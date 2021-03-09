@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <color name="primaryColor">#20ee82</color><!--official siacoin color? it was picked from the logo svg-->
+    <color name="primaryDarkColor">#008653</color>
+    <color name="primaryLightColor">#64eab0</color>
+
+    <color name="midGrey">#4c555a</color>
+    <color name="darkGrey">#242c31</color>
+    <color name="lightGrey">#eeeeee</color>
+
+    <color name="primaryTextColor">#000000</color>
+    <color name="secondaryTextColor">#ffffff</color>
+</resources>

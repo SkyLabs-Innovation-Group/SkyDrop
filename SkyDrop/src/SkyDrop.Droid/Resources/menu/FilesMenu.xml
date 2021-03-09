@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_files_upload"
+        android:icon="@drawable/ic_upload_grey"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:actionLayout="@layout/layout_toolbar"
+        android:title="Upload" />
+
+</menu>
