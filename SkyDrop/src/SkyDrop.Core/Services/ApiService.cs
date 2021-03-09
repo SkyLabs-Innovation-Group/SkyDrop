@@ -39,6 +39,7 @@ namespace SkyDrop.Core.Services
             var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var skyfile = JsonConvert.DeserializeObject<SkyFile>(responseString);
             skyfile.Filename = filename;
+            skyfile.Status = FileStatus.Uploaded;
 
             return skyfile;
         }

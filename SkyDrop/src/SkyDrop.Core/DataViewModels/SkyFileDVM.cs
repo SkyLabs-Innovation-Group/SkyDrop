@@ -14,15 +14,6 @@ namespace SkyDrop.Core.DataViewModels
 {
     public class SkyFileDVM : MvxNotifyPropertyChanged
     {
-        public SkyFileDVM(SkyFile skyFile, IMvxCommand tapCommand, IMvxCommand openCommand, IMvxCommand copySkyLinkCommand, IMvxCommand deleteCommand)
-        {
-            SkyFile = skyFile;
-            TapCommand = tapCommand;
-            OpenCommand = openCommand;
-            CopySkyLinkCommand = copySkyLinkCommand;
-            DeleteCommand = deleteCommand;
-        }
-
         public SkyFile SkyFile { get; set; }
 
         public IMvxCommand TapCommand { get; set; }
@@ -31,8 +22,20 @@ namespace SkyDrop.Core.DataViewModels
         public IMvxCommand DeleteCommand { get; set; }
 
         public bool IsSelected { get; set; }
-        public bool IsNew { get; set; }
+        public bool IsLoading { get; set; }
 
-        public Color FillColor => IsNew ? Colors.PrimaryDark : Colors.MidGrey;
+        public Color FillColor => SkyFile.Status == FileStatus.Uploaded ? Colors.PrimaryDark : Colors.MidGrey;
+
+        public void SetUploaded(SkyFile skyFile)
+        {
+            this.SkyFile.BitField = skyFile.BitField;
+            this.SkyFile.Skylink = skyFile.Skylink;
+            this.SkyFile.Merkelroot = skyFile.Merkelroot;
+            this.SkyFile.Filename = skyFile.Filename;
+            this.SkyFile.Status = skyFile.Status;
+            this.SkyFile.Data = null; //clear file data from memory
+
+            IsLoading = false;
+        }
     }
 }

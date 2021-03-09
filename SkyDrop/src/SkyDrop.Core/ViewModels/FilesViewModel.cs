@@ -17,7 +17,6 @@ namespace SkyDrop.Core.ViewModels.Main
     public class FilesViewModel : BaseViewModel
     {
         public MvxObservableCollection<SkyFileDVM> SkyFiles { get; } = new MvxObservableCollection<SkyFileDVM>();
-        public MvxObservableCollection<StagedFileDVM> StagedFiles { get; } = new MvxObservableCollection<StagedFileDVM>();
 
         /// <summary>
         /// Updated with view binding.
@@ -27,8 +26,6 @@ namespace SkyDrop.Core.ViewModels.Main
         public SkyFileDVM CurrentlySelectedFileDvm { get; set; }
 
         public SkyFileDVM PreviousSelectedSkyFileDvm { get; set; }
-
-        public string SkylinksText { get; set; }
 
         public bool IsLoading { get; set; }
 
@@ -42,6 +39,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand SelectImageCommand { get; set; }
         public IMvxCommand FileTapCommand { get; set; }
         public IMvxCommand UploadCommand { get; set; }
+        public IMvxCommand ClearDataCommand { get; set; }
 
         private Func<Task> _selectFileAsyncFunc;
         public Func<Task> SelectFileAsyncFunc
@@ -58,7 +56,7 @@ namespace SkyDrop.Core.ViewModels.Main
         }
 
         public IMvxCommand AfterFileSelected { get; set; }
-        public IMvxCommand HighlightNewFile { get; set; }
+        public IMvxCommand ScrollToFileCommand { get; set; }
 
         public FilesViewModel(ISingletonService singletonService,
                              IApiService apiService,
@@ -77,6 +75,7 @@ namespace SkyDrop.Core.ViewModels.Main
             SelectFileCommand = new MvxAsyncCommand(async () => await SelectFileAsyncFunc());
             SelectImageCommand = new MvxAsyncCommand(async () => await SelectImageAsyncFunc());
             UploadCommand = new MvxAsyncCommand(UploadStagedFiles);
+            ClearDataCommand = new MvxCommand(ClearData);
         }
 
         public override Task Initialize()
@@ -108,17 +107,31 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private SkyFileDVM GetSkyFileDVM(SkyFile skyFile, bool isNew = false)
         {
-            return new SkyFileDVM(skyFile,
-                new MvxCommand(() => ToggleSelectState(skyFile)),
-                new MvxCommand(() => FileTapCommand.Execute(skyFile)),
-                new MvxAsyncCommand(() => CopyFileLinkToClipboard(skyFile)),
-                new MvxCommand(() => DeleteSkyFileFromList(skyFile)))
-            { IsNew = isNew };
+            return new SkyFileDVM
+            {
+                SkyFile = skyFile,
+                TapCommand = new MvxCommand(() => ToggleSelectState(skyFile)),
+                OpenCommand = new MvxCommand(() => FileTapCommand.Execute(skyFile)),
+                CopySkyLinkCommand = new MvxAsyncCommand(() => CopyFileLinkToClipboard(skyFile)),
+                DeleteCommand = new MvxCommand(() => DeleteSkyFileFromList(skyFile)),
+            };
         }
 
-        public void StageFile(StagedFile stagedFile)
+        public void StageFile(SkyFile stagedFile)
         {
-            StagedFiles.Add(new StagedFileDVM(stagedFile));
+            SkyFiles.Add(GetStagedFileDVM(stagedFile));
+        }
+
+        private SkyFileDVM GetStagedFileDVM(SkyFile stagedFile)
+        {
+            return new SkyFileDVM
+            {
+                SkyFile = stagedFile,
+                TapCommand = new MvxCommand(() => ToggleSelectState(stagedFile)),
+                OpenCommand = new MvxCommand(() => FileTapCommand.Execute(stagedFile)),
+                CopySkyLinkCommand = new MvxAsyncCommand(() => CopyFileLinkToClipboard(stagedFile)),
+                DeleteCommand = new MvxCommand(() => DeleteSkyFileFromList(stagedFile)),
+            };
         }
 
         private void DeleteSkyFileFromList(SkyFile file)
@@ -145,27 +158,25 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             IsLoading = true;
 
-            // make local copy of StagedFiles for safe enumeration in foreach
-            var currentlyStagedFiles = new List<StagedFileDVM>(StagedFiles);
+            //get staged files
+            var currentlyStagedFiles = SkyFiles.Where(s => s.SkyFile.Status == FileStatus.Staged).ToList();
 
             foreach (var stagedFile in currentlyStagedFiles)
             {
                 stagedFile.IsLoading = true;
-                var newSkyFiles = new List<StagedFileDVM>(StagedFiles);
-                StagedFiles.SwitchTo(newSkyFiles);
+                var newSkyFiles = SkyFiles.ToList();
+                SkyFiles.SwitchTo(newSkyFiles);
 
-                await UploadFile(stagedFile.StagedFile);
+                await UploadFile(stagedFile.SkyFile);
 
                 stagedFile.IsLoading = false;
-
-                StagedFiles.Remove(stagedFile);
             }
 
             IsLoading = false;
         }
 
         int uploadCount = 0;
-        private async Task UploadFile(StagedFile stagedFile)
+        private async Task UploadFile(SkyFile stagedFile)
         {
             try
             {
@@ -179,27 +190,29 @@ namespace SkyDrop.Core.ViewModels.Main
                 var existingFile = SkyFiles.FirstOrDefault(s => s.SkyFile.Skylink == skyFile.Skylink);
                 if (existingFile != null)
                 {
-                    var message = "File was already uploaded previously";
+                    var message = "File was already uploaded";
                     Log.Trace(message);
                     userDialogs.Toast(message);
 
-                    existingFile.IsNew = true;
                     int indexOfExistingFile = SkyFiles.IndexOf(existingFile);
                     SkyFiles.Move(indexOfExistingFile, 0);
 
-                    HighlightNewFile.Execute();
+                    ScrollToFileCommand.Execute();
 
                     return;
                 }
 
-                var newDvm = GetSkyFileDVM(skyFile, isNew: true);
-                SkyFiles.Add(newDvm);
-                SkyFiles.Move(SkyFiles.IndexOf(newDvm), 0);
-                HighlightNewFile.Execute();
+                //var newSkyFiles = SkyFiles.ToList();
+                var fileDvm = SkyFiles.FirstOrDefault(f => f.SkyFile.Skylink == stagedFile.Skylink);
+                fileDvm.SetUploaded(skyFile);
+                //SkyFiles.SwitchTo(newSkyFiles);
+
+                _ = fileDvm.RaisePropertyChanged(() => fileDvm.FillColor);
+                _ = RaisePropertyChanged(() => SkyFiles);
+
+                ScrollToFileCommand.Execute();
 
                 storageService.SaveSkyFiles(skyFile);
-
-                SkylinksText = GetSkyLinksText();
             }
             catch (Exception e)
             {
@@ -246,15 +259,6 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
-        private string GetSkyLinksText()
-        {
-            var stringBuilder = new StringBuilder();
-            foreach (var skyfile in SkyFiles)
-                stringBuilder.Append(skyfile.SkyFile.Filename + "\n");
-
-            return stringBuilder.ToString();
-        }
-
         public int? GetIndexForPreviouslySelectedFile()
         {
             try
@@ -266,6 +270,13 @@ namespace SkyDrop.Core.ViewModels.Main
                 Log.Exception(ex);
                 return null;
             }
+        }
+
+        private void ClearData()
+        {
+            storageService.ClearAllData();
+
+            SkyFiles.Clear();
         }
     }
 }

@@ -61,12 +61,6 @@
             </androidx.cardview.widget.CardView>
         </LinearLayout>
 
-        <mvvmcross.droid.support.v7.recyclerview.MvxRecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="128dp"
-            app:MvxItemTemplate="@layout/item_file_staged"
-            app:MvxBind="ItemsSource StagedFiles"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -80,11 +74,11 @@
                 android:foreground="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 app:cardCornerRadius="8dp"
-                app:MvxBind="Click UploadCommand">
+                app:MvxBind="Click ClearDataCommand">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Upload"
+                    android:text="Clear Data"
                     android:layout_gravity="center"
                     android:textColor="#fff"/>
                 <ProgressBar
