@@ -37,7 +37,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public IMvxAsyncCommand SelectFileCommand { get; set; }
         public IMvxCommand SelectImageCommand { get; set; }
-        public IMvxCommand FileTapCommand { get; set; }
+        public IMvxCommand<SkyFile> OpenFileInBrowserCommand { get; set; }
         public IMvxCommand UploadCommand { get; set; }
         public IMvxCommand ClearDataCommand { get; set; }
 
@@ -65,7 +65,7 @@ namespace SkyDrop.Core.ViewModels.Main
                              IMvxNavigationService navigationService,
                              ILog log) : base(singletonService)
         {
-            Title = "Upload";
+            Title = "File Storage";
 
             this.apiService = apiService;
             this.storageService = storageService;
@@ -105,13 +105,13 @@ namespace SkyDrop.Core.ViewModels.Main
             return dvms;
         }
 
-        private SkyFileDVM GetSkyFileDVM(SkyFile skyFile, bool isNew = false)
+        private SkyFileDVM GetSkyFileDVM(SkyFile skyFile)
         {
             return new SkyFileDVM
             {
                 SkyFile = skyFile,
                 TapCommand = new MvxCommand(() => ToggleSelectState(skyFile)),
-                OpenCommand = new MvxCommand(() => FileTapCommand.Execute(skyFile)),
+                OpenCommand = new MvxCommand(() => OpenFileInBrowser(skyFile)),
                 CopySkyLinkCommand = new MvxAsyncCommand(() => CopyFileLinkToClipboard(skyFile)),
                 DeleteCommand = new MvxCommand(() => DeleteSkyFileFromList(skyFile)),
             };
@@ -119,23 +119,31 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public void StageFile(SkyFile stagedFile)
         {
-            SkyFiles.Add(GetStagedFileDVM(stagedFile));
+            SkyFiles.Add(GetSkyFileDVM(stagedFile));
         }
 
-        private SkyFileDVM GetStagedFileDVM(SkyFile stagedFile)
+        private void OpenFileInBrowser(SkyFile skyFile)
         {
-            return new SkyFileDVM
+            if (skyFile.Status == FileStatus.Staged)
             {
-                SkyFile = stagedFile,
-                TapCommand = new MvxCommand(() => ToggleSelectState(stagedFile)),
-                OpenCommand = new MvxCommand(() => FileTapCommand.Execute(stagedFile)),
-                CopySkyLinkCommand = new MvxAsyncCommand(() => CopyFileLinkToClipboard(stagedFile)),
-                DeleteCommand = new MvxCommand(() => DeleteSkyFileFromList(stagedFile)),
-            };
+                PromptToUploadFile();
+                return;
+            }
+
+            OpenFileInBrowserCommand.Execute(skyFile);
         }
 
         private void DeleteSkyFileFromList(SkyFile file)
         {
+            if (file.Status == FileStatus.Staged)
+            {
+                file.Data = null;
+
+                var newFiles = new List<SkyFileDVM>(SkyFiles.Where(f => f.SkyFile.Filename != file.Filename));
+                SkyFiles.SwitchTo(newFiles);
+                return;
+            }
+
             var newSkyFiles = new List<SkyFileDVM>(SkyFiles.Where(f => f.SkyFile.Skylink != file.Skylink));
             SkyFiles.SwitchTo(newSkyFiles);
 
@@ -144,14 +152,22 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task CopyFileLinkToClipboard(SkyFile skyFile)
         {
-            string skyLink = Util.GetSkylinkUrl(skyFile.Skylink);
-            if (string.IsNullOrEmpty(skyLink))
+            if (skyFile.Status == FileStatus.Staged)
+            {
+                PromptToUploadFile();
                 return;
+            }
 
+            string skyLink = Util.GetSkylinkUrl(skyFile.Skylink);
             await Xamarin.Essentials.Clipboard.SetTextAsync(skyLink);
 
             Log.Trace("Set clipboard text to " + skyLink);
             userDialogs.Toast("Copied SkyLink to clipboard");
+        }
+
+        private void PromptToUploadFile()
+        {
+            userDialogs.Toast("Please upload the file first");
         }
 
         private async Task UploadStagedFiles()
