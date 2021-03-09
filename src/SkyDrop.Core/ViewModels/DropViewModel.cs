@@ -25,7 +25,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public string SkyFileJson { get; set; }
         public bool IsLoading { get; set; }
 
-        private StagedFile stagedFile { get; set; }
+        private SkyFile stagedFile { get; set; }
         private string errorMessage;
 
         private Func<Task> _selectFileAsyncFunc;
@@ -157,7 +157,7 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
-        public async Task StageFile(StagedFile stagedFile)
+        public async Task StageFile(SkyFile stagedFile)
         {
             this.stagedFile = stagedFile;
 

@@ -38,17 +38,17 @@ namespace SkyDrop.Droid.Views.Main
 
             ViewModel.SelectFileAsyncFunc = () => AndroidUtil.SelectFile(this);
             ViewModel.SelectImageAsyncFunc = () => AndroidUtil.SelectImage(this);
-            ViewModel.FileTapCommand = new MvxCommand<SkyFile>(skyFile => AndroidUtil.OpenFileInBrowser(this, skyFile));
+            ViewModel.OpenFileInBrowserCommand = new MvxCommand<SkyFile>(skyFile => AndroidUtil.OpenFileInBrowser(this, skyFile));
             ViewModel.AfterFileSelected = new MvxCommand(() => AfterFileWasSelected());
-            ViewModel.HighlightNewFile = new MvxCommand(() => HighlightNewFile());
+            ViewModel.ScrollToFileCommand = new MvxCommand(() => ScrollToFile());
         }
 
         private void HandlePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == nameof(ViewModel.StagedFiles))
+            if(e.PropertyName == nameof(ViewModel.SkyFiles))
             {
                 var uploadItem = menu.FindItem(Resource.Id.menu_files_upload);
-                if (ViewModel.StagedFiles.Count > 0)
+                if (ViewModel.SkyFiles.Where(sf => sf.SkyFile.Status == FileStatus.Staged).Count() > 0)
                     uploadItem.SetIcon(GetDrawable(Resource.Drawable.ic_upload));
                 else
                     uploadItem.SetIcon(GetDrawable(Resource.Drawable.ic_upload_grey));
@@ -74,7 +74,7 @@ namespace SkyDrop.Droid.Views.Main
             return true;
         }
 
-        private void HighlightNewFile()
+        private void ScrollToFile()
         {
             UploadedFilesRecyclerView.SmoothScrollToPosition(0);
         }

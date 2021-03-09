@@ -141,7 +141,7 @@ namespace SkyDrop.Droid.Helper
             }
         }
 
-        public static async Task<StagedFile> HandlePickedFile(Activity context, Intent data)
+        public static async Task<SkyFile> HandlePickedFile(Activity context, Intent data)
         {
             //handle the selected file
             var uri = data.Data;
@@ -158,7 +158,7 @@ namespace SkyDrop.Droid.Helper
             //Toast.MakeText(context, uri.Path, ToastLength.Long).Show();
 
             var fileBytes = await ReadFile(context, uri);
-            return new StagedFile
+            return new SkyFile
             {
                 Filename = filename,
                 Data = fileBytes
