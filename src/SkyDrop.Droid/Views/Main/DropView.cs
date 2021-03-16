@@ -43,7 +43,12 @@ namespace SkyDrop.Droid.Views.Main
                 if (requestCode == AndroidUtil.PickFileRequestCode)
                 {
                     if (data == null)
+                    {
+                        //user did not select a file, reset UI
+                        ViewModel.SendButtonState = true;
+                        ViewModel.ReceiveButtonState = true;
                         return;
+                    }
 
                     await HandlePickedFile(data);
                 }

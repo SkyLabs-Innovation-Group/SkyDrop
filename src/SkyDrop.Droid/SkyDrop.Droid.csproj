@@ -81,6 +81,7 @@
     <Compile Include="Views\Main\DropView.cs" />
     <Compile Include="Views\Main\MenuView.cs" />
     <Compile Include="Bindings\ViewHiddenBinding.cs" />
+    <Compile Include="Bindings\CardStateBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">

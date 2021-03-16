@@ -28,6 +28,9 @@ namespace SkyDrop.Core.ViewModels.Main
         public string SkyFileJson { get; set; }
         public bool IsLoading { get; set; }
         public bool IsBarcodeHidden { get; set; } = true;
+        public string SendButtonLabel => IsLoading ? "SENDING FILE" : "SEND FILE";
+        public bool SendButtonState { get; set; } = true;
+        public bool ReceiveButtonState { get; set; } = true;
 
         private SkyFile skyFile { get; set; }
         private string errorMessage;
@@ -88,6 +91,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task StartSendFile()
         {
+            SendButtonState = true;
+            ReceiveButtonState = false;
+
             var file = "Select File";
             var image = "Select Image";
             var cancel = "cancel";
@@ -133,6 +139,9 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             try
             {
+                SendButtonState = false;
+                ReceiveButtonState = true;
+
                 //prompt user with instructions
                 var message = "Scan the QR code on the sender device to receive the file";
                 await userDialogs.AlertAsync(message);

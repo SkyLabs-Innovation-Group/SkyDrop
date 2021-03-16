@@ -6,8 +6,10 @@ using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.Provider;
+using Android.Util;
 using Android.Widget;
 using MvvmCross;
+using Plugin.CurrentActivity;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Services;
 using SkyDrop.Core.Utility;
@@ -21,6 +23,11 @@ namespace SkyDrop.Droid.Helper
     {
         public const int PickFileRequestCode = 100;
         private static readonly ILog log = Mvx.IoCProvider.Resolve<ILog>();
+
+        public static int DpToPx(int dp)
+        {
+            return (int)Math.Round(CrossCurrentActivity.Current.AppContext.Resources.DisplayMetrics.Density * dp);
+        }
 
         /// <summary>
         /// Get the filename for a local file on Android
