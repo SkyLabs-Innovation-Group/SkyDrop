@@ -69,6 +69,27 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    app:cardElevation="1dp"
+                    app:cardCornerRadius="8dp">
+                    <ImageButton
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:background="@color/midGrey"
+                        android:src="@drawable/ic_file"
+                        app:MvxBind="Click OpenCommand"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="Open"
+                        android:textSize="12sp"
+                        android:textColor="@color/lightGrey"
+                        android:layout_gravity="bottom|center_horizontal"/>
+                </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     app:cardElevation="1dp"
                     app:cardCornerRadius="8dp">
