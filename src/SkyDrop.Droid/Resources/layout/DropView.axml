@@ -16,28 +16,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="8dp"
-                android:layout_alignParentTop="true"
-                android:gravity="center_horizontal"
-                android:padding="8dp"
-                android:clipToPadding="false"
-                app:MvxBind="Click SendCommand;Visibility Visibility(IsBarcodeHidden)">
-                <ImageView
-                    android:layout_width="128dp"
-                    android:layout_height="128dp"
-                    android:src="@drawable/ic_upload_grey"/>
-                <TextView
-                    android:textStyle="bold"
-                    android:textColor="@color/midGrey"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="SEND"/>
-            </LinearLayout>
             
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/BarcodeContainer"
@@ -113,28 +91,73 @@
                 android:layout_centerInParent="true"
                 android:paddingBottom="32dp"
                 app:MvxBind="Visibility Visibility(IsLoading)"/>
+
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="8dp"
-                android:layout_alignParentBottom="true"
-                android:gravity="center_horizontal"
-                android:padding="8dp"
-                android:clipToPadding="false"
-                app:MvxBind="Click ReceiveCommand;Visibility Visibility(IsBarcodeHidden)">
-                <ImageView
-                    android:layout_width="128dp"
-                    android:layout_height="128dp"
-                    android:src="@drawable/ic_download_grey"/>
-                <TextView
-                    android:textStyle="bold"
-                    android:textColor="@color/midGrey"
-                    android:layout_width="match_parent"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="RECEIVE"
-                    android:layout_marginBottom="32dp"/>
+                    android:layout_marginRight="8dp"
+                    app:cardBackgroundColor="@color/lightGrey"
+                    app:cardElevation="1dp"
+                    android:clickable="true"
+                    app:cardCornerRadius="8dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center_horizontal"
+                        android:padding="8dp"
+                        android:clipToPadding="false"
+                        app:MvxBind="Click SendCommand;Visibility Visibility(IsBarcodeHidden)">
+                        <ImageView
+                            android:layout_width="128dp"
+                            android:layout_height="128dp"
+                            android:src="@drawable/ic_upload_grey"/>
+                        <TextView
+                            android:textStyle="bold"
+                            android:textColor="@color/midGrey"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="SEND"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/lightGrey"
+                    android:layout_marginLeft="8dp"
+                    app:cardElevation="1dp"
+                    android:clickable="true"
+                    app:cardCornerRadius="8dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center_horizontal"
+                        android:padding="8dp"
+                        android:clipToPadding="false"
+                        app:MvxBind="Click ReceiveCommand;Visibility Visibility(IsBarcodeHidden)">
+                        <ImageView
+                            android:layout_width="128dp"
+                            android:layout_height="128dp"
+                            android:src="@drawable/ic_download_grey"/>
+                        <TextView
+                            android:textStyle="bold"
+                            android:textColor="@color/midGrey"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="RECEIVE"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
