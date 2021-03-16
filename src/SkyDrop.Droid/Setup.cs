@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using Acr.UserDialogs;
+using Android.Views;
 using AndroidX.CardView.Widget;
 using Engage.Droid.Bindings;
 using MvvmCross;
@@ -10,6 +11,7 @@ using MvvmCross.Platforms.Android;
 using MvvmCross.Platforms.Android.Core;
 using MvvmCross.ViewModels;
 using SkyDrop.Core;
+using SkyDrop.Droid.Bindings;
 
 namespace SkyDrop.Droid
 {
@@ -46,6 +48,7 @@ namespace SkyDrop.Droid
         {
             base.FillTargetFactories(registry);
             registry.RegisterCustomBindingFactory<CardView>(CardBackgroundColorBinding.Name, view => new CardBackgroundColorBinding(view));
+            registry.RegisterCustomBindingFactory<View>(ViewHiddenBinding.Name, view => new ViewHiddenBinding(view));
         }
     }
 }

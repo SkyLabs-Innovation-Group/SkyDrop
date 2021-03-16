@@ -13,7 +13,7 @@
         <include
             android:id="@+id/layout_toolbar"
             layout="@layout/layout_toolbar" />
-        <FrameLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <LinearLayout
@@ -21,11 +21,11 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="8dp"
-                android:layout_gravity="top"
+                android:layout_alignParentTop="true"
                 android:gravity="center_horizontal"
                 android:padding="8dp"
                 android:clipToPadding="false"
-                app:MvxBind="Click SendCommand">
+                app:MvxBind="Click SendCommand;Visibility Visibility(IsBarcodeHidden)">
                 <ImageView
                     android:layout_width="128dp"
                     android:layout_height="128dp"
@@ -38,27 +38,91 @@
                     android:gravity="center_horizontal"
                     android:text="SEND"/>
             </LinearLayout>
-            <ImageView
-                android:id="@+id/BarcodeImage"
+            
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/BarcodeContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:padding="16dp"
+                app:MvxBind="Hidden IsBarcodeHidden">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="1:1" 
+                    app:cardBackgroundColor="@color/lightGrey"
+                    app:cardElevation="1dp"
+                    android:clickable="true"
+                    app:cardCornerRadius="8dp">
+                    <ImageView
+                        android:id="@+id/BarcodeImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"/>
+                </androidx.cardview.widget.CardView>
+            </android.support.constraint.ConstraintLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_below="@id/BarcodeContainer"
+                app:MvxBind="Visibility InvertedVisibility(IsBarcodeHidden)">
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageButton
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:background="@color/midGrey"
+                        android:src="@drawable/ic_link"
+                        app:MvxBind="Click CopyLinkCommand"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:text="Copy Link"
+                        android:textSize="12sp"
+                        android:textColor="@color/lightGrey"
+                        android:layout_gravity="bottom|center_horizontal"/>
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right">
+                    <ImageButton
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:background="@color/midGrey"
+                        android:src="@drawable/ic_share"
+                        app:MvxBind="Click ShareCommand"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:text="Share"
+                        android:textSize="12sp"
+                        android:textColor="@color/lightGrey"
+                        android:layout_gravity="bottom|center_horizontal"/>
+                </FrameLayout>
+            </FrameLayout>
+
+            <ProgressBar
                 android:layout_width="128dp"
                 android:layout_height="128dp"
-                android:layout_marginBottom="16dp"
-                android:layout_gravity="center"/>
-            <ProgressBar
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_gravity="center"
+                android:layout_centerInParent="true"
+                android:paddingBottom="32dp"
                 app:MvxBind="Visibility Visibility(IsLoading)"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="8dp"
-                android:layout_gravity="bottom"
+                android:layout_alignParentBottom="true"
                 android:gravity="center_horizontal"
                 android:padding="8dp"
                 android:clipToPadding="false"
-                app:MvxBind="Click ReceiveCommand">
+                app:MvxBind="Click ReceiveCommand;Visibility Visibility(IsBarcodeHidden)">
                 <ImageView
                     android:layout_width="128dp"
                     android:layout_height="128dp"
@@ -72,6 +136,6 @@
                     android:text="RECEIVE"
                     android:layout_marginBottom="32dp"/>
             </LinearLayout>
-        </FrameLayout>
+        </RelativeLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

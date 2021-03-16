@@ -68,6 +68,7 @@ namespace SkyDrop.Droid.Views.Main
             var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, imageView.Width, imageView.Height);
             var bitmap = await AndroidUtil.EncodeBarcode(matrix, imageView.Width, imageView.Height);
             imageView.SetImageBitmap(bitmap);
+            ViewModel.IsBarcodeHidden = false;
         }
     }
 }

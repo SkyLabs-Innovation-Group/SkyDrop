@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
@@ -226,7 +227,7 @@ namespace SkyDrop.Droid.Helper
                     {
                         for (int y = 0; y < height; y++)
                         {
-                            bitmap.SetPixel(x, y, GetBit(matrix, x, y) ? Color.Black : Color.White);
+                            bitmap.SetPixel(x, y, GetBit(matrix, x, y) ? Colors.DarkGrey.ToNative() : Colors.LightGrey.ToNative());
                         }
                     }
 

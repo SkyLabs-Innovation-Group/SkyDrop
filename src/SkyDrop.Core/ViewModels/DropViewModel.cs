@@ -6,6 +6,7 @@ using MvvmCross.Navigation;
 using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Services;
+using SkyDrop.Core.Utility;
 using ZXing.Common;
 
 namespace SkyDrop.Core.ViewModels.Main
@@ -21,11 +22,14 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand SendCommand { get; set; }
         public IMvxCommand ReceiveCommand { get; set; }
         public IMvxCommand<SkyFile> OpenFileCommand { get; set; }
+        public IMvxCommand ShareCommand { get; set; }
+        public IMvxCommand CopyLinkCommand { get; set; }
 
         public string SkyFileJson { get; set; }
         public bool IsLoading { get; set; }
+        public bool IsBarcodeHidden { get; set; } = true;
 
-        private SkyFile stagedFile { get; set; }
+        private SkyFile skyFile { get; set; }
         private string errorMessage;
 
         private Func<Task> _selectFileAsyncFunc;
@@ -67,6 +71,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
             SendCommand = new MvxAsyncCommand(StartSendFile);
             ReceiveCommand = new MvxAsyncCommand(ReceiveFile);
+            CopyLinkCommand = new MvxAsyncCommand(CopyFileLinkToClipboard);
         }
 
         public override void ViewAppeared()
@@ -107,7 +112,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 IsLoading = true;
                 _ = RaisePropertyChanged(() => IsLoading);
 
-                var skyFile = await UploadFile();
+                skyFile = await UploadFile();
 
                 //show QR code
                 SkyFileJson = JsonConvert.SerializeObject(skyFile);
@@ -159,20 +164,35 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public async Task StageFile(SkyFile stagedFile)
         {
-            this.stagedFile = stagedFile;
+            this.skyFile = stagedFile;
 
             await FinishSendFile();
         }
 
         private async Task<SkyFile> UploadFile()
         {
-            var skyFile = await apiService.UploadFile(stagedFile.Filename, stagedFile.Data);
+            var skyFile = await apiService.UploadFile(this.skyFile.Filename, this.skyFile.Data);
             return skyFile;
         }
 
         public BitMatrix GenerateBarcode(string text, int width, int height)
         {
             return barcodeService.GenerateBarcode(text, width, height);
+        }
+
+        private async Task CopyFileLinkToClipboard()
+        {
+            if (skyFile.Status == FileStatus.Staged)
+            {
+                Log.Error("User tried to copy skylink before file was uploaded");
+                return;
+            }
+
+            string skyLink = Util.GetSkylinkUrl(skyFile.Skylink);
+            await Xamarin.Essentials.Clipboard.SetTextAsync(skyLink);
+
+            Log.Trace("Set clipboard text to " + skyLink);
+            userDialogs.Toast("Copied SkyLink to clipboard");
         }
     }
 }
