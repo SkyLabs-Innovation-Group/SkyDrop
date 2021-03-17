@@ -91,6 +91,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task StartSendFile()
         {
+            //don't allow user to select file while a file is uploading
+            if (IsLoading) return;
+
             SendButtonState = true;
             ReceiveButtonState = false;
 
@@ -139,6 +142,9 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             try
             {
+                //don't allow user to scan QR code while a file is uploading
+                if (IsLoading) return;
+
                 SendButtonState = false;
                 ReceiveButtonState = true;
 

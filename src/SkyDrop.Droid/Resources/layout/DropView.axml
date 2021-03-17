@@ -15,7 +15,8 @@
             layout="@layout/layout_toolbar" />
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true">
             
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/BarcodeContainer"
@@ -41,6 +42,7 @@
             </android.support.constraint.ConstraintLayout>
 
             <FrameLayout
+                android:id="@+id/BarcodeMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
@@ -62,6 +64,27 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:text="Copy Link"
+                        android:textSize="12sp"
+                        android:textColor="@color/lightGrey"
+                        android:layout_gravity="bottom|center_horizontal"/>
+                </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    app:cardElevation="1dp"
+                    app:cardCornerRadius="8dp">
+                    <ImageButton
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:background="@color/midGrey"
+                        android:src="@drawable/ic_file"
+                        app:MvxBind="Click OpenCommand"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="Open"
                         android:textSize="12sp"
                         android:textColor="@color/lightGrey"
                         android:layout_gravity="bottom|center_horizontal"/>
@@ -93,10 +116,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:orientation="horizontal"
-                app:MvxBind="Visibility Visibility(IsBarcodeHidden)">
+                android:orientation="horizontal">
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/SendFileButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="8dp"
@@ -106,6 +129,7 @@
                     app:cardElevation="1dp"
                     android:clickable="true"
                     app:cardCornerRadius="8dp"
+                    android:translationZ="1dp"
                     app:MvxBind="Click SendCommand;MaterialCardState SendButtonState">
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -142,6 +166,7 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/ReceiveFileButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/lightGrey"
