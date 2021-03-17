@@ -30,7 +30,5 @@ namespace SkyDrop.Droid.Views.Main
 
             Log.Trace("MenuView OnCreate()");
         }
-
-
     }
 }
