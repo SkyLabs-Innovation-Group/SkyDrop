@@ -118,6 +118,7 @@
                 app:MvxBind="Visibility Visibility(IsBarcodeHidden)">
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/SendFileButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="8dp"
@@ -127,6 +128,7 @@
                     app:cardElevation="1dp"
                     android:clickable="true"
                     app:cardCornerRadius="8dp"
+                    android:translationZ="1dp"
                     app:MvxBind="Click SendCommand;MaterialCardState SendButtonState">
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -163,6 +165,7 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/ReceiveFileButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/lightGrey"
