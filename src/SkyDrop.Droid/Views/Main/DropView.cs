@@ -6,6 +6,7 @@ using Android.Graphics;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using AndroidX.ConstraintLayout.Widget;
 using Google.Android.Material.Card;
 using MvvmCross.Commands;
 using SkyDrop.Core.DataModels;
@@ -75,6 +76,7 @@ namespace SkyDrop.Droid.Views.Main
             var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, imageView.Width, imageView.Height);
             var bitmap = await AndroidUtil.EncodeBarcode(matrix, imageView.Width, imageView.Height);
             imageView.SetImageBitmap(bitmap);
+            AnimateSlideBarcode();
             ViewModel.IsBarcodeHidden = false;
         }
 
@@ -93,6 +95,23 @@ namespace SkyDrop.Droid.Views.Main
             sendButton.Animate().TranslationX(translationX).SetDuration(duration).Start();
 
             receiveButton.Animate().Alpha(0).SetDuration(duration).Start();
+        }
+
+        private void AnimateSlideBarcode()
+        {
+            var sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
+            var barcodeContainer = FindViewById<ConstraintLayout>(Resource.Id.BarcodeContainer);
+            var barcodeMenu = FindViewById<FrameLayout>(Resource.Id.BarcodeMenu);
+
+            var screenWidth = Resources.DisplayMetrics.WidthPixels;
+
+            barcodeContainer.TranslationX = screenWidth;
+            barcodeMenu.TranslationX = screenWidth;
+
+            var duration = 1000;
+            sendButton.Animate().TranslationXBy(-screenWidth).SetDuration(duration).Start();
+            barcodeContainer.Animate().TranslationX(0).SetDuration(duration).Start();
+            barcodeMenu.Animate().TranslationX(0).SetDuration(duration).Start();
         }
     }
 }

@@ -15,7 +15,8 @@
             layout="@layout/layout_toolbar" />
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true">
             
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/BarcodeContainer"
@@ -41,6 +42,7 @@
             </android.support.constraint.ConstraintLayout>
 
             <FrameLayout
+                android:id="@+id/BarcodeMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
@@ -114,8 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:orientation="horizontal"
-                app:MvxBind="Visibility Visibility(IsBarcodeHidden)">
+                android:orientation="horizontal">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/SendFileButton"
