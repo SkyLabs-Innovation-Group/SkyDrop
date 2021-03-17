@@ -101,7 +101,7 @@ Global
 		{E053BC55-C05E-456A-AA60-3A4610A29E9C}.Debug|iPhoneSimulator.Deploy.0 = Debug|iPhoneSimulator
 		{E053BC55-C05E-456A-AA60-3A4610A29E9C}.Debug|x64.ActiveCfg = Debug|iPhone
 		{E053BC55-C05E-456A-AA60-3A4610A29E9C}.Debug|x86.ActiveCfg = Debug|iPhone
-		{E053BC55-C05E-456A-AA60-3A4610A29E9C}.Release|Any CPU.ActiveCfg = Release|iPhone
+		{E053BC55-C05E-456A-AA60-3A4610A29E9C}.Release|Any CPU.ActiveCfg = Release|iPhoneSimulator
 		{E053BC55-C05E-456A-AA60-3A4610A29E9C}.Release|ARM.ActiveCfg = Release|iPhone
 		{E053BC55-C05E-456A-AA60-3A4610A29E9C}.Release|iPhone.ActiveCfg = Release|iPhone
 		{E053BC55-C05E-456A-AA60-3A4610A29E9C}.Release|iPhone.Build.0 = Release|iPhone
@@ -111,6 +111,7 @@ Global
 		{E053BC55-C05E-456A-AA60-3A4610A29E9C}.Release|iPhoneSimulator.Deploy.0 = Release|iPhoneSimulator
 		{E053BC55-C05E-456A-AA60-3A4610A29E9C}.Release|x64.ActiveCfg = Release|iPhone
 		{E053BC55-C05E-456A-AA60-3A4610A29E9C}.Release|x86.ActiveCfg = Release|iPhone
+		{E053BC55-C05E-456A-AA60-3A4610A29E9C}.Release|Any CPU.Build.0 = Release|iPhoneSimulator
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

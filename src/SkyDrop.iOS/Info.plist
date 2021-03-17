@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>Mvx Scaffolding</string>
+	<string>SkyDrop</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.mvxscaffolding.app</string>
+	<string>net.siasky.SkyDrop</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
