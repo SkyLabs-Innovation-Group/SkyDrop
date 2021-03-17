@@ -142,8 +142,11 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             try
             {
-                //don't allow user to scan QR code while a file is uploading
+                //don't allow user to scan barcode code while a file is uploading
                 if (IsLoading) return;
+
+                //don't allow user to scan barcode code while barcode is visible
+                if (!IsBarcodeHidden) return;
 
                 SendButtonState = false;
                 ReceiveButtonState = true;
