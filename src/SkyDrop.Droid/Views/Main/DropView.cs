@@ -31,6 +31,7 @@ namespace SkyDrop.Droid.Views.Main
         private MaterialCardView sendButton, receiveButton;
         private ConstraintLayout barcodeContainer;
         private FrameLayout barcodeMenu;
+        private const int swipeMarginX = 100;
 
         protected override async void OnCreate(Bundle bundle)
         {
@@ -52,45 +53,6 @@ namespace SkyDrop.Droid.Views.Main
 
             var rootView = FindViewById<ConstraintLayout>(Resource.Id.Root);
             rootView.Touch += HandleTouchEvents;
-        }
-
-        private void HandleTouchEvents(object sender, TouchEventArgs e)
-        {
-            if (e.Event.Action == MotionEventActions.Down)
-            {
-                e.Handled = true;
-                isPressed = true;
-
-                tapX = e.Event.GetX();
-
-                barcodeStartX = barcodeContainer.TranslationX;
-            }
-            else if (e.Event.Action == MotionEventActions.Up)
-            {
-                e.Handled = true;
-                isPressed = false;
-            }
-            else if (e.Event.Action == MotionEventActions.Move)
-            {
-                if (!isPressed)
-                {
-                    e.Handled = false;
-                    return;
-                }
-
-                var touchX = e.Event.GetX();
-
-                var deltaX = touchX - tapX;
-
-                if (!ViewModel.IsBarcodeHidden)
-                {
-                    barcodeContainer.TranslationX = barcodeStartX + deltaX;
-                    barcodeMenu.TranslationX = barcodeStartX + deltaX;
-
-                    if (barcodeContainer.TranslationX > 100)
-                        AnimateSlideBarcodeOut();
-                }
-            }
         }
 
         protected override async void OnActivityResult(int requestCode, Android.App.Result resultCode, Intent data)
@@ -116,6 +78,17 @@ namespace SkyDrop.Droid.Views.Main
             }
 
             base.OnActivityResult(requestCode, resultCode, data);
+        }
+
+        public override void OnBackPressed()
+        {
+            if (!ViewModel.IsBarcodeHidden)
+            {
+                AnimateSlideBarcodeOut();
+                return;
+            }
+
+            base.OnBackPressed();
         }
 
         private async Task HandlePickedFile(Intent data)
@@ -145,7 +118,6 @@ namespace SkyDrop.Droid.Views.Main
             var duration = 1000;
             var translationX = screenCenterX - sendButtonCenterX;
             sendButton.Animate().TranslationX(translationX).SetDuration(duration).Start();
-
             receiveButton.Animate().Alpha(0).SetDuration(duration).Start();
         }
 
@@ -156,7 +128,7 @@ namespace SkyDrop.Droid.Views.Main
             barcodeContainer.TranslationX = screenWidth;
             barcodeMenu.TranslationX = screenWidth;
 
-            var duration = 1000;
+            var duration = 500;
             sendButton.Animate().TranslationXBy(-screenWidth).SetDuration(duration).Start();
             barcodeContainer.Animate().TranslationX(0).SetDuration(duration).Start();
             barcodeMenu.Animate().TranslationX(0).SetDuration(duration).Start();
@@ -169,10 +141,48 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.ReceiveButtonState = true;
 
             var duration = 500;
-            sendButton.Animate().TranslationX(0).SetDuration(duration).Start();
+            sendButton.Animate().TranslationX(0).SetDuration(duration).WithEndAction(new Java.Lang.Runnable(() => ViewModel.IsBarcodeHidden = false)).Start();
             receiveButton.Animate().Alpha(1).SetDuration(duration).Start();
             barcodeContainer.Animate().TranslationX(screenWidth).SetDuration(duration).Start();
             barcodeMenu.Animate().TranslationX(screenWidth).SetDuration(duration).Start();
+        }
+
+        private void HandleTouchEvents(object sender, TouchEventArgs e)
+        {
+            if (e.Event.Action == MotionEventActions.Down)
+            {
+                e.Handled = true;
+                isPressed = true;
+
+                tapX = e.Event.GetX();
+
+                barcodeStartX = barcodeContainer.TranslationX;
+            }
+            else if (e.Event.Action == MotionEventActions.Up)
+            {
+                e.Handled = true;
+                isPressed = false;
+            }
+            else if (e.Event.Action == MotionEventActions.Move)
+            {
+                if (!isPressed)
+                {
+                    e.Handled = false;
+                    return;
+                }
+
+                var touchX = e.Event.GetX();
+                var deltaX = touchX - tapX;
+
+                if (!ViewModel.IsBarcodeHidden && barcodeContainer.TranslationX < swipeMarginX)
+                {
+                    barcodeContainer.TranslationX = barcodeStartX + deltaX;
+                    barcodeMenu.TranslationX = barcodeStartX + deltaX;
+
+                    if (barcodeContainer.TranslationX >= swipeMarginX)
+                        AnimateSlideBarcodeOut();
+                }
+            }
         }
     }
 }
