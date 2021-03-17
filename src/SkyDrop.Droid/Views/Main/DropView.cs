@@ -141,7 +141,7 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.ReceiveButtonState = true;
 
             var duration = 500;
-            sendButton.Animate().TranslationX(0).SetDuration(duration).WithEndAction(new Java.Lang.Runnable(() => ViewModel.IsBarcodeHidden = false)).Start();
+            sendButton.Animate().TranslationX(0).SetDuration(duration).WithEndAction(new Java.Lang.Runnable(() => ViewModel.IsBarcodeHidden = true)).Start();
             receiveButton.Animate().Alpha(1).SetDuration(duration).Start();
             barcodeContainer.Animate().TranslationX(screenWidth).SetDuration(duration).Start();
             barcodeMenu.Animate().TranslationX(screenWidth).SetDuration(duration).Start();
