@@ -10,6 +10,12 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MenuView">
             <connections>
+                <outlet property="FileTransferButton" destination="mZ0-73-8Ah" id="Qpd-ys-h0t"/>
+                <outlet property="FileTransferIcon" destination="Anw-hd-UIv" id="ts5-5N-bv3"/>
+                <outlet property="FileTransferLabel" destination="Bg8-CU-vKz" id="CnS-fb-LhU"/>
+                <outlet property="SettingsButton" destination="FGE-nd-Azo" id="p8N-Uu-cIT"/>
+                <outlet property="SettingsIcon" destination="zCN-mH-jvd" id="7Zm-mm-r7F"/>
+                <outlet property="SettingsLabel" destination="HZ0-pa-hc5" id="pPr-IW-uiV"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
         </placeholder>
@@ -18,7 +24,7 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mZ0-73-8Ah">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mZ0-73-8Ah" userLabel="File Transfer Button">
                     <rect key="frame" x="16" y="60" width="382" height="96"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_share" translatesAutoresizingMaskIntoConstraints="NO" id="Anw-hd-UIv">
@@ -44,7 +50,7 @@
                         <constraint firstItem="Bg8-CU-vKz" firstAttribute="centerX" secondItem="mZ0-73-8Ah" secondAttribute="centerX" id="oht-6g-uso"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FGE-nd-Azo">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FGE-nd-Azo" userLabel="Settings Button">
                     <rect key="frame" x="16" y="172" width="382" height="96"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_settings" translatesAutoresizingMaskIntoConstraints="NO" id="zCN-mH-jvd">
