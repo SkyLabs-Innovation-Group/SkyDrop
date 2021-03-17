@@ -8,7 +8,7 @@
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/primaryDarkColor</item>
         <item name="colorControlNormal">@color/primaryColor</item>
-        <item name="colorControlActivated">@color/primaryColor</item><!--for ProgressBar-->
+        <item name="colorControlActivated">@color/lightGrey</item><!--for ProgressBar-->
         <item name="colorControlHighlight">@color/lightGrey</item>
         <item name="windowActionModeOverlay">false</item>
     </style>

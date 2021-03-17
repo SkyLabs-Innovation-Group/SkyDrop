@@ -8,6 +8,7 @@ using Android.Views;
 using Android.Widget;
 using AndroidX.ConstraintLayout.Widget;
 using Google.Android.Material.Card;
+using Java.Interop;
 using MvvmCross.Commands;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.ViewModels.Main;
@@ -16,6 +17,7 @@ using Xamarin.Essentials;
 using ZXing;
 using ZXing.Common;
 using ZXing.QrCode;
+using static Android.Views.View;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -23,6 +25,12 @@ namespace SkyDrop.Droid.Views.Main
     public class DropView : BaseActivity<DropViewModel>
     {
         protected override int ActivityLayoutId => Resource.Layout.DropView;
+
+        private bool isPressed;
+        private float tapX, barcodeStartX;
+        private MaterialCardView sendButton, receiveButton;
+        private ConstraintLayout barcodeContainer;
+        private FrameLayout barcodeMenu;
 
         protected override async void OnCreate(Bundle bundle)
         {
@@ -36,6 +44,53 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.SelectImageAsyncFunc = async () => await AndroidUtil.SelectImage(this);
             ViewModel.OpenFileCommand = new MvxCommand<SkyFile>(skyFile => AndroidUtil.OpenFileInBrowser(this, skyFile));
             ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
+
+            sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
+            receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);
+            barcodeContainer = FindViewById<ConstraintLayout>(Resource.Id.BarcodeContainer);
+            barcodeMenu = FindViewById<FrameLayout>(Resource.Id.BarcodeMenu);
+
+            var rootView = FindViewById<ConstraintLayout>(Resource.Id.Root);
+            rootView.Touch += HandleTouchEvents;
+        }
+
+        private void HandleTouchEvents(object sender, TouchEventArgs e)
+        {
+            if (e.Event.Action == MotionEventActions.Down)
+            {
+                e.Handled = true;
+                isPressed = true;
+
+                tapX = e.Event.GetX();
+
+                barcodeStartX = barcodeContainer.TranslationX;
+            }
+            else if (e.Event.Action == MotionEventActions.Up)
+            {
+                e.Handled = true;
+                isPressed = false;
+            }
+            else if (e.Event.Action == MotionEventActions.Move)
+            {
+                if (!isPressed)
+                {
+                    e.Handled = false;
+                    return;
+                }
+
+                var touchX = e.Event.GetX();
+
+                var deltaX = touchX - tapX;
+
+                if (!ViewModel.IsBarcodeHidden)
+                {
+                    barcodeContainer.TranslationX = barcodeStartX + deltaX;
+                    barcodeMenu.TranslationX = barcodeStartX + deltaX;
+
+                    if (barcodeContainer.TranslationX > 100)
+                        AnimateSlideBarcodeOut();
+                }
+            }
         }
 
         protected override async void OnActivityResult(int requestCode, Android.App.Result resultCode, Intent data)
@@ -72,19 +127,16 @@ namespace SkyDrop.Droid.Views.Main
 
         public async Task ShowBarcode()
         {
-            var imageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
-            var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, imageView.Width, imageView.Height);
-            var bitmap = await AndroidUtil.EncodeBarcode(matrix, imageView.Width, imageView.Height);
-            imageView.SetImageBitmap(bitmap);
-            AnimateSlideBarcode();
+            var barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
+            var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, barcodeImageView.Width, barcodeImageView.Height);
+            var bitmap = await AndroidUtil.EncodeBarcode(matrix, barcodeImageView.Width, barcodeImageView.Height);
+            barcodeImageView.SetImageBitmap(bitmap);
+            AnimateSlideBarcodeIn();
             ViewModel.IsBarcodeHidden = false;
         }
 
         private void AnimateSlideSendButton()
         {
-            var sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
-            var receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);
-
             var screenCenterX = Resources.DisplayMetrics.WidthPixels / 2;
             var sendButtonLocation = new[] { 0, 0 };
             sendButton.GetLocationOnScreen(sendButtonLocation);
@@ -97,12 +149,8 @@ namespace SkyDrop.Droid.Views.Main
             receiveButton.Animate().Alpha(0).SetDuration(duration).Start();
         }
 
-        private void AnimateSlideBarcode()
+        private void AnimateSlideBarcodeIn()
         {
-            var sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
-            var barcodeContainer = FindViewById<ConstraintLayout>(Resource.Id.BarcodeContainer);
-            var barcodeMenu = FindViewById<FrameLayout>(Resource.Id.BarcodeMenu);
-
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
 
             barcodeContainer.TranslationX = screenWidth;
@@ -112,6 +160,19 @@ namespace SkyDrop.Droid.Views.Main
             sendButton.Animate().TranslationXBy(-screenWidth).SetDuration(duration).Start();
             barcodeContainer.Animate().TranslationX(0).SetDuration(duration).Start();
             barcodeMenu.Animate().TranslationX(0).SetDuration(duration).Start();
+        }
+
+        private void AnimateSlideBarcodeOut()
+        {
+            var screenWidth = Resources.DisplayMetrics.WidthPixels;
+
+            ViewModel.ReceiveButtonState = true;
+
+            var duration = 500;
+            sendButton.Animate().TranslationX(0).SetDuration(duration).Start();
+            receiveButton.Animate().Alpha(1).SetDuration(duration).Start();
+            barcodeContainer.Animate().TranslationX(screenWidth).SetDuration(duration).Start();
+            barcodeMenu.Animate().TranslationX(screenWidth).SetDuration(duration).Start();
         }
     }
 }

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/darkGrey">
+    android:background="@color/darkGrey"
+    android:id="@+id/Root">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -123,7 +124,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="8dp"
-                    app:cardBackgroundColor="@color/lightGrey"
+                    app:cardBackgroundColor="@color/primaryDarkColor"
                     app:strokeColor="@color/midGrey"
                     app:strokeWidth="1dp"
                     app:cardElevation="1dp"
@@ -143,6 +144,7 @@
                             android:layout_width="128dp"
                             android:layout_height="128dp">
                             <ImageView
+                                android:id="@+id/ButtonIcon"
                                 android:layout_width="128dp"
                                 android:layout_height="128dp"
                                 android:src="@drawable/ic_upload_grey"
@@ -156,8 +158,9 @@
                         </FrameLayout>
 
                         <TextView
+                            android:id="@+id/ButtonLabel"
                             android:textStyle="bold"
-                            android:textColor="@color/midGrey"
+                            android:textColor="@color/lightGrey"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
@@ -169,7 +172,7 @@
                     android:id="@+id/ReceiveFileButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/lightGrey"
+                    app:cardBackgroundColor="@color/primaryDarkColor"
                     android:layout_marginLeft="8dp"
                     app:cardElevation="1dp"
                     app:strokeColor="@color/midGrey"
@@ -186,12 +189,14 @@
                         android:padding="8dp"
                         android:clipToPadding="false">
                         <ImageView
+                            android:id="@+id/ButtonIcon"
                             android:layout_width="128dp"
                             android:layout_height="128dp"
                             android:src="@drawable/ic_download_grey"/>
                         <TextView
+                            android:id="@+id/ButtonLabel"
                             android:textStyle="bold"
-                            android:textColor="@color/midGrey"
+                            android:textColor="@color/lightGrey"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
