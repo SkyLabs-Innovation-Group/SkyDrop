@@ -22,7 +22,7 @@ namespace SkyDrop.Core.Services
 
         public async Task ShareLink(string skylink)
         {
-            userDialogs.Toast("Sharing");
+            userDialogs.Toast("Sharing...");
 
             await Share.RequestAsync(new ShareTextRequest
             {
