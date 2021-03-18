@@ -24,6 +24,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand<SkyFile> OpenFileCommand { get; set; }
         public IMvxCommand ShareCommand { get; set; }
         public IMvxCommand CopyLinkCommand { get; set; }
+        public IMvxCommand HandleUploadErrorCommand { get; set; }
 
         public string SkyFileJson { get; set; }
         public bool IsLoading { get; set; }
@@ -102,7 +103,11 @@ namespace SkyDrop.Core.ViewModels.Main
             var cancel = "cancel";
             var fileType = await userDialogs.ActionSheetAsync("", cancel, "", null, file, image);
             if (fileType == cancel)
+            {
+                SendButtonState = true;
+                ReceiveButtonState = true;
                 return;
+            }
 
             if (fileType == file)
             {
@@ -130,6 +135,8 @@ namespace SkyDrop.Core.ViewModels.Main
             catch (Exception e)
             {
                 Log.Exception(e);
+                userDialogs.Toast("Could not upload file");
+                HandleUploadErrorCommand?.Execute();
             }
             finally
             {

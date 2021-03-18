@@ -45,6 +45,7 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.SelectImageAsyncFunc = async () => await AndroidUtil.SelectImage(this);
             ViewModel.OpenFileCommand = new MvxCommand<SkyFile>(skyFile => AndroidUtil.OpenFileInBrowser(this, skyFile));
             ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
+            ViewModel.HandleUploadErrorCommand = new MvxCommand(() => AnimateSlideBarcodeOut(false));
 
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
             receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);
