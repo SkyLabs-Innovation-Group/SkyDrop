@@ -21,6 +21,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IUserDialogs userDialogs;
         private readonly IMvxNavigationService navigationService;
         private readonly IBarcodeService barcodeService;
+        private readonly IShareLinkService shareLinkService;
 
         public IMvxCommand SendCommand { get; set; }
         public IMvxCommand ReceiveCommand { get; set; }
@@ -30,6 +31,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand HandleUploadErrorCommand { get; set; }
         public IMvxCommand ResetBarcodeCommand { get; set; }
         public IMvxCommand NavToSettingsCommand { get; set; }
+        public IMvxCommand ShareLinkCommand { get; set; }
+
         public string SkyFileJson { get; set; }
         public bool IsUploading { get; set; }
         public bool IsBarcodeLoading { get; set; }
@@ -69,6 +72,7 @@ namespace SkyDrop.Core.ViewModels.Main
                              IApiService apiService,
                              IStorageService storageService,
                              IBarcodeService barcodeService,
+                             IShareLinkService shareLinkService,
                              IUserDialogs userDialogs,
                              IMvxNavigationService navigationService,
                              ILog log) : base(singletonService)
@@ -80,11 +84,13 @@ namespace SkyDrop.Core.ViewModels.Main
             this.userDialogs = userDialogs;
             this.navigationService = navigationService;
             this.barcodeService = barcodeService;
+            this.shareLinkService = shareLinkService;
 
             SendCommand = new MvxAsyncCommand(StartSendFile);
             ReceiveCommand = new MvxAsyncCommand(ReceiveFile);
-            CopyLinkCommand = new MvxAsyncCommand(CopyFileLinkToClipboard);
+            CopyLinkCommand = new MvxAsyncCommand(CopySkyLinkToClipboard);
             NavToSettingsCommand = new MvxAsyncCommand(NavToSettings);
+            ShareLinkCommand = new MvxAsyncCommand(ShareLink);
         }
 
         public override void ViewAppeared()
@@ -255,15 +261,23 @@ namespace SkyDrop.Core.ViewModels.Main
             return barcodeService.GenerateBarcode(text, width, height);
         }
 
-        private async Task CopyFileLinkToClipboard()
+        private string GetSkyLink()
         {
             if (skyFile.Status == FileStatus.Staged)
             {
                 Log.Error("User tried to copy skylink before file was uploaded");
-                return;
+                return null;
             }
 
-            string skyLink = Util.GetSkylinkUrl(skyFile.Skylink);
+            return Util.GetSkylinkUrl(skyFile.Skylink);
+        }
+
+        private async Task CopySkyLinkToClipboard()
+        {
+            string skyLink = GetSkyLink();
+            if (skyLink == null)
+                return;
+
             await Xamarin.Essentials.Clipboard.SetTextAsync(skyLink);
 
             Log.Trace("Set clipboard text to " + skyLink);
@@ -273,6 +287,22 @@ namespace SkyDrop.Core.ViewModels.Main
         private Task NavToSettings()
         {
             return navigationService.Navigate<MenuViewModel>();
+        }
+
+        private async Task ShareLink()
+        {
+            try
+            {
+                string skyLink = GetSkyLink();
+                if (skyLink == null)
+                    return;
+
+                await shareLinkService.ShareLink(skyLink);
+            }
+            catch(Exception e)
+            {
+                Log.Exception(e);
+            }
         }
     }
 }

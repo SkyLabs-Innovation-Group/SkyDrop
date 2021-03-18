@@ -30,7 +30,7 @@ namespace SkyDrop.Droid.Views.Main
         private float tapX, barcodeStartX;
         private MaterialCardView sendButton, receiveButton;
         private ConstraintLayout barcodeContainer;
-        private FrameLayout barcodeMenu;
+        private LinearLayout barcodeMenu;
         private ImageView barcodeImageView;
         private const int swipeMarginX = 100;
 
@@ -52,7 +52,7 @@ namespace SkyDrop.Droid.Views.Main
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
             receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);
             barcodeContainer = FindViewById<ConstraintLayout>(Resource.Id.BarcodeContainer);
-            barcodeMenu = FindViewById<FrameLayout>(Resource.Id.BarcodeMenu);
+            barcodeMenu = FindViewById<LinearLayout>(Resource.Id.BarcodeMenu);
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
 
             var rootView = FindViewById<ConstraintLayout>(Resource.Id.Root);
