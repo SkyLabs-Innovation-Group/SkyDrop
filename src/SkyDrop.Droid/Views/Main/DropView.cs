@@ -94,6 +94,24 @@ namespace SkyDrop.Droid.Views.Main
             base.OnBackPressed();
         }
 
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.DropMenu, menu);
+            return true;
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                case Resource.Id.menu_drop_settings:
+                    ViewModel.NavToSettingsCommand?.Execute();
+                    break;
+            }
+
+            return true;
+        }
+
         private async Task HandlePickedFile(Intent data)
         {
             AnimateSlideSendButton();
@@ -151,7 +169,7 @@ namespace SkyDrop.Droid.Views.Main
                 sendButton.TranslationX = screenWidth;
 
             var duration = 250;
-            sendButton.Animate().TranslationX(0).SetDuration(duration).WithEndAction(new Java.Lang.Runnable(() => ViewModel.IsBarcodeHidden = true)).Start();
+            sendButton.Animate().TranslationX(0).SetDuration(duration).WithEndAction(new Java.Lang.Runnable(() => ViewModel.ResetUI())).Start();
             receiveButton.Animate().Alpha(1).SetDuration(duration).Start();
             barcodeContainer.Animate().TranslationX(toLeft ? -screenWidth : screenWidth).SetDuration(duration).Start();
             barcodeMenu.Animate().TranslationX(toLeft ? -screenWidth : screenWidth).SetDuration(duration).Start();

@@ -29,7 +29,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand CopyLinkCommand { get; set; }
         public IMvxCommand HandleUploadErrorCommand { get; set; }
         public IMvxCommand ResetBarcodeCommand { get; set; }
-
+        public IMvxCommand NavToSettingsCommand { get; set; }
         public string SkyFileJson { get; set; }
         public bool IsUploading { get; set; }
         public bool IsBarcodeLoading { get; set; }
@@ -73,7 +73,7 @@ namespace SkyDrop.Core.ViewModels.Main
                              IMvxNavigationService navigationService,
                              ILog log) : base(singletonService)
         {
-            Title = "Drop";
+            Title = "SkyDrop";
 
             this.apiService = apiService;
             this.storageService = storageService;
@@ -84,6 +84,7 @@ namespace SkyDrop.Core.ViewModels.Main
             SendCommand = new MvxAsyncCommand(StartSendFile);
             ReceiveCommand = new MvxAsyncCommand(ReceiveFile);
             CopyLinkCommand = new MvxAsyncCommand(CopyFileLinkToClipboard);
+            NavToSettingsCommand = new MvxAsyncCommand(NavToSettings);
         }
 
         public override void ViewAppeared()
@@ -103,6 +104,7 @@ namespace SkyDrop.Core.ViewModels.Main
             SendButtonState = true;
             ReceiveButtonState = true;
             UploadTimerText = "";
+            IsBarcodeHidden = true;
         }
 
         private async Task StartSendFile()
@@ -266,6 +268,11 @@ namespace SkyDrop.Core.ViewModels.Main
 
             Log.Trace("Set clipboard text to " + skyLink);
             userDialogs.Toast("Copied SkyLink to clipboard");
+        }
+
+        private Task NavToSettings()
+        {
+            return navigationService.Navigate<MenuViewModel>();
         }
     }
 }
