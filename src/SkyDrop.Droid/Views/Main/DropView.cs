@@ -101,12 +101,12 @@ namespace SkyDrop.Droid.Views.Main
 
         public async Task ShowBarcode()
         {
+            ViewModel.IsBarcodeHidden = false;
+            AnimateSlideBarcodeIn();
             var barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
             var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, barcodeImageView.Width, barcodeImageView.Height);
             var bitmap = await AndroidUtil.EncodeBarcode(matrix, barcodeImageView.Width, barcodeImageView.Height);
             barcodeImageView.SetImageBitmap(bitmap);
-            AnimateSlideBarcodeIn();
-            ViewModel.IsBarcodeHidden = false;
         }
 
         private void AnimateSlideSendButton()

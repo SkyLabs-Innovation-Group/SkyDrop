@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Threading.Tasks;
 using System.Timers;
 using Acr.UserDialogs;
@@ -29,9 +30,10 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand HandleUploadErrorCommand { get; set; }
 
         public string SkyFileJson { get; set; }
-        public bool IsLoading { get; set; }
+        public bool IsUploading { get; set; }
+        public bool IsBarcodeLoading { get; set; }
         public bool IsBarcodeHidden { get; set; } = true;
-        public string SendButtonLabel => IsLoading ? "SENDING FILE" : "SEND FILE";
+        public string SendButtonLabel => IsUploading ? "SENDING FILE" : "SEND FILE";
         public bool SendButtonState { get; set; } = true;
         public bool ReceiveButtonState { get; set; } = true;
         public string UploadTimerText { get; set; }
@@ -98,7 +100,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private async Task StartSendFile()
         {
             //don't allow user to select file while a file is uploading
-            if (IsLoading) return;
+            if (IsUploading) return;
 
             SendButtonState = true;
             ReceiveButtonState = false;
@@ -128,14 +130,18 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             try
             {
-                IsLoading = true;
-                _ = RaisePropertyChanged(() => IsLoading);
+                IsUploading = true;
+                _ = RaisePropertyChanged(() => IsUploading);
 
                 StartUploadTimer();
                 skyFile = await UploadFile();
                 StopUploadTimer();
 
                 //show QR code
+                IsUploading = false;
+                _ = RaisePropertyChanged(() => IsUploading);
+                IsBarcodeLoading = true;
+                _ = RaisePropertyChanged(() => IsBarcodeLoading);
                 SkyFileJson = JsonConvert.SerializeObject(skyFile);
                 await GenerateBarcodeAsyncFunc();
             }
@@ -148,8 +154,10 @@ namespace SkyDrop.Core.ViewModels.Main
             finally
             {
                 StopUploadTimer();
-                IsLoading = false;
-                _ = RaisePropertyChanged(() => IsLoading);
+                IsUploading = false;
+                _ = RaisePropertyChanged(() => IsUploading);
+                IsBarcodeLoading = false;
+                _ = RaisePropertyChanged(() => IsBarcodeLoading);
             }
         }
 
@@ -158,7 +166,7 @@ namespace SkyDrop.Core.ViewModels.Main
             try
             {
                 //don't allow user to scan barcode code while a file is uploading
-                if (IsLoading) return;
+                if (IsUploading) return;
 
                 //don't allow user to scan barcode code while barcode is visible
                 if (!IsBarcodeHidden) return;

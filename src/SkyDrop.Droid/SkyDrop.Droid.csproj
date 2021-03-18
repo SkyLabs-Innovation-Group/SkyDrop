@@ -82,6 +82,7 @@
     <Compile Include="Views\Main\MenuView.cs" />
     <Compile Include="Bindings\ViewHiddenBinding.cs" />
     <Compile Include="Bindings\CardStateBinding.cs" />
+    <Compile Include="Bindings\BarcodeBackgroundBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">

@@ -26,20 +26,28 @@
                 android:layout_gravity="center_horizontal|top"
                 android:padding="16dp"
                 app:MvxBind="Hidden IsBarcodeHidden">
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     app:layout_constraintDimensionRatio="1:1" 
                     app:cardBackgroundColor="@color/lightGrey"
                     app:cardElevation="1dp"
                     android:clickable="true"
-                    app:cardCornerRadius="8dp">
+                    app:cardCornerRadius="8dp"
+                    app:MvxBind="BarcodeBackground IsBarcodeLoading">
                     <ImageView
                         android:id="@+id/BarcodeImage"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"/>
-                </androidx.cardview.widget.CardView>
+                    <ProgressBar
+                        android:background="@color/darkGrey"
+                        android:layout_width="128dp"
+                        android:layout_height="128dp"
+                        android:layout_gravity="center"
+                        android:padding="32dp"
+                        app:MvxBind="Visibility Visibility(IsBarcodeLoading)"/>
+                </com.google.android.material.card.MaterialCardView>
             </android.support.constraint.ConstraintLayout>
 
             <FrameLayout
@@ -155,13 +163,13 @@
                                 android:layout_width="128dp"
                                 android:layout_height="128dp"
                                 android:src="@drawable/ic_upload_grey"
-                                app:MvxBind="Visibility InvertedVisibility(IsLoading)"/>
+                                app:MvxBind="Visibility InvertedVisibility(IsUploading)"/>
                             <ProgressBar
                                 android:layout_width="128dp"
                                 android:layout_height="128dp"
                                 android:layout_centerInParent="true"
                                 android:padding="32dp"
-                                app:MvxBind="Visibility Visibility(IsLoading)"/>
+                                app:MvxBind="Visibility Visibility(IsUploading)"/>
                         </FrameLayout>
 
                         <TextView
