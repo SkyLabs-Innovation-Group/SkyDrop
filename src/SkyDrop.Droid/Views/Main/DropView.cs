@@ -84,7 +84,7 @@ namespace SkyDrop.Droid.Views.Main
         {
             if (!ViewModel.IsBarcodeHidden)
             {
-                AnimateSlideBarcodeOut();
+                AnimateSlideBarcodeOut(false);
                 return;
             }
 
@@ -134,17 +134,22 @@ namespace SkyDrop.Droid.Views.Main
             barcodeMenu.Animate().TranslationX(0).SetDuration(duration).Start();
         }
 
-        private void AnimateSlideBarcodeOut()
+        private void AnimateSlideBarcodeOut(bool toLeft)
         {
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
 
             ViewModel.ReceiveButtonState = true;
 
+            if (toLeft)
+            {
+                sendButton.TranslationX = screenWidth;
+            }
+
             var duration = 500;
             sendButton.Animate().TranslationX(0).SetDuration(duration).WithEndAction(new Java.Lang.Runnable(() => ViewModel.IsBarcodeHidden = true)).Start();
             receiveButton.Animate().Alpha(1).SetDuration(duration).Start();
-            barcodeContainer.Animate().TranslationX(screenWidth).SetDuration(duration).Start();
-            barcodeMenu.Animate().TranslationX(screenWidth).SetDuration(duration).Start();
+            barcodeContainer.Animate().TranslationX(toLeft ? -screenWidth : screenWidth).SetDuration(duration).Start();
+            barcodeMenu.Animate().TranslationX(toLeft ? -screenWidth : screenWidth).SetDuration(duration).Start();
         }
 
         private void HandleTouchEvents(object sender, TouchEventArgs e)
@@ -174,13 +179,15 @@ namespace SkyDrop.Droid.Views.Main
                 var touchX = e.Event.GetX();
                 var deltaX = touchX - tapX;
 
-                if (!ViewModel.IsBarcodeHidden && barcodeContainer.TranslationX < swipeMarginX)
+                if (!ViewModel.IsBarcodeHidden && barcodeContainer.TranslationX < swipeMarginX && barcodeContainer.TranslationX > -swipeMarginX)
                 {
                     barcodeContainer.TranslationX = barcodeStartX + deltaX;
                     barcodeMenu.TranslationX = barcodeStartX + deltaX;
 
                     if (barcodeContainer.TranslationX >= swipeMarginX)
-                        AnimateSlideBarcodeOut();
+                        AnimateSlideBarcodeOut(false);
+                    else if (barcodeContainer.TranslationX <= -swipeMarginX)
+                        AnimateSlideBarcodeOut(true);
                 }
             }
         }
