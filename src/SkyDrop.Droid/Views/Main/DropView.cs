@@ -164,6 +164,7 @@ namespace SkyDrop.Droid.Views.Main
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
 
             ViewModel.ReceiveButtonState = true;
+            ViewModel.UploadTimerText = "";
 
             if (toLeft)
                 sendButton.TranslationX = screenWidth;
