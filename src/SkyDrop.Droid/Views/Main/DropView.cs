@@ -142,9 +142,7 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.ReceiveButtonState = true;
 
             if (toLeft)
-            {
                 sendButton.TranslationX = screenWidth;
-            }
 
             var duration = 500;
             sendButton.Animate().TranslationX(0).SetDuration(duration).WithEndAction(new Java.Lang.Runnable(() => ViewModel.IsBarcodeHidden = true)).Start();

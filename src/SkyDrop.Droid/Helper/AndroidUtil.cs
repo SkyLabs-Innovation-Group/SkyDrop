@@ -229,12 +229,14 @@ namespace SkyDrop.Droid.Helper
             {
                 try
                 {
+                    var darkGrey = Colors.DarkGrey.ToNative();
+                    var lightGrey = Colors.LightGrey.ToNative();
                     var bitmap = Bitmap.CreateBitmap(width, height, Bitmap.Config.Rgb565);
                     for (int x = 0; x < width; x++)
                     {
                         for (int y = 0; y < height; y++)
                         {
-                            bitmap.SetPixel(x, y, GetBit(matrix, x, y) ? Colors.DarkGrey.ToNative() : Colors.LightGrey.ToNative());
+                            bitmap.SetPixel(x, y, GetBit(matrix, x, y) ? darkGrey : lightGrey);
                         }
                     }
 

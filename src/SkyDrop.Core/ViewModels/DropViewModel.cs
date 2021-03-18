@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Timers;
 using Acr.UserDialogs;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
@@ -32,9 +34,12 @@ namespace SkyDrop.Core.ViewModels.Main
         public string SendButtonLabel => IsLoading ? "SENDING FILE" : "SEND FILE";
         public bool SendButtonState { get; set; } = true;
         public bool ReceiveButtonState { get; set; } = true;
+        public string UploadTimerText { get; set; }
 
         private SkyFile skyFile { get; set; }
         private string errorMessage;
+        private Stopwatch stopwatch;
+        private Timer timer;
 
         private Func<Task> _selectFileAsyncFunc;
         public Func<Task> SelectFileAsyncFunc
@@ -126,7 +131,9 @@ namespace SkyDrop.Core.ViewModels.Main
                 IsLoading = true;
                 _ = RaisePropertyChanged(() => IsLoading);
 
+                StartUploadTimer();
                 skyFile = await UploadFile();
+                StopUploadTimer();
 
                 //show QR code
                 SkyFileJson = JsonConvert.SerializeObject(skyFile);
@@ -140,6 +147,7 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             finally
             {
+                StopUploadTimer();
                 IsLoading = false;
                 _ = RaisePropertyChanged(() => IsLoading);
             }
@@ -198,6 +206,29 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             var skyFile = await apiService.UploadFile(this.skyFile.Filename, this.skyFile.Data);
             return skyFile;
+        }
+
+        private void StartUploadTimer()
+        {
+            void UpdateTimerText()
+            {
+                UploadTimerText = stopwatch.Elapsed.ToString(@"mm\:ss");
+            }
+
+            stopwatch = new Stopwatch();
+            timer = new Timer();
+            timer.Elapsed += (s, e) => UpdateTimerText();
+            timer.Interval = 1000;
+            timer.Enabled = true;
+            timer.Start();
+            stopwatch.Start();
+            UpdateTimerText();
+        }
+
+        private void StopUploadTimer()
+        {
+            stopwatch.Stop();
+            timer.Stop();
         }
 
         public BitMatrix GenerateBarcode(string text, int width, int height)

@@ -132,6 +132,13 @@
                     app:cardCornerRadius="8dp"
                     android:translationZ="1dp"
                     app:MvxBind="Click SendCommand;MaterialCardState SendButtonState">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textColor="@color/lightGrey"
+                        android:text="0:00"
+                        app:MvxBind="Text UploadTimerText"/>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
