@@ -37,16 +37,25 @@
                     app:MvxBind="BarcodeBackground IsBarcodeLoading">
                     <ImageView
                         android:id="@+id/BarcodeImage"
+                        android:src="@drawable/barcode_grey"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"/>
-                    <ProgressBar
-                        android:background="@color/darkGrey"
-                        android:layout_width="128dp"
-                        android:layout_height="128dp"
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
                         android:layout_gravity="center"
-                        android:padding="32dp"
-                        app:MvxBind="Visibility Visibility(IsBarcodeLoading)"/>
+                        app:cardBackgroundColor="@color/darkGrey"
+                        app:cardElevation="1dp"
+                        android:clickable="true"
+                        app:cardCornerRadius="40dp"
+                        app:MvxBind="Visibility Visibility(IsBarcodeLoading)">
+                        <ProgressBar
+                            android:background="@color/darkGrey"
+                            android:layout_gravity="center"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"/>
+                    </com.google.android.material.card.MaterialCardView>
                 </com.google.android.material.card.MaterialCardView>
             </android.support.constraint.ConstraintLayout>
 

@@ -28,6 +28,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand ShareCommand { get; set; }
         public IMvxCommand CopyLinkCommand { get; set; }
         public IMvxCommand HandleUploadErrorCommand { get; set; }
+        public IMvxCommand ResetBarcodeCommand { get; set; }
 
         public string SkyFileJson { get; set; }
         public bool IsUploading { get; set; }
@@ -97,6 +98,13 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
+        public void ResetUI()
+        {
+            SendButtonState = true;
+            ReceiveButtonState = true;
+            UploadTimerText = "";
+        }
+
         private async Task StartSendFile()
         {
             //don't allow user to select file while a file is uploading
@@ -111,8 +119,7 @@ namespace SkyDrop.Core.ViewModels.Main
             var fileType = await userDialogs.ActionSheetAsync("", cancel, "", null, file, image);
             if (fileType == cancel)
             {
-                SendButtonState = true;
-                ReceiveButtonState = true;
+                ResetUI();
                 return;
             }
 
@@ -136,6 +143,8 @@ namespace SkyDrop.Core.ViewModels.Main
                 StartUploadTimer();
                 skyFile = await UploadFile();
                 StopUploadTimer();
+
+                ResetBarcodeCommand?.Execute();
 
                 //show QR code
                 IsUploading = false;
