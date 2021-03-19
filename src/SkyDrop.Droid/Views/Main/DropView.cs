@@ -209,9 +209,11 @@ namespace SkyDrop.Droid.Views.Main
                     break;
 
                 case MotionEventActions.Up:
+                    if(!isPressed)
+                        return base.DispatchTouchEvent(e);
+
                     isPressed = false;
 
-                    //TODO: add an extra condition here to ensure the thing is not already animating
                     if (ViewModel.IsBarcodeVisible && !ViewModel.IsAnimatingBarcodeOut)
                     {
                         if (barcodeContainer.TranslationX >= swipeMarginX)
