@@ -16,11 +16,12 @@ namespace SkyDrop.iOS
     {
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
-            AppCenter.Start("382ddca4-6c75-43ee-886c-e533cd272137",
-                               typeof(Analytics), typeof(Crashes));
+            var val = base.FinishedLaunching(application, launchOptions);
 
+            //AppCenter.Start("382ddca4-6c75-43ee-886c-e533cd272137",
+            //                   typeof(Analytics), typeof(Crashes));
 
-            return base.FinishedLaunching(application, launchOptions);
+            return val;
         }
     }
 }
