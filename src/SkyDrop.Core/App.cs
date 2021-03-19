@@ -21,9 +21,6 @@ namespace SkyDrop.Core
 
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger());
 
-            AppCenter.Start("a4cdd96b-271f-4337-a1a6-57801ea8fd9c",
-                   typeof(Analytics), typeof(Crashes));
-
             RegisterAppStart<DropViewModel>();
         }
     }
