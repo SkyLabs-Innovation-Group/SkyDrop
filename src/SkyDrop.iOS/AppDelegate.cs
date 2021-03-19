@@ -18,8 +18,8 @@ namespace SkyDrop.iOS
         {
             var val = base.FinishedLaunching(application, launchOptions);
 
-            //AppCenter.Start("382ddca4-6c75-43ee-886c-e533cd272137",
-            //                   typeof(Analytics), typeof(Crashes));
+            AppCenter.Start("382ddca4-6c75-43ee-886c-e533cd272137",
+                               typeof(Analytics), typeof(Crashes));
 
             return val;
         }
