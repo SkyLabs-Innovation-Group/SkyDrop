@@ -139,8 +139,14 @@ namespace SkyDrop.Droid.Views.Main
 
             var duration = 1000;
             var translationX = screenCenterX - sendButtonCenterX;
-            sendButton.Animate().TranslationX(translationX).SetDuration(duration).Start();
-            receiveButton.Animate().Alpha(0).SetDuration(duration).Start();
+            sendButton.Animate()
+                .TranslationX(translationX)
+                .SetDuration(duration)
+                .Start();
+            receiveButton.Animate()
+                .Alpha(0)
+                .SetDuration(duration)
+                .Start();
         }
 
         private void AnimateSlideBarcodeIn()
