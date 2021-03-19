@@ -200,7 +200,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 Log.Trace($"Uploading file #{uploadCount}: {stagedFile?.Filename ?? "null"}");
 
-                var skyFile = await apiService.UploadFile(stagedFile.Filename, stagedFile.Data);
+                var skyFile = await apiService.UploadFile(stagedFile.Filename, stagedFile.Data, stagedFile.FileSizeBytes);
                 Log.Trace("UPLOAD COMPLETE: " + skyFile.Skylink);
 
                 var existingFile = SkyFiles.FirstOrDefault(s => s.SkyFile.Skylink == skyFile.Skylink);

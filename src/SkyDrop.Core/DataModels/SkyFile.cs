@@ -18,6 +18,8 @@ namespace SkyDrop.Core.DataModels
 
         public string Filename { get; set; }
 
+        public long FileSizeBytes { get; set; }
+
         //only for staged files
         [Realms.Ignored]
         public byte[] Data { get; set; }

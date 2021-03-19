@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Realms;
+using Realms.Exceptions;
 using SkyDrop.Core.DataModels;
 
 namespace SkyDrop.Core.Services
@@ -8,6 +10,7 @@ namespace SkyDrop.Core.Services
     public class StorageService : IStorageService
     {
         private readonly ILog log;
+        private Realm realm => GetRealm();
 
         public StorageService(ILog log)
         {
@@ -16,8 +19,6 @@ namespace SkyDrop.Core.Services
 
         public List<SkyFile> LoadSkyFiles()
         {
-            var realm = Realm.GetInstance();
-
             var realmSkyFiles = realm.All<SkyFile>().ToList();
             foreach(var skyFile in realmSkyFiles)
             {
@@ -33,8 +34,6 @@ namespace SkyDrop.Core.Services
         {
             saveCallCount++;
 
-            var realm = Realm.GetInstance();
-
             realm.Write(() =>
             {
                 log.Trace("SaveSkyFiles() write for call #" + saveCallCount);
@@ -44,22 +43,65 @@ namespace SkyDrop.Core.Services
 
         public void DeleteSkyFile(SkyFile skyFile)
         {
-            var realm = Realm.GetInstance();
-
             realm.Write(() =>
             {
                 realm.Remove(skyFile);
             });
         }
 
+        public UploadAverage GetAverageUploadRate()
+        {
+            var uploadAverage = realm.All<UploadAverage>().FirstOrDefault();
+            return uploadAverage ?? new UploadAverage();
+        }
+
+        public void SetAverageUploadRate(UploadAverage uploadAverage)
+        {
+            realm.Write(() =>
+            {
+                log.Trace("SetAverageUploadRate()");
+                realm.RemoveAll<UploadAverage>();
+                realm.Add(uploadAverage);
+            });
+        }
+
         public void ClearAllData()
         {
-            var realm = Realm.GetInstance();
-
             realm.Write(() =>
             {
                 realm.RemoveAll();
             });
+        }
+
+        /// <summary>
+        /// If there is a data discrepancy,
+        /// Clears the whole database off and resets
+        /// </summary>
+        private Realm GetRealm()
+        {
+            var realmConfiguration = new RealmConfiguration();
+
+            try
+            {
+                return Realm.GetInstance(realmConfiguration);
+            }
+            catch (RealmMigrationNeededException e)
+            {
+                try
+                {
+                    log.Exception(e);
+                    Realm.DeleteRealm(realmConfiguration);
+
+                    //Realm file has been deleted.
+                    return Realm.GetInstance(realmConfiguration);
+                }
+                catch (Exception ex)
+                {
+                    //No Realm file to remove.
+                    log.Exception(e);
+                    throw ex;
+                }
+            }
         }
     }
 
@@ -70,6 +112,10 @@ namespace SkyDrop.Core.Services
         void SaveSkyFiles(params SkyFile[] skyFile);
 
         void DeleteSkyFile(SkyFile skyFile);
+
+        UploadAverage GetAverageUploadRate();
+
+        void SetAverageUploadRate(UploadAverage uploadAverage);
 
         void ClearAllData();
     }
