@@ -97,6 +97,9 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             base.ViewAppeared();
 
+            //make sure buttons return to green when returning from QR scanner
+            ResetUI();
+
             //show error message after the qr code scanner view has closed to avoid exception
             if (!string.IsNullOrEmpty(errorMessage))
             {

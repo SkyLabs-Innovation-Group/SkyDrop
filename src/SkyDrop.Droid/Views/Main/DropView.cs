@@ -54,9 +54,6 @@ namespace SkyDrop.Droid.Views.Main
             barcodeContainer = FindViewById<ConstraintLayout>(Resource.Id.BarcodeContainer);
             barcodeMenu = FindViewById<LinearLayout>(Resource.Id.BarcodeMenu);
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
-
-            var rootView = FindViewById<ConstraintLayout>(Resource.Id.Root);
-            rootView.Touch += HandleTouchEvents;
         }
 
         protected override async void OnActivityResult(int requestCode, Android.App.Result resultCode, Intent data)
@@ -176,44 +173,45 @@ namespace SkyDrop.Droid.Views.Main
             barcodeMenu.Animate().TranslationX(toLeft ? -screenWidth : screenWidth).SetDuration(duration).Start();
         }
 
-        private void HandleTouchEvents(object sender, TouchEventArgs e)
+        public override bool DispatchTouchEvent(MotionEvent e)
         {
-            if (e.Event.Action == MotionEventActions.Down)
+            switch(e.Action)
             {
-                e.Handled = true;
-                isPressed = true;
+                case MotionEventActions.Down:
+                    isPressed = true;
 
-                tapX = e.Event.GetX();
+                    tapX = e.GetX();
 
-                barcodeStartX = barcodeContainer.TranslationX;
+                    barcodeStartX = barcodeContainer.TranslationX;
+                    break;
+
+                case MotionEventActions.Up:
+                    isPressed = false;
+                    break;
+
+                case MotionEventActions.Move:
+                    if (!isPressed)
+                        return base.DispatchTouchEvent(e);
+
+                    var touchX = e.GetX();
+                    var deltaX = touchX - tapX;
+
+                    if (!ViewModel.IsBarcodeHidden &&
+                        barcodeContainer.TranslationX < swipeMarginX &&
+                        barcodeContainer.TranslationX > -swipeMarginX)
+                    {
+                        barcodeContainer.TranslationX = barcodeStartX + deltaX;
+                        barcodeMenu.TranslationX = barcodeStartX + deltaX;
+
+                        if (barcodeContainer.TranslationX >= swipeMarginX)
+                            AnimateSlideBarcodeOut(false);
+                        else if (barcodeContainer.TranslationX <= -swipeMarginX)
+                            AnimateSlideBarcodeOut(true);
+                    }
+                    break;
             }
-            else if (e.Event.Action == MotionEventActions.Up)
-            {
-                e.Handled = true;
-                isPressed = false;
-            }
-            else if (e.Event.Action == MotionEventActions.Move)
-            {
-                if (!isPressed)
-                {
-                    e.Handled = false;
-                    return;
-                }
 
-                var touchX = e.Event.GetX();
-                var deltaX = touchX - tapX;
-
-                if (!ViewModel.IsBarcodeHidden && barcodeContainer.TranslationX < swipeMarginX && barcodeContainer.TranslationX > -swipeMarginX)
-                {
-                    barcodeContainer.TranslationX = barcodeStartX + deltaX;
-                    barcodeMenu.TranslationX = barcodeStartX + deltaX;
-
-                    if (barcodeContainer.TranslationX >= swipeMarginX)
-                        AnimateSlideBarcodeOut(false);
-                    else if (barcodeContainer.TranslationX <= -swipeMarginX)
-                        AnimateSlideBarcodeOut(true);
-                }
-            }
+            return base.DispatchTouchEvent(e);
         }
     }
 }
