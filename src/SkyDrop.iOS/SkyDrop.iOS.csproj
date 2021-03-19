@@ -151,6 +151,11 @@
     <ImageAsset Include="Resources\Media.xcassets\ic_cloud.imageset\cloud.pdf" />
     <ImageAsset Include="Resources\Media.xcassets\ic_settings.imageset\Contents.json" />
     <ImageAsset Include="Resources\Media.xcassets\ic_settings.imageset\cog.pdf" />
+    <InterfaceDefinition Include="Views\Drop\DropView.xib" />
+    <Compile Include="Views\Drop\DropView.cs" />
+    <Compile Include="Views\Drop\DropView.designer.cs">
+      <DependentUpon>DropView.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -227,6 +232,7 @@
     <Folder Include="Resources\Media.xcassets\ic_share.imageset\" />
     <Folder Include="Resources\Media.xcassets\ic_cloud.imageset\" />
     <Folder Include="Resources\Media.xcassets\ic_settings.imageset\" />
+    <Folder Include="Views\Drop\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
