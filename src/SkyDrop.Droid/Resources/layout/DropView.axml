@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|top"
                 android:padding="16dp"
-                app:MvxBind="Hidden IsBarcodeHidden">
+                app:MvxBind="VisibleHidden IsBarcodeVisible">
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -66,7 +66,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_below="@id/BarcodeContainer"
                 android:gravity="center_horizontal"
-                app:MvxBind="Visibility InvertedVisibility(IsBarcodeHidden)">
+                app:MvxBind="Visibility Visibility(IsBarcodeVisible)">
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
@@ -160,7 +160,7 @@
                     android:clickable="true"
                     app:cardCornerRadius="8dp"
                     android:translationZ="1dp"
-                    app:MvxBind="Click SendCommand;MaterialCardState SendButtonState">
+                    app:MvxBind="Click SendCommand;MaterialCardState IsSendButtonGreen">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -215,7 +215,7 @@
                     app:strokeWidth="1dp"
                     android:clickable="true"
                     app:cardCornerRadius="8dp"
-                    app:MvxBind="Click ReceiveCommand;MaterialCardState ReceiveButtonState">
+                    app:MvxBind="Click ReceiveCommand;MaterialCardState IsReceiveButtonGreen">
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

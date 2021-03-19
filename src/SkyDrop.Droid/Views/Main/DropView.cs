@@ -26,13 +26,13 @@ namespace SkyDrop.Droid.Views.Main
     {
         protected override int ActivityLayoutId => Resource.Layout.DropView;
 
+        private const int swipeMarginX = 100;
         private bool isPressed;
         private float tapX, barcodeStartX;
         private MaterialCardView sendButton, receiveButton;
         private ConstraintLayout barcodeContainer;
         private LinearLayout barcodeMenu;
         private ImageView barcodeImageView;
-        private const int swipeMarginX = 100;
 
         protected override async void OnCreate(Bundle bundle)
         {
@@ -82,7 +82,7 @@ namespace SkyDrop.Droid.Views.Main
 
         public override void OnBackPressed()
         {
-            if (!ViewModel.IsBarcodeHidden)
+            if (ViewModel.IsBarcodeVisible)
             {
                 AnimateSlideBarcodeOut(false);
                 return;
@@ -118,7 +118,7 @@ namespace SkyDrop.Droid.Views.Main
 
         private async Task ShowBarcode()
         {
-            ViewModel.IsBarcodeHidden = false;
+            ViewModel.IsBarcodeVisible = true;
             AnimateSlideBarcodeIn();
             var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, barcodeImageView.Width, barcodeImageView.Height);
             var bitmap = await AndroidUtil.EncodeBarcode(matrix, barcodeImageView.Width, barcodeImageView.Height);
@@ -151,26 +151,49 @@ namespace SkyDrop.Droid.Views.Main
             barcodeMenu.TranslationX = screenWidth;
 
             var duration = 666;
-            sendButton.Animate().TranslationXBy(-screenWidth).SetDuration(duration).Start();
-            barcodeContainer.Animate().TranslationX(0).SetDuration(duration).Start();
-            barcodeMenu.Animate().TranslationX(0).SetDuration(duration).Start();
+            sendButton.Animate()
+                .TranslationXBy(-screenWidth)
+                .SetDuration(duration)
+                .Start();
+            barcodeContainer.Animate()
+                .TranslationX(0)
+                .SetDuration(duration)
+                .Start();
+            barcodeMenu.Animate()
+                .TranslationX(0)
+                .SetDuration(duration)
+                .Start();
         }
 
         private void AnimateSlideBarcodeOut(bool toLeft)
         {
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
 
-            ViewModel.ReceiveButtonState = true;
+            ViewModel.IsAnimatingBarcodeOut = true;
+            ViewModel.IsReceiveButtonGreen = true;
             ViewModel.UploadTimerText = "";
 
             if (toLeft)
                 sendButton.TranslationX = screenWidth;
 
             var duration = 250;
-            sendButton.Animate().TranslationX(0).SetDuration(duration).WithEndAction(new Java.Lang.Runnable(() => ViewModel.ResetUI())).Start();
-            receiveButton.Animate().Alpha(1).SetDuration(duration).Start();
-            barcodeContainer.Animate().TranslationX(toLeft ? -screenWidth : screenWidth).SetDuration(duration).Start();
-            barcodeMenu.Animate().TranslationX(toLeft ? -screenWidth : screenWidth).SetDuration(duration).Start();
+            sendButton.Animate()
+                .TranslationX(0)
+                .SetDuration(duration)
+                .WithEndAction(new Java.Lang.Runnable(() => ViewModel.ResetUI()))
+                .Start();
+            receiveButton.Animate()
+                .Alpha(1)
+                .SetDuration(duration)
+                .Start();
+            barcodeContainer.Animate()
+                .TranslationX(toLeft ? -screenWidth : screenWidth)
+                .SetDuration(duration)
+                .Start();
+            barcodeMenu.Animate()
+                .TranslationX(toLeft ? -screenWidth : screenWidth)
+                .SetDuration(duration)
+                .Start();
         }
 
         public override bool DispatchTouchEvent(MotionEvent e)
@@ -187,6 +210,15 @@ namespace SkyDrop.Droid.Views.Main
 
                 case MotionEventActions.Up:
                     isPressed = false;
+
+                    //TODO: add an extra condition here to ensure the thing is not already animating
+                    if (ViewModel.IsBarcodeVisible && !ViewModel.IsAnimatingBarcodeOut)
+                    {
+                        if (barcodeContainer.TranslationX >= swipeMarginX)
+                            AnimateSlideBarcodeOut(false);
+                        else if (barcodeContainer.TranslationX <= -swipeMarginX)
+                            AnimateSlideBarcodeOut(true);
+                    }
                     break;
 
                 case MotionEventActions.Move:
@@ -196,17 +228,10 @@ namespace SkyDrop.Droid.Views.Main
                     var touchX = e.GetX();
                     var deltaX = touchX - tapX;
 
-                    if (!ViewModel.IsBarcodeHidden &&
-                        barcodeContainer.TranslationX < swipeMarginX &&
-                        barcodeContainer.TranslationX > -swipeMarginX)
+                    if (ViewModel.IsBarcodeVisible)
                     {
                         barcodeContainer.TranslationX = barcodeStartX + deltaX;
                         barcodeMenu.TranslationX = barcodeStartX + deltaX;
-
-                        if (barcodeContainer.TranslationX >= swipeMarginX)
-                            AnimateSlideBarcodeOut(false);
-                        else if (barcodeContainer.TranslationX <= -swipeMarginX)
-                            AnimateSlideBarcodeOut(true);
                     }
                     break;
             }

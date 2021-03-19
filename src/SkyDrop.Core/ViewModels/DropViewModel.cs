@@ -36,11 +36,12 @@ namespace SkyDrop.Core.ViewModels.Main
         public string SkyFileJson { get; set; }
         public bool IsUploading { get; set; }
         public bool IsBarcodeLoading { get; set; }
-        public bool IsBarcodeHidden { get; set; } = true;
+        public bool IsBarcodeVisible { get; set; }
         public string SendButtonLabel => IsUploading ? "SENDING FILE" : "SEND FILE";
-        public bool SendButtonState { get; set; } = true;
-        public bool ReceiveButtonState { get; set; } = true;
+        public bool IsSendButtonGreen { get; set; } = true;
+        public bool IsReceiveButtonGreen { get; set; } = true;
         public string UploadTimerText { get; set; }
+        public bool IsAnimatingBarcodeOut { get; set; }
 
         private SkyFile skyFile { get; set; }
         private string errorMessage;
@@ -110,10 +111,11 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public void ResetUI()
         {
-            SendButtonState = true;
-            ReceiveButtonState = true;
+            IsSendButtonGreen = true;
+            IsReceiveButtonGreen = true;
             UploadTimerText = "";
-            IsBarcodeHidden = true;
+            IsBarcodeVisible = false;
+            IsAnimatingBarcodeOut = false;
         }
 
         private async Task StartSendFile()
@@ -121,8 +123,8 @@ namespace SkyDrop.Core.ViewModels.Main
             //don't allow user to select file while a file is uploading
             if (IsUploading) return;
 
-            SendButtonState = true;
-            ReceiveButtonState = false;
+            IsSendButtonGreen = true;
+            IsReceiveButtonGreen = false;
 
             var file = "Select File";
             var image = "Select Image";
@@ -189,18 +191,13 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (IsUploading) return;
 
                 //don't allow user to scan barcode code while barcode is visible
-                if (!IsBarcodeHidden) return;
+                if (IsBarcodeVisible) return;
 
-                SendButtonState = false;
-                ReceiveButtonState = true;
-
-                //prompt user with instructions
-                var message = "Scan the QR code on the sender device to receive the file";
-                await userDialogs.AlertAsync(message);
+                IsSendButtonGreen = false;
+                IsReceiveButtonGreen = true;
 
                 //open the QR code scan view
                 var codeJson = await barcodeService.ScanBarcode();
-
                 if (codeJson == null)
                     return;
 
