@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Timers;
 using Realms;
 using SkyDrop.Core.DataModels;
 
@@ -14,6 +16,10 @@ namespace SkyDrop.Core.Services
     {
         private readonly ILog log;
         private readonly IStorageService storageService;
+        private Stopwatch stopwatch;
+        private Timer timer;
+        private TimeSpan estimatedUploadTime;
+        private long fileSizeBytes;
 
         public UploadTimerService(ILog log,
                                   IStorageService storageService)
@@ -55,6 +61,42 @@ namespace SkyDrop.Core.Services
 
             return TimeSpan.FromSeconds(estimatedSeconds);
         }
+
+        public void StartUploadTimer(long fileSizeBytes, Action timerUpdateCallback)
+        {
+            this.fileSizeBytes = fileSizeBytes;
+            estimatedUploadTime = EstimateUploadTime(fileSizeBytes);
+
+            stopwatch = new Stopwatch();
+            timer = new Timer();
+            timer.Elapsed += (s, e) => timerUpdateCallback();
+            timer.Interval = 1000;
+            timer.Enabled = true;
+            timer.Start();
+            stopwatch.Start();
+            timerUpdateCallback();
+        }
+
+        public void StopUploadTimer()
+        {
+            if (stopwatch.IsRunning)
+            {
+                //save the upload time and file size to calculate average upload speed
+                AddReading(stopwatch.Elapsed, fileSizeBytes);
+            }
+
+            stopwatch.Stop();
+            timer.Stop();
+        }
+
+        public (double UploadProgress, string UploadTime) GetUploadProgress()
+        {
+            var uploadTimerText = stopwatch.Elapsed.ToString(@"mm\:ss");
+            var uploadProgress = stopwatch.Elapsed.TotalSeconds / estimatedUploadTime.TotalSeconds;
+            log.Trace($"Upload Progress: {uploadProgress}, Upload Time: {uploadTimerText}");
+
+            return (uploadProgress, uploadTimerText);
+        }
     }
 
     public interface IUploadTimerService
@@ -62,5 +104,11 @@ namespace SkyDrop.Core.Services
         void AddReading(TimeSpan time, long fileSizeBytes);
 
         TimeSpan EstimateUploadTime(long fileSizeBytes);
+
+        void StartUploadTimer(long fileSizeBytes, Action timerUpdateCallback);
+
+        void StopUploadTimer();
+
+        (double UploadProgress, string UploadTime) GetUploadProgress();
     }
 }

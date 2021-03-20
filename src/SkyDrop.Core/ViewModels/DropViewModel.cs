@@ -48,9 +48,6 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private SkyFile skyFile { get; set; }
         private string errorMessage;
-        private Stopwatch stopwatch;
-        private Timer timer;
-        private TimeSpan estimatedUploadTime;
 
         private Func<Task> _selectFileAsyncFunc;
         public Func<Task> SelectFileAsyncFunc
@@ -245,39 +242,27 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void StartUploadTimer()
         {
-            estimatedUploadTime = uploadTimerService.EstimateUploadTime(skyFile.FileSizeBytes);
-
-            stopwatch = new Stopwatch();
-            timer = new Timer();
-            timer.Elapsed += (s, e) => UpdateUploadProgress();
-            timer.Interval = 1000;
-            timer.Enabled = true;
-            timer.Start();
-            stopwatch.Start();
-            UpdateUploadProgress();
-        }
-
-        private void UpdateUploadProgress()
-        {
-            UploadTimerText = stopwatch.Elapsed.ToString(@"mm\:ss");
-
-            UploadProgress = stopwatch.Elapsed.TotalSeconds / estimatedUploadTime.TotalSeconds;
-            Log.Trace($"Upload Progress: {UploadProgress}");
+            uploadTimerService.StartUploadTimer(skyFile.FileSizeBytes, UpdateUploadProgress);
         }
 
         private void StopUploadTimer()
         {
-            if (stopwatch.IsRunning)
+            //fill progress bar
+            UploadProgress = 1;
+            UploadTimerText = "100%";
+
+            uploadTimerService.StopUploadTimer();
+        }
+
+        private void UpdateUploadProgress()
+        {
+            var (uploadProgress, uploadTimerText) = uploadTimerService.GetUploadProgress();
+
+            if (UploadProgress != 1)
             {
-                //fill progress bar
-                UploadProgress = 1;
-
-                //save the upload time and file size to calculate average upload speed
-                uploadTimerService.AddReading(stopwatch.Elapsed, skyFile.FileSizeBytes);
+                UploadProgress = uploadProgress;
+                UploadTimerText = uploadTimerText;
             }
-
-            stopwatch.Stop();
-            timer.Stop();
         }
 
         private void UpdateFileSize()
