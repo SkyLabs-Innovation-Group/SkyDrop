@@ -32,7 +32,7 @@ namespace SkyDrop.Core.Services
             var newAverage = new UploadAverage
             {
                 DataPointCount = newDataPointCount,
-                Value = (currentAverage.Value + uploadRate) / newDataPointCount
+                Value = (currentAverage.Value * currentAverage.DataPointCount + uploadRate) / newDataPointCount
             };
 
             log.Trace($"New upload rate: {uploadRate}b/s");
@@ -41,10 +41,26 @@ namespace SkyDrop.Core.Services
             //save new average
             storageService.SetAverageUploadRate(newAverage);
         }
+
+        public TimeSpan EstimateUploadTime(long fileSizeBytes)
+        {
+            long fileSizeBits = fileSizeBytes * 8;
+            var currentAverage = storageService.GetAverageUploadRate();
+            var averageUploadSpeed = currentAverage.Value;
+            if (averageUploadSpeed == 0)
+                averageUploadSpeed = 10000; //default 10kb/s speed
+
+            var secondsPerBit = 1 / averageUploadSpeed;
+            var estimatedSeconds = fileSizeBits * secondsPerBit;
+
+            return TimeSpan.FromSeconds(estimatedSeconds);
+        }
     }
 
     public interface IUploadTimerService
     {
         void AddReading(TimeSpan time, long fileSizeBytes);
+
+        TimeSpan EstimateUploadTime(long fileSizeBytes);
     }
 }

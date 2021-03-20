@@ -83,6 +83,7 @@
     <Compile Include="Bindings\VisibleHiddenBinding.cs" />
     <Compile Include="Bindings\CardStateBinding.cs" />
     <Compile Include="Bindings\BarcodeBackgroundBinding.cs" />
+    <Compile Include="Bindings\UploadProgressBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">

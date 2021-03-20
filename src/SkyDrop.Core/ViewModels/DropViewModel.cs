@@ -44,11 +44,13 @@ namespace SkyDrop.Core.ViewModels.Main
         public string UploadTimerText { get; set; }
         public bool IsAnimatingBarcodeOut { get; set; }
         public string FileSize { get; set; }
+        public double UploadProgress { get; set; } //0-1
 
         private SkyFile skyFile { get; set; }
         private string errorMessage;
         private Stopwatch stopwatch;
         private Timer timer;
+        private TimeSpan estimatedUploadTime;
 
         private Func<Task> _selectFileAsyncFunc;
         public Func<Task> SelectFileAsyncFunc
@@ -241,19 +243,24 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void StartUploadTimer()
         {
-            void UpdateTimerText()
-            {
-                UploadTimerText = stopwatch.Elapsed.ToString(@"mm\:ss");
-            }
+            estimatedUploadTime = uploadTimerService.EstimateUploadTime(skyFile.FileSizeBytes);
 
             stopwatch = new Stopwatch();
             timer = new Timer();
-            timer.Elapsed += (s, e) => UpdateTimerText();
+            timer.Elapsed += (s, e) => UpdateUploadProgress();
             timer.Interval = 1000;
             timer.Enabled = true;
             timer.Start();
             stopwatch.Start();
-            UpdateTimerText();
+            UpdateUploadProgress();
+        }
+
+        private void UpdateUploadProgress()
+        {
+            UploadTimerText = stopwatch.Elapsed.ToString(@"mm\:ss");
+
+            UploadProgress = stopwatch.Elapsed.TotalSeconds / estimatedUploadTime.TotalSeconds;
+            Log.Trace($"Upload Progress: {UploadProgress}");
         }
 
         private void StopUploadTimer()

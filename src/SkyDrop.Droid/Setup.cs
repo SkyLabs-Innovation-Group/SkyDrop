@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using Acr.UserDialogs;
 using Android.Views;
+using Android.Widget;
 using AndroidX.CardView.Widget;
 using Engage.Droid.Bindings;
 using Google.Android.Material.Card;
@@ -52,6 +53,7 @@ namespace SkyDrop.Droid
             registry.RegisterCustomBindingFactory<MaterialCardView>(MaterialCardStateBinding.Name, view => new MaterialCardStateBinding(view));
             registry.RegisterCustomBindingFactory<MaterialCardView>(BarcodeBackgroundBinding.Name, view => new BarcodeBackgroundBinding(view));
             registry.RegisterCustomBindingFactory<View>(VisibleHiddenBinding.Name, view => new VisibleHiddenBinding(view));
+            registry.RegisterCustomBindingFactory<ProgressBar>(UploadProgressBinding.Name, view => new UploadProgressBinding(view));
         }
     }
 }
