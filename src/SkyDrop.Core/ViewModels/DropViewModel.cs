@@ -123,6 +123,7 @@ namespace SkyDrop.Core.ViewModels.Main
             FileSize = "";
             IsBarcodeVisible = false;
             IsAnimatingBarcodeOut = false;
+            UploadProgress = 0;
         }
 
         private async Task StartSendFile()
@@ -171,9 +172,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 //show QR code
                 IsUploading = false;
-                _ = RaisePropertyChanged(() => IsUploading);
                 IsBarcodeLoading = true;
-                _ = RaisePropertyChanged(() => IsBarcodeLoading);
                 SkyFileJson = JsonConvert.SerializeObject(skyFile);
                 await GenerateBarcodeAsyncFunc();
             }
@@ -270,9 +269,11 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             if (stopwatch.IsRunning)
             {
+                //fill progress bar
+                UploadProgress = 1;
+
                 //save the upload time and file size to calculate average upload speed
                 uploadTimerService.AddReading(stopwatch.Elapsed, skyFile.FileSizeBytes);
-                UploadProgress = 1;
             }
 
             stopwatch.Stop();
