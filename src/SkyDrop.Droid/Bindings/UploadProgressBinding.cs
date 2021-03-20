@@ -1,5 +1,6 @@
 ﻿using System;
 using Android.Views;
+using Android.Views.Animations;
 using Android.Widget;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
@@ -23,6 +24,8 @@ namespace SkyDrop.Droid.Bindings
             Target.Max = max;
             Target.Indeterminate = false;
             Target.SetProgress((int)(value * max), true);
+            //Target.durati
+            //Target.Interpolator = new LinearInterpolator() { }
         }
     }
 }

@@ -164,6 +164,9 @@ namespace SkyDrop.Core.ViewModels.Main
                 skyFile = await UploadFile();
                 StopUploadTimer();
 
+                //wait for progressbar to complete
+                await Task.Delay(500);
+
                 ResetBarcodeCommand?.Execute();
 
                 //show QR code
@@ -269,6 +272,7 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 //save the upload time and file size to calculate average upload speed
                 uploadTimerService.AddReading(stopwatch.Elapsed, skyFile.FileSizeBytes);
+                UploadProgress = 1;
             }
 
             stopwatch.Stop();

@@ -48,7 +48,7 @@ namespace SkyDrop.Core.Services
             var currentAverage = storageService.GetAverageUploadRate();
             var averageUploadSpeed = currentAverage.Value;
             if (averageUploadSpeed == 0)
-                averageUploadSpeed = 10000; //default 10kb/s speed
+                averageUploadSpeed = 800_000; //default 800kb/s speed
 
             var secondsPerBit = 1 / averageUploadSpeed;
             var estimatedSeconds = fileSizeBits * secondsPerBit;
