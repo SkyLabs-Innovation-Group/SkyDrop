@@ -22,6 +22,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IMvxNavigationService navigationService;
         private readonly IBarcodeService barcodeService;
         private readonly IShareLinkService shareLinkService;
+        private readonly IUploadTimerService uploadTimerService;
 
         public IMvxCommand SendCommand { get; set; }
         public IMvxCommand ReceiveCommand { get; set; }
@@ -42,6 +43,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsReceiveButtonGreen { get; set; } = true;
         public string UploadTimerText { get; set; }
         public bool IsAnimatingBarcodeOut { get; set; }
+        public string FileSize { get; set; }
 
         private SkyFile skyFile { get; set; }
         private string errorMessage;
@@ -74,6 +76,7 @@ namespace SkyDrop.Core.ViewModels.Main
                              IStorageService storageService,
                              IBarcodeService barcodeService,
                              IShareLinkService shareLinkService,
+                             IUploadTimerService uploadTimerService,
                              IUserDialogs userDialogs,
                              IMvxNavigationService navigationService,
                              ILog log) : base(singletonService)
@@ -86,6 +89,7 @@ namespace SkyDrop.Core.ViewModels.Main
             this.navigationService = navigationService;
             this.barcodeService = barcodeService;
             this.shareLinkService = shareLinkService;
+            this.uploadTimerService = uploadTimerService;
 
             SendCommand = new MvxAsyncCommand(StartSendFile);
             ReceiveCommand = new MvxAsyncCommand(ReceiveFile);
@@ -114,6 +118,7 @@ namespace SkyDrop.Core.ViewModels.Main
             IsSendButtonGreen = true;
             IsReceiveButtonGreen = true;
             UploadTimerText = "";
+            FileSize = "";
             IsBarcodeVisible = false;
             IsAnimatingBarcodeOut = false;
         }
@@ -223,13 +228,14 @@ namespace SkyDrop.Core.ViewModels.Main
         public async Task StageFile(SkyFile stagedFile)
         {
             this.skyFile = stagedFile;
+            UpdateFileSize();
 
             await FinishSendFile();
         }
 
         private async Task<SkyFile> UploadFile()
         {
-            var skyFile = await apiService.UploadFile(this.skyFile.Filename, this.skyFile.Data);
+            var skyFile = await apiService.UploadFile(this.skyFile.Filename, this.skyFile.Data, this.skyFile.FileSizeBytes);
             return skyFile;
         }
 
@@ -252,8 +258,20 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void StopUploadTimer()
         {
+            if (stopwatch.IsRunning)
+            {
+                //save the upload time and file size to calculate average upload speed
+                uploadTimerService.AddReading(stopwatch.Elapsed, skyFile.FileSizeBytes);
+            }
+
             stopwatch.Stop();
             timer.Stop();
+        }
+
+        private void UpdateFileSize()
+        {
+            var bytesCount = skyFile.FileSizeBytes;
+            FileSize = Util.GetFileSizeString(bytesCount);
         }
 
         public BitMatrix GenerateBarcode(string text, int width, int height)

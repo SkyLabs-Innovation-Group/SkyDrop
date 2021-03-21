@@ -169,7 +169,8 @@ namespace SkyDrop.Droid.Helper
             return new SkyFile
             {
                 Filename = filename,
-                Data = fileBytes
+                Data = fileBytes,
+                FileSizeBytes = fileBytes.LongLength
             };
         }
 
