@@ -4,12 +4,14 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DropView">
             <connections>
-                <outlet property="DropButton" destination="AK1-69-zf1" id="Dd4-bk-8Yn"/>
+                <outlet property="ReceiveButton" destination="Cq9-AE-Hf8" id="QcL-Pd-gZz"/>
+                <outlet property="SendButton" destination="3as-jp-js1" id="gIg-Bk-2BY"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
         </placeholder>
@@ -18,21 +20,56 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AK1-69-zf1">
-                    <rect key="frame" x="108" y="426.5" width="198" height="43"/>
-                    <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="25"/>
-                    <state key="normal" title="Go to DropView"/>
-                    <connections>
-                        <action selector="DropViewClickAction:" destination="-1" eventType="touchUpInside" id="G1b-Le-1mR"/>
-                    </connections>
-                </button>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="0SD-ES-jRi" userLabel="Button Stack View">
+                    <rect key="frame" x="0.0" y="346.5" width="414" height="203"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_upload" translatesAutoresizingMaskIntoConstraints="NO" id="3as-jp-js1" userLabel="Send Button">
+                            <rect key="frame" x="0.0" y="0.0" width="203" height="203"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="3as-jp-js1" secondAttribute="height" multiplier="1:1" id="ubD-7Y-1J8"/>
+                            </constraints>
+                        </imageView>
+                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_download" translatesAutoresizingMaskIntoConstraints="NO" id="Cq9-AE-Hf8" userLabel="Receive Button">
+                            <rect key="frame" x="211" y="0.0" width="203" height="203"/>
+                            <constraints>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="Oog-Df-tIE"/>
+                                <constraint firstAttribute="width" secondItem="Cq9-AE-Hf8" secondAttribute="height" multiplier="1:1" id="R2a-MU-XBD"/>
+                            </constraints>
+                        </imageView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="203" id="tHJ-rb-qvM"/>
+                    </constraints>
+                </stackView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PGP-Pv-bOE">
+                    <rect key="frame" x="81" y="550" width="40" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Receive" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oxd-eT-Zua">
+                    <rect key="frame" x="282" y="550" width="60" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="AK1-69-zf1" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" id="DWa-fD-jqS"/>
-                <constraint firstItem="AK1-69-zf1" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="pBf-vp-cbb"/>
+                <constraint firstItem="oxd-eT-Zua" firstAttribute="leading" secondItem="PGP-Pv-bOE" secondAttribute="trailing" constant="161" id="7O1-fd-clg"/>
+                <constraint firstItem="PGP-Pv-bOE" firstAttribute="top" secondItem="0SD-ES-jRi" secondAttribute="bottom" constant="0.5" id="DiY-Xe-wek"/>
+                <constraint firstItem="oxd-eT-Zua" firstAttribute="bottom" secondItem="PGP-Pv-bOE" secondAttribute="bottom" id="ISt-3Z-Rxn"/>
+                <constraint firstItem="oxd-eT-Zua" firstAttribute="top" secondItem="0SD-ES-jRi" secondAttribute="bottom" constant="0.5" id="RuB-6d-jWz"/>
+                <constraint firstAttribute="trailing" secondItem="0SD-ES-jRi" secondAttribute="trailing" id="XS7-Ic-SXS"/>
+                <constraint firstItem="0SD-ES-jRi" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" id="eUH-h6-sSC"/>
+                <constraint firstItem="0SD-ES-jRi" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="ra8-ma-DcR"/>
             </constraints>
-            <point key="canvasLocation" x="131" y="2"/>
+            <point key="canvasLocation" x="144.92753623188406" y="-44.196428571428569"/>
         </view>
     </objects>
+    <resources>
+        <image name="ic_download" width="18" height="18"/>
+        <image name="ic_upload" width="18" height="18"/>
+    </resources>
 </document>

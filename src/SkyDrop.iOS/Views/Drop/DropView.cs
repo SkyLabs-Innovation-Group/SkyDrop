@@ -1,6 +1,8 @@
 ﻿using System;
+using Acr.UserDialogs;
 using Foundation;
 using MvvmCross.Platforms.Ios.Views;
+using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
 using UIKit;
 
@@ -27,8 +29,25 @@ namespace SkyDrop.iOS.Views.Drop
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            // Perform any additional setup after loading the view, typically from a nib.
 
+            //TODO: dark green navigation bar with title seems to be covered by another (grey) navigation bar
+            NavigationController.Title = "SkyDrop";
+            NavigationController.NavigationBar.BackgroundColor = Colors.PrimaryDark.ToNative();
+
+            View.BackgroundColor = Colors.DarkGrey.ToNative();
+
+            SendButton.AddGestureRecognizer(new UIGestureRecognizer(SendButtonTapped));
+            ReceiveButton.AddGestureRecognizer(new UIGestureRecognizer(ReceiveButtonTapped));
+        }
+
+        private void ReceiveButtonTapped()
+        {
+            ViewModel.Log.Trace("ReceiveButton pressed");
+        }
+
+        public void SendButtonTapped()
+        {
+            ViewModel.Log.Trace("SendButton pressed");
         }
 
         public override void DidReceiveMemoryWarning()

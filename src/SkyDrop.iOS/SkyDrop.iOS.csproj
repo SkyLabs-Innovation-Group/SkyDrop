@@ -67,11 +67,12 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchArch>ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>Apple Development: jacob.hatwell@engagesolutionsgroup.com (22KDJNZT9B)</CodesignKey>
     <MtouchExtraArgs>--linkskip=SkyDrop.Core</MtouchExtraArgs>
     <MtouchLink>Full</MtouchLink>
     <LangVersion>8.0</LangVersion>
     <MtouchUseLlvm>true</MtouchUseLlvm>
+    <BuildIpa>true</BuildIpa>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <AppExtensionDebugBundleId />
@@ -156,6 +157,10 @@
     <Compile Include="Views\Drop\DropView.designer.cs">
       <DependentUpon>DropView.cs</DependentUpon>
     </Compile>
+    <ImageAsset Include="Resources\Media.xcassets\ic_download.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Media.xcassets\ic_upload.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Media.xcassets\ic_upload.imageset\ic_upload.pdf" />
+    <ImageAsset Include="Resources\Media.xcassets\ic_download.imageset\ic_download.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -233,6 +238,8 @@
     <Folder Include="Resources\Media.xcassets\ic_cloud.imageset\" />
     <Folder Include="Resources\Media.xcassets\ic_settings.imageset\" />
     <Folder Include="Views\Drop\" />
+    <Folder Include="Resources\Media.xcassets\ic_download.imageset\" />
+    <Folder Include="Resources\Media.xcassets\ic_upload.imageset\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
