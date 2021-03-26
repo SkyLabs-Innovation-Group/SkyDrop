@@ -73,14 +73,12 @@
                     android:layout_weight="1"
                     app:cardElevation="1dp"
                     app:cardCornerRadius="8dp"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@color/lightGrey"
+                    app:cardBackgroundColor="@color/primaryDarkColor"
                     app:MvxBind="Click CopyLinkCommand">
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="96dp"
                         android:padding="24dp"
-                        android:background="@color/midGrey"
                         android:src="@drawable/ic_link"/>
                     <TextView
                         android:layout_width="wrap_content"
@@ -98,14 +96,12 @@
                     android:layout_marginHorizontal="4dp"
                     app:cardElevation="1dp"
                     app:cardCornerRadius="8dp"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@color/lightGrey"
+                    app:cardBackgroundColor="@color/primaryDarkColor"
                     app:MvxBind="Click OpenCommand">
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="96dp"
                         android:padding="24dp"
-                        android:background="@color/midGrey"
                         android:src="@drawable/ic_file"/>
                     <TextView
                         android:layout_width="wrap_content"
@@ -122,13 +118,11 @@
                     android:layout_weight="1"
                     app:cardElevation="1dp"
                     app:cardCornerRadius="8dp"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@color/lightGrey"
+                    app:cardBackgroundColor="@color/primaryDarkColor"
                     app:MvxBind="Click ShareLinkCommand">
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="96dp"
-                        android:background="@color/midGrey"
                         android:src="@drawable/ic_share"
                         android:padding="24dp"/>
                     <TextView

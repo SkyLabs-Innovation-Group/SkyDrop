@@ -232,6 +232,21 @@ namespace SkyDrop.Droid.Views.Main
                 .Start();
         }
 
+        private void AnimateSlideBarcodeToCenter()
+        {
+            ViewModel.IsBarcodeVisible = true;
+
+            var duration = 500;
+            barcodeContainer.Animate()
+                .TranslationX(0)
+                .SetDuration(duration)
+                .Start();
+            barcodeMenu.Animate()
+                .TranslationX(0)
+                .SetDuration(duration)
+                .Start();
+        }
+
         /// <summary>
         /// Intercept touch events for the whole screen to handle swipe gestures
         /// </summary>
@@ -259,6 +274,8 @@ namespace SkyDrop.Droid.Views.Main
                             AnimateSlideBarcodeOut(false);
                         else if (barcodeContainer.TranslationX <= -swipeMarginX)
                             AnimateSlideBarcodeOut(true);
+                        else
+                            AnimateSlideBarcodeToCenter();
                     }
                     break;
 
