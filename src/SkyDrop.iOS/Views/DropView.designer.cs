@@ -15,11 +15,27 @@ namespace SkyDrop.iOS.Views.Drop
 		[Outlet]
 		UIKit.UIButton DropButton { get; set; }
 
+		[Outlet]
+		UIKit.UIImageView ReceiveButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView SendButton { get; set; }
+
 		[Action ("DropViewClickAction:")]
 		partial void DropViewClickAction (Foundation.NSObject sender);
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (SendButton != null) {
+				SendButton.Dispose ();
+				SendButton = null;
+			}
+
+			if (ReceiveButton != null) {
+				ReceiveButton.Dispose ();
+				ReceiveButton = null;
+			}
+
 			if (DropButton != null) {
 				DropButton.Dispose ();
 				DropButton = null;

@@ -2,22 +2,15 @@
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
-using Android.Graphics;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
 using AndroidX.ConstraintLayout.Widget;
 using Google.Android.Material.Card;
-using Java.Interop;
 using MvvmCross.Commands;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.Droid.Helper;
-using Xamarin.Essentials;
-using ZXing;
-using ZXing.Common;
-using ZXing.QrCode;
-using static Android.Views.View;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -204,7 +197,7 @@ namespace SkyDrop.Droid.Views.Main
 
         public override bool DispatchTouchEvent(MotionEvent e)
         {
-            switch(e.Action)
+            switch (e.Action)
             {
                 case MotionEventActions.Down:
                     isPressed = true;
@@ -215,7 +208,7 @@ namespace SkyDrop.Droid.Views.Main
                     break;
 
                 case MotionEventActions.Up:
-                    if(!isPressed)
+                    if (!isPressed)
                         return base.DispatchTouchEvent(e);
 
                     isPressed = false;
