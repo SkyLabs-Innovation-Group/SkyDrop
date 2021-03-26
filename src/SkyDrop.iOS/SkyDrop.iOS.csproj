@@ -67,7 +67,7 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchArch>ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
-    <CodesignKey>Apple Development: jacob.hatwell@engagesolutionsgroup.com (22KDJNZT9B)</CodesignKey>
+    <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchExtraArgs>--linkskip=SkyDrop.Core</MtouchExtraArgs>
     <MtouchLink>Full</MtouchLink>
     <LangVersion>8.0</LangVersion>
