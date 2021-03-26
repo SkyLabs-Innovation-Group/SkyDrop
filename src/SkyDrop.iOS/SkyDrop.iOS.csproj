@@ -153,14 +153,14 @@
     <ImageAsset Include="Resources\Media.xcassets\ic_settings.imageset\Contents.json" />
     <ImageAsset Include="Resources\Media.xcassets\ic_settings.imageset\cog.pdf" />
     <InterfaceDefinition Include="Views\Drop\DropView.xib" />
-    <Compile Include="Views\Drop\DropView.cs" />
-    <Compile Include="Views\Drop\DropView.designer.cs">
-      <DependentUpon>DropView.cs</DependentUpon>
-    </Compile>
     <ImageAsset Include="Resources\Media.xcassets\ic_download.imageset\Contents.json" />
     <ImageAsset Include="Resources\Media.xcassets\ic_upload.imageset\Contents.json" />
     <ImageAsset Include="Resources\Media.xcassets\ic_upload.imageset\ic_upload.pdf" />
     <ImageAsset Include="Resources\Media.xcassets\ic_download.imageset\ic_download.pdf" />
+    <Compile Include="Views\DropView.cs" />
+    <Compile Include="Views\DropView.designer.cs">
+      <DependentUpon>DropView.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

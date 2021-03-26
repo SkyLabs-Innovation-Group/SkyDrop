@@ -100,6 +100,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public override void ViewAppeared()
         {
+            Log.Trace($"{nameof(DropViewModel)} ViewAppeared()");
+
+
             base.ViewAppeared();
 
             //make sure buttons return to green when returning from QR scanner
@@ -317,7 +320,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 await shareLinkService.ShareLink(skyLink);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.Exception(e);
             }

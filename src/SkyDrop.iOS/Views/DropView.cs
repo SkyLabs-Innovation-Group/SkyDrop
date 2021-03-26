@@ -30,24 +30,23 @@ namespace SkyDrop.iOS.Views.Drop
         {
             base.ViewDidLoad();
 
+            var set = CreateBindingSet();
+
+            set.Bind(SendButton).For("Tap").To(vm => vm.SendCommand);
+
+            set.Bind(ReceiveButton).For("Tap").To(vm => vm.ReceiveCommand);
+
+            set.Apply();
+
+            // TODO implement functions for send/receive buttons
+            //ViewModel.SelectFileAsyncFunc = async () => await Utils.SelectFile(this);
+            //ViewModel.SelectImageAsyncFunc = async () => await Utils.SelectImage(this);
+
             //TODO: dark green navigation bar with title seems to be covered by another (grey) navigation bar
             NavigationController.Title = "SkyDrop";
             NavigationController.NavigationBar.BackgroundColor = Colors.PrimaryDark.ToNative();
 
             View.BackgroundColor = Colors.DarkGrey.ToNative();
-
-            SendButton.AddGestureRecognizer(new UIGestureRecognizer(SendButtonTapped));
-            ReceiveButton.AddGestureRecognizer(new UIGestureRecognizer(ReceiveButtonTapped));
-        }
-
-        private void ReceiveButtonTapped()
-        {
-            ViewModel.Log.Trace("ReceiveButton pressed");
-        }
-
-        public void SendButtonTapped()
-        {
-            ViewModel.Log.Trace("SendButton pressed");
         }
 
         public override void DidReceiveMemoryWarning()
