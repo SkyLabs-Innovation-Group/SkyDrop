@@ -44,11 +44,10 @@ namespace SkyDrop.Core.ViewModels.Main
         public string UploadTimerText { get; set; }
         public bool IsAnimatingBarcodeOut { get; set; }
         public string FileSize { get; set; }
+        public double UploadProgress { get; set; } //0-1
 
         private SkyFile skyFile { get; set; }
         private string errorMessage;
-        private Stopwatch stopwatch;
-        private Timer timer;
 
         private Func<Task> _selectFileAsyncFunc;
         public Func<Task> SelectFileAsyncFunc
@@ -124,6 +123,7 @@ namespace SkyDrop.Core.ViewModels.Main
             FileSize = "";
             IsBarcodeVisible = false;
             IsAnimatingBarcodeOut = false;
+            UploadProgress = 0;
         }
 
         private async Task StartSendFile()
@@ -165,13 +165,14 @@ namespace SkyDrop.Core.ViewModels.Main
                 skyFile = await UploadFile();
                 StopUploadTimer();
 
+                //wait for progressbar to complete
+                await Task.Delay(500);
+
                 ResetBarcodeCommand?.Execute();
 
                 //show QR code
                 IsUploading = false;
-                _ = RaisePropertyChanged(() => IsUploading);
                 IsBarcodeLoading = true;
-                _ = RaisePropertyChanged(() => IsBarcodeLoading);
                 SkyFileJson = JsonConvert.SerializeObject(skyFile);
                 await GenerateBarcodeAsyncFunc();
             }
@@ -244,31 +245,27 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void StartUploadTimer()
         {
-            void UpdateTimerText()
-            {
-                UploadTimerText = stopwatch.Elapsed.ToString(@"mm\:ss");
-            }
-
-            stopwatch = new Stopwatch();
-            timer = new Timer();
-            timer.Elapsed += (s, e) => UpdateTimerText();
-            timer.Interval = 1000;
-            timer.Enabled = true;
-            timer.Start();
-            stopwatch.Start();
-            UpdateTimerText();
+            uploadTimerService.StartUploadTimer(skyFile.FileSizeBytes, UpdateUploadProgress);
         }
 
         private void StopUploadTimer()
         {
-            if (stopwatch.IsRunning)
-            {
-                //save the upload time and file size to calculate average upload speed
-                uploadTimerService.AddReading(stopwatch.Elapsed, skyFile.FileSizeBytes);
-            }
+            //fill progress bar
+            UploadProgress = 1;
+            UploadTimerText = "100%";
 
-            stopwatch.Stop();
-            timer.Stop();
+            uploadTimerService.StopUploadTimer();
+        }
+
+        private void UpdateUploadProgress()
+        {
+            var (uploadProgress, uploadTimerText) = uploadTimerService.GetUploadProgress();
+
+            if (UploadProgress != 1)
+            {
+                UploadProgress = uploadProgress;
+                UploadTimerText = uploadTimerText;
+            }
         }
 
         private void UpdateFileSize()

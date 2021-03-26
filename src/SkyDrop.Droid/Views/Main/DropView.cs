@@ -14,6 +14,9 @@ using SkyDrop.Droid.Helper;
 
 namespace SkyDrop.Droid.Views.Main
 {
+    /// <summary>
+    /// File transfer screen
+    /// </summary>
     [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden)]
     public class DropView : BaseActivity<DropViewModel>
     {
@@ -27,6 +30,9 @@ namespace SkyDrop.Droid.Views.Main
         private LinearLayout barcodeMenu;
         private ImageView barcodeImageView;
 
+        /// <summary>
+        /// Initialize view
+        /// </summary>
         protected override async void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -49,6 +55,9 @@ namespace SkyDrop.Droid.Views.Main
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
         }
 
+        /// <summary>
+        /// Called after user selects file
+        /// </summary>
         protected override async void OnActivityResult(int requestCode, Android.App.Result resultCode, Intent data)
         {
             try
@@ -73,6 +82,9 @@ namespace SkyDrop.Droid.Views.Main
             base.OnActivityResult(requestCode, resultCode, data);
         }
 
+        /// <summary>
+        /// Hide barcode when user presses hardware back button
+        /// </summary>
         public override void OnBackPressed()
         {
             if (ViewModel.IsBarcodeVisible)
@@ -84,12 +96,18 @@ namespace SkyDrop.Droid.Views.Main
             base.OnBackPressed();
         }
 
+        /// <summary>
+        /// Adds settings button to toolbar
+        /// </summary>
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             MenuInflater.Inflate(Resource.Menu.DropMenu, menu);
             return true;
         }
 
+        /// <summary>
+        /// Navigate to settings when settings button is tapped
+        /// </summary>
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             switch (item.ItemId)
@@ -102,6 +120,9 @@ namespace SkyDrop.Droid.Views.Main
             return true;
         }
 
+        /// <summary>
+        /// Generate SkyFile from intent data and stage it for upload
+        /// </summary>
         private async Task HandlePickedFile(Intent data)
         {
             AnimateSlideSendButton();
@@ -109,6 +130,9 @@ namespace SkyDrop.Droid.Views.Main
             await ViewModel.StageFile(stagedFile);
         }
 
+        /// <summary>
+        /// Generate and display QR code
+        /// </summary>
         private async Task ShowBarcode()
         {
             ViewModel.IsBarcodeVisible = true;
@@ -118,11 +142,17 @@ namespace SkyDrop.Droid.Views.Main
             barcodeImageView.SetImageBitmap(bitmap);
         }
 
+        /// <summary>
+        /// Display grey placeholder QR code
+        /// </summary>
         private void ResetBarcode()
         {
             barcodeImageView.SetImageResource(Resource.Drawable.barcode_grey);
         }
 
+        /// <summary>
+        /// Slide send button to center
+        /// </summary>
         private void AnimateSlideSendButton()
         {
             var screenCenterX = Resources.DisplayMetrics.WidthPixels / 2;
@@ -142,6 +172,9 @@ namespace SkyDrop.Droid.Views.Main
                 .Start();
         }
 
+        /// <summary>
+        /// Slide in the QR code from the right
+        /// </summary>
         private void AnimateSlideBarcodeIn()
         {
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
@@ -164,6 +197,9 @@ namespace SkyDrop.Droid.Views.Main
                 .Start();
         }
 
+        /// <summary>
+        /// Slide barcode out to left or right
+        /// </summary>
         private void AnimateSlideBarcodeOut(bool toLeft)
         {
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
@@ -171,6 +207,7 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.IsAnimatingBarcodeOut = true;
             ViewModel.IsReceiveButtonGreen = true;
             ViewModel.UploadTimerText = "";
+            ViewModel.FileSize = "";
 
             if (toLeft)
                 sendButton.TranslationX = screenWidth;
@@ -195,6 +232,9 @@ namespace SkyDrop.Droid.Views.Main
                 .Start();
         }
 
+        /// <summary>
+        /// Intercept touch events for the whole screen to handle swipe gestures
+        /// </summary>
         public override bool DispatchTouchEvent(MotionEvent e)
         {
             switch (e.Action)
