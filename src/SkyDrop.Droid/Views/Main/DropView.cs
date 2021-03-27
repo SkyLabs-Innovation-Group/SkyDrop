@@ -24,10 +24,10 @@ namespace SkyDrop.Droid.Views.Main
 
         private const int swipeMarginX = 100;
         private bool isPressed;
-        private float tapX, barcodeStartX;
+        private float tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
         private MaterialCardView sendButton, receiveButton;
         private ConstraintLayout barcodeContainer;
-        private LinearLayout barcodeMenu;
+        private LinearLayout barcodeMenu, sendReceiveButtonsContainer;
         private ImageView barcodeImageView;
 
         /// <summary>
@@ -53,6 +53,7 @@ namespace SkyDrop.Droid.Views.Main
             barcodeContainer = FindViewById<ConstraintLayout>(Resource.Id.BarcodeContainer);
             barcodeMenu = FindViewById<LinearLayout>(Resource.Id.BarcodeMenu);
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
+            sendReceiveButtonsContainer = FindViewById<LinearLayout>(Resource.Id.SendReceiveContainer);
         }
 
         /// <summary>
@@ -136,7 +137,7 @@ namespace SkyDrop.Droid.Views.Main
         private async Task ShowBarcode()
         {
             ViewModel.IsBarcodeVisible = true;
-            AnimateSlideBarcodeIn();
+            AnimateSlideBarcodeIn(fromLeft: false);
             var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, barcodeImageView.Width, barcodeImageView.Height);
             var bitmap = await AndroidUtil.EncodeBarcode(matrix, barcodeImageView.Width, barcodeImageView.Height);
             barcodeImageView.SetImageBitmap(bitmap);
@@ -173,14 +174,16 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Slide in the QR code from the right
+        /// Slide in the QR code from the left or right
         /// </summary>
-        private void AnimateSlideBarcodeIn()
+        private void AnimateSlideBarcodeIn(bool fromLeft)
         {
+            ViewModel.IsBarcodeVisible = true;
+
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
 
-            barcodeContainer.TranslationX = screenWidth;
-            barcodeMenu.TranslationX = screenWidth;
+            barcodeContainer.TranslationX = fromLeft ? -screenWidth : screenWidth;
+            barcodeMenu.TranslationX = fromLeft ? -screenWidth : screenWidth;
 
             var duration = 666;
             sendButton.Animate()
@@ -209,6 +212,9 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.UploadTimerText = "";
             ViewModel.FileSize = "";
 
+            sendReceiveButtonsContainer.TranslationX = 0;
+            receiveButton.Alpha = 0;
+
             if (toLeft)
                 sendButton.TranslationX = screenWidth;
 
@@ -232,6 +238,9 @@ namespace SkyDrop.Droid.Views.Main
                 .Start();
         }
 
+        /// <summary>
+        /// Return barcode to center when user cancels a dismiss-slide action
+        /// </summary>
         private void AnimateSlideBarcodeToCenter()
         {
             ViewModel.IsBarcodeVisible = true;
@@ -248,6 +257,34 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
+        /// Slide barcode out to left or right
+        /// </summary>
+        private void AnimateSlideSendReceiveButtonsOut(bool toLeft)
+        {
+            var screenWidth = Resources.DisplayMetrics.WidthPixels;
+
+            var duration = 250;
+            sendReceiveButtonsContainer.Animate()
+                .TranslationX(toLeft ? -screenWidth : screenWidth)
+                .SetDuration(duration)
+                .Start();
+
+            AnimateSlideBarcodeIn(fromLeft: !toLeft);
+        }
+
+        /// <summary>
+        /// Slide the send receive button to screen center when user cancels swipe back to barcode action
+        /// </summary>
+        private void AnimateSlideSendReceiveCenter()
+        {
+            var duration = 500;
+            sendReceiveButtonsContainer.Animate()
+                .TranslationX(0)
+                .SetDuration(duration)
+                .Start();
+        }
+
+        /// <summary>
         /// Intercept touch events for the whole screen to handle swipe gestures
         /// </summary>
         public override bool DispatchTouchEvent(MotionEvent e)
@@ -257,9 +294,10 @@ namespace SkyDrop.Droid.Views.Main
                 case MotionEventActions.Down:
                     isPressed = true;
 
-                    tapX = e.GetX();
+                    tapStartX = e.GetX();
 
                     barcodeStartX = barcodeContainer.TranslationX;
+                    sendReceiveButtonsContainerStartX = sendReceiveButtonsContainer.TranslationX;
                     break;
 
                 case MotionEventActions.Up:
@@ -268,29 +306,48 @@ namespace SkyDrop.Droid.Views.Main
 
                     isPressed = false;
 
-                    if (ViewModel.IsBarcodeVisible && !ViewModel.IsAnimatingBarcodeOut)
+                    if (!ViewModel.IsBarcodeVisible)
                     {
+                        //send & receive buttons are visible
+
+                        if (sendReceiveButtonsContainer.TranslationX >= swipeMarginX)
+                            AnimateSlideSendReceiveButtonsOut(toLeft: false);
+                        else if (sendReceiveButtonsContainer.TranslationX <= -swipeMarginX)
+                            AnimateSlideSendReceiveButtonsOut(toLeft: true);
+                        else
+                            AnimateSlideSendReceiveCenter();
+                    }
+                    else if (!ViewModel.IsAnimatingBarcodeOut)
+                    {
+                        //barcode is visible
+
                         if (barcodeContainer.TranslationX >= swipeMarginX)
-                            AnimateSlideBarcodeOut(false);
+                            AnimateSlideBarcodeOut(toLeft: false);
                         else if (barcodeContainer.TranslationX <= -swipeMarginX)
-                            AnimateSlideBarcodeOut(true);
+                            AnimateSlideBarcodeOut(toLeft: true);
                         else
                             AnimateSlideBarcodeToCenter();
                     }
+
                     break;
 
                 case MotionEventActions.Move:
                     if (!isPressed)
                         return base.DispatchTouchEvent(e);
 
-                    var touchX = e.GetX();
-                    var deltaX = touchX - tapX;
+                    var tapEndX = e.GetX();
+                    var deltaX = tapEndX - tapStartX;
 
                     if (ViewModel.IsBarcodeVisible)
                     {
                         barcodeContainer.TranslationX = barcodeStartX + deltaX;
                         barcodeMenu.TranslationX = barcodeStartX + deltaX;
                     }
+                    else
+                    {
+                        sendReceiveButtonsContainer.TranslationX = sendReceiveButtonsContainerStartX + deltaX;
+                    }
+
                     break;
             }
 
