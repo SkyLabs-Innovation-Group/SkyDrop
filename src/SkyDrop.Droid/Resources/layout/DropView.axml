@@ -42,13 +42,13 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"/>
                     <com.google.android.material.card.MaterialCardView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="84dp"
+                        android:layout_height="84dp"
                         android:layout_gravity="center"
                         app:cardBackgroundColor="@color/darkGrey"
                         app:cardElevation="1dp"
                         android:clickable="true"
-                        app:cardCornerRadius="40dp"
+                        app:cardCornerRadius="42dp"
                         app:MvxBind="Visibility Visibility(IsBarcodeLoading)">
                         <ProgressBar
                             android:background="@color/darkGrey"
@@ -137,6 +137,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/SendReceiveContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
