@@ -23,9 +23,9 @@
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
-    <MtouchExtraArgs>--linkskip=SkyDrop.Core</MtouchExtraArgs>
     <LangVersion>8.0</LangVersion>
     <IOSDebuggerPort>10003</IOSDebuggerPort>
+    <CodesignKey>iPhone Developer</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -36,7 +36,6 @@
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <ConsolePause>false</ConsolePause>
-    <MtouchExtraArgs>--linkskip=SkyDrop.Core</MtouchExtraArgs>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
@@ -53,7 +52,6 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <MtouchLink>SdkOnly</MtouchLink>
-    <MtouchExtraArgs>--linkskip=SkyDrop.Core</MtouchExtraArgs>
     <LangVersion>8.0</LangVersion>
     <MtouchFastDev>true</MtouchFastDev>
     <MtouchInterpreter>-all</MtouchInterpreter>
@@ -68,7 +66,6 @@
     <MtouchArch>ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <MtouchExtraArgs>--linkskip=SkyDrop.Core</MtouchExtraArgs>
     <MtouchLink>Full</MtouchLink>
     <LangVersion>8.0</LangVersion>
     <MtouchUseLlvm>true</MtouchUseLlvm>

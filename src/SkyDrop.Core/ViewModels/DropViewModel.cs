@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using Acr.UserDialogs;
@@ -20,6 +22,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IStorageService storageService;
         private readonly IUserDialogs userDialogs;
         private readonly IMvxNavigationService navigationService;
+        private readonly IFileSystemService fileSystemService;
         private readonly IBarcodeService barcodeService;
         private readonly IShareLinkService shareLinkService;
         private readonly IUploadTimerService uploadTimerService;
@@ -49,20 +52,6 @@ namespace SkyDrop.Core.ViewModels.Main
         private SkyFile skyFile { get; set; }
         private string errorMessage;
 
-        private Func<Task> _selectFileAsyncFunc;
-        public Func<Task> SelectFileAsyncFunc
-        {
-            get => _selectFileAsyncFunc;
-            set => _selectFileAsyncFunc = value;
-        }
-
-        private Func<Task> _selectImageAsyncFunc;
-        public Func<Task> SelectImageAsyncFunc
-        {
-            get => _selectImageAsyncFunc;
-            set => _selectImageAsyncFunc = value;
-        }
-
         private Func<Task> _generateBarcodeAsyncFunc;
         public Func<Task> GenerateBarcodeAsyncFunc
         {
@@ -78,6 +67,7 @@ namespace SkyDrop.Core.ViewModels.Main
                              IUploadTimerService uploadTimerService,
                              IUserDialogs userDialogs,
                              IMvxNavigationService navigationService,
+                             IFileSystemService fileSystemService,
                              ILog log) : base(singletonService)
         {
             Title = "SkyDrop";
@@ -86,6 +76,7 @@ namespace SkyDrop.Core.ViewModels.Main
             this.storageService = storageService;
             this.userDialogs = userDialogs;
             this.navigationService = navigationService;
+            this.fileSystemService = fileSystemService;
             this.barcodeService = barcodeService;
             this.shareLinkService = shareLinkService;
             this.uploadTimerService = uploadTimerService;
@@ -143,14 +134,38 @@ namespace SkyDrop.Core.ViewModels.Main
                 ResetUI();
                 return;
             }
-
-            if (fileType == file)
-            {
-                await SelectFileAsyncFunc();
-            }
             else
             {
-                await SelectImageAsyncFunc();
+                var pickedFiles = await fileSystemService.PickFilesAsync();
+
+
+                if (pickedFiles == null || pickedFiles.Count() == 0)
+                {
+                    Log.Trace("No file was picked.");
+                    ResetUI();
+
+                    return;
+                }
+
+                var firstFile = pickedFiles.First();
+
+                byte[] fileBytes = null;
+                using (var stream = await firstFile.OpenReadAsync())
+                using (var memoryStream = new MemoryStream())
+                {
+                    await stream.CopyToAsync(memoryStream);
+
+                    fileBytes = memoryStream.GetBuffer();
+                }
+
+                skyFile = new SkyFile
+                {
+                    Filename = pickedFiles.First().FileName,
+                    Data = fileBytes,
+                    FileSizeBytes = fileBytes.LongCount(),
+                };
+
+                await StageFile(skyFile);
             }
         }
 
