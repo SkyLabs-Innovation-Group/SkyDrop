@@ -28,7 +28,7 @@ namespace SkyDrop.Core.Services
                 Log.Error("File size was zero when uploading file");
 
             var url = $"{Util.Portal}/skynet/skyfile";
-            var form = new MultipartFormDataContent();
+            var form = new ProgressableStreamContent();
             form.Add(new ByteArrayContent(file), "file", filename);
 
             Log.Trace("Sending file " + filename);
