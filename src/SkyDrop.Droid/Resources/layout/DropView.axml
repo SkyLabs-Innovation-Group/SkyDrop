@@ -97,7 +97,7 @@
                     app:cardElevation="1dp"
                     app:cardCornerRadius="8dp"
                     app:cardBackgroundColor="@color/primaryDarkColor"
-                    app:MvxBind="Click OpenCommand">
+                    app:MvxBind="Click OpenFileInBrowserCommand">
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="96dp"
