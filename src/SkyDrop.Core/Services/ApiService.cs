@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
+using SkyDrop.Core.Http;
 using SkyDrop.Core.Utility;
 
 namespace SkyDrop.Core.Services
@@ -28,12 +29,15 @@ namespace SkyDrop.Core.Services
                 Log.Error("File size was zero when uploading file");
 
             var url = $"{Util.Portal}/skynet/skyfile";
-            var form = new ProgressableStreamContent();
+            var form = new MultipartFormDataContent();
             form.Add(new ByteArrayContent(file), "file", filename);
+
+            //convert form to ProgressStreamContent so we can track upload progress
+            var requestContent = new ProgressStreamContent(form);
 
             Log.Trace("Sending file " + filename);
 
-            var response = await httpClient.PostAsync(url, form).ConfigureAwait(false);
+            var response = await httpClient.PostAsync(url, requestContent).ConfigureAwait(false);
 
             Log.Trace(response.RequestMessage.ToString());
 

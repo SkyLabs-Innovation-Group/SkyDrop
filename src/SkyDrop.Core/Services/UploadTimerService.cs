@@ -93,7 +93,7 @@ namespace SkyDrop.Core.Services
         {
             var uploadTimerText = stopwatch.Elapsed.ToString(@"mm\:ss");
             var uploadProgress = stopwatch.Elapsed.TotalSeconds / estimatedUploadTime.TotalSeconds;
-            log.Trace($"Upload Progress: {uploadProgress}, Upload Time: {uploadTimerText}");
+            log.Trace($"Estimated Upload Progress: {uploadProgress}, Upload Time: {uploadTimerText}");
 
             return (uploadProgress, uploadTimerText);
         }
