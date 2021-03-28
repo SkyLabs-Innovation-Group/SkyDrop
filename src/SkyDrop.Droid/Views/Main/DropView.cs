@@ -24,6 +24,7 @@ namespace SkyDrop.Droid.Views.Main
 
         private const int swipeMarginX = 100;
         private bool isPressed;
+        private bool barcodeIsLoaded;
         private float tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
         private MaterialCardView sendButton, receiveButton;
         private ConstraintLayout barcodeContainer;
@@ -141,6 +142,7 @@ namespace SkyDrop.Droid.Views.Main
             var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, barcodeImageView.Width, barcodeImageView.Height);
             var bitmap = await AndroidUtil.EncodeBarcode(matrix, barcodeImageView.Width, barcodeImageView.Height);
             barcodeImageView.SetImageBitmap(bitmap);
+            barcodeIsLoaded = true;
         }
 
         /// <summary>
@@ -261,6 +263,12 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         private void AnimateSlideSendReceiveButtonsOut(bool toLeft)
         {
+            if (!barcodeIsLoaded)
+            {
+                AnimateSlideBarcodeToCenter();
+                return;
+            }
+
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
 
             var duration = 250;
