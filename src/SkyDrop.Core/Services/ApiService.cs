@@ -14,6 +14,8 @@ namespace SkyDrop.Core.Services
     {
         public ILog Log { get; }
 
+        public event EventHandler<(long uploaded, long size)> UploadProgressUpdate;
+
         public ApiService(ILog log)
         {
             Log = log;
@@ -23,6 +25,8 @@ namespace SkyDrop.Core.Services
 
         private HttpClient httpClient { get; set; }
 
+        //TODO: try using HttpClientRequest to disable request buffering
+        //https://docs.microsoft.com/en-us/dotnet/api/system.net.httpwebrequest.allowwritestreambuffering?redirectedfrom=MSDN&view=net-5.0#System_Net_HttpWebRequest_AllowWriteStreamBuffering
         public async Task<SkyFile> UploadFile(string filename, byte[] file, long fileSizeBytes)
         {
             if (fileSizeBytes == 0)
@@ -34,6 +38,7 @@ namespace SkyDrop.Core.Services
 
             //convert form to ProgressStreamContent so we can track upload progress
             var requestContent = new ProgressStreamContent(form);
+            requestContent.ProgressUpdate += UploadProgressUpdate;
 
             Log.Trace("Sending file " + filename);
 
@@ -55,6 +60,8 @@ namespace SkyDrop.Core.Services
 
     public interface IApiService
     {
+        event EventHandler<(long uploaded, long size)> UploadProgressUpdate;
+
         Task<SkyFile> UploadFile(string filename, byte[] file, long fileSizeBytes);
     }
 }

@@ -95,6 +95,17 @@ namespace SkyDrop.Core.ViewModels.Main
             CopyLinkCommand = new MvxAsyncCommand(CopySkyLinkToClipboard);
             NavToSettingsCommand = new MvxAsyncCommand(NavToSettings);
             ShareLinkCommand = new MvxAsyncCommand(ShareLink);
+
+            apiService.UploadProgressUpdate += (s, e) => ApiService_UploadProgressUpdate(e.uploaded, e.size);
+        }
+
+        private void ApiService_UploadProgressUpdate(long uploaded, long size)
+        {
+            if (UploadProgress != 1)
+            {
+                UploadProgress = uploaded / size;
+                //UploadTimerText = uploadTimerText;
+            }
         }
 
         public override void ViewAppeared()
@@ -263,7 +274,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
             if (UploadProgress != 1)
             {
-                UploadProgress = uploadProgress;
+                //UploadProgress = uploadProgress;
                 UploadTimerText = uploadTimerText;
             }
         }
