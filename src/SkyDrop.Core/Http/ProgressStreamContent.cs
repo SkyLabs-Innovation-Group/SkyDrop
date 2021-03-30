@@ -42,6 +42,8 @@ namespace SkyDrop.Core.Http
             }
         }
 
+        public Task PushToStreamAsync(Stream stream) => SerializeToStreamAsync(stream, null);
+
         protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
         {
             return Task.Run(async () =>

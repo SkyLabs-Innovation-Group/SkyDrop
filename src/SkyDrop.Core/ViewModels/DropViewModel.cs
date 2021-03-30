@@ -250,7 +250,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task<SkyFile> UploadFile()
         {
-            var skyFile = await apiService.UploadFile(this.skyFile.Filename, this.skyFile.Data, this.skyFile.FileSizeBytes);
+            var skyFile = await apiService.UploadFile2(this.skyFile.Filename, this.skyFile.Data, this.skyFile.FileSizeBytes);
             return skyFile;
         }
 
