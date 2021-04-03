@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
@@ -22,7 +23,7 @@ namespace SkyDrop.Core.Services
 
         private HttpClient httpClient { get; set; }
 
-        public async Task<SkyFile> UploadFile(string filename, byte[] file, long fileSizeBytes)
+        public async Task<SkyFile> UploadFile(string filename, byte[] file, long fileSizeBytes, CancellationTokenSource cancellationToken)
         {
             if (fileSizeBytes == 0)
                 Log.Error("File size was zero when uploading file");
@@ -33,7 +34,7 @@ namespace SkyDrop.Core.Services
 
             Log.Trace("Sending file " + filename);
 
-            var response = await httpClient.PostAsync(url, form).ConfigureAwait(false);
+            var response = await httpClient.PostAsync(url, form, cancellationToken.Token).ConfigureAwait(false);
 
             Log.Trace(response.RequestMessage.ToString());
 
@@ -51,6 +52,6 @@ namespace SkyDrop.Core.Services
 
     public interface IApiService
     {
-        Task<SkyFile> UploadFile(string filename, byte[] file, long fileSizeBytes);
+        Task<SkyFile> UploadFile(string filename, byte[] file, long fileSizeBytes, CancellationTokenSource cancellationToken);
     }
 }

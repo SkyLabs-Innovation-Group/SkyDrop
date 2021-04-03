@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Acr.UserDialogs;
@@ -34,6 +35,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand NavToSettingsCommand { get; set; }
         public IMvxCommand ShareLinkCommand { get; set; }
         public IMvxCommand OpenFileInBrowserCommand { get; set; }
+        public IMvxCommand CancelUploadCommand { get; set; }
 
         public string SkyFileJson { get; set; }
         public bool IsUploading { get; set; }
@@ -48,6 +50,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public double UploadProgress { get; set; } //0-1
 
         private string errorMessage;
+        private CancellationTokenSource uploadCancellationToken;
 
         public SkyFile SkyFile { get; set; }
 
@@ -97,6 +100,7 @@ namespace SkyDrop.Core.ViewModels.Main
             CopyLinkCommand = new MvxAsyncCommand(CopySkyLinkToClipboard);
             NavToSettingsCommand = new MvxAsyncCommand(NavToSettings);
             ShareLinkCommand = new MvxAsyncCommand(ShareLink);
+            CancelUploadCommand = new MvxCommand(CancelUpload);
         }
 
         public override void ViewAppeared()
@@ -178,8 +182,19 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             catch (Exception e)
             {
-                Log.Exception(e);
-                userDialogs.Toast("Could not upload file");
+                if (e.Message == "Socket closed")
+                {
+                    //user cancelled the upload
+                    userDialogs.Toast("Upload cancelled");
+                }
+                else
+                {
+                    //an error occurred
+                    Log.Exception(e);
+                    userDialogs.Toast("Could not upload file");
+                }
+
+                //reset the UI
                 HandleUploadErrorCommand?.Execute();
             }
             finally
@@ -237,7 +252,8 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task<SkyFile> UploadFile()
         {
-            var skyFile = await apiService.UploadFile(this.SkyFile.Filename, this.SkyFile.Data, this.SkyFile.FileSizeBytes);
+            uploadCancellationToken = new CancellationTokenSource();
+            var skyFile = await apiService.UploadFile(this.SkyFile.Filename, this.SkyFile.Data, this.SkyFile.FileSizeBytes, uploadCancellationToken);
             return skyFile;
         }
 
@@ -270,6 +286,11 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             var bytesCount = SkyFile.FileSizeBytes;
             FileSize = Util.GetFileSizeString(bytesCount);
+        }
+
+        private void CancelUpload()
+        {
+            uploadCancellationToken?.Cancel();
         }
 
         public BitMatrix GenerateBarcode(string text, int width, int height)
