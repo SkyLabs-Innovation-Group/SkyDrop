@@ -13,5 +13,8 @@ namespace SkyDrop.Core.Utility
         public static Color Primary => ColorConverters.FromHex("#58b560"); //official skynet color
         public static Color PrimaryDark => ColorConverters.FromHex("#4d9954");
         public static Color PrimaryLight => ColorConverters.FromHex("#70d379");
+
+        // Gradient color scheme
+
     }
 }
