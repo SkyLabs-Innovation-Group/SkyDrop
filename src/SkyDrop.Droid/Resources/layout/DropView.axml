@@ -253,9 +253,9 @@
                 android:layout_alignParentRight="true"
                 app:cardCornerRadius="32dp"
                 app:cardBackgroundColor="@color/primaryColor"
-                app:MvxBind="Click CancelUploadCommand">
+                app:MvxBind="Click CancelUploadCommand;Visibility Visibility(IsUploading)">
                 <ImageView
-                    android:src="@drawable/ic_delete"
+                    android:src="@drawable/ic_cancel"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="8dp"/>
