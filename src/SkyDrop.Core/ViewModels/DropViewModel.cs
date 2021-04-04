@@ -182,6 +182,8 @@ namespace SkyDrop.Core.ViewModels.Main
                 {
                     Log.Exception(ex);
                     Log.Trace("No file was picked.");
+
+                    //reset the UI
                     HandleUploadErrorCommand?.Execute();
 
                     return;
