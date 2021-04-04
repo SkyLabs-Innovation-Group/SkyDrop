@@ -180,19 +180,19 @@ namespace SkyDrop.Core.ViewModels.Main
                 SkyFileJson = JsonConvert.SerializeObject(SkyFile);
                 await GenerateBarcodeAsyncFunc();
             }
-            catch (Exception e)
+            catch (Exception e) when (e.Message == "Socket closed")
             {
-                if (e.Message == "Socket closed")
-                {
-                    //user cancelled the upload
-                    userDialogs.Toast("Upload cancelled");
-                }
-                else
-                {
-                    //an error occurred
-                    Log.Exception(e);
-                    userDialogs.Toast("Could not upload file");
-                }
+                //user cancelled the upload
+                userDialogs.Toast("Upload cancelled");
+
+                //reset the UI
+                HandleUploadErrorCommand?.Execute();
+            }
+            catch (Exception ex)
+            {
+                //an error occurred
+                Log.Exception(ex);
+                userDialogs.Toast("Could not upload file");
 
                 //reset the UI
                 HandleUploadErrorCommand?.Execute();
