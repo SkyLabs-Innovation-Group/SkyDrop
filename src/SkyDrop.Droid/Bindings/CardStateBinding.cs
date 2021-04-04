@@ -26,7 +26,7 @@ namespace Engage.Droid.Bindings
         {
             if (value)
             {
-                Target.SetCardBackgroundColor(Colors.PrimaryDark.ToNative());
+                Target.SetCardBackgroundColor(Colors.Primary.ToNative());
                 Target.StrokeColor = Colors.PrimaryDark.ToNative();
             }
             else

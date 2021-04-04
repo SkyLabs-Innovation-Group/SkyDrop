@@ -10,8 +10,21 @@ namespace SkyDrop.Core.Utility
         public static Color DarkGrey => ColorConverters.FromHex("#242c31");
         public static Color LightGrey => ColorConverters.FromHex("#eeeeee");
 
-        public static Color Primary => ColorConverters.FromHex("#58b560"); //official skynet color
-        public static Color PrimaryDark => ColorConverters.FromHex("#4d9954");
+        public static Color PrimaryDark => ColorConverters.FromHex("#02A275");
         public static Color PrimaryLight => ColorConverters.FromHex("#70d379");
+
+        // Gradient color scheme
+        public static Color Primary => ColorConverters.FromHex("#58b560"); //official skynet color
+
+        public static Color GradientGreen => ColorConverters.FromHex("#02A275");
+
+        public static Color GradientTurqouise => ColorConverters.FromHex("#008C80");
+
+        public static Color GradientOcean => ColorConverters.FromHex("#00757F");
+
+        public static Color GradientDeepBlue => ColorConverters.FromHex("#165E70");
+
+        public static Color GradientDark => ColorConverters.FromHex("#2F4858");
+
     }
 }

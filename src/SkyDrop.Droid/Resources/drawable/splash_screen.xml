@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <color android:color="@color/primaryDarkColor" />
+        <color android:color="@color/primaryDark" />
     </item>
     <item>
         <bitmap android:src="@drawable/ic_skydrop_logo"

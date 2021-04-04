@@ -15,9 +15,29 @@ namespace SkyDrop.Core.Services
             this.log = log;
         }
 
-        public async Task<IEnumerable<FileResult>> PickFilesAsync()
+
+        public async Task<IEnumerable<FileResult>> PickFilesAsync(SkyFilePickerType fileType)
         {
-            var pickedFiles = await FilePicker.PickMultipleAsync();
+            IEnumerable<FileResult> pickedFiles;
+            switch (fileType)
+            {
+                case SkyFilePickerType.Generic:
+                    pickedFiles = await FilePicker.PickMultipleAsync();
+                    break;
+
+                case SkyFilePickerType.Image:
+                    var pickPhoto = await MediaPicker.PickPhotoAsync();
+                    pickedFiles = new List<FileResult>() { pickPhoto };
+                    break;
+
+                case SkyFilePickerType.Video:
+                    var pickVideo = await MediaPicker.PickVideoAsync();
+                    pickedFiles = new List<FileResult>() { pickVideo };
+                    break;
+
+                default:
+                    throw new ArgumentException(nameof(fileType));
+            }
 
             if (pickedFiles == null)
             {
