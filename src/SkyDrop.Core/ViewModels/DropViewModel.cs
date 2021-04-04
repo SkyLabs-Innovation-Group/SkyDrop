@@ -282,13 +282,17 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void UpdateUploadProgress()
         {
-            var (uploadProgress, uploadTimerText) = uploadTimerService.GetUploadProgress();
+            var (newUploadProgress, newUploadTimerText) = uploadTimerService.GetUploadProgress();
 
-            if (UploadProgress != 1)
-            {
-                UploadProgress = uploadProgress;
-                UploadTimerText = uploadTimerText;
-            }
+            if (UploadProgress == 1)
+                return;
+
+            var maxProgress = 0.9;
+            if (newUploadProgress > maxProgress)
+                newUploadProgress = maxProgress;
+
+            UploadProgress = newUploadProgress;
+            UploadTimerText = newUploadTimerText;
         }
 
         private void UpdateFileSize()
