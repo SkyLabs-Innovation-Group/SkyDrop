@@ -164,23 +164,26 @@ namespace SkyDrop.Core.ViewModels.Main
                 var pickedFiles = await fileSystemService.PickFilesAsync(chosenType);
                 SlideSendButtonToCenterCommand?.Execute();
 
-                if (pickedFiles == null || pickedFiles.Count() == 0)
+                byte[] fileBytes = null;
+                try
                 {
+                    var firstFile = pickedFiles.First();
+
+                    using (var stream = await firstFile.OpenReadAsync())
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await stream.CopyToAsync(memoryStream);
+
+                        fileBytes = memoryStream.GetBuffer();
+                    }
+                }
+                catch (NullReferenceException ex)
+                {
+                    Log.Exception(ex);
                     Log.Trace("No file was picked.");
                     ResetUI();
 
                     return;
-                }
-
-                var firstFile = pickedFiles.First();
-
-                byte[] fileBytes = null;
-                using (var stream = await firstFile.OpenReadAsync())
-                using (var memoryStream = new MemoryStream())
-                {
-                    await stream.CopyToAsync(memoryStream);
-
-                    fileBytes = memoryStream.GetBuffer();
                 }
 
                 SkyFile = new SkyFile
