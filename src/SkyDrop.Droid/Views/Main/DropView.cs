@@ -50,6 +50,7 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.HandleUploadErrorCommand = new MvxCommand(() => AnimateSlideBarcodeOut(false));
             ViewModel.ResetBarcodeCommand = new MvxCommand(ResetBarcode);
             ViewModel.OpenFileInBrowserCommand = new MvxCommand(() => AndroidUtil.OpenFileInBrowser(this, ViewModel.SkyFile));
+            ViewModel.CheckUserIsSwipingCommand = new MvxCommand(CheckUserIsSwiping);
 
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
             receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);
@@ -365,6 +366,14 @@ namespace SkyDrop.Droid.Views.Main
             }
 
             return base.DispatchTouchEvent(e);
+        }
+
+        /// <summary>
+        /// Checks whether the user is doing a swipe and returns the result to the VM
+        /// </summary>
+        private void CheckUserIsSwiping()
+        {
+            ViewModel.UserIsSwipingResult = sendReceiveButtonsContainer.TranslationX != 0;
         }
     }
 }

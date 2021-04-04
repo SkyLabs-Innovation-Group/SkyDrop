@@ -36,6 +36,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand ShareLinkCommand { get; set; }
         public IMvxCommand OpenFileInBrowserCommand { get; set; }
         public IMvxCommand CancelUploadCommand { get; set; }
+        public IMvxCommand CheckUserIsSwipingCommand { get; set; }
 
         public string SkyFileJson { get; set; }
         public bool IsUploading { get; set; }
@@ -49,6 +50,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public string FileSize { get; set; }
         public double UploadProgress { get; set; } //0-1
         public bool FirstFileUploaded { get; set; }
+        public bool UserIsSwipingResult { get; set; }
 
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
@@ -136,6 +138,8 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             //don't allow user to select file while a file is uploading
             if (IsUploading) return;
+
+            if (UserIsSwiping()) return;
 
             IsSendButtonGreen = true;
             IsReceiveButtonGreen = false;
@@ -343,6 +347,13 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 Log.Exception(e);
             }
+        }
+
+        private bool UserIsSwiping()
+        {
+            CheckUserIsSwipingCommand?.Execute();
+
+            return UserIsSwipingResult;
         }
     }
 }
