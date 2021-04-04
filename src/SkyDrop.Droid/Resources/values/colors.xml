@@ -1,13 +1,21 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primaryColor">#58b560</color><!--official skynet color-->
-    <color name="primaryDarkColor">#4d9954</color>
-    <color name="primaryLightColor">#70d379</color>
-
-    <color name="midGrey">#4c555a</color>
-    <color name="darkGrey">#242c31</color>
-    <color name="lightGrey">#eeeeee</color>
-
-    <color name="primaryTextColor">#000000</color>
-    <color name="secondaryTextColor">#ffffff</color>
+	<color name="primaryDark">#02A275</color>
+	<color name="primaryLight">#70d379</color>
+	<!-- Gradient color scheme -->
+	<!--<color name="primaryColor">#58b560</color>-->
+	<color name="primaryColor">#58b560</color>
+	<color name="skyGreen">#02A275</color>
+	<color name="skyTurqouise">#008C80</color>
+	<color name="skyOcean">#00757F</color>
+	<color name="skyDeepBlue">#165E70</color>
+	<color name="skyDarkBlue">#2F4858</color>
+	<!-- Collective color scheme -->
+	<color name="skyLightBlue">#00BBFF</color>
+	<!--official skynet color-->
+	<color name="midGrey">#4c555a</color>
+	<color name="darkGrey">#242c31</color>
+	<color name="lightGrey">#eeeeee</color>
+	<color name="primaryTextColor">#000000</color>
+	<color name="secondaryTextColor">#ffffff</color>
 </resources>
