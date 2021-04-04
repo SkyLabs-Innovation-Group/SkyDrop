@@ -113,7 +113,7 @@ namespace SkyDrop.Core.ViewModels.Main
             base.ViewAppeared();
 
             //make sure buttons return to green when returning from QR scanner
-            ResetUI();
+            ResetUI(leaveBarcode: true);
 
             //show error message after the qr code scanner view has closed to avoid exception
             if (!string.IsNullOrEmpty(errorMessage))
@@ -123,15 +123,17 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
-        public void ResetUI()
+        public void ResetUI(bool leaveBarcode = false)
         {
             IsSendButtonGreen = true;
             IsReceiveButtonGreen = true;
             UploadTimerText = "";
             FileSize = "";
-            IsBarcodeVisible = false;
             IsAnimatingBarcodeOut = false;
             UploadProgress = 0;
+
+            if (!leaveBarcode)
+                IsBarcodeVisible = false;
         }
 
         private async Task StartSendFile()
