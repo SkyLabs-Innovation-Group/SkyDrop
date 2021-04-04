@@ -373,7 +373,13 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         private void CheckUserIsSwiping()
         {
-            ViewModel.UserIsSwipingResult = sendReceiveButtonsContainer.TranslationX != 0;
+            var thresholdOffset = AndroidUtil.DpToPx(16);
+            var isSendReceiveButtonsCentered = sendReceiveButtonsContainer.TranslationX >= -thresholdOffset && sendReceiveButtonsContainer.TranslationX <= thresholdOffset;
+            var isBarcodeCentered = barcodeContainer.TranslationX >= -thresholdOffset && barcodeContainer.TranslationX <= thresholdOffset;
+            var interfaceIsCentered = isSendReceiveButtonsCentered || isBarcodeCentered;
+            var userIsSwipingResult = !interfaceIsCentered;
+            ViewModel.Log.Trace($"UserIsSwipingResult: {userIsSwipingResult}");
+            ViewModel.UserIsSwipingResult = userIsSwipingResult;
         }
     }
 }
