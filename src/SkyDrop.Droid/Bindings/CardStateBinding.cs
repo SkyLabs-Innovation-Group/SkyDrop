@@ -6,6 +6,8 @@ using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
 using SkyDrop.Core.Utility;
 using Engage.Droid;
+using System.Drawing;
+using Xamarin.Essentials;
 
 namespace Engage.Droid.Bindings
 {
@@ -16,8 +18,13 @@ namespace Engage.Droid.Bindings
     {
         public static string Name => "MaterialCardState";
 
+        private Color defaultColor;
+
         public MaterialCardStateBinding(MaterialCardView target) : base(target)
         {
+            var intColor = target.CardBackgroundColor.DefaultColor;
+            var androidColor = new Android.Graphics.Color(intColor);
+            defaultColor = androidColor.ToSystemColor();
         }
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
@@ -26,8 +33,8 @@ namespace Engage.Droid.Bindings
         {
             if (value)
             {
-                Target.SetCardBackgroundColor(Colors.Primary.ToNative());
-                Target.StrokeColor = Colors.PrimaryDark.ToNative();
+                Target.SetCardBackgroundColor(defaultColor.ToNative());
+                Target.StrokeColor = defaultColor.ToNative();
             }
             else
             {
