@@ -268,11 +268,9 @@ namespace SkyDrop.Droid.Views.Main
             if (!barcodeIsLoaded)
             {
                 AnimateSlideBarcodeToCenter();
-                //return;
             }
 
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
-
             var duration = 250;
             sendReceiveButtonsContainer.Animate()
                 .TranslationX(toLeft ? -screenWidth : screenWidth)
@@ -299,6 +297,11 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         public override bool DispatchTouchEvent(MotionEvent e)
         {
+            //don't allow swipe before first file is uploaded
+            //don't allow swipe while file is uploading
+            if (!ViewModel.FirstFileUploaded || ViewModel.IsUploading)
+                return base.DispatchTouchEvent(e);
+
             switch (e.Action)
             {
                 case MotionEventActions.Down:

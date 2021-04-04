@@ -48,6 +48,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsAnimatingBarcodeOut { get; set; }
         public string FileSize { get; set; }
         public double UploadProgress { get; set; } //0-1
+        public bool FirstFileUploaded { get; set; }
 
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
@@ -168,6 +169,8 @@ namespace SkyDrop.Core.ViewModels.Main
                 StartUploadTimer();
                 SkyFile = await UploadFile();
                 StopUploadTimer();
+
+                FirstFileUploaded = true;
 
                 //wait for progressbar to complete
                 await Task.Delay(500);
