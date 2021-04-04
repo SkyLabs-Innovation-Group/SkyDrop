@@ -263,6 +263,10 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         public override bool DispatchTouchEvent(MotionEvent e)
         {
+            //disable swipe while file is uploading
+            if (ViewModel.IsUploading)
+                return base.DispatchTouchEvent(e);
+
             switch (e.Action)
             {
                 case MotionEventActions.Down:
