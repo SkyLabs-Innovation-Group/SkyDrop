@@ -263,6 +263,21 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_margin="16dp"
+                android:layout_alignParentRight="true"
+                app:cardCornerRadius="32dp"
+                app:cardBackgroundColor="@color/primaryColor"
+                app:MvxBind="Click CancelUploadCommand;Visibility Visibility(IsUploading)">
+                <ImageView
+                    android:src="@drawable/ic_cancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"/>
+            </com.google.android.material.card.MaterialCardView>
         </RelativeLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
