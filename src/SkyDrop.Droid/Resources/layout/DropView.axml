@@ -47,7 +47,7 @@
                         android:layout_gravity="center"
                         app:strokeColor="@color/midGrey"
                         app:cardBackgroundColor="@color/darkGrey"
-                        app:cardElevation="1dp"
+                        app:cardElevation="4dp"
                         android:clickable="true"
                         app:cardCornerRadius="42dp"
                         app:MvxBind="Visibility Visibility(IsBarcodeLoading)">
