@@ -38,6 +38,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand ShareLinkCommand { get; set; }
         public IMvxCommand OpenFileInBrowserCommand { get; set; }
         public IMvxCommand SlideSendButtonToCenterCommand { get; set; }
+        //public IMvxCommand ResetAnimateCommand { get; set; }
 
         public string SkyFileJson { get; set; }
         public bool IsUploading { get; set; }
@@ -181,7 +182,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 {
                     Log.Exception(ex);
                     Log.Trace("No file was picked.");
-                    ResetUI();
+                    HandleUploadErrorCommand?.Execute();
 
                     return;
                 }
