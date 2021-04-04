@@ -48,6 +48,7 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.HandleUploadErrorCommand = new MvxCommand(() => AnimateSlideBarcodeOut(false));
             ViewModel.ResetBarcodeCommand = new MvxCommand(ResetBarcode);
             ViewModel.OpenFileInBrowserCommand = new MvxCommand(() => AndroidUtil.OpenFileInBrowser(this, ViewModel.SkyFile));
+            ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
 
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
             receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);
@@ -102,7 +103,6 @@ namespace SkyDrop.Droid.Views.Main
         {
             ViewModel.IsBarcodeVisible = true;
 
-            AnimateSlideSendButton();
             AnimateSlideBarcodeIn(fromLeft: false);
             
             var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, barcodeImageView.Width, barcodeImageView.Height);

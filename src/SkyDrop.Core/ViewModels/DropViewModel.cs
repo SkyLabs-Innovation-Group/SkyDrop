@@ -37,6 +37,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand NavToSettingsCommand { get; set; }
         public IMvxCommand ShareLinkCommand { get; set; }
         public IMvxCommand OpenFileInBrowserCommand { get; set; }
+        public IMvxCommand SlideSendButtonToCenterCommand { get; set; }
 
         public string SkyFileJson { get; set; }
         public bool IsUploading { get; set; }
@@ -161,6 +162,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     chosenType = SkyFilePickerType.Generic;
 
                 var pickedFiles = await fileSystemService.PickFilesAsync(chosenType);
+                SlideSendButtonToCenterCommand?.Execute();
 
                 if (pickedFiles == null || pickedFiles.Count() == 0)
                 {
