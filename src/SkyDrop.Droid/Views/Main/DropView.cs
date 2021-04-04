@@ -268,7 +268,7 @@ namespace SkyDrop.Droid.Views.Main
             if (!barcodeIsLoaded)
             {
                 AnimateSlideBarcodeToCenter();
-                return;
+                //return;
             }
 
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
