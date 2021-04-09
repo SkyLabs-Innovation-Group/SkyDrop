@@ -21,6 +21,11 @@ namespace SkyDrop.Droid.Views.Main
     [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden, ScreenOrientation = ScreenOrientation.Portrait)]
     public class DropView : BaseActivity<DropViewModel>
     {
+        // TODO: Call UpdateDropViewState(), maybe in DispatchTouchEvent() 
+        public enum DropViewState { SendReceiveButtonState = 0, QRCodeState = 1 }
+
+        public DropViewState DropViewUIState { get; set; } 
+        
         protected override int ActivityLayoutId => Resource.Layout.DropView;
 
         private const int swipeMarginX = 100;
@@ -32,6 +37,23 @@ namespace SkyDrop.Droid.Views.Main
         private LinearLayout barcodeMenu, sendReceiveButtonsContainer;
         private ImageView barcodeImageView;
 
+        // TODO: call these methods in the place of current UI handling logic  
+        public void SetSendReceiveButtonUiState()
+        {
+            DropViewUIState = DropViewState.SendReceiveButtonState;
+
+            // todo animate and trigger updates here
+            throw new NotImplementedException();
+        }
+
+        public void SetQRCodeUiState()
+        {
+            DropViewUIState = DropViewState.QRCodeState;
+
+            // todo animate and trigger updates here
+            throw new NotImplementedException();
+        }
+        
         /// <summary>
         /// Initialize view
         /// </summary>
