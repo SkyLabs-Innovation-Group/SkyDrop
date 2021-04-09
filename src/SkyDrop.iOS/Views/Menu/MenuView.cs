@@ -22,7 +22,7 @@ namespace SkyDrop.iOS.Views.Menu
 
             //TODO: dark green navigation bar with title seems to be covered by another (grey) navigation bar
             NavigationController.Title = "SkyDrop";
-            NavigationController.NavigationBar.BackgroundColor = Colors.PrimaryDark.ToNative();
+            NavigationController.NavigationBar.BackgroundColor = Colors.GradientDark.ToNative();
 
             View.BackgroundColor = Colors.DarkGrey.ToNative();
             FileTransferButton.BackgroundColor = Colors.MidGrey.ToNative();
