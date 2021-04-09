@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Acr.UserDialogs;
@@ -39,6 +40,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand OpenFileInBrowserCommand { get; set; }
         public IMvxCommand SlideSendButtonToCenterCommand { get; set; }
         //public IMvxCommand ResetAnimateCommand { get; set; }
+        public IMvxCommand CancelUploadCommand { get; set; }
+        public IMvxCommand CheckUserIsSwipingCommand { get; set; }
 
         public string SkyFileJson { get; set; }
         public bool IsUploading { get; set; }
@@ -51,8 +54,11 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsAnimatingBarcodeOut { get; set; }
         public string FileSize { get; set; }
         public double UploadProgress { get; set; } //0-1
+        public bool FirstFileUploaded { get; set; }
+        public bool UserIsSwipingResult { get; set; }
 
         private string errorMessage;
+        private CancellationTokenSource uploadCancellationToken;
 
         public SkyFile SkyFile { get; set; }
 
@@ -104,6 +110,7 @@ namespace SkyDrop.Core.ViewModels.Main
             CopyLinkCommand = new MvxAsyncCommand(CopySkyLinkToClipboard);
             NavToSettingsCommand = new MvxAsyncCommand(NavToSettings);
             ShareLinkCommand = new MvxAsyncCommand(ShareLink);
+            CancelUploadCommand = new MvxCommand(CancelUpload);
         }
 
         public override void ViewAppeared()
@@ -113,7 +120,7 @@ namespace SkyDrop.Core.ViewModels.Main
             base.ViewAppeared();
 
             //make sure buttons return to green when returning from QR scanner
-            ResetUI();
+            ResetUI(leaveBarcode: true);
 
             //show error message after the qr code scanner view has closed to avoid exception
             if (!string.IsNullOrEmpty(errorMessage))
@@ -123,21 +130,25 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
-        public void ResetUI()
+        public void ResetUI(bool leaveBarcode = false)
         {
             IsSendButtonGreen = true;
             IsReceiveButtonGreen = true;
             UploadTimerText = "";
             FileSize = "";
-            IsBarcodeVisible = false;
             IsAnimatingBarcodeOut = false;
             UploadProgress = 0;
+
+            if (!leaveBarcode)
+                IsBarcodeVisible = false;
         }
 
         private async Task StartSendFile()
         {
             //don't allow user to select file while a file is uploading
             if (IsUploading) return;
+
+            if (UserIsSwiping()) return;
 
             IsSendButtonGreen = true;
             IsReceiveButtonGreen = false;
@@ -210,6 +221,8 @@ namespace SkyDrop.Core.ViewModels.Main
                 SkyFile = await UploadFile();
                 StopUploadTimer();
 
+                FirstFileUploaded = true;
+
                 //wait for progressbar to complete
                 await Task.Delay(500);
 
@@ -221,10 +234,21 @@ namespace SkyDrop.Core.ViewModels.Main
                 SkyFileJson = JsonConvert.SerializeObject(SkyFile);
                 await GenerateBarcodeAsyncFunc();
             }
-            catch (Exception e)
+            catch (Exception e) when (e.Message == "Socket closed")
             {
-                Log.Exception(e);
+                //user cancelled the upload
+                userDialogs.Toast("Upload cancelled");
+
+                //reset the UI
+                HandleUploadErrorCommand?.Execute();
+            }
+            catch (Exception ex)
+            {
+                //an error occurred
+                Log.Exception(ex);
                 userDialogs.Toast("Could not upload file");
+
+                //reset the UI
                 HandleUploadErrorCommand?.Execute();
             }
             finally
@@ -282,7 +306,8 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task<SkyFile> UploadFile()
         {
-            var skyFile = await apiService.UploadFile(this.SkyFile.Filename, this.SkyFile.Data, this.SkyFile.FileSizeBytes);
+            uploadCancellationToken = new CancellationTokenSource();
+            var skyFile = await apiService.UploadFile(this.SkyFile.Filename, this.SkyFile.Data, this.SkyFile.FileSizeBytes, uploadCancellationToken);
             return skyFile;
         }
 
@@ -302,19 +327,28 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void UpdateUploadProgress()
         {
-            var (uploadProgress, uploadTimerText) = uploadTimerService.GetUploadProgress();
+            var (newUploadProgress, newUploadTimerText) = uploadTimerService.GetUploadProgress();
 
-            if (UploadProgress != 1)
-            {
-                UploadProgress = uploadProgress;
-                UploadTimerText = uploadTimerText;
-            }
+            if (UploadProgress == 1)
+                return;
+
+            var maxProgress = 0.9;
+            if (newUploadProgress > maxProgress)
+                newUploadProgress = maxProgress;
+
+            UploadProgress = newUploadProgress;
+            UploadTimerText = newUploadTimerText;
         }
 
         private void UpdateFileSize()
         {
             var bytesCount = SkyFile.FileSizeBytes;
             FileSize = Util.GetFileSizeString(bytesCount);
+        }
+
+        private void CancelUpload()
+        {
+            uploadCancellationToken?.Cancel();
         }
 
         public BitMatrix GenerateBarcode(string text, int width, int height)
@@ -364,6 +398,13 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 Log.Exception(e);
             }
+        }
+
+        private bool UserIsSwiping()
+        {
+            CheckUserIsSwipingCommand?.Execute();
+
+            return UserIsSwipingResult;
         }
     }
 }

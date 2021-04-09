@@ -30,6 +30,12 @@ namespace SkyDrop.Droid.Linker
             button.Click += (s, e) => button.Text = $"{button.Text}";
         }
 
+        public void Include(AndroidX.Core.View.Accessibility.AccessibilityNodeInfoCompat c)
+        {
+            c.SetCollectionItemInfo(null);
+            c.FindAccessibilityNodeInfosByText(null);
+        }
+
         public void Include(View view)
         {
             view.Click += (s, e) => view.ContentDescription = $"{view.ContentDescription}";

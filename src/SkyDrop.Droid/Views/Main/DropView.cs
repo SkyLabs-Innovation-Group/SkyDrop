@@ -49,6 +49,7 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.ResetBarcodeCommand = new MvxCommand(ResetBarcode);
             ViewModel.OpenFileInBrowserCommand = new MvxCommand(() => AndroidUtil.OpenFileInBrowser(this, ViewModel.SkyFile));
             ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
+            ViewModel.CheckUserIsSwipingCommand = new MvxCommand(CheckUserIsSwiping);
 
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
             receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);
@@ -104,7 +105,7 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.IsBarcodeVisible = true;
 
             AnimateSlideBarcodeIn(fromLeft: false);
-            
+
             var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, barcodeImageView.Width, barcodeImageView.Height);
             var bitmap = await AndroidUtil.EncodeBarcode(matrix, barcodeImageView.Width, barcodeImageView.Height);
             barcodeImageView.SetImageBitmap(bitmap);
@@ -232,11 +233,9 @@ namespace SkyDrop.Droid.Views.Main
             if (!barcodeIsLoaded)
             {
                 AnimateSlideBarcodeToCenter();
-                return;
             }
 
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
-
             var duration = 250;
             sendReceiveButtonsContainer.Animate()
                 .TranslationX(toLeft ? -screenWidth : screenWidth)
@@ -263,8 +262,10 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         public override bool DispatchTouchEvent(MotionEvent e)
         {
-            //disable swipe while file is uploading
-            if (ViewModel.IsUploading)
+
+            //don't allow swipe before first file is uploaded
+            //don't allow swipe while file is uploading
+            if (!ViewModel.FirstFileUploaded || ViewModel.IsUploading)
                 return base.DispatchTouchEvent(e);
 
             switch (e.Action)
@@ -330,6 +331,20 @@ namespace SkyDrop.Droid.Views.Main
             }
 
             return base.DispatchTouchEvent(e);
+        }
+
+        /// <summary>
+        /// Checks whether the user is doing a swipe and returns the result to the VM
+        /// </summary>
+        private void CheckUserIsSwiping()
+        {
+            var thresholdOffset = AndroidUtil.DpToPx(16);
+            var isSendReceiveButtonsCentered = sendReceiveButtonsContainer.TranslationX >= -thresholdOffset && sendReceiveButtonsContainer.TranslationX <= thresholdOffset;
+            var isBarcodeCentered = barcodeContainer.TranslationX >= -thresholdOffset && barcodeContainer.TranslationX <= thresholdOffset;
+            var interfaceIsCentered = isSendReceiveButtonsCentered || isBarcodeCentered;
+            var userIsSwipingResult = !interfaceIsCentered;
+            ViewModel.Log.Trace($"UserIsSwipingResult: {userIsSwipingResult}");
+            ViewModel.UserIsSwipingResult = userIsSwipingResult;
         }
     }
 }

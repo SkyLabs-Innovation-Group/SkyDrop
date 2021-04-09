@@ -45,8 +45,9 @@
                         android:layout_width="84dp"
                         android:layout_height="84dp"
                         android:layout_gravity="center"
+                        app:strokeColor="@color/midGrey"
                         app:cardBackgroundColor="@color/darkGrey"
-                        app:cardElevation="1dp"
+                        app:cardElevation="4dp"
                         android:clickable="true"
                         app:cardCornerRadius="42dp"
                         app:MvxBind="Visibility Visibility(IsBarcodeLoading)">
@@ -80,9 +81,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:gravity="center"
                         android:orientation="vertical">
                         <ImageView
-                            android:layout_width="match_parent"
+                            android:layout_width="32dp"
                             android:layout_height="60dp"
                             android:layout_marginTop="8dp"
                             android:src="@drawable/ic_link"/>/>
@@ -92,7 +94,7 @@
                             android:text="Copy Link"
                             android:textSize="12sp"
                             android:textColor="@color/lightGrey"
-                            android:paddingBottom="24dp"/>
+                            android:paddingBottom="16dp"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
                 <com.google.android.material.card.MaterialCardView
@@ -102,7 +104,7 @@
                     android:layout_marginRight="16dp"
                     app:cardElevation="1dp"
                     app:cardCornerRadius="8dp"
-                    app:cardBackgroundColor="@color/primaryColor"
+                    app:cardBackgroundColor="@color/skyGreen"
                     app:MvxBind="Click OpenFileInBrowserCommand">
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -110,7 +112,7 @@
                         android:layout_gravity="center"
                         android:orientation="vertical">
                         <ImageView
-                            android:layout_width="match_parent"
+                            android:layout_width="32dp"
                             android:layout_height="60dp"
                             android:src="@drawable/ic_file"
                             android:layout_marginTop="8dp"/>
@@ -120,7 +122,7 @@
                             android:text="Open"
                             android:textSize="12sp"
                             android:textColor="@color/lightGrey"
-                            android:paddingBottom="24dp"/>/>
+                            android:paddingBottom="16dp"/>/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
                 <com.google.android.material.card.MaterialCardView
@@ -129,7 +131,7 @@
                     android:layout_weight="1"
                     app:cardElevation="1dp"
                     app:cardCornerRadius="8dp"
-                    app:cardBackgroundColor="@color/primaryColor"
+                    app:cardBackgroundColor="@color/skyOcean"
                     app:MvxBind="Click ShareLinkCommand">
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -137,7 +139,7 @@
                         android:layout_gravity="center"
                         android:orientation="vertical">
                         <ImageView
-                            android:layout_width="match_parent"
+                            android:layout_width="32dp"
                             android:layout_height="60dp"
                             android:src="@drawable/ic_share"
                             android:layout_marginTop="8dp" />
@@ -147,7 +149,7 @@
                             android:text="Share"
                             android:textSize="12sp"
                             android:textColor="@color/lightGrey"
-                            android:paddingBottom="24dp"/>
+                            android:paddingBottom="16dp"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
@@ -157,6 +159,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:layout_marginBottom="?attr/actionBarSize"
                 android:orientation="horizontal">
 
                 <com.google.android.material.card.MaterialCardView
@@ -229,7 +232,7 @@
                     android:id="@+id/ReceiveFileButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/primaryColor"
+                    app:cardBackgroundColor="@color/skyTurqouise"
                     android:layout_marginLeft="8dp"
                     app:cardElevation="1dp"
                     app:strokeColor="@color/midGrey"
@@ -261,6 +264,21 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_margin="16dp"
+                android:layout_alignParentRight="true"
+                app:cardCornerRadius="32dp"
+                app:cardBackgroundColor="@color/primaryColor"
+                app:MvxBind="Click CancelUploadCommand;Visibility Visibility(IsUploading)">
+                <ImageView
+                    android:src="@drawable/ic_cancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"/>
+            </com.google.android.material.card.MaterialCardView>
         </RelativeLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
