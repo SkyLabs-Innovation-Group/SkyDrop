@@ -380,3 +380,6 @@ MigrationBackup/
 .ionide/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,xamarinstudio
+.idea/.idea.SkyDrop/.idea/projectSettingsUpdater.xml
+
+.idea/.idea.SkyDrop/.idea/workspace.xml
