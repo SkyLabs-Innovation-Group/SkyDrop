@@ -12,6 +12,7 @@ using MvvmCross.Commands;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.Droid.Helper;
+using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -21,11 +22,6 @@ namespace SkyDrop.Droid.Views.Main
     [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden, ScreenOrientation = ScreenOrientation.Portrait)]
     public class DropView : BaseActivity<DropViewModel>
     {
-        // TODO: Call UpdateDropViewState(), maybe in DispatchTouchEvent() 
-        public enum DropViewState { SendReceiveButtonState = 0, QRCodeState = 1 }
-
-        public DropViewState DropViewUIState { get; set; } 
-        
         protected override int ActivityLayoutId => Resource.Layout.DropView;
 
         private const int swipeMarginX = 100;
@@ -37,23 +33,23 @@ namespace SkyDrop.Droid.Views.Main
         private LinearLayout barcodeMenu, sendReceiveButtonsContainer;
         private ImageView barcodeImageView;
 
-        // TODO: call these methods in the place of current UI handling logic  
         public void SetSendReceiveButtonUiState()
         {
-            DropViewUIState = DropViewState.SendReceiveButtonState;
+            ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState;
 
-            // todo animate and trigger updates here
-            throw new NotImplementedException();
+            AnimateSlideBarcodeOut(toLeft: false);
         }
 
-        public void SetQRCodeUiState()
+        public void SetBarcodeCodeUiState()
         {
-            DropViewUIState = DropViewState.QRCodeState;
+            ViewModel.DropViewUIState = DropViewState.QRCodeState;
 
-            // todo animate and trigger updates here
-            throw new NotImplementedException();
+            ViewModel.IsBarcodeVisible = true;
+
+            AnimateSlideBarcodeIn(fromLeft: false);
+            AnimateSlideSendReceiveButtonsOut(toLeft: true);
         }
-        
+
         /// <summary>
         /// Initialize view
         /// </summary>
@@ -67,7 +63,7 @@ namespace SkyDrop.Droid.Views.Main
 
             ViewModel.OpenFileCommand = new MvxCommand<SkyFile>(skyFile => AndroidUtil.OpenFileInBrowser(this, skyFile));
             ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
-            ViewModel.HandleUploadErrorCommand = new MvxCommand(() => AnimateSlideBarcodeOut(false));
+            ViewModel.HandleUploadErrorCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
             ViewModel.ResetBarcodeCommand = new MvxCommand(ResetBarcode);
             ViewModel.OpenFileInBrowserCommand = new MvxCommand(() => AndroidUtil.OpenFileInBrowser(this, ViewModel.UploadedFile));
             ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
@@ -88,7 +84,7 @@ namespace SkyDrop.Droid.Views.Main
         {
             if (ViewModel.IsBarcodeVisible)
             {
-                AnimateSlideBarcodeOut(false);
+                SetSendReceiveButtonUiState();
                 return;
             }
 
@@ -124,9 +120,7 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         private async Task ShowBarcode()
         {
-            ViewModel.IsBarcodeVisible = true;
-
-            AnimateSlideBarcodeIn(fromLeft: false);
+            SetBarcodeCodeUiState();
 
             var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, barcodeImageView.Width, barcodeImageView.Height);
             var bitmap = await AndroidUtil.EncodeBarcode(matrix, barcodeImageView.Width, barcodeImageView.Height);
@@ -169,8 +163,6 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         private void AnimateSlideBarcodeIn(bool fromLeft)
         {
-            ViewModel.IsBarcodeVisible = true;
-
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
 
             barcodeContainer.TranslationX = fromLeft ? -screenWidth : screenWidth;
@@ -248,7 +240,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Slide barcode out to left or right
+        /// Slide send receive buttons out to left or right
         /// </summary>
         private void AnimateSlideSendReceiveButtonsOut(bool toLeft)
         {
@@ -263,12 +255,10 @@ namespace SkyDrop.Droid.Views.Main
                 .TranslationX(toLeft ? -screenWidth : screenWidth)
                 .SetDuration(duration)
                 .Start();
-
-            AnimateSlideBarcodeIn(fromLeft: !toLeft);
         }
 
         /// <summary>
-        /// Slide the send receive button to screen center when user cancels swipe back to barcode action
+        /// Slide the send receive buttons to screen center when user cancels swipe back to barcode action
         /// </summary>
         private void AnimateSlideSendReceiveCenter()
         {
@@ -311,10 +301,8 @@ namespace SkyDrop.Droid.Views.Main
                     {
                         //send & receive buttons are visible
 
-                        if (sendReceiveButtonsContainer.TranslationX >= swipeMarginX)
-                            AnimateSlideSendReceiveButtonsOut(toLeft: false);
-                        else if (sendReceiveButtonsContainer.TranslationX <= -swipeMarginX)
-                            AnimateSlideSendReceiveButtonsOut(toLeft: true);
+                        if (sendReceiveButtonsContainer.TranslationX <= -swipeMarginX)
+                            SetBarcodeCodeUiState();
                         else
                             AnimateSlideSendReceiveCenter();
                     }
@@ -323,9 +311,7 @@ namespace SkyDrop.Droid.Views.Main
                         //barcode is visible
 
                         if (barcodeContainer.TranslationX >= swipeMarginX)
-                            AnimateSlideBarcodeOut(toLeft: false);
-                        else if (barcodeContainer.TranslationX <= -swipeMarginX)
-                            AnimateSlideBarcodeOut(toLeft: true);
+                            SetSendReceiveButtonUiState();
                         else
                             AnimateSlideBarcodeToCenter();
                     }
