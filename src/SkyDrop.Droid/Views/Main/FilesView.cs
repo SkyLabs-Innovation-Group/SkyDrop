@@ -22,7 +22,7 @@ namespace SkyDrop.Droid.Views.Main
         protected override int ActivityLayoutId => Resource.Layout.FilesView;
 
         public RecyclerView UploadedFilesRecyclerView { get; set; }
-        
+
         private IMenu menu;
 
         protected override async void OnCreate(Bundle bundle)
@@ -36,8 +36,8 @@ namespace SkyDrop.Droid.Views.Main
 
             Log.Trace("MainView OnCreate()");
 
-            ViewModel.SelectFileAsyncFunc = () => AndroidUtil.SelectFile(this);
-            ViewModel.SelectImageAsyncFunc = () => AndroidUtil.SelectImage(this);
+            //ViewModel.SelectFileAsyncFunc = () => AndroidUtil.SelectFile(this);
+            //ViewModel.SelectImageAsyncFunc = () => AndroidUtil.SelectImage(this);
             ViewModel.OpenFileInBrowserCommand = new MvxCommand<SkyFile>(skyFile => AndroidUtil.OpenFileInBrowser(this, skyFile));
             ViewModel.AfterFileSelected = new MvxCommand(() => AfterFileWasSelected());
             ViewModel.ScrollToFileCommand = new MvxCommand(() => ScrollToFile());
@@ -45,7 +45,7 @@ namespace SkyDrop.Droid.Views.Main
 
         private void HandlePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == nameof(ViewModel.SkyFiles))
+            if (e.PropertyName == nameof(ViewModel.SkyFiles))
             {
                 var uploadItem = menu.FindItem(Resource.Id.menu_files_upload);
                 if (ViewModel.SkyFiles.Where(sf => sf.SkyFile.Status == FileStatus.Staged).Count() > 0)
@@ -98,30 +98,30 @@ namespace SkyDrop.Droid.Views.Main
             }
         }
 
-        protected override async void OnActivityResult(int requestCode, Android.App.Result resultCode, Intent data)
-        {
-            try
-            {
-                if (requestCode == AndroidUtil.PickFileRequestCode)
-                {
-                    if (data == null)
-                        return;
+        //protected override async void OnActivityResult(int requestCode, Android.App.Result resultCode, Intent data)
+        //{
+        //    try
+        //    {
+        //        if (requestCode == AndroidUtil.PickFileRequestCode)
+        //        {
+        //            if (data == null)
+        //                return;
 
-                    await HandlePickedFile(data);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Exception(ex);
-            }
+        //            await HandlePickedFile(data);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.Exception(ex);
+        //    }
 
-            base.OnActivityResult(requestCode, resultCode, data);
-        }
+        //    base.OnActivityResult(requestCode, resultCode, data);
+        //}
 
-        private async Task HandlePickedFile(Intent data)
-        {
-            var stagedFile = await AndroidUtil.HandlePickedFile(this, data);
-            ViewModel.StageFile(stagedFile);
-        }
+        //private async Task HandlePickedFile(Intent data)
+        //{
+        //    var stagedFile = await AndroidUtil.HandlePickedFile(this, data);
+        //    ViewModel.StageFile(stagedFile);
+        //}
     }
 }

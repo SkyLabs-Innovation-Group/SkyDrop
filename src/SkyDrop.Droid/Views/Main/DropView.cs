@@ -21,6 +21,11 @@ namespace SkyDrop.Droid.Views.Main
     [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden, ScreenOrientation = ScreenOrientation.Portrait)]
     public class DropView : BaseActivity<DropViewModel>
     {
+        // TODO: Call UpdateDropViewState(), maybe in DispatchTouchEvent() 
+        public enum DropViewState { SendReceiveButtonState = 0, QRCodeState = 1 }
+
+        public DropViewState DropViewUIState { get; set; } 
+        
         protected override int ActivityLayoutId => Resource.Layout.DropView;
 
         private const int swipeMarginX = 100;
@@ -32,6 +37,23 @@ namespace SkyDrop.Droid.Views.Main
         private LinearLayout barcodeMenu, sendReceiveButtonsContainer;
         private ImageView barcodeImageView;
 
+        // TODO: call these methods in the place of current UI handling logic  
+        public void SetSendReceiveButtonUiState()
+        {
+            DropViewUIState = DropViewState.SendReceiveButtonState;
+
+            // todo animate and trigger updates here
+            throw new NotImplementedException();
+        }
+
+        public void SetQRCodeUiState()
+        {
+            DropViewUIState = DropViewState.QRCodeState;
+
+            // todo animate and trigger updates here
+            throw new NotImplementedException();
+        }
+        
         /// <summary>
         /// Initialize view
         /// </summary>
@@ -43,13 +65,12 @@ namespace SkyDrop.Droid.Views.Main
 
             Log.Trace("DropView OnCreate()");
 
-            ViewModel.SelectFileAsyncFunc = async () => await AndroidUtil.SelectFile(this);
-            ViewModel.SelectImageAsyncFunc = async () => await AndroidUtil.SelectImage(this);
             ViewModel.OpenFileCommand = new MvxCommand<SkyFile>(skyFile => AndroidUtil.OpenFileInBrowser(this, skyFile));
             ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
             ViewModel.HandleUploadErrorCommand = new MvxCommand(() => AnimateSlideBarcodeOut(false));
             ViewModel.ResetBarcodeCommand = new MvxCommand(ResetBarcode);
-            ViewModel.OpenFileInBrowserCommand = new MvxCommand(() => AndroidUtil.OpenFileInBrowser(this, ViewModel.SkyFile));
+            ViewModel.OpenFileInBrowserCommand = new MvxCommand(() => AndroidUtil.OpenFileInBrowser(this, ViewModel.UploadedFile));
+            ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
             ViewModel.CheckUserIsSwipingCommand = new MvxCommand(CheckUserIsSwiping);
 
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
@@ -58,33 +79,6 @@ namespace SkyDrop.Droid.Views.Main
             barcodeMenu = FindViewById<LinearLayout>(Resource.Id.BarcodeMenu);
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
             sendReceiveButtonsContainer = FindViewById<LinearLayout>(Resource.Id.SendReceiveContainer);
-        }
-
-        /// <summary>
-        /// Called after user selects file
-        /// </summary>
-        protected override async void OnActivityResult(int requestCode, Android.App.Result resultCode, Intent data)
-        {
-            try
-            {
-                if (requestCode == AndroidUtil.PickFileRequestCode)
-                {
-                    if (data == null)
-                    {
-                        //user did not select a file, reset UI
-                        ViewModel.ResetUI();
-                        return;
-                    }
-
-                    await HandlePickedFile(data);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Exception(ex);
-            }
-
-            base.OnActivityResult(requestCode, resultCode, data);
         }
 
         /// <summary>
@@ -126,22 +120,14 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Generate SkyFile from intent data and stage it for upload
-        /// </summary>
-        private async Task HandlePickedFile(Intent data)
-        {
-            AnimateSlideSendButton();
-            var stagedFile = await AndroidUtil.HandlePickedFile(this, data);
-            await ViewModel.StageFile(stagedFile);
-        }
-
-        /// <summary>
         /// Generate and display QR code
         /// </summary>
         private async Task ShowBarcode()
         {
             ViewModel.IsBarcodeVisible = true;
+
             AnimateSlideBarcodeIn(fromLeft: false);
+
             var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, barcodeImageView.Width, barcodeImageView.Height);
             var bitmap = await AndroidUtil.EncodeBarcode(matrix, barcodeImageView.Width, barcodeImageView.Height);
             barcodeImageView.SetImageBitmap(bitmap);
@@ -298,6 +284,7 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         public override bool DispatchTouchEvent(MotionEvent e)
         {
+
             //don't allow swipe before first file is uploaded
             //don't allow swipe while file is uploading
             if (!ViewModel.FirstFileUploaded || ViewModel.IsUploading)
