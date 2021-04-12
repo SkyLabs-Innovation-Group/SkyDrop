@@ -62,7 +62,9 @@ namespace SkyDrop.Core.ViewModels.Main
         public List<SkyFile> StagedFiles { get; set; }
         public SkyFile UploadedFile { get; set; }
         public SkyFile FileToUpload { get; set; }
-        public DropViewState DropViewUIState { get; set; }
+
+        private DropViewState _dropViewUIState;
+        public DropViewState DropViewUIState { get => _dropViewUIState; set { _dropViewUIState = value; Log.Trace($"New UI State: {value}"); } }
         public enum DropViewState { SendReceiveButtonState = 0, QRCodeState = 1 }
 
         private string errorMessage;
@@ -138,6 +140,8 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public void ResetUI(bool leaveBarcode = false)
         {
+            DropViewUIState = DropViewState.SendReceiveButtonState;
+
             IsSendButtonGreen = true;
             IsReceiveButtonGreen = true;
             UploadTimerText = "";
@@ -391,14 +395,23 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task CopySkyLinkToClipboard()
         {
-            string skyLink = GetSkyLink();
-            if (skyLink == null)
-                return;
+            try
+            {
+                if (UserIsSwiping()) return;
 
-            await Xamarin.Essentials.Clipboard.SetTextAsync(skyLink);
+                string skyLink = GetSkyLink();
+                if (skyLink == null)
+                    return;
 
-            Log.Trace("Set clipboard text to " + skyLink);
-            userDialogs.Toast("Copied SkyLink to clipboard");
+                await Xamarin.Essentials.Clipboard.SetTextAsync(skyLink);
+
+                Log.Trace("Set clipboard text to " + skyLink);
+                userDialogs.Toast("Copied SkyLink to clipboard");
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e);
+            }
         }
 
         private Task NavToSettings()
@@ -410,6 +423,8 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             try
             {
+                if (UserIsSwiping()) return;
+
                 string skyLink = GetSkyLink();
                 if (skyLink == null)
                     return;
@@ -422,7 +437,7 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
-        private bool UserIsSwiping()
+        public bool UserIsSwiping()
         {
             CheckUserIsSwipingCommand?.Execute();
 

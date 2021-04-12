@@ -35,8 +35,8 @@ namespace SkyDrop.Droid.Views.Main
 
         public void SetSendReceiveButtonUiState()
         {
-            ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState;
-
+            //DropViewUIState gets changed at the end of the animation (in ViewModel.ResetUI())
+            //that is to fix an issue with CheckUserIsSwiping() on barcode menu buttons
             AnimateSlideBarcodeOut(toLeft: false);
         }
 
@@ -65,7 +65,7 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
             ViewModel.HandleUploadErrorCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
             ViewModel.ResetBarcodeCommand = new MvxCommand(ResetBarcode);
-            ViewModel.OpenFileInBrowserCommand = new MvxCommand(() => AndroidUtil.OpenFileInBrowser(this, ViewModel.UploadedFile));
+            ViewModel.OpenFileInBrowserCommand = new MvxCommand(() => { if (!ViewModel.UserIsSwiping()) AndroidUtil.OpenFileInBrowser(this, ViewModel.UploadedFile); });
             ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
             ViewModel.CheckUserIsSwipingCommand = new MvxCommand(CheckUserIsSwiping);
 
@@ -349,7 +349,7 @@ namespace SkyDrop.Droid.Views.Main
             var thresholdOffset = AndroidUtil.DpToPx(16);
             var isSendReceiveButtonsCentered = sendReceiveButtonsContainer.TranslationX >= -thresholdOffset && sendReceiveButtonsContainer.TranslationX <= thresholdOffset;
             var isBarcodeCentered = barcodeContainer.TranslationX >= -thresholdOffset && barcodeContainer.TranslationX <= thresholdOffset;
-            var interfaceIsCentered = isSendReceiveButtonsCentered || isBarcodeCentered;
+            var interfaceIsCentered = ViewModel.DropViewUIState == DropViewState.SendReceiveButtonState ? isSendReceiveButtonsCentered : isBarcodeCentered;
             var userIsSwipingResult = !interfaceIsCentered;
             ViewModel.Log.Trace($"UserIsSwipingResult: {userIsSwipingResult}");
             ViewModel.UserIsSwipingResult = userIsSwipingResult;
