@@ -21,6 +21,9 @@ namespace SkyDrop.Core.ViewModels.Main
 {
     public class DropViewModel : BaseViewModel
     {
+        // TODO: Call UpdateDropViewState(), maybe in DispatchTouchEvent() 
+        public enum DropViewState { SendReceiveButtonState = 0, QRCodeState = 1 }
+
         private readonly IApiService apiService;
         private readonly IStorageService storageService;
         private readonly IUserDialogs userDialogs;
@@ -59,12 +62,13 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool FirstFileUploaded { get; set; }
         public bool UserIsSwipingResult { get; set; }
 
-        private string errorMessage;
-        private CancellationTokenSource uploadCancellationToken;
-
         public List<SkyFile> StagedFiles { get; set; }
         public SkyFile UploadedFile { get; set; }
         public SkyFile FileToUpload { get; set; }
+        public DropViewState DropViewUIState { get; set; }
+
+        private string errorMessage;
+        private CancellationTokenSource uploadCancellationToken;
 
         // private Func<Task> _selectFileAsyncFunc;
         // public Func<Task> SelectFileAsyncFunc
