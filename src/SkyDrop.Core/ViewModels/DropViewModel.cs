@@ -62,7 +62,9 @@ namespace SkyDrop.Core.ViewModels.Main
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
 
-        public SkyFile SkyFile { get; set; }
+        public List<SkyFile> StagedFiles { get; set; }
+        public SkyFile UploadedFile { get; set; }
+        public SkyFile FileToUpload { get; set; }
 
         // private Func<Task> _selectFileAsyncFunc;
         // public Func<Task> SelectFileAsyncFunc
@@ -213,10 +215,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 
                 if (userSkyFiles.Count > 0)
                 {
-                    // TODO: handle staging multiple files
-                    SkyFile = userSkyFiles.First();
-                
-                    await StageFile(SkyFile);
+                    await StageFiles(userSkyFiles);
                 }
             }
         }
@@ -227,8 +226,8 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 IsUploading = true;
 
-                StartUploadTimer();
-                SkyFile = await UploadFile();
+                StartUploadTimer(FileToUpload.FileSizeBytes);
+                UploadedFile = await UploadFile();
                 StopUploadTimer();
 
                 FirstFileUploaded = true;
@@ -241,7 +240,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 //show QR code
                 IsUploading = false;
                 IsBarcodeLoading = true;
-                SkyFileJson = JsonConvert.SerializeObject(SkyFile);
+                SkyFileJson = JsonConvert.SerializeObject(UploadedFile);
                 await GenerateBarcodeAsyncFunc();
             }
             catch (Exception e) when (e.Message == "Socket closed")
@@ -306,9 +305,11 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
-        public async Task StageFile(SkyFile stagedFile)
+        public async Task StageFiles(List<SkyFile> userFiles)
         {
-            this.SkyFile = stagedFile;
+            StagedFiles = userFiles;
+
+            FileToUpload = GetMockedZipFile();
             UpdateFileSize();
 
             await FinishSendFile();
@@ -317,13 +318,24 @@ namespace SkyDrop.Core.ViewModels.Main
         private async Task<SkyFile> UploadFile()
         {
             uploadCancellationToken = new CancellationTokenSource();
-            var skyFile = await apiService.UploadFile(this.SkyFile.Filename, this.SkyFile.Data, this.SkyFile.FileSizeBytes, uploadCancellationToken);
+            var skyFile = await apiService.UploadFile(FileToUpload.Filename, FileToUpload.Data, FileToUpload.FileSizeBytes, uploadCancellationToken);
             return skyFile;
         }
 
-        private void StartUploadTimer()
+        private SkyFile GetMockedZipFile()
         {
-            uploadTimerService.StartUploadTimer(SkyFile.FileSizeBytes, UpdateUploadProgress);
+            if (StagedFiles.Count > 1)
+            {
+                //TODO: zip the files together and return zip file when multiple files are staged
+                return StagedFiles.First();
+            }
+
+            return StagedFiles.First();
+        }
+
+        private void StartUploadTimer(long fileSizeBytes)
+        {
+            uploadTimerService.StartUploadTimer(fileSizeBytes, UpdateUploadProgress);
         }
 
         private void StopUploadTimer()
@@ -352,7 +364,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void UpdateFileSize()
         {
-            var bytesCount = SkyFile.FileSizeBytes;
+            var bytesCount = FileToUpload.FileSizeBytes;
             FileSize = Util.GetFileSizeString(bytesCount);
         }
 
@@ -368,13 +380,13 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private string GetSkyLink()
         {
-            if (SkyFile.Status == FileStatus.Staged)
+            if (UploadedFile == null)
             {
                 Log.Error("User tried to copy skylink before file was uploaded");
                 return null;
             }
 
-            return Util.GetSkylinkUrl(SkyFile.Skylink);
+            return Util.GetSkylinkUrl(UploadedFile.Skylink);
         }
 
         private async Task CopySkyLinkToClipboard()
