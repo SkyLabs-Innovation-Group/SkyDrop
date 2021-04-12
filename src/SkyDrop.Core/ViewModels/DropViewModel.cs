@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -13,6 +14,7 @@ using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Services;
 using SkyDrop.Core.Utility;
+using Xamarin.Essentials;
 using ZXing.Common;
 
 namespace SkyDrop.Core.ViewModels.Main
@@ -176,38 +178,46 @@ namespace SkyDrop.Core.ViewModels.Main
                 var pickedFiles = await fileSystemService.PickFilesAsync(chosenType);
                 SlideSendButtonToCenterCommand?.Execute();
 
-                byte[] fileBytes = null;
-                try
+                // TODO: optimise this, currently files' bytes are held in memory prior to upload
+                var userSkyFiles = new List<SkyFile>();
+                foreach (var pickedFile in pickedFiles)
                 {
-                    var firstFile = pickedFiles.First();
-
-                    using (var stream = await firstFile.OpenReadAsync())
-                    using (var memoryStream = new MemoryStream())
+                    try
                     {
-                        await stream.CopyToAsync(memoryStream);
+                        using (var stream = await pickedFile.OpenReadAsync())
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await stream.CopyToAsync(memoryStream);
+                            
+                            var fileBytes = memoryStream.GetBuffer();
+                            var skyFile = new SkyFile()
+                            {
+                                Data = fileBytes,
+                                Filename = pickedFile.FileName,
+                                FileSizeBytes = fileBytes.LongCount(),
+                            };
 
-                        fileBytes = memoryStream.GetBuffer();
+                            userSkyFiles.Add(skyFile);
+                        }
+                    }
+                    catch (NullReferenceException ex)
+                    {
+                        Log.Exception(ex);
+                        Log.Trace("Error picking file.");
+
+                        //reset the UI
+                        HandleUploadErrorCommand?.Execute();
+                        return;
                     }
                 }
-                catch (NullReferenceException ex)
+                
+                if (userSkyFiles.Count > 0)
                 {
-                    Log.Exception(ex);
-                    Log.Trace("No file was picked.");
-
-                    //reset the UI
-                    HandleUploadErrorCommand?.Execute();
-
-                    return;
+                    // TODO: handle staging multiple files
+                    SkyFile = userSkyFiles.First();
+                
+                    await StageFile(SkyFile);
                 }
-
-                SkyFile = new SkyFile
-                {
-                    Filename = pickedFiles.First().FileName,
-                    Data = fileBytes,
-                    FileSizeBytes = fileBytes.LongCount(),
-                };
-
-                await StageFile(SkyFile);
             }
         }
 
