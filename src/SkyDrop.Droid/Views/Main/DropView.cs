@@ -22,8 +22,6 @@ namespace SkyDrop.Droid.Views.Main
     [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden, ScreenOrientation = ScreenOrientation.Portrait)]
     public class DropView : BaseActivity<DropViewModel>
     {
-        
-        
         protected override int ActivityLayoutId => Resource.Layout.DropView;
 
         private const int swipeMarginX = 100;
@@ -35,7 +33,6 @@ namespace SkyDrop.Droid.Views.Main
         private LinearLayout barcodeMenu, sendReceiveButtonsContainer;
         private ImageView barcodeImageView;
 
-        // TODO: call these methods in the place of current UI handling logic  
         public void SetSendReceiveButtonUiState()
         {
             ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState;
@@ -46,6 +43,8 @@ namespace SkyDrop.Droid.Views.Main
         public void SetBarcodeCodeUiState()
         {
             ViewModel.DropViewUIState = DropViewState.QRCodeState;
+
+            ViewModel.IsBarcodeVisible = true;
 
             AnimateSlideBarcodeIn(fromLeft: false);
             AnimateSlideSendReceiveButtonsOut(toLeft: true);
@@ -121,8 +120,6 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         private async Task ShowBarcode()
         {
-            ViewModel.IsBarcodeVisible = true;
-
             SetBarcodeCodeUiState();
 
             var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, barcodeImageView.Width, barcodeImageView.Height);
@@ -166,8 +163,6 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         private void AnimateSlideBarcodeIn(bool fromLeft)
         {
-            ViewModel.IsBarcodeVisible = true;
-
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
 
             barcodeContainer.TranslationX = fromLeft ? -screenWidth : screenWidth;
@@ -263,7 +258,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Slide the send receive button to screen center when user cancels swipe back to barcode action
+        /// Slide the send receive buttons to screen center when user cancels swipe back to barcode action
         /// </summary>
         private void AnimateSlideSendReceiveCenter()
         {
@@ -306,9 +301,7 @@ namespace SkyDrop.Droid.Views.Main
                     {
                         //send & receive buttons are visible
 
-                        /*if (sendReceiveButtonsContainer.TranslationX >= swipeMarginX)
-                            AnimateSlideSendReceiveButtonsOut(toLeft: false);
-                        else */if (sendReceiveButtonsContainer.TranslationX <= -swipeMarginX)
+                        if (sendReceiveButtonsContainer.TranslationX <= -swipeMarginX)
                             SetBarcodeCodeUiState();
                         else
                             AnimateSlideSendReceiveCenter();
@@ -319,8 +312,6 @@ namespace SkyDrop.Droid.Views.Main
 
                         if (barcodeContainer.TranslationX >= swipeMarginX)
                             SetSendReceiveButtonUiState();
-                        /*else if (barcodeContainer.TranslationX <= -swipeMarginX)
-                            SetSendReceiveButtonUiState();*/
                         else
                             AnimateSlideBarcodeToCenter();
                     }

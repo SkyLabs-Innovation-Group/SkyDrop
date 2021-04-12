@@ -21,9 +21,6 @@ namespace SkyDrop.Core.ViewModels.Main
 {
     public class DropViewModel : BaseViewModel
     {
-        // TODO: Call UpdateDropViewState(), maybe in DispatchTouchEvent() 
-        public enum DropViewState { SendReceiveButtonState = 0, QRCodeState = 1 }
-
         private readonly IApiService apiService;
         private readonly IStorageService storageService;
         private readonly IUserDialogs userDialogs;
@@ -66,6 +63,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public SkyFile UploadedFile { get; set; }
         public SkyFile FileToUpload { get; set; }
         public DropViewState DropViewUIState { get; set; }
+        public enum DropViewState { SendReceiveButtonState = 0, QRCodeState = 1 }
 
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
@@ -171,56 +169,54 @@ namespace SkyDrop.Core.ViewModels.Main
                 ResetUI();
                 return;
             }
+
+            SkyFilePickerType chosenType;
+            if (fileType == image)
+                chosenType = SkyFilePickerType.Image;
+            else if (fileType == video)
+                chosenType = SkyFilePickerType.Video;
             else
+                chosenType = SkyFilePickerType.Generic;
+
+            var pickedFiles = await fileSystemService.PickFilesAsync(chosenType);
+            SlideSendButtonToCenterCommand?.Execute();
+
+            // TODO: optimise this, currently files' bytes are held in memory prior to upload
+            var userSkyFiles = new List<SkyFile>();
+            foreach (var pickedFile in pickedFiles)
             {
-                SkyFilePickerType chosenType;
-                if (fileType == image)
-                    chosenType = SkyFilePickerType.Image;
-                else if (fileType == video)
-                    chosenType = SkyFilePickerType.Video;
-                else
-                    chosenType = SkyFilePickerType.Generic;
-
-                var pickedFiles = await fileSystemService.PickFilesAsync(chosenType);
-                SlideSendButtonToCenterCommand?.Execute();
-
-                // TODO: optimise this, currently files' bytes are held in memory prior to upload
-                var userSkyFiles = new List<SkyFile>();
-                foreach (var pickedFile in pickedFiles)
+                try
                 {
-                    try
+                    using (var stream = await pickedFile.OpenReadAsync())
+                    using (var memoryStream = new MemoryStream())
                     {
-                        using (var stream = await pickedFile.OpenReadAsync())
-                        using (var memoryStream = new MemoryStream())
-                        {
-                            await stream.CopyToAsync(memoryStream);
+                        await stream.CopyToAsync(memoryStream);
                             
-                            var fileBytes = memoryStream.GetBuffer();
-                            var skyFile = new SkyFile()
-                            {
-                                Data = fileBytes,
-                                Filename = pickedFile.FileName,
-                                FileSizeBytes = fileBytes.LongCount(),
-                            };
+                        var fileBytes = memoryStream.GetBuffer();
+                        var skyFile = new SkyFile()
+                        {
+                            Data = fileBytes,
+                            Filename = pickedFile.FileName,
+                            FileSizeBytes = fileBytes.LongCount(),
+                        };
 
-                            userSkyFiles.Add(skyFile);
-                        }
-                    }
-                    catch (NullReferenceException ex)
-                    {
-                        Log.Exception(ex);
-                        Log.Trace("Error picking file.");
-
-                        //reset the UI
-                        HandleUploadErrorCommand?.Execute();
-                        return;
+                        userSkyFiles.Add(skyFile);
                     }
                 }
-                
-                if (userSkyFiles.Count > 0)
+                catch (NullReferenceException ex)
                 {
-                    await StageFiles(userSkyFiles);
+                    Log.Exception(ex);
+                    Log.Trace("Error picking file.");
+
+                    //reset the UI
+                    HandleUploadErrorCommand?.Execute();
+                    return;
                 }
+            }
+                
+            if (userSkyFiles.Count > 0)
+            {
+                await StageFiles(userSkyFiles);
             }
         }
 
