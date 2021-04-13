@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:animateLayoutChanges="true">
             
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/BarcodeContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
                             android:layout_height="64dp"/>
                     </com.google.android.material.card.MaterialCardView>
                 </com.google.android.material.card.MaterialCardView>
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:id="@+id/BarcodeMenu"
@@ -279,6 +279,13 @@
                     android:layout_height="match_parent"
                     android:padding="8dp"/>
             </com.google.android.material.card.MaterialCardView>
+
+            <mvvmcross.droid.support.v7.recyclerview.MvxRecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                app:MvxItemTemplate="@layout/item_file_staged_square"
+                app:MvxBind="ItemsSource StagedFiles"/>
         </RelativeLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
