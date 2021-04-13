@@ -19,5 +19,5 @@
         android:textSize="12sp"
         android:textColor="@color/lightGrey"
         android:paddingBottom="16dp"
-        app:MvxBind="Text SkyFile.Filename"/>
+        app:MvxBind="Text Filename"/>
 </LinearLayout>

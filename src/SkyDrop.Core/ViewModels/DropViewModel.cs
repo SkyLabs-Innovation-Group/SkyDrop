@@ -49,6 +49,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsUploading { get; set; }
         public bool IsBarcodeLoading { get; set; }
         public bool IsBarcodeVisible { get; set; }
+        public bool IsStagedFilesVisible => DropViewUIState == DropViewState.ConfirmFilesState;
         public string SendButtonLabel => IsUploading ? "SENDING FILE" : "SEND FILE";
         public bool IsSendButtonGreen { get; set; } = true;
         public bool IsReceiveButtonGreen { get; set; } = true;
@@ -65,7 +66,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private DropViewState _dropViewUIState;
         public DropViewState DropViewUIState { get => _dropViewUIState; set { _dropViewUIState = value; Log.Trace($"New UI State: {value}"); } }
-        public enum DropViewState { SendReceiveButtonState = 0, QRCodeState = 1 }
+        public enum DropViewState { SendReceiveButtonState = 1, ConfirmFilesState = 2, QRCodeState = 3 }
 
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
@@ -313,10 +314,12 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             StagedFiles = userFiles;
 
-            FileToUpload = GetMockedZipFile();
-            UpdateFileSize();
+            DropViewUIState = DropViewState.ConfirmFilesState;
 
-            await FinishSendFile();
+            //FileToUpload = GetMockedZipFile();
+            //UpdateFileSize();
+
+            //await FinishSendFile();
         }
 
         private async Task<SkyFile> UploadFile()

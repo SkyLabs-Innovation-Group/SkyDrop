@@ -285,7 +285,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 app:MvxItemTemplate="@layout/item_file_staged_square"
-                app:MvxBind="ItemsSource StagedFiles"/>
+                app:MvxBind="ItemsSource StagedFiles;Visibility Visibility(IsStagedFilesVisible)"/>
         </RelativeLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
