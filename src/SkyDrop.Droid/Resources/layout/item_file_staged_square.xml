@@ -19,5 +19,7 @@
         android:textSize="12sp"
         android:textColor="@color/lightGrey"
         android:paddingBottom="16dp"
+        android:singleLine="true"
+        android:ellipsize="middle"
         app:MvxBind="Text Filename"/>
 </LinearLayout>
