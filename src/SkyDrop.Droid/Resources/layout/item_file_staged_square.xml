@@ -19,6 +19,7 @@
         android:textSize="12sp"
         android:textColor="@color/lightGrey"
         android:paddingBottom="16dp"
+        android:layout_marginHorizontal="8dp"
         android:singleLine="true"
         android:ellipsize="middle"
         app:MvxBind="Text Filename"/>

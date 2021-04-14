@@ -4,6 +4,7 @@ using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
+using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using AndroidX.ConstraintLayout.Widget;
@@ -75,6 +76,9 @@ namespace SkyDrop.Droid.Views.Main
             barcodeMenu = FindViewById<LinearLayout>(Resource.Id.BarcodeMenu);
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
             sendReceiveButtonsContainer = FindViewById<LinearLayout>(Resource.Id.SendReceiveContainer);
+
+            var stagedFilesRecycler = FindViewById<RecyclerView>(Resource.Id.StagedFilesRecycler);
+            stagedFilesRecycler.SetLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false));
         }
 
         /// <summary>

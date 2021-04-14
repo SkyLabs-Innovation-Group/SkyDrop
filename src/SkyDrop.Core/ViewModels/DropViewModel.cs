@@ -50,7 +50,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsBarcodeLoading { get; set; }
         public bool IsBarcodeVisible { get; set; }
         public bool IsStagedFilesVisible => DropViewUIState == DropViewState.ConfirmFilesState;
-        public string SendButtonLabel => IsUploading ? "SENDING FILE" : "SEND FILE";
+        public string SendButtonLabel => IsUploading ? "SENDING FILE" : StagedFiles?.Count > 1 ? "SEND FILES" : "SEND FILE";
         public bool IsSendButtonGreen { get; set; } = true;
         public bool IsReceiveButtonGreen { get; set; } = true;
         public string UploadTimerText { get; set; }
@@ -114,7 +114,7 @@ namespace SkyDrop.Core.ViewModels.Main
             this.shareLinkService = shareLinkService;
             this.uploadTimerService = uploadTimerService;
 
-            SendCommand = new MvxAsyncCommand(StartSendFile);
+            SendCommand = new MvxAsyncCommand(SendButtonTapped);
             ReceiveCommand = new MvxAsyncCommand(ReceiveFile);
             CopyLinkCommand = new MvxAsyncCommand(CopySkyLinkToClipboard);
             NavToSettingsCommand = new MvxAsyncCommand(NavToSettings);
@@ -152,6 +152,18 @@ namespace SkyDrop.Core.ViewModels.Main
 
             if (!leaveBarcode)
                 IsBarcodeVisible = false;
+        }
+
+        private async Task SendButtonTapped()
+        {
+            if (DropViewUIState == DropViewState.SendReceiveButtonState)
+            {
+                await StartSendFile();
+            }
+            else if (DropViewUIState == DropViewState.ConfirmFilesState)
+            {
+                await FinishSendFile();
+            }
         }
 
         private async Task StartSendFile()
@@ -230,6 +242,9 @@ namespace SkyDrop.Core.ViewModels.Main
             try
             {
                 IsUploading = true;
+
+                FileToUpload = GetMockedZipFile();
+                UpdateFileSize();
 
                 StartUploadTimer(FileToUpload.FileSizeBytes);
                 UploadedFile = await UploadFile();
@@ -315,11 +330,6 @@ namespace SkyDrop.Core.ViewModels.Main
             StagedFiles = userFiles;
 
             DropViewUIState = DropViewState.ConfirmFilesState;
-
-            //FileToUpload = GetMockedZipFile();
-            //UpdateFileSize();
-
-            //await FinishSendFile();
         }
 
         private async Task<SkyFile> UploadFile()
