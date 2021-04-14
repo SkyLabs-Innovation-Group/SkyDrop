@@ -278,10 +278,9 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         public override bool DispatchTouchEvent(MotionEvent e)
         {
-
-            //don't allow swipe before first file is uploaded
-            //don't allow swipe while file is uploading
-            if (!ViewModel.FirstFileUploaded || ViewModel.IsUploading)
+            if (!ViewModel.FirstFileUploaded || //don't allow swipe before first file is uploaded
+                ViewModel.IsUploading || //don't allow swipe while file is uploading
+                ViewModel.DropViewUIState == DropViewState.ConfirmFilesState) //don't allow swipe on confirm file UI state
                 return base.DispatchTouchEvent(e);
 
             switch (e.Action)

@@ -50,7 +50,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsBarcodeLoading { get; set; }
         public bool IsBarcodeVisible { get; set; }
         public bool IsStagedFilesVisible => DropViewUIState == DropViewState.ConfirmFilesState;
-        public string SendButtonLabel => IsUploading ? "SENDING FILE" : StagedFiles?.Count > 1 ? "SEND FILES" : "SEND FILE";
+        public string SendButtonLabel => IsUploading ? StagedFiles?.Count > 1 ? "SENDING FILES" : "SENDING FILE" : StagedFiles?.Count > 1 ? "SEND FILES" : "SEND FILE";
         public bool IsSendButtonGreen { get; set; } = true;
         public bool IsReceiveButtonGreen { get; set; } = true;
         public string UploadTimerText { get; set; }
