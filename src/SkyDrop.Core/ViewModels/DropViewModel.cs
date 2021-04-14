@@ -47,6 +47,8 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public string SkyFileJson { get; set; }
         public bool IsUploading { get; set; }
+        public bool IsStagingFiles { get; set; }
+        public bool IsUploadArrowVisible => !IsUploading && !IsStagingFiles;
         public bool IsBarcodeLoading { get; set; }
         public bool IsBarcodeVisible { get; set; }
         public bool IsStagedFilesVisible => DropViewUIState == DropViewState.ConfirmFilesState;
@@ -199,6 +201,7 @@ namespace SkyDrop.Core.ViewModels.Main
             SlideSendButtonToCenterCommand?.Execute();
 
             // TODO: optimise this, currently files' bytes are held in memory prior to upload
+            IsStagingFiles = true;
             var userSkyFiles = new List<SkyFile>();
             foreach (var pickedFile in pickedFiles)
             {
@@ -225,6 +228,8 @@ namespace SkyDrop.Core.ViewModels.Main
                     Log.Exception(ex);
                     Log.Trace("Error picking file.");
 
+                    IsStagingFiles = false;
+
                     //reset the UI
                     HandleUploadErrorCommand?.Execute();
                     return;
@@ -233,8 +238,10 @@ namespace SkyDrop.Core.ViewModels.Main
                 
             if (userSkyFiles.Count > 0)
             {
-                await StageFiles(userSkyFiles);
+                StageFiles(userSkyFiles);
             }
+
+            IsStagingFiles = false;
         }
 
         private async Task FinishSendFile()
@@ -325,7 +332,7 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
-        public async Task StageFiles(List<SkyFile> userFiles)
+        private void StageFiles(List<SkyFile> userFiles)
         {
             StagedFiles = userFiles;
 
