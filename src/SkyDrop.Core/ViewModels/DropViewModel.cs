@@ -501,6 +501,8 @@ namespace SkyDrop.Core.ViewModels.Main
             var fileExtension = skyFile.Filename.Split('.')?.LastOrDefault();
 
             var result = await userDialogs.PromptAsync("Rename file");
+            if (string.IsNullOrEmpty(result.Value)) return;
+
             var newName = $"{result.Value}.{fileExtension}";
 
             skyFile.Filename = newName;
