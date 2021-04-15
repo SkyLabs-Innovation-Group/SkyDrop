@@ -14,7 +14,7 @@ using Java.IO;
 namespace Engage.Droid.Bindings
 {
     /// <summary>
-    /// Sets material card fill to light grey or dark grey with mid grey outline depending on bool state
+    /// Binds byte array images to an ImageView
     /// </summary>
     public class ByteArrayImageViewBinding : MvxTargetBinding<ImageView, byte[]>
     {

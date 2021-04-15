@@ -126,6 +126,13 @@ namespace SkyDrop.Core.ViewModels.Main
             RenameStagedFileCommand = new MvxAsyncCommand<SkyFile>(skyFile => RenameStagedFile(skyFile));
         }
 
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+
+            DropViewUIState = DropViewState.SendReceiveButtonState;
+        }
+
         public override void ViewAppeared()
         {
             Log.Trace($"{nameof(DropViewModel)} ViewAppeared()");
@@ -145,8 +152,6 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public void ResetUI(bool leaveBarcode = false)
         {
-            DropViewUIState = DropViewState.SendReceiveButtonState;
-
             IsSendButtonGreen = true;
             IsReceiveButtonGreen = true;
             UploadTimerText = "";
@@ -496,6 +501,8 @@ namespace SkyDrop.Core.ViewModels.Main
             var fileExtension = skyFile.Filename.Split('.')?.LastOrDefault();
 
             var result = await userDialogs.PromptAsync("Rename file");
+            if (string.IsNullOrEmpty(result.Value)) return;
+
             var newName = $"{result.Value}.{fileExtension}";
 
             skyFile.Filename = newName;
