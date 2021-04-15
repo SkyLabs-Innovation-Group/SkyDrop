@@ -54,6 +54,7 @@ namespace SkyDrop.Droid
             registry.RegisterCustomBindingFactory<MaterialCardView>(BarcodeBackgroundBinding.Name, view => new BarcodeBackgroundBinding(view));
             registry.RegisterCustomBindingFactory<View>(VisibleHiddenBinding.Name, view => new VisibleHiddenBinding(view));
             registry.RegisterCustomBindingFactory<ProgressBar>(UploadProgressBinding.Name, view => new UploadProgressBinding(view));
+            registry.RegisterCustomBindingFactory<ImageView>(ByteArrayImageViewBinding.Name, view => new ByteArrayImageViewBinding(view));
         }
     }
 }

@@ -10,7 +10,13 @@
         android:layout_height="64dp"
         android:layout_margin="16dp"
         app:cardBackgroundColor="@color/skyTurqouise"
-        app:cardCornerRadius="8dp"/>
+        app:cardCornerRadius="8dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:MvxBind="Bytes Data"
+            android:scaleType="centerCrop"/>
+    </com.google.android.material.card.MaterialCardView>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
