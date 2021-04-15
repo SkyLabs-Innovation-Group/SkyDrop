@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:animateLayoutChanges="true">
             
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/BarcodeContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
                             android:layout_height="64dp"/>
                     </com.google.android.material.card.MaterialCardView>
                 </com.google.android.material.card.MaterialCardView>
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:id="@+id/BarcodeMenu"
@@ -206,15 +206,19 @@
                                 android:layout_width="128dp"
                                 android:layout_height="128dp"
                                 android:src="@drawable/ic_upload_grey"
-                                app:MvxBind="Visibility InvertedVisibility(IsUploading)"/>
+                                app:MvxBind="Visibility Visibility(IsUploadArrowVisible)"/>
                             <ProgressBar
                                 android:layout_width="128dp"
                                 android:layout_height="128dp"
                                 android:layout_centerInParent="true"
-                                
                                 android:progressDrawable="@drawable/progress_circular"
                                 style="?android:attr/progressBarStyleHorizontal"
                                 app:MvxBind="Visibility Visibility(IsUploading);Progress UploadProgress"/>
+                            <ProgressBar
+                                android:layout_width="128dp"
+                                android:layout_height="128dp"
+                                android:padding="32dp"
+                                app:MvxBind="Visibility Visibility(IsStagingFiles)"/>
                         </FrameLayout>
 
                         <TextView
@@ -279,6 +283,14 @@
                     android:layout_height="match_parent"
                     android:padding="8dp"/>
             </com.google.android.material.card.MaterialCardView>
+
+            <mvvmcross.droid.support.v7.recyclerview.MvxRecyclerView
+                android:id="@+id/StagedFilesRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                app:MvxItemTemplate="@layout/item_file_staged_square"
+                app:MvxBind="ItemsSource StagedFiles;ItemClick RenameStagedFileCommand;Visibility Visibility(IsStagedFilesVisible)"/>
         </RelativeLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
