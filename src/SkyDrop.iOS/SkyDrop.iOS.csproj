@@ -21,7 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>x86_64</MtouchArch>
-    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
     <LangVersion>8.0</LangVersion>
     <IOSDebuggerPort>10003</IOSDebuggerPort>
@@ -154,8 +154,8 @@
     <ImageAsset Include="Resources\Media.xcassets\ic_upload.imageset\Contents.json" />
     <ImageAsset Include="Resources\Media.xcassets\ic_upload.imageset\ic_upload.pdf" />
     <ImageAsset Include="Resources\Media.xcassets\ic_download.imageset\ic_download.pdf" />
-    <Compile Include="Views\DropView.cs" />
-    <Compile Include="Views\DropView.designer.cs">
+    <Compile Include="Views\Drop\DropView.cs" />
+    <Compile Include="Views\Drop\DropView.designer.cs">
       <DependentUpon>DropView.cs</DependentUpon>
     </Compile>
   </ItemGroup>
