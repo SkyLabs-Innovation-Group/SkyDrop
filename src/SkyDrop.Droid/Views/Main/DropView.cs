@@ -36,7 +36,7 @@ namespace SkyDrop.Droid.Views.Main
 
         public void SetSendReceiveButtonUiState()
         {
-            //DropViewUIState gets changed at the end of the animation (in ViewModel.ResetUI())
+            //DropViewUIState gets changed at the end of the animation 
             //that is to fix an issue with CheckUserIsSwiping() on barcode menu buttons
             AnimateSlideBarcodeOut(toLeft: false);
         }
@@ -209,7 +209,7 @@ namespace SkyDrop.Droid.Views.Main
             sendButton.Animate()
                 .TranslationX(0)
                 .SetDuration(duration)
-                .WithEndAction(new Java.Lang.Runnable(() => ViewModel.ResetUI()))
+                .WithEndAction(new Java.Lang.Runnable(() => { ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState; ViewModel.ResetUI(); }))
                 .Start();
             receiveButton.Animate()
                 .Alpha(1)
