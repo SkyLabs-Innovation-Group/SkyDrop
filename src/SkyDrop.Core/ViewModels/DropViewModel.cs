@@ -44,6 +44,7 @@ namespace SkyDrop.Core.ViewModels.Main
         //public IMvxCommand ResetAnimateCommand { get; set; }
         public IMvxCommand CancelUploadCommand { get; set; }
         public IMvxCommand CheckUserIsSwipingCommand { get; set; }
+        public IMvxCommand<SkyFile> RenameStagedFileCommand { get; set; }
 
         public string SkyFileJson { get; set; }
         public bool IsUploading { get; set; }
@@ -122,6 +123,7 @@ namespace SkyDrop.Core.ViewModels.Main
             NavToSettingsCommand = new MvxAsyncCommand(NavToSettings);
             ShareLinkCommand = new MvxAsyncCommand(ShareLink);
             CancelUploadCommand = new MvxCommand(CancelUpload);
+            RenameStagedFileCommand = new MvxAsyncCommand<SkyFile>(skyFile => RenameStagedFile(skyFile));
         }
 
         public override void ViewAppeared()
@@ -457,11 +459,24 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
+        /// <summary>
+        /// Asks DropView whether the user is currently performing a swipe gesture
+        /// </summary>
         public bool UserIsSwiping()
         {
             CheckUserIsSwipingCommand?.Execute();
 
             return UserIsSwipingResult;
+        }
+
+        private async Task RenameStagedFile(SkyFile skyFile)
+        {
+            var fileExtension = skyFile.Filename.Split('.')?.LastOrDefault();
+
+            var result = await userDialogs.PromptAsync("Rename file");
+            var newName = $"{result.Value}.{fileExtension}";
+
+            skyFile.Filename = newName;
         }
     }
 }
