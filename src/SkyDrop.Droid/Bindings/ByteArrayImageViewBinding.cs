@@ -28,6 +28,9 @@ namespace Engage.Droid.Bindings
 
         protected override void SetValue(byte[] value)
         {
+            if (value == null)
+                return;
+
             var bitmap = BitmapFactory.DecodeByteArray(value, 0, value.Length);
             if (bitmap == null)
                 return;

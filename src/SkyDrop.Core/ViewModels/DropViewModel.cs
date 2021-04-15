@@ -180,6 +180,8 @@ namespace SkyDrop.Core.ViewModels.Main
             IsSendButtonGreen = true;
             IsReceiveButtonGreen = false;
 
+            //select file
+
             var file = "Select Files";
             var image = "Select Image";
             var video = "Select Video";
@@ -200,15 +202,28 @@ namespace SkyDrop.Core.ViewModels.Main
                 chosenType = SkyFilePickerType.Generic;
 
             var pickedFiles = await fileSystemService.PickFilesAsync(chosenType);
+            if (pickedFiles == null)
+            {
+                ResetUI();
+                return;
+            }
+
             SlideSendButtonToCenterCommand?.Execute();
 
-            // TODO: optimise this, currently files' bytes are held in memory prior to upload
+            //read contents of the selected files
+
+            //TODO: optimise this, currently files' bytes are held in memory prior to upload
             IsStagingFiles = true;
             var userSkyFiles = new List<SkyFile>();
-            foreach (var pickedFile in pickedFiles)
+
+            try
             {
-                try
+                foreach (var pickedFile in pickedFiles)
                 {
+
+                    if (pickedFile == null)
+                        continue;
+
                     using (var stream = await pickedFile.OpenReadAsync())
                     using (var memoryStream = new MemoryStream())
                     {
@@ -225,22 +240,29 @@ namespace SkyDrop.Core.ViewModels.Main
                         userSkyFiles.Add(skyFile);
                     }
                 }
-                catch (NullReferenceException ex)
-                {
-                    Log.Exception(ex);
-                    Log.Trace("Error picking file.");
-
-                    IsStagingFiles = false;
-
-                    //reset the UI
-                    HandleUploadErrorCommand?.Execute();
-                    return;
-                }
             }
-                
+            catch (NullReferenceException ex)
+            {
+                Log.Exception(ex);
+                Log.Trace("Error picking file.");
+
+                IsStagingFiles = false;
+
+                //reset the UI
+                HandleUploadErrorCommand?.Execute();
+                return;
+            }
+
+            //stage the files
+
             if (userSkyFiles.Count > 0)
             {
                 StageFiles(userSkyFiles);
+            }
+            else
+            {
+                //reset the UI
+                HandleUploadErrorCommand?.Execute();
             }
 
             IsStagingFiles = false;
