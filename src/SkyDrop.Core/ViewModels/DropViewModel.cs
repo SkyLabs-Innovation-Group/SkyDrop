@@ -40,7 +40,9 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand NavToSettingsCommand { get; set; }
         public IMvxCommand ShareLinkCommand { get; set; }
         public IMvxCommand OpenFileInBrowserCommand { get; set; }
+
         public IMvxCommand SlideSendButtonToCenterCommand { get; set; }
+
         //public IMvxCommand ResetAnimateCommand { get; set; }
         public IMvxCommand CancelUploadCommand { get; set; }
         public IMvxCommand CheckUserIsSwipingCommand { get; set; }
@@ -53,7 +55,11 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsBarcodeLoading { get; set; }
         public bool IsBarcodeVisible { get; set; }
         public bool IsStagedFilesVisible => DropViewUIState == DropViewState.ConfirmFilesState;
-        public string SendButtonLabel => IsUploading ? StagedFiles?.Count > 1 ? "SENDING FILES" : "SENDING FILE" : StagedFiles?.Count > 1 ? "SEND FILES" : "SEND FILE";
+
+        public string SendButtonLabel => IsUploading ? StagedFiles?.Count > 1 ? "SENDING FILES" :
+            "SENDING FILE" :
+            StagedFiles?.Count > 1 ? "SEND FILES" : "SEND FILE";
+
         public bool IsSendButtonGreen { get; set; } = true;
         public bool IsReceiveButtonGreen { get; set; } = true;
         public string UploadTimerText { get; set; }
@@ -68,8 +74,23 @@ namespace SkyDrop.Core.ViewModels.Main
         public SkyFile FileToUpload { get; set; }
 
         private DropViewState _dropViewUIState;
-        public DropViewState DropViewUIState { get => _dropViewUIState; set { _dropViewUIState = value; Log.Trace($"New UI State: {value}"); } }
-        public enum DropViewState { SendReceiveButtonState = 1, ConfirmFilesState = 2, QRCodeState = 3 }
+
+        public DropViewState DropViewUIState
+        {
+            get => _dropViewUIState;
+            set
+            {
+                _dropViewUIState = value;
+                Log.Trace($"New UI State: {value}");
+            }
+        }
+
+        public enum DropViewState
+        {
+            SendReceiveButtonState = 1,
+            ConfirmFilesState = 2,
+            QRCodeState = 3
+        }
 
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
@@ -89,6 +110,7 @@ namespace SkyDrop.Core.ViewModels.Main
         // }
 
         private Func<Task> _generateBarcodeAsyncFunc;
+
         public Func<Task> GenerateBarcodeAsyncFunc
         {
             get => _generateBarcodeAsyncFunc;
@@ -96,15 +118,15 @@ namespace SkyDrop.Core.ViewModels.Main
         }
 
         public DropViewModel(ISingletonService singletonService,
-                             IApiService apiService,
-                             IStorageService storageService,
-                             IBarcodeService barcodeService,
-                             IShareLinkService shareLinkService,
-                             IUploadTimerService uploadTimerService,
-                             IUserDialogs userDialogs,
-                             IMvxNavigationService navigationService,
-                             IFileSystemService fileSystemService,
-                             ILog log) : base(singletonService)
+            IApiService apiService,
+            IStorageService storageService,
+            IBarcodeService barcodeService,
+            IShareLinkService shareLinkService,
+            IUploadTimerService uploadTimerService,
+            IUserDialogs userDialogs,
+            IMvxNavigationService navigationService,
+            IFileSystemService fileSystemService,
+            ILog log) : base(singletonService)
         {
             Title = "SkyDrop";
 
@@ -221,29 +243,30 @@ namespace SkyDrop.Core.ViewModels.Main
             IsStagingFiles = true;
             var userSkyFiles = new List<SkyFile>();
 
+            bool shouldCompress = pickedFiles.Count() > 1;
+
             try
             {
                 foreach (var pickedFile in pickedFiles)
                 {
-
                     if (pickedFile == null)
                         continue;
 
-                    using (var stream = await pickedFile.OpenReadAsync())
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await stream.CopyToAsync(memoryStream);
-                            
-                        var fileBytes = memoryStream.GetBuffer();
-                        var skyFile = new SkyFile()
-                        {
-                            Data = fileBytes,
-                            Filename = pickedFile.FileName,
-                            FileSizeBytes = fileBytes.LongCount(),
-                        };
+                    using var stream = await pickedFile.OpenReadAsync();
+                    using var memoryStream = new MemoryStream();
 
-                        userSkyFiles.Add(skyFile);
-                    }
+                    await stream.CopyToAsync(memoryStream);
+
+                    var fileBytes = memoryStream.GetBuffer();
+                    var skyFile = new SkyFile()
+                    {
+                        Data = fileBytes,
+                        FullFilePath = pickedFile.FullPath,
+                        Filename = pickedFile.FileName,
+                        FileSizeBytes = fileBytes.LongCount(),
+                    };
+
+                    userSkyFiles.Add(skyFile);
                 }
             }
             catch (NullReferenceException ex)
@@ -279,7 +302,9 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 IsUploading = true;
 
-                FileToUpload = GetMockedZipFile();
+                if (StagedFiles.Count() > 1)                
+                    FileToUpload = MakeZipFile();
+                
                 UpdateFileSize();
 
                 StartUploadTimer(FileToUpload.FileSizeBytes);
@@ -371,19 +396,33 @@ namespace SkyDrop.Core.ViewModels.Main
         private async Task<SkyFile> UploadFile()
         {
             uploadCancellationToken = new CancellationTokenSource();
-            var skyFile = await apiService.UploadFile(FileToUpload.Filename, FileToUpload.Data, FileToUpload.FileSizeBytes, uploadCancellationToken);
+            var skyFile = await apiService.UploadFile(FileToUpload.Filename, FileToUpload.Data,
+                FileToUpload.FileSizeBytes, uploadCancellationToken);
             return skyFile;
         }
 
-        private SkyFile GetMockedZipFile()
+        private SkyFile MakeZipFile()
         {
-            if (StagedFiles.Count > 1)
-            {
-                //TODO: zip the files together and return zip file when multiple files are staged
-                return StagedFiles.First();
-            }
+            var filePaths = StagedFiles.Select(f => f.FullFilePath).ToArray();
 
-            return StagedFiles.First();
+            string skyArchive = "skydrop_archive.zip";
+
+            string compressedFilePath = Path.Combine(Path.GetTempPath(), skyArchive);
+
+            bool compressSuccess = fileSystemService.CompressX(filePaths, compressedFilePath);
+
+            // TODO: remove need for storing file bytes in SkyFiles, upload from file path instead
+            var fileBytes = File.ReadAllBytes(compressedFilePath);
+
+            var skyFile = new SkyFile()
+            {
+                Data = fileBytes,
+                FullFilePath = compressedFilePath,
+                Filename = skyArchive,
+                FileSizeBytes = fileBytes.LongCount(),
+            };
+
+            return skyFile;
         }
 
         private void StartUploadTimer(long fileSizeBytes)

@@ -224,6 +224,7 @@
     </ImageAsset>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Services" />
     <Folder Include="Views\Menu\" />
     <Folder Include="Resources\Media.xcassets\ic_share.imageset\" />
     <Folder Include="Resources\Media.xcassets\ic_cloud.imageset\" />

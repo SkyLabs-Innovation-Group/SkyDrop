@@ -327,6 +327,7 @@
     <Folder Include="Helper\" />
     <Folder Include="Bindings\" />
     <Folder Include="Resources\menu\" />
+    <Folder Include="Services" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

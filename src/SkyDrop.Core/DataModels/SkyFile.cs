@@ -17,6 +17,8 @@ namespace SkyDrop.Core.DataModels
         public long BitField { get; set; }
 
         public string Filename { get; set; }
+        
+        public string FullFilePath { get; set; }
 
         public long FileSizeBytes { get; set; }
 

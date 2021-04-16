@@ -10,5 +10,7 @@ namespace SkyDrop.Core.Services
     public interface IFileSystemService
     {
         Task<IEnumerable<FileResult>> PickFilesAsync(SkyFilePickerType fileType);
+
+        bool CompressX(string[] filesToZip, string destinationZipFullPath);
     }
 }
