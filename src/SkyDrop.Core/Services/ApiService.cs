@@ -48,10 +48,37 @@ namespace SkyDrop.Core.Services
 
             return skyFile;
         }
-    }
 
+
+        public QueryParameters ParseQueryParameters(string skylink)
+        {
+            string uri = skylink.Substring( skylink.LastIndexOf('/'));
+            
+            string trimmedUri = skylink.Substring(uri.IndexOf('?'));
+            
+            // if (trimmedUri.Contains()) params...
+
+            throw new NotImplementedException();
+        }
+    }
+    
     public interface IApiService
     {
         Task<SkyFile> UploadFile(string filename, byte[] file, long fileSizeBytes, CancellationTokenSource cancellationToken);
+    }
+
+    /// <summary>
+    /// Add query parameters which our app will embed into our skylink QR codes to this class.
+    /// </summary>
+    public class QueryParameters
+    {
+        // public const string 
+        
+        public QueryParameters()
+        {
+            
+        }
+        
+
     }
 }
