@@ -74,5 +74,13 @@ namespace SkyDrop.Core.Services
                 return false;
             }
         }
+
+        public bool ExtractZipToDownloads()
+        {
+
+
+
+            return false;
+        }
     }
 }

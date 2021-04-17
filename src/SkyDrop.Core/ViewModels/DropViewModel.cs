@@ -302,9 +302,11 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 IsUploading = true;
 
-                if (StagedFiles.Count() > 1)                
+                if (StagedFiles.Count() > 1)
                     FileToUpload = MakeZipFile();
-                
+                else
+                    FileToUpload = StagedFiles.First();
+
                 UpdateFileSize();
 
                 StartUploadTimer(FileToUpload.FileSizeBytes);
@@ -398,6 +400,9 @@ namespace SkyDrop.Core.ViewModels.Main
             uploadCancellationToken = new CancellationTokenSource();
             var skyFile = await apiService.UploadFile(FileToUpload.Filename, FileToUpload.Data,
                 FileToUpload.FileSizeBytes, uploadCancellationToken);
+            
+            var skyFileBytes = await apiService.DownloadSkyFileBytes(skyFile.Skylink);
+
             return skyFile;
         }
 
@@ -422,7 +427,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 Filename = skyArchive,
                 FileSizeBytes = fileBytes.LongCount(),
             };
-
+            
             return skyFile;
         }
 
