@@ -405,6 +405,7 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             var filePaths = StagedFiles.Select(f => f.FullFilePath).ToArray();
 
+            // TODO: add option to rename zip file in the renaming dialog
             string skyArchive = "skydrop_archive.zip";
 
             string compressedFilePath = Path.Combine(Path.GetTempPath(), skyArchive);
