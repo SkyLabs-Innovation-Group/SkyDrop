@@ -10,6 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DropView">
             <connections>
+                <outlet property="FilePreviewCollectionView" destination="jiB-ne-gQ7" id="OAM-Sk-N3G"/>
                 <outlet property="ReceiveButton" destination="pjX-AC-hdv" id="JZq-8B-A1n"/>
                 <outlet property="ReceiveIcon" destination="Cq9-AE-Hf8" id="Bfi-nb-PGd"/>
                 <outlet property="SendButton" destination="EyF-1x-tNq" id="Zet-dE-ps3"/>
@@ -94,11 +95,27 @@
                         <constraint firstAttribute="trailing" secondItem="pjX-AC-hdv" secondAttribute="trailing" id="s8c-1u-E9X"/>
                     </constraints>
                 </view>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="jiB-ne-gQ7" userLabel="File Preview Collection View">
+                    <rect key="frame" x="0.0" y="768" width="414" height="128"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="128" id="2ny-Wz-7E0"/>
+                    </constraints>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="WoU-q9-skZ">
+                        <size key="itemSize" width="128" height="128"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="xZc-Mi-WtT" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" id="BYI-NG-C6y"/>
                 <constraint firstItem="xZc-Mi-WtT" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="KrS-lc-ktf"/>
+                <constraint firstAttribute="bottom" secondItem="jiB-ne-gQ7" secondAttribute="bottom" id="V9R-CP-6H3"/>
+                <constraint firstItem="jiB-ne-gQ7" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="jdU-8L-Orb"/>
+                <constraint firstAttribute="trailing" secondItem="jiB-ne-gQ7" secondAttribute="trailing" id="zOI-GD-mkc"/>
             </constraints>
             <point key="canvasLocation" x="144.92753623188406" y="-44.196428571428569"/>
         </view>
@@ -106,6 +123,9 @@
     <resources>
         <image name="ic_download" width="18" height="18"/>
         <image name="ic_upload" width="18" height="18"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

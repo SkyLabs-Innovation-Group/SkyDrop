@@ -158,6 +158,11 @@
     <Compile Include="Views\Drop\DropView.designer.cs">
       <DependentUpon>DropView.cs</DependentUpon>
     </Compile>
+    <InterfaceDefinition Include="Views\Drop\FilePreviewCollectionViewCell.xib" />
+    <Compile Include="Views\Drop\FilePreviewCollectionViewCell.cs" />
+    <Compile Include="Views\Drop\FilePreviewCollectionViewCell.designer.cs">
+      <DependentUpon>FilePreviewCollectionViewCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

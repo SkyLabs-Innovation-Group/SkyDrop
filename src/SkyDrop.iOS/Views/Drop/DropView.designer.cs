@@ -13,6 +13,9 @@ namespace SkyDrop.iOS.Views.Drop
 	partial class DropView
 	{
 		[Outlet]
+		UIKit.UICollectionView FilePreviewCollectionView { get; set; }
+
+		[Outlet]
 		UIKit.UIView ReceiveButton { get; set; }
 
 		[Outlet]
@@ -47,6 +50,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (ReceiveButton != null) {
 				ReceiveButton.Dispose ();
 				ReceiveButton = null;
+			}
+
+			if (FilePreviewCollectionView != null) {
+				FilePreviewCollectionView.Dispose ();
+				FilePreviewCollectionView = null;
 			}
 		}
 	}

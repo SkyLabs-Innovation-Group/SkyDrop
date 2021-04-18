@@ -4,6 +4,7 @@ using Acr.UserDialogs;
 using CoreGraphics;
 using Foundation;
 using MvvmCross.Commands;
+using MvvmCross.Platforms.Ios.Binding.Views;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
 using SkyDrop.Core.Utility;
@@ -40,9 +41,10 @@ namespace SkyDrop.iOS.Views.Drop
 
                 ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
 
+                
 
+                //setup nav bar
                 NavigationController.Title = "SkyDrop";
-
                 var barColor = Colors.GradientDeepBlue.ToNative();
                 NavigationController.NavigationBar.BarTintColor = barColor;
 
@@ -55,6 +57,13 @@ namespace SkyDrop.iOS.Views.Drop
                 ReceiveButton.Layer.CornerRadius = 8;
 
                 var set = CreateBindingSet();
+
+                //setup file preview collection view
+                var filePreviewSource = new MvxCollectionViewSource(FilePreviewCollectionView, FilePreviewCollectionViewCell.Key);
+                FilePreviewCollectionView.DataSource = filePreviewSource;
+                FilePreviewCollectionView.RegisterClassForCell(typeof(FilePreviewCollectionViewCell), FilePreviewCollectionViewCell.Key);
+                set.Bind(filePreviewSource).For(s => s.ItemsSource).To(vm => vm.StagedFiles);
+                set.Bind(FilePreviewCollectionView).For("Visible").To(vm => vm.IsStagedFilesVisible);
 
                 set.Bind(SendButton).For("Tap").To(vm => vm.SendCommand);
                 set.Bind(ReceiveButton).For("Tap").To(vm => vm.ReceiveCommand);
