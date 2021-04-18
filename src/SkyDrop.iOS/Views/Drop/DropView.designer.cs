@@ -13,19 +13,32 @@ namespace SkyDrop.iOS.Views.Drop
 	partial class DropView
 	{
 		[Outlet]
-		UIKit.UIButton DropButton { get; set; }
+		UIKit.UIView ReceiveButton { get; set; }
 
 		[Outlet]
-		UIKit.UIImageView ReceiveButton { get; set; }
+		UIKit.UIImageView ReceiveIcon { get; set; }
 
 		[Outlet]
-		UIKit.UIImageView SendButton { get; set; }
+		UIKit.UIView SendButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView SendIcon { get; set; }
 
 		[Action ("DropViewClickAction:")]
 		partial void DropViewClickAction (Foundation.NSObject sender);
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (ReceiveIcon != null) {
+				ReceiveIcon.Dispose ();
+				ReceiveIcon = null;
+			}
+
+			if (SendIcon != null) {
+				SendIcon.Dispose ();
+				SendIcon = null;
+			}
+
 			if (SendButton != null) {
 				SendButton.Dispose ();
 				SendButton = null;
@@ -34,11 +47,6 @@ namespace SkyDrop.iOS.Views.Drop
 			if (ReceiveButton != null) {
 				ReceiveButton.Dispose ();
 				ReceiveButton = null;
-			}
-
-			if (DropButton != null) {
-				DropButton.Dispose ();
-				DropButton = null;
 			}
 		}
 	}

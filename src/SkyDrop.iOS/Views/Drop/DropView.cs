@@ -39,7 +39,10 @@ namespace SkyDrop.iOS.Views.Drop
             NavigationController.NavigationBar.BarTintColor = barColor;
             
             View.BackgroundColor = Colors.DarkGrey.ToNative();
-            
+
+            SendButton.Layer.CornerRadius = 8;
+            ReceiveButton.Layer.CornerRadius = 8;
+
             var set = CreateBindingSet();
 
             set.Bind(SendButton).For("Tap").To(vm => vm.SendCommand);

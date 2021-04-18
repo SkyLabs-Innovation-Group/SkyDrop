@@ -4,14 +4,16 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
-        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DropView">
             <connections>
-                <outlet property="ReceiveButton" destination="Cq9-AE-Hf8" id="QcL-Pd-gZz"/>
-                <outlet property="SendButton" destination="3as-jp-js1" id="gIg-Bk-2BY"/>
+                <outlet property="ReceiveButton" destination="pjX-AC-hdv" id="JZq-8B-A1n"/>
+                <outlet property="ReceiveIcon" destination="Cq9-AE-Hf8" id="Bfi-nb-PGd"/>
+                <outlet property="SendButton" destination="EyF-1x-tNq" id="Zet-dE-ps3"/>
+                <outlet property="SendIcon" destination="3as-jp-js1" id="y9a-OO-QKZ"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
         </placeholder>
@@ -20,50 +22,83 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="0SD-ES-jRi" userLabel="Button Stack View">
-                    <rect key="frame" x="0.0" y="346.5" width="414" height="203"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xZc-Mi-WtT" userLabel="Send Receive Buttons Container">
+                    <rect key="frame" x="47" y="361.5" width="320" height="173"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_upload" translatesAutoresizingMaskIntoConstraints="NO" id="3as-jp-js1" userLabel="Send Button">
-                            <rect key="frame" x="0.0" y="0.0" width="203" height="203"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EyF-1x-tNq" userLabel="Send Button">
+                            <rect key="frame" x="0.0" y="0.0" width="144" height="173"/>
+                            <subviews>
+                                <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_upload" translatesAutoresizingMaskIntoConstraints="NO" id="3as-jp-js1" userLabel="Send Icon">
+                                    <rect key="frame" x="8" y="8" width="128" height="128"/>
+                                    <color key="tintColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="128" id="RZf-PA-DYT"/>
+                                        <constraint firstAttribute="width" constant="128" id="bTj-nM-Att"/>
+                                        <constraint firstAttribute="width" secondItem="3as-jp-js1" secondAttribute="height" multiplier="1:1" id="ubD-7Y-1J8"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SEND" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JFC-yr-fmz">
+                                    <rect key="frame" x="48" y="136" width="48" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="17"/>
+                                    <color key="textColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemGreenColor"/>
                             <constraints>
-                                <constraint firstAttribute="width" secondItem="3as-jp-js1" secondAttribute="height" multiplier="1:1" id="ubD-7Y-1J8"/>
+                                <constraint firstItem="JFC-yr-fmz" firstAttribute="centerX" secondItem="EyF-1x-tNq" secondAttribute="centerX" id="0q2-jT-CcD"/>
+                                <constraint firstAttribute="trailing" secondItem="3as-jp-js1" secondAttribute="trailing" constant="8" id="FLG-Fz-LYI"/>
+                                <constraint firstItem="3as-jp-js1" firstAttribute="leading" secondItem="EyF-1x-tNq" secondAttribute="leading" constant="8" id="QfI-on-NN7"/>
+                                <constraint firstItem="JFC-yr-fmz" firstAttribute="top" secondItem="3as-jp-js1" secondAttribute="bottom" id="cgV-F9-Jvk"/>
+                                <constraint firstItem="3as-jp-js1" firstAttribute="top" secondItem="EyF-1x-tNq" secondAttribute="top" constant="8" id="s5X-eQ-eTw"/>
+                                <constraint firstAttribute="bottom" secondItem="JFC-yr-fmz" secondAttribute="bottom" constant="16" id="wdU-tp-2YG"/>
                             </constraints>
-                        </imageView>
-                        <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_download" translatesAutoresizingMaskIntoConstraints="NO" id="Cq9-AE-Hf8" userLabel="Receive Button">
-                            <rect key="frame" x="211" y="0.0" width="203" height="203"/>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pjX-AC-hdv" userLabel="Receive Button">
+                            <rect key="frame" x="176" y="0.0" width="144" height="173"/>
+                            <subviews>
+                                <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_download" translatesAutoresizingMaskIntoConstraints="NO" id="Cq9-AE-Hf8" userLabel="Receive Icon">
+                                    <rect key="frame" x="8" y="8" width="128" height="128"/>
+                                    <color key="tintColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="128" id="Oog-Df-tIE"/>
+                                        <constraint firstAttribute="height" constant="128" id="vOW-uj-Y2m"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RECEIVE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OfC-3c-DrC">
+                                    <rect key="frame" x="35.5" y="136" width="73" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="17"/>
+                                    <color key="textColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemGreenColor"/>
                             <constraints>
-                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="Oog-Df-tIE"/>
-                                <constraint firstAttribute="width" secondItem="Cq9-AE-Hf8" secondAttribute="height" multiplier="1:1" id="R2a-MU-XBD"/>
+                                <constraint firstItem="OfC-3c-DrC" firstAttribute="centerX" secondItem="pjX-AC-hdv" secondAttribute="centerX" id="3uk-SB-pF8"/>
+                                <constraint firstItem="Cq9-AE-Hf8" firstAttribute="top" secondItem="pjX-AC-hdv" secondAttribute="top" constant="8" id="Amv-Ao-On3"/>
+                                <constraint firstAttribute="bottom" secondItem="OfC-3c-DrC" secondAttribute="bottom" constant="16" id="By6-21-SkF"/>
+                                <constraint firstItem="Cq9-AE-Hf8" firstAttribute="leading" secondItem="pjX-AC-hdv" secondAttribute="leading" constant="8" id="EDr-xT-SXN"/>
+                                <constraint firstAttribute="trailing" secondItem="Cq9-AE-Hf8" secondAttribute="trailing" constant="8" id="SQo-qv-xTk"/>
+                                <constraint firstItem="OfC-3c-DrC" firstAttribute="top" secondItem="Cq9-AE-Hf8" secondAttribute="bottom" id="jFj-Of-Teb"/>
                             </constraints>
-                        </imageView>
+                        </view>
                     </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="203" id="tHJ-rb-qvM"/>
+                        <constraint firstItem="pjX-AC-hdv" firstAttribute="top" secondItem="xZc-Mi-WtT" secondAttribute="top" id="M4q-N0-7sv"/>
+                        <constraint firstItem="EyF-1x-tNq" firstAttribute="top" secondItem="xZc-Mi-WtT" secondAttribute="top" id="ZWl-do-Ymg"/>
+                        <constraint firstAttribute="bottom" secondItem="EyF-1x-tNq" secondAttribute="bottom" id="ipa-Oz-Wn2"/>
+                        <constraint firstAttribute="bottom" secondItem="pjX-AC-hdv" secondAttribute="bottom" id="nDW-Bz-OQu"/>
+                        <constraint firstAttribute="width" constant="320" id="rkl-yZ-wcX"/>
+                        <constraint firstItem="EyF-1x-tNq" firstAttribute="leading" secondItem="xZc-Mi-WtT" secondAttribute="leading" id="rmz-Xc-5bB"/>
+                        <constraint firstAttribute="trailing" secondItem="pjX-AC-hdv" secondAttribute="trailing" id="s8c-1u-E9X"/>
                     </constraints>
-                </stackView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PGP-Pv-bOE">
-                    <rect key="frame" x="81" y="550" width="40" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Receive" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oxd-eT-Zua">
-                    <rect key="frame" x="282" y="550" width="60" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="oxd-eT-Zua" firstAttribute="leading" secondItem="PGP-Pv-bOE" secondAttribute="trailing" constant="161" id="7O1-fd-clg"/>
-                <constraint firstItem="PGP-Pv-bOE" firstAttribute="top" secondItem="0SD-ES-jRi" secondAttribute="bottom" constant="0.5" id="DiY-Xe-wek"/>
-                <constraint firstItem="oxd-eT-Zua" firstAttribute="bottom" secondItem="PGP-Pv-bOE" secondAttribute="bottom" id="ISt-3Z-Rxn"/>
-                <constraint firstItem="oxd-eT-Zua" firstAttribute="top" secondItem="0SD-ES-jRi" secondAttribute="bottom" constant="0.5" id="RuB-6d-jWz"/>
-                <constraint firstAttribute="trailing" secondItem="0SD-ES-jRi" secondAttribute="trailing" id="XS7-Ic-SXS"/>
-                <constraint firstItem="0SD-ES-jRi" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" id="eUH-h6-sSC"/>
-                <constraint firstItem="0SD-ES-jRi" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="ra8-ma-DcR"/>
+                <constraint firstItem="xZc-Mi-WtT" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" id="BYI-NG-C6y"/>
+                <constraint firstItem="xZc-Mi-WtT" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="KrS-lc-ktf"/>
             </constraints>
             <point key="canvasLocation" x="144.92753623188406" y="-44.196428571428569"/>
         </view>
@@ -71,5 +106,8 @@
     <resources>
         <image name="ic_download" width="18" height="18"/>
         <image name="ic_upload" width="18" height="18"/>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>
