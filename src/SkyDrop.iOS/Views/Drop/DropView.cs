@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
+using CoreGraphics;
 using Foundation;
+using MvvmCross.Commands;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
 using SkyDrop.Core.Utility;
@@ -17,6 +19,7 @@ namespace SkyDrop.iOS.Views.Drop
         {
         }
 
+        //what is this?
         partial void DropViewClickAction(NSObject sender)
         {
             try
@@ -31,39 +34,58 @@ namespace SkyDrop.iOS.Views.Drop
 
         public override void ViewDidLoad()
         {
-            base.ViewDidLoad();
-            
-            NavigationController.Title = "SkyDrop";
+            try
+            {
+                base.ViewDidLoad();
 
-            var barColor =  Colors.GradientDeepBlue.ToNative();
-            NavigationController.NavigationBar.BarTintColor = barColor;
-            
-            View.BackgroundColor = Colors.DarkGrey.ToNative();
-
-            SendButton.Layer.CornerRadius = 8;
-            ReceiveButton.Layer.CornerRadius = 8;
-
-            var set = CreateBindingSet();
-
-            set.Bind(SendButton).For("Tap").To(vm => vm.SendCommand);
-
-            set.Bind(ReceiveButton).For("Tap").To(vm => vm.ReceiveCommand);
-            
-            // set.Bind(NavigationController.nav).For(n => n.NavigationBar)
-
-            set.Apply();
-
-            // TODO implement functions for send/receive buttons
-            //ViewModel.SelectFileAsyncFunc = async () => await Utils.SelectFile(this);
-            //ViewModel.SelectImageAsyncFunc = async () => await Utils.SelectImage(this);
+                ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
 
 
+                NavigationController.Title = "SkyDrop";
+
+                var barColor = Colors.GradientDeepBlue.ToNative();
+                NavigationController.NavigationBar.BarTintColor = barColor;
+
+                View.BackgroundColor = Colors.DarkGrey.ToNative();
+
+                SendButton.BackgroundColor = Colors.Primary.ToNative();
+                ReceiveButton.BackgroundColor = Colors.GradientTurqouise.ToNative();
+
+                SendButton.Layer.CornerRadius = 8;
+                ReceiveButton.Layer.CornerRadius = 8;
+
+                var set = CreateBindingSet();
+
+                set.Bind(SendButton).For("Tap").To(vm => vm.SendCommand);
+                set.Bind(ReceiveButton).For("Tap").To(vm => vm.ReceiveCommand);
+                set.Bind(Title).To(vm => vm.Title);
+                // set.Bind(NavigationController.nav).For(n => n.NavigationBar)
+
+                set.Apply();
+            }
+            catch(Exception e)
+            {
+                ViewModel.Log.Exception(e);
+            }
         }
 
-        public override void DidReceiveMemoryWarning()
+        /// <summary>
+        /// Slide send button to center
+        /// </summary>
+        private void AnimateSlideSendButton()
         {
-            base.DidReceiveMemoryWarning();
-            // Release any cached data, images, etc that aren't in use.
+            var screenCenterX = UIScreen.MainScreen.Bounds.Width / 2;
+            var sendButtonLocation = new[] { 0, 0 };
+
+            var sendButtonCenterX = SendButton.ConvertPointToView(new CGPoint(SendButton.Bounds.Width * 0.5, SendButton.Bounds.Height), null).X;
+            var translationX = screenCenterX - sendButtonCenterX;
+
+            var sendFrame = SendButton.Frame;
+            UIView.Animate(1, () =>
+            {
+                SendButton.Frame = new CGRect(sendFrame.X + translationX, sendFrame.Y, sendFrame.Width, sendFrame.Height);
+                ReceiveButton.Alpha = 0;
+            });
         }
     }
 }
