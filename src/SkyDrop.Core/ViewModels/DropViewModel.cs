@@ -418,6 +418,7 @@ namespace SkyDrop.Core.ViewModels.Main
             bool compressSuccess = fileSystemService.CompressX(filePaths, compressedFilePath);
 
             // TODO: remove need for storing file bytes in SkyFiles, upload from file path instead
+            // note file bytes are currently used for image previews
             var fileBytes = File.ReadAllBytes(compressedFilePath);
 
             var skyFile = new SkyFile()
