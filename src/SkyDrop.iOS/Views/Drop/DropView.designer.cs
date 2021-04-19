@@ -19,7 +19,13 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView BarcodeMenu { get; set; }
 
 		[Outlet]
+		UIKit.UIView CopyLinkButton { get; set; }
+
+		[Outlet]
 		UIKit.UICollectionView FilePreviewCollectionView { get; set; }
+
+		[Outlet]
+		UIKit.UIView OpenButton { get; set; }
 
 		[Outlet]
 		UIKit.UIView ReceiveButton { get; set; }
@@ -32,6 +38,12 @@ namespace SkyDrop.iOS.Views.Drop
 
 		[Outlet]
 		UIKit.UIImageView SendIcon { get; set; }
+
+		[Outlet]
+		UIKit.UIView SendReceiveButtonsContainer { get; set; }
+
+		[Outlet]
+		UIKit.UIView ShareButton { get; set; }
 
 		[Action ("DropViewClickAction:")]
 		partial void DropViewClickAction (Foundation.NSObject sender);
@@ -71,6 +83,26 @@ namespace SkyDrop.iOS.Views.Drop
 			if (BarcodeMenu != null) {
 				BarcodeMenu.Dispose ();
 				BarcodeMenu = null;
+			}
+
+			if (SendReceiveButtonsContainer != null) {
+				SendReceiveButtonsContainer.Dispose ();
+				SendReceiveButtonsContainer = null;
+			}
+
+			if (CopyLinkButton != null) {
+				CopyLinkButton.Dispose ();
+				CopyLinkButton = null;
+			}
+
+			if (OpenButton != null) {
+				OpenButton.Dispose ();
+				OpenButton = null;
+			}
+
+			if (ShareButton != null) {
+				ShareButton.Dispose ();
+				ShareButton = null;
 			}
 		}
 	}

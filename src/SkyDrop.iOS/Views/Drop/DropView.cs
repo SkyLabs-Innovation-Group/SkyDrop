@@ -28,7 +28,7 @@ namespace SkyDrop.iOS.Views.Drop
             ViewModel.IsBarcodeVisible = true;
 
             AnimateSlideBarcodeIn(fromLeft: false);
-            //AnimateSlideSendReceiveButtonsOut(toLeft: true);
+            AnimateSlideSendReceiveButtonsOut(toLeft: true);
         }
 
         //what is this?
@@ -67,6 +67,14 @@ namespace SkyDrop.iOS.Views.Drop
                 SendButton.Layer.CornerRadius = 8;
                 ReceiveButton.Layer.CornerRadius = 8;
 
+                CopyLinkButton.BackgroundColor = Colors.Primary.ToNative();
+                OpenButton.BackgroundColor = Colors.GradientGreen.ToNative();
+                ShareButton.BackgroundColor = Colors.GradientOcean.ToNative();
+
+                CopyLinkButton.Layer.CornerRadius = 8;
+                OpenButton.Layer.CornerRadius = 8;
+                ShareButton.Layer.CornerRadius = 8;
+
                 var set = CreateBindingSet();
 
                 //setup file preview collection view
@@ -92,14 +100,14 @@ namespace SkyDrop.iOS.Views.Drop
             }
         }
 
-
-
         /// <summary>
         /// Generate and display QR code
         /// </summary>
         private async Task ShowBarcode()
         {
             SetBarcodeCodeUiState();
+
+            //TODO: barcode logic
             /*
             var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, barcodeImageView.Width, barcodeImageView.Height);
             var bitmap = await AndroidUtil.EncodeBarcode(matrix, barcodeImageView.Width, barcodeImageView.Height);
@@ -147,23 +155,45 @@ namespace SkyDrop.iOS.Views.Drop
             {
                 BarcodeMenu.Frame = new CGRect(screenCenterX - barcodeMenuFrame.Width * 0.5, barcodeMenuFrame.Y, barcodeMenuFrame.Width, barcodeMenuFrame.Height);
                 BarcodeContainer.Frame = new CGRect(screenCenterX - barcodeContainerFrame.Width * 0.5, barcodeContainerFrame.Y, barcodeContainerFrame.Width, barcodeContainerFrame.Height);
-
-                //ReceiveButton.Alpha = 0;
             });
+        }
+
+        /// <summary>
+        /// Slide send receive buttons out to left or right
+        /// </summary>
+        private void AnimateSlideSendReceiveButtonsOut(bool toLeft)
+        {
             /*
-            sendButton.Animate()
-                .TranslationXBy(-screenWidth)
-                .SetDuration(duration)
-                .Start();
-            barcodeContainer.Animate()
-                .TranslationX(0)
-                .SetDuration(duration)
-                .Start();
-            barcodeMenu.Animate()
-                .TranslationX(0)
-                .SetDuration(duration)
-                .Start();
+            if (!barcodeIsLoaded)
+            {
+                AnimateSlideBarcodeToCenter();
+            }
             */
+            var screenWidth = UIScreen.MainScreen.Bounds.Width;
+
+            var translationX = toLeft ? -screenWidth : screenWidth;
+            var duration = 0.25;
+            var sendReceiveButtonsContainerFrame = SendReceiveButtonsContainer.Frame;
+            UIView.Animate(duration, () =>
+            {
+                SendReceiveButtonsContainer.Frame = new CGRect(sendReceiveButtonsContainerFrame.X + translationX, sendReceiveButtonsContainerFrame.Y, sendReceiveButtonsContainerFrame.Width, sendReceiveButtonsContainerFrame.Height);
+            });
+        }
+
+        /// <summary>
+        /// Slide the send receive buttons to screen center when user cancels swipe back to barcode action
+        /// </summary>
+        private void AnimateSlideSendReceiveCenter()
+        {
+            var screenWidth = UIScreen.MainScreen.Bounds.Width;
+            var screenCenterX = screenWidth * 0.5;
+
+            var sendReceiveButtonsContainerFrame = SendReceiveButtonsContainer.Frame;
+            var duration = 0.5;
+            UIView.Animate(duration, () =>
+            {
+                SendReceiveButtonsContainer.Frame = new CGRect(screenCenterX - sendReceiveButtonsContainerFrame.Width * 0.5, sendReceiveButtonsContainerFrame.Y, sendReceiveButtonsContainerFrame.Width, sendReceiveButtonsContainerFrame.Height);
+            });
         }
     }
 }
