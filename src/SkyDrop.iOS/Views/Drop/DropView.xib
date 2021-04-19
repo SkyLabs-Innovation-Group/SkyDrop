@@ -16,6 +16,7 @@
                 <outlet property="CopyLinkButton" destination="B7a-we-xUR" id="mdr-aw-R0F"/>
                 <outlet property="FilePreviewCollectionView" destination="jiB-ne-gQ7" id="OAM-Sk-N3G"/>
                 <outlet property="OpenButton" destination="rhP-Ru-BgC" id="SIp-o7-VRB"/>
+                <outlet property="ProgressFillArea" destination="RUr-fo-czC" id="9Zk-Lf-VbU"/>
                 <outlet property="ReceiveButton" destination="pjX-AC-hdv" id="JZq-8B-A1n"/>
                 <outlet property="ReceiveIcon" destination="Cq9-AE-Hf8" id="Bfi-nb-PGd"/>
                 <outlet property="SendButton" destination="EyF-1x-tNq" id="Zet-dE-ps3"/>
@@ -37,6 +38,13 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EyF-1x-tNq" userLabel="Send Button">
                             <rect key="frame" x="0.0" y="0.0" width="144" height="173"/>
                             <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RUr-fo-czC" userLabel="Progress Fill Area">
+                                    <rect key="frame" x="0.0" y="157" width="144" height="16"/>
+                                    <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="16" placeholder="YES" id="MB9-gM-2PE"/>
+                                    </constraints>
+                                </view>
                                 <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_upload" translatesAutoresizingMaskIntoConstraints="NO" id="3as-jp-js1" userLabel="Send Icon">
                                     <rect key="frame" x="8" y="8" width="128" height="128"/>
                                     <color key="tintColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -62,9 +70,12 @@
                                 <constraint firstItem="JFC-yr-fmz" firstAttribute="centerX" secondItem="EyF-1x-tNq" secondAttribute="centerX" id="0q2-jT-CcD"/>
                                 <constraint firstAttribute="trailing" secondItem="3as-jp-js1" secondAttribute="trailing" constant="8" id="FLG-Fz-LYI"/>
                                 <constraint firstItem="WEo-01-0A0" firstAttribute="centerX" secondItem="3as-jp-js1" secondAttribute="centerX" id="H9c-zs-M3r"/>
+                                <constraint firstItem="RUr-fo-czC" firstAttribute="leading" secondItem="EyF-1x-tNq" secondAttribute="leading" id="Kt6-L6-1xa"/>
                                 <constraint firstItem="3as-jp-js1" firstAttribute="leading" secondItem="EyF-1x-tNq" secondAttribute="leading" constant="8" id="QfI-on-NN7"/>
                                 <constraint firstItem="JFC-yr-fmz" firstAttribute="top" secondItem="3as-jp-js1" secondAttribute="bottom" id="cgV-F9-Jvk"/>
                                 <constraint firstItem="WEo-01-0A0" firstAttribute="centerY" secondItem="3as-jp-js1" secondAttribute="centerY" id="fvR-Dd-5fV"/>
+                                <constraint firstAttribute="bottom" secondItem="RUr-fo-czC" secondAttribute="bottom" id="hRC-uK-gaj"/>
+                                <constraint firstAttribute="trailing" secondItem="RUr-fo-czC" secondAttribute="trailing" id="kyK-BJ-6mp"/>
                                 <constraint firstItem="3as-jp-js1" firstAttribute="top" secondItem="EyF-1x-tNq" secondAttribute="top" constant="8" id="s5X-eQ-eTw"/>
                                 <constraint firstAttribute="bottom" secondItem="JFC-yr-fmz" secondAttribute="bottom" constant="16" id="wdU-tp-2YG"/>
                             </constraints>
@@ -262,6 +273,9 @@
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemOrangeColor">
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
             <color red="0.35294117647058826" green="0.78431372549019607" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

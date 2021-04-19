@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using CoreGraphics;
+using Engage.iOS.Bindings;
 using Foundation;
 using MvvmCross.Commands;
 using MvvmCross.Platforms.Ios.Binding.Views;
@@ -63,17 +64,18 @@ namespace SkyDrop.iOS.Views.Drop
 
                 SendButton.BackgroundColor = Colors.Primary.ToNative();
                 ReceiveButton.BackgroundColor = Colors.GradientTurqouise.ToNative();
-
                 SendButton.Layer.CornerRadius = 8;
                 ReceiveButton.Layer.CornerRadius = 8;
 
                 CopyLinkButton.BackgroundColor = Colors.Primary.ToNative();
                 OpenButton.BackgroundColor = Colors.GradientGreen.ToNative();
                 ShareButton.BackgroundColor = Colors.GradientOcean.ToNative();
-
                 CopyLinkButton.Layer.CornerRadius = 8;
                 OpenButton.Layer.CornerRadius = 8;
                 ShareButton.Layer.CornerRadius = 8;
+
+                ProgressFillArea.BackgroundColor = Colors.GradientTurqouise.ToNative();
+                ProgressFillArea.Layer.CornerRadius = 8;
 
                 var set = CreateBindingSet();
 
@@ -96,6 +98,8 @@ namespace SkyDrop.iOS.Views.Drop
                 set.Bind(SendIcon).For(v => v.Hidden).To(vm => vm.IsUploading);
 
                 set.Bind(SendLabel).To(vm => vm.SendButtonLabel);
+
+                set.Bind(ProgressFillArea).For(ProgressFillHeightBinding.Name).To(vm => vm.UploadProgress);
 
                 set.Apply();
             }

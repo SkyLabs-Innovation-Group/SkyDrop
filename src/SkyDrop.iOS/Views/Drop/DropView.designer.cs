@@ -31,6 +31,9 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView OpenButton { get; set; }
 
 		[Outlet]
+		UIKit.UIView ProgressFillArea { get; set; }
+
+		[Outlet]
 		UIKit.UIView ReceiveButton { get; set; }
 
 		[Outlet]
@@ -119,6 +122,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (SendLabel != null) {
 				SendLabel.Dispose ();
 				SendLabel = null;
+			}
+
+			if (ProgressFillArea != null) {
+				ProgressFillArea.Dispose ();
+				ProgressFillArea = null;
 			}
 		}
 	}

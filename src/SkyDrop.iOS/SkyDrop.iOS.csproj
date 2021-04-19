@@ -142,6 +142,7 @@
     <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\152.png" />
     <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\167.png" />
     <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\SkyDrop Logo 1024.png" />
+    <Compile Include="Bindings\ProgressFillHeightBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -182,6 +183,7 @@
     <Folder Include="Views\Drop\" />
     <Folder Include="Resources\Media.xcassets\ic_download.imageset\" />
     <Folder Include="Resources\Media.xcassets\ic_upload.imageset\" />
+    <Folder Include="Bindings\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

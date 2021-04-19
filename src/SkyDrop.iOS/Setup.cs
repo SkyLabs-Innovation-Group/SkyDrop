@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Acr.UserDialogs;
+using Engage.iOS.Bindings;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.IoC;
@@ -7,6 +8,7 @@ using MvvmCross.Platforms.Ios.Core;
 using MvvmCross.Platforms.Ios.Presenters;
 using MvvmCross.ViewModels;
 using SkyDrop.Core;
+using UIKit;
 
 namespace SkyDrop.iOS
 {
@@ -24,6 +26,7 @@ namespace SkyDrop.iOS
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
+            registry.RegisterCustomBindingFactory<UIView>(ProgressFillHeightBinding.Name, view => new ProgressFillHeightBinding(view));
             base.FillTargetFactories(registry);
         }
 
