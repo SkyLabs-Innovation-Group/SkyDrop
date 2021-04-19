@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using Acr.UserDialogs;
 using MvvmCross.Binding;
@@ -22,15 +23,24 @@ namespace Engage.iOS.Bindings
         protected override void SetValue(double value)
         {
             var parentHeight = Target.Superview.Frame.Height;
-            var progressHeight = parentHeight * value;
+            var progressHeight = parentHeight * Math.Min(value, 1);
 
             if (heightConstraint == null)
             {
-                heightConstraint = Target.HeightAnchor.ConstraintEqualTo((float)progressHeight);
+                heightConstraint = Target.HeightAnchor.ConstraintEqualTo(0);
                 heightConstraint.Active = true;
             }
-            else
+
+            Target.Superview.LayoutIfNeeded();
+
+            var duration = value >= 1 ? 0.1 : 1.5;
+
+            UIView.Animate(duration, () =>
+            {
                 heightConstraint.Constant = (float)progressHeight;
+
+                Target.Superview.LayoutIfNeeded();
+            });
         }
     }
 }
