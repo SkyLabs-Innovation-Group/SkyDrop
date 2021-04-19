@@ -10,6 +10,7 @@ using MvvmCross.Platforms.Ios.Views;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
 using UIKit;
+using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 
 namespace SkyDrop.iOS.Views.Drop
 {
@@ -18,6 +19,16 @@ namespace SkyDrop.iOS.Views.Drop
     {
         public DropView() : base("DropView", null)
         {
+        }
+
+        public void SetBarcodeCodeUiState()
+        {
+            ViewModel.DropViewUIState = DropViewState.QRCodeState;
+
+            ViewModel.IsBarcodeVisible = true;
+
+            AnimateSlideBarcodeIn(fromLeft: false);
+            //AnimateSlideSendReceiveButtonsOut(toLeft: true);
         }
 
         //what is this?
@@ -40,8 +51,8 @@ namespace SkyDrop.iOS.Views.Drop
                 base.ViewDidLoad();
 
                 ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
+                ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
 
-                
 
                 //setup nav bar
                 NavigationController.Title = "SkyDrop";
@@ -70,12 +81,31 @@ namespace SkyDrop.iOS.Views.Drop
                 set.Bind(Title).To(vm => vm.Title);
                 // set.Bind(NavigationController.nav).For(n => n.NavigationBar)
 
+                set.Bind(BarcodeMenu).For("Visible").To(vm => vm.IsBarcodeVisible);
+                set.Bind(BarcodeContainer).For("Visible").To(vm => vm.IsBarcodeVisible);
+
                 set.Apply();
             }
             catch(Exception e)
             {
                 ViewModel.Log.Exception(e);
             }
+        }
+
+
+
+        /// <summary>
+        /// Generate and display QR code
+        /// </summary>
+        private async Task ShowBarcode()
+        {
+            SetBarcodeCodeUiState();
+            /*
+            var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, barcodeImageView.Width, barcodeImageView.Height);
+            var bitmap = await AndroidUtil.EncodeBarcode(matrix, barcodeImageView.Width, barcodeImageView.Height);
+            barcodeImageView.SetImageBitmap(bitmap);
+            barcodeIsLoaded = true;
+            */
         }
 
         /// <summary>
@@ -95,6 +125,45 @@ namespace SkyDrop.iOS.Views.Drop
                 SendButton.Frame = new CGRect(sendFrame.X + translationX, sendFrame.Y, sendFrame.Width, sendFrame.Height);
                 ReceiveButton.Alpha = 0;
             });
+        }
+
+        /// <summary>
+        /// Slide in the QR code from the left or right
+        /// </summary>
+        private void AnimateSlideBarcodeIn(bool fromLeft)
+        {
+            var screenWidth = UIScreen.MainScreen.Bounds.Width;
+            var screenCenterX = screenWidth * 0.5;
+
+            var barcodeTranslationX = fromLeft ? -screenWidth : screenWidth;
+
+            var barcodeMenuFrame = BarcodeMenu.Frame;
+            var barcodeContainerFrame = BarcodeContainer.Frame;
+            BarcodeMenu.Frame = new CGRect(screenCenterX - barcodeMenuFrame.Width * 0.5 + screenWidth, barcodeMenuFrame.Y, barcodeMenuFrame.Width, barcodeMenuFrame.Height);
+            BarcodeContainer.Frame = new CGRect(screenCenterX - barcodeContainerFrame.Width + screenWidth, barcodeContainerFrame.Y, barcodeContainerFrame.Width, barcodeContainerFrame.Height);
+
+            var duration = 0.666;
+            UIView.Animate(duration, () =>
+            {
+                BarcodeMenu.Frame = new CGRect(screenCenterX - barcodeMenuFrame.Width * 0.5, barcodeMenuFrame.Y, barcodeMenuFrame.Width, barcodeMenuFrame.Height);
+                BarcodeContainer.Frame = new CGRect(screenCenterX - barcodeContainerFrame.Width * 0.5, barcodeContainerFrame.Y, barcodeContainerFrame.Width, barcodeContainerFrame.Height);
+
+                //ReceiveButton.Alpha = 0;
+            });
+            /*
+            sendButton.Animate()
+                .TranslationXBy(-screenWidth)
+                .SetDuration(duration)
+                .Start();
+            barcodeContainer.Animate()
+                .TranslationX(0)
+                .SetDuration(duration)
+                .Start();
+            barcodeMenu.Animate()
+                .TranslationX(0)
+                .SetDuration(duration)
+                .Start();
+            */
         }
     }
 }

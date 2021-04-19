@@ -300,8 +300,10 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 IsUploading = true;
 
-                if (StagedFiles.Count() > 1)                
+                if (StagedFiles.Count() > 1)
                     FileToUpload = MakeZipFile();
+                else
+                    FileToUpload = StagedFiles.First();
                 
                 UpdateFileSize();
 

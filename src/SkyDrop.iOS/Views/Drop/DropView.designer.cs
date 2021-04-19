@@ -13,6 +13,12 @@ namespace SkyDrop.iOS.Views.Drop
 	partial class DropView
 	{
 		[Outlet]
+		UIKit.UIView BarcodeContainer { get; set; }
+
+		[Outlet]
+		UIKit.UIView BarcodeMenu { get; set; }
+
+		[Outlet]
 		UIKit.UICollectionView FilePreviewCollectionView { get; set; }
 
 		[Outlet]
@@ -32,19 +38,9 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (ReceiveIcon != null) {
-				ReceiveIcon.Dispose ();
-				ReceiveIcon = null;
-			}
-
-			if (SendIcon != null) {
-				SendIcon.Dispose ();
-				SendIcon = null;
-			}
-
-			if (SendButton != null) {
-				SendButton.Dispose ();
-				SendButton = null;
+			if (FilePreviewCollectionView != null) {
+				FilePreviewCollectionView.Dispose ();
+				FilePreviewCollectionView = null;
 			}
 
 			if (ReceiveButton != null) {
@@ -52,9 +48,29 @@ namespace SkyDrop.iOS.Views.Drop
 				ReceiveButton = null;
 			}
 
-			if (FilePreviewCollectionView != null) {
-				FilePreviewCollectionView.Dispose ();
-				FilePreviewCollectionView = null;
+			if (ReceiveIcon != null) {
+				ReceiveIcon.Dispose ();
+				ReceiveIcon = null;
+			}
+
+			if (SendButton != null) {
+				SendButton.Dispose ();
+				SendButton = null;
+			}
+
+			if (SendIcon != null) {
+				SendIcon.Dispose ();
+				SendIcon = null;
+			}
+
+			if (BarcodeContainer != null) {
+				BarcodeContainer.Dispose ();
+				BarcodeContainer = null;
+			}
+
+			if (BarcodeMenu != null) {
+				BarcodeMenu.Dispose ();
+				BarcodeMenu = null;
 			}
 		}
 	}
