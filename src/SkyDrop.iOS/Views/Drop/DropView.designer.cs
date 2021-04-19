@@ -28,6 +28,9 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UICollectionView FilePreviewCollectionView { get; set; }
 
 		[Outlet]
+		UIKit.UILabel FileSizeLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIView OpenButton { get; set; }
 
 		[Outlet]
@@ -89,6 +92,11 @@ namespace SkyDrop.iOS.Views.Drop
 				OpenButton = null;
 			}
 
+			if (ProgressFillArea != null) {
+				ProgressFillArea.Dispose ();
+				ProgressFillArea = null;
+			}
+
 			if (ReceiveButton != null) {
 				ReceiveButton.Dispose ();
 				ReceiveButton = null;
@@ -109,6 +117,11 @@ namespace SkyDrop.iOS.Views.Drop
 				SendIcon = null;
 			}
 
+			if (SendLabel != null) {
+				SendLabel.Dispose ();
+				SendLabel = null;
+			}
+
 			if (SendReceiveButtonsContainer != null) {
 				SendReceiveButtonsContainer.Dispose ();
 				SendReceiveButtonsContainer = null;
@@ -119,14 +132,9 @@ namespace SkyDrop.iOS.Views.Drop
 				ShareButton = null;
 			}
 
-			if (SendLabel != null) {
-				SendLabel.Dispose ();
-				SendLabel = null;
-			}
-
-			if (ProgressFillArea != null) {
-				ProgressFillArea.Dispose ();
-				ProgressFillArea = null;
+			if (FileSizeLabel != null) {
+				FileSizeLabel.Dispose ();
+				FileSizeLabel = null;
 			}
 		}
 	}

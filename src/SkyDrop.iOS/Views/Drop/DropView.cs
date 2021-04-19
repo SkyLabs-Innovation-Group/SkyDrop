@@ -89,7 +89,6 @@ namespace SkyDrop.iOS.Views.Drop
                 set.Bind(SendButton).For("Tap").To(vm => vm.SendCommand);
                 set.Bind(ReceiveButton).For("Tap").To(vm => vm.ReceiveCommand);
                 set.Bind(Title).To(vm => vm.Title);
-                // set.Bind(NavigationController.nav).For(n => n.NavigationBar)
 
                 set.Bind(BarcodeMenu).For("Visible").To(vm => vm.IsBarcodeVisible);
                 set.Bind(BarcodeContainer).For("Visible").To(vm => vm.IsBarcodeVisible);
@@ -98,6 +97,8 @@ namespace SkyDrop.iOS.Views.Drop
                 set.Bind(SendIcon).For(v => v.Hidden).To(vm => vm.IsUploading);
 
                 set.Bind(SendLabel).To(vm => vm.SendButtonLabel);
+
+                set.Bind(FileSizeLabel).To(vm => vm.FileSize);
 
                 set.Bind(ProgressFillArea).For(ProgressFillHeightBinding.Name).To(vm => vm.UploadProgress);
 
