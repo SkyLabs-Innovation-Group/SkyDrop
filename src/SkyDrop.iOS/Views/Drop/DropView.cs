@@ -88,6 +88,11 @@ namespace SkyDrop.iOS.Views.Drop
 
                 set.Bind(SendButton).For("Tap").To(vm => vm.SendCommand);
                 set.Bind(ReceiveButton).For("Tap").To(vm => vm.ReceiveCommand);
+
+                set.Bind(CopyLinkButton).For("Tap").To(vm => vm.CopyLinkCommand);
+                set.Bind(OpenButton).For("Tap").To(vm => vm.OpenFileCommand);
+                set.Bind(ShareButton).For("Tap").To(vm => vm.ShareCommand);
+
                 set.Bind(Title).To(vm => vm.Title);
 
                 set.Bind(BarcodeMenu).For("Visible").To(vm => vm.IsBarcodeVisible);
