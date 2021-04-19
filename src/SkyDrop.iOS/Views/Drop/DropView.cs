@@ -92,6 +92,11 @@ namespace SkyDrop.iOS.Views.Drop
                 set.Bind(BarcodeMenu).For("Visible").To(vm => vm.IsBarcodeVisible);
                 set.Bind(BarcodeContainer).For("Visible").To(vm => vm.IsBarcodeVisible);
 
+                set.Bind(ActivityIndicator).For("Visible").To(vm => vm.IsUploading);
+                set.Bind(SendIcon).For(v => v.Hidden).To(vm => vm.IsUploading);
+
+                set.Bind(SendLabel).To(vm => vm.SendButtonLabel);
+
                 set.Apply();
             }
             catch(Exception e)
@@ -173,10 +178,12 @@ namespace SkyDrop.iOS.Views.Drop
 
             var translationX = toLeft ? -screenWidth : screenWidth;
             var duration = 0.25;
-            var sendReceiveButtonsContainerFrame = SendReceiveButtonsContainer.Frame;
+            var sendButtonFrame = SendButton.Frame;
+            var receiveButtonFrame = ReceiveButton.Frame;
             UIView.Animate(duration, () =>
             {
-                SendReceiveButtonsContainer.Frame = new CGRect(sendReceiveButtonsContainerFrame.X + translationX, sendReceiveButtonsContainerFrame.Y, sendReceiveButtonsContainerFrame.Width, sendReceiveButtonsContainerFrame.Height);
+                SendButton.Frame = new CGRect(sendButtonFrame.X + translationX, sendButtonFrame.Y, sendButtonFrame.Width, sendButtonFrame.Height);
+                ReceiveButton.Frame = new CGRect(receiveButtonFrame.X + translationX, receiveButtonFrame.Y, receiveButtonFrame.Width, receiveButtonFrame.Height);
             });
         }
 

@@ -10,6 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DropView">
             <connections>
+                <outlet property="ActivityIndicator" destination="WEo-01-0A0" id="Yay-To-vVz"/>
                 <outlet property="BarcodeContainer" destination="d8B-sr-eBO" id="Iky-Gr-hJJ"/>
                 <outlet property="BarcodeMenu" destination="RQr-fo-ynZ" id="d2C-Fy-YkH"/>
                 <outlet property="CopyLinkButton" destination="B7a-we-xUR" id="mdr-aw-R0F"/>
@@ -19,6 +20,7 @@
                 <outlet property="ReceiveIcon" destination="Cq9-AE-Hf8" id="Bfi-nb-PGd"/>
                 <outlet property="SendButton" destination="EyF-1x-tNq" id="Zet-dE-ps3"/>
                 <outlet property="SendIcon" destination="3as-jp-js1" id="y9a-OO-QKZ"/>
+                <outlet property="SendLabel" destination="JFC-yr-fmz" id="Acd-cP-12D"/>
                 <outlet property="SendReceiveButtonsContainer" destination="xZc-Mi-WtT" id="pu5-Xs-HnF"/>
                 <outlet property="ShareButton" destination="39U-MZ-Zba" id="eEH-H4-xyV"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
@@ -50,13 +52,19 @@
                                     <color key="textColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="WEo-01-0A0">
+                                    <rect key="frame" x="53.5" y="53.5" width="37" height="37"/>
+                                    <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </activityIndicatorView>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemGreenColor"/>
                             <constraints>
                                 <constraint firstItem="JFC-yr-fmz" firstAttribute="centerX" secondItem="EyF-1x-tNq" secondAttribute="centerX" id="0q2-jT-CcD"/>
                                 <constraint firstAttribute="trailing" secondItem="3as-jp-js1" secondAttribute="trailing" constant="8" id="FLG-Fz-LYI"/>
+                                <constraint firstItem="WEo-01-0A0" firstAttribute="centerX" secondItem="3as-jp-js1" secondAttribute="centerX" id="H9c-zs-M3r"/>
                                 <constraint firstItem="3as-jp-js1" firstAttribute="leading" secondItem="EyF-1x-tNq" secondAttribute="leading" constant="8" id="QfI-on-NN7"/>
                                 <constraint firstItem="JFC-yr-fmz" firstAttribute="top" secondItem="3as-jp-js1" secondAttribute="bottom" id="cgV-F9-Jvk"/>
+                                <constraint firstItem="WEo-01-0A0" firstAttribute="centerY" secondItem="3as-jp-js1" secondAttribute="centerY" id="fvR-Dd-5fV"/>
                                 <constraint firstItem="3as-jp-js1" firstAttribute="top" secondItem="EyF-1x-tNq" secondAttribute="top" constant="8" id="s5X-eQ-eTw"/>
                                 <constraint firstAttribute="bottom" secondItem="JFC-yr-fmz" secondAttribute="bottom" constant="16" id="wdU-tp-2YG"/>
                             </constraints>
