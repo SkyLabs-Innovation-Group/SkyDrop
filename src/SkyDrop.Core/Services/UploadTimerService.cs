@@ -79,6 +79,8 @@ namespace SkyDrop.Core.Services
 
         public void StopUploadTimer()
         {
+            if (stopwatch == null) return;
+
             if (stopwatch.IsRunning)
             {
                 //save the upload time and file size to calculate average upload speed
