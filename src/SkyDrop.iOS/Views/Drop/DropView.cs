@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using CoreGraphics;
@@ -113,6 +113,13 @@ namespace SkyDrop.iOS.Views.Drop
             {
                 ViewModel.Log.Exception(e);
             }
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            Title = "SkyDrop";
+
+            base.ViewDidAppear(animated);
         }
 
         /// <summary>
