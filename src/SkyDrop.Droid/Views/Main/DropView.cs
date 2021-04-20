@@ -173,6 +173,10 @@ namespace SkyDrop.Droid.Views.Main
             barcodeMenu.TranslationX = fromLeft ? -screenWidth : screenWidth;
 
             var duration = 666;
+            sendButton.Animate()
+                .TranslationXBy(-screenWidth)
+                .SetDuration(duration)
+                .Start();
             barcodeContainer.Animate()
                 .TranslationX(0)
                 .SetDuration(duration)
