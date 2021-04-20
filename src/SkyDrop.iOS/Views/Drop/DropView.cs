@@ -57,13 +57,13 @@ namespace SkyDrop.iOS.Views.Drop
 
                 //setup nav bar
                 NavigationController.Title = "SkyDrop";
-                var barColor = Colors.GradientDeepBlue.ToNative();
+                var barColor = Colors.GradientDark.ToNative();
                 NavigationController.NavigationBar.BarTintColor = barColor;
 
                 View.BackgroundColor = Colors.DarkGrey.ToNative();
 
-                SendButton.BackgroundColor = Colors.Primary.ToNative();
-                ReceiveButton.BackgroundColor = Colors.GradientTurqouise.ToNative();
+                SendButton.BackgroundColor = Colors.GradientGreen.ToNative();
+                ReceiveButton.BackgroundColor = Colors.NewBlue.ToNative();
                 SendButton.Layer.CornerRadius = 8;
                 ReceiveButton.Layer.CornerRadius = 8;
 
