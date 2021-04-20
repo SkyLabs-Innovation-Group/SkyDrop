@@ -10,6 +10,10 @@ using System.Drawing;
 using Xamarin.Essentials;
 using Android.Graphics;
 using Java.IO;
+using System.Threading.Tasks;
+using System;
+using MvvmCross;
+using SkyDrop;
 
 namespace Engage.Droid.Bindings
 {
@@ -26,16 +30,28 @@ namespace Engage.Droid.Bindings
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
-        protected override void SetValue(byte[] value)
+        protected override async void SetValue(byte[] value)
         {
-            if (value == null)
-                return;
+            try
+            {
+                if (value == null)
+                    return;
 
-            var bitmap = BitmapFactory.DecodeByteArray(value, 0, value.Length);
-            if (bitmap == null)
-                return;
+                var bitmap = await Task.Run(() =>
+                {
+                    return BitmapFactory.DecodeByteArray(value, 0, value.Length);
+                });
 
-            Target.SetImageBitmap(bitmap);
+                if (bitmap == null)
+                    return;
+
+                Target.SetImageBitmap(bitmap);
+            }
+            catch(Exception e)
+            {
+                var log = Mvx.IoCProvider.Resolve<ILog>();
+                log.Exception(e);
+            }
         }
     }
 }
