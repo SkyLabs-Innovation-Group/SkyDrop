@@ -243,8 +243,6 @@ namespace SkyDrop.Core.ViewModels.Main
             IsStagingFiles = true;
             var userSkyFiles = new List<SkyFile>();
 
-            bool shouldCompress = pickedFiles.Count() > 1;
-
             try
             {
                 foreach (var pickedFile in pickedFiles)

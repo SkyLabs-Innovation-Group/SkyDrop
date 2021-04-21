@@ -75,53 +75,11 @@
     <AppExtensionDebugBundleId />
   </PropertyGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\launch_image.png" />
-    <BundleResource Include="Resources\launch_image%402x.png" />
-    <BundleResource Include="Resources\launch_image%403x.png" />
     <Compile Include="Linker\LinkerPleaseInclude.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Styles\ColorPalette.cs" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-87.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-80.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-76.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-60.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-58.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-40.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-29.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-20.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-180.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-167.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-152.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-120.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-1024.png">
-      <Visible>false</Visible>
-    </ImageAsset>
     <None Include="Info.plist">
       <SubType>Designer</SubType>
     </None>
@@ -158,6 +116,33 @@
     <Compile Include="Views\Drop\DropView.designer.cs">
       <DependentUpon>DropView.cs</DependentUpon>
     </Compile>
+    <InterfaceDefinition Include="Views\Drop\FilePreviewCollectionViewCell.xib" />
+    <Compile Include="Views\Drop\FilePreviewCollectionViewCell.cs" />
+    <Compile Include="Views\Drop\FilePreviewCollectionViewCell.designer.cs">
+      <DependentUpon>FilePreviewCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <BundleResource Include="Resources\launch_image.png" />
+    <BundleResource Include="Resources\launch_image%402x.png" />
+    <BundleResource Include="Resources\launch_image%403x.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\29.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\40.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\60.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\58.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\87.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\80.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\120.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\120-1.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\180.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\20.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\40-1.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\58-1.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\40-2.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\80-1.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\76.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\152.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\167.png" />
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\SkyDrop Logo 1024.png" />
+    <Compile Include="Bindings\ProgressFillHeightBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -175,50 +160,16 @@
     <PackageReference Include="Cirrious.FluentLayout">
       <Version>2.9.0</Version>
     </PackageReference>
+    <PackageReference Include="Realm">
+      <Version>10.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="Realm.Fody">
+      <Version>10.1.2</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Contents.json">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-1024.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-120.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-152.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-167.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-180.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-20.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-29.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-40.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-58.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-60.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-76.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-80.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Icon-87.png">
-      <Visible>false</Visible>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\LaunchImages.launchimage\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
@@ -232,6 +183,7 @@
     <Folder Include="Views\Drop\" />
     <Folder Include="Resources\Media.xcassets\ic_download.imageset\" />
     <Folder Include="Resources\Media.xcassets\ic_upload.imageset\" />
+    <Folder Include="Bindings\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
