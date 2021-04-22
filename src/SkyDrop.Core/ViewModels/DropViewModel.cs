@@ -146,6 +146,7 @@ namespace SkyDrop.Core.ViewModels.Main
             ShareLinkCommand = new MvxAsyncCommand(ShareLink);
             CancelUploadCommand = new MvxCommand(CancelUpload);
             RenameStagedFileCommand = new MvxAsyncCommand<SkyFile>(skyFile => RenameStagedFile(skyFile));
+            OpenFileInBrowserCommand = new MvxAsyncCommand(OpenFileInBrowser);
         }
 
         public override async Task Initialize()
@@ -546,6 +547,15 @@ namespace SkyDrop.Core.ViewModels.Main
             var newName = $"{result.Value}.{fileExtension}";
 
             skyFile.Filename = newName;
+        }
+
+        private async Task OpenFileInBrowser()
+        {
+            await Browser.OpenAsync(Util.GetSkylinkUrl(UploadedFile.Skylink), new BrowserLaunchOptions
+            {
+                LaunchMode = BrowserLaunchMode.SystemPreferred,
+                TitleMode = BrowserTitleMode.Show
+            });
         }
     }
 }
