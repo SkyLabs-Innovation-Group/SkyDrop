@@ -13,6 +13,7 @@ using MvvmCross.Commands;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.Droid.Helper;
+using ZXing.Mobile;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 
 namespace SkyDrop.Droid.Views.Main
@@ -127,7 +128,13 @@ namespace SkyDrop.Droid.Views.Main
             SetBarcodeCodeUiState();
 
             var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, barcodeImageView.Width, barcodeImageView.Height);
-            var bitmap = await AndroidUtil.EncodeBarcode(matrix, barcodeImageView.Width, barcodeImageView.Height);
+            var renderer = new BitmapRenderer();
+            var bitmap = await Task.Run(() =>
+            {
+                //computationally heavy but quick
+                return renderer.Render(matrix, ZXing.BarcodeFormat.QR_CODE, ViewModel.SkyFileJson);
+            });
+
             barcodeImageView.SetImageBitmap(bitmap);
             barcodeIsLoaded = true;
         }

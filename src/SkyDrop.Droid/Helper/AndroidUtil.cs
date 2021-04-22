@@ -126,33 +126,6 @@ namespace SkyDrop.Droid.Helper
             }
         }
 
-        public static Task<Bitmap> EncodeBarcode(BitMatrix matrix, int width, int height)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    var darkGrey = Colors.DarkGrey.ToNative();
-                    var lightGrey = Colors.LightGrey.ToNative();
-                    var bitmap = Bitmap.CreateBitmap(width, height, Bitmap.Config.Rgb565);
-                    for (int x = 0; x < width; x++)
-                    {
-                        for (int y = 0; y < height; y++)
-                        {
-                            bitmap.SetPixel(x, y, GetBit(matrix, x, y) ? darkGrey : lightGrey);
-                        }
-                    }
-
-                    return bitmap;
-                }
-                catch (WriterException ex)
-                {
-                    log.Exception(ex);
-                    return null;
-                }
-            });
-        }
-
         public static bool GetBit(BitMatrix matrix, int x, int y)
         {
             var row = matrix.getRow(y, null);
