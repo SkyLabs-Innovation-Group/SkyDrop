@@ -56,11 +56,12 @@ namespace SkyDrop.iOS.Views.Drop
                 ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
                 ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
 
-
                 //setup nav bar
-                NavigationController.Title = "SkyDrop";
-                var barColor = Colors.GradientDark.ToNative();
-                NavigationController.NavigationBar.BarTintColor = barColor;
+                NavigationController.NavigationBar.BarTintColor = Colors.GradientDark.ToNative();
+                NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes()
+                {
+                    ForegroundColor = Colors.LightGrey.ToNative()
+                };
 
                 View.BackgroundColor = Colors.DarkGrey.ToNative();
 
@@ -98,7 +99,7 @@ namespace SkyDrop.iOS.Views.Drop
                 set.Bind(OpenButton).For("Tap").To(vm => vm.OpenFileCommand);
                 set.Bind(ShareButton).For("Tap").To(vm => vm.ShareCommand);
 
-                set.Bind(Title).To(vm => vm.Title);
+                set.Bind(this).For(th => th.Title).To(vm => vm.Title);
 
                 set.Bind(BarcodeMenu).For("Visible").To(vm => vm.IsBarcodeVisible);
                 set.Bind(BarcodeContainer).For("Visible").To(vm => vm.IsBarcodeVisible);
@@ -118,13 +119,6 @@ namespace SkyDrop.iOS.Views.Drop
             {
                 ViewModel.Log.Exception(e);
             }
-        }
-
-        public override void ViewDidAppear(bool animated)
-        {
-            Title = "SkyDrop";
-
-            base.ViewDidAppear(animated);
         }
 
         /// <summary>
