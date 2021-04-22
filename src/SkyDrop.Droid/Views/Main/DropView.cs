@@ -35,23 +35,6 @@ namespace SkyDrop.Droid.Views.Main
         private LinearLayout barcodeMenu, sendReceiveButtonsContainer;
         private ImageView barcodeImageView;
 
-        public void SetSendReceiveButtonUiState()
-        {
-            //DropViewUIState gets changed at the end of the animation 
-            //that is to fix an issue with CheckUserIsSwiping() on barcode menu buttons
-            AnimateSlideBarcodeOut(toLeft: false);
-        }
-
-        public void SetBarcodeCodeUiState()
-        {
-            ViewModel.DropViewUIState = DropViewState.QRCodeState;
-
-            ViewModel.IsBarcodeVisible = true;
-
-            AnimateSlideBarcodeIn(fromLeft: false);
-            AnimateSlideSendReceiveButtonsOut(toLeft: true);
-        }
-
         /// <summary>
         /// Initialize view
         /// </summary>
@@ -63,11 +46,9 @@ namespace SkyDrop.Droid.Views.Main
 
             Log.Trace("DropView OnCreate()");
 
-            ViewModel.OpenFileCommand = new MvxCommand<SkyFile>(skyFile => AndroidUtil.OpenFileInBrowser(this, skyFile));
             ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
             ViewModel.HandleUploadErrorCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
             ViewModel.ResetBarcodeCommand = new MvxCommand(ResetBarcode);
-            ViewModel.OpenFileInBrowserCommand = new MvxCommand(() => { if (!ViewModel.UserIsSwiping()) AndroidUtil.OpenFileInBrowser(this, ViewModel.UploadedFile); });
             ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
             ViewModel.CheckUserIsSwipingCommand = new MvxCommand(CheckUserIsSwiping);
 
@@ -128,13 +109,7 @@ namespace SkyDrop.Droid.Views.Main
             SetBarcodeCodeUiState();
 
             var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, barcodeImageView.Width, barcodeImageView.Height);
-            var renderer = new BitmapRenderer();
-            var bitmap = await Task.Run(() =>
-            {
-                //computationally heavy but quick
-                return renderer.Render(matrix, ZXing.BarcodeFormat.QR_CODE, ViewModel.SkyFileJson);
-            });
-
+            var bitmap = await AndroidUtil.BitMatrixToBitmap(matrix);
             barcodeImageView.SetImageBitmap(bitmap);
             barcodeIsLoaded = true;
         }
@@ -145,6 +120,29 @@ namespace SkyDrop.Droid.Views.Main
         private void ResetBarcode()
         {
             barcodeImageView.SetImageResource(Resource.Drawable.barcode_grey);
+        }
+
+        /// <summary>
+        /// Return to the initial UI state
+        /// </summary>
+        public void SetSendReceiveButtonUiState()
+        {
+            //DropViewUIState gets changed at the end of the animation 
+            //that is to fix an issue with CheckUserIsSwiping() on barcode menu buttons
+            AnimateSlideBarcodeOut(toLeft: false);
+        }
+
+        /// <summary>
+        /// Show the QR code UI state
+        /// </summary>
+        public void SetBarcodeCodeUiState()
+        {
+            ViewModel.DropViewUIState = DropViewState.QRCodeState;
+
+            ViewModel.IsBarcodeVisible = true;
+
+            AnimateSlideBarcodeIn(fromLeft: false);
+            AnimateSlideSendReceiveButtonsOut(toLeft: true);
         }
 
         /// <summary>

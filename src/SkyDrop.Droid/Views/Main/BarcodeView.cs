@@ -37,7 +37,7 @@ namespace SkyDrop.Droid.Views.Main
         {
             var imageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
             var matrix = ViewModel.GenerateBarcode("panchos", imageView.Width, imageView.Height);
-            var bitmap = await AndroidUtil.EncodeBarcode(matrix, imageView.Width, imageView.Height);
+            var bitmap = await AndroidUtil.BitMatrixToBitmap(matrix);
             imageView.SetImageBitmap(bitmap);
         }
     }

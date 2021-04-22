@@ -16,6 +16,7 @@ using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
 using ZXing;
 using ZXing.Common;
+using ZXing.Mobile;
 
 namespace SkyDrop.Droid.Helper
 {
@@ -130,6 +131,16 @@ namespace SkyDrop.Droid.Helper
         {
             var row = matrix.getRow(y, null);
             return row[x];
+        }
+
+        public static Task<Bitmap> BitMatrixToBitmap(BitMatrix bitMatrix)
+        {
+            var renderer = new BitmapRenderer();
+            return Task.Run(() =>
+            {
+                //computationally heavy but quick
+                return renderer.Render(bitMatrix, ZXing.BarcodeFormat.QR_CODE, "");
+            });
         }
     }
 }

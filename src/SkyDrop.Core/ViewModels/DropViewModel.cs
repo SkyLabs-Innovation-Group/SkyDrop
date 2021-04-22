@@ -32,7 +32,6 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public IMvxCommand SendCommand { get; set; }
         public IMvxCommand ReceiveCommand { get; set; }
-        public IMvxCommand OpenFileCommand { get; set; }
         public IMvxCommand ShareCommand { get; set; }
         public IMvxCommand CopyLinkCommand { get; set; }
         public IMvxCommand HandleUploadErrorCommand { get; set; }
@@ -146,7 +145,7 @@ namespace SkyDrop.Core.ViewModels.Main
             ShareLinkCommand = new MvxAsyncCommand(ShareLink);
             CancelUploadCommand = new MvxCommand(CancelUpload);
             RenameStagedFileCommand = new MvxAsyncCommand<SkyFile>(skyFile => RenameStagedFile(skyFile));
-            OpenFileInBrowserCommand = new MvxAsyncCommand(OpenFileInBrowser);
+            OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
         }
 
         public override async Task Initialize()
@@ -369,9 +368,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     return;
 
                 var skyFile = JsonConvert.DeserializeObject<SkyFile>(codeJson);
-
-                //open the file in browser
-                OpenFileCommand.Execute(skyFile);
+                OpenFileInBrowser(skyFile);
             }
             catch (JsonException e)
             {
@@ -549,9 +546,13 @@ namespace SkyDrop.Core.ViewModels.Main
             skyFile.Filename = newName;
         }
 
-        private async Task OpenFileInBrowser()
+        private async Task OpenFileInBrowser(SkyFile skyFile = null)
         {
-            await Browser.OpenAsync(Util.GetSkylinkUrl(UploadedFile.Skylink), new BrowserLaunchOptions
+            if (UserIsSwiping())
+                return;
+
+            var file = skyFile ?? UploadedFile;
+            await Browser.OpenAsync(Util.GetSkylinkUrl(file.Skylink), new BrowserLaunchOptions
             {
                 LaunchMode = BrowserLaunchMode.SystemPreferred,
                 TitleMode = BrowserTitleMode.Show
