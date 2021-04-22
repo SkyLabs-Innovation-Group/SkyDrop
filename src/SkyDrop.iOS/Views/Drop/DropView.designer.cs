@@ -19,6 +19,9 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView BarcodeContainer { get; set; }
 
 		[Outlet]
+		UIKit.UIImageView BarcodeImage { get; set; }
+
+		[Outlet]
 		UIKit.UIView BarcodeMenu { get; set; }
 
 		[Outlet]
@@ -87,6 +90,11 @@ namespace SkyDrop.iOS.Views.Drop
 				FilePreviewCollectionView = null;
 			}
 
+			if (FileSizeLabel != null) {
+				FileSizeLabel.Dispose ();
+				FileSizeLabel = null;
+			}
+
 			if (OpenButton != null) {
 				OpenButton.Dispose ();
 				OpenButton = null;
@@ -132,9 +140,9 @@ namespace SkyDrop.iOS.Views.Drop
 				ShareButton = null;
 			}
 
-			if (FileSizeLabel != null) {
-				FileSizeLabel.Dispose ();
-				FileSizeLabel = null;
+			if (BarcodeImage != null) {
+				BarcodeImage.Dispose ();
+				BarcodeImage = null;
 			}
 		}
 	}

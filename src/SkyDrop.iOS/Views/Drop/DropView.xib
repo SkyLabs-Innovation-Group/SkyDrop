@@ -12,6 +12,7 @@
             <connections>
                 <outlet property="ActivityIndicator" destination="WEo-01-0A0" id="Yay-To-vVz"/>
                 <outlet property="BarcodeContainer" destination="d8B-sr-eBO" id="Iky-Gr-hJJ"/>
+                <outlet property="BarcodeImage" destination="1Ig-6e-hog" id="N99-yB-WUp"/>
                 <outlet property="BarcodeMenu" destination="RQr-fo-ynZ" id="d2C-Fy-YkH"/>
                 <outlet property="CopyLinkButton" destination="B7a-we-xUR" id="mdr-aw-R0F"/>
                 <outlet property="FilePreviewCollectionView" destination="jiB-ne-gQ7" id="OAM-Sk-N3G"/>
@@ -144,10 +145,19 @@
                 </collectionView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d8B-sr-eBO" userLabel="BarcodeContainer">
                     <rect key="frame" x="87" y="108" width="240" height="240"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1Ig-6e-hog" userLabel="Barcode Image">
+                            <rect key="frame" x="0.0" y="0.0" width="240" height="240"/>
+                        </imageView>
+                    </subviews>
                     <color key="backgroundColor" systemColor="systemTealColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="240" id="0C4-H6-Ui2"/>
+                        <constraint firstItem="1Ig-6e-hog" firstAttribute="top" secondItem="d8B-sr-eBO" secondAttribute="top" id="3iR-1X-hjp"/>
                         <constraint firstAttribute="width" constant="240" id="4cX-6T-qUD"/>
+                        <constraint firstAttribute="bottom" secondItem="1Ig-6e-hog" secondAttribute="bottom" id="CSa-ko-1Oh"/>
+                        <constraint firstItem="1Ig-6e-hog" firstAttribute="leading" secondItem="d8B-sr-eBO" secondAttribute="leading" id="UE2-Pd-ziL"/>
+                        <constraint firstAttribute="trailing" secondItem="1Ig-6e-hog" secondAttribute="trailing" id="z7Q-JB-N9h"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RQr-fo-ynZ" userLabel="BarcodeMenu">

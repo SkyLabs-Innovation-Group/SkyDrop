@@ -11,6 +11,8 @@ using MvvmCross.Platforms.Ios.Views;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
 using UIKit;
+using ZXing.Mobile;
+using ZXing.Rendering;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 
 namespace SkyDrop.iOS.Views.Drop
@@ -77,6 +79,9 @@ namespace SkyDrop.iOS.Views.Drop
                 ProgressFillArea.BackgroundColor = Colors.GradientTurqouise.ToNative();
                 ProgressFillArea.Layer.CornerRadius = 8;
 
+                BarcodeContainer.Layer.CornerRadius = 8;
+                BarcodeContainer.ClipsToBounds = true;
+
                 var set = CreateBindingSet();
 
                 //setup file preview collection view
@@ -129,13 +134,15 @@ namespace SkyDrop.iOS.Views.Drop
         {
             SetBarcodeCodeUiState();
 
-            //TODO: barcode logic
-            /*
-            var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, barcodeImageView.Width, barcodeImageView.Height);
-            var bitmap = await AndroidUtil.EncodeBarcode(matrix, barcodeImageView.Width, barcodeImageView.Height);
-            barcodeImageView.SetImageBitmap(bitmap);
-            barcodeIsLoaded = true;
-            */
+            var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, (int)BarcodeImage.Frame.Width, (int)BarcodeImage.Frame.Height);
+            var renderer = new BitmapRenderer();
+            var image = await Task.Run(() =>
+            {
+                //computationally heavy but quick
+                return renderer.Render(matrix, ZXing.BarcodeFormat.QR_CODE, ViewModel.SkyFileJson);
+            });
+
+            BarcodeImage.Image = image;
         }
 
         /// <summary>
