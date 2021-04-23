@@ -1,8 +1,11 @@
 using System.Threading.Tasks;
+using Plugin.Permissions.Abstractions;
+using Xamarin.Essentials;
 using ZXing;
 using ZXing.Common;
 using ZXing.Mobile;
 using ZXing.QrCode;
+using PermissionStatus = Xamarin.Essentials.PermissionStatus;
 
 namespace SkyDrop.Core.Services
 {
@@ -17,6 +20,18 @@ namespace SkyDrop.Core.Services
 
         public async Task<string> ScanBarcode()
         {
+            var permissionResult = Permissions.RequestAsync<Permissions.Camera>();
+
+            if (permissionResult.Result != PermissionStatus.Granted)
+            {
+                log.Error("Camera permission not granted.");
+                return null;
+            }
+            else
+            {
+                log.Trace("ScanBarcode() was called, with camera permission granted");
+            }
+                
             var scanner = new MobileBarcodeScanner();
             var result = await scanner.Scan();
 
@@ -25,7 +40,6 @@ namespace SkyDrop.Core.Services
                 log.Error("MobileBarcodeScanner result was null");
             }
 
-            // Here you were getting a nullReference exception, which broke your app
             return result?.Text;
         }
 

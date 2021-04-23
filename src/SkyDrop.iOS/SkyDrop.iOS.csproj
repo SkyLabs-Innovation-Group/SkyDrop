@@ -51,7 +51,7 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
-    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchLink>None</MtouchLink>
     <LangVersion>8.0</LangVersion>
     <MtouchFastDev>true</MtouchFastDev>
     <MtouchInterpreter>-all</MtouchInterpreter>
