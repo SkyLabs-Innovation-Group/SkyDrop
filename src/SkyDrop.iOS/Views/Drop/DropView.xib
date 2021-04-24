@@ -144,24 +144,23 @@
                     </collectionViewFlowLayout>
                 </collectionView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d8B-sr-eBO" userLabel="BarcodeContainer">
-                    <rect key="frame" x="87" y="108" width="240" height="240"/>
+                    <rect key="frame" x="16" y="68" width="382" height="382"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1Ig-6e-hog" userLabel="Barcode Image">
-                            <rect key="frame" x="0.0" y="0.0" width="240" height="240"/>
+                            <rect key="frame" x="0.0" y="0.0" width="382" height="382"/>
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemTealColor"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="240" id="0C4-H6-Ui2"/>
                         <constraint firstItem="1Ig-6e-hog" firstAttribute="top" secondItem="d8B-sr-eBO" secondAttribute="top" id="3iR-1X-hjp"/>
-                        <constraint firstAttribute="width" constant="240" id="4cX-6T-qUD"/>
                         <constraint firstAttribute="bottom" secondItem="1Ig-6e-hog" secondAttribute="bottom" id="CSa-ko-1Oh"/>
                         <constraint firstItem="1Ig-6e-hog" firstAttribute="leading" secondItem="d8B-sr-eBO" secondAttribute="leading" id="UE2-Pd-ziL"/>
+                        <constraint firstAttribute="width" secondItem="d8B-sr-eBO" secondAttribute="height" multiplier="1:1" id="o9N-qP-pV2"/>
                         <constraint firstAttribute="trailing" secondItem="1Ig-6e-hog" secondAttribute="trailing" id="z7Q-JB-N9h"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RQr-fo-ynZ" userLabel="BarcodeMenu">
-                    <rect key="frame" x="16" y="412" width="382" height="96"/>
+                    <rect key="frame" x="16" y="474" width="382" height="96"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B7a-we-xUR">
                             <rect key="frame" x="0.0" y="0.0" width="96" height="96"/>
@@ -267,14 +266,16 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="xZc-Mi-WtT" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" id="BYI-NG-C6y"/>
+                <constraint firstAttribute="trailing" secondItem="d8B-sr-eBO" secondAttribute="trailing" constant="16" id="CQt-JM-dsf"/>
                 <constraint firstItem="xZc-Mi-WtT" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="KrS-lc-ktf"/>
                 <constraint firstItem="RQr-fo-ynZ" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="LNa-l9-VIv"/>
                 <constraint firstAttribute="trailing" secondItem="RQr-fo-ynZ" secondAttribute="trailing" constant="16" id="P5C-uN-FaT"/>
-                <constraint firstItem="RQr-fo-ynZ" firstAttribute="top" secondItem="d8B-sr-eBO" secondAttribute="bottom" constant="64" id="UUF-ow-pwA"/>
+                <constraint firstItem="RQr-fo-ynZ" firstAttribute="top" secondItem="d8B-sr-eBO" secondAttribute="bottom" constant="24" id="UUF-ow-pwA"/>
                 <constraint firstAttribute="bottom" secondItem="jiB-ne-gQ7" secondAttribute="bottom" id="V9R-CP-6H3"/>
                 <constraint firstItem="d8B-sr-eBO" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="bma-Oq-Ee2"/>
+                <constraint firstItem="d8B-sr-eBO" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="cxI-Sh-vz6"/>
                 <constraint firstItem="RQr-fo-ynZ" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="hIj-Tk-o8x"/>
-                <constraint firstItem="d8B-sr-eBO" firstAttribute="top" secondItem="2" secondAttribute="topMargin" constant="64" id="iA6-Bf-wdK"/>
+                <constraint firstItem="d8B-sr-eBO" firstAttribute="top" secondItem="2" secondAttribute="topMargin" constant="24" id="iA6-Bf-wdK"/>
                 <constraint firstItem="jiB-ne-gQ7" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="jdU-8L-Orb"/>
                 <constraint firstAttribute="trailing" secondItem="jiB-ne-gQ7" secondAttribute="trailing" id="zOI-GD-mkc"/>
             </constraints>
