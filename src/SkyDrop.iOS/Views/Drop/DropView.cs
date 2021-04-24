@@ -10,6 +10,7 @@ using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
+using SkyDrop.iOS.Common;
 using UIKit;
 using ZXing.Mobile;
 using ZXing.Rendering;
@@ -55,6 +56,8 @@ namespace SkyDrop.iOS.Views.Drop
 
                 ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
                 ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
+
+                SetupGestureListener();
 
                 //setup nav bar
                 NavigationController.NavigationBar.BarTintColor = Colors.GradientDark.ToNative();
@@ -219,6 +222,101 @@ namespace SkyDrop.iOS.Views.Drop
             {
                 SendReceiveButtonsContainer.Frame = new CGRect(screenCenterX - sendReceiveButtonsContainerFrame.Width * 0.5, sendReceiveButtonsContainerFrame.Y, sendReceiveButtonsContainerFrame.Width, sendReceiveButtonsContainerFrame.Height);
             });
+        }
+
+        /*
+        /// <summary>
+        /// Intercept touch events for the whole screen to handle swipe gestures
+        /// </summary>
+        public override bool DispatchTouchEvent(MotionEvent e)
+        {
+            if (!ViewModel.FirstFileUploaded || //don't allow swipe before first file is uploaded
+                ViewModel.IsUploading || //don't allow swipe while file is uploading
+                ViewModel.DropViewUIState == DropViewState.ConfirmFilesState) //don't allow swipe on confirm file UI state
+                return base.DispatchTouchEvent(e);
+
+            switch (e.Action)
+            {
+                case MotionEventActions.Down:
+                    isPressed = true;
+
+                    tapStartX = e.GetX();
+
+                    barcodeStartX = barcodeContainer.TranslationX;
+                    sendReceiveButtonsContainerStartX = sendReceiveButtonsContainer.TranslationX;
+                    break;
+
+                case MotionEventActions.Up:
+                    if (!isPressed)
+                        return base.DispatchTouchEvent(e);
+
+                    isPressed = false;
+
+                    if (!ViewModel.IsBarcodeVisible)
+                    {
+                        //send & receive buttons are visible
+
+                        if (sendReceiveButtonsContainer.TranslationX <= -swipeMarginX)
+                            SetBarcodeCodeUiState();
+                        else
+                            AnimateSlideSendReceiveCenter();
+                    }
+                    else if (!ViewModel.IsAnimatingBarcodeOut)
+                    {
+                        //barcode is visible
+
+                        if (barcodeContainer.TranslationX >= swipeMarginX)
+                            SetSendReceiveButtonUiState();
+                        else
+                            AnimateSlideBarcodeToCenter();
+                    }
+
+                    break;
+
+                case MotionEventActions.Move:
+                    if (!isPressed)
+                        return base.DispatchTouchEvent(e);
+
+                    var tapEndX = e.GetX();
+                    var deltaX = tapEndX - tapStartX;
+
+                    if (ViewModel.IsBarcodeVisible)
+                    {
+                        barcodeContainer.TranslationX = barcodeStartX + deltaX;
+                        barcodeMenu.TranslationX = barcodeStartX + deltaX;
+                    }
+                    else
+                    {
+                        sendReceiveButtonsContainer.TranslationX = sendReceiveButtonsContainerStartX + deltaX;
+                    }
+
+                    break;
+            }
+
+            return base.DispatchTouchEvent(e);
+        }
+
+        */
+
+        private void SetupGestureListener()
+        {
+            var touchInterceptor = new TouchInterceptor();
+            touchInterceptor.TouchDown += (s, e) =>
+            {
+                Console.WriteLine($"TouchDown: ({e.X}, {e.Y})");
+            };
+
+            touchInterceptor.TouchUp += (s, e) =>
+            {
+                Console.WriteLine($"TouchUp: ({e.X}, {e.Y})");
+            };
+
+            touchInterceptor.TouchMove += (s, e) =>
+            {
+                Console.WriteLine($"TouchMove: ({e.X}, {e.Y})");
+            };
+
+            View.AddGestureRecognizer(touchInterceptor);
         }
     }
 }
