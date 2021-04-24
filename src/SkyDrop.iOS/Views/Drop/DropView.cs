@@ -290,8 +290,6 @@ namespace SkyDrop.iOS.Views.Drop
             {
                 if (IgnoreSwipes()) return;
 
-                Console.WriteLine($"TouchDown: ({e.X}, {e.Y})");
-
                 isPressed = true;
 
                 tapStartX = e.X;
@@ -303,8 +301,6 @@ namespace SkyDrop.iOS.Views.Drop
             touchInterceptor.TouchUp += (s, e) =>
             {
                 if (IgnoreSwipes()) return;
-
-                Console.WriteLine($"TouchUp: ({e.X}, {e.Y})");
 
                 if (!isPressed) return;
 
@@ -333,8 +329,6 @@ namespace SkyDrop.iOS.Views.Drop
             touchInterceptor.TouchMove += (s, e) =>
             {
                 if (IgnoreSwipes()) return;
-
-                Console.WriteLine($"TouchMove: ({e.X}, {e.Y})");
 
                 if (!isPressed) return;
 
