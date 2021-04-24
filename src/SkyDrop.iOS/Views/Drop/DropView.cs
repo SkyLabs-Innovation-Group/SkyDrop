@@ -21,18 +21,12 @@ namespace SkyDrop.iOS.Views.Drop
     [MvxRootPresentation(WrapInNavigationController = true)]
     public partial class DropView : MvxViewController<DropViewModel>
     {
+        private const int swipeMarginX = 100;
+        private bool isPressed;
+        private nfloat tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
+
         public DropView() : base("DropView", null)
         {
-        }
-
-        public void SetBarcodeCodeUiState()
-        {
-            ViewModel.DropViewUIState = DropViewState.QRCodeState;
-
-            ViewModel.IsBarcodeVisible = true;
-
-            AnimateSlideBarcodeIn(fromLeft: false);
-            AnimateSlideSendReceiveButtonsOut(toLeft: true);
         }
 
         //what is this?
@@ -143,6 +137,29 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
+        /// Return to the initial UI state
+        /// </summary>
+        private void SetSendReceiveButtonUiState()
+        {
+            //DropViewUIState gets changed at the end of the animation 
+            //that is to fix an issue with CheckUserIsSwiping() on barcode menu buttons
+            AnimateSlideBarcodeOut(toLeft: false);
+        }
+
+        /// <summary>
+        /// Show the QR code UI state
+        /// </summary>
+        private void SetBarcodeCodeUiState()
+        {
+            ViewModel.DropViewUIState = DropViewState.QRCodeState;
+
+            ViewModel.IsBarcodeVisible = true;
+
+            AnimateSlideBarcodeIn(fromLeft: false);
+            AnimateSlideSendReceiveButtonsOut(toLeft: true);
+        }
+        
+        /// <summary>
         /// Slide send button to center
         /// </summary>
         private void AnimateSlideSendButton()
@@ -206,6 +223,85 @@ namespace SkyDrop.iOS.Views.Drop
                 SendButton.Frame = new CGRect(sendButtonFrame.X + translationX, sendButtonFrame.Y, sendButtonFrame.Width, sendButtonFrame.Height);
                 ReceiveButton.Frame = new CGRect(receiveButtonFrame.X + translationX, receiveButtonFrame.Y, receiveButtonFrame.Width, receiveButtonFrame.Height);
             });
+        }
+
+        /// <summary>
+        /// Slide barcode out to left or right
+        /// </summary>
+        private void AnimateSlideBarcodeOut(bool toLeft)
+        {
+            var screenWidth = UIScreen.MainScreen.Bounds.Width;
+
+            ViewModel.IsAnimatingBarcodeOut = true;
+            ViewModel.IsReceiveButtonGreen = true;
+            ViewModel.UploadTimerText = "";
+            ViewModel.FileSize = "";
+
+            SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(0, 0);
+            ReceiveButton.Alpha = 0;
+
+            if (toLeft)
+                SendButton.Transform = CGAffineTransform.MakeTranslation(screenWidth, 0);
+
+            var duration = 250;
+            var barcodeTranslationX = toLeft ? -screenWidth : screenWidth;
+            UIView.Animate(duration, () =>
+            {
+                SendButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
+                ReceiveButton.Alpha = 1;
+                BarcodeContainer.Transform = CGAffineTransform.MakeTranslation(barcodeTranslationX, 0);
+                BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(barcodeTranslationX, 0);
+            }, () =>
+            {
+                ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState;
+                ViewModel.ResetUI();
+            });
+
+            /*
+            sendButton.Animate()
+                .TranslationX(0)
+                .SetDuration(duration)
+                .WithEndAction(new Java.Lang.Runnable(() => { ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState; ViewModel.ResetUI(); }))
+                .Start();
+            receiveButton.Animate()
+                .Alpha(1)
+                .SetDuration(duration)
+                .Start();
+            barcodeContainer.Animate()
+                .TranslationX(toLeft ? -screenWidth : screenWidth)
+                .SetDuration(duration)
+                .Start();
+            barcodeMenu.Animate()
+                .TranslationX(toLeft ? -screenWidth : screenWidth)
+                .SetDuration(duration)
+                .Start();
+            */
+        }
+
+        /// <summary>
+        /// Return barcode to center when user cancels a dismiss-slide action
+        /// </summary>
+        private void AnimateSlideBarcodeToCenter()
+        {
+            ViewModel.IsBarcodeVisible = true;
+
+            var duration = 500;
+            UIView.Animate(duration, () =>
+            {
+                BarcodeContainer.Transform = CGAffineTransform.MakeTranslation(0, 0);
+                BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(0, 0);
+            });
+
+            /*
+            barcodeContainer.Animate()
+                .TranslationX(0)
+                .SetDuration(duration)
+                .Start();
+            barcodeMenu.Animate()
+                .TranslationX(0)
+                .SetDuration(duration)
+                .Start();
+            */
         }
 
         /// <summary>
@@ -295,7 +391,6 @@ namespace SkyDrop.iOS.Views.Drop
 
             return base.DispatchTouchEvent(e);
         }
-
         */
 
         private void SetupGestureListener()
@@ -304,16 +399,63 @@ namespace SkyDrop.iOS.Views.Drop
             touchInterceptor.TouchDown += (s, e) =>
             {
                 Console.WriteLine($"TouchDown: ({e.X}, {e.Y})");
+
+                isPressed = true;
+
+                tapStartX = e.X;
+
+                barcodeStartX = BarcodeContainer.Transform.x0;//.TranslationX;
+                sendReceiveButtonsContainerStartX = SendReceiveButtonsContainer.Transform.x0;//.TranslationX;
             };
 
             touchInterceptor.TouchUp += (s, e) =>
             {
                 Console.WriteLine($"TouchUp: ({e.X}, {e.Y})");
+
+                if (!isPressed) return;
+
+                isPressed = false;
+
+                if (!ViewModel.IsBarcodeVisible)
+                {
+                    //send & receive buttons are visible
+
+                    if (SendReceiveButtonsContainer.Transform.x0/*.TranslationX*/ <= -swipeMarginX)
+                        SetBarcodeCodeUiState();
+                    else
+                        AnimateSlideSendReceiveCenter();
+                }
+                else if (!ViewModel.IsAnimatingBarcodeOut)
+                {
+                    //barcode is visible
+
+                    if (BarcodeContainer.Transform.x0/*.TranslationX*/ >= swipeMarginX)
+                        SetSendReceiveButtonUiState();
+                    else
+                        AnimateSlideBarcodeToCenter();
+                }
             };
 
             touchInterceptor.TouchMove += (s, e) =>
             {
                 Console.WriteLine($"TouchMove: ({e.X}, {e.Y})");
+
+                if (!isPressed) return;
+
+                var tapEndX = e.X;
+                var deltaX = tapEndX - tapStartX;
+
+                if (ViewModel.IsBarcodeVisible)
+                {
+                    var translationX = barcodeStartX + deltaX;
+                    BarcodeContainer.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
+                    BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
+                }
+                else
+                {
+                    var translationX = sendReceiveButtonsContainerStartX + deltaX;
+                    SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
+                }
             };
 
             View.AddGestureRecognizer(touchInterceptor);

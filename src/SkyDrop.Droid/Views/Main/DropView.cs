@@ -125,7 +125,7 @@ namespace SkyDrop.Droid.Views.Main
         /// <summary>
         /// Return to the initial UI state
         /// </summary>
-        public void SetSendReceiveButtonUiState()
+        private void SetSendReceiveButtonUiState()
         {
             //DropViewUIState gets changed at the end of the animation 
             //that is to fix an issue with CheckUserIsSwiping() on barcode menu buttons
@@ -135,7 +135,7 @@ namespace SkyDrop.Droid.Views.Main
         /// <summary>
         /// Show the QR code UI state
         /// </summary>
-        public void SetBarcodeCodeUiState()
+        private void SetBarcodeCodeUiState()
         {
             ViewModel.DropViewUIState = DropViewState.QRCodeState;
 
