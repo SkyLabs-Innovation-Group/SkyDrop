@@ -21,7 +21,7 @@ namespace SkyDrop.iOS.Views.Drop
     [MvxRootPresentation(WrapInNavigationController = true)]
     public partial class DropView : MvxViewController<DropViewModel>
     {
-        private const int swipeMarginX = 100;
+        private const int swipeMarginX = 20;
         private bool isPressed;
         private nfloat tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
 
@@ -63,7 +63,7 @@ namespace SkyDrop.iOS.Views.Drop
                 View.BackgroundColor = Colors.DarkGrey.ToNative();
 
                 SendButton.BackgroundColor = Colors.GradientGreen.ToNative();
-                ReceiveButton.BackgroundColor = Colors.NewBlue.ToNative();
+                ReceiveButton.BackgroundColor = Colors.GradientOcean.ToNative();
                 SendButton.Layer.CornerRadius = 8;
                 ReceiveButton.Layer.CornerRadius = 8;
 
@@ -243,7 +243,7 @@ namespace SkyDrop.iOS.Views.Drop
             if (toLeft)
                 SendButton.Transform = CGAffineTransform.MakeTranslation(screenWidth, 0);
 
-            var duration = 250;
+            var duration = 0.25;
             var barcodeTranslationX = toLeft ? -screenWidth : screenWidth;
             UIView.Animate(duration, () =>
             {
@@ -251,7 +251,7 @@ namespace SkyDrop.iOS.Views.Drop
                 ReceiveButton.Alpha = 1;
                 BarcodeContainer.Transform = CGAffineTransform.MakeTranslation(barcodeTranslationX, 0);
                 BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(barcodeTranslationX, 0);
-            }, () =>
+            }, completion: () =>
             {
                 ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState;
                 ViewModel.ResetUI();
@@ -285,7 +285,7 @@ namespace SkyDrop.iOS.Views.Drop
         {
             ViewModel.IsBarcodeVisible = true;
 
-            var duration = 500;
+            var duration = 0.5;
             UIView.Animate(duration, () =>
             {
                 BarcodeContainer.Transform = CGAffineTransform.MakeTranslation(0, 0);
@@ -398,6 +398,8 @@ namespace SkyDrop.iOS.Views.Drop
             var touchInterceptor = new TouchInterceptor();
             touchInterceptor.TouchDown += (s, e) =>
             {
+                if (IgnoreSwipes()) return;
+
                 Console.WriteLine($"TouchDown: ({e.X}, {e.Y})");
 
                 isPressed = true;
@@ -410,6 +412,8 @@ namespace SkyDrop.iOS.Views.Drop
 
             touchInterceptor.TouchUp += (s, e) =>
             {
+                if (IgnoreSwipes()) return;
+
                 Console.WriteLine($"TouchUp: ({e.X}, {e.Y})");
 
                 if (!isPressed) return;
@@ -438,6 +442,8 @@ namespace SkyDrop.iOS.Views.Drop
 
             touchInterceptor.TouchMove += (s, e) =>
             {
+                if (IgnoreSwipes()) return;
+
                 Console.WriteLine($"TouchMove: ({e.X}, {e.Y})");
 
                 if (!isPressed) return;
@@ -459,6 +465,13 @@ namespace SkyDrop.iOS.Views.Drop
             };
 
             View.AddGestureRecognizer(touchInterceptor);
+        }
+
+        private bool IgnoreSwipes()
+        {
+            return !ViewModel.FirstFileUploaded || //don't allow swipe before first file is uploaded
+                ViewModel.IsUploading || //don't allow swipe while file is uploading
+                ViewModel.DropViewUIState == DropViewState.ConfirmFilesState; //don't allow swipe on confirm file UI state
         }
     }
 }

@@ -35,13 +35,13 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xZc-Mi-WtT" userLabel="Send Receive Buttons Container">
-                    <rect key="frame" x="47" y="361.5" width="320" height="173"/>
+                    <rect key="frame" x="55" y="363.5" width="304" height="169"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EyF-1x-tNq" userLabel="Send Button">
-                            <rect key="frame" x="0.0" y="0.0" width="144" height="173"/>
+                            <rect key="frame" x="0.0" y="0.0" width="144" height="169"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RUr-fo-czC" userLabel="Progress Fill Area">
-                                    <rect key="frame" x="0.0" y="157" width="144" height="16"/>
+                                    <rect key="frame" x="0.0" y="153" width="144" height="16"/>
                                     <color key="backgroundColor" systemColor="systemOrangeColor"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="16" placeholder="YES" id="MB9-gM-2PE"/>
@@ -56,9 +56,9 @@
                                         <constraint firstAttribute="width" secondItem="3as-jp-js1" secondAttribute="height" multiplier="1:1" id="ubD-7Y-1J8"/>
                                     </constraints>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SEND" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JFC-yr-fmz">
-                                    <rect key="frame" x="49" y="136" width="46.5" height="21"/>
-                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SEND FILE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JFC-yr-fmz">
+                                    <rect key="frame" x="36.5" y="136" width="71.5" height="17"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                     <color key="textColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -91,7 +91,7 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pjX-AC-hdv" userLabel="Receive Button">
-                            <rect key="frame" x="176" y="0.0" width="144" height="173"/>
+                            <rect key="frame" x="160" y="0.0" width="144" height="169"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_download" translatesAutoresizingMaskIntoConstraints="NO" id="Cq9-AE-Hf8" userLabel="Receive Icon">
                                     <rect key="frame" x="8" y="8" width="128" height="128"/>
@@ -102,8 +102,8 @@
                                     </constraints>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RECEIVE FILE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OfC-3c-DrC">
-                                    <rect key="frame" x="17.5" y="136" width="109.5" height="21"/>
-                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                    <rect key="frame" x="26" y="136" width="92.5" height="17"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                     <color key="textColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -125,7 +125,7 @@
                         <constraint firstItem="EyF-1x-tNq" firstAttribute="top" secondItem="xZc-Mi-WtT" secondAttribute="top" id="ZWl-do-Ymg"/>
                         <constraint firstAttribute="bottom" secondItem="EyF-1x-tNq" secondAttribute="bottom" id="ipa-Oz-Wn2"/>
                         <constraint firstAttribute="bottom" secondItem="pjX-AC-hdv" secondAttribute="bottom" id="nDW-Bz-OQu"/>
-                        <constraint firstAttribute="width" constant="320" id="rkl-yZ-wcX"/>
+                        <constraint firstAttribute="width" constant="304" id="rkl-yZ-wcX"/>
                         <constraint firstItem="EyF-1x-tNq" firstAttribute="leading" secondItem="xZc-Mi-WtT" secondAttribute="leading" id="rmz-Xc-5bB"/>
                         <constraint firstAttribute="trailing" secondItem="pjX-AC-hdv" secondAttribute="trailing" id="s8c-1u-E9X"/>
                     </constraints>
