@@ -170,10 +170,10 @@ namespace SkyDrop.iOS.Views.Drop
             var sendButtonCenterX = SendButton.ConvertPointToView(new CGPoint(SendButton.Bounds.Width * 0.5, SendButton.Bounds.Height), null).X;
             var translationX = screenCenterX - sendButtonCenterX;
 
-            var sendFrame = SendButton.Frame;
+            //var sendFrame = SendButton.Frame;
             UIView.Animate(1, () =>
             {
-                SendButton.Frame = new CGRect(sendFrame.X + translationX, sendFrame.Y, sendFrame.Width, sendFrame.Height);
+                SendButton.Transform = CGAffineTransform.MakeTranslation(translationX, 0);//.Frame = new CGRect(sendFrame.X + translationX, sendFrame.Y, sendFrame.Width, sendFrame.Height);
                 ReceiveButton.Alpha = 0;
             });
         }
@@ -188,16 +188,22 @@ namespace SkyDrop.iOS.Views.Drop
 
             var barcodeTranslationX = fromLeft ? -screenWidth : screenWidth;
 
-            var barcodeMenuFrame = BarcodeMenu.Frame;
-            var barcodeContainerFrame = BarcodeContainer.Frame;
-            BarcodeMenu.Frame = new CGRect(screenCenterX - barcodeMenuFrame.Width * 0.5 + screenWidth, barcodeMenuFrame.Y, barcodeMenuFrame.Width, barcodeMenuFrame.Height);
-            BarcodeContainer.Frame = new CGRect(screenCenterX - barcodeContainerFrame.Width + screenWidth, barcodeContainerFrame.Y, barcodeContainerFrame.Width, barcodeContainerFrame.Height);
+            BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(screenWidth, 0);
+            BarcodeContainer.Transform = CGAffineTransform.MakeTranslation(screenWidth, 0);
+
+            //var barcodeMenuFrame = BarcodeMenu.Frame;
+            //var barcodeContainerFrame = BarcodeContainer.Frame;
+            //BarcodeMenu.Frame = new CGRect(screenCenterX - barcodeMenuFrame.Width * 0.5 + screenWidth, barcodeMenuFrame.Y, barcodeMenuFrame.Width, barcodeMenuFrame.Height);
+            //BarcodeContainer.Frame = new CGRect(screenCenterX - barcodeContainerFrame.Width + screenWidth, barcodeContainerFrame.Y, barcodeContainerFrame.Width, barcodeContainerFrame.Height);
 
             var duration = 0.666;
             UIView.Animate(duration, () =>
             {
-                BarcodeMenu.Frame = new CGRect(screenCenterX - barcodeMenuFrame.Width * 0.5, barcodeMenuFrame.Y, barcodeMenuFrame.Width, barcodeMenuFrame.Height);
-                BarcodeContainer.Frame = new CGRect(screenCenterX - barcodeContainerFrame.Width * 0.5, barcodeContainerFrame.Y, barcodeContainerFrame.Width, barcodeContainerFrame.Height);
+                //BarcodeMenu.Frame = new CGRect(screenCenterX - barcodeMenuFrame.Width * 0.5, barcodeMenuFrame.Y, barcodeMenuFrame.Width, barcodeMenuFrame.Height);
+                //BarcodeContainer.Frame = new CGRect(screenCenterX - barcodeContainerFrame.Width * 0.5, barcodeContainerFrame.Y, barcodeContainerFrame.Width, barcodeContainerFrame.Height);
+
+                BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(0, 0);
+                BarcodeContainer.Transform = CGAffineTransform.MakeTranslation(0, 0);
             });
         }
 
@@ -216,12 +222,14 @@ namespace SkyDrop.iOS.Views.Drop
 
             var translationX = toLeft ? -screenWidth : screenWidth;
             var duration = 0.25;
-            var sendButtonFrame = SendButton.Frame;
-            var receiveButtonFrame = ReceiveButton.Frame;
+            //var sendButtonFrame = SendButton.Frame;
+            //var receiveButtonFrame = ReceiveButton.Frame;
             UIView.Animate(duration, () =>
             {
-                SendButton.Frame = new CGRect(sendButtonFrame.X + translationX, sendButtonFrame.Y, sendButtonFrame.Width, sendButtonFrame.Height);
-                ReceiveButton.Frame = new CGRect(receiveButtonFrame.X + translationX, receiveButtonFrame.Y, receiveButtonFrame.Width, receiveButtonFrame.Height);
+                //SendButton.Frame = new CGRect(sendButtonFrame.X + translationX, sendButtonFrame.Y, sendButtonFrame.Width, sendButtonFrame.Height);
+                //ReceiveButton.Frame = new CGRect(receiveButtonFrame.X + translationX, receiveButtonFrame.Y, receiveButtonFrame.Width, receiveButtonFrame.Height);
+                SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
+                SendButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
             });
         }
 
@@ -237,20 +245,27 @@ namespace SkyDrop.iOS.Views.Drop
             ViewModel.UploadTimerText = "";
             ViewModel.FileSize = "";
 
-            SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(0, 0);
+            //SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(0, 0);
             ReceiveButton.Alpha = 0;
 
+            /*
             if (toLeft)
                 SendButton.Transform = CGAffineTransform.MakeTranslation(screenWidth, 0);
+            */
 
             var duration = 0.25;
             var barcodeTranslationX = toLeft ? -screenWidth : screenWidth;
             UIView.Animate(duration, () =>
             {
-                SendButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
-                ReceiveButton.Alpha = 1;
+                //slide barcode out
                 BarcodeContainer.Transform = CGAffineTransform.MakeTranslation(barcodeTranslationX, 0);
                 BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(barcodeTranslationX, 0);
+
+                //slide send receive buttons in
+                SendButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
+                ReceiveButton.Alpha = 1;
+                SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(0, 0);
+
             }, completion: () =>
             {
                 ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState;
@@ -420,7 +435,7 @@ namespace SkyDrop.iOS.Views.Drop
 
                 isPressed = false;
 
-                if (!ViewModel.IsBarcodeVisible)
+                if (ViewModel.DropViewUIState == DropViewState.SendReceiveButtonState)
                 {
                     //send & receive buttons are visible
 
