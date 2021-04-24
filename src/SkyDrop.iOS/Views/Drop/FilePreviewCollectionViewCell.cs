@@ -15,6 +15,7 @@ namespace SkyDrop.iOS.Views.Drop
 
         static FilePreviewCollectionViewCell()
         {
+            Nib = UINib.FromName(Key, NSBundle.MainBundle);
         }
 
         protected FilePreviewCollectionViewCell(IntPtr handle) : base(handle)
@@ -31,6 +32,8 @@ namespace SkyDrop.iOS.Views.Drop
         [Export("awakeFromNib")]
         public override void AwakeFromNib()
         {
+            if (ImageContainer == null) return;
+
             ImageContainer.Layer.CornerRadius = 8;
         }
     }

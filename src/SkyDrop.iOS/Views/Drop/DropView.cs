@@ -85,7 +85,7 @@ namespace SkyDrop.iOS.Views.Drop
                 //setup file preview collection view
                 var filePreviewSource = new MvxCollectionViewSource(FilePreviewCollectionView, FilePreviewCollectionViewCell.Key);
                 FilePreviewCollectionView.DataSource = filePreviewSource;
-                FilePreviewCollectionView.RegisterClassForCell(typeof(FilePreviewCollectionViewCell), FilePreviewCollectionViewCell.Key);
+                FilePreviewCollectionView.RegisterNibForCell(FilePreviewCollectionViewCell.Nib, FilePreviewCollectionViewCell.Key);
                 set.Bind(filePreviewSource).For(s => s.ItemsSource).To(vm => vm.StagedFiles);
                 set.Bind(FilePreviewCollectionView).For("Visible").To(vm => vm.IsStagedFilesVisible);
 
