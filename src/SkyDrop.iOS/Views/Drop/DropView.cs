@@ -143,7 +143,7 @@ namespace SkyDrop.iOS.Views.Drop
         {
             //DropViewUIState gets changed at the end of the animation 
             //that is to fix an issue with CheckUserIsSwiping() on barcode menu buttons
-            AnimateSlideBarcodeOut(toLeft: false);
+            AnimateSlideBarcodeOut();
         }
 
         /// <summary>
@@ -170,10 +170,9 @@ namespace SkyDrop.iOS.Views.Drop
             var sendButtonCenterX = SendButton.ConvertPointToView(new CGPoint(SendButton.Bounds.Width * 0.5, SendButton.Bounds.Height), null).X;
             var translationX = screenCenterX - sendButtonCenterX;
 
-            //var sendFrame = SendButton.Frame;
             UIView.Animate(1, () =>
             {
-                SendButton.Transform = CGAffineTransform.MakeTranslation(translationX, 0);//.Frame = new CGRect(sendFrame.X + translationX, sendFrame.Y, sendFrame.Width, sendFrame.Height);
+                SendButton.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
                 ReceiveButton.Alpha = 0;
             });
         }
@@ -191,17 +190,9 @@ namespace SkyDrop.iOS.Views.Drop
             BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(screenWidth, 0);
             BarcodeContainer.Transform = CGAffineTransform.MakeTranslation(screenWidth, 0);
 
-            //var barcodeMenuFrame = BarcodeMenu.Frame;
-            //var barcodeContainerFrame = BarcodeContainer.Frame;
-            //BarcodeMenu.Frame = new CGRect(screenCenterX - barcodeMenuFrame.Width * 0.5 + screenWidth, barcodeMenuFrame.Y, barcodeMenuFrame.Width, barcodeMenuFrame.Height);
-            //BarcodeContainer.Frame = new CGRect(screenCenterX - barcodeContainerFrame.Width + screenWidth, barcodeContainerFrame.Y, barcodeContainerFrame.Width, barcodeContainerFrame.Height);
-
             var duration = 0.666;
             UIView.Animate(duration, () =>
             {
-                //BarcodeMenu.Frame = new CGRect(screenCenterX - barcodeMenuFrame.Width * 0.5, barcodeMenuFrame.Y, barcodeMenuFrame.Width, barcodeMenuFrame.Height);
-                //BarcodeContainer.Frame = new CGRect(screenCenterX - barcodeContainerFrame.Width * 0.5, barcodeContainerFrame.Y, barcodeContainerFrame.Width, barcodeContainerFrame.Height);
-
                 BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(0, 0);
                 BarcodeContainer.Transform = CGAffineTransform.MakeTranslation(0, 0);
             });
@@ -222,21 +213,17 @@ namespace SkyDrop.iOS.Views.Drop
 
             var translationX = toLeft ? -screenWidth : screenWidth;
             var duration = 0.25;
-            //var sendButtonFrame = SendButton.Frame;
-            //var receiveButtonFrame = ReceiveButton.Frame;
             UIView.Animate(duration, () =>
             {
-                //SendButton.Frame = new CGRect(sendButtonFrame.X + translationX, sendButtonFrame.Y, sendButtonFrame.Width, sendButtonFrame.Height);
-                //ReceiveButton.Frame = new CGRect(receiveButtonFrame.X + translationX, receiveButtonFrame.Y, receiveButtonFrame.Width, receiveButtonFrame.Height);
                 SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
                 SendButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
             });
         }
 
         /// <summary>
-        /// Slide barcode out to left or right
+        /// Slide barcode out, slide send receive buttons in
         /// </summary>
-        private void AnimateSlideBarcodeOut(bool toLeft)
+        private void AnimateSlideBarcodeOut()
         {
             var screenWidth = UIScreen.MainScreen.Bounds.Width;
 
@@ -244,17 +231,10 @@ namespace SkyDrop.iOS.Views.Drop
             ViewModel.IsReceiveButtonGreen = true;
             ViewModel.UploadTimerText = "";
             ViewModel.FileSize = "";
-
-            //SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(0, 0);
             ReceiveButton.Alpha = 0;
 
-            /*
-            if (toLeft)
-                SendButton.Transform = CGAffineTransform.MakeTranslation(screenWidth, 0);
-            */
-
             var duration = 0.25;
-            var barcodeTranslationX = toLeft ? -screenWidth : screenWidth;
+            var barcodeTranslationX = screenWidth;
             UIView.Animate(duration, () =>
             {
                 //slide barcode out
@@ -262,7 +242,6 @@ namespace SkyDrop.iOS.Views.Drop
                 BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(barcodeTranslationX, 0);
 
                 //slide send receive buttons in
-                SendButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
                 ReceiveButton.Alpha = 1;
                 SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(0, 0);
 
@@ -271,26 +250,6 @@ namespace SkyDrop.iOS.Views.Drop
                 ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState;
                 ViewModel.ResetUI();
             });
-
-            /*
-            sendButton.Animate()
-                .TranslationX(0)
-                .SetDuration(duration)
-                .WithEndAction(new Java.Lang.Runnable(() => { ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState; ViewModel.ResetUI(); }))
-                .Start();
-            receiveButton.Animate()
-                .Alpha(1)
-                .SetDuration(duration)
-                .Start();
-            barcodeContainer.Animate()
-                .TranslationX(toLeft ? -screenWidth : screenWidth)
-                .SetDuration(duration)
-                .Start();
-            barcodeMenu.Animate()
-                .TranslationX(toLeft ? -screenWidth : screenWidth)
-                .SetDuration(duration)
-                .Start();
-            */
         }
 
         /// <summary>
@@ -306,17 +265,6 @@ namespace SkyDrop.iOS.Views.Drop
                 BarcodeContainer.Transform = CGAffineTransform.MakeTranslation(0, 0);
                 BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(0, 0);
             });
-
-            /*
-            barcodeContainer.Animate()
-                .TranslationX(0)
-                .SetDuration(duration)
-                .Start();
-            barcodeMenu.Animate()
-                .TranslationX(0)
-                .SetDuration(duration)
-                .Start();
-            */
         }
 
         /// <summary>
@@ -331,82 +279,9 @@ namespace SkyDrop.iOS.Views.Drop
             var duration = 0.5;
             UIView.Animate(duration, () =>
             {
-                SendReceiveButtonsContainer.Frame = new CGRect(screenCenterX - sendReceiveButtonsContainerFrame.Width * 0.5, sendReceiveButtonsContainerFrame.Y, sendReceiveButtonsContainerFrame.Width, sendReceiveButtonsContainerFrame.Height);
+                SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(0, 0);
             });
         }
-
-        /*
-        /// <summary>
-        /// Intercept touch events for the whole screen to handle swipe gestures
-        /// </summary>
-        public override bool DispatchTouchEvent(MotionEvent e)
-        {
-            if (!ViewModel.FirstFileUploaded || //don't allow swipe before first file is uploaded
-                ViewModel.IsUploading || //don't allow swipe while file is uploading
-                ViewModel.DropViewUIState == DropViewState.ConfirmFilesState) //don't allow swipe on confirm file UI state
-                return base.DispatchTouchEvent(e);
-
-            switch (e.Action)
-            {
-                case MotionEventActions.Down:
-                    isPressed = true;
-
-                    tapStartX = e.GetX();
-
-                    barcodeStartX = barcodeContainer.TranslationX;
-                    sendReceiveButtonsContainerStartX = sendReceiveButtonsContainer.TranslationX;
-                    break;
-
-                case MotionEventActions.Up:
-                    if (!isPressed)
-                        return base.DispatchTouchEvent(e);
-
-                    isPressed = false;
-
-                    if (!ViewModel.IsBarcodeVisible)
-                    {
-                        //send & receive buttons are visible
-
-                        if (sendReceiveButtonsContainer.TranslationX <= -swipeMarginX)
-                            SetBarcodeCodeUiState();
-                        else
-                            AnimateSlideSendReceiveCenter();
-                    }
-                    else if (!ViewModel.IsAnimatingBarcodeOut)
-                    {
-                        //barcode is visible
-
-                        if (barcodeContainer.TranslationX >= swipeMarginX)
-                            SetSendReceiveButtonUiState();
-                        else
-                            AnimateSlideBarcodeToCenter();
-                    }
-
-                    break;
-
-                case MotionEventActions.Move:
-                    if (!isPressed)
-                        return base.DispatchTouchEvent(e);
-
-                    var tapEndX = e.GetX();
-                    var deltaX = tapEndX - tapStartX;
-
-                    if (ViewModel.IsBarcodeVisible)
-                    {
-                        barcodeContainer.TranslationX = barcodeStartX + deltaX;
-                        barcodeMenu.TranslationX = barcodeStartX + deltaX;
-                    }
-                    else
-                    {
-                        sendReceiveButtonsContainer.TranslationX = sendReceiveButtonsContainerStartX + deltaX;
-                    }
-
-                    break;
-            }
-
-            return base.DispatchTouchEvent(e);
-        }
-        */
 
         private void SetupGestureListener()
         {
@@ -421,8 +296,8 @@ namespace SkyDrop.iOS.Views.Drop
 
                 tapStartX = e.X;
 
-                barcodeStartX = BarcodeContainer.Transform.x0;//.TranslationX;
-                sendReceiveButtonsContainerStartX = SendReceiveButtonsContainer.Transform.x0;//.TranslationX;
+                barcodeStartX = BarcodeContainer.Transform.x0;
+                sendReceiveButtonsContainerStartX = SendReceiveButtonsContainer.Transform.x0;
             };
 
             touchInterceptor.TouchUp += (s, e) =>
@@ -439,7 +314,7 @@ namespace SkyDrop.iOS.Views.Drop
                 {
                     //send & receive buttons are visible
 
-                    if (SendReceiveButtonsContainer.Transform.x0/*.TranslationX*/ <= -swipeMarginX)
+                    if (SendReceiveButtonsContainer.Transform.x0 <= -swipeMarginX)
                         SetBarcodeCodeUiState();
                     else
                         AnimateSlideSendReceiveCenter();
@@ -448,7 +323,7 @@ namespace SkyDrop.iOS.Views.Drop
                 {
                     //barcode is visible
 
-                    if (BarcodeContainer.Transform.x0/*.TranslationX*/ >= swipeMarginX)
+                    if (BarcodeContainer.Transform.x0 >= swipeMarginX)
                         SetSendReceiveButtonUiState();
                     else
                         AnimateSlideBarcodeToCenter();

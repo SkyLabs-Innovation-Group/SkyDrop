@@ -193,7 +193,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Slide barcode out to left or right
+        /// Slide barcode out, slide send receive buttons in
         /// </summary>
         private void AnimateSlideBarcodeOut(bool toLeft)
         {

@@ -33,7 +33,7 @@ namespace Engage.iOS.Bindings
 
             Target.Superview.LayoutIfNeeded();
 
-            var duration = value >= 1 ? 0.1 : 1.5;
+            var duration = value >= 1 || value == 0 ? 0.1 : 1.5;
 
             UIView.Animate(duration, () =>
             {

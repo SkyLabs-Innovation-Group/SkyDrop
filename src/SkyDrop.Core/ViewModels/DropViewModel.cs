@@ -448,7 +448,9 @@ namespace SkyDrop.Core.ViewModels.Main
             if (UploadProgress == 1)
                 return;
 
-            var maxProgress = 0.9;
+            //scale the progress so it fits within 85% of the bar
+            var maxProgress = 0.85;
+            newUploadProgress *= maxProgress;
             if (newUploadProgress > maxProgress)
                 newUploadProgress = maxProgress;
 
