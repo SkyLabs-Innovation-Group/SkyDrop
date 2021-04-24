@@ -22,17 +22,15 @@ namespace SkyDrop.iOS.Views.Drop
         {
             this.DelayBind(() =>
             {
-
                 var set = this.CreateBindingSet<FilePreviewCollectionViewCell, SkyFile>();
                 set.Bind(FilenameLabel).To(skyFile => skyFile.Filename);
                 set.Apply();
             });
         }
 
-        [Export("awakeFromNib")]
         public override void AwakeFromNib()
         {
-            if (ImageContainer == null) return;
+            base.AwakeFromNib();
 
             ImageContainer.Layer.CornerRadius = 8;
         }
