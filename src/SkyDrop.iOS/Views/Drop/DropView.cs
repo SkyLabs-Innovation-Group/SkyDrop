@@ -63,7 +63,10 @@ namespace SkyDrop.iOS.Views.Drop
 
                 View.BackgroundColor = Colors.DarkGrey.ToNative();
 
-                SendButton.BackgroundColor = Colors.GradientGreen.ToNative();
+                CancelButton.BackgroundColor = Colors.Primary.ToNative();
+                CancelButton.Layer.CornerRadius = 32;
+
+                SendButton.BackgroundColor = Colors.Primary.ToNative();
                 ReceiveButton.BackgroundColor = Colors.GradientOcean.ToNative();
                 SendButton.Layer.CornerRadius = 8;
                 ReceiveButton.Layer.CornerRadius = 8;

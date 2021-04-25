@@ -146,6 +146,8 @@
     <Compile Include="Common\TouchInterceptor.cs" />
     <Compile Include="Bindings\ByteArrayImageViewBinding.cs" />
     <Compile Include="Common\iOSUtil.cs" />
+    <ImageAsset Include="Resources\Media.xcassets\ic_cancel.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Media.xcassets\ic_cancel.imageset\cancel.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -188,6 +190,7 @@
     <Folder Include="Resources\Media.xcassets\ic_upload.imageset\" />
     <Folder Include="Bindings\" />
     <Folder Include="Common\" />
+    <Folder Include="Resources\Media.xcassets\ic_cancel.imageset\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

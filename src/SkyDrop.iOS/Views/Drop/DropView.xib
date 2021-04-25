@@ -265,10 +265,20 @@
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ei9-jC-BaR" userLabel="Cancel Button">
                     <rect key="frame" x="334" y="60" width="64" height="64"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_cancel" translatesAutoresizingMaskIntoConstraints="NO" id="AV8-a7-EEc">
+                            <rect key="frame" x="8" y="8" width="48" height="48"/>
+                            <color key="tintColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </imageView>
+                    </subviews>
                     <color key="backgroundColor" systemColor="systemPurpleColor"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="64" id="48G-MI-lpq"/>
+                        <constraint firstItem="AV8-a7-EEc" firstAttribute="leading" secondItem="ei9-jC-BaR" secondAttribute="leading" constant="8" id="68S-ih-Uz7"/>
+                        <constraint firstItem="AV8-a7-EEc" firstAttribute="top" secondItem="ei9-jC-BaR" secondAttribute="top" constant="8" id="KDP-n3-bvr"/>
+                        <constraint firstAttribute="trailing" secondItem="AV8-a7-EEc" secondAttribute="trailing" constant="8" id="Krw-4l-d03"/>
                         <constraint firstAttribute="height" constant="64" id="QO3-NE-53r"/>
+                        <constraint firstAttribute="bottom" secondItem="AV8-a7-EEc" secondAttribute="bottom" constant="8" id="oGX-aV-yb8"/>
                     </constraints>
                 </view>
             </subviews>
@@ -295,6 +305,7 @@
     </objects>
     <resources>
         <image name="filemenu.and.cursorarrow" catalog="system" width="128" height="96"/>
+        <image name="ic_cancel" width="18" height="18"/>
         <image name="ic_download" width="18" height="18"/>
         <image name="ic_share" width="18" height="18"/>
         <image name="ic_upload" width="18" height="18"/>
