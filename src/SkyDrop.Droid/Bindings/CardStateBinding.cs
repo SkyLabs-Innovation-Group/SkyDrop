@@ -5,11 +5,11 @@ using Google.Android.Material.Card;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
 using SkyDrop.Core.Utility;
-using Engage.Droid;
+using SkyDrop.Droid;
 using System.Drawing;
 using Xamarin.Essentials;
 
-namespace Engage.Droid.Bindings
+namespace SkyDrop.Droid.Bindings
 {
     /// <summary>
     /// Sets material card fill to light grey or dark grey with mid grey outline depending on bool state

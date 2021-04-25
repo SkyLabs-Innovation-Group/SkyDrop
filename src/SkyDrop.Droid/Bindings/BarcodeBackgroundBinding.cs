@@ -7,7 +7,7 @@ using MvvmCross.Binding.Bindings.Target;
 using SkyDrop.Core.Utility;
 using SkyDrop.Droid.Helper;
 
-namespace Engage.Droid.Bindings
+namespace SkyDrop.Droid.Bindings
 {
     public class BarcodeBackgroundBinding : MvxTargetBinding<MaterialCardView, bool>
     {

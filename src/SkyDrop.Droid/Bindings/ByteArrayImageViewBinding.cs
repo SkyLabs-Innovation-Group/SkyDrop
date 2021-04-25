@@ -5,7 +5,7 @@ using Google.Android.Material.Card;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
 using SkyDrop.Core.Utility;
-using Engage.Droid;
+using SkyDrop.Droid;
 using System.Drawing;
 using Xamarin.Essentials;
 using Android.Graphics;
@@ -15,7 +15,7 @@ using System;
 using MvvmCross;
 using SkyDrop;
 
-namespace Engage.Droid.Bindings
+namespace SkyDrop.Droid.Bindings
 {
     /// <summary>
     /// Binds byte array images to an ImageView

@@ -144,6 +144,7 @@
     <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\SkyDrop Logo 1024.png" />
     <Compile Include="Bindings\ProgressFillHeightBinding.cs" />
     <Compile Include="Common\TouchInterceptor.cs" />
+    <Compile Include="Bindings\ByteArrayImageViewBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

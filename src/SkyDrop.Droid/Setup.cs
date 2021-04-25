@@ -4,7 +4,7 @@ using Acr.UserDialogs;
 using Android.Views;
 using Android.Widget;
 using AndroidX.CardView.Widget;
-using Engage.Droid.Bindings;
+using SkyDrop.Droid.Bindings;
 using Google.Android.Material.Card;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;

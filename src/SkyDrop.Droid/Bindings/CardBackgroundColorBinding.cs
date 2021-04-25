@@ -4,7 +4,7 @@ using AndroidX.CardView.Widget;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
 
-namespace Engage.Droid.Bindings
+namespace SkyDrop.Droid.Bindings
 {
     public class CardBackgroundColorBinding : MvxTargetBinding<CardView, Color>
     {

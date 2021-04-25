@@ -25,12 +25,21 @@
                             <constraint firstAttribute="height" constant="128" id="DA4-RT-3ar"/>
                         </constraints>
                     </view>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Gt-aV-33k">
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Gt-aV-33k">
                         <rect key="frame" x="32" y="16" width="64" height="64"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Fq5-dt-7fH">
+                                <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemGreenColor"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="64" id="0Oe-1t-2bz"/>
+                            <constraint firstItem="Fq5-dt-7fH" firstAttribute="leading" secondItem="6Gt-aV-33k" secondAttribute="leading" id="68U-vP-3Ql"/>
+                            <constraint firstAttribute="trailing" secondItem="Fq5-dt-7fH" secondAttribute="trailing" id="73w-qB-VK3"/>
                             <constraint firstAttribute="width" constant="64" id="DeJ-tE-PcA"/>
+                            <constraint firstItem="Fq5-dt-7fH" firstAttribute="top" secondItem="6Gt-aV-33k" secondAttribute="top" id="FnV-yR-ZoW"/>
+                            <constraint firstAttribute="bottom" secondItem="Fq5-dt-7fH" secondAttribute="bottom" id="zb0-mN-34N"/>
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1" text="filename.jpg" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KJL-qO-c2W">
@@ -58,6 +67,7 @@
             <connections>
                 <outlet property="FilenameLabel" destination="KJL-qO-c2W" id="3bx-8s-SRn"/>
                 <outlet property="ImageContainer" destination="6Gt-aV-33k" id="gXw-ip-8Ev"/>
+                <outlet property="PreviewImage" destination="Fq5-dt-7fH" id="YyL-4W-Xsn"/>
             </connections>
             <point key="canvasLocation" x="-136.23188405797103" y="-21.428571428571427"/>
         </collectionViewCell>

@@ -6,7 +6,7 @@ using MvvmCross.Binding.Bindings.Target;
 using SkyDrop.Core.Utility;
 using UIKit;
 
-namespace Engage.iOS.Bindings
+namespace SkyDrop.iOS.Bindings
 {
     public class ProgressFillHeightBinding : MvxTargetBinding<UIView, double>
     {

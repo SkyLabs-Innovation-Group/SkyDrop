@@ -17,6 +17,9 @@ namespace SkyDrop.iOS.Views.Drop
 
 		[Outlet]
 		UIKit.UIView ImageContainer { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView PreviewImage { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -28,6 +31,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (ImageContainer != null) {
 				ImageContainer.Dispose ();
 				ImageContainer = null;
+			}
+
+			if (PreviewImage != null) {
+				PreviewImage.Dispose ();
+				PreviewImage = null;
 			}
 		}
 	}

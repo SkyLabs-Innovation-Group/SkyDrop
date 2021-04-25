@@ -1,5 +1,5 @@
 ﻿using System;
-
+using SkyDrop.iOS.Bindings;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding.Views;
@@ -24,6 +24,7 @@ namespace SkyDrop.iOS.Views.Drop
             {
                 var set = this.CreateBindingSet<FilePreviewCollectionViewCell, SkyFile>();
                 set.Bind(FilenameLabel).To(skyFile => skyFile.Filename);
+                set.Bind(PreviewImage).For(ByteArrayImageViewBinding.Name).To(skyFile => skyFile.Data);
                 set.Apply();
             });
         }
