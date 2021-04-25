@@ -88,6 +88,11 @@ namespace SkyDrop.iOS.Views.Drop
 				BarcodeMenu = null;
 			}
 
+			if (CancelButton != null) {
+				CancelButton.Dispose ();
+				CancelButton = null;
+			}
+
 			if (CopyLinkButton != null) {
 				CopyLinkButton.Dispose ();
 				CopyLinkButton = null;
@@ -146,11 +151,6 @@ namespace SkyDrop.iOS.Views.Drop
 			if (ShareButton != null) {
 				ShareButton.Dispose ();
 				ShareButton = null;
-			}
-
-			if (CancelButton != null) {
-				CancelButton.Dispose ();
-				CancelButton = null;
 			}
 		}
 	}

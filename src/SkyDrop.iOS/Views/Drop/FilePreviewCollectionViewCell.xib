@@ -28,6 +28,12 @@
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Gt-aV-33k">
                         <rect key="frame" x="32" y="16" width="64" height="64"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="JPG" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Clx-pI-Yj0">
+                                <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                <color key="textColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Fq5-dt-7fH">
                                 <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
                             </imageView>
@@ -35,10 +41,14 @@
                         <color key="backgroundColor" systemColor="systemGreenColor"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="64" id="0Oe-1t-2bz"/>
+                            <constraint firstAttribute="bottom" secondItem="Clx-pI-Yj0" secondAttribute="bottom" id="3n8-rv-EZf"/>
                             <constraint firstItem="Fq5-dt-7fH" firstAttribute="leading" secondItem="6Gt-aV-33k" secondAttribute="leading" id="68U-vP-3Ql"/>
                             <constraint firstAttribute="trailing" secondItem="Fq5-dt-7fH" secondAttribute="trailing" id="73w-qB-VK3"/>
                             <constraint firstAttribute="width" constant="64" id="DeJ-tE-PcA"/>
                             <constraint firstItem="Fq5-dt-7fH" firstAttribute="top" secondItem="6Gt-aV-33k" secondAttribute="top" id="FnV-yR-ZoW"/>
+                            <constraint firstItem="Clx-pI-Yj0" firstAttribute="leading" secondItem="6Gt-aV-33k" secondAttribute="leading" id="KYy-Rh-9Kb"/>
+                            <constraint firstItem="Clx-pI-Yj0" firstAttribute="top" secondItem="6Gt-aV-33k" secondAttribute="top" id="UVk-8x-0W9"/>
+                            <constraint firstAttribute="trailing" secondItem="Clx-pI-Yj0" secondAttribute="trailing" id="gPL-G5-eLR"/>
                             <constraint firstAttribute="bottom" secondItem="Fq5-dt-7fH" secondAttribute="bottom" id="zb0-mN-34N"/>
                         </constraints>
                     </view>
@@ -65,6 +75,7 @@
             </collectionViewCellContentView>
             <size key="customSize" width="77" height="117"/>
             <connections>
+                <outlet property="FileExtensionLabel" destination="Clx-pI-Yj0" id="Njq-Ma-9DW"/>
                 <outlet property="FilenameLabel" destination="KJL-qO-c2W" id="3bx-8s-SRn"/>
                 <outlet property="ImageContainer" destination="6Gt-aV-33k" id="gXw-ip-8Ev"/>
                 <outlet property="PreviewImage" destination="Fq5-dt-7fH" id="YyL-4W-Xsn"/>

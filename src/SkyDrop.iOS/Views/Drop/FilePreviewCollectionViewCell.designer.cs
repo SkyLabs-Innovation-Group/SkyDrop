@@ -13,6 +13,9 @@ namespace SkyDrop.iOS.Views.Drop
 	partial class FilePreviewCollectionViewCell
 	{
 		[Outlet]
+		UIKit.UILabel FileExtensionLabel { get; set; }
+
+		[Outlet]
 		UIKit.UILabel FilenameLabel { get; set; }
 
 		[Outlet]
@@ -23,6 +26,11 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (FileExtensionLabel != null) {
+				FileExtensionLabel.Dispose ();
+				FileExtensionLabel = null;
+			}
+
 			if (FilenameLabel != null) {
 				FilenameLabel.Dispose ();
 				FilenameLabel = null;

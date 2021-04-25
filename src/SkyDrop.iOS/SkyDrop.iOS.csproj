@@ -148,6 +148,7 @@
     <Compile Include="Common\iOSUtil.cs" />
     <ImageAsset Include="Resources\Media.xcassets\ic_cancel.imageset\Contents.json" />
     <ImageAsset Include="Resources\Media.xcassets\ic_cancel.imageset\cancel.pdf" />
+    <Compile Include="Converters\FileExtensionConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -191,6 +192,7 @@
     <Folder Include="Bindings\" />
     <Folder Include="Common\" />
     <Folder Include="Resources\Media.xcassets\ic_cancel.imageset\" />
+    <Folder Include="Converters\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

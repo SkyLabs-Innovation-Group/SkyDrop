@@ -9,6 +9,8 @@ using MvvmCross.Platforms.Ios.Presenters;
 using MvvmCross.ViewModels;
 using SkyDrop.Core;
 using UIKit;
+using MvvmCross.Converters;
+using SkyDrop.iOS.Converters;
 
 namespace SkyDrop.iOS
 {
@@ -30,6 +32,13 @@ namespace SkyDrop.iOS
             registry.RegisterCustomBindingFactory<UIImageView>(ByteArrayImageViewBinding.Name, view => new ByteArrayImageViewBinding(view));
 
             base.FillTargetFactories(registry);
+        }
+
+        protected override void FillValueConverters(IMvxValueConverterRegistry registry)
+        {
+            registry.AddOrOverwrite(FileExtensionConverter.Name, new FileExtensionConverter());
+
+            base.FillValueConverters(registry);
         }
 
         protected override IMvxIosViewPresenter CreateViewPresenter()

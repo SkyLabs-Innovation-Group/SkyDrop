@@ -7,6 +7,7 @@ using SkyDrop.Core.DataModels;
 using UIKit;
 using SkyDrop.Core.Utility;
 using Acr.UserDialogs;
+using SkyDrop.iOS.Converters;
 
 namespace SkyDrop.iOS.Views.Drop
 {
@@ -26,6 +27,7 @@ namespace SkyDrop.iOS.Views.Drop
             {
                 var set = this.CreateBindingSet<FilePreviewCollectionViewCell, SkyFile>();
                 set.Bind(FilenameLabel).To(skyFile => skyFile.Filename);
+                set.Bind(FileExtensionLabel).To(skyFile => skyFile.Filename).WithConversion(FileExtensionConverter.Name);
                 set.Bind(PreviewImage).For(ByteArrayImageViewBinding.Name).To(skyFile => skyFile.Data);
                 set.Apply();
             });
