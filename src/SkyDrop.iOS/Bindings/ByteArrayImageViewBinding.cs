@@ -33,6 +33,7 @@ namespace SkyDrop.iOS.Bindings
             {
                 var log = Mvx.IoCProvider.Resolve<ILog>();
                 log.Exception(e);
+                Target.Image = null;
             }
         }
     }

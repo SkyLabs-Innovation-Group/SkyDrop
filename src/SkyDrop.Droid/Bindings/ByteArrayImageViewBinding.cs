@@ -32,24 +32,33 @@ namespace SkyDrop.Droid.Bindings
 
         protected override async void SetValue(byte[] value)
         {
+            var log = Mvx.IoCProvider.Resolve<ILog>();
+
             try
             {
                 if (value == null)
+                {
+                    Target.SetImageBitmap(null);
                     return;
+                }
 
                 var bitmap = await Task.Run(() =>
                 {
-                    return BitmapFactory.DecodeByteArray(value, 0, value.Length);
+                    try
+                    {
+                        return BitmapFactory.DecodeByteArray(value, 0, value.Length);
+                    }
+                    catch(Exception e)
+                    {
+                        log.Exception(e);
+                        return null;
+                    }
                 });
-
-                if (bitmap == null)
-                    return;
 
                 Target.SetImageBitmap(bitmap);
             }
             catch(Exception e)
             {
-                var log = Mvx.IoCProvider.Resolve<ILog>();
                 log.Exception(e);
             }
         }
