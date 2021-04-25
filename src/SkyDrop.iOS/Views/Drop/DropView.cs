@@ -98,7 +98,7 @@ namespace SkyDrop.iOS.Views.Drop
 
                 set.Bind(CopyLinkButton).For("Tap").To(vm => vm.CopyLinkCommand);
                 set.Bind(OpenButton).For("Tap").To(vm => vm.OpenFileInBrowserCommand);
-                set.Bind(ShareButton).For("Tap").To(vm => vm.ShareCommand);
+                set.Bind(ShareButton).For("Tap").To(vm => vm.ShareLinkCommand);
 
                 set.Bind(this).For(th => th.Title).To(vm => vm.Title);
 

@@ -32,7 +32,6 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public IMvxCommand SendCommand { get; set; }
         public IMvxCommand ReceiveCommand { get; set; }
-        public IMvxCommand ShareCommand { get; set; }
         public IMvxCommand CopyLinkCommand { get; set; }
         public IMvxCommand ResetUIStateCommand { get; set; }
         public IMvxCommand ResetBarcodeCommand { get; set; }
