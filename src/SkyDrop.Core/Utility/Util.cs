@@ -5,9 +5,20 @@ namespace SkyDrop.Core.Utility
     {
         public const string Portal = "https://siasky.net";
 
+        /// <summary>
+        /// Convert raw skylink to full skylink url
+        /// </summary>
         public static string GetSkylinkUrl(string skylink)
         {
             return $"{Portal}/{skylink}";
+        }
+
+        /// <summary>
+        /// Convert full skylink url to raw skylink (removing any url parameters)
+        /// </summary>
+        public static string GetRawSkylink(string fullSkylinkUrl)
+        {
+            return fullSkylinkUrl.Substring(fullSkylinkUrl.LastIndexOf('/') + 1, 46);
         }
 
         public static string GetFileSizeString(long bytesCount)

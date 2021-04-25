@@ -125,7 +125,7 @@ namespace SkyDrop.iOS.Views.Drop
         {
             SetBarcodeCodeUiState();
 
-            var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, (int)BarcodeImage.Frame.Width, (int)BarcodeImage.Frame.Height);
+            var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileFullUrl, (int)BarcodeImage.Frame.Width, (int)BarcodeImage.Frame.Height);
             var image = await iOSUtil.BitMatrixToImage(matrix);
             BarcodeImage.Image = image;
         }

@@ -47,7 +47,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand CheckUserIsSwipingCommand { get; set; }
         public IMvxCommand<SkyFile> RenameStagedFileCommand { get; set; }
 
-        public string SkyFileJson { get; set; }
+        public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
         public bool IsStagingFiles { get; set; }
         public bool IsUploadArrowVisible => !IsUploading && !IsStagingFiles;
@@ -321,7 +321,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 //show QR code
                 IsUploading = false;
                 IsBarcodeLoading = true;
-                SkyFileJson = JsonConvert.SerializeObject(UploadedFile);
+                SkyFileFullUrl = Util.GetSkylinkUrl(UploadedFile.Skylink);
                 await GenerateBarcodeAsyncFunc();
             }
             catch (Exception e) when (e.Message == "Socket closed")
@@ -363,15 +363,15 @@ namespace SkyDrop.Core.ViewModels.Main
                 IsReceiveButtonGreen = true;
 
                 //open the QR code scan view
-                var codeJson = await barcodeService.ScanBarcode();
-                if (codeJson == null)
+                var barcodeData = await barcodeService.ScanBarcode();
+                if (barcodeData == null)
                 {
-                    Log.Trace("codeJson == null");
+                    Log.Trace("barcodeData is null");
                     return;
                 }
 
-                var skyFile = JsonConvert.DeserializeObject<SkyFile>(codeJson);
-                OpenFileInBrowser(skyFile);
+                var skyFile = new SkyFile() { Skylink = Util.GetRawSkylink(barcodeData) };
+                await OpenFileInBrowser(skyFile);
             }
             catch (JsonException e)
             {

@@ -108,7 +108,7 @@ namespace SkyDrop.Droid.Views.Main
         {
             SetBarcodeCodeUiState();
 
-            var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileJson, barcodeImageView.Width, barcodeImageView.Height);
+            var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileFullUrl, barcodeImageView.Width, barcodeImageView.Height);
             var bitmap = await AndroidUtil.BitMatrixToBitmap(matrix);
             barcodeImageView.SetImageBitmap(bitmap);
             barcodeIsLoaded = true;
