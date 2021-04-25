@@ -5,6 +5,8 @@ using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using SkyDrop.Core.DataModels;
 using UIKit;
+using SkyDrop.Core.Utility;
+using Acr.UserDialogs;
 
 namespace SkyDrop.iOS.Views.Drop
 {
@@ -33,6 +35,7 @@ namespace SkyDrop.iOS.Views.Drop
         {
             base.AwakeFromNib();
 
+            ImageContainer.BackgroundColor = Colors.GradientTurqouise.ToNative();
             ImageContainer.Layer.CornerRadius = 8;
         }
     }
