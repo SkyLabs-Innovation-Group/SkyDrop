@@ -18,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:animateLayoutChanges="true">
-            
+
+            <!--QR code-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/BarcodeContainer"
                 android:layout_width="match_parent"
@@ -60,6 +61,7 @@
                 </com.google.android.material.card.MaterialCardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!--barcode menu buttons-->
             <LinearLayout
                 android:id="@+id/BarcodeMenu"
                 android:layout_width="match_parent"
@@ -154,6 +156,7 @@
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
+            <!--send & receive buttons-->
             <LinearLayout
                 android:id="@+id/SendReceiveContainer"
                 android:layout_width="wrap_content"
@@ -269,6 +272,7 @@
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
+            <!--cancel button-->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="64dp"
                 android:layout_height="64dp"
@@ -276,7 +280,7 @@
                 android:layout_alignParentRight="true"
                 app:cardCornerRadius="32dp"
                 app:cardBackgroundColor="@color/primaryColor"
-                app:MvxBind="Click CancelUploadCommand;Visibility Visibility(IsUploading)">
+                app:MvxBind="Click CancelUploadCommand;Visibility Visibility(IsStagedFilesVisible)">
                 <ImageView
                     android:src="@drawable/ic_cancel"
                     android:layout_width="match_parent"
@@ -284,6 +288,7 @@
                     android:padding="8dp"/>
             </com.google.android.material.card.MaterialCardView>
 
+            <!--files preview-->
             <mvvmcross.droid.support.v7.recyclerview.MvxRecyclerView
                 android:id="@+id/StagedFilesRecycler"
                 android:layout_width="match_parent"

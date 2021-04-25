@@ -34,15 +34,12 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand ReceiveCommand { get; set; }
         public IMvxCommand ShareCommand { get; set; }
         public IMvxCommand CopyLinkCommand { get; set; }
-        public IMvxCommand HandleUploadErrorCommand { get; set; }
+        public IMvxCommand ResetUIStateCommand { get; set; }
         public IMvxCommand ResetBarcodeCommand { get; set; }
         public IMvxCommand NavToSettingsCommand { get; set; }
         public IMvxCommand ShareLinkCommand { get; set; }
         public IMvxCommand OpenFileInBrowserCommand { get; set; }
-
         public IMvxCommand SlideSendButtonToCenterCommand { get; set; }
-
-        //public IMvxCommand ResetAnimateCommand { get; set; }
         public IMvxCommand CancelUploadCommand { get; set; }
         public IMvxCommand CheckUserIsSwipingCommand { get; set; }
         public IMvxCommand<SkyFile> RenameStagedFileCommand { get; set; }
@@ -54,11 +51,6 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsBarcodeLoading { get; set; }
         public bool IsBarcodeVisible { get; set; }
         public bool IsStagedFilesVisible => DropViewUIState == DropViewState.ConfirmFilesState;
-
-        public string SendButtonLabel => IsUploading ? StagedFiles?.Count > 1 ? "SENDING FILES" :
-            "SENDING FILE" :
-            StagedFiles?.Count > 1 ? "SEND FILES" : "SEND FILE";
-
         public bool IsSendButtonGreen { get; set; } = true;
         public bool IsReceiveButtonGreen { get; set; } = true;
         public string UploadTimerText { get; set; }
@@ -67,6 +59,9 @@ namespace SkyDrop.Core.ViewModels.Main
         public double UploadProgress { get; set; } //0-1
         public bool FirstFileUploaded { get; set; }
         public bool UserIsSwipingResult { get; set; }
+        public string SendButtonLabel => IsUploading ? StagedFiles?.Count > 1 ? "SENDING FILES" :
+            "SENDING FILE" :
+            StagedFiles?.Count > 1 ? "SEND FILES" : "SEND FILE";
 
         public List<SkyFile> StagedFiles { get; set; }
         public SkyFile UploadedFile { get; set; }
@@ -94,22 +89,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
 
-        // private Func<Task> _selectFileAsyncFunc;
-        // public Func<Task> SelectFileAsyncFunc
-        // {
-        //     get => _selectFileAsyncFunc;
-        //     set => _selectFileAsyncFunc = value;
-        // }
-
-        // private Func<Task> _selectImageAsyncFunc;
-        // public Func<Task> SelectImageAsyncFunc
-        // {
-        //     get => _selectImageAsyncFunc;
-        //     set => _selectImageAsyncFunc = value;
-        // }
-
         private Func<Task> _generateBarcodeAsyncFunc;
-
         public Func<Task> GenerateBarcodeAsyncFunc
         {
             get => _generateBarcodeAsyncFunc;
@@ -275,7 +255,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 IsStagingFiles = false;
 
                 //reset the UI
-                HandleUploadErrorCommand?.Execute();
+                ResetUIStateCommand?.Execute();
                 return;
             }
 
@@ -288,7 +268,7 @@ namespace SkyDrop.Core.ViewModels.Main
             else
             {
                 //reset the UI
-                HandleUploadErrorCommand?.Execute();
+                ResetUIStateCommand?.Execute();
             }
 
             IsStagingFiles = false;
@@ -330,7 +310,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 userDialogs.Toast("Upload cancelled");
 
                 //reset the UI
-                HandleUploadErrorCommand?.Execute();
+                ResetUIStateCommand?.Execute();
             }
             catch (Exception ex)
             {
@@ -339,7 +319,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 userDialogs.Toast("Could not upload file");
 
                 //reset the UI
-                HandleUploadErrorCommand?.Execute();
+                ResetUIStateCommand?.Execute();
             }
             finally
             {
@@ -466,7 +446,13 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void CancelUpload()
         {
-            uploadCancellationToken?.Cancel();
+            if (IsUploading)
+            {
+                uploadCancellationToken?.Cancel();
+                return;
+            }
+
+            ResetUIStateCommand?.Execute();
         }
 
         public BitMatrix GenerateBarcode(string text, int width, int height)

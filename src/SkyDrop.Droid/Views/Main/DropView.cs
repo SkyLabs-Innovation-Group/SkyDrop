@@ -47,7 +47,7 @@ namespace SkyDrop.Droid.Views.Main
             Log.Trace("DropView OnCreate()");
 
             ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
-            ViewModel.HandleUploadErrorCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
+            ViewModel.ResetUIStateCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
             ViewModel.ResetBarcodeCommand = new MvxCommand(ResetBarcode);
             ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
             ViewModel.CheckUserIsSwipingCommand = new MvxCommand(CheckUserIsSwiping);
