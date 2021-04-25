@@ -145,6 +145,7 @@
     <Compile Include="Bindings\ProgressFillHeightBinding.cs" />
     <Compile Include="Common\TouchInterceptor.cs" />
     <Compile Include="Bindings\ByteArrayImageViewBinding.cs" />
+    <Compile Include="Common\iOSUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
