@@ -148,7 +148,6 @@
     <Compile Include="Common\iOSUtil.cs" />
     <ImageAsset Include="Resources\Media.xcassets\ic_cancel.imageset\Contents.json" />
     <ImageAsset Include="Resources\Media.xcassets\ic_cancel.imageset\cancel.pdf" />
-    <Compile Include="Converters\FileExtensionConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

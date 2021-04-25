@@ -3,7 +3,7 @@ using System.Globalization;
 using MvvmCross;
 using MvvmCross.Converters;
 
-namespace SkyDrop.iOS.Converters
+namespace SkyDrop.Core.Converters
 {
     public class FileExtensionConverter : MvxValueConverter<string, string>
     {

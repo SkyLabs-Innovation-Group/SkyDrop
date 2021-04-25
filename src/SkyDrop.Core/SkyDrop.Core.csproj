@@ -28,5 +28,6 @@
     <Folder Include="Services\IServices\" />
     <Folder Include="QA\" />
     <Folder Include="QA\Tooling\" />
+    <Folder Include="Converters\" />
   </ItemGroup>
 </Project>

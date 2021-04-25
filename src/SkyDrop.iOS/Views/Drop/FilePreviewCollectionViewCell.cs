@@ -7,7 +7,7 @@ using SkyDrop.Core.DataModels;
 using UIKit;
 using SkyDrop.Core.Utility;
 using Acr.UserDialogs;
-using SkyDrop.iOS.Converters;
+using SkyDrop.Core.Converters;
 
 namespace SkyDrop.iOS.Views.Drop
 {

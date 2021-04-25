@@ -10,7 +10,7 @@ using MvvmCross.ViewModels;
 using SkyDrop.Core;
 using UIKit;
 using MvvmCross.Converters;
-using SkyDrop.iOS.Converters;
+using SkyDrop.Core.Converters;
 
 namespace SkyDrop.iOS
 {
