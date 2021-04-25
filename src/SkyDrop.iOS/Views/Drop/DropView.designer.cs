@@ -25,6 +25,9 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView BarcodeMenu { get; set; }
 
 		[Outlet]
+		UIKit.UIView CancelButton { get; set; }
+
+		[Outlet]
 		UIKit.UIView CopyLinkButton { get; set; }
 
 		[Outlet]
@@ -73,6 +76,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (BarcodeContainer != null) {
 				BarcodeContainer.Dispose ();
 				BarcodeContainer = null;
+			}
+
+			if (BarcodeImage != null) {
+				BarcodeImage.Dispose ();
+				BarcodeImage = null;
 			}
 
 			if (BarcodeMenu != null) {
@@ -140,9 +148,9 @@ namespace SkyDrop.iOS.Views.Drop
 				ShareButton = null;
 			}
 
-			if (BarcodeImage != null) {
-				BarcodeImage.Dispose ();
-				BarcodeImage = null;
+			if (CancelButton != null) {
+				CancelButton.Dispose ();
+				CancelButton = null;
 			}
 		}
 	}

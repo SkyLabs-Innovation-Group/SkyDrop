@@ -50,6 +50,7 @@ namespace SkyDrop.iOS.Views.Drop
 
                 ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
                 ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
+                ViewModel.ResetUIStateCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
 
                 SetupGestureListener();
 
@@ -108,7 +109,11 @@ namespace SkyDrop.iOS.Views.Drop
 
                 set.Bind(FileSizeLabel).To(vm => vm.FileSize);
 
+                set.Bind(ProgressFillArea).For("Visible").To(vm => vm.IsUploading);
                 set.Bind(ProgressFillArea).For(ProgressFillHeightBinding.Name).To(vm => vm.UploadProgress);
+
+                set.Bind(CancelButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
+                set.Bind(CancelButton).For("Tap").To(vm => vm.CancelUploadCommand);
 
                 set.Apply();
             }
@@ -238,6 +243,7 @@ namespace SkyDrop.iOS.Views.Drop
                 //slide send receive buttons in
                 ReceiveButton.Alpha = 1;
                 SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(0, 0);
+                SendButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
 
             }, completion: () =>
             {

@@ -304,7 +304,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 SkyFileFullUrl = Util.GetSkylinkUrl(UploadedFile.Skylink);
                 await GenerateBarcodeAsyncFunc();
             }
-            catch (Exception e) when (e.Message == "Socket closed")
+            catch (Exception e) when (e.Message == "Socket closed" || e.Message == "A task was canceled.")
             {
                 //user cancelled the upload
                 userDialogs.Toast("Upload cancelled");

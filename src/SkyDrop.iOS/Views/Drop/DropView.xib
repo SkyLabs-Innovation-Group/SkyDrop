@@ -14,6 +14,7 @@
                 <outlet property="BarcodeContainer" destination="d8B-sr-eBO" id="Iky-Gr-hJJ"/>
                 <outlet property="BarcodeImage" destination="1Ig-6e-hog" id="N99-yB-WUp"/>
                 <outlet property="BarcodeMenu" destination="RQr-fo-ynZ" id="d2C-Fy-YkH"/>
+                <outlet property="CancelButton" destination="ei9-jC-BaR" id="7Ee-UT-FXX"/>
                 <outlet property="CopyLinkButton" destination="B7a-we-xUR" id="mdr-aw-R0F"/>
                 <outlet property="FilePreviewCollectionView" destination="jiB-ne-gQ7" id="OAM-Sk-N3G"/>
                 <outlet property="FileSizeLabel" destination="qif-P7-gfN" id="S6w-Pg-oEg"/>
@@ -262,16 +263,26 @@
                         <constraint firstItem="B7a-we-xUR" firstAttribute="top" secondItem="RQr-fo-ynZ" secondAttribute="top" id="r7L-Uq-bwE"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ei9-jC-BaR" userLabel="Cancel Button">
+                    <rect key="frame" x="334" y="60" width="64" height="64"/>
+                    <color key="backgroundColor" systemColor="systemPurpleColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="64" id="48G-MI-lpq"/>
+                        <constraint firstAttribute="height" constant="64" id="QO3-NE-53r"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="xZc-Mi-WtT" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" id="BYI-NG-C6y"/>
                 <constraint firstAttribute="trailing" secondItem="d8B-sr-eBO" secondAttribute="trailing" constant="16" id="CQt-JM-dsf"/>
+                <constraint firstItem="ei9-jC-BaR" firstAttribute="top" secondItem="2" secondAttribute="topMargin" constant="16" id="E7I-Xx-Fa2"/>
                 <constraint firstItem="xZc-Mi-WtT" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="KrS-lc-ktf"/>
                 <constraint firstItem="RQr-fo-ynZ" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="LNa-l9-VIv"/>
                 <constraint firstAttribute="trailing" secondItem="RQr-fo-ynZ" secondAttribute="trailing" constant="16" id="P5C-uN-FaT"/>
                 <constraint firstItem="RQr-fo-ynZ" firstAttribute="top" secondItem="d8B-sr-eBO" secondAttribute="bottom" constant="24" id="UUF-ow-pwA"/>
                 <constraint firstAttribute="bottomMargin" secondItem="jiB-ne-gQ7" secondAttribute="bottom" id="V9R-CP-6H3"/>
+                <constraint firstAttribute="trailing" secondItem="ei9-jC-BaR" secondAttribute="trailing" constant="16" id="Vxj-vg-bH6"/>
                 <constraint firstItem="d8B-sr-eBO" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="bma-Oq-Ee2"/>
                 <constraint firstItem="d8B-sr-eBO" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="cxI-Sh-vz6"/>
                 <constraint firstItem="RQr-fo-ynZ" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="hIj-Tk-o8x"/>
@@ -293,6 +304,9 @@
         </systemColor>
         <systemColor name="systemOrangeColor">
             <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemPurpleColor">
+            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemTealColor">
             <color red="0.35294117647058826" green="0.78431372549019607" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
