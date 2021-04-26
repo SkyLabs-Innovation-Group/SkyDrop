@@ -78,4 +78,19 @@ namespace SkyDrop
             TraceLog.Print(message, sourceFilePath, sourceLineNumber);
         }
     }
+
+    public interface ILog
+    {
+        public void Exception(Exception exception,
+            [CallerFilePath] string sourceFilePath = "",
+            [CallerLineNumber] int sourceLineNumber = 0);
+
+        void Error(string errorMessage, Exception ex,
+            [CallerFilePath] string sourceFilePath = "",
+            [CallerLineNumber] int sourceLineNumber = 0);
+
+        void Error(string errorMessage,
+            [CallerFilePath] string sourceFilePath = "",
+            [CallerLineNumber] int sourceLineNumber = 0);
+    }
 }

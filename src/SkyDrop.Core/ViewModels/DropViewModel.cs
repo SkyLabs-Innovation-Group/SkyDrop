@@ -383,14 +383,14 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private SkyFile MakeZipFile()
         {
-            var filePaths = StagedFiles.Select(f => f.FullFilePath).ToArray();
-
             // TODO: add option to rename zip file in the renaming dialog
             string skyArchive = "skydrop_archive.zip";
 
             string compressedFilePath = Path.Combine(Path.GetTempPath(), skyArchive);
 
-            bool compressSuccess = fileSystemService.CompressX(filePaths, compressedFilePath);
+            bool compressSuccess = fileSystemService.CompressX(StagedFiles, compressedFilePath);
+            if (!compressSuccess)
+                throw new Exception("Failed to create archive");
 
             // TODO: remove need for storing file bytes in SkyFiles, upload from file path instead
             var fileBytes = File.ReadAllBytes(compressedFilePath);

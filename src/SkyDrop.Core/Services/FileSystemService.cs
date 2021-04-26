@@ -4,20 +4,19 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
+using SkyDrop.Core.DataModels;
 using Xamarin.Essentials;
 
 namespace SkyDrop.Core.Services
 {
     public class FileSystemService : IFileSystemService
     {
-
-        public ILog log { get; }
+        public ILog Log { get; }
 
         public FileSystemService(ILog log)
         {
-            this.log = log;
+            this.Log = log;
         }
-
 
         public async Task<IEnumerable<FileResult>> PickFilesAsync(SkyFilePickerType fileType)
         {
@@ -44,13 +43,13 @@ namespace SkyDrop.Core.Services
         
             if (pickedFiles == null)
             {
-                log.Trace("No file was picked");
+                Log.Trace("No file was picked");
             }
         
             return pickedFiles;
         }
 
-        public bool CompressX(string[] filesToZip, string destinationZipFullPath)
+        public bool CompressX(IEnumerable<SkyFile> filesToZip, string destinationZipFullPath)
         {
             try
             {
@@ -62,7 +61,7 @@ namespace SkyDrop.Core.Services
                 {
                     foreach (var file in filesToZip)
                     {
-                        zip.CreateEntryFromFile(file, Path.GetFileName(file), CompressionLevel.Optimal);
+                        zip.CreateEntryFromFile(file.FullFilePath, file.Filename, CompressionLevel.Optimal);
                     }               
                 }
 
@@ -70,9 +69,18 @@ namespace SkyDrop.Core.Services
             }
             catch (Exception e)
             {
-                log.Exception(e);
+                Log.Exception(e);
                 return false;
             }
         }
+    }
+
+    public enum SkyFilePickerType { Generic = 0, Image = 1, Video = 2 }
+
+    public interface IFileSystemService
+    {
+        Task<IEnumerable<FileResult>> PickFilesAsync(SkyFilePickerType fileType);
+
+        bool CompressX(IEnumerable<SkyFile> filesToZip, string destinationZipFullPath);
     }
 }

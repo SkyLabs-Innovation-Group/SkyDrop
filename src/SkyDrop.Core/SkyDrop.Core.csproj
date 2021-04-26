@@ -25,7 +25,6 @@
     <Folder Include="DataModels\" />
     <Folder Include="DataViewModels\" />
     <Folder Include="Utility\" />
-    <Folder Include="Services\IServices\" />
     <Folder Include="QA\" />
     <Folder Include="QA\Tooling\" />
     <Folder Include="Converters\" />
