@@ -8,5 +8,5 @@ Android app ![Build status](https://build.appcenter.ms/v0.1/apps/1cd210b4-00be-4
   
 iOS app ![Build status](https://build.appcenter.ms/v0.1/apps/7d69bbc9-723d-4bb1-b62f-4c2890c8ab45/branches/main/badge)
 
-[Click to view a SkyGallery album with a demonstration of sending a file](https://skygallery.hns.siasky.net/#/a/AADRiuHzKGmHxeR06fdoy6dIEqFhMSf8tKCyrQLlWOajuQ).
+[Click to view a SkyGallery album with a demonstration of sending a file from Android to iOS using decentralised QR transfer](https://skygallery.hns.siasky.net/#/a/AAAk0Kqps6NnpZ8bTEnrFI_dpg57n0FwmdG0nyibZxqOhA).
 
