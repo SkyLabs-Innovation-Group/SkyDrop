@@ -1,8 +1,6 @@
 # [SkyDrop](http://skydrop.wellhat.hns.to/)
 
-We want to make Skynet's decentralised storage cloud useful to all mobile users, with a new mobile app for decentralised file transfer, enabling mobile users of both Android and iOS to easily send each other files. SkyDrop was initially intended as a cross platform alternative to AirDrop on iOS, but is developing into a more interesting project for us as it grows. We support the wider vision of an interoperable, extensible, and decentralised web3, and are open to collaboration and contributors. 
-
-We are still working on a MySky integration, which is challenging to incorporate into .NET without porting SkynetClient, or using an additional Webview that's otherwise not required. This shouldn't be too hard to resolve, so we plan to add importing files from MySky and sharing your files in the app. 
+We want to make Skynet's decentralised storage cloud useful to all mobile users, with a new mobile app for decentralised file transfers. Users of Android and iOS can easily send each other files with SkyDrop. Inspired by AirDrop on Apple devices, SkyDrop is progressively becoming a more interesting project for us as it grows. We support the wider vision of an interoperable, extensible, and decentralised web3, and are open to collaboration and contributors. 
 
 The future feature roadmap of SkyDrop is deliberately open ended, including some privacy features such as E2E encryption of files and media metadata stripping, a web app which encodes existing dweb skylinks into shareable QR codes, and ambitiously we hope to publish SDK offerings as nuget packages for any significant engineering undertaken for porting the existing skynet-js libraries to C#.
 
