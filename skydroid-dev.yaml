@@ -1,0 +1,16 @@
+name: skyqr.hns.to
+metadataFile: skydroid-app.yaml
+skynetPortal: https://siasky.net
+
+checkVersion:
+  file: src/SkyDrop.Droid/Properties/AndroidManifest.xml
+  versionCode: 'versionCode=+"([^"]+)"'
+  versionName: 'versionName=+"([^"]+)"'
+
+uploadBuild:
+  file: src/SkyDrop.Droid/bin/Release/to.hns.skyqr.skydrop-Signed.apk
+
+updateMetadataFile:
+  updateWhatsNew: false
+
+# uploadMetadata:
