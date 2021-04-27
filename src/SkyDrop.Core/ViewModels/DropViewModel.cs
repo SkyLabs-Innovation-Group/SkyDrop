@@ -41,7 +41,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand SlideSendButtonToCenterCommand { get; set; }
         public IMvxCommand CancelUploadCommand { get; set; }
         public IMvxCommand CheckUserIsSwipingCommand { get; set; }
-        public IMvxCommand<SkyFile> RenameStagedFileCommand { get; set; }
+        public IMvxCommand<SkyFile> ShowStagedFileMenuCommand { get; set; }
 
         public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
@@ -123,7 +123,7 @@ namespace SkyDrop.Core.ViewModels.Main
             NavToSettingsCommand = new MvxAsyncCommand(NavToSettings);
             ShareLinkCommand = new MvxAsyncCommand(ShareLink);
             CancelUploadCommand = new MvxCommand(CancelUpload);
-            RenameStagedFileCommand = new MvxAsyncCommand<SkyFile>(skyFile => RenameStagedFile(skyFile));
+            ShowStagedFileMenuCommand = new MvxAsyncCommand<SkyFile>(skyFile => ShowStagedFileMenu(skyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
         }
 
@@ -524,6 +524,26 @@ namespace SkyDrop.Core.ViewModels.Main
             return UserIsSwipingResult;
         }
 
+        private async Task ShowStagedFileMenu(SkyFile skyFile)
+        {
+            const string cancel = "Cancel";
+            const string rename = "Rename";
+            const string remove = "Remove";
+            var menuResult = await userDialogs.ActionSheetAsync("", cancel, "", null, new[] { rename, remove });
+
+            switch(menuResult)
+            {
+                case cancel:
+                    break;
+                case rename:
+                    await RenameStagedFile(skyFile);
+                    break;
+                case remove:
+                    DeleteStagedFile(skyFile);
+                    break;
+            }
+        }
+
         private async Task RenameStagedFile(SkyFile skyFile)
         {
             var fileExtension = skyFile.Filename.Split('.')?.LastOrDefault();
@@ -534,6 +554,12 @@ namespace SkyDrop.Core.ViewModels.Main
             var newName = $"{result.Value}.{fileExtension}";
 
             skyFile.Filename = newName;
+        }
+
+        private void DeleteStagedFile(SkyFile skyFile)
+        {
+            //make a new list without the specified skyFile
+            StagedFiles = StagedFiles.Where(s => s.FullFilePath != skyFile.FullFilePath).ToList();
         }
 
         private async Task OpenFileInBrowser(SkyFile skyFile = null)
