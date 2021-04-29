@@ -2,15 +2,15 @@ name: SkyDrop
 authorName: Jacob Hatwell & Tom Dawes
 packageName: to.hns.skyqr.skydrop
 
-icon: https://siasky.net/HAFOjncgxRPpftai1VoaaQapzi6nEkO1muMzZeCG35LvfA
+icon: sia://HAFOjncgxRPpftai1VoaaQapzi6nEkO1muMzZeCG35LvfA
 
 localized:
   en-US:
     description: |-
-      A new mobile app for decentralised file transfers. 
-      Users of Android and iOS can easily send each other files with SkyDrop. 
+      A new mobile app for decentralised file transfers.
+      Users of Android and iOS can easily send each other files with SkyDrop.
       We support the wider vision of an interoperable, extensible, and decentralised web3, and are open to collaboration and contributors.
-    summary: Mobile app for decentralised file transfers. 
+    summary: Mobile app for decentralised file transfers.
 
 # !!! DO NO EDIT BELOW THIS LINE !!!
 
@@ -23,10 +23,6 @@ builds:
     versionCode: 2
     sha256: 3859b7552619a8eb269e0487d7e950b665110da10f00ea2fe7941f9023e04a40
     apkLink: sia://AACVh_RyH0PuJFGOlYCEBgyKOputmF-Q7NEQjZJ65P5NwA
-  - versionName: 1.0
-    versionCode: 1
-    sha256: 8d237edc5462977ee91e459e4f753adf20eb375ed46c2ce1976ebe513c40bac7
-    apkLink: sia://AABx3A5JAa3cf_OfvhW22NxirNX1h30G1YaHgghAdhgN7Q
 
 currentVersionName: 1.0.0.2
 currentVersionCode: 3

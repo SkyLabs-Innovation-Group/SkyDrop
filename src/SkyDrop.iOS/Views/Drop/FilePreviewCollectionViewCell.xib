@@ -75,6 +75,7 @@
             </collectionViewCellContentView>
             <size key="customSize" width="77" height="117"/>
             <connections>
+                <outlet property="ContentView" destination="JED-eZ-a6d" id="h0P-EB-h0d"/>
                 <outlet property="FileExtensionLabel" destination="Clx-pI-Yj0" id="Njq-Ma-9DW"/>
                 <outlet property="FilenameLabel" destination="KJL-qO-c2W" id="3bx-8s-SRn"/>
                 <outlet property="ImageContainer" destination="6Gt-aV-33k" id="gXw-ip-8Ev"/>

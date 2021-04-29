@@ -12,6 +12,7 @@ using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
+using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Services;
 using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
@@ -41,7 +42,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand SlideSendButtonToCenterCommand { get; set; }
         public IMvxCommand CancelUploadCommand { get; set; }
         public IMvxCommand CheckUserIsSwipingCommand { get; set; }
-        public IMvxCommand<SkyFile> ShowStagedFileMenuCommand { get; set; }
+        public IMvxCommand<StagedFileDVM> ShowStagedFileMenuCommand { get; set; }
 
         public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
@@ -62,7 +63,7 @@ namespace SkyDrop.Core.ViewModels.Main
             "SENDING FILE" :
             StagedFiles?.Count > 1 ? "SEND FILES" : "SEND FILE";
 
-        public List<SkyFile> StagedFiles { get; set; }
+        public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile UploadedFile { get; set; }
         public SkyFile FileToUpload { get; set; }
 
@@ -123,7 +124,7 @@ namespace SkyDrop.Core.ViewModels.Main
             NavToSettingsCommand = new MvxAsyncCommand(NavToSettings);
             ShareLinkCommand = new MvxAsyncCommand(ShareLink);
             CancelUploadCommand = new MvxCommand(CancelUpload);
-            ShowStagedFileMenuCommand = new MvxAsyncCommand<SkyFile>(skyFile => ShowStagedFileMenu(skyFile));
+            ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async skyFile => await ShowStagedFileMenu(skyFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
         }
 
@@ -282,7 +283,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (StagedFiles.Count() > 1)
                     FileToUpload = MakeZipFile();
                 else
-                    FileToUpload = StagedFiles.First();
+                    FileToUpload = StagedFiles.First().SkyFile;
                 
                 UpdateFileSize();
 
@@ -368,7 +369,11 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void StageFiles(List<SkyFile> userFiles)
         {
-            StagedFiles = userFiles;
+            StagedFiles = userFiles.Select(s => new StagedFileDVM
+            {
+                SkyFile = s,
+                TapCommand = new MvxAsyncCommand(async () => await ShowStagedFileMenu(s))
+            }).ToList();
 
             DropViewUIState = DropViewState.ConfirmFilesState;
         }
@@ -388,7 +393,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
             string compressedFilePath = Path.Combine(Path.GetTempPath(), skyArchive);
 
-            bool compressSuccess = fileSystemService.CompressX(StagedFiles, compressedFilePath);
+            bool compressSuccess = fileSystemService.CompressX(StagedFiles.Select(s => s.SkyFile).ToList(), compressedFilePath);
             if (!compressSuccess)
                 throw new Exception("Failed to create archive");
 
@@ -558,8 +563,15 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void DeleteStagedFile(SkyFile skyFile)
         {
+            if (StagedFiles.Count == 1)
+            {
+                //cancel the send operation
+                CancelUploadCommand?.Execute();
+                return;
+            }
+
             //make a new list without the specified skyFile
-            StagedFiles = StagedFiles.Where(s => s.FullFilePath != skyFile.FullFilePath).ToList();
+            StagedFiles = StagedFiles.Where(s => s.SkyFile.FullFilePath != skyFile.FullFilePath).ToList();
         }
 
         private async Task OpenFileInBrowser(SkyFile skyFile = null)

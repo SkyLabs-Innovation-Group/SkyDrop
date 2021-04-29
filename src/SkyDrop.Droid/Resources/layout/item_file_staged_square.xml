@@ -21,12 +21,12 @@
             android:gravity="center_horizontal"
             android:text="JPG"
             android:lines="1"
-            app:MvxBind="Text FileExtension(Filename)"/>
+            app:MvxBind="Text FileExtension(SkyFile.Filename)"/>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:MvxBind="Bytes Data"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            app:MvxBind="Bytes SkyFile.Data"/>
         
     </com.google.android.material.card.MaterialCardView>
     <TextView
@@ -40,5 +40,5 @@
         android:layout_marginHorizontal="8dp"
         android:singleLine="true"
         android:ellipsize="middle"
-        app:MvxBind="Text Filename"/>
+        app:MvxBind="Text SkyFile.Filename"/>
 </LinearLayout>
