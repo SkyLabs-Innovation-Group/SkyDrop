@@ -1,0 +1,25 @@
+.PortalAlternatives-container {
+  /* background-color: green; */
+  position: relative;
+}
+.PortalAlternatives-loader-box {
+  background: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+}
+
+.PortalAlternatives-loader {
+  width: 75px;
+  margin: 15px auto;
+}
+
+.PortalAlternatives-links {
+  font-size: 0.9em;
+}
+
+.PortalAlternatives-spin-container {
+  margin-top: -32px;
+}

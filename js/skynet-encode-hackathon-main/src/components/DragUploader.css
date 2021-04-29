@@ -1,0 +1,33 @@
+.DragUploader-drag-box {
+  /* background-color: green; */
+  position: relative;
+  /* padding: 15px; */
+  margin-top: 25px;
+}
+
+.DragUploader-loader-box {
+  /* position: absolute; */
+  /* top: 0; */
+  /* min-height: 90px; */
+  /* height: 100%; */
+  /* width: 100%; */
+  /* display: block; */
+  /* background-color: rgba(255, 255, 255, 0.8); */
+}
+
+.DragUploader-progress-wrapper {
+  width: 75px;
+  /* height: 100%; */
+  margin: 0 auto;
+  display: block;
+  position: relative;
+}
+
+.DragUploader-progress {
+  display: block;
+  width: 75px;
+  height: 75px;
+  position: absolute;
+  /* top: 50%; */
+  margin-top: -90px !important;
+}
