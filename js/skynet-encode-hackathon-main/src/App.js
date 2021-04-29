@@ -22,8 +22,10 @@ import {
   Divider,
 } from 'semantic-ui-react';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { monokaiSublime } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+
+import { SkynetClient } from 'skynet-js';
 
 const style = {
   h1: {
@@ -50,6 +52,12 @@ class App extends React.Component {
         hideVideo: false,
         hideWalkthrough: false,
         hideInteractive: false
+    }
+
+    componentDidMount()
+    {
+        let client = new SkynetClient();
+        client.loadMySky("https://siasky.net");
     }
 
     setHideVideo()
