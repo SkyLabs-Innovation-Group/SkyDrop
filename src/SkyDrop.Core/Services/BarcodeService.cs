@@ -20,9 +20,9 @@ namespace SkyDrop.Core.Services
 
         public async Task<string> ScanBarcode()
         {
-            var permissionResult = Permissions.RequestAsync<Permissions.Camera>();
+            var permissionResult = await Permissions.RequestAsync<Permissions.Camera>();
 
-            if (permissionResult.Result != PermissionStatus.Granted)
+            if (permissionResult != PermissionStatus.Granted)
             {
                 log.Error("Camera permission not granted.");
                 return null;
