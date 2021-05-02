@@ -215,7 +215,7 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 IsUploading = true;
 
-                if (StagedFiles.Count() > 1)
+                if (StagedFiles.Count() > 2) //file and add more files button
                     FileToUpload = MakeZipFile();
                 else
                     FileToUpload = StagedFiles.First().SkyFile;
@@ -447,6 +447,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task AddMoreFiles()
         {
+            if (IsUploading)
+                return;
+
             var pickedFiles = await SelectFiles();
             if (pickedFiles == null)
                 return;

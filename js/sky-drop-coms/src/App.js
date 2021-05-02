@@ -5,10 +5,22 @@ import { SkynetClient } from 'skynet-js';
 
 class App extends React.Component 
 {
-    componentDidMount()
+    async componentDidMount()
     {
-        let client = new SkynetClient();
-        client.loadMySky("https://siasky.net");
+        let client = new SkynetClient("https://siasky.net");
+        let mySky = await client.loadMySky("siasky.net");
+
+        console.log("mySky", mySky);
+
+        const loggedIn = await mySky.checkLogin();
+        console.log("loggedIn", loggedIn);
+
+        if (!loggedIn) 
+        {
+            window.document
+                .getElementById("login-button")
+                .addEventListener("click", mySky.requestLoginAccess);
+        }
     }
 
     render()
@@ -17,6 +29,7 @@ class App extends React.Component
             <div className="App">
             <header className="App-header">
                 <img src={logo} className="App-logo" alt="logo" />
+                <button id="login-button">Press me</button>
                 <p>
                 Edit <code>src/App.js</code> and save to reload.
                 </p>
