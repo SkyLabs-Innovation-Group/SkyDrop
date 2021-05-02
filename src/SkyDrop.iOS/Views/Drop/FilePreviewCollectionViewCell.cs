@@ -30,9 +30,8 @@ namespace SkyDrop.iOS.Views.Drop
                 set.Bind(FilenameLabel).To(stagedFile => stagedFile.SkyFile.Filename);
                 set.Bind(FileExtensionLabel).To(stagedFile => stagedFile.SkyFile.Filename).WithConversion(FileExtensionConverter.Name);
                 set.Bind(PreviewImage).For(ByteArrayImageViewBinding.Name).To(stagedFile => stagedFile.SkyFile.Data);
-
-                //TODO: why this not working??
                 set.Bind(ContentView).For("Tap").To(stagedFile => stagedFile.TapCommand);
+                set.Bind(AddMoreFilesIcon).For("Visible").To(stagedFile => stagedFile.IsMoreFilesButton);
                 set.Apply();
             });
         }

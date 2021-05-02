@@ -26,6 +26,12 @@ namespace SkyDrop.iOS.Bindings
         {
             try
             {
+                if (value == null)
+                {
+                    Target.Image = null;
+                    return;
+                }
+
                 var previewImage = UIImage.LoadFromData(NSData.FromArray(value));
                 Target.Image = previewImage;
             }

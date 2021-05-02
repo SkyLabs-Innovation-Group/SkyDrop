@@ -124,7 +124,7 @@ namespace SkyDrop.Core.ViewModels.Main
             NavToSettingsCommand = new MvxAsyncCommand(async () => await NavToSettings());
             ShareLinkCommand = new MvxAsyncCommand(async () => await ShareLink());
             CancelUploadCommand = new MvxCommand(CancelUpload);
-            ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async skyFile => await ShowStagedFileMenu(skyFile.SkyFile));
+            ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
         }
 
@@ -189,89 +189,24 @@ namespace SkyDrop.Core.ViewModels.Main
 
             //select file
 
-            var file = "Select Files";
-            var image = "Select Image";
-            var video = "Select Video";
-            var cancel = "cancel";
-            var fileType = await userDialogs.ActionSheetAsync("", cancel, "", null, file, image, video);
-            if (fileType == cancel)
-            {
-                ResetUI();
-                return;
-            }
-
-            SkyFilePickerType chosenType;
-            if (fileType == image)
-                chosenType = SkyFilePickerType.Image;
-            else if (fileType == video)
-                chosenType = SkyFilePickerType.Video;
-            else
-                chosenType = SkyFilePickerType.Generic;
-
-            var pickedFiles = await fileSystemService.PickFilesAsync(chosenType);
+            var pickedFiles = await SelectFiles();
             if (pickedFiles == null)
             {
                 ResetUI();
                 return;
             }
 
-            SlideSendButtonToCenterCommand?.Execute();
-
-            //read contents of the selected files
-
-            //TODO: optimise this, currently files' bytes are held in memory prior to upload
-            IsStagingFiles = true;
-            var userSkyFiles = new List<SkyFile>();
-
-            try
-            {
-                foreach (var pickedFile in pickedFiles)
-                {
-                    if (pickedFile == null)
-                        continue;
-
-                    using var stream = await pickedFile.OpenReadAsync();
-                    using var memoryStream = new MemoryStream();
-
-                    await stream.CopyToAsync(memoryStream);
-
-                    var fileBytes = memoryStream.GetBuffer();
-                    var skyFile = new SkyFile()
-                    {
-                        Data = fileBytes,
-                        FullFilePath = pickedFile.FullPath,
-                        Filename = pickedFile.FileName,
-                        FileSizeBytes = fileBytes.LongCount(),
-                    };
-
-                    userSkyFiles.Add(skyFile);
-                }
-            }
-            catch (NullReferenceException ex)
-            {
-                Log.Exception(ex);
-                Log.Trace("Error picking file.");
-
-                IsStagingFiles = false;
-
-                //reset the UI
-                ResetUIStateCommand?.Execute();
-                return;
-            }
-
             //stage the files
 
-            if (userSkyFiles.Count > 0)
+            if (pickedFiles.Count > 0)
             {
-                StageFiles(userSkyFiles);
+                StageFiles(pickedFiles, false);
             }
             else
             {
                 //reset the UI
                 ResetUIStateCommand?.Execute();
             }
-
-            IsStagingFiles = false;
         }
 
         private async Task FinishSendFile()
@@ -367,13 +302,39 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
-        private void StageFiles(List<SkyFile> userFiles)
+        private void StageFiles(List<SkyFile> userFiles, bool keepExisting)
         {
-            StagedFiles = userFiles.Select(s => new StagedFileDVM
+            var newStagedFiles = userFiles.Select(s => new StagedFileDVM
             {
                 SkyFile = s,
                 TapCommand = new MvxAsyncCommand(async () => await ShowStagedFileMenu(s))
             }).ToList();
+
+            if (keepExisting)
+            {
+                //adding more files
+
+                var stagedFiles = StagedFiles;
+                newStagedFiles.AddRange(stagedFiles);
+
+                //remove duplicates
+                newStagedFiles = newStagedFiles.GroupBy(x => x.SkyFile?.FullFilePath).Select(group => group.First()).ToList();
+
+                StagedFiles = newStagedFiles;
+            }
+            else
+            {
+                //staging for the first time
+
+                //add more files button 
+                newStagedFiles.Add(new StagedFileDVM
+                {
+                    IsMoreFilesButton = true,
+                    TapCommand = new MvxAsyncCommand(AddMoreFiles)
+                });
+
+                StagedFiles = newStagedFiles;
+            }
 
             DropViewUIState = DropViewState.ConfirmFilesState;
         }
@@ -393,7 +354,8 @@ namespace SkyDrop.Core.ViewModels.Main
 
             string compressedFilePath = Path.Combine(Path.GetTempPath(), skyArchive);
 
-            bool compressSuccess = fileSystemService.CompressX(StagedFiles.Select(s => s.SkyFile).ToList(), compressedFilePath);
+            var filesToUpload = StagedFiles.Where(s => !s.IsMoreFilesButton).Select(s => s.SkyFile).ToList();
+            bool compressSuccess = fileSystemService.CompressX(filesToUpload, compressedFilePath);
             if (!compressSuccess)
                 throw new Exception("Failed to create archive");
 
@@ -409,6 +371,87 @@ namespace SkyDrop.Core.ViewModels.Main
             };
 
             return skyFile;
+        }
+
+        private async Task<List<SkyFile>> SelectFiles()
+        {
+            var file = "Select Files";
+            var image = "Select Image";
+            var video = "Select Video";
+            var cancel = "cancel";
+            var fileType = await userDialogs.ActionSheetAsync("", cancel, "", null, file, image, video);
+            if (fileType == cancel)
+            {
+                return null;
+            }
+
+            SkyFilePickerType chosenType;
+            if (fileType == image)
+                chosenType = SkyFilePickerType.Image;
+            else if (fileType == video)
+                chosenType = SkyFilePickerType.Video;
+            else
+                chosenType = SkyFilePickerType.Generic;
+
+            var pickedFiles = await fileSystemService.PickFilesAsync(chosenType);
+
+            if (DropViewUIState == DropViewState.SendReceiveButtonState)
+                SlideSendButtonToCenterCommand?.Execute();
+
+            //read contents of the selected files
+
+            //TODO: optimise this, currently files' bytes are held in memory prior to upload
+            IsStagingFiles = true;
+            var userSkyFiles = new List<SkyFile>();
+
+            try
+            {
+                foreach (var pickedFile in pickedFiles)
+                {
+                    if (pickedFile == null)
+                        continue;
+
+                    using var stream = await pickedFile.OpenReadAsync();
+                    using var memoryStream = new MemoryStream();
+
+                    await stream.CopyToAsync(memoryStream);
+
+                    var fileBytes = memoryStream.GetBuffer();
+                    var skyFile = new SkyFile()
+                    {
+                        Data = fileBytes,
+                        FullFilePath = pickedFile.FullPath,
+                        Filename = pickedFile.FileName,
+                        FileSizeBytes = fileBytes.LongCount(),
+                    };
+
+                    userSkyFiles.Add(skyFile);
+                }
+            }
+            catch (NullReferenceException ex)
+            {
+                Log.Exception(ex);
+                Log.Trace("Error picking file.");
+
+                IsStagingFiles = false;
+
+                //reset the UI
+                ResetUIStateCommand?.Execute();
+                return null;
+            }
+
+            IsStagingFiles = false;
+
+            return userSkyFiles;
+        }
+
+        private async Task AddMoreFiles()
+        {
+            var pickedFiles = await SelectFiles();
+            if (pickedFiles == null)
+                return;
+
+            StageFiles(pickedFiles, true);
         }
 
         private void StartUploadTimer(long fileSizeBytes)
@@ -531,6 +574,13 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task ShowStagedFileMenu(SkyFile skyFile)
         {
+            if (skyFile == null)
+            {
+                //add more files button clicked on Android
+                await AddMoreFiles();
+                return;
+            }
+
             const string cancel = "Cancel";
             const string rename = "Rename";
             const string remove = "Remove";
@@ -563,7 +613,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void DeleteStagedFile(SkyFile skyFile)
         {
-            if (StagedFiles.Count == 1)
+            if (StagedFiles.Count == 2) //last file + add more files button
             {
                 //cancel the send operation
                 CancelUploadCommand?.Execute();
@@ -571,7 +621,7 @@ namespace SkyDrop.Core.ViewModels.Main
             }
 
             //make a new list without the specified skyFile
-            StagedFiles = StagedFiles.Where(s => s.SkyFile.FullFilePath != skyFile.FullFilePath).ToList();
+            StagedFiles = StagedFiles.Where(s => s.SkyFile?.FullFilePath != skyFile.FullFilePath).ToList();
         }
 
         private async Task OpenFileInBrowser(SkyFile skyFile = null)
