@@ -9,5 +9,7 @@ namespace SkyDrop.Core.DataViewModels
         public SkyFile SkyFile { get; set; }
 
         public IMvxCommand TapCommand { get; set; }
+
+        public bool IsMoreFilesButton { get; set; }
     }
 }

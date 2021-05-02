@@ -13,7 +13,10 @@ namespace SkyDrop.iOS.Views.Drop
 	partial class FilePreviewCollectionViewCell
 	{
 		[Outlet]
-		UIKit.UIView ContentView { get; set; }
+		UIKit.UIImageView AddMoreFilesIcon { get; set; }
+
+		[Outlet]
+		UIKit.UIView BackgroundView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel FileExtensionLabel { get; set; }
@@ -49,9 +52,14 @@ namespace SkyDrop.iOS.Views.Drop
 				PreviewImage = null;
 			}
 
-			if (ContentView != null) {
-				ContentView.Dispose ();
-				ContentView = null;
+			if (AddMoreFilesIcon != null) {
+				AddMoreFilesIcon.Dispose ();
+				AddMoreFilesIcon = null;
+			}
+
+			if (BackgroundView != null) {
+				BackgroundView.Dispose ();
+				BackgroundView = null;
 			}
 		}
 	}

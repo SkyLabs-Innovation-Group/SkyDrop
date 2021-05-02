@@ -37,9 +37,14 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Fq5-dt-7fH">
                                 <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
                             </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="plus" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="5EA-mn-57d" userLabel="Add More Files Icon">
+                                <rect key="frame" x="12" y="14" width="40" height="36"/>
+                                <color key="tintColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemGreenColor"/>
                         <constraints>
+                            <constraint firstItem="5EA-mn-57d" firstAttribute="top" secondItem="6Gt-aV-33k" secondAttribute="top" constant="12" id="0FI-bh-mlG"/>
                             <constraint firstAttribute="height" constant="64" id="0Oe-1t-2bz"/>
                             <constraint firstAttribute="bottom" secondItem="Clx-pI-Yj0" secondAttribute="bottom" id="3n8-rv-EZf"/>
                             <constraint firstItem="Fq5-dt-7fH" firstAttribute="leading" secondItem="6Gt-aV-33k" secondAttribute="leading" id="68U-vP-3Ql"/>
@@ -47,8 +52,11 @@
                             <constraint firstAttribute="width" constant="64" id="DeJ-tE-PcA"/>
                             <constraint firstItem="Fq5-dt-7fH" firstAttribute="top" secondItem="6Gt-aV-33k" secondAttribute="top" id="FnV-yR-ZoW"/>
                             <constraint firstItem="Clx-pI-Yj0" firstAttribute="leading" secondItem="6Gt-aV-33k" secondAttribute="leading" id="KYy-Rh-9Kb"/>
+                            <constraint firstItem="5EA-mn-57d" firstAttribute="leading" secondItem="6Gt-aV-33k" secondAttribute="leading" constant="12" id="Kph-1f-oy4"/>
                             <constraint firstItem="Clx-pI-Yj0" firstAttribute="top" secondItem="6Gt-aV-33k" secondAttribute="top" id="UVk-8x-0W9"/>
                             <constraint firstAttribute="trailing" secondItem="Clx-pI-Yj0" secondAttribute="trailing" id="gPL-G5-eLR"/>
+                            <constraint firstAttribute="trailing" secondItem="5EA-mn-57d" secondAttribute="trailing" constant="12" id="hqG-e2-HBZ"/>
+                            <constraint firstAttribute="bottom" secondItem="5EA-mn-57d" secondAttribute="bottom" constant="12" id="lwk-Wi-0CJ"/>
                             <constraint firstAttribute="bottom" secondItem="Fq5-dt-7fH" secondAttribute="bottom" id="zb0-mN-34N"/>
                         </constraints>
                     </view>
@@ -75,7 +83,8 @@
             </collectionViewCellContentView>
             <size key="customSize" width="77" height="117"/>
             <connections>
-                <outlet property="ContentView" destination="JED-eZ-a6d" id="h0P-EB-h0d"/>
+                <outlet property="AddMoreFilesIcon" destination="5EA-mn-57d" id="zSv-wE-xKQ"/>
+                <outlet property="BackgroundView" destination="sfS-4j-cqu" id="sge-ug-m4W"/>
                 <outlet property="FileExtensionLabel" destination="Clx-pI-Yj0" id="Njq-Ma-9DW"/>
                 <outlet property="FilenameLabel" destination="KJL-qO-c2W" id="3bx-8s-SRn"/>
                 <outlet property="ImageContainer" destination="6Gt-aV-33k" id="gXw-ip-8Ev"/>
@@ -85,6 +94,7 @@
         </collectionViewCell>
     </objects>
     <resources>
+        <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

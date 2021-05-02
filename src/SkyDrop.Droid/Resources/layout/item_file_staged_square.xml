@@ -27,6 +27,13 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             app:MvxBind="Bytes SkyFile.Data"/>
+        <ImageView
+            android:src="@drawable/ic_plus"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:padding="8dp"
+            app:MvxBind="Visibility Visibility(IsMoreFilesButton)"/>
         
     </com.google.android.material.card.MaterialCardView>
     <TextView
