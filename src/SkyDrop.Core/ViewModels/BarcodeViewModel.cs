@@ -46,7 +46,7 @@ namespace SkyDrop.Core.ViewModels.Main
             this.barcodeService = barcodeService;
 
             GenerateBarcodeCommand = new MvxAsyncCommand(async () => await GenerateBarcodeAsyncFunc());
-            ScanBarcodeCommand = new MvxAsyncCommand(ScanBarcode);
+            ScanBarcodeCommand = new MvxAsyncCommand(async () => await ScanBarcode());
         }
 
         private async Task ScanBarcode()

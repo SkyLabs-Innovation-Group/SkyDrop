@@ -74,8 +74,8 @@ namespace SkyDrop.Core.ViewModels.Main
             _log = log;
             SelectFileCommand = new MvxAsyncCommand(async () => await SelectFileAsyncFunc());
             SelectImageCommand = new MvxAsyncCommand(async () => await SelectImageAsyncFunc());
-            UploadCommand = new MvxAsyncCommand(UploadStagedFiles);
-            ClearDataCommand = new MvxCommand(ClearData);
+            UploadCommand = new MvxAsyncCommand(async () => await UploadStagedFiles());
+            ClearDataCommand = new MvxCommand(() => ClearData());
         }
 
         public override Task Initialize()

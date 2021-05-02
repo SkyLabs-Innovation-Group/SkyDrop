@@ -34,9 +34,9 @@ namespace SkyDrop.Core.ViewModels.Main
             this.navigationService = navigationService;
             this.barcodeService = barcodeService;
 
-            NavToDropCommand = new MvxAsyncCommand(NavToDrop);
-            NavToFilesCommand = new MvxAsyncCommand(NavToFiles);
-            NavToBarcodeCommand = new MvxAsyncCommand(NavToBarcode);
+            NavToDropCommand = new MvxAsyncCommand(async () => await NavToDrop());
+            NavToFilesCommand = new MvxAsyncCommand(async () => await NavToFiles());
+            NavToBarcodeCommand = new MvxAsyncCommand(async () => await NavToBarcode());
         }
 
         private Task NavToDrop()

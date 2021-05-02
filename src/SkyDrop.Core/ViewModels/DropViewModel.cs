@@ -118,11 +118,11 @@ namespace SkyDrop.Core.ViewModels.Main
             this.shareLinkService = shareLinkService;
             this.uploadTimerService = uploadTimerService;
 
-            SendCommand = new MvxAsyncCommand(SendButtonTapped);
-            ReceiveCommand = new MvxAsyncCommand(ReceiveFile);
-            CopyLinkCommand = new MvxAsyncCommand(CopySkyLinkToClipboard);
-            NavToSettingsCommand = new MvxAsyncCommand(NavToSettings);
-            ShareLinkCommand = new MvxAsyncCommand(ShareLink);
+            SendCommand = new MvxAsyncCommand(async () => await SendButtonTapped());
+            ReceiveCommand = new MvxAsyncCommand(async () => await ReceiveFile());
+            CopyLinkCommand = new MvxAsyncCommand(async () => await CopySkyLinkToClipboard());
+            NavToSettingsCommand = new MvxAsyncCommand(async () => await NavToSettings());
+            ShareLinkCommand = new MvxAsyncCommand(async () => await ShareLink());
             CancelUploadCommand = new MvxCommand(CancelUpload);
             ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async skyFile => await ShowStagedFileMenu(skyFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
