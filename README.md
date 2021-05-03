@@ -13,3 +13,7 @@ We are developing an adjacent web app which can now be used to encode skylinks, 
 
 
 [View our submission demo for the Encode Hack The System hackathon](https://skygallery.hns.siasky.net/#/a/AABHY16W-Jz4QGrJi78EDjraaPla1mC8VjpliZPKW_948Q)
+
+Android installation: [Install SkyDroid](https://skydroid.app/), then install SkyDrop from there. [SkyDroid is open source](https://github.com/redsolver/skydroid) and maintained by redsolver.
+
+iOS installation: you will need to sign the .ipa file yourself which requires a Mac device; we will have an App Store listing some time in the future
