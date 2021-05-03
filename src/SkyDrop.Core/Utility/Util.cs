@@ -1,9 +1,13 @@
 using System;
+using System.Linq;
+
 namespace SkyDrop.Core.Utility
 {
     public static class Util
     {
         public const string Portal = "https://siasky.net";
+
+        private const int SkylinkLength = 46;
 
         /// <summary>
         /// Convert raw skylink to full skylink url
@@ -18,7 +22,10 @@ namespace SkyDrop.Core.Utility
         /// </summary>
         public static string GetRawSkylink(string fullSkylinkUrl)
         {
-            return fullSkylinkUrl.Substring(fullSkylinkUrl.LastIndexOf('/') + 1, 46);
+            if (fullSkylinkUrl.Split('/').Last().Length != SkylinkLength)
+                return null; //not a skylink
+
+            return fullSkylinkUrl.Substring(fullSkylinkUrl.LastIndexOf('/') + 1, SkylinkLength);
         }
 
         public static string GetFileSizeString(long bytesCount)

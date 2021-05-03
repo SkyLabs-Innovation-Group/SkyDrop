@@ -285,20 +285,27 @@ namespace SkyDrop.Core.ViewModels.Main
                     return;
                 }
 
-                var skyFile = new SkyFile() { Skylink = Util.GetRawSkylink(barcodeData) };
-                await OpenFileInBrowser(skyFile);
-            }
-            catch (JsonException e)
-            {
-                Log.Exception(e);
+                var rawSkylink = Util.GetRawSkylink(barcodeData);
+                if (rawSkylink == null)
+                {
+                    //not a skylink
+                    await OpenUrlInBrowser(barcodeData);
+                    return;
+                }
 
-                //show error message after the qr code scanner view has closed to avoid exception
-                errorMessage = "Error: Invalid QR code";
-                Log.Error(errorMessage);
+                var skyFile = new SkyFile() { Skylink = rawSkylink };
+                await OpenFileInBrowser(skyFile);
             }
             catch (Exception e)
             {
                 Log.Exception(e);
+
+                //avoid crashing android by NOT showing a toast before the scanner activity has closed
+                var error = "Invalid QR code";
+                if (DeviceInfo.Platform == DevicePlatform.iOS)
+                    userDialogs.Toast(error);
+                else
+                    errorMessage = error;
             }
         }
 
@@ -634,6 +641,19 @@ namespace SkyDrop.Core.ViewModels.Main
 
             var file = skyFile ?? UploadedFile;
             await Browser.OpenAsync(Util.GetSkylinkUrl(file.Skylink), new BrowserLaunchOptions
+            {
+                LaunchMode = BrowserLaunchMode.SystemPreferred,
+                TitleMode = BrowserTitleMode.Show
+            });
+        }
+
+        /// <summary>
+        /// Open a non-skylink URL
+        /// For opening SkyFiles, Use OpenFileInBrowser instead
+        /// </summary>
+        private async Task OpenUrlInBrowser(string url)
+        {
+            await Browser.OpenAsync(url, new BrowserLaunchOptions
             {
                 LaunchMode = BrowserLaunchMode.SystemPreferred,
                 TitleMode = BrowserTitleMode.Show
