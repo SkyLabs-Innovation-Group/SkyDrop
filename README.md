@@ -12,7 +12,7 @@ Here are our download links and more: http://app.encodeqr.hns.to/
 
 Android app ![Build status](https://build.appcenter.ms/v0.1/apps/1cd210b4-00be-4c63-a322-2afc2db6b603/branches/main/badge)
 
-How to install android beta: [Install SkyDroid](https://skydroid.app/), then install SkyDrop from there. [SkyDroid is open source](https://github.com/redsolver/skydroid) and maintained by redsolver.
+How to install android beta: [Install SkyDroid](https://skydroid.app/), then install SkyDrop from there. [SkyDroid is open source](https://github.com/redsolver/skydroid) and maintained by redsolver. If you have trouble finding the app in SkyDroid, click the + and search for *skydrop.skyqr*.
 
 iOS app ![Build status](https://build.appcenter.ms/v0.1/apps/7d69bbc9-723d-4bb1-b62f-4c2890c8ab45/branches/main/badge)
 
