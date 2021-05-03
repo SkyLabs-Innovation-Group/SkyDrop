@@ -9,7 +9,7 @@ Android app ![Build status](https://build.appcenter.ms/v0.1/apps/1cd210b4-00be-4
   
 iOS app ![Build status](https://build.appcenter.ms/v0.1/apps/7d69bbc9-723d-4bb1-b62f-4c2890c8ab45/branches/main/badge)
 
-We are developing an adjacent web app here, for now it can be used to encode skylinks, soon MySky will be integrated across the web app and our mobile apps https://encodeqr.hns.siasky.net/
+We are developing an adjacent web app which can now be used to encode skylinks, and will soon also be integrated with MySky, and hopefully increasing ease of use alongside the SkyDrop mobile apps https://encodeqr.hns.siasky.net/
 
 
 [View our submission demo for the Encode Hack The System hackathon](https://skygallery.hns.siasky.net/#/a/AABHY16W-Jz4QGrJi78EDjraaPla1mC8VjpliZPKW_948Q)
