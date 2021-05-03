@@ -3,7 +3,7 @@
 
 Users of Android and iOS can easily send each other files with SkyDrop, a new mobile app for decentralised file transfers. We support multiple files being sent in zips, and are planning an App Store listing for the iOS app, increased integrations with the skapp ecosystem and MySky, and privacy features like metadata stripping and e2e encryption are on the way.
 
-You can access the 
+You can find the download links and more at http://app.encodeqr.hns.to/
 
 Android app ![Build status](https://build.appcenter.ms/v0.1/apps/1cd210b4-00be-4c63-a322-2afc2db6b603/branches/main/badge)
   
