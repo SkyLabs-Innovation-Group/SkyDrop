@@ -105,28 +105,6 @@ namespace SkyDrop.Droid.Helper
             context.StartActivity(browserIntent);
         }
 
-        private static async Task<bool> CheckPermissions()
-        {
-            try
-            {
-                var status = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
-
-                if (status != PermissionStatus.Granted)
-                {
-                    status = await Permissions.RequestAsync<Permissions.StorageRead>();
-                }
-
-                return status == PermissionStatus.Granted;
-            }
-            catch (Exception ex)
-            {
-                log.Error("Permission not granted");
-                log.Exception(ex);
-
-                return false;
-            }
-        }
-
         public static bool GetBit(BitMatrix matrix, int x, int y)
         {
             var row = matrix.getRow(y, null);
