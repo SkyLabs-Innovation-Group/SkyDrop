@@ -1,5 +1,7 @@
 # [SkyDrop](http://app.encodeqr.hns.to/)
 
+*Note: SkyDrop is still in beta, you can submit bug reports here on GitHub, [check known issues here first](is:issue is:open label:"known issues" )
+
 Users of Android and iOS can easily send each other files with SkyDrop, a new mobile app for decentralised file transfers. Users can upload one or more files to Skynet and share the link, which is also encoded to a QR code for convenient file sharing with anyone using a QR enabled camera. We support multiple files being sent in zips, and are planning an App Store listing for the iOS app, increased integrations with the skapp ecosystem and MySky, and privacy features like metadata stripping and e2e encryption are on the way.
 
 We are developing an adjacent web app which can now be used to encode skylinks, and will soon also be integrated with MySky, hopefully making the web and mobile apps easy to use alongside each other. https://encodeqr.hns.siasky.net/
