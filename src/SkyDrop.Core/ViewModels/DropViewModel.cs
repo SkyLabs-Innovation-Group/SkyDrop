@@ -59,9 +59,9 @@ namespace SkyDrop.Core.ViewModels.Main
         public double UploadProgress { get; set; } //0-1
         public bool FirstFileUploaded { get; set; }
         public bool UserIsSwipingResult { get; set; }
-        public string SendButtonLabel => IsUploading ? StagedFiles?.Count > 1 ? "SENDING FILES" :
+        public string SendButtonLabel => IsUploading ? StagedFiles?.Count > 2 ? "SENDING FILES" :
             "SENDING FILE" :
-            StagedFiles?.Count > 1 ? "SEND FILES" : "SEND FILE";
+            DropViewUIState == DropViewState.ConfirmFilesState && StagedFiles?.Count > 2 ? "SEND FILES" : "SEND FILE";
 
         public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile UploadedFile { get; set; }
