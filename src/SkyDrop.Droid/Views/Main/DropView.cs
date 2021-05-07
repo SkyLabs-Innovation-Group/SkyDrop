@@ -78,30 +78,6 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Adds settings button to toolbar
-        /// </summary>
-        public override bool OnCreateOptionsMenu(IMenu menu)
-        {
-            MenuInflater.Inflate(Resource.Menu.DropMenu, menu);
-            return true;
-        }
-
-        /// <summary>
-        /// Navigate to settings when settings button is tapped
-        /// </summary>
-        public override bool OnOptionsItemSelected(IMenuItem item)
-        {
-            switch (item.ItemId)
-            {
-                case Resource.Id.menu_drop_settings:
-                    ViewModel.NavToSettingsCommand?.Execute();
-                    break;
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Generate and display QR code
         /// </summary>
         private async Task ShowBarcode()
