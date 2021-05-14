@@ -2,5 +2,5 @@
 <resources>
     <string name="app_name">SkyDrop</string>
     <string name="app_welcome_message">Welcome to SkyDrop</string>
-    <string name="app_message">Powered by Siacoin</string>
+    <string name="app_message">Powered by Sia Skynet</string>
 </resources>
