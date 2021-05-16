@@ -36,6 +36,9 @@ namespace SkyDrop.Core.Services
 
             var response = await httpClient.PostAsync(url, form, cancellationToken.Token).ConfigureAwait(false);
 
+            //free up memory
+            file.Dispose();
+
             Log.Trace(response.RequestMessage.ToString());
 
             response.EnsureSuccessStatusCode();

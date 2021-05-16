@@ -356,7 +356,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private SkyFile MakeZipFile()
         {
-            // TODO: add option to rename zip file in the renaming dialog
+            //TODO: add option to rename zip file in the renaming dialog
             string skyArchive = "skydrop_archive.zip";
 
             string compressedFilePath = Path.Combine(Path.GetTempPath(), skyArchive);
@@ -366,17 +366,13 @@ namespace SkyDrop.Core.ViewModels.Main
             if (!compressSuccess)
                 throw new Exception("Failed to create archive");
 
-            // TODO: remove need for storing file bytes in SkyFiles, upload from file path instead
-            //var fileBytes = File.ReadAllBytes(compressedFilePath);
-
             var fileStream = File.OpenRead(compressedFilePath);
-
             var skyFile = new SkyFile()
             {
                 Data = fileStream,
                 FullFilePath = compressedFilePath,
                 Filename = skyArchive,
-                FileSizeBytes = 420,
+                FileSizeBytes = fileStream.Length,
             };
 
             return skyFile;
@@ -409,7 +405,6 @@ namespace SkyDrop.Core.ViewModels.Main
 
             //read contents of the selected files
 
-            //TODO: optimise this, currently files' bytes are held in memory prior to upload
             IsStagingFiles = true;
             var userSkyFiles = new List<SkyFile>();
 
@@ -421,17 +416,12 @@ namespace SkyDrop.Core.ViewModels.Main
                         continue;
 
                     var stream = await pickedFile.OpenReadAsync();
-                    //using var memoryStream = new MemoryStream();
-
-                    //await stream.CopyToAsync(memoryStream);
-
-                    //var fileBytes = memoryStream.GetBuffer();
                     var skyFile = new SkyFile()
                     {
                         Data = stream,
                         FullFilePath = pickedFile.FullPath,
                         Filename = pickedFile.FileName,
-                        FileSizeBytes = 420,//fileBytes.LongCount(),
+                        FileSizeBytes = stream.Length,
                     };
 
                     userSkyFiles.Add(skyFile);
