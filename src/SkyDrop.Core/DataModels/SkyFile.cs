@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.IO;
 using Newtonsoft.Json;
 using Realms;
 
@@ -24,7 +25,7 @@ namespace SkyDrop.Core.DataModels
 
         //only for staged files
         [Realms.Ignored]
-        public byte[] Data { get; set; }
+        public Stream Data { get; set; }
 
         public FileStatus Status
         {

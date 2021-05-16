@@ -367,14 +367,16 @@ namespace SkyDrop.Core.ViewModels.Main
                 throw new Exception("Failed to create archive");
 
             // TODO: remove need for storing file bytes in SkyFiles, upload from file path instead
-            var fileBytes = File.ReadAllBytes(compressedFilePath);
+            //var fileBytes = File.ReadAllBytes(compressedFilePath);
+
+            var fileStream = File.OpenRead(compressedFilePath);
 
             var skyFile = new SkyFile()
             {
-                Data = fileBytes,
+                Data = fileStream,
                 FullFilePath = compressedFilePath,
                 Filename = skyArchive,
-                FileSizeBytes = fileBytes.LongCount(),
+                FileSizeBytes = 420,
             };
 
             return skyFile;
@@ -418,18 +420,18 @@ namespace SkyDrop.Core.ViewModels.Main
                     if (pickedFile == null)
                         continue;
 
-                    using var stream = await pickedFile.OpenReadAsync();
-                    using var memoryStream = new MemoryStream();
+                    var stream = await pickedFile.OpenReadAsync();
+                    //using var memoryStream = new MemoryStream();
 
-                    await stream.CopyToAsync(memoryStream);
+                    //await stream.CopyToAsync(memoryStream);
 
-                    var fileBytes = memoryStream.GetBuffer();
+                    //var fileBytes = memoryStream.GetBuffer();
                     var skyFile = new SkyFile()
                     {
-                        Data = fileBytes,
+                        Data = stream,
                         FullFilePath = pickedFile.FullPath,
                         Filename = pickedFile.FileName,
-                        FileSizeBytes = fileBytes.LongCount(),
+                        FileSizeBytes = 420,//fileBytes.LongCount(),
                     };
 
                     userSkyFiles.Add(skyFile);

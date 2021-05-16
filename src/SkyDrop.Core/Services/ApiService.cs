@@ -23,14 +23,14 @@ namespace SkyDrop.Core.Services
 
         private HttpClient httpClient { get; set; }
 
-        public async Task<SkyFile> UploadFile(string filename, byte[] file, long fileSizeBytes, CancellationTokenSource cancellationToken)
+        public async Task<SkyFile> UploadFile(string filename, Stream file, long fileSizeBytes, CancellationTokenSource cancellationToken)
         {
             if (fileSizeBytes == 0)
                 Log.Error("File size was zero when uploading file");
 
             var url = $"{Util.Portal}/skynet/skyfile";
             var form = new MultipartFormDataContent();
-            form.Add(new ByteArrayContent(file), "file", filename);
+            form.Add(new StreamContent(file), "file", filename);
 
             Log.Trace("Sending file " + filename);
 
@@ -52,6 +52,6 @@ namespace SkyDrop.Core.Services
 
     public interface IApiService
     {
-        Task<SkyFile> UploadFile(string filename, byte[] file, long fileSizeBytes, CancellationTokenSource cancellationToken);
+        Task<SkyFile> UploadFile(string filename, Stream file, long fileSizeBytes, CancellationTokenSource cancellationToken);
     }
 }
