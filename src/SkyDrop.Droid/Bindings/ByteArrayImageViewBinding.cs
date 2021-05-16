@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System;
 using MvvmCross;
 using SkyDrop;
+using SkyDrop.Core;
 
 namespace SkyDrop.Droid.Bindings
 {
@@ -22,6 +23,9 @@ namespace SkyDrop.Droid.Bindings
     /// </summary>
     public class ByteArrayImageViewBinding : MvxTargetBinding<ImageView, byte[]>
     {
+        private ILog _log;
+        private ILog log => _log ??= Mvx.IoCProvider.Resolve<ILog>();
+        
         public static string Name => "Bytes";
 
         public ByteArrayImageViewBinding(ImageView target) : base(target)
@@ -30,10 +34,8 @@ namespace SkyDrop.Droid.Bindings
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
-        protected override async void SetValue(byte[] value)
+        protected override void SetValue(byte[] value)
         {
-            var log = Mvx.IoCProvider.Resolve<ILog>();
-
             try
             {
                 if (value == null)
@@ -42,20 +44,20 @@ namespace SkyDrop.Droid.Bindings
                     return;
                 }
 
-                var bitmap = await Task.Run(() =>
+                // GC.Collect();
+
+                MainThread.InvokeOnMainThreadAsync(async () =>
                 {
                     try
                     {
-                        return BitmapFactory.DecodeByteArray(value, 0, value.Length);
+                        var bitmap = await BitmapFactory.DecodeByteArrayAsync(value, 0, value.Length);
+                        Target.SetImageBitmap(bitmap);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         log.Exception(e);
-                        return null;
                     }
-                });
-
-                Target.SetImageBitmap(bitmap);
+                }).Forget();
             }
             catch(Exception e)
             {
