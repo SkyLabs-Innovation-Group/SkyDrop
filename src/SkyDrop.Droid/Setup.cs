@@ -4,6 +4,7 @@ using Acr.UserDialogs;
 using Android.Views;
 using Android.Widget;
 using AndroidX.CardView.Widget;
+using FFImageLoading.Cross;
 using SkyDrop.Droid.Bindings;
 using Google.Android.Material.Card;
 using MvvmCross;
@@ -54,7 +55,7 @@ namespace SkyDrop.Droid
             registry.RegisterCustomBindingFactory<MaterialCardView>(BarcodeBackgroundBinding.Name, view => new BarcodeBackgroundBinding(view));
             registry.RegisterCustomBindingFactory<View>(VisibleHiddenBinding.Name, view => new VisibleHiddenBinding(view));
             registry.RegisterCustomBindingFactory<ProgressBar>(UploadProgressBinding.Name, view => new UploadProgressBinding(view));
-            registry.RegisterCustomBindingFactory<ImageView>(ByteArrayImageViewBinding.Name, view => new ByteArrayImageViewBinding(view));
+            registry.RegisterCustomBindingFactory<MvxCachedImageView>(StreamImageViewBinding.Name, view => new StreamImageViewBinding(view));
         }
     }
 }
