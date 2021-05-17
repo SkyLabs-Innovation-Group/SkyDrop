@@ -4,12 +4,14 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Fody;
 using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Utility;
 
 namespace SkyDrop.Core.Services
 {
+    [ConfigureAwait(false)]
     public class ApiService : IApiService
     {
         public ILog Log { get; }
@@ -40,13 +42,13 @@ namespace SkyDrop.Core.Services
 
             Log.Trace("Sending file " + filename);
 
-            var response = await httpClient.PostAsync(url, form, cancellationToken.Token).ConfigureAwait(false);
+            var response = await httpClient.PostAsync(url, form, cancellationToken.Token);
 
             Log.Trace(response.RequestMessage.ToString());
 
             response.EnsureSuccessStatusCode();
 
-            var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var responseString = await response.Content.ReadAsStringAsync();
 
             var skyFile = JsonConvert.DeserializeObject<SkyFile>(responseString);
             skyFile.Filename = filename;
