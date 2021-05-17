@@ -23,27 +23,31 @@ namespace SkyDrop.Core.Services
 
         private HttpClient httpClient { get; set; }
 
-        public async Task<SkyFile> UploadFile(string filename, Stream file, long fileSizeBytes, CancellationTokenSource cancellationToken)
+        public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationToken)
         {
-            if (fileSizeBytes == 0)
-                Log.Error("File size was zero when uploading file");
+            var fileSizeBytes = skyfile.FileSizeBytes;
+            var filename = skyfile.Filename;
 
             var url = $"{Util.Portal}/skynet/skyfile";
             var form = new MultipartFormDataContent();
+            
+            using var file = skyfile.GetStream();
+            
+            if (fileSizeBytes == 0)
+                Log.Error("File size was zero when uploading file");
+
             form.Add(new StreamContent(file), "file", filename);
 
             Log.Trace("Sending file " + filename);
 
             var response = await httpClient.PostAsync(url, form, cancellationToken.Token).ConfigureAwait(false);
 
-            //free up memory
-            file.Dispose();
-
             Log.Trace(response.RequestMessage.ToString());
 
             response.EnsureSuccessStatusCode();
 
             var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
             var skyFile = JsonConvert.DeserializeObject<SkyFile>(responseString);
             skyFile.Filename = filename;
             skyFile.Status = FileStatus.Uploaded;
@@ -55,6 +59,6 @@ namespace SkyDrop.Core.Services
 
     public interface IApiService
     {
-        Task<SkyFile> UploadFile(string filename, Stream file, long fileSizeBytes, CancellationTokenSource cancellationToken);
+        Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationToken);
     }
 }

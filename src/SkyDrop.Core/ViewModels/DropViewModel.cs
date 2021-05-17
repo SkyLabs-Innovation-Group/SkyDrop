@@ -349,8 +349,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private async Task<SkyFile> UploadFile()
         {
             uploadCancellationToken = new CancellationTokenSource();
-            var skyFile = await apiService.UploadFile(FileToUpload.Filename, FileToUpload.Data,
-                FileToUpload.FileSizeBytes, uploadCancellationToken);
+            var skyFile = await apiService.UploadFile(FileToUpload, uploadCancellationToken);
             return skyFile;
         }
 
@@ -369,12 +368,11 @@ namespace SkyDrop.Core.ViewModels.Main
             var fileStream = File.OpenRead(compressedFilePath);
             var skyFile = new SkyFile()
             {
-                Data = fileStream,
                 FullFilePath = compressedFilePath,
                 Filename = skyArchive,
                 FileSizeBytes = fileStream.Length,
             };
-
+            
             return skyFile;
         }
 
@@ -418,7 +416,6 @@ namespace SkyDrop.Core.ViewModels.Main
                     var stream = await pickedFile.OpenReadAsync();
                     var skyFile = new SkyFile()
                     {
-                        Data = stream,
                         FullFilePath = pickedFile.FullPath,
                         Filename = pickedFile.FileName,
                         FileSizeBytes = stream.Length,

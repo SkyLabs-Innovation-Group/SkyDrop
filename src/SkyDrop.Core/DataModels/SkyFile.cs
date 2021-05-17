@@ -24,8 +24,15 @@ namespace SkyDrop.Core.DataModels
         public long FileSizeBytes { get; set; }
 
         //only for staged files
-        [Realms.Ignored]
-        public Stream Data { get; set; }
+        [Realms.Ignored] public Stream Data => File.OpenRead(FullFilePath);
+
+        public Stream GetStream()
+        {
+            if (FullFilePath == null)
+                return null;
+            
+            return File.OpenRead(FullFilePath);
+        }
 
         public FileStatus Status
         {
