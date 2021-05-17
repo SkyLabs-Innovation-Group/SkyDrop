@@ -21,6 +21,7 @@ namespace SkyDrop.Core.Services
             Log = log;
             httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri("https://siasky.net/");
+            httpClient.Timeout = TimeSpan.FromMinutes(120);
         }
 
         private HttpClient httpClient { get; set; }
