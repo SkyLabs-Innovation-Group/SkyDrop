@@ -43,13 +43,24 @@ namespace SkyDrop.Core.Services
 
             Log.Trace("Sending file " + filename);
 
-            var response = await httpClient.PostAsync(url, form, cancellationToken.Token);
+            // var response = await httpClient.PostAsync(url, form, cancellationToken.Token);
 
-            Log.Trace(response.RequestMessage.ToString());
+            var request = new HttpRequestMessage(HttpMethod.Post, url) {Content =  form};
+            
+            Log.Trace(request.ToString());
 
+            var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+            
             response.EnsureSuccessStatusCode();
+            
+            
 
             var responseString = await response.Content.ReadAsStringAsync();
+            
+            Log.Trace(responseString);
+            
+            // Before using JsonConvert dispose the content - if this is too large it will waste memory alloc
+            // response.Headers.get
 
             var skyFile = JsonConvert.DeserializeObject<SkyFile>(responseString);
             skyFile.Filename = filename;
