@@ -12,6 +12,9 @@ using Android.Graphics;
 using Java.IO;
 using System.Threading.Tasks;
 using System;
+using System.IO;
+using System.Threading;
+using FFImageLoading.Cross;
 using MvvmCross;
 using SkyDrop;
 using SkyDrop.Core;
@@ -19,22 +22,22 @@ using SkyDrop.Core;
 namespace SkyDrop.Droid.Bindings
 {
     /// <summary>
-    /// Binds byte array images to an ImageView
+    /// Binds stream  images to an MvxCachedImageView
     /// </summary>
-    public class ByteArrayImageViewBinding : MvxTargetBinding<ImageView, byte[]>
+    public class StreamImageViewBinding : MvxTargetBinding<MvxCachedImageView, Stream>
     {
         private ILog _log;
         private ILog log => _log ??= Mvx.IoCProvider.Resolve<ILog>();
         
-        public static string Name => "Bytes";
+        public static string Name => "ImageStream";
 
-        public ByteArrayImageViewBinding(ImageView target) : base(target)
+        public StreamImageViewBinding(MvxCachedImageView target) : base(target)
         {
         }
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
-        protected override void SetValue(byte[] value)
+        protected override void SetValue(Stream value)
         {
             try
             {
@@ -43,18 +46,16 @@ namespace SkyDrop.Droid.Bindings
                     Target.SetImageBitmap(null);
                     return;
                 }
-
-                // GC.Collect();
-
-                MainThread.InvokeOnMainThreadAsync(async () =>
+                
+                MainThread.InvokeOnMainThreadAsync( () =>
                 {
                     try
                     {
-                        var bitmap = await BitmapFactory.DecodeByteArrayAsync(value, 0, value.Length);
-                        Target.SetImageBitmap(bitmap);
+                        Target.ImageStream = c => Task.FromResult(value);
                     }
                     catch (Exception e)
                     {
+                        log.Trace("Exception encountered while setting SkyFile's thumbnail in ImageStream binding");
                         log.Exception(e);
                     }
                 }).Forget();

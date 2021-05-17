@@ -55,7 +55,7 @@ namespace SkyDrop
                 PrintError("Logging exception - the inner exception", sourceFilePath, sourceLineNumber);
             }
 
-            Print(ex.Message, sourceFilePath, sourceLineNumber);
+            Print($"{ex.GetType()}: {ex.Message}", sourceFilePath, sourceLineNumber);
             Print(ex.StackTrace, sourceFilePath, sourceLineNumber);
 
             if (ex.InnerException != null)

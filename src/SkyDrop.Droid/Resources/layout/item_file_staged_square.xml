@@ -22,11 +22,11 @@
             android:text="JPG"
             android:lines="1"
             app:MvxBind="Text FileExtension(SkyFile.Filename)"/>
-        <ImageView
+        <FFImageLoading.Cross.MvxCachedImageView 
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:MvxBind="Bytes SkyFile.Data"/>
+            app:MvxBind="ImageStream SkyFile.Data"/>
         <ImageView
             android:src="@drawable/ic_plus"
             android:layout_width="match_parent"
