@@ -38,7 +38,7 @@
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <LangVersion>8.0</LangVersion>
-<AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
+<AndroidHttpClientHandlerType>System.Net.Http.HttpClientHandler</AndroidHttpClientHandlerType>
 <AndroidLinkMode>None</AndroidLinkMode>
 <AndroidUseAapt2>true</AndroidUseAapt2>
   </PropertyGroup>
