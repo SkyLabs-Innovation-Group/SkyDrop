@@ -6,23 +6,24 @@ using MvvmCross;
 using SkyDrop;
 using UIKit;
 using Foundation;
+using SkyDrop.Core.DataModels;
 
 namespace SkyDrop.iOS.Bindings
 {
     /// <summary>
-    /// Binds byte array images to an ImageView
+    /// Binds SkyFile to an ImageView for image previews
     /// </summary>
-    public class ByteArrayImageViewBinding : MvxTargetBinding<UIImageView, byte[]>
+    public class SkyFileImageViewBinding : MvxTargetBinding<UIImageView, SkyFile>
     {
-        public static string Name => "Bytes";
+        public static string Name => "ImagePreview";
 
-        public ByteArrayImageViewBinding(UIImageView target) : base(target)
+        public SkyFileImageViewBinding(UIImageView target) : base(target)
         {
         }
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
-        protected override void SetValue(byte[] value)
+        protected override void SetValue(SkyFile value)
         {
             try
             {
@@ -32,8 +33,11 @@ namespace SkyDrop.iOS.Bindings
                     return;
                 }
 
-                var previewImage = UIImage.LoadFromData(NSData.FromArray(value));
-                Target.Image = previewImage;
+                using (var stream = value.GetStream())
+                {
+                    var previewImage = UIImage.LoadFromData(NSData.FromStream(stream));
+                    Target.Image = previewImage;
+                }
             }
             catch (Exception e)
             {

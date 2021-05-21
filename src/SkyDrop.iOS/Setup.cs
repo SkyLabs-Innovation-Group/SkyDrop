@@ -29,7 +29,7 @@ namespace SkyDrop.iOS
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterCustomBindingFactory<UIView>(ProgressFillHeightBinding.Name, view => new ProgressFillHeightBinding(view));
-            registry.RegisterCustomBindingFactory<UIImageView>(ByteArrayImageViewBinding.Name, view => new ByteArrayImageViewBinding(view));
+            registry.RegisterCustomBindingFactory<UIImageView>(SkyFileImageViewBinding.Name, view => new SkyFileImageViewBinding(view));
 
             base.FillTargetFactories(registry);
         }
