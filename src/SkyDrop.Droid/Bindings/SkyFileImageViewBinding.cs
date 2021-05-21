@@ -14,16 +14,16 @@ using System.Threading.Tasks;
 using System;
 using System.IO;
 using System.Threading;
-using FFImageLoading.Cross;
 using MvvmCross;
 using SkyDrop;
 using SkyDrop.Core;
 using SkyDrop.Core.DataModels;
+using FFImageLoading.Cross;
 
 namespace SkyDrop.Droid.Bindings
 {
     /// <summary>
-    /// Binds a SkyFile's stream to an MvxCachedImageView.
+    /// Binds a SkyFile to an MvxCachedImageView for file preview
     ///
     /// FFImageLoading handles optimising the stream, so I am generating it only right before passing it to Target.ImageStream.
     /// </summary>
@@ -32,7 +32,7 @@ namespace SkyDrop.Droid.Bindings
         private ILog _log;
         private ILog log => _log ??= Mvx.IoCProvider.Resolve<ILog>();
         
-        public static string Name => "ImageStream";
+        public static string Name => "ImagePreview";
 
         public SkyFileImageViewBinding(MvxCachedImageView target) : base(target)
         {
@@ -44,12 +44,19 @@ namespace SkyDrop.Droid.Bindings
         {
             try
             {
-                if (value?.FullFilePath == null)
+                if (value == null)
                 {
                     Target.SetImageBitmap(null);
                     return;
                 }
-                
+
+                using (var stream = value.GetStream())
+                {
+                    //this line should work but doesn't
+                    Target.ImageStream = async c => await Task.FromResult(stream);
+                }
+
+                /*
                 MainThread.InvokeOnMainThreadAsync( () =>
                 {
                     try
@@ -63,6 +70,7 @@ namespace SkyDrop.Droid.Bindings
                         log.Exception(e);
                     }
                 }).Forget();
+                */
             }
             catch(Exception e)
             {
