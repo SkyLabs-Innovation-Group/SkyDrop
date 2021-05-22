@@ -5,6 +5,7 @@ using Google.Android.Material.Card;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
 using SkyDrop.Core.Utility;
+using SkyDrop.Droid;
 using System.Drawing;
 using Xamarin.Essentials;
 
@@ -49,8 +50,8 @@ namespace SkyDrop.Droid.Bindings
             var childColor = state ? Colors.LightGrey.ToNative() : Colors.MidGrey.ToNative();
             for (var i = 0; i < parent.ChildCount; i++)
             {
-                var label = parent.FindViewById<TextView>(Resource.Id.ButtonLabel);
-                var icon = parent.FindViewById<ImageView>(Resource.Id.ButtonIcon);
+                var label = parent.FindViewById<TextView>(SkyDrop.Droid.Resource.Id.ButtonLabel);
+                var icon = parent.FindViewById<ImageView>(SkyDrop.Droid.Resource.Id.ButtonIcon);
                 label?.SetTextColor(childColor);
                 icon?.SetColorFilter(childColor);
             }

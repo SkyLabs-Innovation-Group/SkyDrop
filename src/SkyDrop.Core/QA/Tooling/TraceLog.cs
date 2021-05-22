@@ -4,7 +4,6 @@ using System.IO;
 using System.Runtime.CompilerServices;
 
 // In exceptional cases, tooling may be placed into the root namespace to gain accessibility to the members everywhere.
-// ReSharper disable once CheckNamespace
 namespace SkyDrop
 {
     public static class TraceLog
@@ -19,7 +18,6 @@ namespace SkyDrop
             Print(message, sourceFilePath, sourceLineNumber);
         }
 
-        [Conditional("DEBUG")]
         public static void Print(string message, string sourceFilePath, int sourceLineNumber)
         {
             try
@@ -28,7 +26,7 @@ namespace SkyDrop
 
                 Debug.WriteLine($"{fileName}:{sourceLineNumber} " + message);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Debug.WriteLine(message);
             }

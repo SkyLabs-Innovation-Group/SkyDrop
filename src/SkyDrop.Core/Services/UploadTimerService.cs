@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Timers;
+using Realms;
 using SkyDrop.Core.DataModels;
 
 namespace SkyDrop.Core.Services
@@ -25,9 +28,9 @@ namespace SkyDrop.Core.Services
             this.storageService = storageService;
         }
 
-        public void AddReading(TimeSpan time, long sizeInBytes)
+        public void AddReading(TimeSpan time, long fileSizeBytes)
         {
-            var uploadRate = (sizeInBytes * 8) / time.TotalSeconds; //in bits/second
+            var uploadRate = (fileSizeBytes * 8) / time.TotalSeconds; //in bits/second
 
             //add the new value to the average
             var currentAverage = storageService.GetAverageUploadRate();
@@ -45,9 +48,9 @@ namespace SkyDrop.Core.Services
             storageService.SetAverageUploadRate(newAverage);
         }
 
-        public TimeSpan EstimateUploadTime(long sizeInBytes)
+        public TimeSpan EstimateUploadTime(long fileSizeBytes)
         {
-            long fileSizeBits = sizeInBytes * 8;
+            long fileSizeBits = fileSizeBytes * 8;
             var currentAverage = storageService.GetAverageUploadRate();
             var averageUploadSpeed = currentAverage.Value;
             if (averageUploadSpeed == 0)
@@ -60,10 +63,10 @@ namespace SkyDrop.Core.Services
             return TimeSpan.FromSeconds(estimatedSeconds);
         }
 
-        public void StartUploadTimer(long sizeInBytes, Action timerUpdateCallback)
+        public void StartUploadTimer(long fileSizeBytes, Action timerUpdateCallback)
         {
-            this.fileSizeBytes = sizeInBytes;
-            estimatedUploadTime = EstimateUploadTime(sizeInBytes);
+            this.fileSizeBytes = fileSizeBytes;
+            estimatedUploadTime = EstimateUploadTime(fileSizeBytes);
 
             stopwatch = new Stopwatch();
             timer = new Timer();
@@ -101,11 +104,11 @@ namespace SkyDrop.Core.Services
 
     public interface IUploadTimerService
     {
-        void AddReading(TimeSpan time, long sizeInBytes);
+        void AddReading(TimeSpan time, long fileSizeBytes);
 
-        TimeSpan EstimateUploadTime(long sizeInBytes);
+        TimeSpan EstimateUploadTime(long fileSizeBytes);
 
-        void StartUploadTimer(long sizeInBytes, Action timerUpdateCallback);
+        void StartUploadTimer(long fileSizeBytes, Action timerUpdateCallback);
 
         void StopUploadTimer();
 

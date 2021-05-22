@@ -98,8 +98,8 @@ namespace SkyDrop.Core.Services
                 catch (Exception ex)
                 {
                     //No Realm file to remove.
-                    log.Exception(ex);
-                    throw;
+                    log.Exception(e);
+                    throw ex;
                 }
             }
         }

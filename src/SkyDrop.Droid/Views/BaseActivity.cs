@@ -2,6 +2,7 @@ using Android.OS;
 using AndroidX.AppCompat.Widget;
 using MvvmCross.Platforms.Android.Views;
 using MvvmCross.ViewModels;
+using SkyDrop.Core.Services;
 using SkyDrop.Core.ViewModels;
 
 namespace SkyDrop.Droid.Views

@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using CoreGraphics;
@@ -10,10 +9,12 @@ using MvvmCross.Platforms.Ios.Binding.Views;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
 using SkyDrop.Core.Utility;
-using SkyDrop.Core.ViewModels;
+using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.iOS.Common;
 using UIKit;
-using static SkyDrop.Core.ViewModels.DropViewModel;
+using ZXing.Mobile;
+using ZXing.Rendering;
+using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 
 namespace SkyDrop.iOS.Views.Drop
 {
@@ -60,8 +61,6 @@ namespace SkyDrop.iOS.Views.Drop
                     ForegroundColor = Colors.LightGrey.ToNative()
                 };
 
-                Debug.Assert(View != null, nameof(View) + " != null");
-                
                 View.BackgroundColor = Colors.DarkGrey.ToNative();
 
                 CancelButton.BackgroundColor = Colors.GradientOcean.ToNative();
@@ -352,7 +351,7 @@ namespace SkyDrop.iOS.Views.Drop
                 }
             };
 
-            View?.AddGestureRecognizer(touchInterceptor);
+            View.AddGestureRecognizer(touchInterceptor);
         }
 
         private bool IgnoreSwipes()

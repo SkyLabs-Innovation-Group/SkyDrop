@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using MvvmCross.Commands;
+using SkyDrop.Core.DataModels;
+using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Services;
 using ZXing.Common;
 
-namespace SkyDrop.Core.ViewModels
+namespace SkyDrop.Core.ViewModels.Main
 {
     public class BarcodeViewModel : BaseViewModel
     {
@@ -19,7 +24,12 @@ namespace SkyDrop.Core.ViewModels
         public IMvxCommand GenerateBarcodeCommand { get; set; }
         public IMvxCommand ScanBarcodeCommand { get; set; }
 
-        public Func<Task> GenerateBarcodeAsyncFunc { get; set; }
+        private Func<Task> _generateBarcodeAsyncFunc;
+        public Func<Task> GenerateBarcodeAsyncFunc
+        {
+            get => _generateBarcodeAsyncFunc;
+            set => _generateBarcodeAsyncFunc = value;
+        }
 
         public BarcodeViewModel(ISingletonService singletonService,
                              IApiService apiService,
@@ -28,7 +38,6 @@ namespace SkyDrop.Core.ViewModels
                              IBarcodeService barcodeService,
                              ILog log) : base(singletonService)
         {
-            Log = log;
             Title = "Scan";
 
             this.apiService = apiService;

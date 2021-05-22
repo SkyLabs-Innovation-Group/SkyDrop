@@ -1,14 +1,28 @@
+using Acr.UserDialogs;
+using Android.Views;
+using Android.Widget;
+using Google.Android.Material.Card;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
+using SkyDrop.Core.Utility;
+using SkyDrop.Droid;
+using System.Drawing;
 using Xamarin.Essentials;
+using Android.Graphics;
 using System.Threading.Tasks;
 using System;
 using System.IO;
+using System.Net;
+using System.Threading;
 using FFImageLoading;
 using MvvmCross;
+using SkyDrop;
 using SkyDrop.Core;
+using SkyDrop.Core.DataModels;
 using FFImageLoading.Cross;
 using Serilog;
+using Serilog.Core;
+using File = Java.IO.File;
 
 namespace SkyDrop.Droid.Bindings
 {

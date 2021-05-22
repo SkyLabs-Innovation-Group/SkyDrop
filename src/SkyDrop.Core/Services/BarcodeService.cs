@@ -1,8 +1,10 @@
 using System.Threading.Tasks;
+using Plugin.Permissions.Abstractions;
 using Xamarin.Essentials;
 using ZXing;
 using ZXing.Common;
 using ZXing.Mobile;
+using ZXing.QrCode;
 using PermissionStatus = Xamarin.Essentials.PermissionStatus;
 
 namespace SkyDrop.Core.Services

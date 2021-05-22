@@ -1,10 +1,19 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Android.App;
+using Android.Content;
+using Android.Graphics;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using SkyDrop.Core.ViewModels;
+using MvvmCross.Commands;
+using SkyDrop.Core.DataModels;
+using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.Droid.Helper;
+using Xamarin.Essentials;
+using ZXing;
+using ZXing.Common;
+using ZXing.QrCode;
 
 namespace SkyDrop.Droid.Views.Main
 {

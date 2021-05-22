@@ -3,6 +3,7 @@ using SkyDrop.iOS.Bindings;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding.Views;
+using SkyDrop.Core.DataModels;
 using UIKit;
 using SkyDrop.Core.Utility;
 using Acr.UserDialogs;

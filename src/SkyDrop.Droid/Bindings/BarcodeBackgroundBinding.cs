@@ -1,4 +1,6 @@
+using System.Drawing;
 using Acr.UserDialogs;
+using AndroidX.CardView.Widget;
 using Google.Android.Material.Card;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;

@@ -1,8 +1,10 @@
-﻿using Acr.UserDialogs;
+﻿using System;
+using Acr.UserDialogs;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
 using SkyDrop.Core.Utility;
-using SkyDrop.Core.ViewModels;
+using SkyDrop.Core.ViewModels.Main;
+using UIKit;
 
 namespace SkyDrop.iOS.Views.Menu
 {
