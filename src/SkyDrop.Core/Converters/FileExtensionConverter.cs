@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using MvvmCross;
 using MvvmCross.Converters;
 
 namespace SkyDrop.Core.Converters

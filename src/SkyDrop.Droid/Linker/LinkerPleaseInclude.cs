@@ -63,8 +63,8 @@ namespace SkyDrop.Droid.Linker
 
         public void Include(CardView cardView)
         {
-            EventHandler F = null;
-            cardView.Click += F;
+            EventHandler f = null;
+            cardView.Click += f;
         }
 
         public void Include(Activity act)
@@ -196,8 +196,8 @@ namespace SkyDrop.Droid.Linker
             var _ = p;
         }
 
-        public void Include<Ts, Tr>(MvxWeakEventSubscription<Ts, Tr> mvxWeakEventSubscription)
-            where Ts : class
+        public void Include<TS, TR>(MvxWeakEventSubscription<TS, TR> mvxWeakEventSubscription)
+            where TS : class
         {
             mvxWeakEventSubscription?.Dispose();
         }

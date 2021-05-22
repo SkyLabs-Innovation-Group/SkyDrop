@@ -1,5 +1,4 @@
-﻿using System;
-using Android.Views;
+﻿using Android.Views;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
 

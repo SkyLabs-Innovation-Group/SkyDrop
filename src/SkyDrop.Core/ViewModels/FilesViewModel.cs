@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using MvvmCross.Commands;
@@ -12,7 +11,7 @@ using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Services;
 using SkyDrop.Core.Utility;
 
-namespace SkyDrop.Core.ViewModels.Main
+namespace SkyDrop.Core.ViewModels
 {
     public class FilesViewModel : BaseViewModel
     {
@@ -244,7 +243,7 @@ namespace SkyDrop.Core.ViewModels.Main
             bool currentSelectionState = selectedFileDVM.IsSelected;
             bool newSelectionState = !currentSelectionState;
 
-            if (newSelectionState == true)
+            if (newSelectionState)
             {
                 int newSelectedIndex = SkyFiles.IndexOf(selectedFileDVM);
 

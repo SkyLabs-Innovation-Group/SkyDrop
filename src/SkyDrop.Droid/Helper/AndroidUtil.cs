@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Acr.UserDialogs;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.Provider;
-using Android.Util;
 using Android.Widget;
 using MvvmCross;
 using Plugin.CurrentActivity;
 using SkyDrop.Core.DataModels;
-using SkyDrop.Core.Services;
 using SkyDrop.Core.Utility;
-using Xamarin.Essentials;
 using ZXing;
 using ZXing.Common;
 using ZXing.Mobile;
@@ -23,7 +19,9 @@ namespace SkyDrop.Droid.Helper
     public static class AndroidUtil
     {
         public const int PickFileRequestCode = 100;
-        private static readonly ILog log = Mvx.IoCProvider.Resolve<ILog>();
+
+        private static ILog _logInstance;
+        private static ILog log => _logInstance ??= Mvx.IoCProvider.Resolve<ILog>();
 
         public static int DpToPx(int dp)
         {
@@ -86,6 +84,7 @@ namespace SkyDrop.Droid.Helper
             }
             catch (Exception e)
             {
+                log.Exception(e);
                 return "error.jpg";
             }
             finally
@@ -99,7 +98,7 @@ namespace SkyDrop.Droid.Helper
 
         public static void OpenFileInBrowser(Activity context, SkyFile file)
         {
-            Toast.MakeText(context, $"Opening file {file.Filename}", ToastLength.Long).Show();
+            Toast.MakeText(context, $"Opening file {file.Filename}", ToastLength.Long)?.Show();
 
             var browserIntent = new Intent(Intent.ActionView, Android.Net.Uri.Parse(Util.GetSkylinkUrl(file.Skylink)));
             context.StartActivity(browserIntent);
@@ -117,7 +116,7 @@ namespace SkyDrop.Droid.Helper
             return Task.Run(() =>
             {
                 //computationally heavy but quick
-                return renderer.Render(bitMatrix, ZXing.BarcodeFormat.QR_CODE, "");
+                return renderer.Render(bitMatrix, BarcodeFormat.QR_CODE, "");
             });
         }
     }

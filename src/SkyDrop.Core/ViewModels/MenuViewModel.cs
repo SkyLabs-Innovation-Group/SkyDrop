@@ -4,7 +4,7 @@ using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using SkyDrop.Core.Services;
 
-namespace SkyDrop.Core.ViewModels.Main
+namespace SkyDrop.Core.ViewModels
 {
     public class MenuViewModel : BaseViewModel
     {
@@ -26,6 +26,7 @@ namespace SkyDrop.Core.ViewModels.Main
                              IMvxNavigationService navigationService,
                              ILog log) : base(singletonService)
         {
+            Log = log;
             Title = "SkyDrop";
 
             this.apiService = apiService;

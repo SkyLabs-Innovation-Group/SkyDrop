@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using Acr.UserDialogs;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
-using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Services;
@@ -18,7 +14,7 @@ using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
 using ZXing.Common;
 
-namespace SkyDrop.Core.ViewModels.Main
+namespace SkyDrop.Core.ViewModels
 {
     public class DropViewModel : BaseViewModel
     {
@@ -47,8 +43,6 @@ namespace SkyDrop.Core.ViewModels.Main
         public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
         public bool IsStagingFiles { get; set; }
-        public bool IsUploadArrowVisible => !IsUploading && !IsStagingFiles;
-        public bool IsBarcodeLoading { get; set; }
         public bool IsBarcodeVisible { get; set; }
         public bool IsStagedFilesVisible => DropViewUIState == DropViewState.ConfirmFilesState;
         public bool IsSendButtonGreen { get; set; } = true;
@@ -107,6 +101,7 @@ namespace SkyDrop.Core.ViewModels.Main
             IFileSystemService fileSystemService,
             ILog log) : base(singletonService)
         {
+            Log = log;
             Title = "SkyDrop";
 
             this.apiService = apiService;
@@ -235,26 +230,24 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 //show QR code
                 IsUploading = false;
-                IsBarcodeLoading = true;
                 SkyFileFullUrl = Util.GetSkylinkUrl(UploadedFile.Skylink);
                 await GenerateBarcodeAsyncFunc();
             }
             catch (TaskCanceledException tce)
             {
                 userDialogs.Toast("Upload cancelled");
+                ResetUIStateCommand?.Execute();
             }
             catch (Exception ex) // General error
             {
                 userDialogs.Toast("Could not upload file");
                 Log.Exception(ex);
+                ResetUIStateCommand?.Execute();
             }
             finally
             {
                 StopUploadTimer();
                 IsUploading = false;
-                IsBarcodeLoading = false;
-                
-                ResetUIStateCommand?.Execute();
             }
         }
 
@@ -465,7 +458,7 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             var (newUploadProgress, newUploadTimerText) = uploadTimerService.GetUploadProgress();
 
-            if (UploadProgress == 1)
+            if (UploadProgress >= 1)
                 return;
 
             //scale the progress so it fits within 85% of the bar

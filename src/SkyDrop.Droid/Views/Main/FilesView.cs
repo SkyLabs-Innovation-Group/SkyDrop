@@ -1,17 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Android.App;
-using Android.Content;
-using Android.Graphics;
 using Android.OS;
 using Android.Views;
-using Android.Widget;
 using AndroidX.RecyclerView.Widget;
 using MvvmCross.Commands;
 using SkyDrop.Core.DataModels;
-using SkyDrop.Core.DataViewModels;
-using SkyDrop.Core.ViewModels.Main;
+using SkyDrop.Core.ViewModels;
 using SkyDrop.Droid.Helper;
 
 namespace SkyDrop.Droid.Views.Main
@@ -55,10 +49,10 @@ namespace SkyDrop.Droid.Views.Main
             }
         }
 
-        public override bool OnCreateOptionsMenu(IMenu menu)
+        public override bool OnCreateOptionsMenu(IMenu iMenu)
         {
-            MenuInflater.Inflate(Resource.Menu.FilesMenu, menu);
-            this.menu = menu;
+            MenuInflater.Inflate(Resource.Menu.FilesMenu, iMenu);
+            this.menu = iMenu;
             return true;
         }
 

@@ -1,12 +1,6 @@
-﻿using Acr.UserDialogs;
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
-using MvvmCross;
-using MvvmCross.IoC;
+﻿using MvvmCross.IoC;
 using MvvmCross.ViewModels;
-using SkyDrop.Core.Services;
-using SkyDrop.Core.ViewModels.Main;
+using SkyDrop.Core.ViewModels;
 
 namespace SkyDrop.Core
 {

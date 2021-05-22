@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Android.App;
-using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
@@ -10,11 +8,9 @@ using Android.Widget;
 using AndroidX.ConstraintLayout.Widget;
 using Google.Android.Material.Card;
 using MvvmCross.Commands;
-using SkyDrop.Core.DataModels;
-using SkyDrop.Core.ViewModels.Main;
+using SkyDrop.Core.ViewModels;
 using SkyDrop.Droid.Helper;
-using ZXing.Mobile;
-using static SkyDrop.Core.ViewModels.Main.DropViewModel;
+using static SkyDrop.Core.ViewModels.DropViewModel;
 
 namespace SkyDrop.Droid.Views.Main
 {

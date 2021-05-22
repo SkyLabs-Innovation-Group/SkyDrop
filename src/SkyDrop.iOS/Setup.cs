@@ -44,7 +44,7 @@ namespace SkyDrop.iOS
             Debug.WriteLine("CreateApp() iOS");
 
             UserDialogs.Instance = new UserDialogsImpl();
-            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IUserDialogs>(() => UserDialogs.Instance);
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton(() => UserDialogs.Instance);
 
             return base.CreateApp();
         }
@@ -52,7 +52,7 @@ namespace SkyDrop.iOS
         protected override IMvxIosViewPresenter CreateViewPresenter()
         {
             var presenter = base.CreateViewPresenter();
-            Mvx.IoCProvider.RegisterSingleton<IMvxIosViewPresenter>(presenter);
+            Mvx.IoCProvider.RegisterSingleton(presenter);
             return presenter;
         }
         

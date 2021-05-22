@@ -20,6 +20,8 @@ namespace SkyDrop.iOS.Linker
     [Preserve(AllMembers = true)]
     public class LinkerPleaseInclude
     {
+        
+        
         public void Include(UIButton uiButton)
         {
             uiButton.TouchUpInside += (s, e) =>
@@ -49,7 +51,8 @@ namespace SkyDrop.iOS.Linker
         public void Include(UILabel label)
         {
             label.Text = $"{ label.Text }";
-            label.AttributedText = new NSAttributedString($"{ label.AttributedText.ToString() }");
+
+            label.AttributedText = new NSAttributedString(label?.AttributedText?.ToString() ?? "");
         }
 
         public void Include(UIImageView imageView)

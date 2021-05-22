@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Acr.UserDialogs.Infrastructure;
 
 namespace SkyDrop.Core
 {

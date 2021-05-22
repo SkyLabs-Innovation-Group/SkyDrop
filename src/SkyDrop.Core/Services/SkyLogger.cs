@@ -1,10 +1,10 @@
 using System;
 using System.Runtime.CompilerServices;
 using FFImageLoading.Helpers;
-using MvvmCross;
 using MvvmCross.Logging;
 
 // In exceptional cases, tooling may be placed into the root namespace to gain accessibility to the members everywhere.
+// ReSharper disable once CheckNamespace
 namespace SkyDrop
 {
     public class SkyLogger : ILog, IMiniLogger

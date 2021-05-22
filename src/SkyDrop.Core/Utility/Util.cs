@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 
 namespace SkyDrop.Core.Utility
@@ -41,7 +40,8 @@ namespace SkyDrop.Core.Utility
 
             //adjust the format string to your preferences. For example "{0:0.#}{1}" would
             //show a single decimal place, and no space.
-            return String.Format("{0:0.##}{1}", bytes, sizes[order]);
+            return $"{bytes:0.##}{sizes[order]}";
+            // return String.Format("{0:0.##}{1}", bytes, sizes[order]);
         }
     }
 }

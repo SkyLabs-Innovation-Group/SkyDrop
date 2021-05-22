@@ -1,6 +1,4 @@
-﻿using System;
-using Android.Animation;
-using Android.Views;
+﻿using Android.Animation;
 using Android.Views.Animations;
 using Android.Widget;
 using MvvmCross.Binding;
@@ -12,8 +10,8 @@ namespace SkyDrop.Droid.Bindings
     {
         public const string Name = "Progress";
 
-        private const int increments = 10000;
-        private const int animationDuration = 500;
+        private const int Increments = 10000;
+        private const int AnimationDuration = 500;
 
         public UploadProgressBinding(ProgressBar target) : base(target)
         {
@@ -24,10 +22,10 @@ namespace SkyDrop.Droid.Bindings
         protected override void SetValue(double value)
         {
             //value is 0-1
-            Target.Max = increments;
+            Target.Max = Increments;
             Target.Indeterminate = false;
 
-            var newProgress = (int)(value * increments);
+            var newProgress = (int)(value * Increments);
             if (value == 0)
                 Target.SetProgress(newProgress, false);
             else
@@ -37,7 +35,7 @@ namespace SkyDrop.Droid.Bindings
         private void SetProgressAnimate(ProgressBar progressBar, int newProgress)
         {
             var animation = ObjectAnimator.OfInt(progressBar, "progress", progressBar.Progress, newProgress);
-            animation.SetDuration(animationDuration);
+            animation.SetDuration(AnimationDuration);
             animation.SetInterpolator(new DecelerateInterpolator());
             animation.Start();
         }

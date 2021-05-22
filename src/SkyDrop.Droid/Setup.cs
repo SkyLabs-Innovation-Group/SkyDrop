@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 using System.IO;
 using Acr.UserDialogs;
@@ -20,18 +19,14 @@ using MvvmCross.Platforms.Android;
 using MvvmCross.Platforms.Android.Core;
 using MvvmCross.ViewModels;
 using Serilog;
-using Serilog.Core;
-using Serilog.Events;
 using SkyDrop.Core;
-using SkyDrop.Droid.Bindings;
 using Xamarin.Essentials;
-using Log = Acr.UserDialogs.Infrastructure.Log;
 
 namespace SkyDrop.Droid
 {
     public class Setup : MvxAndroidSetup<App>
     {
-        private IMvxAndroidCurrentTopActivity topActivityProvider { get; set; }
+        private IMvxAndroidCurrentTopActivity topActivityProvider;
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {

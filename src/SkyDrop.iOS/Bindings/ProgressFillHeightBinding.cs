@@ -1,9 +1,6 @@
 using System;
-using System.Drawing;
-using Acr.UserDialogs;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
-using SkyDrop.Core.Utility;
 using UIKit;
 
 namespace SkyDrop.iOS.Bindings

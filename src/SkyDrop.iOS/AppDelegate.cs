@@ -1,10 +1,7 @@
-﻿using Acr.UserDialogs;
-using Foundation;
+﻿using Foundation;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
-using MvvmCross;
-using MvvmCross.IoC;
 using MvvmCross.Platforms.Ios.Core;
 using SkyDrop.Core;
 using UIKit;

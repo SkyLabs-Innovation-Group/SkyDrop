@@ -1,12 +1,10 @@
-using System;
-using System.ComponentModel;
 using System.IO;
 using Newtonsoft.Json;
 using Realms;
 
 namespace SkyDrop.Core.DataModels
 {
-    public class SkyFile : RealmObject, INotifyPropertyChanged
+    public class SkyFile : RealmObject
     {
         [JsonProperty("skylink")]
         public string Skylink { get; set; }
