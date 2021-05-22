@@ -50,7 +50,7 @@ namespace SkyDrop.iOS.Views.Drop
 
                 ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
                 ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
-                ViewModel.ResetUIStateCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
+                ViewModel.ResetUIStateCommand = new MvxCommand(SetSendReceiveButtonUiState);
 
                 SetupGestureListener();
 
@@ -131,11 +131,18 @@ namespace SkyDrop.iOS.Views.Drop
         /// </summary>
         private async Task ShowBarcode()
         {
-            SetBarcodeCodeUiState();
-
-            var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileFullUrl, (int)BarcodeImage.Frame.Width, (int)BarcodeImage.Frame.Height);
-            var image = await iOSUtil.BitMatrixToImage(matrix);
-            BarcodeImage.Image = image;
+            try
+            {
+                SetBarcodeCodeUiState();
+                var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileFullUrl, (int)BarcodeImage.Frame.Width, (int)BarcodeImage.Frame.Height);
+                var image = await iOSUtil.BitMatrixToImage(matrix);
+                BarcodeImage.Image = image;
+            }
+            catch (Exception ex)
+            {
+                ViewModel.Log.Error("Error in ShowBarcode(): ");
+                ViewModel.Log.Exception(ex);
+            }
         }
 
         /// <summary>
@@ -156,6 +163,8 @@ namespace SkyDrop.iOS.Views.Drop
             ViewModel.DropViewUIState = DropViewState.QRCodeState;
 
             ViewModel.IsBarcodeVisible = true;
+            
+            ViewModel.Log.Trace("Sliding in QR code view");
 
             AnimateSlideBarcodeIn(fromLeft: false);
             AnimateSlideSendReceiveButtonsOut(toLeft: true);

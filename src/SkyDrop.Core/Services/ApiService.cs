@@ -20,9 +20,10 @@ namespace SkyDrop.Core.Services
         public ApiService(ILog log)
         {
             Log = log;
-            httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("https://siasky.net/");
-            httpClient.Timeout = TimeSpan.FromMinutes(120);
+            httpClient = new HttpClient
+            {
+                BaseAddress = new Uri("https://siasky.net/"), Timeout = TimeSpan.FromMinutes(120)
+            };
         }
 
         private HttpClient httpClient { get; set; }

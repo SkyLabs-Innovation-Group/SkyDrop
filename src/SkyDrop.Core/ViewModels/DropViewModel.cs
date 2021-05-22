@@ -107,6 +107,7 @@ namespace SkyDrop.Core.ViewModels.Main
             IFileSystemService fileSystemService,
             ILog log) : base(singletonService)
         {
+            Log = log;
             Title = "SkyDrop";
 
             this.apiService = apiService;
@@ -242,19 +243,21 @@ namespace SkyDrop.Core.ViewModels.Main
             catch (TaskCanceledException tce)
             {
                 userDialogs.Toast("Upload cancelled");
+                ResetUIStateCommand?.Execute();
+
             }
             catch (Exception ex) // General error
             {
                 userDialogs.Toast("Could not upload file");
                 Log.Exception(ex);
+                
+                ResetUIStateCommand?.Execute();
             }
             finally
             {
                 StopUploadTimer();
                 IsUploading = false;
                 IsBarcodeLoading = false;
-                
-                ResetUIStateCommand?.Execute();
             }
         }
 
@@ -407,7 +410,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     if (pickedFile == null)
                         continue;
 
-                    var stream = await pickedFile.OpenReadAsync();
+                    using var stream = await pickedFile.OpenReadAsync();
                     var skyFile = new SkyFile()
                     {
                         FullFilePath = pickedFile.FullPath,
@@ -465,7 +468,7 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             var (newUploadProgress, newUploadTimerText) = uploadTimerService.GetUploadProgress();
 
-            if (UploadProgress == 1)
+            if (UploadProgress >= 1)
                 return;
 
             //scale the progress so it fits within 85% of the bar
