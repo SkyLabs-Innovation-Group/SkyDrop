@@ -74,14 +74,15 @@ namespace SkyDrop.Droid
 
             ImageService.Instance.Initialize(new Configuration()
             {
+                ClearMemoryCacheOnOutOfMemory = true,
                 DownsampleInterpolationMode = InterpolationMode.Low,
                 
                 // Logging attributes 
                 Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>(),
-                VerboseLogging = true,
-                VerboseLoadingCancelledLogging = true,
-                VerbosePerformanceLogging = true,
-                VerboseMemoryCacheLogging = true,
+                // VerboseLogging = true,
+                // VerboseLoadingCancelledLogging = true,
+                // VerbosePerformanceLogging = true,
+                // VerboseMemoryCacheLogging = true,
             });
 
             ImageService.Instance.Config.Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>();
