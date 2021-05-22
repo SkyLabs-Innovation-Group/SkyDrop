@@ -18,9 +18,7 @@ namespace SkyDrop.Core
                 .EndingWith("Service")
                 .AsInterfaces()
                 .RegisterAsLazySingleton();
-
-            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger());
-
+            
             RegisterAppStart<DropViewModel>();
         }
     }

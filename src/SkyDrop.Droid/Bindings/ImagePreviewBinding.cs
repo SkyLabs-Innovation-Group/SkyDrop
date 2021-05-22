@@ -12,12 +12,16 @@ using Android.Graphics;
 using System.Threading.Tasks;
 using System;
 using System.IO;
+using System.Net;
 using System.Threading;
+using FFImageLoading;
 using MvvmCross;
 using SkyDrop;
 using SkyDrop.Core;
 using SkyDrop.Core.DataModels;
 using FFImageLoading.Cross;
+using Serilog;
+using Serilog.Core;
 using File = Java.IO.File;
 
 namespace SkyDrop.Droid.Bindings
@@ -49,21 +53,24 @@ namespace SkyDrop.Droid.Bindings
                     Target.SetImageBitmap(null);
                     return;
                 }
+                
+                if (!Target.DownsampleUseDipUnits)
+                    Target.DownsampleUseDipUnits = true;
 
-                Target.ImageStream = c =>
-                                    {
-                                        try
-                                        {
-                                            return Task.FromResult((Stream) System.IO.File.OpenRead(value));
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            log.Error("Target.ImageStream");
-                                            log.Exception(e);
 
-                                            return null;
-                                        }
-                                    };
+                MainThread.InvokeOnMainThreadAsync(async () =>
+                {
+                    try
+                    {
+                        await ImageService.Instance.LoadStream(
+                            c => Task.FromResult((Stream)System.IO.File.OpenRead(value)))
+                            .IntoAsync(Target);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Logger.Error("Error loading image binding", ex);
+                    }
+                }).Forget();
             }
             catch(Exception e)
             {

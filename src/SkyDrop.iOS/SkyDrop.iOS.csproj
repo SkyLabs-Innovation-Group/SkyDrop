@@ -173,6 +173,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Serilog.Sinks.Xamarin">
+      <Version>0.2.0.64</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Media.xcassets\LaunchImages.launchimage\Contents.json">

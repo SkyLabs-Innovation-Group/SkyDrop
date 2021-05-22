@@ -1,5 +1,10 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using Acr.UserDialogs;
+using FFImageLoading;
+using FFImageLoading.Config;
+using FFImageLoading.Helpers;
+using FFImageLoading.Work;
 using SkyDrop.iOS.Bindings;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
@@ -10,22 +15,15 @@ using MvvmCross.ViewModels;
 using SkyDrop.Core;
 using UIKit;
 using MvvmCross.Converters;
+using MvvmCross.Logging;
+using Serilog;
 using SkyDrop.Core.Converters;
+using Xamarin.Essentials;
 
 namespace SkyDrop.iOS
 {
     public class Setup : MvxIosSetup<App>
     {
-        protected override IMvxApplication CreateApp()
-        {
-            Debug.WriteLine("CreateApp() iOS");
-
-            UserDialogs.Instance = new UserDialogsImpl();
-            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IUserDialogs>(() => UserDialogs.Instance);
-
-            return base.CreateApp();
-        }
-
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterCustomBindingFactory<UIView>(ProgressFillHeightBinding.Name, view => new ProgressFillHeightBinding(view));
@@ -41,11 +39,59 @@ namespace SkyDrop.iOS
             base.FillValueConverters(registry);
         }
 
+        protected override IMvxApplication CreateApp()
+        {
+            Debug.WriteLine("CreateApp() iOS");
+
+            UserDialogs.Instance = new UserDialogsImpl();
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IUserDialogs>(() => UserDialogs.Instance);
+
+            return base.CreateApp();
+        }
+        
         protected override IMvxIosViewPresenter CreateViewPresenter()
         {
             var presenter = base.CreateViewPresenter();
             Mvx.IoCProvider.RegisterSingleton<IMvxIosViewPresenter>(presenter);
             return presenter;
         }
+        
+        public override MvxLogProviderType GetDefaultLogProviderType() => MvxLogProviderType.Serilog;
+
+        protected override IMvxLogProvider CreateLogProvider()
+        {
+            // From https://prin53.medium.com/logging-in-xamarin-application-logging-infrastructure-with-mvvmcross-2c9bef960c60
+            Serilog.Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .Enrich.FromLogContext()
+                .WriteTo.NSLog(outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj} ({SourceContext}) {Exception}")
+                .WriteTo.File(
+                    Path.Combine(FileSystem.CacheDirectory, "Logs", "Log.log"),
+                    rollingInterval: RollingInterval.Day,
+                    outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj} ({SourceContext}) {Exception}{NewLine}"
+                ).CreateLogger();
+            
+            var logProvider = base.CreateLogProvider();
+            
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger(logProvider));
+
+            ImageService.Instance.Initialize(new Configuration()
+            {
+                ClearMemoryCacheOnOutOfMemory = true,
+                DownsampleInterpolationMode = InterpolationMode.Low,
+                
+                // Logging attributes 
+                Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>(),
+                // VerboseLogging = true,
+                // VerboseLoadingCancelledLogging = true,
+                // VerbosePerformanceLogging = true,
+                // VerboseMemoryCacheLogging = true,
+            });
+
+            ImageService.Instance.Config.Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>();
+
+            return logProvider;
+        }
+        
     }
 }

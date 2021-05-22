@@ -6,7 +6,10 @@ using MvvmCross;
 using SkyDrop;
 using UIKit;
 using Foundation;
+using Serilog;
+using SkyDrop.Core;
 using SkyDrop.Core.DataModels;
+using Xamarin.Essentials;
 
 namespace SkyDrop.iOS.Bindings
 {
@@ -33,11 +36,19 @@ namespace SkyDrop.iOS.Bindings
                     return;
                 }
 
-                using (var stream = value.GetStream())
+                MainThread.InvokeOnMainThreadAsync(async () =>
                 {
-                    var previewImage = UIImage.LoadFromData(NSData.FromStream(stream));
-                    Target.Image = previewImage;
-                }
+                    try
+                    {
+                        await using var stream = value.GetStream();
+                        var previewImage = UIImage.LoadFromData(NSData.FromStream(stream));
+                        Target.Image = previewImage;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Logger.Error("Error setting SkyFile preview", ex);
+                    }
+                }).Forget();
             }
             catch (Exception e)
             {
