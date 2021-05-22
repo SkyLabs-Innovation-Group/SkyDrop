@@ -26,7 +26,7 @@ namespace SkyDrop.Core.Services
 
         private HttpClient httpClient { get; set; }
 
-        public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationToken)
+        public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationTokenSource)
         {
             var fileSizeBytes = skyfile.FileSizeBytes;
             var filename = skyfile.Filename;
@@ -42,27 +42,24 @@ namespace SkyDrop.Core.Services
             form.Add(new StreamContent(file), "file", filename);
 
             Log.Trace("Sending file " + filename);
-
-            // var response = await httpClient.PostAsync(url, form, cancellationToken.Token);
-
+            
             var request = new HttpRequestMessage(HttpMethod.Post, url) {Content =  form};
             
             Log.Trace(request.ToString());
 
-            var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+            var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationTokenSource.Token);
             
             response.EnsureSuccessStatusCode();
             
-            
-
             var responseString = await response.Content.ReadAsStringAsync();
             
             Log.Trace(responseString);
-            
-            // Before using JsonConvert dispose the content - if this is too large it will waste memory alloc
-            // response.Headers.get
 
             var skyFile = JsonConvert.DeserializeObject<SkyFile>(responseString);
+
+            if (skyfile == null)
+                throw new ArgumentNullException(nameof(skyfile));
+            
             skyFile.Filename = filename;
             skyFile.Status = FileStatus.Uploaded;
             skyFile.FileSizeBytes = fileSizeBytes;
@@ -73,6 +70,6 @@ namespace SkyDrop.Core.Services
 
     public interface IApiService
     {
-        Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationToken);
+        Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationTokenSource);
     }
 }

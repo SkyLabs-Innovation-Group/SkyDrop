@@ -239,28 +239,22 @@ namespace SkyDrop.Core.ViewModels.Main
                 SkyFileFullUrl = Util.GetSkylinkUrl(UploadedFile.Skylink);
                 await GenerateBarcodeAsyncFunc();
             }
-            catch (Exception e) when (e.Message == "Socket closed" || e.Message == "A task was canceled.")
+            catch (TaskCanceledException tce)
             {
-                //user cancelled the upload
                 userDialogs.Toast("Upload cancelled");
-
-                //reset the UI
-                ResetUIStateCommand?.Execute();
             }
-            catch (Exception ex)
+            catch (Exception ex) // General error
             {
-                //an error occurred
-                Log.Exception(ex);
                 userDialogs.Toast("Could not upload file");
-
-                //reset the UI
-                ResetUIStateCommand?.Execute();
+                Log.Exception(ex);
             }
             finally
             {
                 StopUploadTimer();
                 IsUploading = false;
                 IsBarcodeLoading = false;
+                
+                ResetUIStateCommand?.Execute();
             }
         }
 
