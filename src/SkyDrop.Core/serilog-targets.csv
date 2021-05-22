@@ -1,0 +1,5 @@
+Data Type,Target,App Environment,Log Level,Note
+Tracing,Console,Debug,Verbose,To ensure that all application output is visible when debugging.
+Tracing,File,Release,Verbose,To ensure that all application output is saved and can be transferred for analysis.
+Failures,AppCenter Crashes,Release,Error,To use `Error` events to report handled errors.
+Failures,AppCenter Crashes,Release,Fatal,To use `Fatal` events to report crashes.

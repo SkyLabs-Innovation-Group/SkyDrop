@@ -1,20 +1,30 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using Acr.UserDialogs;
 using Android.Views;
 using Android.Widget;
 using AndroidX.CardView.Widget;
+using FFImageLoading;
+using FFImageLoading.Config;
 using FFImageLoading.Cross;
+using FFImageLoading.Helpers;
 using SkyDrop.Droid.Bindings;
 using Google.Android.Material.Card;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.IoC;
+using MvvmCross.Logging;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Platforms.Android.Core;
 using MvvmCross.ViewModels;
+using Serilog;
+using Serilog.Core;
+using Serilog.Events;
 using SkyDrop.Core;
 using SkyDrop.Droid.Bindings;
+using Xamarin.Essentials;
+using Log = Acr.UserDialogs.Infrastructure.Log;
 
 namespace SkyDrop.Droid
 {
@@ -25,12 +35,7 @@ namespace SkyDrop.Droid
         protected override IMvxApplication CreateApp()
         {
             Debug.WriteLine("CreateApp() droid");
-
-            while (topActivityProvider.Activity == null)
-            {
-
-            }
-
+            
             UserDialogs.Init(topActivityProvider.Activity);
 
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton(() => UserDialogs.Instance);
@@ -43,8 +48,43 @@ namespace SkyDrop.Droid
             Debug.WriteLine("CreateAndroidCurrentTopActivity() droid");
 
             topActivityProvider = base.CreateAndroidCurrentTopActivity();
+            
 
             return topActivityProvider;
+        }
+        
+        public override MvxLogProviderType GetDefaultLogProviderType() => MvxLogProviderType.Serilog;
+
+        protected override IMvxLogProvider CreateLogProvider()
+        {
+            Serilog.Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .Enrich.FromLogContext()
+                .WriteTo.AndroidLog(outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj} ({SourceContext}) {Exception}")
+                .WriteTo.File(
+                    Path.Combine(FileSystem.CacheDirectory, "Logs", "Log.log"),
+                    rollingInterval: RollingInterval.Day,
+                    outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj} ({SourceContext}) {Exception}{NewLine}"
+                ).CreateLogger();
+            
+            var logProvider = base.CreateLogProvider();
+            
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger(logProvider));
+
+            ImageService.Instance.Initialize(new Configuration()
+            {
+                Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>(),
+                
+                VerboseLogging = true,
+                VerboseLoadingCancelledLogging = true,
+                
+                VerbosePerformanceLogging = true,
+                VerboseMemoryCacheLogging = true,
+            });
+
+            ImageService.Instance.Config.Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>();
+
+            return logProvider;
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)

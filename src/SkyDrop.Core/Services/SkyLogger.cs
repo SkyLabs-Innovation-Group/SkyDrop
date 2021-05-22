@@ -1,18 +1,36 @@
 using System;
 using System.Runtime.CompilerServices;
 using FFImageLoading.Helpers;
+using MvvmCross;
+using MvvmCross.Logging;
 
 // In exceptional cases, tooling may be placed into the root namespace to gain accessibility to the members everywhere.
 namespace SkyDrop
 {
     public class SkyLogger : ILog, IMiniLogger
     {
+        // private static SkyLogger _instance;
+        // public static SkyLogger Instance => _instance ?? (SkyLogger) Mvx.IoCProvider.Resolve<ILog>();
+
+        private static IMvxLog _mvxLog;
+        
+        public SkyLogger(IMvxLogProvider logProvider)
+        {
+            _mvxLog = logProvider.GetLogFor<SkyLogger>();
+        }
+        
         // IMiniLogger methods for FFImageLoading logging
-        public void Debug(string message) => Print(message, nameof(IMiniLogger), -1);
+        public void Debug(string message) => _mvxLog.Debug(message);
 
-        public void Error(string errorMessage) => Print(errorMessage, nameof(IMiniLogger), -1);
+        public void Error(string errorMessage) => _mvxLog.Debug(errorMessage);
 
-        public void Error(string errorMessage, Exception exception) => Exception(exception, errorMessage, -1);
+        public void Error(string errorMessage, Exception exception)
+        {
+            _mvxLog.Debug("_mvxLog IMiniLogger error: ");
+            _mvxLog.Debug($"{exception.GetType()}: {exception.Message}");
+            _mvxLog.Debug(exception.StackTrace);
+            Exception(exception);
+        }
 
 
         // SkyLogger
