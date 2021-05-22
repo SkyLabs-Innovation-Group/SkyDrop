@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -52,13 +53,15 @@ namespace SkyDrop.Core.Services
             response.EnsureSuccessStatusCode();
             
             var responseString = await response.Content.ReadAsStringAsync();
-            
             Log.Trace(responseString);
 
             var skyFile = JsonConvert.DeserializeObject<SkyFile>(responseString);
 
             if (skyfile == null)
                 throw new ArgumentNullException(nameof(skyfile));
+
+            // From ReSharper - in debug mode, outputs call stack + message here when this condition is false
+            Debug.Assert(skyFile != null, nameof(skyFile) + " != null");
             
             skyFile.Filename = filename;
             skyFile.Status = FileStatus.Uploaded;
