@@ -9,7 +9,6 @@ using SkyDrop.Droid;
 using System.Drawing;
 using Xamarin.Essentials;
 using Android.Graphics;
-using Java.IO;
 using System.Threading.Tasks;
 using System;
 using System.IO;
@@ -19,6 +18,7 @@ using SkyDrop;
 using SkyDrop.Core;
 using SkyDrop.Core.DataModels;
 using FFImageLoading.Cross;
+using File = Java.IO.File;
 
 namespace SkyDrop.Droid.Bindings
 {
@@ -27,50 +27,43 @@ namespace SkyDrop.Droid.Bindings
     ///
     /// FFImageLoading handles optimising the stream, so I am generating it only right before passing it to Target.ImageStream.
     /// </summary>
-    public class SkyFileImageViewBinding : MvxTargetBinding<MvxCachedImageView, SkyFile>
+    public class ImagePreviewBinding : MvxTargetBinding<MvxCachedImageView, string>
     {
         private ILog _log;
         private ILog log => _log ??= Mvx.IoCProvider.Resolve<ILog>();
         
         public static string Name => "ImagePreview";
 
-        public SkyFileImageViewBinding(MvxCachedImageView target) : base(target)
+        public ImagePreviewBinding(MvxCachedImageView target) : base(target)
         {
         }
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
-        protected override void SetValue(SkyFile value)
+        protected override void SetValue(string value)
         {
             try
             {
-                if (value == null)
+                if (string.IsNullOrEmpty(value))
                 {
                     Target.SetImageBitmap(null);
                     return;
                 }
 
-                using (var stream = value.GetStream())
-                {
-                    //this line should work but doesn't
-                    Target.ImageStream = async c => await Task.FromResult(stream);
-                }
+                Target.ImageStream = c =>
+                                    {
+                                        try
+                                        {
+                                            return Task.FromResult((Stream) System.IO.File.OpenRead(value));
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            log.Error("Target.ImageStream");
+                                            log.Exception(e);
 
-                /*
-                MainThread.InvokeOnMainThreadAsync( () =>
-                {
-                    try
-                    {
-                        using var stream = value.GetStream();
-                        Target.ImageStream = c => Task.FromResult(stream);
-                    }
-                    catch (Exception e)
-                    {
-                        log.Trace("Exception encountered while setting SkyFile's thumbnail in ImageStream binding");
-                        log.Exception(e);
-                    }
-                }).Forget();
-                */
+                                            return null;
+                                        }
+                                    };
             }
             catch(Exception e)
             {

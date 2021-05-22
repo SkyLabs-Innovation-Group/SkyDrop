@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -19,9 +20,16 @@ namespace SkyDrop
 
         public static void Print(string message, string sourceFilePath, int sourceLineNumber)
         {
-            string fileName = Path.GetFileName(sourceFilePath);
+            try
+            {
+                string fileName = Path.GetFileName(sourceFilePath);
 
-            System.Diagnostics.Trace.WriteLine($"{fileName}:{sourceLineNumber} " + message);
+                Debug.WriteLine($"{fileName}:{sourceLineNumber} " + message);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(message);
+            }
         }
     }
 }

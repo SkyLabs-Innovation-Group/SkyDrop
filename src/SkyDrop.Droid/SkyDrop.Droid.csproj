@@ -85,7 +85,7 @@
     <Compile Include="Bindings\CardStateBinding.cs" />
     <Compile Include="Bindings\BarcodeBackgroundBinding.cs" />
     <Compile Include="Bindings\UploadProgressBinding.cs" />
-    <Compile Include="Bindings\SkyFileImageViewBinding.cs" />
+    <Compile Include="Bindings\ImagePreviewBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
