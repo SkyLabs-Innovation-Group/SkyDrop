@@ -68,7 +68,7 @@ namespace SkyDrop.Droid.Bindings
                     }
                     catch (Exception ex)
                     {
-                        Log.Logger.Error("Error loading image binding", ex);
+                        Log.Logger.Error(ex, "Error loading image binding");
                     }
                 }).Forget();
             }

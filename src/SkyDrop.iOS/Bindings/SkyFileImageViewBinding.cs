@@ -46,7 +46,7 @@ namespace SkyDrop.iOS.Bindings
                     }
                     catch (Exception ex)
                     {
-                        Log.Logger.Error("Error setting SkyFile preview", ex);
+                        Log.Logger.Error(ex, "Error setting SkyFile preview");
                     }
                 }).Forget();
             }
