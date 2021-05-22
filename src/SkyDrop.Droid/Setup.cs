@@ -9,6 +9,7 @@ using FFImageLoading;
 using FFImageLoading.Config;
 using FFImageLoading.Cross;
 using FFImageLoading.Helpers;
+using FFImageLoading.Work;
 using SkyDrop.Droid.Bindings;
 using Google.Android.Material.Card;
 using MvvmCross;
@@ -73,11 +74,12 @@ namespace SkyDrop.Droid
 
             ImageService.Instance.Initialize(new Configuration()
             {
-                Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>(),
+                DownsampleInterpolationMode = InterpolationMode.Low,
                 
+                // Logging attributes 
+                Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>(),
                 VerboseLogging = true,
                 VerboseLoadingCancelledLogging = true,
-                
                 VerbosePerformanceLogging = true,
                 VerboseMemoryCacheLogging = true,
             });

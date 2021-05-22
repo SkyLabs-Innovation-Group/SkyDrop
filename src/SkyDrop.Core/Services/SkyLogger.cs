@@ -20,16 +20,17 @@ namespace SkyDrop
         }
         
         // IMiniLogger methods for FFImageLoading logging
-        public void Debug(string message) => _mvxLog.Debug(message);
+        public void Debug(string message) => Print(message, "", 1);
 
-        public void Error(string errorMessage) => _mvxLog.Debug(errorMessage);
+        public void Error(string errorMessage) => Print(errorMessage, "", 1);
 
         public void Error(string errorMessage, Exception exception)
         {
+            Exception(exception);
+
             _mvxLog.Debug("_mvxLog IMiniLogger error: ");
             _mvxLog.Debug($"{exception.GetType()}: {exception.Message}");
             _mvxLog.Debug(exception.StackTrace);
-            Exception(exception);
         }
 
 

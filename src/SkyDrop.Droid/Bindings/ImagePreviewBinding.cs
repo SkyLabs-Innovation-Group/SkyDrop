@@ -49,6 +49,9 @@ namespace SkyDrop.Droid.Bindings
                     Target.SetImageBitmap(null);
                     return;
                 }
+                
+                if (!Target.DownsampleUseDipUnits)
+                    Target.DownsampleUseDipUnits = true;
 
                 Target.ImageStream = c =>
                                     {
