@@ -33,6 +33,17 @@ namespace SkyDrop.Droid
     {
         private IMvxAndroidCurrentTopActivity topActivityProvider { get; set; }
 
+        protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
+        {
+            base.FillTargetFactories(registry);
+            registry.RegisterCustomBindingFactory<CardView>(CardBackgroundColorBinding.Name, view => new CardBackgroundColorBinding(view));
+            registry.RegisterCustomBindingFactory<MaterialCardView>(MaterialCardStateBinding.Name, view => new MaterialCardStateBinding(view));
+            registry.RegisterCustomBindingFactory<MaterialCardView>(BarcodeBackgroundBinding.Name, view => new BarcodeBackgroundBinding(view));
+            registry.RegisterCustomBindingFactory<View>(VisibleHiddenBinding.Name, view => new VisibleHiddenBinding(view));
+            registry.RegisterCustomBindingFactory<ProgressBar>(UploadProgressBinding.Name, view => new UploadProgressBinding(view));
+            registry.RegisterCustomBindingFactory<MvxCachedImageView>(ImagePreviewBinding.Name, view => new ImagePreviewBinding(view));
+        }
+        
         protected override IMvxApplication CreateApp()
         {
             Debug.WriteLine("CreateApp() droid");
@@ -58,6 +69,7 @@ namespace SkyDrop.Droid
 
         protected override IMvxLogProvider CreateLogProvider()
         {
+            // From https://prin53.medium.com/logging-in-xamarin-application-logging-infrastructure-with-mvvmcross-2c9bef960c60
             Serilog.Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Verbose()
                 .Enrich.FromLogContext()
@@ -90,15 +102,6 @@ namespace SkyDrop.Droid
             return logProvider;
         }
 
-        protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
-        {
-            base.FillTargetFactories(registry);
-            registry.RegisterCustomBindingFactory<CardView>(CardBackgroundColorBinding.Name, view => new CardBackgroundColorBinding(view));
-            registry.RegisterCustomBindingFactory<MaterialCardView>(MaterialCardStateBinding.Name, view => new MaterialCardStateBinding(view));
-            registry.RegisterCustomBindingFactory<MaterialCardView>(BarcodeBackgroundBinding.Name, view => new BarcodeBackgroundBinding(view));
-            registry.RegisterCustomBindingFactory<View>(VisibleHiddenBinding.Name, view => new VisibleHiddenBinding(view));
-            registry.RegisterCustomBindingFactory<ProgressBar>(UploadProgressBinding.Name, view => new UploadProgressBinding(view));
-            registry.RegisterCustomBindingFactory<MvxCachedImageView>(ImagePreviewBinding.Name, view => new ImagePreviewBinding(view));
-        }
+  
     }
 }
