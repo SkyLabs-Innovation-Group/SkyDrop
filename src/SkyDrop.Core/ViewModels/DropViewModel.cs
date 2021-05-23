@@ -375,7 +375,7 @@ namespace SkyDrop.Core.ViewModels.Main
             var image = "Select Image";
             var video = "Select Video";
             var cancel = "cancel";
-            var fileType = await userDialogs.ActionSheetAsync("", cancel, "", null, file, image, video);
+            var fileType = await userDialogs.ActionSheetAsync("", cancel, null, null, file, image, video);
             if (fileType == cancel)
             {
                 return null;
