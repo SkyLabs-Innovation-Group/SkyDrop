@@ -61,8 +61,6 @@ namespace SkyDrop.iOS.Bindings
                 {
                     try
                     {
-                        
-                        
                         var task = ImageService.Instance.LoadStream(
                                 c => Task.FromResult((Stream) System.IO.File.OpenRead(value.FullFilePath)))
                             .DownSampleInDip()
