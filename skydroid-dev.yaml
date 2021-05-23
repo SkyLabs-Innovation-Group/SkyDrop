@@ -8,7 +8,7 @@ checkVersion:
   versionName: 'versionName=+"([^"]+)"'
 
 uploadBuild:
-  file: src/SkyDrop.Droid/bin/Release/to.hns.skyqr.skydrop-Signed.apk
+  file: src/SkyDrop.Droid/bin/Release/to.hns.skydrop-Signed.apk
 
 updateMetadataFile:
   updateWhatsNew: false

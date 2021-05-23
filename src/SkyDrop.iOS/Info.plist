@@ -7,9 +7,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>skydrop.skydrop</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>1.0.0.1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIDeviceFamily</key>
@@ -39,5 +39,7 @@
 	<string>SkyDrop uses your camera to scan for QR codes which point to skylinks</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Microphone permission is required for selecting video due to a bug, please allow the permission or use Select Files instead to upload videos</string>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 </dict>
 </plist>
