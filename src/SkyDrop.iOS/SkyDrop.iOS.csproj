@@ -57,6 +57,7 @@
     <MtouchFastDev>true</MtouchFastDev>
     <MtouchInterpreter>-all</MtouchInterpreter>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <CodesignProvision>iOS Team Provisioning Profile: skydrop</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>

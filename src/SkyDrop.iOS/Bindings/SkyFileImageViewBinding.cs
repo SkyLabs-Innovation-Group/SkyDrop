@@ -2,6 +2,8 @@ using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
 using System.Threading.Tasks;
 using System;
+using System.IO;
+using FFImageLoading;
 using MvvmCross;
 using SkyDrop;
 using UIKit;
@@ -30,19 +32,43 @@ namespace SkyDrop.iOS.Bindings
         {
             try
             {
-                if (value == null)
-                {
-                    Target.Image = null;
-                    return;
-                }
+                Target.Image = null;
 
-                MainThread.InvokeOnMainThreadAsync(async () =>
+                if (value == null)
+                    return;
+                
+                string extension = Path.GetExtension(value.FullFilePath).ToLowerInvariant();
+
+                bool shouldSetImagePreview;
+                switch (extension) 
+                {
+                    case ".jpg":
+                    case ".jpeg":
+                    case ".bmp":
+                    case ".png":
+                    case ".tiff":
+                        shouldSetImagePreview = true;
+                        break;
+                    default:
+                        shouldSetImagePreview = false;
+                        break;
+                }
+                
+                if (!shouldSetImagePreview)
+                    return;
+
+                Task.Run(async () =>
                 {
                     try
                     {
-                        await using var stream = value.GetStream();
-                        var previewImage = UIImage.LoadFromData(NSData.FromStream(stream));
-                        Target.Image = previewImage;
+                        
+                        
+                        var task = ImageService.Instance.LoadStream(
+                                c => Task.FromResult((Stream) System.IO.File.OpenRead(value.FullFilePath)))
+                            .DownSampleInDip()
+                            .IntoAsync(Target);
+
+                        await task;
                     }
                     catch (Exception ex)
                     {
