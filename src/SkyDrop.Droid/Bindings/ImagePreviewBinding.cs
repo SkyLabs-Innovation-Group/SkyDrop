@@ -49,6 +49,8 @@ namespace SkyDrop.Droid.Bindings
         {
             try
             {
+                Target.SetImageBitmap(null);
+                
                 if (string.IsNullOrEmpty(value?.FullFilePath))
                     return;
 
