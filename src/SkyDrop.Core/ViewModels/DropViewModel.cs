@@ -271,6 +271,9 @@ namespace SkyDrop.Core.ViewModels.Main
                 //don't allow user to scan barcode code while barcode is visible
                 if (IsBarcodeVisible) return;
 
+                //don't allow user to scan barcode code from confirm upload screen
+                if (DropViewUIState == DropViewState.ConfirmFilesState) return;
+
                 IsSendButtonGreen = false;
                 IsReceiveButtonGreen = true;
 
