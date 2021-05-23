@@ -1,15 +1,18 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Fody;
 using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Utility;
 
 namespace SkyDrop.Core.Services
 {
+    [ConfigureAwait(false)]
     public class ApiService : IApiService
     {
         public ILog Log { get; }
@@ -17,31 +20,50 @@ namespace SkyDrop.Core.Services
         public ApiService(ILog log)
         {
             Log = log;
-            httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("https://siasky.net/");
+            httpClient = new HttpClient
+            {
+                BaseAddress = new Uri("https://siasky.net/"), Timeout = TimeSpan.FromMinutes(120)
+            };
         }
 
         private HttpClient httpClient { get; set; }
 
-        public async Task<SkyFile> UploadFile(string filename, byte[] file, long fileSizeBytes, CancellationTokenSource cancellationToken)
+        public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationTokenSource)
         {
-            if (fileSizeBytes == 0)
-                Log.Error("File size was zero when uploading file");
+            var fileSizeBytes = skyfile.FileSizeBytes;
+            var filename = skyfile.Filename;
 
             var url = $"{Util.Portal}/skynet/skyfile";
             var form = new MultipartFormDataContent();
-            form.Add(new ByteArrayContent(file), "file", filename);
+            
+            using var file = skyfile.GetStream();
+            
+            if (fileSizeBytes == 0)
+                Log.Error("File size was zero when uploading file");
+
+            form.Add(new StreamContent(file), "file", filename);
 
             Log.Trace("Sending file " + filename);
+            
+            var request = new HttpRequestMessage(HttpMethod.Post, url) {Content =  form};
+            
+            Log.Trace(request.ToString());
 
-            var response = await httpClient.PostAsync(url, form, cancellationToken.Token).ConfigureAwait(false);
-
-            Log.Trace(response.RequestMessage.ToString());
-
+            var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationTokenSource.Token);
+            
             response.EnsureSuccessStatusCode();
+            
+            var responseString = await response.Content.ReadAsStringAsync();
+            Log.Trace(responseString);
 
-            var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var skyFile = JsonConvert.DeserializeObject<SkyFile>(responseString);
+
+            if (skyfile == null)
+                throw new ArgumentNullException(nameof(skyfile));
+
+            // From ReSharper - in debug mode, outputs call stack + message here when this condition is false
+            Debug.Assert(skyFile != null, nameof(skyFile) + " != null");
+            
             skyFile.Filename = filename;
             skyFile.Status = FileStatus.Uploaded;
             skyFile.FileSizeBytes = fileSizeBytes;
@@ -52,6 +74,6 @@ namespace SkyDrop.Core.Services
 
     public interface IApiService
     {
-        Task<SkyFile> UploadFile(string filename, byte[] file, long fileSizeBytes, CancellationTokenSource cancellationToken);
+        Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationTokenSource);
     }
 }

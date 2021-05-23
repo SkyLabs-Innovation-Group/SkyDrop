@@ -137,7 +137,7 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             if (file.Status == FileStatus.Staged)
             {
-                file.Data = null;
+                file.FullFilePath = null;
 
                 var newFiles = new List<SkyFileDVM>(SkyFiles.Where(f => f.SkyFile.Filename != file.Filename));
                 SkyFiles.SwitchTo(newFiles);
@@ -200,7 +200,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 Log.Trace($"Uploading file #{uploadCount}: {stagedFile?.Filename ?? "null"}");
 
-                var skyFile = await apiService.UploadFile(stagedFile.Filename, stagedFile.Data, stagedFile.FileSizeBytes, null);
+                var skyFile = await apiService.UploadFile(stagedFile, null);
                 Log.Trace("UPLOAD COMPLETE: " + skyFile.Skylink);
 
                 var existingFile = SkyFiles.FirstOrDefault(s => s.SkyFile.Skylink == skyFile.Skylink);

@@ -107,6 +107,7 @@ namespace SkyDrop.Core.ViewModels.Main
             IFileSystemService fileSystemService,
             ILog log) : base(singletonService)
         {
+            Log = log;
             Title = "SkyDrop";
 
             this.apiService = apiService;
@@ -239,21 +240,17 @@ namespace SkyDrop.Core.ViewModels.Main
                 SkyFileFullUrl = Util.GetSkylinkUrl(UploadedFile.Skylink);
                 await GenerateBarcodeAsyncFunc();
             }
-            catch (Exception e) when (e.Message == "Socket closed" || e.Message == "A task was canceled.")
+            catch (TaskCanceledException tce)
             {
-                //user cancelled the upload
                 userDialogs.Toast("Upload cancelled");
-
-                //reset the UI
                 ResetUIStateCommand?.Execute();
-            }
-            catch (Exception ex)
-            {
-                //an error occurred
-                Log.Exception(ex);
-                userDialogs.Toast("Could not upload file");
 
-                //reset the UI
+            }
+            catch (Exception ex) // General error
+            {
+                userDialogs.Toast("Could not upload file");
+                Log.Exception(ex);
+                
                 ResetUIStateCommand?.Execute();
             }
             finally
@@ -273,6 +270,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 //don't allow user to scan barcode code while barcode is visible
                 if (IsBarcodeVisible) return;
+
+                //don't allow user to scan barcode code from confirm upload screen
+                if (DropViewUIState == DropViewState.ConfirmFilesState) return;
 
                 IsSendButtonGreen = false;
                 IsReceiveButtonGreen = true;
@@ -349,14 +349,13 @@ namespace SkyDrop.Core.ViewModels.Main
         private async Task<SkyFile> UploadFile()
         {
             uploadCancellationToken = new CancellationTokenSource();
-            var skyFile = await apiService.UploadFile(FileToUpload.Filename, FileToUpload.Data,
-                FileToUpload.FileSizeBytes, uploadCancellationToken);
+            var skyFile = await apiService.UploadFile(FileToUpload, uploadCancellationToken);
             return skyFile;
         }
 
         private SkyFile MakeZipFile()
         {
-            // TODO: add option to rename zip file in the renaming dialog
+            //TODO: add option to rename zip file in the renaming dialog
             string skyArchive = "skydrop_archive.zip";
 
             string compressedFilePath = Path.Combine(Path.GetTempPath(), skyArchive);
@@ -366,17 +365,14 @@ namespace SkyDrop.Core.ViewModels.Main
             if (!compressSuccess)
                 throw new Exception("Failed to create archive");
 
-            // TODO: remove need for storing file bytes in SkyFiles, upload from file path instead
-            var fileBytes = File.ReadAllBytes(compressedFilePath);
-
+            var fileStream = File.OpenRead(compressedFilePath);
             var skyFile = new SkyFile()
             {
-                Data = fileBytes,
                 FullFilePath = compressedFilePath,
                 Filename = skyArchive,
-                FileSizeBytes = fileBytes.LongCount(),
+                FileSizeBytes = fileStream.Length,
             };
-
+            
             return skyFile;
         }
 
@@ -407,7 +403,6 @@ namespace SkyDrop.Core.ViewModels.Main
 
             //read contents of the selected files
 
-            //TODO: optimise this, currently files' bytes are held in memory prior to upload
             IsStagingFiles = true;
             var userSkyFiles = new List<SkyFile>();
 
@@ -419,17 +414,11 @@ namespace SkyDrop.Core.ViewModels.Main
                         continue;
 
                     using var stream = await pickedFile.OpenReadAsync();
-                    using var memoryStream = new MemoryStream();
-
-                    await stream.CopyToAsync(memoryStream);
-
-                    var fileBytes = memoryStream.GetBuffer();
                     var skyFile = new SkyFile()
                     {
-                        Data = fileBytes,
                         FullFilePath = pickedFile.FullPath,
                         Filename = pickedFile.FileName,
-                        FileSizeBytes = fileBytes.LongCount(),
+                        FileSizeBytes = stream.Length,
                     };
 
                     userSkyFiles.Add(skyFile);
@@ -482,7 +471,7 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             var (newUploadProgress, newUploadTimerText) = uploadTimerService.GetUploadProgress();
 
-            if (UploadProgress == 1)
+            if (UploadProgress >= 1)
                 return;
 
             //scale the progress so it fits within 85% of the bar

@@ -33,7 +33,7 @@ namespace SkyDrop.Core.DataViewModels
             this.SkyFile.Merkelroot = skyFile.Merkelroot;
             this.SkyFile.Filename = skyFile.Filename;
             this.SkyFile.Status = skyFile.Status;
-            this.SkyFile.Data = null; //clear file data from memory
+            this.SkyFile.FullFilePath = null; 
 
             IsLoading = false;
         }

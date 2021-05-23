@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.IO;
 using Newtonsoft.Json;
 using Realms;
 
@@ -22,16 +23,20 @@ namespace SkyDrop.Core.DataModels
 
         public long FileSizeBytes { get; set; }
 
-        //only for staged files
-        [Realms.Ignored]
-        public byte[] Data { get; set; }
+        public Stream GetStream()
+        {
+            if (FullFilePath == null)
+                return null;
+            
+            return File.OpenRead(FullFilePath);
+        }
 
+        private int statusInt = 1;
         public FileStatus Status
         {
             get => (FileStatus)statusInt;
             set => statusInt = (int)value;
         }
-        private int statusInt = 1;
     }
 
     public enum FileStatus
