@@ -37,6 +37,8 @@ namespace SkyDrop.Core.DataModels
             get => (FileStatus)statusInt;
             set => statusInt = (int)value;
         }
+
+        public bool ShouldDownsample => true;
     }
 
     public enum FileStatus
