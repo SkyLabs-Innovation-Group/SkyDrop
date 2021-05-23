@@ -57,6 +57,7 @@
     <MtouchFastDev>true</MtouchFastDev>
     <MtouchInterpreter>-all</MtouchInterpreter>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <PlatformTarget>iPhone</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
