@@ -191,7 +191,7 @@ namespace SkyDrop.Core.ViewModels.Main
             //select file
 
             var pickedFiles = await SelectFiles();
-            if (pickedFiles == null)
+            if (pickedFiles == null || pickedFiles.Count == 0)
             {
                 ResetUI();
                 return;
@@ -199,15 +199,8 @@ namespace SkyDrop.Core.ViewModels.Main
 
             //stage the files
 
-            if (pickedFiles.Count > 0)
-            {
-                StageFiles(pickedFiles, false);
-            }
-            else
-            {
-                //reset the UI
-                ResetUIStateCommand?.Execute();
-            }
+            SlideSendButtonToCenterCommand?.Execute();
+            StageFiles(pickedFiles, false);
         }
 
         private async Task FinishSendFile()
@@ -397,9 +390,6 @@ namespace SkyDrop.Core.ViewModels.Main
                 chosenType = SkyFilePickerType.Generic;
 
             var pickedFiles = await fileSystemService.PickFilesAsync(chosenType);
-
-            if (DropViewUIState == DropViewState.SendReceiveButtonState)
-                SlideSendButtonToCenterCommand?.Execute();
 
             //read contents of the selected files
 
