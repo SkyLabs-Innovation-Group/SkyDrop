@@ -78,8 +78,7 @@ namespace SkyDrop.Droid.Bindings
                 {
                     try
                     {
-                        var task = ImageService.Instance.LoadStream(
-                                c => Task.FromResult((Stream) System.IO.File.OpenRead(value.FullFilePath)))
+                        var task = ImageService.Instance.LoadFile(value.FullFilePath)
                             .DownSampleInDip()
                             .IntoAsync(Target);
 

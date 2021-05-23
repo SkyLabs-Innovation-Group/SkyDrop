@@ -61,6 +61,8 @@ namespace SkyDrop.Droid.Views.Main
 
             var stagedFilesRecycler = FindViewById<RecyclerView>(Resource.Id.StagedFilesRecycler);
             stagedFilesRecycler.SetLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false));
+            
+            stagedFilesRecycler.HasFixedSize = true;
         }
 
         /// <summary>
