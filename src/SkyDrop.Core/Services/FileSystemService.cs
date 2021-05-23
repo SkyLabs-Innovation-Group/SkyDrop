@@ -20,6 +20,18 @@ namespace SkyDrop.Core.Services
 
         public async Task<IEnumerable<FileResult>> PickFilesAsync(SkyFilePickerType fileType)
         {
+            var permissionResult = await Permissions.RequestAsync<Permissions.StorageRead>();
+
+            if (permissionResult != PermissionStatus.Granted)
+            {
+                Log.Error("StorageRead permission not granted.");
+                return null;
+            }
+            else
+            {
+                Log.Trace("PickFilesAsync() was called, with StorageRead permission granted");
+            }
+
             IEnumerable<FileResult> pickedFiles;
             switch (fileType)
             {
