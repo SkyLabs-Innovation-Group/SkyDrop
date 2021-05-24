@@ -17,6 +17,7 @@ using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.Droid.Helper;
 using ZXing.Mobile;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
+using static SkyDrop.Core.Utility.Util;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -28,8 +29,6 @@ namespace SkyDrop.Droid.Views.Main
     {
         protected override int ActivityLayoutId => Resource.Layout.DropView;
 
-        private const float dotsMinAlpha = 0.2f;
-        private const float dotsMaxAlpha = 0.8f;
         private const int swipeMarginX = 100;
         private bool isPressed;
         private float tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
@@ -353,8 +352,8 @@ namespace SkyDrop.Droid.Views.Main
         {
             var dotSize = 40;
 
-            leftDot = new View(this) { Alpha = dotsMaxAlpha, LayoutParameters = new LinearLayout.LayoutParams(dotSize, dotSize) { RightMargin = dotSize } };
-            rightDot = new View(this) { Alpha = dotsMinAlpha, LayoutParameters = new LinearLayout.LayoutParams(dotSize, dotSize) };
+            leftDot = new View(this) { Alpha = NavDotsMaxAlpha, LayoutParameters = new LinearLayout.LayoutParams(dotSize, dotSize) { RightMargin = dotSize } };
+            rightDot = new View(this) { Alpha = NavDotsMinAlpha, LayoutParameters = new LinearLayout.LayoutParams(dotSize, dotSize) };
             leftDot.Background = GetDrawable(Resource.Drawable.ic_circle);
             rightDot.Background = GetDrawable(Resource.Drawable.ic_circle);
 
@@ -374,12 +373,12 @@ namespace SkyDrop.Droid.Views.Main
             {
                 case DropViewState.SendReceiveButtonState:
                 case DropViewState.ConfirmFilesState:
-                    leftDot.Animate().Alpha(dotsMaxAlpha).SetDuration(duration).Start();
-                    rightDot.Animate().Alpha(dotsMinAlpha).SetDuration(duration).Start();
+                    leftDot.Animate().Alpha(NavDotsMaxAlpha).SetDuration(duration).Start();
+                    rightDot.Animate().Alpha(NavDotsMinAlpha).SetDuration(duration).Start();
                     break;
                 case DropViewState.QRCodeState:
-                    leftDot.Animate().Alpha(dotsMinAlpha).SetDuration(duration).Start();
-                    rightDot.Animate().Alpha(dotsMaxAlpha).SetDuration(duration).Start();
+                    leftDot.Animate().Alpha(NavDotsMinAlpha).SetDuration(duration).Start();
+                    rightDot.Animate().Alpha(NavDotsMaxAlpha).SetDuration(duration).Start();
                     break;
             }
         }

@@ -15,6 +15,7 @@ using UIKit;
 using ZXing.Mobile;
 using ZXing.Rendering;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
+using static SkyDrop.Core.Utility.Util;
 
 namespace SkyDrop.iOS.Views.Drop
 {
@@ -51,8 +52,10 @@ namespace SkyDrop.iOS.Views.Drop
                 ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
                 ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
                 ViewModel.ResetUIStateCommand = new MvxCommand(SetSendReceiveButtonUiState);
+                ViewModel.UpdateNavDotsCommand = new MvxCommand(() => UpdateNavDots());
 
                 SetupGestureListener();
+                SetupNavDots();
 
                 //setup nav bar
                 NavigationController.NavigationBar.BarTintColor = Colors.GradientDark.ToNative();
@@ -118,11 +121,49 @@ namespace SkyDrop.iOS.Views.Drop
                 set.Bind(CancelButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
                 set.Bind(CancelButton).For("Tap").To(vm => vm.CancelUploadCommand);
 
+                set.Bind(LeftNavDot).For("Visible").To(vm => vm.NavDotsVisible);
+                set.Bind(RightNavDot).For("Visible").To(vm => vm.NavDotsVisible);
+
                 set.Apply();
             }
             catch(Exception e)
             {
                 ViewModel.Log.Exception(e);
+            }
+        }
+
+        private void SetupNavDots()
+        {
+            LeftNavDot.Alpha = NavDotsMaxAlpha;
+            RightNavDot.Alpha = NavDotsMinAlpha;
+        }
+
+        /// <summary>
+        /// Change alpha of navigation dots display to reflect new UI state
+        /// </summary>
+        private void UpdateNavDots()
+        {
+            var duration = 0.25;
+
+            switch (ViewModel.DropViewUIState)
+            {
+                case DropViewState.SendReceiveButtonState:
+                case DropViewState.ConfirmFilesState:
+                    UIView.Animate(duration, () =>
+                    {
+                        LeftNavDot.Alpha = NavDotsMaxAlpha;
+                        RightNavDot.Alpha = NavDotsMinAlpha;
+                    });
+                    
+                    break;
+                case DropViewState.QRCodeState:
+                    UIView.Animate(duration, () =>
+                    {
+                        LeftNavDot.Alpha = NavDotsMinAlpha;
+                        RightNavDot.Alpha = NavDotsMaxAlpha;
+                    });
+
+                    break;
             }
         }
 
@@ -137,6 +178,7 @@ namespace SkyDrop.iOS.Views.Drop
                 var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileFullUrl, (int)BarcodeImage.Frame.Width, (int)BarcodeImage.Frame.Height);
                 var image = await iOSUtil.BitMatrixToImage(matrix);
                 BarcodeImage.Image = image;
+                ViewModel.BarcodeIsLoaded = true;
             }
             catch (Exception ex)
             {

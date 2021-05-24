@@ -6,6 +6,8 @@ namespace SkyDrop.Core.Utility
     public static class Util
     {
         public const string Portal = "https://siasky.net";
+        public const float NavDotsMinAlpha = 0.2f;
+        public const float NavDotsMaxAlpha = 0.8f;
 
         private const int SkylinkLength = 46;
 

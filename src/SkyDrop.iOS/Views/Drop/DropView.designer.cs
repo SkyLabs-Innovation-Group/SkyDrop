@@ -37,6 +37,9 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UILabel FileSizeLabel { get; set; }
 
 		[Outlet]
+		UIKit.UIImageView LeftNavDot { get; set; }
+
+		[Outlet]
 		UIKit.UIView OpenButton { get; set; }
 
 		[Outlet]
@@ -47,6 +50,9 @@ namespace SkyDrop.iOS.Views.Drop
 
 		[Outlet]
 		UIKit.UIImageView ReceiveIcon { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView RightNavDot { get; set; }
 
 		[Outlet]
 		UIKit.UIView SendButton { get; set; }
@@ -151,6 +157,16 @@ namespace SkyDrop.iOS.Views.Drop
 			if (ShareButton != null) {
 				ShareButton.Dispose ();
 				ShareButton = null;
+			}
+
+			if (LeftNavDot != null) {
+				LeftNavDot.Dispose ();
+				LeftNavDot = null;
+			}
+
+			if (RightNavDot != null) {
+				RightNavDot.Dispose ();
+				RightNavDot = null;
 			}
 		}
 	}
