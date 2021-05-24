@@ -16,7 +16,7 @@ Android app ![Build status](https://build.appcenter.ms/v0.1/apps/1cd210b4-00be-4
 
 [Get SkyDrop on Google Play](https://play.google.com/store/apps/details?id=to.hns.skydrop)
 
-Install SkyDrop using SkyDroid (decentralised app store for Android): [Install SkyDroid](https://skydroid.app/), then install SkyDrop from there. [SkyDroid is open source](https://github.com/redsolver/skydroid) and maintained by redsolver. If you have trouble finding the app in SkyDroid, click the + and search for **skydrop.skyqr**.
+Install SkyDrop using SkyDroid (decentralised app store for Android): [Install SkyDroid](https://skydroid.app/), then install SkyDrop from there. [SkyDroid is open source](https://github.com/redsolver/skydroid) and maintained by redsolver. If you have trouble finding the app in SkyDroid, click the + and enter **skydrop**.
 
 iOS app ![Build status](https://build.appcenter.ms/v0.1/apps/7d69bbc9-723d-4bb1-b62f-4c2890c8ab45/branches/main/badge)
 
