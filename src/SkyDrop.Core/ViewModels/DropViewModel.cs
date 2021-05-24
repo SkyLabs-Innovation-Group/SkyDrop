@@ -43,6 +43,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand CancelUploadCommand { get; set; }
         public IMvxCommand CheckUserIsSwipingCommand { get; set; }
         public IMvxCommand<StagedFileDVM> ShowStagedFileMenuCommand { get; set; }
+        public IMvxCommand UpdateNavDotsCommand { get; set; }
 
         public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
@@ -59,6 +60,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public double UploadProgress { get; set; } //0-1
         public bool FirstFileUploaded { get; set; }
         public bool UserIsSwipingResult { get; set; }
+        public bool BarcodeIsLoaded { get; set; }
+        public bool NavDotsVisible => DropViewUIState != DropViewState.ConfirmFilesState && BarcodeIsLoaded;
         public string SendButtonLabel => IsUploading ? StagedFiles?.Count > 2 ? "SENDING FILES" :
             "SENDING FILE" :
             DropViewUIState == DropViewState.ConfirmFilesState && StagedFiles?.Count > 2 ? "SEND FILES" : "SEND FILE";
@@ -76,6 +79,8 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 _dropViewUIState = value;
                 Log.Trace($"New UI State: {value}");
+
+                UpdateNavDotsCommand?.Execute();
             }
         }
 
