@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -126,12 +127,11 @@ namespace SkyDrop.Droid.Helper
         {
             if (!await CheckPermissions())
                 return;
+
             /*
-            var intent = new Intent(Intent.ActionGetContent);
-            intent.SetType("image/*");
-            context.StartActivityForResult(intent, AndroidUtil.PickFileRequestCode);
-            */
+
             Intent getIntent = new Intent(Intent.ActionGetContent);
+            getIntent.PutExtra(Intent.ExtraAllowMultiple, true);
             getIntent.SetType("image/*");
 
             Intent pickIntent = new Intent(Intent.ActionPick, Android.Provider.MediaStore.Images.Media.ExternalContentUri);
@@ -141,7 +141,14 @@ namespace SkyDrop.Droid.Helper
             chooserIntent.PutExtra(Intent.ExtraInitialIntents, new Intent[] { pickIntent });
 
             context.StartActivityForResult(chooserIntent, AndroidUtil.PickFileRequestCode);
-            //startActivityForResult(chooserIntent, PICK_IMAGE);
+
+            */
+
+            Intent intent = new Intent(Intent.ActionGetContent);
+            intent.SetType("image/*"); //allows any image file type. Change * to specific extension to limit it
+                                       //**The following line is the important one!
+            intent.PutExtra(Intent.ExtraAllowMultiple, true);
+            context.StartActivityForResult(Intent.CreateChooser(intent, "Select Picture"), AndroidUtil.PickFileRequestCode); 
         }
 
         public static async Task SelectFile(Activity context)
@@ -199,10 +206,51 @@ namespace SkyDrop.Droid.Helper
             return true;
         }
 
-        public static SkyFile HandlePickedFile(Activity context, Intent data)
+        public static List<SkyFile> HandlePickedFiles(Activity context, Intent data)
         {
-            //handle the selected file
-            var uri = data.Data;
+            if (data.ClipData == null)
+            {
+                //HANDLE SINGLE FILE
+
+                var uri = data.Data;
+                string mimeType = context.ContentResolver.GetType(uri);
+                log.Trace("mime type: " + mimeType);
+
+                string extension = System.IO.Path.GetExtension(uri.Path);
+                log.Trace("extension: " + extension);
+
+                log.Trace("path: " + uri.Path);
+
+                var filename = GetFileName(context, uri);
+
+                //Toast.MakeText(context, uri.Path, ToastLength.Long).Show();
+
+                var fullPath = FilePathProvider.GetActualPathFromFile(context, uri);
+                using var stream = GetFileStream(context, uri);
+
+                return new List<SkyFile>{ new SkyFile
+                {
+                    FullFilePath = fullPath,
+                    Filename = filename,
+                    FileSizeBytes = stream.Length,
+                }};
+            }
+
+            //HANDLE MULTIPLE FILES
+            var files = new List<SkyFile>();
+            for (var i = 0; i < data.ClipData.ItemCount; i++)
+            {
+                var item = data.ClipData.GetItemAt(i);
+                var uri = item.Uri;
+                var skyFile = PickedFileToSkyFile(context, uri);
+                files.Add(skyFile);
+            }
+
+            return files;
+        }
+
+        private static SkyFile PickedFileToSkyFile(Context context, Android.Net.Uri uri)
+        {
             string mimeType = context.ContentResolver.GetType(uri);
             log.Trace("mime type: " + mimeType);
 
@@ -216,18 +264,17 @@ namespace SkyDrop.Droid.Helper
             //Toast.MakeText(context, uri.Path, ToastLength.Long).Show();
 
             var fullPath = FilePathProvider.GetActualPathFromFile(context, uri);
-            var stream = GetFileStream(context, uri);
+            using var stream = GetFileStream(context, uri);
+
             return new SkyFile
             {
                 FullFilePath = fullPath,
                 Filename = filename,
                 FileSizeBytes = stream.Length,
             };
-
-            
         }
 
-        public static Stream GetFileStream(Activity context, Android.Net.Uri uri)
+        public static Stream GetFileStream(Context context, Android.Net.Uri uri)
         {
             return context.ContentResolver.OpenInputStream(uri);
         }

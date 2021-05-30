@@ -105,8 +105,9 @@ namespace SkyDrop.Droid.Views.Main
         private void HandlePickedFile(Intent data)
         {
             AnimateSlideSendButton();
-            var stagedFile = AndroidUtil.HandlePickedFile(this, data);
-            ViewModel.NativePickFilesTask.SetResult(new System.Collections.Generic.List<SkyFile> { stagedFile });
+
+            var stagedFiles = AndroidUtil.HandlePickedFiles(this, data);
+            ViewModel.NativePickFilesTask.SetResult(stagedFiles);
             //ViewModel.StageFiles(new System.Collections.Generic.List<SkyFile> { stagedFile }, true);
         }
 
