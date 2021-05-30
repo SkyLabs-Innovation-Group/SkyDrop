@@ -199,7 +199,7 @@ namespace SkyDrop.Droid.Helper
             return true;
         }
 
-        public static async Task<SkyFile> HandlePickedFile(Activity context, Intent data)
+        public static SkyFile HandlePickedFile(Activity context, Intent data)
         {
             //handle the selected file
             var uri = data.Data;
@@ -215,10 +215,11 @@ namespace SkyDrop.Droid.Helper
 
             //Toast.MakeText(context, uri.Path, ToastLength.Long).Show();
 
+            var fullPath = FilePathProvider.GetActualPathFromFile(context, uri);
             var stream = GetFileStream(context, uri);
             return new SkyFile
             {
-                FullFilePath = uri.Path,
+                FullFilePath = fullPath,
                 Filename = filename,
                 FileSizeBytes = stream.Length,
             };

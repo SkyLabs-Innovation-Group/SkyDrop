@@ -75,7 +75,7 @@ namespace SkyDrop.Droid.Views.Main
         /// <summary>
         /// Called after user selects file
         /// </summary>
-        protected override async void OnActivityResult(int requestCode, Android.App.Result resultCode, Intent data)
+        protected override void OnActivityResult(int requestCode, Android.App.Result resultCode, Intent data)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace SkyDrop.Droid.Views.Main
                         return;
                     }
 
-                    await HandlePickedFile(data);
+                    HandlePickedFile(data);
                 }
             }
             catch (Exception ex)
@@ -102,10 +102,10 @@ namespace SkyDrop.Droid.Views.Main
         /// <summary>
         /// Generate SkyFile from intent data and stage it for upload
         /// </summary>
-        private async Task HandlePickedFile(Intent data)
+        private void HandlePickedFile(Intent data)
         {
             AnimateSlideSendButton();
-            var stagedFile = await AndroidUtil.HandlePickedFile(this, data);
+            var stagedFile = AndroidUtil.HandlePickedFile(this, data);
             ViewModel.NativePickFilesTask.SetResult(new System.Collections.Generic.List<SkyFile> { stagedFile });
             //ViewModel.StageFiles(new System.Collections.Generic.List<SkyFile> { stagedFile }, true);
         }

@@ -86,6 +86,7 @@
     <Compile Include="Bindings\BarcodeBackgroundBinding.cs" />
     <Compile Include="Bindings\UploadProgressBinding.cs" />
     <Compile Include="Bindings\ImagePreviewBinding.cs" />
+    <Compile Include="Helper\FilePathProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
