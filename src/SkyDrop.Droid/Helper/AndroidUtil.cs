@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Android.App;
@@ -119,6 +120,115 @@ namespace SkyDrop.Droid.Helper
                 //computationally heavy but quick
                 return renderer.Render(bitMatrix, ZXing.BarcodeFormat.QR_CODE, "");
             });
+        }
+
+        public static async Task SelectImage(Activity context)
+        {
+            if (!await CheckPermissions())
+                return;
+            /*
+            var intent = new Intent(Intent.ActionGetContent);
+            intent.SetType("image/*");
+            context.StartActivityForResult(intent, AndroidUtil.PickFileRequestCode);
+            */
+            Intent getIntent = new Intent(Intent.ActionGetContent);
+            getIntent.SetType("image/*");
+
+            Intent pickIntent = new Intent(Intent.ActionPick, Android.Provider.MediaStore.Images.Media.ExternalContentUri);
+            pickIntent.SetType("image/*");
+
+            Intent chooserIntent = Intent.CreateChooser(getIntent, "Select Image");
+            chooserIntent.PutExtra(Intent.ExtraInitialIntents, new Intent[] { pickIntent });
+
+            context.StartActivityForResult(chooserIntent, AndroidUtil.PickFileRequestCode);
+            //startActivityForResult(chooserIntent, PICK_IMAGE);
+        }
+
+        public static async Task SelectFile(Activity context)
+        {
+            try
+            {
+                if (!await CheckPermissions())
+                    return;
+
+                var intent = new Intent(Intent.ActionGetContent);
+                intent.SetType("file/*");
+                intent.AddCategory(Intent.CategoryOpenable);
+
+                // special intent for Samsung file manager
+                Intent sIntent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
+                sIntent.AddCategory(Intent.CategoryDefault);
+
+                Intent chooserIntent;
+                if (context.PackageManager.ResolveActivity(sIntent, 0) != null)
+                {
+                    // it is device with Samsung file manager
+                    chooserIntent = Intent.CreateChooser(sIntent, "Open file");
+                    chooserIntent.PutExtra(Intent.ExtraInitialIntents, new Intent[] { intent });
+                }
+                else
+                {
+                    chooserIntent = Intent.CreateChooser(intent, "Open file");
+                }
+
+                try
+                {
+                    context.StartActivityForResult(chooserIntent, PickFileRequestCode);
+                }
+                catch (Android.Content.ActivityNotFoundException ex)
+                {
+                    log.Exception(ex);
+                    Toast.MakeText(context, "No suitable File Manager was found", ToastLength.Short).Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Exception(ex);
+            }
+        }
+
+        private static async Task<bool> CheckPermissions()
+        {
+            var permissionResult = await Permissions.RequestAsync<Permissions.StorageRead>();
+            if (permissionResult != PermissionStatus.Granted)
+            {
+                log.Error("StorageRead permission not granted.");
+                return false;
+            }
+
+            return true;
+        }
+
+        public static async Task<SkyFile> HandlePickedFile(Activity context, Intent data)
+        {
+            //handle the selected file
+            var uri = data.Data;
+            string mimeType = context.ContentResolver.GetType(uri);
+            log.Trace("mime type: " + mimeType);
+
+            string extension = System.IO.Path.GetExtension(uri.Path);
+            log.Trace("extension: " + extension);
+
+            log.Trace("path: " + uri.Path);
+
+            var filename = GetFileName(context, uri);
+
+            //Toast.MakeText(context, uri.Path, ToastLength.Long).Show();
+
+            var stream = GetFileStream(context, uri);
+            return new SkyFile
+            {
+                FullFilePath = uri.Path,
+                Filename = filename,
+                FileSizeBytes = stream.Length,
+            };
+
+            
+        }
+
+        public static Stream GetFileStream(Activity context, Android.Net.Uri uri)
+        {
+            return context.ContentResolver.OpenInputStream(uri);
         }
     }
 }

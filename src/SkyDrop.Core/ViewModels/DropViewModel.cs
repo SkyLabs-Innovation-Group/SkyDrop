@@ -44,6 +44,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand CheckUserIsSwipingCommand { get; set; }
         public IMvxCommand<StagedFileDVM> ShowStagedFileMenuCommand { get; set; }
         public IMvxCommand UpdateNavDotsCommand { get; set; }
+        public IMvxCommand SelectFileNativeCommand { get; set; }
+        public IMvxCommand SelectImageNativeCommand { get; set; }
 
         public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
@@ -69,6 +71,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile UploadedFile { get; set; }
         public SkyFile FileToUpload { get; set; }
+
+        public TaskCompletionSource<List<SkyFile>> NativePickFilesTask { get; set; }
 
         private DropViewState _dropViewUIState;
 
@@ -307,7 +311,7 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
-        private void StageFiles(List<SkyFile> userFiles, bool keepExisting)
+        public void StageFiles(List<SkyFile> userFiles, bool keepExisting)
         {
             var newStagedFiles = userFiles.Select(s => new StagedFileDVM
             {
@@ -393,7 +397,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 chosenType = SkyFilePickerType.Video;
             else
                 chosenType = SkyFilePickerType.Generic;
-
+            /*
             var pickedFiles = await fileSystemService.PickFilesAsync(chosenType);
 
             //read contents of the selected files
@@ -417,7 +421,12 @@ namespace SkyDrop.Core.ViewModels.Main
                     };
 
                     userSkyFiles.Add(skyFile);
-                }
+                }*/
+
+            var userSkyFiles = new List<SkyFile>();
+            try
+            {
+                userSkyFiles = await NativePickFiles(chosenType);
             }
             catch (NullReferenceException ex)
             {
@@ -434,6 +443,25 @@ namespace SkyDrop.Core.ViewModels.Main
             IsStagingFiles = false;
 
             return userSkyFiles;
+        }
+
+        private Task<List<SkyFile>> NativePickFiles(SkyFilePickerType type)
+        {
+            NativePickFilesTask = new TaskCompletionSource<List<SkyFile>>();
+
+            switch(type)
+            {
+                case SkyFilePickerType.Generic:
+                    SelectFileNativeCommand?.Execute();
+                    break;
+                case SkyFilePickerType.Image:
+                    SelectImageNativeCommand?.Execute();
+                    break;
+                case SkyFilePickerType.Video:
+                    break;
+            }
+
+            return NativePickFilesTask.Task;
         }
 
         private async Task AddMoreFiles()

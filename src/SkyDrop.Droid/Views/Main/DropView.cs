@@ -49,6 +49,9 @@ namespace SkyDrop.Droid.Views.Main
 
             Log.Trace("DropView OnCreate()");
 
+            ViewModel.SelectFileNativeCommand = new MvxCommand(async () => await AndroidUtil.SelectFile(this));
+            ViewModel.SelectImageNativeCommand = new MvxCommand(async () => await AndroidUtil.SelectImage(this));
+
             ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
             ViewModel.ResetUIStateCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
             ViewModel.ResetBarcodeCommand = new MvxCommand(ResetBarcode);
@@ -67,6 +70,44 @@ namespace SkyDrop.Droid.Views.Main
             stagedFilesRecycler.SetLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false));
 
             CreateNavDots();
+        }
+
+        /// <summary>
+        /// Called after user selects file
+        /// </summary>
+        protected override async void OnActivityResult(int requestCode, Android.App.Result resultCode, Intent data)
+        {
+            try
+            {
+                if (requestCode == AndroidUtil.PickFileRequestCode)
+                {
+                    if (data == null)
+                    {
+                        //user did not select a file, reset UI
+                        ViewModel.ResetUI();
+                        return;
+                    }
+
+                    await HandlePickedFile(data);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Exception(ex);
+            }
+
+            base.OnActivityResult(requestCode, resultCode, data);
+        }
+
+        /// <summary>
+        /// Generate SkyFile from intent data and stage it for upload
+        /// </summary>
+        private async Task HandlePickedFile(Intent data)
+        {
+            AnimateSlideSendButton();
+            var stagedFile = await AndroidUtil.HandlePickedFile(this, data);
+            ViewModel.NativePickFilesTask.SetResult(new System.Collections.Generic.List<SkyFile> { stagedFile });
+            //ViewModel.StageFiles(new System.Collections.Generic.List<SkyFile> { stagedFile }, true);
         }
 
         /// <summary>
