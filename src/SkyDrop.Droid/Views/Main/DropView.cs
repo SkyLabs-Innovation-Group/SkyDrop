@@ -18,6 +18,7 @@ using SkyDrop.Droid.Helper;
 using ZXing.Mobile;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 using static SkyDrop.Core.Utility.Util;
+using System.Collections.Generic;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -87,6 +88,9 @@ namespace SkyDrop.Droid.Views.Main
                     {
                         //user did not select a file, reset UI
                         ViewModel.ResetUI();
+
+                        //allow SendCommand to return so it can run when send button is next pressed
+                        ViewModel.NativePickFilesTask.SetResult(new List<SkyFile>());
                         return;
                     }
 
