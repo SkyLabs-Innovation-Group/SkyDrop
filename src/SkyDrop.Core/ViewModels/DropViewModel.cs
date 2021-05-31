@@ -45,7 +45,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand<StagedFileDVM> ShowStagedFileMenuCommand { get; set; }
         public IMvxCommand UpdateNavDotsCommand { get; set; }
         public IMvxCommand SelectFileNativeCommand { get; set; }
-        public IMvxCommand SelectImageNativeCommand { get; set; }
+        public IMvxCommand SelectImagesNativeCommand { get; set; }
+        public IMvxCommand SelectImageFromGalleryNativeCommand { get; set; }
 
         public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
@@ -381,18 +382,21 @@ namespace SkyDrop.Core.ViewModels.Main
         private async Task<List<SkyFile>> SelectFiles()
         {
             var file = "Select Files";
-            var image = "Select Image";
+            var image = "Select Images";
+            var gallery = "Select Image From Gallery";
             var video = "Select Video";
             var cancel = "cancel";
-            var fileType = await userDialogs.ActionSheetAsync("", cancel, null, null, file, image, video);
+            var fileType = await userDialogs.ActionSheetAsync("", cancel, null, null, file, image, gallery, video);
             if (fileType == cancel)
             {
                 return null;
             }
 
             SkyFilePickerType chosenType;
-            if (fileType == image)
-                chosenType = SkyFilePickerType.Image;
+            if (fileType == gallery)
+                chosenType = SkyFilePickerType.Gallery;
+            else if (fileType == image)
+                chosenType = SkyFilePickerType.Images;
             else if (fileType == video)
                 chosenType = SkyFilePickerType.Video;
             else
@@ -454,8 +458,11 @@ namespace SkyDrop.Core.ViewModels.Main
                 case SkyFilePickerType.Generic:
                     SelectFileNativeCommand?.Execute();
                     break;
-                case SkyFilePickerType.Image:
-                    SelectImageNativeCommand?.Execute();
+                case SkyFilePickerType.Images:
+                    SelectImagesNativeCommand?.Execute();
+                    break;
+                case SkyFilePickerType.Gallery:
+                    SelectImageFromGalleryNativeCommand?.Execute();
                     break;
                 case SkyFilePickerType.Video:
                     break;

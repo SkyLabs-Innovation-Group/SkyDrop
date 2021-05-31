@@ -123,15 +123,23 @@ namespace SkyDrop.Droid.Helper
             });
         }
 
-        public static async Task SelectImage(Activity context)
+        public static async Task SelectImages(Activity context)
         {
             if (!await CheckPermissions())
                 return;
 
-            /*
+            Intent intent = new Intent(Intent.ActionGetContent);
+            intent.SetType("image/*");
+            intent.PutExtra(Intent.ExtraAllowMultiple, true);
+            context.StartActivityForResult(Intent.CreateChooser(intent, "Select Picture"), AndroidUtil.PickFileRequestCode); 
+        }
+
+        public static async Task SelectImageFromGallery(Activity context)
+        {
+            if (!await CheckPermissions())
+                return;
 
             Intent getIntent = new Intent(Intent.ActionGetContent);
-            getIntent.PutExtra(Intent.ExtraAllowMultiple, true);
             getIntent.SetType("image/*");
 
             Intent pickIntent = new Intent(Intent.ActionPick, Android.Provider.MediaStore.Images.Media.ExternalContentUri);
@@ -141,14 +149,6 @@ namespace SkyDrop.Droid.Helper
             chooserIntent.PutExtra(Intent.ExtraInitialIntents, new Intent[] { pickIntent });
 
             context.StartActivityForResult(chooserIntent, AndroidUtil.PickFileRequestCode);
-
-            */
-
-            Intent intent = new Intent(Intent.ActionGetContent);
-            intent.SetType("image/*"); //allows any image file type. Change * to specific extension to limit it
-                                       //**The following line is the important one!
-            intent.PutExtra(Intent.ExtraAllowMultiple, true);
-            context.StartActivityForResult(Intent.CreateChooser(intent, "Select Picture"), AndroidUtil.PickFileRequestCode); 
         }
 
         public static async Task SelectFile(Activity context)

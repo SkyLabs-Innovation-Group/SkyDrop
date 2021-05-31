@@ -39,7 +39,7 @@ namespace SkyDrop.Core.Services
                     pickedFiles = await FilePicker.PickMultipleAsync();
                     break;
         
-                case SkyFilePickerType.Image:
+                case SkyFilePickerType.Images:
                     var pickPhoto = await MediaPicker.PickPhotoAsync();
                     pickedFiles = new List<FileResult>() { pickPhoto };
                     break;
@@ -87,7 +87,7 @@ namespace SkyDrop.Core.Services
         }
     }
 
-    public enum SkyFilePickerType { Generic = 0, Image = 1, Video = 2 }
+    public enum SkyFilePickerType { Generic = 0, Images = 1, Gallery = 2, Video = 3 }
 
     public interface IFileSystemService
     {

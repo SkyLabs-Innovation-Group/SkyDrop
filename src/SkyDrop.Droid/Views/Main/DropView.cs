@@ -50,7 +50,8 @@ namespace SkyDrop.Droid.Views.Main
             Log.Trace("DropView OnCreate()");
 
             ViewModel.SelectFileNativeCommand = new MvxCommand(async () => await AndroidUtil.SelectFile(this));
-            ViewModel.SelectImageNativeCommand = new MvxCommand(async () => await AndroidUtil.SelectImage(this));
+            ViewModel.SelectImagesNativeCommand = new MvxCommand(async () => await AndroidUtil.SelectImages(this));
+            ViewModel.SelectImageFromGalleryNativeCommand = new MvxCommand(async () => await AndroidUtil.SelectImageFromGallery(this));
 
             ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
             ViewModel.ResetUIStateCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
