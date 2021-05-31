@@ -159,9 +159,9 @@ namespace SkyDrop.Droid.Helper
                     return;
 
                 var intent = new Intent(Intent.ActionGetContent);
-                intent.SetType("file/*");
+                intent.SetType("*/*");
                 intent.PutExtra(Intent.ExtraAllowMultiple, true);
-                intent.AddCategory(Intent.CategoryAppFiles);
+                intent.AddCategory(Intent.CategoryOpenable);
 
                 //special intent for Samsung file manager
                 Intent sIntent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
