@@ -151,7 +151,7 @@ namespace SkyDrop.Droid.Helper
             context.StartActivityForResult(chooserIntent, AndroidUtil.PickFileRequestCode);
         }
 
-        public static async Task SelectFile(Activity context)
+        public static async Task SelectFiles(Activity context)
         {
             try
             {
@@ -160,16 +160,17 @@ namespace SkyDrop.Droid.Helper
 
                 var intent = new Intent(Intent.ActionGetContent);
                 intent.SetType("file/*");
-                intent.AddCategory(Intent.CategoryOpenable);
+                intent.PutExtra(Intent.ExtraAllowMultiple, true);
+                intent.AddCategory(Intent.CategoryAppFiles);
 
-                // special intent for Samsung file manager
+                //special intent for Samsung file manager
                 Intent sIntent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
                 sIntent.AddCategory(Intent.CategoryDefault);
 
                 Intent chooserIntent;
                 if (context.PackageManager.ResolveActivity(sIntent, 0) != null)
                 {
-                    // it is device with Samsung file manager
+                    //it is device with Samsung file manager
                     chooserIntent = Intent.CreateChooser(sIntent, "Open file");
                     chooserIntent.PutExtra(Intent.ExtraInitialIntents, new Intent[] { intent });
                 }

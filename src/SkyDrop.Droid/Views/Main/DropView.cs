@@ -50,7 +50,7 @@ namespace SkyDrop.Droid.Views.Main
 
             Log.Trace("DropView OnCreate()");
 
-            ViewModel.SelectFileNativeCommand = new MvxCommand(async () => await AndroidUtil.SelectFile(this));
+            ViewModel.SelectFileNativeCommand = new MvxCommand(async () => await AndroidUtil.SelectFiles(this));
             ViewModel.SelectImagesNativeCommand = new MvxCommand(async () => await AndroidUtil.SelectImages(this));
             ViewModel.SelectImageFromGalleryNativeCommand = new MvxCommand(async () => await AndroidUtil.SelectImageFromGallery(this));
             ViewModel.SelectVideosNativeCommand = new MvxCommand(async () => await AndroidUtil.SelectVideos(this));
