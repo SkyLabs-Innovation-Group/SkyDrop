@@ -47,6 +47,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand SelectFileNativeCommand { get; set; }
         public IMvxCommand SelectImagesNativeCommand { get; set; }
         public IMvxCommand SelectImageFromGalleryNativeCommand { get; set; }
+        public IMvxCommand SelectVideosNativeCommand { get; set; }
 
         public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
@@ -384,7 +385,7 @@ namespace SkyDrop.Core.ViewModels.Main
             var file = "Select Files";
             var image = "Select Images";
             var gallery = "Select Image From Gallery";
-            var video = "Select Video";
+            var video = "Select Videos";
             var cancel = "cancel";
             var fileType = await userDialogs.ActionSheetAsync("", cancel, null, null, file, image, gallery, video);
             if (fileType == cancel)
@@ -401,31 +402,6 @@ namespace SkyDrop.Core.ViewModels.Main
                 chosenType = SkyFilePickerType.Video;
             else
                 chosenType = SkyFilePickerType.Generic;
-            /*
-            var pickedFiles = await fileSystemService.PickFilesAsync(chosenType);
-
-            //read contents of the selected files
-
-            IsStagingFiles = true;
-            var userSkyFiles = new List<SkyFile>();
-
-            try
-            {
-                foreach (var pickedFile in pickedFiles)
-                {
-                    if (pickedFile == null)
-                        continue;
-
-                    using var stream = await pickedFile.OpenReadAsync();
-                    var skyFile = new SkyFile()
-                    {
-                        FullFilePath = pickedFile.FullPath,
-                        Filename = pickedFile.FileName,
-                        FileSizeBytes = stream.Length,
-                    };
-
-                    userSkyFiles.Add(skyFile);
-                }*/
 
             var userSkyFiles = new List<SkyFile>();
             try
@@ -465,6 +441,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     SelectImageFromGalleryNativeCommand?.Execute();
                     break;
                 case SkyFilePickerType.Video:
+                    SelectVideosNativeCommand?.Execute();
                     break;
             }
 

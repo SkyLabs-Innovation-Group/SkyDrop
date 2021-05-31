@@ -52,6 +52,7 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.SelectFileNativeCommand = new MvxCommand(async () => await AndroidUtil.SelectFile(this));
             ViewModel.SelectImagesNativeCommand = new MvxCommand(async () => await AndroidUtil.SelectImages(this));
             ViewModel.SelectImageFromGalleryNativeCommand = new MvxCommand(async () => await AndroidUtil.SelectImageFromGallery(this));
+            ViewModel.SelectVideosNativeCommand = new MvxCommand(async () => await AndroidUtil.SelectVideos(this));
 
             ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
             ViewModel.ResetUIStateCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
@@ -109,7 +110,6 @@ namespace SkyDrop.Droid.Views.Main
 
             var stagedFiles = AndroidUtil.HandlePickedFiles(this, data);
             ViewModel.NativePickFilesTask.SetResult(stagedFiles);
-            //ViewModel.StageFiles(new System.Collections.Generic.List<SkyFile> { stagedFile }, true);
         }
 
         /// <summary>

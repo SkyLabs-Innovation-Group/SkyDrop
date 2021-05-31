@@ -131,7 +131,7 @@ namespace SkyDrop.Droid.Helper
             Intent intent = new Intent(Intent.ActionGetContent);
             intent.SetType("image/*");
             intent.PutExtra(Intent.ExtraAllowMultiple, true);
-            context.StartActivityForResult(Intent.CreateChooser(intent, "Select Picture"), AndroidUtil.PickFileRequestCode); 
+            context.StartActivityForResult(Intent.CreateChooser(intent, "Select Pictures"), AndroidUtil.PickFileRequestCode); 
         }
 
         public static async Task SelectImageFromGallery(Activity context)
@@ -192,6 +192,17 @@ namespace SkyDrop.Droid.Helper
             {
                 log.Exception(ex);
             }
+        }
+
+        public static async Task SelectVideos(Activity context)
+        {
+            if (!await CheckPermissions())
+                return;
+
+            Intent intent = new Intent(Intent.ActionGetContent);
+            intent.SetType("video/*");
+            intent.PutExtra(Intent.ExtraAllowMultiple, true);
+            context.StartActivityForResult(Intent.CreateChooser(intent, "Select Videos"), AndroidUtil.PickFileRequestCode);
         }
 
         private static async Task<bool> CheckPermissions()
