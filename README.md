@@ -10,7 +10,7 @@ Many FAQs about SkyDrop can be answered by reading Skynet’s Siasky portal’s 
 
 We are developing an adjacent web app which can now be used to encode skylinks, and will soon also be integrated with MySky, hopefully making the web and mobile apps easy to use alongside each other. https://encodeqr.hns.siasky.net/
 
-*Note: SkyDrop is still in beta, [Check here for known issues](https://github.com/SkyLabs-Innovation-Group/SkyDrop/issues?q=is%3Aissue+is%3Aopen+label%3A%22known+issues%22), you may submit bug reports and feature requests here on Github!*
+*Note: SkyDrop is still in beta. [Check here for known issues](https://github.com/SkyLabs-Innovation-Group/SkyDrop/issues?q=is%3Aissue+is%3Aopen+label%3A%22known+issues%22), you may submit bug reports and feature requests here on Github!*
 
 ---
 
