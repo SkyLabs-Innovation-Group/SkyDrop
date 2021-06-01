@@ -1,4 +1,4 @@
-# [SkyDrop](http://app.encodeqr.hns.to/)
+# [SkyDrop](http://app.skydrop.hns.to/)
 
 *Note: SkyDrop is still in beta, you can submit bug reports here on GitHub, [check here](https://github.com/SkyLabs-Innovation-Group/SkyDrop/issues?q=is%3Aissue+is%3Aopen+label%3A%22known+issues%22) for known issues here first.*
 
@@ -6,7 +6,7 @@ Users of Android and iOS can easily send each other files with SkyDrop, a new mo
 
 We are developing an adjacent web app which can now be used to encode skylinks, and will soon also be integrated with MySky, hopefully making the web and mobile apps easy to use alongside each other. https://encodeqr.hns.siasky.net/
 
-Here are our download links and more: http://app.encodeqr.hns.to/
+Here are our download links and more: http://app.skydrop.hns.to/
 
 [Submission video demoing our app for the Encode Hack The System hackathon](https://skygallery.hns.siasky.net/#/a/AABHY16W-Jz4QGrJi78EDjraaPla1mC8VjpliZPKW_948Q)
 
@@ -15,6 +15,8 @@ Here are our download links and more: http://app.encodeqr.hns.to/
 Android app ![Build status](https://build.appcenter.ms/v0.1/apps/1cd210b4-00be-4c63-a322-2afc2db6b603/branches/main/badge)
 
 [Get SkyDrop on Google Play](https://play.google.com/store/apps/details?id=to.hns.skydrop)
+
+[Get SkyDrop on App Store for iOS](https://apps.apple.com/app/id1568591168#?platform=iphone)
 
 Install SkyDrop using SkyDroid (decentralised app store for Android): [Install SkyDroid](https://skydroid.app/), then install SkyDrop from there. [SkyDroid is open source](https://github.com/redsolver/skydroid) and maintained by redsolver. If you have trouble finding the app in SkyDroid, click the + and enter **skydrop**.
 
