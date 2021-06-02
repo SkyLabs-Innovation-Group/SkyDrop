@@ -1,7 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,39 +14,37 @@ namespace SkyDrop.Core.Services
     public class ApiService : IApiService
     {
         public ILog Log { get; }
+        
+        private HttpClient httpClient;
 
-        public ApiService(ILog log)
+        public ApiService(ILog log, ISkyDropHttpClientFactory skyDropHttpClientFactory)
         {
             Log = log;
-            httpClient = new HttpClient
-            {
-                BaseAddress = new Uri("https://siasky.net/"), Timeout = TimeSpan.FromMinutes(120)
-            };
+            httpClient = skyDropHttpClientFactory.GetSkyDropHttpClientInstance();
         }
-
-        private HttpClient httpClient { get; set; }
-
+        
         public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationTokenSource)
         {
             var fileSizeBytes = skyfile.FileSizeBytes;
             var filename = skyfile.Filename;
 
             var url = $"{Util.Portal}/skynet/skyfile";
+
             var form = new MultipartFormDataContent();
             
             using var file = skyfile.GetStream();
             
             if (fileSizeBytes == 0)
                 Log.Error("File size was zero when uploading file");
-
+            
             form.Add(new StreamContent(file), "file", filename);
-
+            
             Log.Trace("Sending file " + filename);
             
             var request = new HttpRequestMessage(HttpMethod.Post, url) {Content =  form};
             
             Log.Trace(request.ToString());
-
+            
             var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationTokenSource.Token);
             
             response.EnsureSuccessStatusCode();

@@ -25,6 +25,8 @@
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.2.0" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Common" />
+    <Folder Include="Components" />
     <Folder Include="Services\" />
     <Folder Include="DataModels\" />
     <Folder Include="DataViewModels\" />

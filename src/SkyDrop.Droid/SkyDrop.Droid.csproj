@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Linker\LinkerPleaseInclude.cs" />
     <Compile Include="MainApplication.cs" />
+    <Compile Include="Services\AndroidHttpClientFactory.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Views\BaseActivity.cs" />
     <Compile Include="Views\BaseFragment.cs" />
@@ -334,7 +335,6 @@
     <Folder Include="Helper\" />
     <Folder Include="Bindings\" />
     <Folder Include="Resources\menu\" />
-    <Folder Include="Services" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

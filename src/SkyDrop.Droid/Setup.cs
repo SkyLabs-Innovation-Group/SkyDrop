@@ -23,7 +23,9 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using SkyDrop.Core;
+using SkyDrop.Core.Services;
 using SkyDrop.Droid.Bindings;
+using SkyDrop.Droid.Services;
 using Xamarin.Essentials;
 using Log = Acr.UserDialogs.Infrastructure.Log;
 
@@ -83,6 +85,7 @@ namespace SkyDrop.Droid
             var logProvider = base.CreateLogProvider();
             
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger(logProvider));
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISkyDropHttpClientFactory>(() => new AndroidHttpClientFactory());
 
             ImageService.Instance.Initialize(new Configuration()
             {

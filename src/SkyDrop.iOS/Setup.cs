@@ -18,6 +18,8 @@ using MvvmCross.Converters;
 using MvvmCross.Logging;
 using Serilog;
 using SkyDrop.Core.Converters;
+using SkyDrop.Core.Services;
+using SkyDrop.iOS.Services;
 using Xamarin.Essentials;
 
 namespace SkyDrop.iOS
@@ -46,6 +48,8 @@ namespace SkyDrop.iOS
             UserDialogs.Instance = new UserDialogsImpl();
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IUserDialogs>(() => UserDialogs.Instance);
 
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISkyDropHttpClientFactory>(() => new NSUrlHttpClientFactory());
+            
             return base.CreateApp();
         }
         
