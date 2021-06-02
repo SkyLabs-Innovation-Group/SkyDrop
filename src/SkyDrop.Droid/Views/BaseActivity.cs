@@ -4,6 +4,7 @@ using MvvmCross.Platforms.Android.Views;
 using MvvmCross.ViewModels;
 using SkyDrop.Core.Services;
 using SkyDrop.Core.ViewModels;
+using SkyDrop.Droid.Helper;
 
 namespace SkyDrop.Droid.Views
 {
@@ -24,6 +25,8 @@ namespace SkyDrop.Droid.Views
             var toolbar = FindViewById<Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
             SupportActionBar.SetDisplayShowTitleEnabled(false);
+
+            AndroidUtil.CreateNotificationChannel(this);
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)

@@ -94,6 +94,8 @@ namespace SkyDrop.Droid.Views.Main
             var bitmap = await AndroidUtil.BitMatrixToBitmap(matrix);
             barcodeImageView.SetImageBitmap(bitmap);
             ViewModel.BarcodeIsLoaded = true;
+
+            AndroidUtil.ShowUploadCompleteNotification(this, $"{ViewModel.UploadedFile.Filename} {ViewModel.FileSize}");
         }
 
         /// <summary>
