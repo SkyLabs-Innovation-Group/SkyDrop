@@ -1,23 +1,21 @@
-# [SkyDrop](http://app.encodeqr.hns.to/)
+# [SkyDrop](http://app.skydrop.hns.to/)
 
-*Note: SkyDrop is still in beta, you can submit bug reports here on GitHub, [check here](https://github.com/SkyLabs-Innovation-Group/SkyDrop/issues?q=is%3Aissue+is%3Aopen+label%3A%22known+issues%22) for known issues here first.*
+We took inspiration from popular file sharing apps like WeTransfer, and Apple’s polished AirDrop app for iOS and Mac, and decided to create SkyDrop: a free and open source alternative with which users can send multiple files, including large files, and share them easily with a simple link or QR code.
 
-Users of Android and iOS can easily send each other files with SkyDrop, a new mobile app for decentralised file transfers. Users can upload one or more files to Skynet and share the link, which is also encoded to a QR code for convenient file sharing with anyone using a QR enabled camera. We support multiple files being sent in zips, and are planning an App Store listing for the iOS app, increased integrations with the skapp ecosystem and MySky, and privacy features like metadata stripping and e2e encryption are on the way.
+SkyDrop is free to download and has no ads; your files are stored on the Skynet portal and redundantly backed up on Sia’s decentralised blockchain powered cloud.
+
+Open sourced under MIT license, we built SkyDrop using .NET’s native cross platform app building framework Xamarin. The app is maintained openly by C# developers who appreciate its usefulness. You can find the source code on Github if you’re interested to read it.
+
+Many FAQs about SkyDrop can be answered by reading Skynet’s Siasky portal’s privacy policy. It’s actually short and quite understandable, credit to Skynet Labs. As we are powered by Skynet’s decentralised file publishing platform, SkyDrop can’t see your files, it only publishes them to Skynet via the https://siasky.net portal.
 
 We are developing an adjacent web app which can now be used to encode skylinks, and will soon also be integrated with MySky, hopefully making the web and mobile apps easy to use alongside each other. https://encodeqr.hns.siasky.net/
 
-Here are our download links and more: http://app.encodeqr.hns.to/
-
-[Submission video demoing our app for the Encode Hack The System hackathon](https://skygallery.hns.siasky.net/#/a/AABHY16W-Jz4QGrJi78EDjraaPla1mC8VjpliZPKW_948Q)
+*Note: SkyDrop is still in beta. [Check here for known issues](https://github.com/SkyLabs-Innovation-Group/SkyDrop/issues?q=is%3Aissue+is%3Aopen+label%3A%22known+issues%22), you may submit bug reports and feature requests here on Github!*
 
 ---
 
-Android app ![Build status](https://build.appcenter.ms/v0.1/apps/1cd210b4-00be-4c63-a322-2afc2db6b603/branches/main/badge)
+* [Get SkyDrop on Google Play](https://play.google.com/store/apps/details?id=to.hns.skydrop)
 
-[Get SkyDrop on Google Play](https://play.google.com/store/apps/details?id=to.hns.skydrop)
+  * Alternatively, you can use the cryptographically secure app store by redsolver, [SkyDroid](https://skydroid.app/), to install SkyDrop instead! If you have trouble finding the app in SkyDroid, click the + and enter **skydrop**.
 
-Install SkyDrop using SkyDroid (decentralised app store for Android): [Install SkyDroid](https://skydroid.app/), then install SkyDrop from there. [SkyDroid is open source](https://github.com/redsolver/skydroid) and maintained by redsolver. If you have trouble finding the app in SkyDroid, click the + and enter **skydrop**.
-
-iOS app ![Build status](https://build.appcenter.ms/v0.1/apps/7d69bbc9-723d-4bb1-b62f-4c2890c8ab45/branches/main/badge)
-
-How to install iOS beta: you will need to sign the .ipa file yourself which requires a Mac device and XCode CLI tools or [AltStore.io](https://altstore.io); we will have an App Store listing some time in the future which will make it much easier for you to install.
+* [Get SkyDrop on App Store for iOS](https://apps.apple.com/app/id1568591168#?platform=iphone)

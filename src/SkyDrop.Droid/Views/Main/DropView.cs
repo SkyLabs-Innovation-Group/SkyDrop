@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -11,10 +12,12 @@ using AndroidX.ConstraintLayout.Widget;
 using Google.Android.Material.Card;
 using MvvmCross.Commands;
 using SkyDrop.Core.DataModels;
+using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.Droid.Helper;
 using ZXing.Mobile;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
+using static SkyDrop.Core.Utility.Util;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -28,12 +31,12 @@ namespace SkyDrop.Droid.Views.Main
 
         private const int swipeMarginX = 100;
         private bool isPressed;
-        private bool barcodeIsLoaded;
         private float tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
         private MaterialCardView sendButton, receiveButton;
         private ConstraintLayout barcodeContainer;
         private LinearLayout barcodeMenu, sendReceiveButtonsContainer;
         private ImageView barcodeImageView;
+        private View leftDot, rightDot;
 
         /// <summary>
         /// Initialize view
@@ -51,6 +54,7 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.ResetBarcodeCommand = new MvxCommand(ResetBarcode);
             ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
             ViewModel.CheckUserIsSwipingCommand = new MvxCommand(CheckUserIsSwiping);
+            ViewModel.UpdateNavDotsCommand = new MvxCommand(() => UpdateNavDots());
 
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
             receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);
@@ -61,6 +65,8 @@ namespace SkyDrop.Droid.Views.Main
 
             var stagedFilesRecycler = FindViewById<RecyclerView>(Resource.Id.StagedFilesRecycler);
             stagedFilesRecycler.SetLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false));
+
+            CreateNavDots();
         }
 
         /// <summary>
@@ -87,7 +93,7 @@ namespace SkyDrop.Droid.Views.Main
             var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileFullUrl, barcodeImageView.Width, barcodeImageView.Height);
             var bitmap = await AndroidUtil.BitMatrixToBitmap(matrix);
             barcodeImageView.SetImageBitmap(bitmap);
-            barcodeIsLoaded = true;
+            ViewModel.BarcodeIsLoaded = true;
         }
 
         /// <summary>
@@ -229,7 +235,7 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         private void AnimateSlideSendReceiveButtonsOut(bool toLeft)
         {
-            if (!barcodeIsLoaded)
+            if (!ViewModel.BarcodeIsLoaded)
             {
                 AnimateSlideBarcodeToCenter();
             }
@@ -337,6 +343,44 @@ namespace SkyDrop.Droid.Views.Main
             var userIsSwipingResult = !interfaceIsCentered;
             ViewModel.Log.Trace($"UserIsSwipingResult: {userIsSwipingResult}");
             ViewModel.UserIsSwipingResult = userIsSwipingResult;
+        }
+
+        /// <summary>
+        /// Create navigation dots display
+        /// </summary>
+        private void CreateNavDots()
+        {
+            var dotSize = 40;
+
+            leftDot = new View(this) { Alpha = NavDotsMaxAlpha, LayoutParameters = new LinearLayout.LayoutParams(dotSize, dotSize) { RightMargin = dotSize } };
+            rightDot = new View(this) { Alpha = NavDotsMinAlpha, LayoutParameters = new LinearLayout.LayoutParams(dotSize, dotSize) };
+            leftDot.Background = GetDrawable(Resource.Drawable.ic_circle);
+            rightDot.Background = GetDrawable(Resource.Drawable.ic_circle);
+
+            var dotsContainer = FindViewById<LinearLayout>(Resource.Id.NavDotsLayout);
+            dotsContainer.AddView(leftDot);
+            dotsContainer.AddView(rightDot);
+        }
+
+        /// <summary>
+        /// Change alpha of navigation dots display to reflect new UI state
+        /// </summary>
+        private void UpdateNavDots()
+        {
+            var duration = 250; //ms
+
+            switch (ViewModel.DropViewUIState)
+            {
+                case DropViewState.SendReceiveButtonState:
+                case DropViewState.ConfirmFilesState:
+                    leftDot.Animate().Alpha(NavDotsMaxAlpha).SetDuration(duration).Start();
+                    rightDot.Animate().Alpha(NavDotsMinAlpha).SetDuration(duration).Start();
+                    break;
+                case DropViewState.QRCodeState:
+                    leftDot.Animate().Alpha(NavDotsMinAlpha).SetDuration(duration).Start();
+                    rightDot.Animate().Alpha(NavDotsMaxAlpha).SetDuration(duration).Start();
+                    break;
+            }
         }
     }
 }

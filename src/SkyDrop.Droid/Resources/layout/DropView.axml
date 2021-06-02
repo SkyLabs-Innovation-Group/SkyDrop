@@ -296,6 +296,16 @@
                 android:layout_alignParentBottom="true"
                 app:MvxItemTemplate="@layout/item_file_staged_square"
                 app:MvxBind="ItemsSource StagedFiles;ItemClick ShowStagedFileMenuCommand;Visibility Visibility(IsStagedFilesVisible)"/>
+
+            <LinearLayout
+                android:id="@+id/NavDotsLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal"
+                android:layout_marginBottom="32dp"
+                app:MvxBind="Visibility Visibility(NavDotsVisible)"/>
         </RelativeLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
