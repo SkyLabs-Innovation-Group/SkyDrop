@@ -46,6 +46,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand UpdateNavDotsCommand { get; set; }
         public IMvxCommand UploadStartedNotificationCommand { get; set; }
         public IMvxCommand<FileUploadResult> UploadFinishedNotificationCommand { get; set; }
+        public IMvxCommand<double> UpdateNotificationProgressCommand { get; set; }
 
         public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
@@ -481,6 +482,8 @@ namespace SkyDrop.Core.ViewModels.Main
 
             if (UploadProgress >= 1)
                 return;
+
+            UpdateNotificationProgressCommand?.Execute(newUploadProgress);
 
             //scale the progress so it fits within 85% of the bar
             var maxProgress = 0.85;

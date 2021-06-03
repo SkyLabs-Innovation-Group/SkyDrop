@@ -57,6 +57,7 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.UpdateNavDotsCommand = new MvxCommand(() => UpdateNavDots());
             ViewModel.UploadStartedNotificationCommand = new MvxCommand(() => AndroidUtil.ShowUploadStartedNotification(this, $"{ViewModel.FileToUpload.Filename} {ViewModel.FileSize}"));
             ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>(result => AndroidUtil.ShowUploadFinishedNotification(this, result));
+            ViewModel.UpdateNotificationProgressCommand = new MvxCommand<double>(progress => AndroidUtil.UpdateNotificationProgress(this, progress));
 
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
             receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);

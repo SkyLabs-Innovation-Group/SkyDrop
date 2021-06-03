@@ -176,7 +176,8 @@ namespace SkyDrop.Droid.Helper
                 .SetContentTitle("Sending file...")
                 .SetContentText(message)
                 .SetSmallIcon(Resource.Drawable.ic_skydrop)
-                .SetContentIntent(pendingIntent);
+                .SetContentIntent(pendingIntent)
+                .SetProgress(100, 0, false);
 
             // Build the notification:
             Notification notification = uploadNotificationBuilder.Build();
@@ -191,9 +192,11 @@ namespace SkyDrop.Droid.Helper
             {
                 case FileUploadResult.Success:
                     uploadNotificationBuilder.SetContentTitle("File published successfully (tap to view)");
+                    uploadNotificationBuilder.SetProgress(0, 0, false); //hide progressbar
                     break;
                 case FileUploadResult.Fail:
                     uploadNotificationBuilder.SetContentTitle("File could not be uploaded");
+                    uploadNotificationBuilder.SetProgress(0, 0, false); //hide progressbar
                     break;
                 case FileUploadResult.Cancelled:
                     GetNotificationManager(context).CancelAll();
@@ -205,6 +208,23 @@ namespace SkyDrop.Droid.Helper
 
             // Publish the new notification with the existing ID:
             GetNotificationManager(context).Notify(UploadNotificationId, notification);
+        }
+
+        public static void UpdateNotificationProgress(Context context, double normalProgress)
+        {
+            if (normalProgress >= 1)
+            {
+                //set indeterminate loader
+                uploadNotificationBuilder.SetProgress(100, 0, true);
+                var notification = uploadNotificationBuilder.Build();
+                GetNotificationManager(context).Notify(UploadNotificationId, notification);
+                return;
+            }
+
+            var intProgress = (int)Math.Floor(normalProgress * 100);
+            uploadNotificationBuilder.SetProgress(100, intProgress, false);
+            var notificationOther = uploadNotificationBuilder.Build();
+            GetNotificationManager(context).Notify(UploadNotificationId, notificationOther);
         }
 
         private static NotificationManager GetNotificationManager(Context context)
