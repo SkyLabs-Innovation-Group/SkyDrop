@@ -21,8 +21,8 @@ namespace SkyDrop.Droid.Bindings
 
         protected override void SetValue(bool value)
         {
-            var backgroundColor = value ? Colors.DarkGrey : Colors.LightGrey;
-            var strokeColor = value ? Colors.MidGrey : Colors.LightGrey;
+            var backgroundColor = value ? Colors.DarkGrey : Colors.White;
+            var strokeColor = value ? Colors.MidGrey : Colors.White;
             Target.SetCardBackgroundColor(backgroundColor.ToNative());
             Target.StrokeColor = strokeColor.ToNative();
             Target.StrokeWidth = AndroidUtil.DpToPx(1);
