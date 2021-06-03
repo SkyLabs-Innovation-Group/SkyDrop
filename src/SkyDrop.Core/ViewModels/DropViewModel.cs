@@ -45,7 +45,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand<StagedFileDVM> ShowStagedFileMenuCommand { get; set; }
         public IMvxCommand UpdateNavDotsCommand { get; set; }
         public IMvxCommand UploadStartedNotificationCommand { get; set; }
-        public IMvxCommand UploadFinishedNotificationCommand { get; set; }
+        public IMvxCommand<FileUploadResult> UploadFinishedNotificationCommand { get; set; }
 
         public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
@@ -91,6 +91,13 @@ namespace SkyDrop.Core.ViewModels.Main
             SendReceiveButtonState = 1,
             ConfirmFilesState = 2,
             QRCodeState = 3
+        }
+
+        public enum FileUploadResult
+        {
+            Success = 1,
+            Fail = 2,
+            Cancelled = 3
         }
 
         private string errorMessage;
@@ -242,20 +249,20 @@ namespace SkyDrop.Core.ViewModels.Main
                 IsBarcodeLoading = true;
                 SkyFileFullUrl = Util.GetSkylinkUrl(UploadedFile.Skylink);
                 await GenerateBarcodeAsyncFunc();
-
-                UploadFinishedNotificationCommand?.Execute();
+                UploadFinishedNotificationCommand?.Execute(FileUploadResult.Success);
             }
             catch (TaskCanceledException tce)
             {
                 userDialogs.Toast("Upload cancelled");
                 ResetUIStateCommand?.Execute();
+                UploadFinishedNotificationCommand?.Execute(FileUploadResult.Cancelled);
             }
             catch (Exception ex) // General error
             {
                 userDialogs.Toast("Could not upload file");
                 Log.Exception(ex);
-                
                 ResetUIStateCommand?.Execute();
+                UploadFinishedNotificationCommand?.Execute(FileUploadResult.Fail);
             }
             finally
             {

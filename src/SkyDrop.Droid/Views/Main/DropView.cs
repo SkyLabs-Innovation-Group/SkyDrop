@@ -56,7 +56,7 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.CheckUserIsSwipingCommand = new MvxCommand(CheckUserIsSwiping);
             ViewModel.UpdateNavDotsCommand = new MvxCommand(() => UpdateNavDots());
             ViewModel.UploadStartedNotificationCommand = new MvxCommand(() => AndroidUtil.ShowUploadStartedNotification(this, $"{ViewModel.FileToUpload.Filename} {ViewModel.FileSize}"));
-            ViewModel.UploadFinishedNotificationCommand = new MvxCommand(() => AndroidUtil.ShowUploadFinishedNotification(this, $"{ViewModel.UploadedFile.Filename} {ViewModel.FileSize}"));
+            ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>(result => AndroidUtil.ShowUploadFinishedNotification(this, result));
 
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
             receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);

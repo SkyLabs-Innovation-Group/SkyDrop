@@ -20,6 +20,7 @@ using Xamarin.Essentials;
 using ZXing;
 using ZXing.Common;
 using ZXing.Mobile;
+using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 
 namespace SkyDrop.Droid.Helper
 {
@@ -184,11 +185,20 @@ namespace SkyDrop.Droid.Helper
             GetNotificationManager(context).Notify(UploadNotificationId, notification);
         }
 
-        public static void ShowUploadFinishedNotification(Context context, string message)
+        public static void ShowUploadFinishedNotification(Context context, FileUploadResult uploadResult)
         {
-            // Update the existing notification builder content:
-            uploadNotificationBuilder.SetContentTitle("File published successfully (tap to view)");
-            uploadNotificationBuilder.SetContentText(message);
+            switch(uploadResult)
+            {
+                case FileUploadResult.Success:
+                    uploadNotificationBuilder.SetContentTitle("File published successfully (tap to view)");
+                    break;
+                case FileUploadResult.Fail:
+                    uploadNotificationBuilder.SetContentTitle("File could not be uploaded");
+                    break;
+                case FileUploadResult.Cancelled:
+                    GetNotificationManager(context).CancelAll();
+                    return;
+            }
 
             // Build a notification object with updated content:
             var notification = uploadNotificationBuilder.Build();
