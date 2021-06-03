@@ -55,6 +55,8 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
             ViewModel.CheckUserIsSwipingCommand = new MvxCommand(CheckUserIsSwiping);
             ViewModel.UpdateNavDotsCommand = new MvxCommand(() => UpdateNavDots());
+            ViewModel.UploadStartedNotificationCommand = new MvxCommand(() => AndroidUtil.ShowUploadStartedNotification(this, $"{ViewModel.FileToUpload.Filename} {ViewModel.FileSize}"));
+            ViewModel.UploadFinishedNotificationCommand = new MvxCommand(() => AndroidUtil.ShowUploadFinishedNotification(this, $"{ViewModel.UploadedFile.Filename} {ViewModel.FileSize}"));
 
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
             receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);
@@ -94,8 +96,6 @@ namespace SkyDrop.Droid.Views.Main
             var bitmap = await AndroidUtil.BitMatrixToBitmap(matrix);
             barcodeImageView.SetImageBitmap(bitmap);
             ViewModel.BarcodeIsLoaded = true;
-
-            AndroidUtil.ShowUploadCompleteNotification(this, $"{ViewModel.UploadedFile.Filename} {ViewModel.FileSize}");
         }
 
         /// <summary>

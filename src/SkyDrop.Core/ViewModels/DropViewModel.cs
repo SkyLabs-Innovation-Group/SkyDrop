@@ -44,6 +44,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand CheckUserIsSwipingCommand { get; set; }
         public IMvxCommand<StagedFileDVM> ShowStagedFileMenuCommand { get; set; }
         public IMvxCommand UpdateNavDotsCommand { get; set; }
+        public IMvxCommand UploadStartedNotificationCommand { get; set; }
+        public IMvxCommand UploadFinishedNotificationCommand { get; set; }
 
         public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
@@ -221,6 +223,9 @@ namespace SkyDrop.Core.ViewModels.Main
                 
                 UpdateFileSize();
 
+                //show push notification
+                UploadStartedNotificationCommand?.Execute();
+
                 StartUploadTimer(FileToUpload.FileSizeBytes);
                 UploadedFile = await UploadFile();
                 StopUploadTimer();
@@ -237,12 +242,13 @@ namespace SkyDrop.Core.ViewModels.Main
                 IsBarcodeLoading = true;
                 SkyFileFullUrl = Util.GetSkylinkUrl(UploadedFile.Skylink);
                 await GenerateBarcodeAsyncFunc();
+
+                UploadFinishedNotificationCommand?.Execute();
             }
             catch (TaskCanceledException tce)
             {
                 userDialogs.Toast("Upload cancelled");
                 ResetUIStateCommand?.Execute();
-
             }
             catch (Exception ex) // General error
             {

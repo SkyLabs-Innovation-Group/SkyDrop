@@ -30,6 +30,9 @@ namespace SkyDrop.Droid.Helper
         private const string UploadNotificationChannelId = "to.hns.skydrop.notifications.DOWNLOAD";
         private const string UploadNotificationChannelName = "Uploads";
         private const string UploadNotificationChannelDescription = "Notifies you when a file has finished uploading";
+        private const int UploadNotificationId = 200;
+
+        private static NotificationCompat.Builder uploadNotificationBuilder;
 
         private static readonly ILog log = Mvx.IoCProvider.Resolve<ILog>();
 
@@ -154,7 +157,7 @@ namespace SkyDrop.Droid.Helper
             notificationManager.CreateNotificationChannel(channel);
         }
 
-        public static void ShowUploadCompleteNotification(Context context, string message)
+        public static void ShowUploadStartedNotification(Context context, string message)
         {
             // Set up an intent so that tapping the notifications returns to this app:
             Intent intent = new Intent(context, typeof(DropView));
@@ -168,22 +171,35 @@ namespace SkyDrop.Droid.Helper
                 PendingIntent.GetActivity(context, pendingIntentId, intent, PendingIntentFlags.OneShot);
 
             // Instantiate the builder and set notification elements:
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, UploadNotificationChannelId)
-                .SetContentTitle("Upload Complete")
+            uploadNotificationBuilder = new NotificationCompat.Builder(context, UploadNotificationChannelId)
+                .SetContentTitle("Sending file...")
                 .SetContentText(message)
                 .SetSmallIcon(Resource.Drawable.ic_skydrop)
                 .SetContentIntent(pendingIntent);
 
             // Build the notification:
-            Notification notification = builder.Build();
-
-            // Get the notification manager:
-            NotificationManager notificationManager =
-                context.GetSystemService(Context.NotificationService) as NotificationManager;
+            Notification notification = uploadNotificationBuilder.Build();
 
             // Publish the notification:
-            const int notificationId = 0;
-            notificationManager.Notify(notificationId, notification);
+            GetNotificationManager(context).Notify(UploadNotificationId, notification);
+        }
+
+        public static void ShowUploadFinishedNotification(Context context, string message)
+        {
+            // Update the existing notification builder content:
+            uploadNotificationBuilder.SetContentTitle("File published successfully (tap to view)");
+            uploadNotificationBuilder.SetContentText(message);
+
+            // Build a notification object with updated content:
+            var notification = uploadNotificationBuilder.Build();
+
+            // Publish the new notification with the existing ID:
+            GetNotificationManager(context).Notify(UploadNotificationId, notification);
+        }
+
+        private static NotificationManager GetNotificationManager(Context context)
+        {
+            return context.GetSystemService(Context.NotificationService) as NotificationManager;
         }
     }
 }
