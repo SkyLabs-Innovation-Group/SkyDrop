@@ -169,7 +169,7 @@ namespace SkyDrop.Droid.Helper
             // Create a PendingIntent; we're only using one PendingIntent (ID = 0):
             const int pendingIntentId = 0;
             PendingIntent pendingIntent =
-                PendingIntent.GetActivity(context, pendingIntentId, intent, PendingIntentFlags.OneShot);
+                PendingIntent.GetActivity(context, pendingIntentId, intent, 0);
 
             // Instantiate the builder and set notification elements:
             uploadNotificationBuilder = new NotificationCompat.Builder(context, UploadNotificationChannelId)
@@ -177,7 +177,8 @@ namespace SkyDrop.Droid.Helper
                 .SetContentText(message)
                 .SetSmallIcon(Resource.Drawable.ic_skydrop)
                 .SetContentIntent(pendingIntent)
-                .SetProgress(100, 0, false);
+                .SetProgress(100, 0, false)
+                .SetAutoCancel(true); //dismiss notification when tapped
 
             // Build the notification:
             Notification notification = uploadNotificationBuilder.Build();
