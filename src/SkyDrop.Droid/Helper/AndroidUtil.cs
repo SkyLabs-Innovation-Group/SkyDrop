@@ -196,7 +196,7 @@ namespace SkyDrop.Droid.Helper
                     uploadNotificationBuilder.SetProgress(0, 0, false); //hide progressbar
                     break;
                 case FileUploadResult.Fail:
-                    uploadNotificationBuilder.SetContentTitle("File could not be uploaded");
+                    uploadNotificationBuilder.SetContentTitle("Upload failed");
                     uploadNotificationBuilder.SetProgress(0, 0, false); //hide progressbar
                     break;
                 case FileUploadResult.Cancelled:
