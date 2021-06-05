@@ -53,6 +53,7 @@ namespace SkyDrop.iOS.Views.Drop
                 ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
                 ViewModel.ResetUIStateCommand = new MvxCommand(SetSendReceiveButtonUiState);
                 ViewModel.UpdateNavDotsCommand = new MvxCommand(() => UpdateNavDots());
+                ViewModel.UploadStartedNotificationCommand = new MvxCommand(() => iOSUtil.ShowUploadStartedNotification(ViewModel.FileToUpload.Filename));
 
                 SetupGestureListener();
                 SetupNavDots();
