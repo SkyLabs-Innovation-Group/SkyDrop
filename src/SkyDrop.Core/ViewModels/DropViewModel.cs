@@ -231,7 +231,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 
                 
                 // todo: ui for selecting portal to upload to (advanced upload options, swipe up)
-                SkynetPortal.SelectedPortal = SkynetPortal.SkyportalXyz;
+                SkynetPortal.SelectedPortal = SkynetPortal.SiaskyPortal;
 
                 var portal = SkynetPortal.SelectedPortal;
                 
