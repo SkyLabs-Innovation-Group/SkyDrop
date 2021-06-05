@@ -1,3 +1,8 @@
+using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+using Newtonsoft.Json;
+using Realms;
+
 namespace SkyDrop.Core.DataModels
 {
     public class SkynetPortal
@@ -17,18 +22,22 @@ namespace SkyDrop.Core.DataModels
         public SkynetPortal(string baseUrl)
         {
             this.BaseUrl = baseUrl;
+            this.InitialBaseUrl = baseUrl;
             
-            // When first portal instance is created, it will be set here. This would start to cause bugs potentially if we accidentally created a
+            // When first portal instance is created, it will be selected here. This would start to cause bugs potentially if we accidentally created a
             // SkynetPortal instance on startup for some other reason (e.g. to check equality in a startup method Initialize())
             if (isFirstPortal) SelectedPortal = this;
             isFirstPortal = false;
         }
         
-        public string BaseUrl { get; }
+        // Used for Fody.Weaver
+        public string BaseUrl { get; set; }
+
+        public readonly string InitialBaseUrl;
 
         public override int GetHashCode()
         {
-            return BaseUrl?.GetHashCode() ?? 0;
+            return InitialBaseUrl.GetHashCode();
         }
 
         public override bool Equals(object obj)

@@ -7,30 +7,20 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SkyDrop.Core.Components;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Services;
 
 namespace SkyDrop.Droid.Services
 {
-    public class AndroidHttpClientFactory : ISkyDropHttpClientFactory
+    public class AndroidHttpClientFactory : BaseSkyDropHttpClientFactory
     {
-        private HashSet<SkynetPortal> SupportedPortals { get; } = new HashSet<SkynetPortal>() { SkynetPortal.SiaskyPortal };
-        
-        // todo: nb that this might one day cause issues if we stored too many HttpClient instances e.g. for 100s of portals
-        private Dictionary<SkynetPortal, HttpClient> HttpClientsPerPortal { get; } = new Dictionary<SkynetPortal, HttpClient>();
-
-        /// <summary>
-        /// Get the HttpClient which connects to the default Siasky portal.
-        /// </summary>
-        public HttpClient GetSkyDropHttpClientInstance()
-        {
-            return GetSkyDropHttpClientInstance(SkynetPortal.SiaskyPortal);
-        }
+        // Check BaseSkyDropHttpClientFactory for the default portal logic.
 
         /// <summary>
         /// Get the HttpClient which connects to the portal provided by argument.
         /// </summary>
-        public HttpClient GetSkyDropHttpClientInstance(SkynetPortal portal)
+        public override HttpClient GetSkyDropHttpClientInstance(SkynetPortal portal)
         {
             // Re-use HttpClient if already created
             if (HttpClientsPerPortal.ContainsKey(portal))
