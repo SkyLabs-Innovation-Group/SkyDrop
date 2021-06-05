@@ -28,7 +28,7 @@ namespace SkyDrop.Core.Services
             var fileSizeBytes = skyfile.FileSizeBytes;
             var filename = skyfile.Filename;
 
-            var url = $"{Util.Portal}/skynet/skyfile";
+            var url = $"{SkynetPortal.SelectedPortal}/skynet/skyfile";
 
             var form = new MultipartFormDataContent();
             

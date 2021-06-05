@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
+using SkyDrop.Core.DataModels;
 
 namespace SkyDrop.Core.Utility
 {
     public static class Util
     {
-        public const string Portal = "https://siasky.net";
         public const float NavDotsMinAlpha = 0.2f;
         public const float NavDotsMaxAlpha = 0.8f;
 
@@ -16,7 +16,7 @@ namespace SkyDrop.Core.Utility
         /// </summary>
         public static string GetSkylinkUrl(string skylink)
         {
-            return $"{Portal}/{skylink}";
+            return $"{SkynetPortal.SelectedPortal}/{skylink}";
         }
 
         /// <summary>
