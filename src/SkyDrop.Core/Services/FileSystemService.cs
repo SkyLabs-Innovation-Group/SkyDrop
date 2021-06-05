@@ -32,20 +32,32 @@ namespace SkyDrop.Core.Services
                 Log.Trace("PickFilesAsync() was called, with StorageRead permission granted");
             }
 
-            IEnumerable<FileResult> pickedFiles;
+            IEnumerable<FileResult> pickedFiles = null;
             switch (fileType)
             {
                 case SkyFilePickerType.Generic:
                     pickedFiles = await FilePicker.PickMultipleAsync();
+
+                    if (pickedFiles == null)
+                        break;
+                    
                     break;
         
                 case SkyFilePickerType.Image:
                     var pickPhoto = await MediaPicker.PickPhotoAsync();
+
+                    if (pickPhoto == null)
+                        break;
+                    
                     pickedFiles = new List<FileResult>() { pickPhoto };
                     break;
         
                 case SkyFilePickerType.Video:
                     var pickVideo = await MediaPicker.PickVideoAsync();
+
+                    if (pickVideo == null)
+                        break;
+                    
                     pickedFiles = new List<FileResult>() { pickVideo };
                     break;
         
