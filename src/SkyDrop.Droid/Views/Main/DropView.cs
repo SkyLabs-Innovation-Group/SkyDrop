@@ -91,7 +91,7 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         private async Task ShowBarcode()
         {
-            SetBarcodeCodeUiState();
+            SetBarcodeCodeUiState(slow: true);
 
             var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileFullUrl, barcodeImageView.Width, barcodeImageView.Height);
             var bitmap = await AndroidUtil.BitMatrixToBitmap(matrix);
@@ -120,13 +120,13 @@ namespace SkyDrop.Droid.Views.Main
         /// <summary>
         /// Show the QR code UI state
         /// </summary>
-        private void SetBarcodeCodeUiState()
+        private void SetBarcodeCodeUiState(bool slow = false)
         {
             ViewModel.DropViewUIState = DropViewState.QRCodeState;
 
             ViewModel.IsBarcodeVisible = true;
 
-            AnimateSlideBarcodeIn(fromLeft: false);
+            AnimateSlideBarcodeIn(fromLeft: false, slow: slow);
             AnimateSlideSendReceiveButtonsOut(toLeft: true);
         }
 
@@ -155,14 +155,14 @@ namespace SkyDrop.Droid.Views.Main
         /// <summary>
         /// Slide in the QR code from the left or right
         /// </summary>
-        private void AnimateSlideBarcodeIn(bool fromLeft)
+        private void AnimateSlideBarcodeIn(bool fromLeft, bool slow)
         {
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
 
             barcodeContainer.TranslationX = fromLeft ? -screenWidth : screenWidth;
             barcodeMenu.TranslationX = fromLeft ? -screenWidth : screenWidth;
 
-            var duration = 666;
+            var duration = slow ? 666 : 250;
             sendButton.Animate()
                 .TranslationXBy(-screenWidth)
                 .SetDuration(duration)
