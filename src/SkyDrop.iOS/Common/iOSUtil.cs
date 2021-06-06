@@ -2,13 +2,17 @@
 using System.Threading.Tasks;
 using Foundation;
 using UIKit;
+using UserNotifications;
 using ZXing.Common;
 using ZXing.Mobile;
+using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 
 namespace SkyDrop.iOS.Common
 {
     public static class iOSUtil
     {
+        private static UILocalNotification uploadNotification;
+
         public static Task<UIImage> BitMatrixToImage(BitMatrix bitMatrix)
         {
             var renderer = new BitmapRenderer();
@@ -19,28 +23,43 @@ namespace SkyDrop.iOS.Common
             });
         }
 
-        public static void ShowUploadStartedNotification(string message)
+        public static void RegisterForLocalNotifications()
         {
-            /*
-            // create the notification
-            var notification = new UILocalNotification();
+            var settings = UIUserNotificationSettings.GetSettingsForTypes(UIUserNotificationType.Alert, null);
+            UIApplication.SharedApplication.RegisterUserNotificationSettings(settings);
+        }
 
-            // set the fire date (the date time in which it will fire)
-            notification.FireDate = NSDate.FromTimeIntervalSinceNow(5);
+        public static void ShowUploadFinishedNotification(FileUploadResult uploadResult, string filename)
+        {
+            switch (uploadResult)
+            {
+                case FileUploadResult.Success:
+                    ShowNotification("File published successfully (tap to view)", filename);
+                    break;
+                case FileUploadResult.Fail:
+                    ShowNotification("Upload failed", filename);
+                    break;
+                case FileUploadResult.Cancelled:
+                    break;
+            }
+        }
 
-            // configure the alert
-            notification.AlertAction = "View Alert";
-            notification.AlertBody = "Your one minute alert has fired!";
+        public static void ShowNotification(string title, string message)
+        {
+            if (uploadNotification != null)
+                UIApplication.SharedApplication.CancelLocalNotification(uploadNotification);
 
-            // modify the badge
-            notification.ApplicationIconBadgeNumber = 1;
+            uploadNotification = new UILocalNotification
+            {
+                FireDate = NSDate.FromTimeIntervalSinceNow(2),
+                AlertTitle = title,
+                AlertBody = message,
+                ApplicationIconBadgeNumber = 0,
+                SoundName = UILocalNotification.DefaultSoundName,
+                UserInfo = new NSDictionary()
+            };
 
-            // set the sound to be the default sound
-            notification.SoundName = UILocalNotification.DefaultSoundName;
-
-            // schedule it
-            UIApplication.SharedApplication.ScheduleLocalNotification(notification);
-            */
+            UIApplication.SharedApplication.ScheduleLocalNotification(uploadNotification);
         }
     }
 }

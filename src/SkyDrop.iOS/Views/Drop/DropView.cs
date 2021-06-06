@@ -25,22 +25,10 @@ namespace SkyDrop.iOS.Views.Drop
         private const int swipeMarginX = 20;
         private bool isPressed;
         private nfloat tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
+        private NSObject appBackgroundedObserver;
 
         public DropView() : base("DropView", null)
         {
-        }
-
-        //what is this?
-        partial void DropViewClickAction(NSObject sender)
-        {
-            try
-            {
-                ViewModel.NavToSettingsCommand.Execute();
-            }
-            catch (Exception ex)
-            {
-                ViewModel.Log.Exception(ex);
-            }
         }
 
         public override void ViewDidLoad()
@@ -53,10 +41,12 @@ namespace SkyDrop.iOS.Views.Drop
                 ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
                 ViewModel.ResetUIStateCommand = new MvxCommand(SetSendReceiveButtonUiState);
                 ViewModel.UpdateNavDotsCommand = new MvxCommand(() => UpdateNavDots());
-                ViewModel.UploadStartedNotificationCommand = new MvxCommand(() => iOSUtil.ShowUploadStartedNotification(ViewModel.FileToUpload.Filename));
+                ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>(result => iOSUtil.ShowUploadFinishedNotification(result, ViewModel.FileToUpload.Filename));
 
                 SetupGestureListener();
                 SetupNavDots();
+                SetupAppBackgroundedService();
+                iOSUtil.RegisterForLocalNotifications();
 
                 //setup nav bar
                 NavigationController.NavigationBar.BarTintColor = Colors.GradientDark.ToNative();
@@ -131,6 +121,18 @@ namespace SkyDrop.iOS.Views.Drop
             {
                 ViewModel.Log.Exception(e);
             }
+        }
+
+        public void AppBackgrounded(NSNotification notification)
+        {
+            //we send the notification when the app gets backgrounded, because it won't show while the app is in the foreground
+            if (ViewModel.IsUploading)
+                iOSUtil.ShowNotification("Sending file...", ViewModel.FileToUpload.Filename);
+        }
+
+        private void SetupAppBackgroundedService()
+        {
+            appBackgroundedObserver = NSNotificationCenter.DefaultCenter.AddObserver(UIApplication.WillResignActiveNotification, AppBackgrounded, null);
         }
 
         private void SetupNavDots()
