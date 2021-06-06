@@ -25,6 +25,7 @@ namespace SkyDrop.iOS.Views.Drop
         private const int swipeMarginX = 20;
         private bool isPressed;
         private nfloat tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
+        private nfloat screenWidth => UIScreen.MainScreen.Bounds.Width;
 
         public DropView() : base("DropView", null)
         {
@@ -235,7 +236,6 @@ namespace SkyDrop.iOS.Views.Drop
         /// </summary>
         private void AnimateSlideBarcodeIn(bool isSlow = false)
         {
-            var screenWidth = UIScreen.MainScreen.Bounds.Width;
             var screenCenterX = screenWidth * 0.5;
 
             var barcodeTranslationX = screenWidth;
@@ -256,8 +256,6 @@ namespace SkyDrop.iOS.Views.Drop
         /// </summary>
         private void AnimateSlideSendReceiveButtonsOut(bool toLeft)
         {
-            var screenWidth = UIScreen.MainScreen.Bounds.Width;
-
             var translationX = toLeft ? -screenWidth : screenWidth;
             var duration = 0.25;
             UIView.Animate(duration, () =>
@@ -272,8 +270,6 @@ namespace SkyDrop.iOS.Views.Drop
         /// </summary>
         private void AnimateSlideBarcodeOut()
         {
-            var screenWidth = UIScreen.MainScreen.Bounds.Width;
-
             ViewModel.IsAnimatingBarcodeOut = true;
             ViewModel.IsReceiveButtonGreen = true;
             ViewModel.UploadTimerText = "";
@@ -320,7 +316,6 @@ namespace SkyDrop.iOS.Views.Drop
         /// </summary>
         private void AnimateSlideSendReceiveCenter()
         {
-            var screenWidth = UIScreen.MainScreen.Bounds.Width;
             var screenCenterX = screenWidth * 0.5;
 
             var sendReceiveButtonsContainerFrame = SendReceiveButtonsContainer.Frame;
