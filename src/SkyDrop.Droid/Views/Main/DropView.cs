@@ -114,7 +114,7 @@ namespace SkyDrop.Droid.Views.Main
         {
             //DropViewUIState gets changed at the end of the animation 
             //that is to fix an issue with CheckUserIsSwiping() on barcode menu buttons
-            AnimateSlideBarcodeOut(toLeft: false);
+            AnimateSlideBarcodeOut();
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace SkyDrop.Droid.Views.Main
 
             ViewModel.IsBarcodeVisible = true;
 
-            AnimateSlideBarcodeIn(fromLeft: false, slow: slow);
+            AnimateSlideBarcodeIn(fromLeft: false, slow);
             AnimateSlideSendReceiveButtonsOut(toLeft: true);
         }
 
@@ -180,7 +180,7 @@ namespace SkyDrop.Droid.Views.Main
         /// <summary>
         /// Slide barcode out, slide send receive buttons in
         /// </summary>
-        private void AnimateSlideBarcodeOut(bool toLeft)
+        private void AnimateSlideBarcodeOut()
         {
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
 
@@ -189,28 +189,22 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.UploadTimerText = "";
             ViewModel.FileSize = "";
 
-            sendReceiveButtonsContainer.TranslationX = 0;
-            receiveButton.Alpha = 0;
-
-            if (toLeft)
-                sendButton.TranslationX = screenWidth;
+            sendReceiveButtonsContainer.TranslationX = -screenWidth;
+            receiveButton.Alpha = 1;
+            sendButton.TranslationX = 0;
 
             var duration = 250;
-            sendButton.Animate()
+            sendReceiveButtonsContainer.Animate()
                 .TranslationX(0)
                 .SetDuration(duration)
                 .WithEndAction(new Java.Lang.Runnable(() => { ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState; ViewModel.ResetUI(); }))
                 .Start();
-            receiveButton.Animate()
-                .Alpha(1)
-                .SetDuration(duration)
-                .Start();
             barcodeContainer.Animate()
-                .TranslationX(toLeft ? -screenWidth : screenWidth)
+                .TranslationX(screenWidth)
                 .SetDuration(duration)
                 .Start();
             barcodeMenu.Animate()
-                .TranslationX(toLeft ? -screenWidth : screenWidth)
+                .TranslationX(screenWidth)
                 .SetDuration(duration)
                 .Start();
         }
