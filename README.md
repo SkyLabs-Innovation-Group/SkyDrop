@@ -4,7 +4,7 @@ We took inspiration from popular file sharing apps like WeTransfer, and Apple’
 
 SkyDrop is free to download and has no ads; your files are stored on the Skynet portal and redundantly backed up on Sia’s decentralised blockchain powered cloud.
 
-Open sourced under MIT license, we built SkyDrop using .NET’s native cross platform app building framework Xamarin. The app is maintained openly by C# developers who appreciate its usefulness. You can find the source code on Github if you’re interested to read it.
+Open sourced under MIT license, we built SkyDrop using .NET’s native cross-platform app framework Xamarin. The app is maintained openly by C# developers who appreciate its usefulness. You can find the source code on Github if you’re interested to read it.
 
 Many FAQs about SkyDrop can be answered by reading Skynet’s Siasky portal’s privacy policy. It’s actually short and quite understandable, credit to Skynet Labs. As we are powered by Skynet’s decentralised file publishing platform, SkyDrop can’t see your files, it only publishes them to Skynet via the https://siasky.net portal.
 
