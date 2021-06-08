@@ -1,7 +1,4 @@
-# [SkyDrop](http://app.skydrop.hns.to/) 
-
-![skydrop links QR code link]( "QR code to http://app.skydrop.hns.to")
-<img src="https://siasky.net/OAAJRvfx8zGMkMLRqnaZz9IwXI0Cc7KqeGmvsXvbQd7enQ" alt="skydrop store links qr code link" width="50"/>
+# [SkyDrop](http://app.skydrop.hns.to/) <img src="https://siasky.net/OAAJRvfx8zGMkMLRqnaZz9IwXI0Cc7KqeGmvsXvbQd7enQ" alt="skydrop store links qr code link" width="200"/>
 
 
 
