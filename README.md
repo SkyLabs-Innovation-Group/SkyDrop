@@ -1,6 +1,9 @@
 # [SkyDrop](http://app.skydrop.hns.to/) 
 
-![skydrop links QR code link](https://siasky.net/OAAJRvfx8zGMkMLRqnaZz9IwXI0Cc7KqeGmvsXvbQd7enQ "QR code to http://app.skydrop.hns.to")
+![skydrop links QR code link]( "QR code to http://app.skydrop.hns.to")
+<img src="https://siasky.net/OAAJRvfx8zGMkMLRqnaZz9IwXI0Cc7KqeGmvsXvbQd7enQ" alt="skydrop store links qr code link" width="50"/>
+
+
 
 We took inspiration from popular file sharing apps like WeTransfer, and Apple’s polished AirDrop app for iOS and Mac, and decided to create SkyDrop: a free and open source alternative with which users can send multiple files, including large files, and share them easily with a simple link or QR code.
 
