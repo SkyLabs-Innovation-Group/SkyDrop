@@ -1,4 +1,4 @@
-# [SkyDrop](http://app.skydrop.hns.to/) <img src="https://siasky.net/OAAJRvfx8zGMkMLRqnaZz9IwXI0Cc7KqeGmvsXvbQd7enQ" align="right" alt="skydrop store links qr code link" width="200"/>
+<img src="https://siasky.net/OAAJRvfx8zGMkMLRqnaZz9IwXI0Cc7KqeGmvsXvbQd7enQ" align="left" alt="skydrop store links qr code link" width="200"/> # [SkyDrop](http://app.skydrop.hns.to/)
 
 
 
