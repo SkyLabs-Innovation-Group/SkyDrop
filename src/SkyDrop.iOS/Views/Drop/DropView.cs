@@ -25,6 +25,7 @@ namespace SkyDrop.iOS.Views.Drop
         private const int swipeMarginX = 20;
         private bool isPressed;
         private nfloat tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
+        private nfloat screenWidth => UIScreen.MainScreen.Bounds.Width;
 
         public DropView() : base("DropView", null)
         {
@@ -174,7 +175,7 @@ namespace SkyDrop.iOS.Views.Drop
         {
             try
             {
-                SetBarcodeCodeUiState();
+                SetBarcodeCodeUiState(isSlow: true);
                 var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileFullUrl, (int)BarcodeImage.Frame.Width, (int)BarcodeImage.Frame.Height);
                 var image = await iOSUtil.BitMatrixToImage(matrix);
                 BarcodeImage.Image = image;
@@ -200,7 +201,7 @@ namespace SkyDrop.iOS.Views.Drop
         /// <summary>
         /// Show the QR code UI state
         /// </summary>
-        private void SetBarcodeCodeUiState()
+        private void SetBarcodeCodeUiState(bool isSlow)
         {
             ViewModel.DropViewUIState = DropViewState.QRCodeState;
 
@@ -208,7 +209,7 @@ namespace SkyDrop.iOS.Views.Drop
             
             ViewModel.Log.Trace("Sliding in QR code view");
 
-            AnimateSlideBarcodeIn(fromLeft: false);
+            AnimateSlideBarcodeIn(isSlow);
             AnimateSlideSendReceiveButtonsOut(toLeft: true);
         }
         
@@ -233,17 +234,16 @@ namespace SkyDrop.iOS.Views.Drop
         /// <summary>
         /// Slide in the QR code from the left or right
         /// </summary>
-        private void AnimateSlideBarcodeIn(bool fromLeft)
+        private void AnimateSlideBarcodeIn(bool isSlow = false)
         {
-            var screenWidth = UIScreen.MainScreen.Bounds.Width;
             var screenCenterX = screenWidth * 0.5;
 
-            var barcodeTranslationX = fromLeft ? -screenWidth : screenWidth;
+            var barcodeTranslationX = screenWidth;
 
             BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(screenWidth, 0);
             BarcodeContainer.Transform = CGAffineTransform.MakeTranslation(screenWidth, 0);
 
-            var duration = 0.666;
+            var duration = isSlow ? 0.666 : 0.25;
             UIView.Animate(duration, () =>
             {
                 BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(0, 0);
@@ -256,14 +256,6 @@ namespace SkyDrop.iOS.Views.Drop
         /// </summary>
         private void AnimateSlideSendReceiveButtonsOut(bool toLeft)
         {
-            /*
-            if (!barcodeIsLoaded)
-            {
-                AnimateSlideBarcodeToCenter();
-            }
-            */
-            var screenWidth = UIScreen.MainScreen.Bounds.Width;
-
             var translationX = toLeft ? -screenWidth : screenWidth;
             var duration = 0.25;
             UIView.Animate(duration, () =>
@@ -278,8 +270,6 @@ namespace SkyDrop.iOS.Views.Drop
         /// </summary>
         private void AnimateSlideBarcodeOut()
         {
-            var screenWidth = UIScreen.MainScreen.Bounds.Width;
-
             ViewModel.IsAnimatingBarcodeOut = true;
             ViewModel.IsReceiveButtonGreen = true;
             ViewModel.UploadTimerText = "";
@@ -326,7 +316,6 @@ namespace SkyDrop.iOS.Views.Drop
         /// </summary>
         private void AnimateSlideSendReceiveCenter()
         {
-            var screenWidth = UIScreen.MainScreen.Bounds.Width;
             var screenCenterX = screenWidth * 0.5;
 
             var sendReceiveButtonsContainerFrame = SendReceiveButtonsContainer.Frame;
@@ -365,7 +354,7 @@ namespace SkyDrop.iOS.Views.Drop
                     //send & receive buttons are visible
 
                     if (SendReceiveButtonsContainer.Transform.x0 <= -swipeMarginX)
-                        SetBarcodeCodeUiState();
+                        SetBarcodeCodeUiState(isSlow: false);
                     else
                         AnimateSlideSendReceiveCenter();
                 }
