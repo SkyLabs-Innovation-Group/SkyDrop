@@ -5,7 +5,7 @@ namespace SkyDrop.Core.ViewModels
 {
     public abstract class BaseViewModel : MvxViewModel
     {
-        protected readonly ISingletonService singletonService;
+        public readonly ISingletonService singletonService;
 
         // Expose to views
         public ILog Log { get; protected set; }
