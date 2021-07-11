@@ -27,7 +27,11 @@ namespace SkyDrop.Core.DataModels
 
         private static SkynetPortal SetSelectedSkynetPortal(SkynetPortal portal)
         {
-            Preferences.Set("selected_skynetportal", portal?.ToString());
+            if (string.IsNullOrEmpty(portal.ToString()))
+                return SiaskyPortal;
+
+            Preferences.Remove("selected_skynetportal");
+            Preferences.Set("selected_skynetportal", portal.ToString());
             return portal;
         }
 
@@ -39,18 +43,10 @@ namespace SkyDrop.Core.DataModels
         
         public static SkynetPortal SkyportalXyz = new SkynetPortal(SkyportalXyzUrl);
 
-
-
-        private bool isFirstPortal = true;
         public SkynetPortal(string baseUrl)
         {
             this.BaseUrl = baseUrl;
             this.InitialBaseUrl = baseUrl;
-            
-            // When first portal instance is created, it will be selected here. This would start to cause bugs potentially if we accidentally created a
-            // SkynetPortal instance on startup for some other reason (e.g. to check equality in a startup method Initialize())
-            if (isFirstPortal) SelectedPortal = this;
-            isFirstPortal = false;
         }
         
         // Used for Fody.Weaver
