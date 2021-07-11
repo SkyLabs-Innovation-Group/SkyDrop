@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darkGrey">
+
+    <include
+        android:id="@+id/layout_toolbar"
+        layout="@layout/layout_toolbar" />
+
+     <TextView
+        android:id="@+id/enterSkynetPortalLabel"
+        android:text="Enter a skynet portal to use in the app (default is siasky.net): "
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="16dp"
+        android:layout_marginHorizontal="8dp"
+        />
+
+    <EditText
+        android:id="@+id/skynetPortalEditText"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#FFFFFF"
+        android:layout_marginVertical="16dp"
+        />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:layout_margin="16dp"
+        />
+    
+</LinearLayout>

@@ -45,6 +45,10 @@ namespace SkyDrop.Droid.Views.Main
         {
             base.OnCreate(bundle);
 
+            var toolbar = FindViewById<AndroidX.AppCompat.Widget.Toolbar>(Resource.Id.toolbar);
+            SetSupportActionBar(toolbar);
+            SupportActionBar.SetDisplayShowTitleEnabled(false);
+
             await ViewModel.InitializeTask.Task;
 
             Log.Trace("DropView OnCreate()");
@@ -70,6 +74,23 @@ namespace SkyDrop.Droid.Views.Main
             stagedFilesRecycler.SetLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false));
 
             CreateNavDots();
+        }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.DropMenu, menu);
+            return base.OnCreateOptionsMenu(menu);
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            if (item.ItemId == Resource.Id.menu_drop_settings)
+            {
+                ViewModel.NavigateToSettings().GetAwaiter().GetResult();
+            }
+
+
+            return base.OnOptionsItemSelected(item);
         }
 
         /// <summary>

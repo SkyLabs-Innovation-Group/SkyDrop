@@ -87,6 +87,11 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
+        public Task NavigateToSettings()
+        {
+            return navigationService.Navigate<SettingsViewModel>();
+        }
+
         public enum DropViewState
         {
             SendReceiveButtonState = 1,
@@ -229,10 +234,6 @@ namespace SkyDrop.Core.ViewModels.Main
                 else
                     FileToUpload = StagedFiles.First().SkyFile;
                 
-                
-                // todo: ui for selecting portal to upload to (advanced upload options, swipe up)
-                SkynetPortal.SelectedPortal = SkynetPortal.SiaskyPortal;
-
                 var portal = SkynetPortal.SelectedPortal;
                 
                 FileToUpload.SetSkynetPortalUploadedTo(portal);
