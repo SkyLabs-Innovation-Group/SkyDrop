@@ -153,12 +153,11 @@
     <Compile Include="Common\iOSUtil.cs" />
     <ImageAsset Include="Resources\Media.xcassets\ic_cancel.imageset\Contents.json" />
     <ImageAsset Include="Resources\Media.xcassets\ic_cancel.imageset\cancel.pdf" />
-    <Compile Include="Views\Drop\SettingsView.cs" />
-
-    <Compile Include="Views\Drop\SettingsView.designer.cs">
-                      <DependentUpon>SettingsView.cs</DependentUpon>
+    <Compile Include="Views\Settings\SettingsView.cs" />
+    <Compile Include="Views\Settings\SettingsView.designer.cs">
+      <DependentUpon>SettingsView.cs</DependentUpon>
     </Compile>
-    <InterfaceDefinition Include="Views\Drop\SettingsView.xib" />
+    <InterfaceDefinition Include="Views\Settings\SettingsView.xib" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -206,6 +205,7 @@
     <Folder Include="Common\" />
     <Folder Include="Resources\Media.xcassets\ic_cancel.imageset\" />
     <Folder Include="Converters\" />
+    <Folder Include="Views\Settings\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

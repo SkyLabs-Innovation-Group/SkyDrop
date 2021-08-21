@@ -8,7 +8,7 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace SkyDrop.iOS.Views.Drop
+namespace SkyDrop.iOS.Views.Settings
 {
 	[Register ("SettingsView")]
 	partial class SettingsView

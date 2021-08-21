@@ -64,6 +64,7 @@ namespace SkyDrop.Core.ViewModels
             }
             catch (Exception ex)
             {
+                singletonService.UserDialogs.Toast("Error - couldn't reach portal " + portalUrl);
                 Log.Exception(ex);
             }
         }

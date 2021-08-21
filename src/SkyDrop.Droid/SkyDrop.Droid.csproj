@@ -75,7 +75,7 @@
     <Compile Include="Views\BaseActivity.cs" />
     <Compile Include="Views\BaseFragment.cs" />
     <Compile Include="Views\Main\FilesView.cs" />
-    <Compile Include="Views\Main\SettingsActivity.cs" />
+    <Compile Include="Views\Main\SettingsView.cs" />
     <Compile Include="Views\Splash\SplashActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

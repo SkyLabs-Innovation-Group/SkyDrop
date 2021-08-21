@@ -105,9 +105,14 @@ namespace SkyDrop.Core.Services
                 else
                     Log.Trace("Success querying for file header on portal " + skynetPortal);
             }
+            else if (result == null)
+            {
+                Log.Error($"Head request to {skynetPortal} returned null");
+                return false;
+            }
             else
             {
-                Log.Error($"Head request to {skynetPortal} returned status code {result.StatusCode}");
+                Log.Error($"Head request to {skynetPortal} returned status code {result?.StatusCode}");
                 return false;
             }
 

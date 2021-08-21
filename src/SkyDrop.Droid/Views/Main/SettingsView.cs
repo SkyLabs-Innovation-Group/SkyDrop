@@ -14,8 +14,8 @@ using System.Threading.Tasks;
 
 namespace SkyDrop.Droid.Views.Main
 {
-    [Activity(Label = "SettingsActivity")]
-    public class SettingsActivity : BaseActivity<SettingsViewModel>
+    [Activity(Label = "SettingsView")]
+    public class SettingsView : BaseActivity<SettingsViewModel>
     {
         private Button saveButton;
         private EditText portalEditText;
@@ -27,9 +27,9 @@ namespace SkyDrop.Droid.Views.Main
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-
             BindViews();
-            
+
+            portalEditText.Text = SkynetPortal.SelectedPortal.ToString();
             saveButton.Click += async (s, e) => await ViewModel.ValidateAndTrySetSkynetPortal(portalEditText.Text);
         }
 

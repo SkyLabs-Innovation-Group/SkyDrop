@@ -1,9 +1,10 @@
 ﻿using System;
 using MvvmCross.Platforms.Ios.Views;
+using SkyDrop.Core.DataModels;
 using SkyDrop.Core.ViewModels;
 using UIKit;
 
-namespace SkyDrop.iOS.Views.Drop
+namespace SkyDrop.iOS.Views.Settings
 {
     partial class SettingsView : MvxViewController<SettingsViewModel>
     {
@@ -18,6 +19,10 @@ namespace SkyDrop.iOS.Views.Drop
             var set = CreateBindingSet();
             set.Bind(SetPortalLabel).For(v => v.Text).To(vm => vm.SkynetPortalLabelText);
             set.Apply();
+
+            PortalTextView.Text = SkynetPortal.SelectedPortal.ToString();
+            PortalTextView.BackgroundColor = UIColor.White;
+            PortalTextView.TextColor = UIColor.Black;
 
             SavePortalButton.BackgroundColor = UIColor.White;
             SavePortalButton.TouchUpInside += async(s, e) =>
