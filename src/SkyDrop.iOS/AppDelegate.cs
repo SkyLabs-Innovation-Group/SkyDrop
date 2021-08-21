@@ -8,6 +8,7 @@ using MvvmCross.IoC;
 using MvvmCross.Platforms.Ios.Core;
 using SkyDrop.Core;
 using UIKit;
+using UserNotifications;
 
 namespace SkyDrop.iOS
 {
@@ -17,6 +18,9 @@ namespace SkyDrop.iOS
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
             var val = base.FinishedLaunching(application, launchOptions);
+
+
+            UNUserNotificationCenter.Current.RequestAuthorizationAsync(UNAuthorizationOptions.Announcement);
 
             AppCenter.Start("382ddca4-6c75-43ee-886c-e533cd272137",
                                typeof(Analytics), typeof(Crashes));

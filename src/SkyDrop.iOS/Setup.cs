@@ -96,6 +96,5 @@ namespace SkyDrop.iOS
 
             return logProvider;
         }
-        
     }
 }

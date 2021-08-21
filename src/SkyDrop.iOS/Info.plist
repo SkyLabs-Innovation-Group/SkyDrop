@@ -5,7 +5,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>SkyDrop</string>
 	<key>CFBundleIdentifier</key>
-	<string>skydrop.skydrop</string>
+	<string>wellhat.SkyDrop</string>
 	<key>CFBundleShortVersionString</key>
 	<string>3</string>
 	<key>CFBundleVersion</key>
@@ -43,5 +43,7 @@
 	<string>SkyDrop allows you to choose photos to upload to Skynet from your photo library</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>SkyDrop allows you to choose photos to upload to Skynet from your photo library</string>
+	<key>SBAppUsesLocalNotifications</key>
+	<true/>
 </dict>
 </plist>
