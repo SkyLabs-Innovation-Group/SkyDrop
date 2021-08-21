@@ -17,10 +17,10 @@ namespace SkyDrop.Droid.Views.Main
     [Activity(Label = "SettingsActivity")]
     public class SettingsActivity : BaseActivity<SettingsViewModel>
     {
-        /// <summary>
-        /// Currently, the best way to verify a Skynet portal that I can think of would be to query for a sky file's metadata.
-        /// </summary>
-        private const string RandomFileToQueryFor = "AACEA6yg7OM0_gl6_sHx2D7ztt20-g0oXum5GNbCc0ycRg";
+        private Button saveButton;
+        private EditText portalEditText;
+
+
 
         protected override int ActivityLayoutId => Resource.Layout.SettingsActivity;
 
@@ -28,45 +28,15 @@ namespace SkyDrop.Droid.Views.Main
         {
             base.OnCreate(savedInstanceState);
 
-            var saveButton = FindViewById<Button>(Resource.Id.saveButton);
-
-            saveButton.Click += async (s, e) => await ValidateAndSetSkynetPortal();
+            BindViews();
+            
+            saveButton.Click += async (s, e) => await ViewModel.ValidateAndTrySetSkynetPortal(portalEditText.Text);
         }
 
-        protected async Task ValidateAndSetSkynetPortal()
+        private void BindViews()
         {
-            try
-            {
-                var portalEditText = FindViewById<EditText>(Resource.Id.skynetPortalEditText);
-
-                string portalUrl = portalEditText.Text;
-                if (string.IsNullOrEmpty(portalUrl))
-                {
-                    Log.Error("User entered null or empty portal, setting to siasky.net");
-                }
-                else
-                {
-                    var portal = new SkynetPortal(portalUrl);
-                    bool success = await ViewModel.singletonService.ApiService.PingPortalForSkylink(RandomFileToQueryFor, portal);
-
-                    if (success)
-                    {
-                        bool userHasConfirmed = await ViewModel.singletonService.UserDialogs.ConfirmAsync($"Set your portal to {portalUrl} ?");
-
-                        if (userHasConfirmed)
-                            SkynetPortal.SelectedPortal = portal;
-
-                        // Once the user updates SkynetPortal.SelectedPortal, file downloads and uploads should use their preferred portal
-                        // If this degrades performance significantly, I think it would be ideal to make toggling between portals:
-                        // 1) Suggested by the app with a dialog if net is slow,
-                        // 2) Manually toggleable between saved portals in settings
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Exception(ex);
-            }
+            saveButton = FindViewById<Button>(Resource.Id.saveButton);
+            portalEditText = FindViewById<EditText>(Resource.Id.skynetPortalEditText);
         }
     }
 }

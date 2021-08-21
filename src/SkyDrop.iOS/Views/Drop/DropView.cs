@@ -43,11 +43,25 @@ namespace SkyDrop.iOS.Views.Drop
             }
         }
 
+        private void NavigateToSettings(object sender, EventArgs e)
+        {
+            ViewModel.NavigateToSettings().GetAwaiter().GetResult();
+        }
+
         public override void ViewDidLoad()
         {
             try
             {
                 base.ViewDidLoad();
+
+                var settingsButton = new UIBarButtonItem()
+                {
+                    Image = UIImage.FromBundle("ic_settings")
+                };
+                settingsButton.Clicked += NavigateToSettings;
+
+                NavigationItem.RightBarButtonItem = settingsButton;
+                NavigationItem.RightBarButtonItem.TintColor = UIColor.White;
 
                 ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
                 ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;

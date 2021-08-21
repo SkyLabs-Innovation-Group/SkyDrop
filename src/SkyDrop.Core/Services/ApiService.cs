@@ -79,11 +79,20 @@ namespace SkyDrop.Core.Services
 
             var request = new HttpRequestMessage(HttpMethod.Head, requestUrl);
 
-            var result = await httpClient.SendAsync(request);
+            HttpResponseMessage result = null;
+            try
+            {
+                result = await httpClient.SendAsync(request);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error pinging skynet portal at " + skynetPortal.BaseUrl);
+                Log.Exception(e);
+            }
 
-            Log.Trace(result.ToString());
+            Log.Trace(result?.ToString());
 
-            if (result.StatusCode == System.Net.HttpStatusCode.OK)
+            if (result?.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var headers = result.Headers;
                 var skylinkHeader = headers.GetValues("Skynet-Skylink").FirstOrDefault();

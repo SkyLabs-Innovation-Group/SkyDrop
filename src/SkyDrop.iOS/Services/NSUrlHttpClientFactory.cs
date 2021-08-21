@@ -21,9 +21,10 @@ namespace SkyDrop.iOS.Services
             // Re-use HttpClient if already created
             if (HttpClientsPerPortal.ContainsKey(portal))
                 return HttpClientsPerPortal[portal];
-            
+
             // Create a background configuration for the application, enables background upload or download
-            var configuration = NSUrlSessionConfiguration.CreateBackgroundSessionConfiguration ("skydrop.skydrop");
+            var configuration = NSUrlSessionConfiguration.CreateBackgroundSessionConfiguration ($"skydrop.skydrop.{HttpClientsPerPortal.Count}");
+
             
             var client = new HttpClient(new NSUrlSessionHandler(configuration))
             {

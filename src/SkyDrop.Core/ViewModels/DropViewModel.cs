@@ -427,6 +427,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
             try
             {
+                if (pickedFiles == null)
+                    throw new ArgumentNullException(nameof(pickedFiles));
+                
                 foreach (var pickedFile in pickedFiles)
                 {
                     if (pickedFile == null)
@@ -443,7 +446,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     userSkyFiles.Add(skyFile);
                 }
             }
-            catch (NullReferenceException ex)
+            catch (Exception ex)
             {
                 Log.Exception(ex);
                 Log.Trace("Error picking file.");

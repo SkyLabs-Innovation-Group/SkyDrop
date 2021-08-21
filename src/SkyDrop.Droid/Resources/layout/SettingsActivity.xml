@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,13 +12,13 @@
 
      <TextView
         android:id="@+id/enterSkynetPortalLabel"
-        android:text="Enter a skynet portal to use in the app (default is siasky.net): "
         android:textSize="20sp"
         android:textColor="#FFFFFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="16dp"
         android:layout_marginHorizontal="8dp"
+        app:MvxBind="Text SkynetPortalLabelText"
         />
 
     <EditText
