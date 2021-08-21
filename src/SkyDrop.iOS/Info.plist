@@ -37,9 +37,11 @@
 	<string></string>
 	<key>NSCameraUsageDescription</key>
 	<string>SkyDrop uses your camera to scan for QR codes which point to skylinks</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Microphone permission is required for selecting video due to a bug, please allow the permission or use Select Files instead to upload videos</string>
 	<key>UIRequiresFullScreen</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>SkyDrop allows you to choose photos to upload to Skynet from your photo library</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>SkyDrop allows you to choose photos to upload to Skynet from your photo library</string>
 </dict>
 </plist>
