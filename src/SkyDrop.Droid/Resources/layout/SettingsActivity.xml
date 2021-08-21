@@ -26,11 +26,12 @@
         android:layout_height="30dp"
         android:background="#FFFFFF"
         android:layout_margin="16dp"
+        android:inputType="textNoSuggestions"  
         />
 
     <Button
         android:id="@+id/saveButton"
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Set portal"
         android:layout_margin="16dp"

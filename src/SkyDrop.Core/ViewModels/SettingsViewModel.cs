@@ -51,6 +51,7 @@ namespace SkyDrop.Core.ViewModels
                         if (userHasConfirmed)
                             SkynetPortal.SelectedPortal = portal;
 
+                        singletonService.UserDialogs.Toast("Your SkyDrop portal is now set to " + portalUrl);
                         // Once the user updates SkynetPortal.SelectedPortal, file downloads and uploads should use their preferred portal
                         // If this degrades performance significantly, I think it would be ideal to make toggling between portals:
                         // 1) Suggested by the app with a dialog if net is slow,

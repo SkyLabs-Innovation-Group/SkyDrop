@@ -3,6 +3,7 @@ using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
+using Android.Views.InputMethods;
 using Android.Widget;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.ViewModels;
@@ -30,13 +31,36 @@ namespace SkyDrop.Droid.Views.Main
             BindViews();
 
             portalEditText.Text = SkynetPortal.SelectedPortal.ToString();
-            saveButton.Click += async (s, e) => await ViewModel.ValidateAndTrySetSkynetPortal(portalEditText.Text);
+            saveButton.Click += async (s, e) =>
+            {
+                HideKeyboard();
+                await ViewModel.ValidateAndTrySetSkynetPortal(portalEditText.Text);
+            };
         }
 
         private void BindViews()
         {
             saveButton = FindViewById<Button>(Resource.Id.saveButton);
             portalEditText = FindViewById<EditText>(Resource.Id.skynetPortalEditText);
+        }
+
+        public void HideKeyboard()
+        {
+            try
+            {
+                var inputMethodManager = GetSystemService(InputMethodService) as InputMethodManager;
+                if (inputMethodManager != null)
+                {
+                    var token = CurrentFocus?.WindowToken;
+                    inputMethodManager.HideSoftInputFromWindow(token, HideSoftInputFlags.None);
+
+                    Window.DecorView.ClearFocus();
+                }
+            }
+            catch(Exception ex)
+            {
+                Log.Exception(ex);
+            }
         }
     }
 }

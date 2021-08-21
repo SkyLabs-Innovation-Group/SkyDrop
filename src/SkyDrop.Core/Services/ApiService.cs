@@ -18,11 +18,13 @@ namespace SkyDrop.Core.Services
         public ILog Log { get; }
         
         private ISkyDropHttpClientFactory httpClientFactory;
+        private ISingletonService singletonService;
 
-        public ApiService(ILog log, ISkyDropHttpClientFactory skyDropHttpClientFactory)
+        public ApiService(ILog log, ISkyDropHttpClientFactory skyDropHttpClientFactory, ISingletonService singletonService)
         {
             Log = log;
             httpClientFactory = skyDropHttpClientFactory;
+            this.singletonService = singletonService;
         }
         
         public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationTokenSource)
@@ -107,11 +109,14 @@ namespace SkyDrop.Core.Services
             }
             else if (result == null)
             {
+
+                singletonService.UserDialogs.Toast("No response from " + skynetPortal);
                 Log.Error($"Head request to {skynetPortal} returned null");
                 return false;
             }
             else
             {
+                singletonService.UserDialogs.Toast($"{skynetPortal} refused the portal check request");
                 Log.Error($"Head request to {skynetPortal} returned status code {result?.StatusCode}");
                 return false;
             }
