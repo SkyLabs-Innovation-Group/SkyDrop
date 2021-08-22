@@ -49,9 +49,8 @@ namespace SkyDrop.Droid
         protected override IMvxApplication CreateApp()
         {
             Debug.WriteLine("CreateApp() droid");
-            
-            UserDialogs.Init(topActivityProvider.Activity);
 
+            UserDialogs.Init(topActivityProvider.Activity);
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton(() => UserDialogs.Instance);
 
             return base.CreateApp();
