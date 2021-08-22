@@ -1,23 +1,15 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using Acr.UserDialogs;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
-using Android.Provider;
-using Android.Util;
 using Android.Widget;
 using AndroidX.Core.App;
 using MvvmCross;
 using Plugin.CurrentActivity;
 using SkyDrop.Core.DataModels;
-using SkyDrop.Core.Services;
-using SkyDrop.Core.Utility;
 using SkyDrop.Droid.Views.Main;
-using Xamarin.Essentials;
-using ZXing;
 using ZXing.Common;
 using ZXing.Mobile;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
@@ -47,21 +39,26 @@ namespace SkyDrop.Droid.Helper
         /// </summary>
         public static string GetFileName(Context context, Android.Net.Uri uri)
         {
-            if (uri.LastPathSegment.Contains("."))
-            {
-                //this is a "file"
-                return uri.LastPathSegment;
-            }
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
 
-            //this is an "image"
-
-            // The query, because it only applies to a single document, returns only
-            // one row. There's no need to filter, sort, or select fields,
-            // because we want all fields for one document.
-            Android.Database.ICursor cursor = context.ContentResolver.Query(uri, null, null, null, null, null);
-            var displayName = "";
+            string displayName;
+            Android.Database.ICursor cursor = null;
             try
             {
+                if (uri.LastPathSegment.Contains("."))
+                {
+                    //this is a "file"
+                    return uri.LastPathSegment;
+                }
+
+                //this is an "image"
+
+                // The query, because it only applies to a single document, returns only
+                // one row. There's no need to filter, sort, or select fields,
+                // because we want all fields for one document.
+                cursor = context.ContentResolver.Query(uri, null, null, null, null, null);
+                
                 // moveToFirst() returns false if the cursor has 0 rows. Very handy for
                 // "if there's anything to look at, look at it" conditionals.
                 if (cursor != null && cursor.MoveToFirst())
@@ -111,9 +108,9 @@ namespace SkyDrop.Droid.Helper
 
         public static void OpenFileInBrowser(Activity context, SkyFile file)
         {
-            Toast.MakeText(context, $"Opening file {file.Filename}", ToastLength.Long).Show();
+            Toast.MakeText(context, $"Opening file {file.Filename}", ToastLength.Long)?.Show();
 
-            var browserIntent = new Intent(Intent.ActionView, Android.Net.Uri.Parse(Util.GetSkylinkUrl(file.Skylink)));
+            var browserIntent = new Intent(Intent.ActionView, Android.Net.Uri.Parse(file.GetSkylinkUrl()));
             context.StartActivity(browserIntent);
         }
 

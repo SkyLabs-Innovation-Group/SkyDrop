@@ -51,8 +51,16 @@ namespace SkyDrop.Core.Services
 
         public UploadAverage GetAverageUploadRate()
         {
-            var uploadAverage = realm.All<UploadAverage>().FirstOrDefault();
-            return uploadAverage ?? new UploadAverage();
+            try
+            {
+                var uploadAverage = realm.All<UploadAverage>().First();
+                return uploadAverage;
+            }
+            catch (InvalidOperationException)
+            {
+                log.Trace("No uploaded file in UploadAverage table");
+                return new UploadAverage();
+            }
         }
 
         public void SetAverageUploadRate(UploadAverage uploadAverage)

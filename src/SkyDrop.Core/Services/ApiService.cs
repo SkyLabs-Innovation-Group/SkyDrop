@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Fody;
@@ -15,12 +17,14 @@ namespace SkyDrop.Core.Services
     {
         public ILog Log { get; }
         
-        private HttpClient httpClient;
+        private ISkyDropHttpClientFactory httpClientFactory;
+        private ISingletonService singletonService;
 
-        public ApiService(ILog log, ISkyDropHttpClientFactory skyDropHttpClientFactory)
+        public ApiService(ILog log, ISkyDropHttpClientFactory skyDropHttpClientFactory, ISingletonService singletonService)
         {
             Log = log;
-            httpClient = skyDropHttpClientFactory.GetSkyDropHttpClientInstance();
+            httpClientFactory = skyDropHttpClientFactory;
+            this.singletonService = singletonService;
         }
         
         public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationTokenSource)
@@ -28,7 +32,7 @@ namespace SkyDrop.Core.Services
             var fileSizeBytes = skyfile.FileSizeBytes;
             var filename = skyfile.Filename;
 
-            var url = $"{Util.Portal}/skynet/skyfile";
+            var url = $"{SkynetPortal.SelectedPortal}/skynet/skyfile";
 
             var form = new MultipartFormDataContent();
             
@@ -44,6 +48,8 @@ namespace SkyDrop.Core.Services
             var request = new HttpRequestMessage(HttpMethod.Post, url) {Content =  form};
             
             Log.Trace(request.ToString());
+
+            var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             
             var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationTokenSource.Token);
             
@@ -66,10 +72,63 @@ namespace SkyDrop.Core.Services
 
             return skyFile;
         }
+
+        public async Task<bool> PingPortalForSkylink(string skylink, SkynetPortal skynetPortal)
+        {
+            var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(skynetPortal);
+
+            string requestUrl = $"{skynetPortal}/{skylink}";
+
+            var request = new HttpRequestMessage(HttpMethod.Head, requestUrl);
+
+            HttpResponseMessage result = null;
+            try
+            {
+                result = await httpClient.SendAsync(request);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error pinging skynet portal at " + skynetPortal.BaseUrl);
+                Log.Exception(e);
+            }
+
+            Log.Trace(result?.ToString());
+
+            if (result?.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var headers = result.Headers;
+                var skylinkHeader = headers.GetValues("Skynet-Skylink").FirstOrDefault();
+
+                if (!(skylinkHeader == skylink))
+                {
+                    Log.Error("!(skylinkHeader == skylink)");
+                    return false;
+                }
+                else
+                    Log.Trace("Success querying for file header on portal " + skynetPortal);
+            }
+            else if (result == null)
+            {
+
+                singletonService.UserDialogs.Toast("No response from " + skynetPortal);
+                Log.Error($"Head request to {skynetPortal} returned null");
+                return false;
+            }
+            else
+            {
+                singletonService.UserDialogs.Toast($"{skynetPortal} refused the portal check request");
+                Log.Error($"Head request to {skynetPortal} returned status code {result?.StatusCode}");
+                return false;
+            }
+
+            return true;
+        }
     }
 
     public interface IApiService
     {
         Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationTokenSource);
+
+        Task<bool> PingPortalForSkylink(string skylink, SkynetPortal skynetPortal);
     }
 }

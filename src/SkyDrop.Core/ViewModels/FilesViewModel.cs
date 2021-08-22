@@ -158,7 +158,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 return;
             }
 
-            string skyLink = Util.GetSkylinkUrl(skyFile.Skylink);
+            string skyLink = skyFile.GetSkylinkUrl();
             await Xamarin.Essentials.Clipboard.SetTextAsync(skyLink);
 
             Log.Trace("Set clipboard text to " + skyLink);
