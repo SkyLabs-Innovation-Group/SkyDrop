@@ -1,35 +1,14 @@
 using System;
 using System.Linq;
+using SkyDrop.Core.DataModels;
 
 namespace SkyDrop.Core.Utility
 {
     public static class Util
     {
-        public const string Portal = "https://siasky.net";
         public const float NavDotsMinAlpha = 0.2f;
         public const float NavDotsMaxAlpha = 0.8f;
-
-        private const int SkylinkLength = 46;
-
-        /// <summary>
-        /// Convert raw skylink to full skylink url
-        /// </summary>
-        public static string GetSkylinkUrl(string skylink)
-        {
-            return $"{Portal}/{skylink}";
-        }
-
-        /// <summary>
-        /// Convert full skylink url to raw skylink (removing any url parameters)
-        /// </summary>
-        public static string GetRawSkylink(string fullSkylinkUrl)
-        {
-            if (fullSkylinkUrl.Split('/').Last().Length != SkylinkLength)
-                return null; //not a skylink
-
-            return fullSkylinkUrl.Substring(fullSkylinkUrl.LastIndexOf('/') + 1, SkylinkLength);
-        }
-
+        
         public static string GetFileSizeString(long bytesCount)
         {
             string[] sizes = { "B", "KB", "MB", "GB", "TB" };
@@ -43,7 +22,7 @@ namespace SkyDrop.Core.Utility
 
             //adjust the format string to your preferences. For example "{0:0.#}{1}" would
             //show a single decimal place, and no space.
-            return String.Format("{0:0.##}{1}", bytes, sizes[order]);
+            return $"{bytes:0.##}{sizes[order]}";
         }
     }
 }
