@@ -144,7 +144,13 @@ namespace SkyDrop.iOS.Views.Drop
             int progressPercentage = (int)Math.Floor(progress * 100);
 
             var content = new UNMutableNotificationContent();
+
             content.Title = "Upload started";
+            if (progress > 1.0)
+            {
+                progressPercentage = 100;
+            }
+
             content.Body = $"{progressPercentage}% complete";
 
             var trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(1, false);
