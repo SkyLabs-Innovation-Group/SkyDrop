@@ -23,7 +23,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using SkyDrop.Core;
-using SkyDrop.Core.Services;
+using SkyDrop.Core.Services.Api;
 using SkyDrop.Droid.Bindings;
 using SkyDrop.Droid.Services;
 using Xamarin.Essentials;

@@ -3,7 +3,7 @@ using Android.Views;
 using AndroidX.AppCompat.Widget;
 using MvvmCross.Platforms.Android.Views;
 using MvvmCross.ViewModels;
-using SkyDrop.Core.Services;
+using SkyDrop.Core.Services.Api;
 using SkyDrop.Core.ViewModels;
 using SkyDrop.Droid.Helper;
 using System;

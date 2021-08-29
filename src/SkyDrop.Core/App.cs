@@ -5,7 +5,7 @@ using Microsoft.AppCenter.Crashes;
 using MvvmCross;
 using MvvmCross.IoC;
 using MvvmCross.ViewModels;
-using SkyDrop.Core.Services;
+using SkyDrop.Core.Services.Api;
 using SkyDrop.Core.ViewModels.Main;
 
 namespace SkyDrop.Core

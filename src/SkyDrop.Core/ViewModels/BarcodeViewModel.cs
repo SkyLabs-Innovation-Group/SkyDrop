@@ -7,7 +7,7 @@ using Acr.UserDialogs;
 using MvvmCross.Commands;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
-using SkyDrop.Core.Services;
+using SkyDrop.Core.Services.Api;
 using ZXing.Common;
 
 namespace SkyDrop.Core.ViewModels.Main

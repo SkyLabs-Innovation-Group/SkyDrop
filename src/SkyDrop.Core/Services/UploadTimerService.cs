@@ -6,7 +6,7 @@ using System.Timers;
 using Realms;
 using SkyDrop.Core.DataModels;
 
-namespace SkyDrop.Core.Services
+namespace SkyDrop.Core.Services.Api
 {
     /// <summary>
     /// Keeps a running average of upload rates

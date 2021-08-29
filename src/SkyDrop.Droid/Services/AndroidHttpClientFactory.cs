@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SkyDrop.Core.Components;
 using SkyDrop.Core.DataModels;
-using SkyDrop.Core.Services;
+using SkyDrop.Core.Services.Api;
 
 namespace SkyDrop.Droid.Services
 {

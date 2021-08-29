@@ -7,7 +7,7 @@ using ZXing.Mobile;
 using ZXing.QrCode;
 using PermissionStatus = Xamarin.Essentials.PermissionStatus;
 
-namespace SkyDrop.Core.Services
+namespace SkyDrop.Core.Services.Api
 {
     public class BarcodeService : IBarcodeService
     {

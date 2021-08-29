@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO;
 using Acr.UserDialogs;
 using FFImageLoading;
@@ -18,7 +18,7 @@ using MvvmCross.Converters;
 using MvvmCross.Logging;
 using Serilog;
 using SkyDrop.Core.Converters;
-using SkyDrop.Core.Services;
+using SkyDrop.Core.Services.Api;
 using SkyDrop.iOS.Services;
 using Xamarin.Essentials;
 

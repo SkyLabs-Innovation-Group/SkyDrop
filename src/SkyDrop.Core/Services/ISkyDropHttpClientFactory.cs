@@ -1,7 +1,7 @@
 using System.Net.Http;
 using SkyDrop.Core.DataModels;
 
-namespace SkyDrop.Core.Services
+namespace SkyDrop.Core.Services.Api
 {
     public interface ISkyDropHttpClientFactory
     {

@@ -5,7 +5,7 @@ using Realms;
 using Realms.Exceptions;
 using SkyDrop.Core.DataModels;
 
-namespace SkyDrop.Core.Services
+namespace SkyDrop.Core.Services.Api
 {
     public class StorageService : IStorageService
     {

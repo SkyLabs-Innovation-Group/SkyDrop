@@ -1,5 +1,5 @@
 using MvvmCross.ViewModels;
-using SkyDrop.Core.Services;
+using SkyDrop.Core.Services.Api;
 
 namespace SkyDrop.Core.ViewModels
 {

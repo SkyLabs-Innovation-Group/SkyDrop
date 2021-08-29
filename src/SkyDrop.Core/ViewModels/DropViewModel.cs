@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -13,7 +13,7 @@ using MvvmCross.Navigation;
 using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
-using SkyDrop.Core.Services;
+using SkyDrop.Core.Services.Api;
 using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
 using ZXing.Common;

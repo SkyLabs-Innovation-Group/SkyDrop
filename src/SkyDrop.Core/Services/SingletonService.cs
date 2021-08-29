@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Acr.UserDialogs;
 using MvvmCross;
 
-namespace SkyDrop.Core.Services
+namespace SkyDrop.Core.Services.Api
 {
     // Uses this simple pattern, to lazily initialize all our singletons and expose them publicly
     // private T _instance;

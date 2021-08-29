@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using SkyDrop.Core.DataModels;
-using SkyDrop.Core.Services;
+using SkyDrop.Core.Services.Api;
 
 namespace SkyDrop.Core.Components
 {

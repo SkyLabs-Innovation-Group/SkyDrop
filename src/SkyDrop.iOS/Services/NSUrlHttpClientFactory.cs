@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using Foundation;
 using SkyDrop.Core.Components;
 using SkyDrop.Core.DataModels;
-using SkyDrop.Core.Services;
+using SkyDrop.Core.Services.Api;
 
 namespace SkyDrop.iOS.Services
 {

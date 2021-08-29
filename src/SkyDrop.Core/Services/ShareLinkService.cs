@@ -6,7 +6,7 @@ using Realms;
 using SkyDrop.Core.DataModels;
 using Xamarin.Essentials;
 
-namespace SkyDrop.Core.Services
+namespace SkyDrop.Core.Services.Api
 {
     public class ShareLinkService : IShareLinkService
     {
