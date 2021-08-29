@@ -40,7 +40,7 @@ namespace SkyDrop.Core.Services.Api
             if (fileSizeBytes == 0)
                 Log.Error("File size was zero when uploading file");
             
-            form.Add(new ProgressableStreamContent(file, fileSizeBytes), "file", filename);
+            form.Add(new ProgressableStreamContent(file), "file", filename);
             Log.Trace("Sending file " + filename);
             
             var request = new HttpRequestMessage(HttpMethod.Post, url) {Content =  form};

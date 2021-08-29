@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -46,8 +45,11 @@ namespace SkyDrop.Core.DataModels
         public string GetSkylinkUrl()
         {
             var portal = UseUploadPortal ? UploadPortal : SkynetPortal.SelectedPortal;
-            
-            return $"{portal}/{Skylink}";
+
+            if (portal.ToString().EndsWith("/"))
+                return $"{portal}{Skylink}";
+            else
+                return $"{portal}/{Skylink}";
         }
         
         private const int SkylinkLength = 46;

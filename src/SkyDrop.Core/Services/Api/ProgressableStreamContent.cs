@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using MvvmCross;
 
 namespace SkyDrop.Core.Services.Api
 {
@@ -25,18 +26,17 @@ namespace SkyDrop.Core.Services.Api
         public EventHandler<int> ReportUploadedPercentage;
         public EventHandler<bool> ReportUploadDidComplete;
 
-        public ProgressableStreamContent(Stream content, long fileSizeBytes, int bufferSize = defaultBufferSize)
+        public ProgressableStreamContent(Stream content, int bufferSize = defaultBufferSize)
         {
             if (bufferSize <= 0)
                 throw new ArgumentOutOfRangeException(nameof(bufferSize));
             
-            if (fileSizeBytes <= 0)
-                throw new ArgumentOutOfRangeException(nameof(fileSizeBytes));
-
-            this.fileSizeBytes = fileSizeBytes;
+            this.fileSizeBytes = content.Length;
             this.content = content ?? throw new ArgumentNullException(nameof(content));
             this.bufferSize = bufferSize;
         }
+
+
 
         protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
         {
@@ -61,7 +61,7 @@ namespace SkyDrop.Core.Services.Api
                         stream.Write(buffer, 0, length);
                     }
 
-                ReportUploadDidComplete.Invoke(this, true);
+                ReportUploadDidComplete?.Invoke(this, true);
                 //downloader.ChangeState(DownloadState.PendingResponse);
             });
         }
@@ -74,21 +74,24 @@ namespace SkyDrop.Core.Services.Api
             if (mbUploaded > uploadedMegabytesCount)
             {
                 uploadedMegabytesCount = mbUploaded;
-                ReportUploadedMegabytes.Invoke(this, uploadedMegabytesCount);
+                ReportUploadedMegabytes?.Invoke(this, uploadedMegabytesCount);
+                
             }
-            
-            int percentageUploaded = (int) (100 * (uploadedBytesCount / fileSizeBytes));
+
+            double uploadedRatio = (double) uploadedBytesCount / fileSizeBytes;
+            int percentageUploaded = (int) Math.Truncate(uploadedRatio * 100);
             percentageUploaded = Math.Min(percentageUploaded, 100);
             if (percentageUploaded > uploadedPercentageCount)
             {
                 uploadedPercentageCount = percentageUploaded;
-                ReportUploadedPercentage.Invoke(this, uploadedPercentageCount);
+                ReportUploadedPercentage?.Invoke(this, uploadedPercentageCount);
+                Mvx.IoCProvider.Resolve<ILog>().Trace($"Uploaded {uploadedPercentageCount}, {uploadedBytesCount} bytes out of {fileSizeBytes}");
             }
-        }
+        }   
 
         protected override bool TryComputeLength(out long length)
         {
-            length = content.Length;
+            length = fileSizeBytes;
             return true;
         }
 
