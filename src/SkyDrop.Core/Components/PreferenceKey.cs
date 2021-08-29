@@ -1,7 +1,9 @@
-namespace SkyDrop.Core.Components
+namespace SkyDrop.Core
 {
-    public class PreferenceKey
+    public static class PreferenceKey
     {
-        
+        public static string UploadNotificationsEnabled = "uploadNotificationsEnabled";
+
+        public static string SelectedSkynetPortal = "selected_skynetportal";
     }
 }

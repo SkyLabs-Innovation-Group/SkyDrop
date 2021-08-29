@@ -17,7 +17,7 @@ namespace SkyDrop.Core.DataModels
             if (_selectedPortalInstance != null)
                 return _selectedPortalInstance;
 
-            string portalUrl = Preferences.Get("selected_skynetportal", "");
+            string portalUrl = Preferences.Get(PreferenceKey.SelectedSkynetPortal, "");
 
             if (!string.IsNullOrEmpty(portalUrl))
                 return new SkynetPortal(portalUrl);
@@ -30,8 +30,8 @@ namespace SkyDrop.Core.DataModels
             if (string.IsNullOrEmpty(portal.ToString()))
                 return SiaskyPortal;
 
-            Preferences.Remove("selected_skynetportal");
-            Preferences.Set("selected_skynetportal", portal.ToString());
+            Preferences.Remove(PreferenceKey.SelectedSkynetPortal);
+            Preferences.Set(PreferenceKey.SelectedSkynetPortal, portal.ToString());
             return portal;
         }
 

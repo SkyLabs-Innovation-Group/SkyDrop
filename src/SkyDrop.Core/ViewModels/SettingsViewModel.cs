@@ -1,4 +1,4 @@
-using SkyDrop.Core.Services.Api;
+﻿using SkyDrop.Core.Services.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,15 +16,33 @@ namespace SkyDrop.Core.ViewModels
         /// Currently, the best way to verify a Skynet portal that I can think of would be to query for a sky file's metadata.
         /// </summary>
         private const string RandomFileToQueryFor = "AACEA6yg7OM0_gl6_sHx2D7ztt20-g0oXum5GNbCc0ycRg";
+
+        public bool UploadNotificationsEnabled { get; set; } = true;
+    
         
         public string SkynetPortalLabelText { get; set; }
 
         public SettingsViewModel(ISingletonService singletonService) : base(singletonService)
         {
+            Title = "Advanced settings";
         }
 
+        public override Task Initialize()
+        {
+            UploadNotificationsEnabled = Preferences.Get(PreferenceKey.UploadNotificationsEnabled, true);
+            
+            return base.Initialize();
+        }
+
+        public void Toast(string message)
+        {
+            singletonService.UserDialogs.Toast(message);
+        }
+        
         public override void ViewAppearing()
         {
+            Toast("VM ViewAppearing()");
+            
             SkynetPortalLabelText = "Enter a skynet portal to use in the app (default is siasky.net):";
             base.ViewAppearing();
         }
@@ -70,6 +88,13 @@ namespace SkyDrop.Core.ViewModels
                 singletonService.UserDialogs.Toast("Error - couldn't reach portal " + portalUrl);
                 Log.Exception(ex);
             }
+        }
+
+        public void SetUploadNotificationEnabled(bool value)
+        {
+            UploadNotificationsEnabled = value;
+            Preferences.Remove(PreferenceKey.UploadNotificationsEnabled);
+            Preferences.Set(PreferenceKey.UploadNotificationsEnabled, value);
         }
     }
 }
