@@ -60,7 +60,6 @@ namespace SkyDrop.Core.ViewModels.Main
         public string UploadTimerText { get; set; }
         public bool IsAnimatingBarcodeOut { get; set; }
         public string FileSize { get; set; }
-        public double UploadProgress { get; set; } //0-1
         public bool FirstFileUploaded { get; set; }
         public bool UserIsSwipingResult { get; set; }
         public bool BarcodeIsLoaded { get; set; }
@@ -186,7 +185,6 @@ namespace SkyDrop.Core.ViewModels.Main
             UploadTimerText = "";
             FileSize = "";
             IsAnimatingBarcodeOut = false;
-            UploadProgress = 0;
 
             if (!leaveBarcode)
                 IsBarcodeVisible = false;
@@ -488,7 +486,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void StartUploadTimer(long fileSizeBytes)
         {
-            uploadTimerService.StartUploadTimer(fileSizeBytes, UpdateUploadProgress);
+            uploadTimerService.StartUploadTimer(fileSizeBytes, UpdateTimerText);
         }
 
         private void StopUploadTimer()
@@ -496,7 +494,7 @@ namespace SkyDrop.Core.ViewModels.Main
             uploadTimerService.StopUploadTimer();
         }
 
-        private void UpdateUploadProgress()
+        private void UpdateTimerText()
         {
             UploadTimerText = uploadTimerService.Stopwatch.Elapsed.ToString(@"mm\:ss");
         }
