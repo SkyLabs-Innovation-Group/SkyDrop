@@ -46,9 +46,7 @@ namespace SkyDrop.Core.Services
             Log.Trace("Sending file " + filename);
             
             var request = new HttpRequestMessage(HttpMethod.Post, url) {Content =  form};
-
-            request.Headers.TransferEncodingChunked = true;
-
+            
             Log.Trace(request.ToString());
 
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
