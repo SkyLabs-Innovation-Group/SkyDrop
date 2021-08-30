@@ -216,7 +216,7 @@
                                 android:layout_centerInParent="true"
                                 android:progressDrawable="@drawable/progress_circular"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                app:MvxBind="Visibility Visibility(IsUploading);Progress UploadProgress"/>
+                                app:MvxBind="Visibility Visibility(IsUploading);Progress UploadProgressPercentage"/>
                             <ProgressBar
                                 android:layout_width="128dp"
                                 android:layout_height="128dp"

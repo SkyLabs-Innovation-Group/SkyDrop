@@ -117,6 +117,8 @@ namespace SkyDrop.Core.ViewModels.Main
         
         public bool UploadNotificationsEnabled { get; set; }
 
+        public int UploadProgressPercentage { get; private set; }
+
         public DropViewModel(ISingletonService singletonService,
             IApiService apiService,
             IStorageService storageService,
@@ -148,6 +150,8 @@ namespace SkyDrop.Core.ViewModels.Main
             CancelUploadCommand = new MvxCommand(CancelUpload);
             ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
+
+            this.apiService.UpdateUploadPercentage_Changed += UploadProgressPercentage_Changed;
         }
 
         public override async Task Initialize()
@@ -498,6 +502,19 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             UploadTimerText = uploadTimerService.Stopwatch.Elapsed.ToString(@"mm\:ss");
         }
+
+        public void UploadProgressPercentage_Changed(int progress)
+        {
+            if (progress > 100)
+                throw new ArgumentOutOfRangeException(nameof(progress));
+
+            UploadProgressPercentage = progress;
+        }
+
+        //public void UploadMegabytesChanged(int megabytesUploaded)
+        //{
+
+        //}
 
         private void UpdateFileSize()
         {

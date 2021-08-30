@@ -8,11 +8,10 @@ using MvvmCross.Binding.Bindings.Target;
 
 namespace SkyDrop.Droid.Bindings
 {
-    public class UploadProgressBinding : MvxTargetBinding<ProgressBar, double>
+    public class UploadProgressBinding : MvxTargetBinding<ProgressBar, int>
     {
         public const string Name = "Progress";
 
-        private const int increments = 10000;
         private const int animationDuration = 500;
 
         public UploadProgressBinding(ProgressBar target) : base(target)
@@ -21,13 +20,16 @@ namespace SkyDrop.Droid.Bindings
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
-        protected override void SetValue(double value)
+        protected override void SetValue(int value)
         {
+            if (value < 0 || value > 100)
+                throw new ArgumentOutOfRangeException(nameof(value));
+
             //value is 0-1
-            Target.Max = increments;
+            Target.Max = 100;
             Target.Indeterminate = false;
 
-            var newProgress = (int)(value * increments);
+            var newProgress = value;
             if (value == 0)
                 Target.SetProgress(newProgress, false);
             else

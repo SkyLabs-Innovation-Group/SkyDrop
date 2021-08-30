@@ -20,6 +20,8 @@ namespace SkyDrop.Core.Services.Api
         private ISkyDropHttpClientFactory httpClientFactory;
         private ISingletonService singletonService;
 
+        public Action<int> UpdateUploadPercentage_Changed { get; set; }
+
         public ApiService(ILog log, ISkyDropHttpClientFactory skyDropHttpClientFactory, ISingletonService singletonService)
         {
             Log = log;
@@ -39,10 +41,13 @@ namespace SkyDrop.Core.Services.Api
             
             if (fileSizeBytes == 0)
                 Log.Error("File size was zero when uploading file");
-            
-            form.Add(new ProgressableStreamContent(file), "file", filename);
+
+            var progContent = new ProgressableStreamContent(file);
+            form.Add(progContent, "file", filename);
             Log.Trace("Sending file " + filename);
-            
+
+            progContent.ReportUploadedPercentage += (s, progress) => UpdateUploadPercentage_Changed(progress);
+
             var request = new HttpRequestMessage(HttpMethod.Post, url) {Content =  form};
             Log.Trace(request.ToString());
 
@@ -124,6 +129,10 @@ namespace SkyDrop.Core.Services.Api
 
     public interface IApiService
     {
+        Action<int> UpdateUploadPercentage_Changed { get; set; }
+
+        //int UploadProgressPercentage { get; set; }
+
         Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationTokenSource);
 
         Task<bool> PingPortalForSkylink(string skylink, SkynetPortal skynetPortal);
