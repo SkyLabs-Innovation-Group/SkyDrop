@@ -8,7 +8,7 @@ using UIKit;
 
 namespace SkyDrop.iOS.Bindings
 {
-    public class ProgressFillHeightBinding : MvxTargetBinding<UIView, double>
+    public class ProgressFillHeightBinding : MvxTargetBinding<UIView, int>
     {
         public static string Name => "ProgressFillHeight";
 
@@ -20,10 +20,13 @@ namespace SkyDrop.iOS.Bindings
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
-        protected override void SetValue(double value)
+        protected override void SetValue(int value)
         {
+            if (value < 0 || value > 100)
+                throw new ArgumentOutOfRangeException(nameof(value));
+
             var parentHeight = Target.Superview.Frame.Height;
-            var progressHeight = parentHeight * Math.Min(value, 1);
+            var progressHeight = parentHeight * Math.Min(value, 100) / 100;
 
             if (heightConstraint == null)
             {

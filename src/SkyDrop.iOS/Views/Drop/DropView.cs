@@ -131,7 +131,7 @@ namespace SkyDrop.iOS.Views.Drop
                 set.Bind(FileSizeLabel).To(vm => vm.FileSize);
 
                 set.Bind(ProgressFillArea).For("Visible").To(vm => vm.IsUploading);
-                set.Bind(ProgressFillArea).For(ProgressFillHeightBinding.Name).To(vm => vm.UploadProgress);
+                set.Bind(ProgressFillArea).For(ProgressFillHeightBinding.Name).To(vm => vm.UploadProgressPercentage);
 
                 set.Bind(CancelButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
                 set.Bind(CancelButton).For("Tap").To(vm => vm.CancelUploadCommand);
