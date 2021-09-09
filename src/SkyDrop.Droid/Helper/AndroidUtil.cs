@@ -150,6 +150,7 @@ namespace SkyDrop.Droid.Helper
             {
                 Description = channelDescription
             };
+            channel.SetSound(null, null);
 
             var notificationManager = (NotificationManager)context.GetSystemService(Context.NotificationService);
             notificationManager.CreateNotificationChannel(channel);
@@ -186,7 +187,7 @@ namespace SkyDrop.Droid.Helper
 
         public static void ShowUploadFinishedNotification(Context context, FileUploadResult uploadResult)
         {
-            switch(uploadResult)
+            switch (uploadResult)
             {
                 case FileUploadResult.Success:
                     uploadNotificationBuilder.SetContentTitle("File published successfully (tap to view)");

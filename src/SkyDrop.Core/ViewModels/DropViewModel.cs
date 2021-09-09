@@ -29,7 +29,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IFileSystemService fileSystemService;
         private readonly IBarcodeService barcodeService;
         private readonly IShareLinkService shareLinkService;
-        //private readonly IUploadTimerService uploadTimerService;
+        private readonly IUploadTimerService uploadTimerService;
 
         public IMvxCommand SendCommand { get; set; }
         public IMvxCommand ReceiveCommand { get; set; }
@@ -139,7 +139,7 @@ namespace SkyDrop.Core.ViewModels.Main
             this.fileSystemService = fileSystemService;
             this.barcodeService = barcodeService;
             this.shareLinkService = shareLinkService;
-            //this.uploadTimerService = uploadTimerService;
+            this.uploadTimerService = uploadTimerService;
 
             SendCommand = new MvxAsyncCommand(async () => await SendButtonTapped());
             ReceiveCommand = new MvxAsyncCommand(async () => await ReceiveFile());
@@ -488,7 +488,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void StartUploadTimer(long fileSizeBytes)
         {
-            //uploadTimerService.StartUploadTimer(fileSizeBytes, UpdateUploadProgress);
+            uploadTimerService.StartUploadTimer(fileSizeBytes, UpdateUploadProgress);
         }
 
         private void StopUploadTimer()
@@ -497,27 +497,27 @@ namespace SkyDrop.Core.ViewModels.Main
             UploadProgress = 1;
             UploadTimerText = "100%";
 
-            //uploadTimerService.StopUploadTimer();
+            uploadTimerService.StopUploadTimer();
         }
 
         private void UpdateUploadProgress()
         {
-            //var (newUploadProgress, newUploadTimerText) = uploadTimerService.GetUploadProgress();
+            var (newUploadProgress, newUploadTimerText) = uploadTimerService.GetUploadProgress();
 
             if (UploadProgress >= 1)
                 return;
 
             //scale the progress so it fits within 85% of the bar
             var maxProgress = 0.85;
-            //newUploadProgress *= maxProgress;
-            //if (newUploadProgress > maxProgress)
-            //    newUploadProgress = maxProgress;
+            newUploadProgress *= maxProgress;
+            if (newUploadProgress > maxProgress)
+                newUploadProgress = maxProgress;
 
-            //UploadProgress = newUploadProgress;
-            //UploadTimerText = newUploadTimerText;
-            
-            //if (UploadNotificationsEnabled)
-            //    UpdateNotificationProgressCommand?.Execute(newUploadProgress);
+            UploadProgress = newUploadProgress;
+            UploadTimerText = newUploadTimerText;
+
+            if (UploadNotificationsEnabled)
+                UpdateNotificationProgressCommand?.Execute(newUploadProgress);
         }
 
         private void UpdateFileSize()

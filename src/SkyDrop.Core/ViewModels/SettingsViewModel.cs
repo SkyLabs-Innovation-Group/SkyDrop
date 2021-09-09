@@ -1,10 +1,8 @@
-﻿using SkyDrop.Core.Services.Api;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
 using SkyDrop.Core.DataModels;
+using SkyDrop.Core.Services;
+using Xamarin.Essentials;
 
 namespace SkyDrop.Core.ViewModels
 {
