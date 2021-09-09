@@ -36,9 +36,7 @@ namespace SkyDrop.Core.ViewModels
         }
         
         public override void ViewAppearing()
-        {
-            Toast("VM ViewAppearing()");
-            
+        {            
             SkynetPortalLabelText = "Enter a skynet portal to use in the app (default is siasky.net):";
             base.ViewAppearing();
         }
