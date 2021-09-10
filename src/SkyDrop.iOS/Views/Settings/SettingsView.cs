@@ -30,6 +30,14 @@ namespace SkyDrop.iOS.Views.Settings
                 UIApplication.SharedApplication.KeyWindow.EndEditing(true);
                 await ViewModel.ValidateAndTrySetSkynetPortal(PortalTextView.Text);
             };
+
+            EnableUploadNotificationsSwitch.On = ViewModel.UploadNotificationsEnabled;
+            EnableUploadNotificationsSwitch.ValueChanged += EnableUploadNotificationsSwitch_ValueChanged;
+        }
+
+        private void EnableUploadNotificationsSwitch_ValueChanged(object sender, EventArgs e)
+        {
+            ViewModel.SetUploadNotificationEnabled((sender as UISwitch).On);
         }
     }
 }
