@@ -23,18 +23,18 @@ namespace SkyDrop.Core.ViewModels
             Title = "Advanced settings";
         }
 
-        public override Task Initialize()
-        {
-            UploadNotificationsEnabled = Preferences.Get(PreferenceKey.UploadNotificationsEnabled, true);
-            
-            return base.Initialize();
-        }
-
         public void Toast(string message)
         {
             singletonService.UserDialogs.Toast(message);
         }
-        
+
+        public override void ViewCreated()
+        {
+            UploadNotificationsEnabled = Preferences.Get(PreferenceKey.UploadNotificationsEnabled, true);
+
+            base.ViewCreated();
+        }
+
         public override void ViewAppearing()
         {            
             SkynetPortalLabelText = "Enter a skynet portal to use in the app (default is siasky.net):";

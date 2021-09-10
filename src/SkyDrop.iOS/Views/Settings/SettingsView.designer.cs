@@ -1,8 +1,7 @@
-﻿// WARNING
+// WARNING
 //
-// This file has been generated automatically by Rider IDE
-//   to store outlets and actions made in Xcode.
-// If it is removed, they will be lost.
+// This file has been generated automatically by Visual Studio to store outlets and
+// actions made in the UI designer. If it is removed, they will be lost.
 // Manual changes to this file may not be handled correctly.
 //
 using Foundation;
@@ -14,6 +13,9 @@ namespace SkyDrop.iOS.Views.Settings
 	partial class SettingsView
 	{
 		[Outlet]
+		UIKit.UISwitch EnableUploadNotificationsSwitch { get; set; }
+
+		[Outlet]
 		UIKit.UITextView PortalTextView { get; set; }
 
 		[Outlet]
@@ -21,12 +23,12 @@ namespace SkyDrop.iOS.Views.Settings
 
 		[Outlet]
 		UIKit.UILabel SetPortalLabel { get; set; }
-
+		
 		void ReleaseDesignerOutlets ()
 		{
-			if (SetPortalLabel != null) {
-				SetPortalLabel.Dispose ();
-				SetPortalLabel = null;
+			if (EnableUploadNotificationsSwitch != null) {
+				EnableUploadNotificationsSwitch.Dispose ();
+				EnableUploadNotificationsSwitch = null;
 			}
 
 			if (PortalTextView != null) {
@@ -39,6 +41,10 @@ namespace SkyDrop.iOS.Views.Settings
 				SavePortalButton = null;
 			}
 
+			if (SetPortalLabel != null) {
+				SetPortalLabel.Dispose ();
+				SetPortalLabel = null;
+			}
 		}
 	}
 }

@@ -16,6 +16,7 @@ using ZXing.Mobile;
 using ZXing.Rendering;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 using static SkyDrop.Core.Utility.Util;
+using UserNotifications;
 
 namespace SkyDrop.iOS.Views.Drop
 {
@@ -25,6 +26,8 @@ namespace SkyDrop.iOS.Views.Drop
         private const int swipeMarginX = 20;
         private bool isPressed;
         private nfloat tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
+        const string DropUploadNotifRequestId = "drop_upload_notification_id";
+
         private nfloat screenWidth => UIScreen.MainScreen.Bounds.Width;
 
         public DropView() : base("DropView", null)
@@ -68,6 +71,9 @@ namespace SkyDrop.iOS.Views.Drop
                 ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
                 ViewModel.ResetUIStateCommand = new MvxCommand(SetSendReceiveButtonUiState);
                 ViewModel.UpdateNavDotsCommand = new MvxCommand(() => UpdateNavDots());
+                ViewModel.UploadStartedNotificationCommand = new MvxAsyncCommand(async() => await ShowUploadStartedNotification()); ;
+                ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>((result) => ShowUploadFinishedNotification(result));
+                ViewModel.UpdateNotificationProgressCommand = new MvxCommand<double>((progress) => UpdateUploadNotificationProgress(progress));
 
                 SetupGestureListener();
                 SetupNavDots();
@@ -145,6 +151,77 @@ namespace SkyDrop.iOS.Views.Drop
             {
                 ViewModel.Log.Exception(e);
             }
+        }
+
+        private void UpdateUploadNotificationProgress(double progress)
+        {
+            int progressPercentage = (int)Math.Floor(progress * 100);
+
+            var content = new UNMutableNotificationContent();
+
+            content.Title = "Upload started";
+            if (progress > 1.0)
+            {
+                progressPercentage = 100;
+            }
+
+            content.Body = $"{progressPercentage}% complete";
+
+            var trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(1, false);
+            var request = UNNotificationRequest.FromIdentifier(DropUploadNotifRequestId, content, trigger);
+            UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) => {
+
+            });
+        }
+
+        private async Task ShowUploadStartedNotification()
+        {
+            var (granted, _) = await UNUserNotificationCenter.Current.RequestAuthorizationAsync(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge);
+
+            if (!granted)
+            {
+                // No notification permission
+            }
+
+            var content = new UNMutableNotificationContent();
+            content.Title = "Upload started";
+            content.Body = "0% complete";
+            var trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(1, false);
+
+            var request = UNNotificationRequest.FromIdentifier(DropUploadNotifRequestId, content, trigger);
+
+            UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) => {
+                if (err != null)
+                {
+                    ViewModel.Log.Error($"{err.Description}");
+                    ViewModel.Log.Error($"{err.ToString()}");
+                }
+            });
+        }
+
+        private void ShowUploadFinishedNotification(FileUploadResult result)
+        {
+            var content = new UNMutableNotificationContent();
+
+            switch (result)
+            {
+                case FileUploadResult.Success:
+                    content.Title = "File published successfully (tap to view)";
+                    break;
+                case FileUploadResult.Fail:
+                    content.Title = "Upload failed";
+                    break;
+                case FileUploadResult.Cancelled:
+                    return;
+            }
+
+            var trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(1, false);
+
+            var request = UNNotificationRequest.FromIdentifier(DropUploadNotifRequestId, content, trigger);
+
+            UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) => {
+
+            });
         }
 
         private void SetupNavDots()
