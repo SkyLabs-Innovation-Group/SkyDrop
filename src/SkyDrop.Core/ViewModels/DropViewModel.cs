@@ -87,6 +87,11 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
+        public Task NavigateToSettings()
+        {
+            return navigationService.Navigate<SettingsViewModel>();
+        }
+
         public enum DropViewState
         {
             SendReceiveButtonState = 1,
@@ -110,6 +115,8 @@ namespace SkyDrop.Core.ViewModels.Main
             get => _generateBarcodeAsyncFunc;
             set => _generateBarcodeAsyncFunc = value;
         }
+        
+        public bool UploadNotificationsEnabled { get; set; }
 
         public DropViewModel(ISingletonService singletonService,
             IApiService apiService,
@@ -146,11 +153,15 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public override async Task Initialize()
         {
-            await base.Initialize();
-
             DropViewUIState = DropViewState.SendReceiveButtonState;
+            await base.Initialize();
         }
 
+        public override void ViewAppearing()
+        {
+            UploadNotificationsEnabled = Preferences.Get(PreferenceKey.UploadNotificationsEnabled, true);
+        }
+    
         public override void ViewAppeared()
         {
             Log.Trace($"{nameof(DropViewModel)} ViewAppeared()");
@@ -229,10 +240,14 @@ namespace SkyDrop.Core.ViewModels.Main
                 else
                     FileToUpload = StagedFiles.First().SkyFile;
                 
+                var portal = SkynetPortal.SelectedPortal;
+                
+                FileToUpload.SetSkynetPortalUploadedTo(portal);
+                
                 UpdateFileSize();
 
-                //show push notification
-                UploadStartedNotificationCommand?.Execute();
+                if (UploadNotificationsEnabled)
+                    UploadStartedNotificationCommand?.Execute();
 
                 StartUploadTimer(FileToUpload.FileSizeBytes);
                 UploadedFile = await UploadFile();
@@ -248,22 +263,26 @@ namespace SkyDrop.Core.ViewModels.Main
                 //show QR code
                 IsUploading = false;
                 IsBarcodeLoading = true;
-                SkyFileFullUrl = Util.GetSkylinkUrl(UploadedFile.Skylink);
+                SkyFileFullUrl = UploadedFile.GetSkylinkUrl();
                 await GenerateBarcodeAsyncFunc();
-                UploadFinishedNotificationCommand?.Execute(FileUploadResult.Success);
+                
+                if (UploadNotificationsEnabled)
+                    UploadFinishedNotificationCommand?.Execute(FileUploadResult.Success);
             }
             catch (TaskCanceledException tce)
             {
                 userDialogs.Toast("Upload cancelled");
                 ResetUIStateCommand?.Execute();
-                UploadFinishedNotificationCommand?.Execute(FileUploadResult.Cancelled);
+                if (UploadNotificationsEnabled)
+                    UploadFinishedNotificationCommand?.Execute(FileUploadResult.Cancelled);
             }
             catch (Exception ex) // General error
             {
                 userDialogs.Toast("Could not upload file");
                 Log.Exception(ex);
                 ResetUIStateCommand?.Execute();
-                UploadFinishedNotificationCommand?.Execute(FileUploadResult.Fail);
+                if (UploadNotificationsEnabled)
+                    UploadFinishedNotificationCommand?.Execute(FileUploadResult.Fail);
             }
             finally
             {
@@ -297,16 +316,18 @@ namespace SkyDrop.Core.ViewModels.Main
                     return;
                 }
 
-                var rawSkylink = Util.GetRawSkylink(barcodeData);
-                if (rawSkylink == null)
+                if (!SkyFile.IsSkyfile(barcodeData))
                 {
                     //not a skylink
                     await OpenUrlInBrowser(barcodeData);
                     return;
                 }
-
-                var skyFile = new SkyFile() { Skylink = rawSkylink };
-                await OpenFileInBrowser(skyFile);
+                else
+                {
+                    string skylink = barcodeData.Substring(barcodeData.Length - 46, 46);
+                    var skyFile = new SkyFile() { Skylink = skylink };
+                    await OpenFileInBrowser(skyFile);
+                }
             }
             catch (Exception e)
             {
@@ -417,6 +438,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
             try
             {
+                if (pickedFiles == null)
+                    throw new ArgumentNullException(nameof(pickedFiles));
+                
                 foreach (var pickedFile in pickedFiles)
                 {
                     if (pickedFile == null)
@@ -433,7 +457,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     userSkyFiles.Add(skyFile);
                 }
             }
-            catch (NullReferenceException ex)
+            catch (Exception ex)
             {
                 Log.Exception(ex);
                 Log.Trace("Error picking file.");
@@ -483,8 +507,6 @@ namespace SkyDrop.Core.ViewModels.Main
             if (UploadProgress >= 1)
                 return;
 
-            UpdateNotificationProgressCommand?.Execute(newUploadProgress);
-
             //scale the progress so it fits within 85% of the bar
             var maxProgress = 0.85;
             newUploadProgress *= maxProgress;
@@ -493,6 +515,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
             UploadProgress = newUploadProgress;
             UploadTimerText = newUploadTimerText;
+
+            if (UploadNotificationsEnabled)
+                UpdateNotificationProgressCommand?.Execute(newUploadProgress);
         }
 
         private void UpdateFileSize()
@@ -517,7 +542,7 @@ namespace SkyDrop.Core.ViewModels.Main
             return barcodeService.GenerateBarcode(text, width, height);
         }
 
-        private string GetSkyLink()
+        private string GetUploadedSkyLink()
         {
             if (UploadedFile == null)
             {
@@ -525,7 +550,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 return null;
             }
 
-            return Util.GetSkylinkUrl(UploadedFile.Skylink);
+            return UploadedFile.GetSkylinkUrl();
         }
 
         private async Task CopySkyLinkToClipboard()
@@ -534,7 +559,7 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 if (UserIsSwiping()) return;
 
-                string skyLink = GetSkyLink();
+                string skyLink = GetUploadedSkyLink();
                 if (skyLink == null)
                     return;
 
@@ -560,7 +585,7 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 if (UserIsSwiping()) return;
 
-                string skyLink = GetSkyLink();
+                string skyLink = GetUploadedSkyLink();
                 if (skyLink == null)
                     return;
 
@@ -639,8 +664,11 @@ namespace SkyDrop.Core.ViewModels.Main
             if (UserIsSwiping())
                 return;
 
-            var file = skyFile ?? UploadedFile;
-            await Browser.OpenAsync(Util.GetSkylinkUrl(file.Skylink), new BrowserLaunchOptions
+            var fileToOpen = skyFile ?? UploadedFile;
+
+            string skylinkUrl = fileToOpen.GetSkylinkUrl();
+            Log.Trace("Opening Skylink " + skylinkUrl);
+            await Browser.OpenAsync(skylinkUrl, new BrowserLaunchOptions
             {
                 LaunchMode = BrowserLaunchMode.SystemPreferred,
                 TitleMode = BrowserTitleMode.Show

@@ -26,7 +26,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common" />
-    <Folder Include="Components" />
     <Folder Include="Services\" />
     <Folder Include="DataModels\" />
     <Folder Include="DataViewModels\" />

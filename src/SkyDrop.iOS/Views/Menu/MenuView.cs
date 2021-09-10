@@ -24,6 +24,10 @@ namespace SkyDrop.iOS.Views.Menu
             NavigationController.Title = "SkyDrop";
             NavigationController.NavigationBar.BackgroundColor = Colors.GradientDark.ToNative();
 
+
+
+
+
             View.BackgroundColor = Colors.DarkGrey.ToNative();
             FileTransferButton.BackgroundColor = Colors.MidGrey.ToNative();
             SettingsButton.BackgroundColor = Colors.MidGrey.ToNative();
