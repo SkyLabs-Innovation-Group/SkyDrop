@@ -384,3 +384,5 @@ MigrationBackup/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,xamarinstudio
 logdump/
+
+.DS_Store
