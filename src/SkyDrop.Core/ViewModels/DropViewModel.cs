@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Acr.UserDialogs;
+using Microsoft.AppCenter.Crashes;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using Newtonsoft.Json;
@@ -279,6 +280,7 @@ namespace SkyDrop.Core.ViewModels.Main
             catch (Exception ex) // General error
             {
                 userDialogs.Toast("Could not upload file");
+                Crashes.TrackError(ex);
                 Log.Exception(ex);
                 ResetUIStateCommand?.Execute();
                 if (UploadNotificationsEnabled)
