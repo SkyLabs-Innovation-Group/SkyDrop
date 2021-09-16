@@ -58,15 +58,6 @@ namespace SkyDrop.iOS.Views.Drop
             {
                 base.ViewDidLoad();
 
-                var settingsButton = new UIBarButtonItem()
-                {
-                    Image = UIImage.FromBundle("ic_settings")
-                };
-                settingsButton.Clicked += NavigateToSettings;
-
-                NavigationItem.RightBarButtonItem = settingsButton;
-                NavigationItem.RightBarButtonItem.TintColor = UIColor.White;
-
                 ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
                 ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
                 ViewModel.ResetUIStateCommand = new MvxCommand(SetSendReceiveButtonUiState);
@@ -82,10 +73,19 @@ namespace SkyDrop.iOS.Views.Drop
                 NavigationController.NavigationBar.BarTintColor = Colors.GradientDark.ToNative();
                 NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes()
                 {
-                    ForegroundColor = Colors.LightGrey.ToNative()
+                    ForegroundColor = Colors.White.ToNative()
                 };
 
                 View.BackgroundColor = Colors.DarkGrey.ToNative();
+
+                var settingsButton = new UIBarButtonItem()
+                {
+                    Image = UIImage.FromBundle("ic_settings")
+                };
+                settingsButton.Clicked += NavigateToSettings;
+
+                NavigationItem.RightBarButtonItem = settingsButton;
+                NavigationItem.RightBarButtonItem.TintColor = UIColor.White;
 
                 CancelButton.BackgroundColor = Colors.GradientOcean.ToNative();
                 CancelButton.Layer.CornerRadius = 32;
@@ -169,9 +169,7 @@ namespace SkyDrop.iOS.Views.Drop
 
             var trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(1, false);
             var request = UNNotificationRequest.FromIdentifier(DropUploadNotifRequestId, content, trigger);
-            UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) => {
-
-            });
+            UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) => { });
         }
 
         private async Task ShowUploadStartedNotification()
@@ -219,9 +217,7 @@ namespace SkyDrop.iOS.Views.Drop
 
             var request = UNNotificationRequest.FromIdentifier(DropUploadNotifRequestId, content, trigger);
 
-            UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) => {
-
-            });
+            UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) => { });
         }
 
         private void SetupNavDots()
