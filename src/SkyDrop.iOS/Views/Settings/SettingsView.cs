@@ -32,9 +32,11 @@ namespace SkyDrop.iOS.Views.Settings
             NavigationController.NavigationBar.TintColor = UIColor.White;
 
             PortalTextView.Text = SkynetPortal.SelectedPortal.ToString();
-            PortalTextView.BackgroundColor = UIColor.White;
-            PortalTextView.TextColor = UIColor.Black;
+            PortalTextView.BackgroundColor = Colors.MidGrey.ToNative();
+            PortalTextView.TextColor = UIColor.White;
+            PortalTextView.Layer.CornerRadius = 8;
 
+            SavePortalButton.Layer.CornerRadius = 8;
             SavePortalButton.BackgroundColor = UIColor.White;
             SavePortalButton.TouchUpInside += async(s, e) =>
             {
@@ -44,6 +46,20 @@ namespace SkyDrop.iOS.Views.Settings
 
             EnableUploadNotificationsSwitch.On = ViewModel.UploadNotificationsEnabled;
             EnableUploadNotificationsSwitch.ValueChanged += EnableUploadNotificationsSwitch_ValueChanged;
+
+            PortalTextView.Changed += (s, e) => AdjustTextBoxContentSize(PortalTextView);
+
+            AdjustTextBoxContentSize(PortalTextView);
+        }
+
+        /// <summary>
+        /// Keeps text input text centered vertically 
+        /// </summary>
+        private void AdjustTextBoxContentSize(UITextView tv)
+        {
+            var deadSpace = tv.Bounds.Height - tv.ContentSize.Height;
+            var inset = (float)Math.Max(0, deadSpace / 2.0);
+            tv.ContentInset = new UIEdgeInsets(inset, tv.ContentInset.Left, inset, tv.ContentInset.Right);
         }
 
         private void EnableUploadNotificationsSwitch_ValueChanged(object sender, EventArgs e)
