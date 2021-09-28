@@ -38,7 +38,7 @@ namespace SkyDrop.iOS.Views.Settings
 
             SavePortalButton.Layer.CornerRadius = 8;
             SavePortalButton.BackgroundColor = UIColor.White;
-            SavePortalButton.TouchUpInside += async(s, e) =>
+            SavePortalButton.TouchUpInside += async (s, e) =>
             {
                 UIApplication.SharedApplication.KeyWindow.EndEditing(true);
                 await ViewModel.ValidateAndTrySetSkynetPortal(PortalTextView.Text);

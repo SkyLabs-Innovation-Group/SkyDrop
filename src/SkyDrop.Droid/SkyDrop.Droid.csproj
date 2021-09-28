@@ -432,7 +432,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\SettingsActivity.xml">
+    <AndroidResource Include="Resources\layout\SettingsView.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

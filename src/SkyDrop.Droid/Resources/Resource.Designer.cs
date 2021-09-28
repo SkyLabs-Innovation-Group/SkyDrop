@@ -19456,7 +19456,7 @@ namespace SkyDrop.Droid
 			public const int select_dialog_singlechoice_material = 2131427422;
 			
 			// aapt resource value: 0x7F0B005F
-			public const int SettingsActivity = 2131427423;
+			public const int SettingsView = 2131427423;
 			
 			// aapt resource value: 0x7F0B0060
 			public const int support_simple_spinner_dropdown_item = 2131427424;
