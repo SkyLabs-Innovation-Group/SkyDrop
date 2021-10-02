@@ -9,15 +9,21 @@ namespace SkyDrop.Core.ViewModels
     public class SettingsViewModel : BaseViewModel
     {
         public bool UploadNotificationsEnabled { get; set; } = true;
-        public string SkynetPortalLabelText { get; set; }
+        public bool VerifySslCertificates { get; set; } = true;
+        public string SkynetPortalLabelText { get; set; } = "Enter a skynet portal to use in the app (default is siasky.net):";
 
         /// <summary>
         /// Currently, the best way to verify a Skynet portal that I can think of would be to query for a sky file's metadata.
         /// </summary>
         private const string RandomFileToQueryFor = "AACEA6yg7OM0_gl6_sHx2D7ztt20-g0oXum5GNbCc0ycRg";
 
-        public SettingsViewModel(ISingletonService singletonService) : base(singletonService)
+        private ISkyDropHttpClientFactory httpClientFactory;
+
+        public SettingsViewModel(ISingletonService singletonService,
+                                 ISkyDropHttpClientFactory skyDropHttpClientFactory) : base(singletonService)
         {
+            this.httpClientFactory = skyDropHttpClientFactory;
+
             Title = "Advanced settings";
         }
 
@@ -29,14 +35,8 @@ namespace SkyDrop.Core.ViewModels
         public override void ViewCreated()
         {
             UploadNotificationsEnabled = Preferences.Get(PreferenceKey.UploadNotificationsEnabled, true);
-
+            VerifySslCertificates = Preferences.Get(PreferenceKey.VerifySslCertificates, true);
             base.ViewCreated();
-        }
-
-        public override void ViewAppearing()
-        {            
-            SkynetPortalLabelText = "Enter a skynet portal to use in the app (default is siasky.net):";
-            base.ViewAppearing();
         }
 
         public async Task<string> ValidateAndTrySetSkynetPortal(string portalUrl)
@@ -83,6 +83,16 @@ namespace SkyDrop.Core.ViewModels
             UploadNotificationsEnabled = value;
             Preferences.Remove(PreferenceKey.UploadNotificationsEnabled);
             Preferences.Set(PreferenceKey.UploadNotificationsEnabled, value);
+        }
+
+        public void SetVerifySslCertificates(bool value)
+        {
+            VerifySslCertificates = value;
+            Preferences.Remove(PreferenceKey.VerifySslCertificates);
+            Preferences.Set(PreferenceKey.VerifySslCertificates, value);
+
+            //clients must be rebuilt after changing this setting
+            httpClientFactory.ClearCachedClients();
         }
 
         private string FormatPortalUrl(string portalUrl)

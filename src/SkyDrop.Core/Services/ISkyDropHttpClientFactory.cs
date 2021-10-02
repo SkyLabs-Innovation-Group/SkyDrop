@@ -8,5 +8,7 @@ namespace SkyDrop.Core.Services
         HttpClient GetSkyDropHttpClientInstance();
         
         HttpClient GetSkyDropHttpClientInstance(SkynetPortal portal);
+
+        void ClearCachedClients();
     }
 }

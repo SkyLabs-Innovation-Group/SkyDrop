@@ -14,7 +14,7 @@ namespace SkyDrop.Droid.Views.Main
     {
         private Button saveButton;
         private EditText portalEditText;
-        private CheckBox uploadNotificationCheckbox;
+        private CheckBox uploadNotificationCheckbox, verifySslCheckbox;
 
         protected override int ActivityLayoutId => Resource.Layout.SettingsView;
 
@@ -36,8 +36,12 @@ namespace SkyDrop.Droid.Views.Main
         {
             saveButton = FindViewById<Button>(Resource.Id.saveButton);
             portalEditText = FindViewById<EditText>(Resource.Id.skynetPortalEditText);
+
             uploadNotificationCheckbox = FindViewById<CheckBox>(Resource.Id.uploadNotificationCheckbox);
             uploadNotificationCheckbox.CheckedChange += (s, e) => ViewModel.SetUploadNotificationEnabled(e.IsChecked);
+
+            verifySslCheckbox = FindViewById<CheckBox>(Resource.Id.verifySslCheckbox);
+            verifySslCheckbox.CheckedChange += (s, e) => ViewModel.SetVerifySslCertificates(e.IsChecked);
         }
 
         public void HideKeyboard()

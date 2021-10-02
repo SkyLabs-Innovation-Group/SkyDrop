@@ -19033,25 +19033,28 @@ namespace SkyDrop.Droid
 			public const int useLogo = 2131231073;
 			
 			// aapt resource value: 0x7F080162
-			public const int view_offset_helper = 2131231074;
+			public const int verifySslCheckbox = 2131231074;
 			
 			// aapt resource value: 0x7F080163
-			public const int view_tree_saved_state_registry_owner = 2131231075;
+			public const int view_offset_helper = 2131231075;
 			
 			// aapt resource value: 0x7F080164
-			public const int visible = 2131231076;
+			public const int view_tree_saved_state_registry_owner = 2131231076;
 			
 			// aapt resource value: 0x7F080165
-			public const int visible_removing_fragment_view_tag = 2131231077;
+			public const int visible = 2131231077;
 			
 			// aapt resource value: 0x7F080166
-			public const int withText = 2131231078;
+			public const int visible_removing_fragment_view_tag = 2131231078;
 			
 			// aapt resource value: 0x7F080167
-			public const int wrap = 2131231079;
+			public const int withText = 2131231079;
 			
 			// aapt resource value: 0x7F080168
-			public const int wrap_content = 2131231080;
+			public const int wrap = 2131231080;
+			
+			// aapt resource value: 0x7F080169
+			public const int wrap_content = 2131231081;
 			
 			static Id()
 			{

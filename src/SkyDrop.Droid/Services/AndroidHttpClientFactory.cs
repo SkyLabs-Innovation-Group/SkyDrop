@@ -7,9 +7,11 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SkyDrop.Core;
 using SkyDrop.Core.Components;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Services;
+using Xamarin.Essentials;
 
 namespace SkyDrop.Droid.Services
 {
@@ -22,22 +24,46 @@ namespace SkyDrop.Droid.Services
         /// </summary>
         public override HttpClient GetSkyDropHttpClientInstance(SkynetPortal portal)
         {
-            // Re-use HttpClient if already created
+            //re-use HttpClient if already created
             if (HttpClientsPerPortal.ContainsKey(portal))
                 return HttpClientsPerPortal[portal];
-            
-            var client = new HttpClient()
+
+            HttpClient client;
+            if (Preferences.Get(PreferenceKey.VerifySslCertificates, true))
             {
-                BaseAddress = new Uri(portal.BaseUrl), 
-                Timeout = TimeSpan.FromMinutes(120),
-            };
-            
+                //normal SSL certificate verification
+                client = new HttpClient()
+                {
+                    BaseAddress = new Uri(portal.BaseUrl),
+                    Timeout = TimeSpan.FromMinutes(120),
+                };
+            }
+            else
+            {
+                //don't verify SSL certificates
+                var handler = GetInsecureClientHandler();
+                client = new HttpClient(handler)
+                {
+                    BaseAddress = new Uri(portal.BaseUrl),
+                    Timeout = TimeSpan.FromMinutes(120),
+                };
+            }
+
             client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
 
-            // Save the HttpClient for efficient re-use
+            //save the HttpClient for efficient re-use
             HttpClientsPerPortal.Add(portal, client);
             
             return client;
+        }
+
+        private HttpClientHandler GetInsecureClientHandler()
+        {
+            HttpClientHandler handler = new HttpClientHandler();
+
+            //accept all SSL certificates (insecure!)
+            handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
+            return handler;
         }
     }
 }

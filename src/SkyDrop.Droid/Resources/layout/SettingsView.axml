@@ -18,9 +18,19 @@
         android:id="@+id/uploadNotificationCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enable upload notification?"
+        android:text="Enable upload notification"
         app:MvxBind="Checked UploadNotificationsEnabled"
         android:layout_marginVertical="16dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="#FFFFFF" />
+
+    <CheckBox
+        android:id="@+id/verifySslCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Verify SSL certificates"
+        app:MvxBind="Checked VerifySslCertificates"
+        android:layout_marginBottom="16dp"
         android:layout_marginLeft="10dp"
         android:textColor="#FFFFFF" />
 

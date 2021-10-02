@@ -2,8 +2,10 @@ namespace SkyDrop.Core
 {
     public static class PreferenceKey
     {
-        public static string UploadNotificationsEnabled = "uploadNotificationsEnabled";
+        public static string UploadNotificationsEnabled = "UploadNotificationsEnabled";
 
-        public static string SelectedSkynetPortal = "selected_skynetportal";
+        public static string SelectedSkynetPortal = "SelectedSkynetPortal";
+
+        public static string VerifySslCertificates = "VerifySslCertificates";
     }
 }
