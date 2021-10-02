@@ -41,7 +41,8 @@ namespace SkyDrop.iOS.Views.Settings
             SavePortalButton.TouchUpInside += async (s, e) =>
             {
                 UIApplication.SharedApplication.KeyWindow.EndEditing(true);
-                await ViewModel.ValidateAndTrySetSkynetPortal(PortalTextView.Text);
+                var formattedPortalUrl = await ViewModel.ValidateAndTrySetSkynetPortal(PortalTextView.Text);
+                PortalTextView.Text = formattedPortalUrl;
             };
 
             EnableUploadNotificationsSwitch.On = ViewModel.UploadNotificationsEnabled;

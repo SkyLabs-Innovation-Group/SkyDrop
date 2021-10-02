@@ -24,11 +24,8 @@ namespace SkyDrop.Droid.Views
 
             SetContentView(ActivityLayoutId);
 
-
             AndroidUtil.CreateNotificationChannel(this);
         }
-
-      
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
         {

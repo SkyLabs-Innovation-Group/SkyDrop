@@ -35,9 +35,9 @@ namespace SkyDrop.Core.DataModels
             return portal;
         }
 
-        public const string SiaskyPortalUrl = "https://siasky.net/";
+        public const string SiaskyPortalUrl = "https://siasky.net";
 
-        public const string SkyportalXyzUrl = "https://skyportal.xyz/";
+        public const string SkyportalXyzUrl = "https://skyportal.xyz";
         
         public static SkynetPortal SiaskyPortal = new SkynetPortal(SiaskyPortalUrl);
         
