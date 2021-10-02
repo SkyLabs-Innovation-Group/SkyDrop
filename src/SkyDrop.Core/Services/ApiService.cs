@@ -5,10 +5,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using Fody;
 using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Utility;
+using Xamarin.Essentials;
 
 namespace SkyDrop.Core.Services
 {
@@ -19,12 +21,17 @@ namespace SkyDrop.Core.Services
         
         private ISkyDropHttpClientFactory httpClientFactory;
         private ISingletonService singletonService;
+        private IUserDialogs userDialogs;
 
-        public ApiService(ILog log, ISkyDropHttpClientFactory skyDropHttpClientFactory, ISingletonService singletonService)
+        public ApiService(ILog log,
+            ISkyDropHttpClientFactory skyDropHttpClientFactory,
+            ISingletonService singletonService,
+            IUserDialogs userDialogs)
         {
             Log = log;
             httpClientFactory = skyDropHttpClientFactory;
             this.singletonService = singletonService;
+            this.userDialogs = userDialogs;
         }
         
         public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationTokenSource)
@@ -86,41 +93,44 @@ namespace SkyDrop.Core.Services
             {
                 result = await httpClient.SendAsync(request);
             }
-            catch (Exception e)
+            catch (HttpRequestException httpEx) when (httpEx.Message.Contains("SSL") && DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                userDialogs.Alert("Failed to verify SSL certificate. If you trust this network, try disabling certificate verification");
+                Log.Exception(httpEx);
+                return false;
+            }
+            catch (HttpRequestException e)
             {
                 Log.Error("Error pinging skynet portal at " + skynetPortal.BaseUrl);
                 Log.Exception(e);
             }
 
-            Log.Trace(result?.ToString());
-
-            if (result?.StatusCode == System.Net.HttpStatusCode.OK)
+            if (result == null)
             {
-                var headers = result.Headers;
-                var skylinkHeader = headers.GetValues("Skynet-Skylink").FirstOrDefault();
-
-                if (!(skylinkHeader == skylink))
-                {
-                    Log.Error("!(skylinkHeader == skylink)");
-                    return false;
-                }
-                else
-                    Log.Trace("Success querying for file header on portal " + skynetPortal);
-            }
-            else if (result == null)
-            {
-
-                singletonService.UserDialogs.Toast("No response from " + skynetPortal);
+                userDialogs.Toast("No response from " + skynetPortal);
                 Log.Error($"Head request to {skynetPortal} returned null");
                 return false;
             }
-            else
+
+            Log.Trace(result.ToString());
+
+            if (result.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                singletonService.UserDialogs.Toast($"{skynetPortal} refused the portal check request");
-                Log.Error($"Head request to {skynetPortal} returned status code {result?.StatusCode}");
+                userDialogs.Toast($"{skynetPortal} refused the portal check request");
+                Log.Error($"Head request to {skynetPortal} returned status code {result.StatusCode}");
                 return false;
             }
 
+            var headers = result.Headers;
+            var skylinkHeader = headers.GetValues("Skynet-Skylink").FirstOrDefault();
+            if (!(skylinkHeader == skylink))
+            {
+                Log.Error("!(skylinkHeader == skylink)");
+                userDialogs.Toast($"{skynetPortal} Skylink Header did not match");
+                return false;
+            }
+
+            Log.Trace("Success querying for file header on portal " + skynetPortal);
             return true;
         }
     }
