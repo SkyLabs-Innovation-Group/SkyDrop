@@ -277,7 +277,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (UploadNotificationsEnabled)
                     UploadFinishedNotificationCommand?.Execute(FileUploadResult.Cancelled);
             }
-            catch (HttpRequestException httpEx) when (httpEx.Message.Contains("SSL"))
+            catch (HttpRequestException httpEx) when (httpEx.Message.Contains("SSL") && DeviceInfo.Platform == DevicePlatform.Android)
             {
                 userDialogs.Alert("Failed to verify SSL certificate. If you trust this network, try disabling certificate verification in settings.");
                 Log.Exception(httpEx);
