@@ -28,7 +28,7 @@
         android:id="@+id/verifySslCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Verify SSL certificates"
+        android:text="Verify SSL certificates (recommended)"
         app:MvxBind="Checked VerifySslCertificates"
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="10dp"

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -275,6 +276,14 @@ namespace SkyDrop.Core.ViewModels.Main
                 ResetUIStateCommand?.Execute();
                 if (UploadNotificationsEnabled)
                     UploadFinishedNotificationCommand?.Execute(FileUploadResult.Cancelled);
+            }
+            catch (HttpRequestException httpEx) when (httpEx.Message.Contains("SSL"))
+            {
+                userDialogs.Alert("Failed to verify SSL certificate. If you trust this network, try disabling certificate verification in settings.");
+                Log.Exception(httpEx);
+                ResetUIStateCommand?.Execute();
+                if (UploadNotificationsEnabled)
+                    UploadFinishedNotificationCommand?.Execute(FileUploadResult.Fail);
             }
             catch (Exception ex) // General error
             {
