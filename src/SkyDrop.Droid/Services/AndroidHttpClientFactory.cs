@@ -32,7 +32,7 @@ namespace SkyDrop.Droid.Services
             if (Preferences.Get(PreferenceKey.VerifySslCertificates, true))
             {
                 //normal SSL certificate verification
-                client = new HttpClient()
+                client = new HttpClient(new Xamarin.Android.Net.AndroidClientHandler())
                 {
                     BaseAddress = new Uri(portal.BaseUrl),
                     Timeout = TimeSpan.FromMinutes(120),
@@ -57,9 +57,9 @@ namespace SkyDrop.Droid.Services
             return client;
         }
 
-        private HttpClientHandler GetInsecureClientHandler()
+        private Xamarin.Android.Net.AndroidClientHandler GetInsecureClientHandler()
         {
-            HttpClientHandler handler = new HttpClientHandler();
+            var handler = new Xamarin.Android.Net.AndroidClientHandler();
 
             //accept all SSL certificates (insecure!)
             handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
