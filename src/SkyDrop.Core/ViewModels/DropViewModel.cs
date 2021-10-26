@@ -90,7 +90,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public Task NavigateToSettings()
         {
-            return navigationService.Navigate<SettingsViewModel>();
+            return navigationService.Navigate<FilesViewModel>();
         }
 
         public enum DropViewState

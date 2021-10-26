@@ -157,6 +157,16 @@
       <DependentUpon>SettingsView.cs</DependentUpon>
     </Compile>
     <InterfaceDefinition Include="Views\Settings\SettingsView.xib" />
+    <InterfaceDefinition Include="Views\Files\FilesView.xib" />
+    <Compile Include="Views\Files\FilesView.cs" />
+    <Compile Include="Views\Files\FilesView.designer.cs">
+      <DependentUpon>FilesView.cs</DependentUpon>
+    </Compile>
+    <InterfaceDefinition Include="Views\Files\FileCollectionViewCell.xib" />
+    <Compile Include="Views\Files\FileCollectionViewCell.cs" />
+    <Compile Include="Views\Files\FileCollectionViewCell.designer.cs">
+      <DependentUpon>FileCollectionViewCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -205,6 +215,7 @@
     <Folder Include="Resources\Media.xcassets\ic_cancel.imageset\" />
     <Folder Include="Converters\" />
     <Folder Include="Views\Settings\" />
+    <Folder Include="Views\Files\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

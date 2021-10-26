@@ -91,7 +91,7 @@ namespace SkyDrop.Core.ViewModels.Main
             SkyFiles.SwitchTo(newSkyFiles);
 
             // TODO remove if possible
-            RaiseAllPropertiesChanged();
+            //RaiseAllPropertiesChanged();
         }
 
         private List<SkyFileDVM> GetSkyFileDVMs(List<SkyFile> skyFiles)
