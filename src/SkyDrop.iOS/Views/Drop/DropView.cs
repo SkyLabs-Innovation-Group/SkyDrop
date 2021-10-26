@@ -49,7 +49,7 @@ namespace SkyDrop.iOS.Views.Drop
 
         private void NavigateToSettings(object sender, EventArgs e)
         {
-            ViewModel.NavigateToSettings().GetAwaiter().GetResult();
+            ViewModel.NavigateToSettings();
         }
 
         public override void ViewDidLoad()
