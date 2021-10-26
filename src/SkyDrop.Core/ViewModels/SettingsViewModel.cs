@@ -35,7 +35,7 @@ namespace SkyDrop.Core.ViewModels
         public override void ViewCreated()
         {
             UploadNotificationsEnabled = Preferences.Get(PreferenceKey.UploadNotificationsEnabled, true);
-            VerifySslCertificates = Preferences.Get(PreferenceKey.VerifySslCertificates, true);
+            VerifySslCertificates = Preferences.Get(PreferenceKey.RequireSecureConnection, true);
             base.ViewCreated();
         }
 
@@ -88,8 +88,8 @@ namespace SkyDrop.Core.ViewModels
         public void SetVerifySslCertificates(bool value)
         {
             VerifySslCertificates = value;
-            Preferences.Remove(PreferenceKey.VerifySslCertificates);
-            Preferences.Set(PreferenceKey.VerifySslCertificates, value);
+            Preferences.Remove(PreferenceKey.RequireSecureConnection);
+            Preferences.Set(PreferenceKey.RequireSecureConnection, value);
 
             //clients must be rebuilt after changing this setting
             httpClientFactory.ClearCachedClients();

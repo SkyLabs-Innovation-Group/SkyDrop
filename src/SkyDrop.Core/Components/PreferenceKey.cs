@@ -6,6 +6,6 @@ namespace SkyDrop.Core
 
         public static string SelectedSkynetPortal = "SelectedSkynetPortal";
 
-        public static string VerifySslCertificates = "VerifySslCertificates";
+        public static string RequireSecureConnection = "RequireSecureConnection";
     }
 }

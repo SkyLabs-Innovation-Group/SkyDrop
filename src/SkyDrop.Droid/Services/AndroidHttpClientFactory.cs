@@ -29,7 +29,7 @@ namespace SkyDrop.Droid.Services
                 return HttpClientsPerPortal[portal];
 
             HttpClient client;
-            if (Preferences.Get(PreferenceKey.VerifySslCertificates, true))
+            if (Preferences.Get(PreferenceKey.RequireSecureConnection, true))
             {
                 //normal SSL certificate verification
                 client = new HttpClient(new Xamarin.Android.Net.AndroidClientHandler())
