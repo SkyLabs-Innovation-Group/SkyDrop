@@ -13,7 +13,7 @@ namespace SkyDrop.iOS.Views.Files
 	partial class FilesView
 	{
 		[Outlet]
-		UIKit.UIView FilesCollectionView { get; set; }
+		UIKit.UICollectionView FilesCollectionView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{

@@ -23,13 +23,13 @@ namespace SkyDrop.iOS.Views.Settings
             set.Apply();
 
             //setup nav bar
-            NavigationController.NavigationBar.BarTintColor = Colors.GradientDark.ToNative();
+            NavigationController.NavigationBar.TintColor = UIColor.White;
+            /*NavigationController.NavigationBar.BarTintColor = Colors.GradientDark.ToNative();
             NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes()
             {
                 ForegroundColor = Colors.White.ToNative()
-            };
+            };*/
             View.BackgroundColor = Colors.DarkGrey.ToNative();
-            NavigationController.NavigationBar.TintColor = UIColor.White;
 
             PortalTextView.Text = SkynetPortal.SelectedPortal.ToString();
             PortalTextView.BackgroundColor = Colors.MidGrey.ToNative();
