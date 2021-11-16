@@ -32,6 +32,7 @@ namespace SkyDrop.iOS.Views.Files
 
             var set = CreateBindingSet();
             set.Bind(collectionViewSource).For(f => f.ItemsSource).To(vm => vm.SkyFiles);
+            set.Bind(collectionViewSource).For(f => f.SelectionChangedCommand).To(vm => vm.FileSelectedCommand);
             set.Apply();
         }
 

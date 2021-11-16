@@ -88,16 +88,6 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
-        public Task NavigateToSettings()
-        {
-            return navigationService.Navigate<SettingsViewModel>();
-        }
-
-        public Task NavigateToFiles()
-        {
-            return navigationService.Navigate<FilesViewModel>();
-        }
-
         public enum DropViewState
         {
             SendReceiveButtonState = 1,
@@ -708,6 +698,25 @@ namespace SkyDrop.Core.ViewModels.Main
                 LaunchMode = BrowserLaunchMode.SystemPreferred,
                 TitleMode = BrowserTitleMode.Show
             });
+        }
+
+        public Task NavigateToSettings()
+        {
+            return navigationService.Navigate<SettingsViewModel>();
+        }
+
+        public async Task NavigateToFiles()
+        {
+            var selectedFile = await navigationService.Navigate<FilesViewModel, object, SkyFile>(null);
+            if (selectedFile == null)
+                return;
+
+            UploadedFile = selectedFile;
+
+            //show QR code
+            IsBarcodeLoading = true;
+            SkyFileFullUrl = UploadedFile.GetSkylinkUrl();
+            await GenerateBarcodeAsyncFunc();
         }
     }
 }

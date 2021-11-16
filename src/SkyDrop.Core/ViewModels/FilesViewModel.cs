@@ -14,7 +14,7 @@ using SkyDrop.Core.Utility;
 
 namespace SkyDrop.Core.ViewModels.Main
 {
-    public class FilesViewModel : BaseViewModel
+    public class FilesViewModel : BaseViewModel<object, SkyFile>
     {
         public MvxObservableCollection<SkyFileDVM> SkyFiles { get; } = new MvxObservableCollection<SkyFileDVM>();
 
@@ -35,9 +35,8 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IMvxNavigationService navigationService;
         private readonly ILog _log;
 
-        public IMvxAsyncCommand SelectFileCommand { get; set; }
         public IMvxCommand SelectImageCommand { get; set; }
-        public IMvxCommand<SkyFile> OpenFileInBrowserCommand { get; set; }
+        public IMvxCommand<SkyFileDVM> FileSelectedCommand { get; set; }
         public IMvxCommand UploadCommand { get; set; }
         public IMvxCommand ClearDataCommand { get; set; }
 
@@ -72,7 +71,8 @@ namespace SkyDrop.Core.ViewModels.Main
             this.userDialogs = userDialogs;
             this.navigationService = navigationService;
             _log = log;
-            SelectFileCommand = new MvxAsyncCommand(async () => await SelectFileAsyncFunc());
+
+            FileSelectedCommand = new MvxAsyncCommand<SkyFileDVM>(SelectFile);
             SelectImageCommand = new MvxAsyncCommand(async () => await SelectImageAsyncFunc());
             UploadCommand = new MvxAsyncCommand(async () => await UploadStagedFiles());
             ClearDataCommand = new MvxCommand(() => ClearData());
@@ -89,9 +89,11 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             var newSkyFiles = GetSkyFileDVMs(storageService.LoadSkyFiles());
             SkyFiles.SwitchTo(newSkyFiles);
+        }
 
-            // TODO remove if possible
-            //RaiseAllPropertiesChanged();
+        private async Task SelectFile(SkyFileDVM skyFile)
+        {
+            await navigationService.Close(this, skyFile.SkyFile);
         }
 
         private List<SkyFileDVM> GetSkyFileDVMs(List<SkyFile> skyFiles)
@@ -111,7 +113,6 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 SkyFile = skyFile,
                 TapCommand = new MvxCommand(() => ToggleSelectState(skyFile)),
-                OpenCommand = new MvxCommand(() => OpenFileInBrowser(skyFile)),
                 CopySkyLinkCommand = new MvxAsyncCommand(() => CopyFileLinkToClipboard(skyFile)),
                 DeleteCommand = new MvxCommand(() => DeleteSkyFileFromList(skyFile)),
             };
@@ -120,17 +121,6 @@ namespace SkyDrop.Core.ViewModels.Main
         public void StageFile(SkyFile stagedFile)
         {
             SkyFiles.Add(GetSkyFileDVM(stagedFile));
-        }
-
-        private void OpenFileInBrowser(SkyFile skyFile)
-        {
-            if (skyFile.Status == FileStatus.Staged)
-            {
-                PromptToUploadFile();
-                return;
-            }
-
-            OpenFileInBrowserCommand.Execute(skyFile);
         }
 
         private void DeleteSkyFileFromList(SkyFile file)
@@ -293,6 +283,11 @@ namespace SkyDrop.Core.ViewModels.Main
             storageService.ClearAllData();
 
             SkyFiles.Clear();
+        }
+
+        public override void Prepare(object parameter)
+        {
+            
         }
     }
 }

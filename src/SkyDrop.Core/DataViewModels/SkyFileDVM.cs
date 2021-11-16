@@ -17,7 +17,6 @@ namespace SkyDrop.Core.DataViewModels
         public SkyFile SkyFile { get; set; }
 
         public IMvxCommand TapCommand { get; set; }
-        public IMvxCommand OpenCommand { get; set; }
         public IMvxCommand CopySkyLinkCommand { get; set; }
         public IMvxCommand DeleteCommand { get; set; }
 
