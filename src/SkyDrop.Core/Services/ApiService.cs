@@ -86,20 +86,21 @@ namespace SkyDrop.Core.Services
             var request = new HttpRequestMessage(HttpMethod.Head, skyfile.GetSkylinkUrl());
 
             var result = await httpClient.SendAsync(request);
-
             if (result == null)
                 return null;
-
-            Log.Trace(result.ToString());
 
             if (result.StatusCode != System.Net.HttpStatusCode.OK)
                 return null;
 
             var headers = result.Content.Headers;
             var filenameHeader = headers.GetValues("Content-Disposition").FirstOrDefault();
-            throw new Exception($"TODO: fix this. Filename = {filenameHeader}");
 
-            return filenameHeader;
+            var filenamePrefix = "filename=\"";
+            var startIndex = filenameHeader.IndexOf(filenamePrefix) + filenamePrefix.Length;
+            filenameHeader = filenameHeader.Substring(startIndex);
+            var filename = filenameHeader.Substring(0, filenameHeader.Length - 1);
+
+            return filename;
         }
 
         public async Task<bool> PingPortalForSkylink(string skylink, SkynetPortal skynetPortal)
