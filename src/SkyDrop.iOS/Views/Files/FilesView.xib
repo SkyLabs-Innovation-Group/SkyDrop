@@ -20,7 +20,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="QRV-E6-Axf">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <rect key="frame" x="8" y="52" width="398" height="836"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="j4a-y6-UwD">
                         <size key="itemSize" width="128" height="128"/>
@@ -32,12 +32,12 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="QRV-E6-Axf" secondAttribute="bottom" id="5rt-ZG-9ou"/>
-                <constraint firstItem="QRV-E6-Axf" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="VcD-sv-CF9"/>
-                <constraint firstAttribute="trailing" secondItem="QRV-E6-Axf" secondAttribute="trailing" id="aXA-Xg-05G"/>
-                <constraint firstItem="QRV-E6-Axf" firstAttribute="top" secondItem="2" secondAttribute="top" id="qgS-Rz-aAf"/>
+                <constraint firstAttribute="bottom" secondItem="QRV-E6-Axf" secondAttribute="bottom" constant="8" id="5rt-ZG-9ou"/>
+                <constraint firstItem="QRV-E6-Axf" firstAttribute="top" secondItem="2" secondAttribute="topMargin" constant="8" id="Kaq-V8-3Li"/>
+                <constraint firstItem="QRV-E6-Axf" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="8" id="VcD-sv-CF9"/>
+                <constraint firstAttribute="trailing" secondItem="QRV-E6-Axf" secondAttribute="trailing" constant="8" id="aXA-Xg-05G"/>
             </constraints>
-            <point key="canvasLocation" x="97" y="2"/>
+            <point key="canvasLocation" x="95.652173913043484" y="1.3392857142857142"/>
         </view>
     </objects>
     <resources>

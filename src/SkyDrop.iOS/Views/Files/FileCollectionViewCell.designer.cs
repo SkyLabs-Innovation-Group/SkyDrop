@@ -23,12 +23,25 @@ namespace SkyDrop.iOS.Views.Files
 
 		[Outlet]
 		UIKit.UIView InnerView { get; set; }
+
+		[Outlet]
+		FFImageLoading.Cross.MvxCachedImageView PreviewImage { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (BottomPanel != null) {
+				BottomPanel.Dispose ();
+				BottomPanel = null;
+			}
+
 			if (ContainerView != null) {
 				ContainerView.Dispose ();
 				ContainerView = null;
+			}
+
+			if (FileNameLabel != null) {
+				FileNameLabel.Dispose ();
+				FileNameLabel = null;
 			}
 
 			if (InnerView != null) {
@@ -36,14 +49,9 @@ namespace SkyDrop.iOS.Views.Files
 				InnerView = null;
 			}
 
-			if (BottomPanel != null) {
-				BottomPanel.Dispose ();
-				BottomPanel = null;
-			}
-
-			if (FileNameLabel != null) {
-				FileNameLabel.Dispose ();
-				FileNameLabel = null;
+			if (PreviewImage != null) {
+				PreviewImage.Dispose ();
+				PreviewImage = null;
 			}
 		}
 	}

@@ -26,7 +26,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TMc-ne-gGF">
                                         <rect key="frame" x="0.0" y="80" width="112" height="32"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="filename.png" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bKK-Ps-LBN">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="filename.png" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bKK-Ps-LBN">
                                                 <rect key="frame" x="8" y="7.5" width="96" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -41,11 +41,18 @@
                                             <constraint firstAttribute="trailing" secondItem="bKK-Ps-LBN" secondAttribute="trailing" constant="8" id="cjo-SJ-t8G"/>
                                         </constraints>
                                     </view>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fz4-b1-uME" customClass="MvxCachedImageView">
+                                        <rect key="frame" x="0.0" y="0.0" width="112" height="80"/>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
+                                    <constraint firstItem="TMc-ne-gGF" firstAttribute="top" secondItem="fz4-b1-uME" secondAttribute="bottom" id="MAd-Ct-N83"/>
+                                    <constraint firstItem="fz4-b1-uME" firstAttribute="leading" secondItem="6hn-i9-ClJ" secondAttribute="leading" id="V3f-mL-pF4"/>
                                     <constraint firstAttribute="trailing" secondItem="TMc-ne-gGF" secondAttribute="trailing" id="WfK-DL-F0d"/>
                                     <constraint firstItem="TMc-ne-gGF" firstAttribute="leading" secondItem="6hn-i9-ClJ" secondAttribute="leading" id="ciN-ic-UWh"/>
+                                    <constraint firstAttribute="trailing" secondItem="fz4-b1-uME" secondAttribute="trailing" id="tfa-N6-36g"/>
+                                    <constraint firstItem="fz4-b1-uME" firstAttribute="top" secondItem="6hn-i9-ClJ" secondAttribute="top" id="yu5-nA-2nT"/>
                                     <constraint firstAttribute="bottom" secondItem="TMc-ne-gGF" secondAttribute="bottom" id="zLP-Pr-Fr8"/>
                                 </constraints>
                             </view>
@@ -79,6 +86,7 @@
                 <outlet property="ContainerView" destination="LOh-kW-72d" id="aIk-Zx-Bxi"/>
                 <outlet property="FileNameLabel" destination="bKK-Ps-LBN" id="5Xk-wt-z9p"/>
                 <outlet property="InnerView" destination="6hn-i9-ClJ" id="Pfq-EC-Tq7"/>
+                <outlet property="PreviewImage" destination="fz4-b1-uME" id="AWI-D1-jWC"/>
             </connections>
             <point key="canvasLocation" x="200.00000000000003" y="54.910714285714285"/>
         </collectionViewCell>

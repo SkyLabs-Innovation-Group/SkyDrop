@@ -26,6 +26,7 @@ namespace SkyDrop.iOS.Views.Files
             {
                 var set = this.CreateBindingSet<FileCollectionViewCell, SkyFileDVM>();
                 set.Bind(FileNameLabel).To(vm => vm.SkyFile.Filename);
+                set.Bind(this).For(t => t.SkyFile).To(vm => vm.SkyFile);
                 set.Apply();
             });
         }
@@ -41,6 +42,20 @@ namespace SkyDrop.iOS.Views.Files
             InnerView.Layer.BorderColor = Colors.MidGrey.ToNative().CGColor;
             InnerView.Layer.BorderWidth = 1;
             InnerView.Layer.MasksToBounds = true;
+        }
+
+        public SkyFile SkyFile
+        {
+            get => new SkyFile();
+            set
+            {
+                //update preview image
+                if (Util.ExtensionMatches(value.Filename, ".jpeg", ".jpg", ".png"))
+                {
+                    var filePath = value?.GetSkylinkUrl();
+                    PreviewImage.ImagePath = filePath;
+                }
+            }
         }
     }
 }

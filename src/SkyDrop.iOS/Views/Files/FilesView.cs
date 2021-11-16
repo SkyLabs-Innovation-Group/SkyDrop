@@ -19,6 +19,7 @@ namespace SkyDrop.iOS.Views.Files
         {
             base.ViewDidLoad();
 
+            View.BackgroundColor = Colors.DarkGrey.ToNative();
             FilesCollectionView.BackgroundColor = Colors.DarkGrey.ToNative();
 
             //setup nav bar
@@ -36,13 +37,17 @@ namespace SkyDrop.iOS.Views.Files
 
         public class FilesCollectionViewLayout : UICollectionViewFlowLayout
         {
-            private nfloat screenWidth => UIScreen.MainScreen.Bounds.Width / 2;
+            private const int horizontalMargins = 16;
+            private nfloat itemWidth => (UIScreen.MainScreen.Bounds.Width - horizontalMargins) / 2;
 
             public override CGSize ItemSize
             {
-                get => new CGSize(screenWidth, screenWidth);
+                get => new CGSize(itemWidth, itemWidth);
                 set => base.ItemSize = value;
             }
+
+            public override nfloat MinimumInteritemSpacing => 0;
+            public override nfloat MinimumLineSpacing => 0;
         }
     }
 }

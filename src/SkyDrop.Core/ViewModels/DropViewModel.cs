@@ -90,6 +90,11 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public Task NavigateToSettings()
         {
+            return navigationService.Navigate<SettingsViewModel>();
+        }
+
+        public Task NavigateToFiles()
+        {
             return navigationService.Navigate<FilesViewModel>();
         }
 
@@ -338,6 +343,13 @@ namespace SkyDrop.Core.ViewModels.Main
                 {
                     string skylink = barcodeData.Substring(barcodeData.Length - 46, 46);
                     var skyFile = new SkyFile() { Skylink = skylink };
+
+                    //TODO: find a way to query the filename of the skyfile, then save received file to the list
+                    var filename = await apiService.GetSkyFileFilename(skyFile);
+                    skyFile.Filename = filename;
+
+                    storageService.SaveSkyFiles(skyFile);
+
                     await OpenFileInBrowser(skyFile);
                 }
             }
