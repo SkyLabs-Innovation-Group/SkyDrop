@@ -252,6 +252,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 FirstFileUploaded = true;
 
                 //save skylink locally
+                UploadedFile.WasSent = true;
                 storageService.SaveSkyFiles(UploadedFile);
 
                 //wait for progressbar to complete

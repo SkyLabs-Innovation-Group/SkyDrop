@@ -169,6 +169,7 @@
     </Compile>
     <ImageAsset Include="Resources\Media.xcassets\ic_menu.imageset\Contents.json" />
     <ImageAsset Include="Resources\Media.xcassets\ic_menu.imageset\menu.pdf" />
+    <Compile Include="Converters\NativeColorConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

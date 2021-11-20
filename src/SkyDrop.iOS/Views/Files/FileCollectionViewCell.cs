@@ -27,6 +27,8 @@ namespace SkyDrop.iOS.Views.Files
                 var set = this.CreateBindingSet<FileCollectionViewCell, SkyFileDVM>();
                 set.Bind(FileNameLabel).To(vm => vm.SkyFile.Filename);
                 set.Bind(this).For(t => t.SkyFile).To(vm => vm.SkyFile);
+                set.Bind(InnerView.Layer).For(i => i.BorderColor).To(vm => vm.FillColor).WithConversion("CGColor");
+                set.Bind(BottomPanel).For(i => i.BackgroundColor).To(vm => vm.FillColor).WithConversion("NativeColor");
                 set.Apply();
             });
         }
@@ -40,7 +42,7 @@ namespace SkyDrop.iOS.Views.Files
 
             InnerView.Layer.CornerRadius = 8;
             InnerView.Layer.BorderColor = Colors.MidGrey.ToNative().CGColor;
-            InnerView.Layer.BorderWidth = 1;
+            InnerView.Layer.BorderWidth = 2;
             InnerView.Layer.MasksToBounds = true;
         }
 

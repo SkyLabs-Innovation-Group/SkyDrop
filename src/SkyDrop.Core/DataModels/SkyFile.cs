@@ -75,6 +75,12 @@ namespace SkyDrop.Core.DataModels
             get => (FileStatus)statusInt;
             set => statusInt = (int)value;
         }
+
+        /// <summary>
+        /// True if this file was sent from this device
+        /// False if this file was recieved from another device
+        /// </summary>
+        public bool WasSent { get; set; }
     }
 
     public enum FileStatus
