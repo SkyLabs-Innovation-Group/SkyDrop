@@ -17,14 +17,4 @@ namespace SkyDrop.iOS.Converters
             return value.ToNative();
         }
     }
-
-    public class CGColorConverter : MvxValueConverter<Color, CGColor>
-    {
-        public const string Name = "CGColor";
-
-        protected override CGColor Convert(Color value, Type targetType, object parameter, CultureInfo cultureInfo)
-        {
-            return value.ToNative().CGColor;
-        }
-    }
 }

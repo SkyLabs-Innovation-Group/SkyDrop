@@ -39,7 +39,6 @@ namespace SkyDrop.iOS
         {
             registry.AddOrOverwrite(FileExtensionConverter.Name, new FileExtensionConverter());
             registry.AddOrOverwrite(NativeColorConverter.Name, new NativeColorConverter());
-            registry.AddOrOverwrite(CGColorConverter.Name, new CGColorConverter());
 
             base.FillValueConverters(registry);
         }
