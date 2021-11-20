@@ -23,7 +23,7 @@ namespace SkyDrop.Core.DataViewModels
         public bool IsSelected { get; set; }
         public bool IsLoading { get; set; }
 
-        public Color FillColor => SkyFile.WasSent ? Colors.GradientGreen : Colors.GradientOcean;
+        public Color FillColor => SkyFile.WasSent ? Colors.Primary : Colors.GradientOcean;
 
         public void SetUploaded(SkyFile skyFile)
         {

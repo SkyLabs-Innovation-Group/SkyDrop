@@ -712,6 +712,7 @@ namespace SkyDrop.Core.ViewModels.Main
             if (selectedFile == null)
                 return;
 
+            FirstFileUploaded = true;
             UploadedFile = selectedFile;
 
             //show QR code
