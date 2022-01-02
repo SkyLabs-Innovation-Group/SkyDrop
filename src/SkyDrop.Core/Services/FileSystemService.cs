@@ -85,7 +85,17 @@ namespace SkyDrop.Core.Services
                 {
                     foreach (var file in filesToZip)
                     {
-                        zip.CreateEntryFromFile(file.FullFilePath, file.Filename, CompressionLevel.Optimal);
+                        if (file.AndroidContentStream != null)
+                        {
+                            var fileInArchive = zip.CreateEntry(file.Filename, CompressionLevel.Optimal);
+                            using (var entryStream = fileInArchive.Open())
+                            using (var fileToCompressStream = file.AndroidContentStream)
+                            {
+                                fileToCompressStream.CopyTo(entryStream);
+                            }
+                        }
+                        else
+                            zip.CreateEntryFromFile(file.FullFilePath, file.Filename, CompressionLevel.Optimal);
                     }               
                 }
 
