@@ -101,7 +101,5 @@ namespace SkyDrop.Droid
 
             return logProvider;
         }
-
-  
     }
 }

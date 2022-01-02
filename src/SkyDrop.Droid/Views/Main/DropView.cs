@@ -23,6 +23,7 @@ using MvvmCross.ViewModels;
 using Android.Webkit;
 using MvvmCross.Platforms.Android.Core;
 using MvvmCross.Platforms.Android;
+using SkyDrop.Droid.Views.Splash;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -30,7 +31,7 @@ namespace SkyDrop.Droid.Views.Main
     /// File transfer screen
     /// </summary>
     [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden, ScreenOrientation = ScreenOrientation.Portrait)]
-    [IntentFilter(new[] { Intent.ActionSend }, Categories = new[] { Intent.CategoryDefault }, DataMimeTypes = new[] { "image/*", "video/*", "audio/*", "application/*" })]
+    //[IntentFilter(new[] { Intent.ActionSend }, Categories = new[] { Intent.CategoryDefault }, DataMimeTypes = new[] { "image/*", "video/*", "audio/*", "application/*" })]
     public class DropView : BaseActivity<DropViewModel>
     {
         protected override int ActivityLayoutId => Resource.Layout.DropView;
@@ -49,9 +50,6 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         protected override async void OnCreate(Bundle bundle)
         {
-            var setup = MvxAndroidSetupSingleton.EnsureSingletonAvailable(ApplicationContext);
-            setup.EnsureInitialized();
-            
             base.OnCreate(bundle);
 
             if (ViewModel == null)
@@ -90,6 +88,8 @@ namespace SkyDrop.Droid.Views.Main
             stagedFilesRecycler.SetLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false));
 
             CreateNavDots();
+
+            SplashActivity.NewIntent += (s, e) => HandleInputFile();
 
             HandleInputFile();
         }
@@ -131,10 +131,13 @@ namespace SkyDrop.Droid.Views.Main
         {
             try
             {
-                if (Intent.Action != Intent.ActionSend)
+                var startIntent = SplashActivity.StartupIntent;
+
+                ViewModel.UserDialogs.Toast($"Intent.Action = {startIntent.Action}");
+                if (startIntent.Action != Intent.ActionSend)
                     return;
 
-                var parcel = (IParcelable)Intent.GetParcelableExtra(Intent.ExtraStream);
+                var parcel = (IParcelable)startIntent.GetParcelableExtra(Intent.ExtraStream);
                 var uri = (Android.Net.Uri)parcel;
                 var uriString = uri.ToString();
 
@@ -148,6 +151,8 @@ namespace SkyDrop.Droid.Views.Main
 
                 using var stream = skyFile.GetStream();
                     skyFile.FileSizeBytes = stream.Length;
+
+                ViewModel.UserDialogs.Toast($"SkyFile.FullFilePath = {skyFile.FullFilePath}");
 
                 ViewModel.StageFiles(new System.Collections.Generic.List<SkyFile> { skyFile }, false);
             }

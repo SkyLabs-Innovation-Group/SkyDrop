@@ -282,7 +282,7 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             catch (Exception ex) // General error
             {
-                UserDialogs.Toast("Could not upload file");
+                //UserDialogs.Toast("Could not upload file");
                 Log.Exception(ex);
                 ResetUIStateCommand?.Execute();
                 if (UploadNotificationsEnabled)
