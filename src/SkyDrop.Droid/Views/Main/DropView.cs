@@ -25,6 +25,7 @@ namespace SkyDrop.Droid.Views.Main
     /// File transfer screen
     /// </summary>
     [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden, ScreenOrientation = ScreenOrientation.Portrait)]
+    [IntentFilter(new[] { Intent.ActionSend }, Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable }, DataHost = "*", DataMimeType = "*/*")]
     public class DropView : BaseActivity<DropViewModel>
     {
         protected override int ActivityLayoutId => Resource.Layout.DropView;
