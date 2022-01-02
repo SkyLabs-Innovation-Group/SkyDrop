@@ -84,10 +84,10 @@ namespace SkyDrop.Droid.Views.Main
             //handle files sent to SkyDrop from another app's share menu
 
             //a) when SkyDrop is open in the background
-            SplashActivity.NewSkyFileInput += (s, skyFile) => HandleInputFile(skyFile);
+            SplashActivity.NewSkyFileInput += async (s, skyFile) => await HandleInputFile(skyFile);
 
             //b) when SkyDrop was not open (cold launch)
-            HandleInputFile(SplashActivity.SkyFileInput);
+            await HandleInputFile(SplashActivity.SkyFileInput);
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -123,14 +123,20 @@ namespace SkyDrop.Droid.Views.Main
         /// <summary>
         /// Handle file when SkyDrop is selected from share menu
         /// </summary>
-        private void HandleInputFile(SkyFile skyFile)
+        private async Task HandleInputFile(SkyFile skyFile)
         {
             try
             {
                 if (skyFile == null)
                     return;
 
+                SetSendReceiveButtonUiState();
+                await Task.Delay(500);
+
                 ViewModel.StageFiles(new System.Collections.Generic.List<SkyFile> { skyFile }, false);
+
+                await Task.Delay(500);
+                AnimateSlideSendButton();
             }
             catch(Exception e)
             {
