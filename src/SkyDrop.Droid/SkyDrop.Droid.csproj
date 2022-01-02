@@ -91,6 +91,7 @@
     <Compile Include="Bindings\BarcodeBackgroundBinding.cs" />
     <Compile Include="Bindings\UploadProgressBinding.cs" />
     <Compile Include="Bindings\ImagePreviewBinding.cs" />
+    <Compile Include="Services\ContentResolverService.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">

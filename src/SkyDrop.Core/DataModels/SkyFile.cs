@@ -2,8 +2,10 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using MvvmCross;
 using Newtonsoft.Json;
 using Realms;
+using SkyDrop.Core.Services;
 
 namespace SkyDrop.Core.DataModels
 {
@@ -36,6 +38,13 @@ namespace SkyDrop.Core.DataModels
         {
             if (FullFilePath == null)
                 return null;
+
+            if (FullFilePath.StartsWith("content://"))
+            {
+                //this file was provided from android share menu, so we have a content URI instead of a file path
+                var contentResolver = Mvx.IoCProvider.Resolve<IContentResolverService>();
+                return contentResolver.GetContentStream(FullFilePath);
+            }
             
             return File.OpenRead(FullFilePath);
         }

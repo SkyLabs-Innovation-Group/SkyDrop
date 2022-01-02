@@ -59,10 +59,7 @@ namespace SkyDrop.Droid
         protected override IMvxAndroidCurrentTopActivity CreateAndroidCurrentTopActivity()
         {
             Debug.WriteLine("CreateAndroidCurrentTopActivity() droid");
-
             topActivityProvider = base.CreateAndroidCurrentTopActivity();
-            
-
             return topActivityProvider;
         }
         
@@ -85,6 +82,7 @@ namespace SkyDrop.Droid
             
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger(logProvider));
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISkyDropHttpClientFactory>(() => new AndroidHttpClientFactory());
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IContentResolverService>(() => new ContentResolverService());
 
             ImageService.Instance.Initialize(new Configuration()
             {

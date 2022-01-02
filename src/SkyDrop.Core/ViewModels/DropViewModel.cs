@@ -25,7 +25,6 @@ namespace SkyDrop.Core.ViewModels.Main
     {
         private readonly IApiService apiService;
         private readonly IStorageService storageService;
-        private readonly IUserDialogs userDialogs;
         private readonly IMvxNavigationService navigationService;
         private readonly IFileSystemService fileSystemService;
         private readonly IBarcodeService barcodeService;
@@ -125,17 +124,13 @@ namespace SkyDrop.Core.ViewModels.Main
             IBarcodeService barcodeService,
             IShareLinkService shareLinkService,
             IUploadTimerService uploadTimerService,
-            IUserDialogs userDialogs,
             IMvxNavigationService navigationService,
-            IFileSystemService fileSystemService,
-            ILog log) : base(singletonService)
+            IFileSystemService fileSystemService) : base(singletonService)
         {
-            Log = log;
             Title = "SkyDrop";
 
             this.apiService = apiService;
             this.storageService = storageService;
-            this.userDialogs = userDialogs;
             this.navigationService = navigationService;
             this.fileSystemService = fileSystemService;
             this.barcodeService = barcodeService;
@@ -175,7 +170,7 @@ namespace SkyDrop.Core.ViewModels.Main
             //show error message after the qr code scanner view has closed to avoid exception
             if (!string.IsNullOrEmpty(errorMessage))
             {
-                userDialogs.Toast(errorMessage);
+                UserDialogs.Toast(errorMessage);
                 errorMessage = null;
             }
         }
@@ -272,14 +267,14 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             catch (TaskCanceledException tce)
             {
-                userDialogs.Toast("Upload cancelled");
+                UserDialogs.Toast("Upload cancelled");
                 ResetUIStateCommand?.Execute();
                 if (UploadNotificationsEnabled)
                     UploadFinishedNotificationCommand?.Execute(FileUploadResult.Cancelled);
             }
             catch (HttpRequestException httpEx) when (httpEx.Message.Contains("SSL") && DeviceInfo.Platform == DevicePlatform.Android)
             {
-                userDialogs.Alert(Strings.SslPrompt);
+                UserDialogs.Alert(Strings.SslPrompt);
                 Log.Exception(httpEx);
                 ResetUIStateCommand?.Execute();
                 if (UploadNotificationsEnabled)
@@ -287,7 +282,7 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             catch (Exception ex) // General error
             {
-                userDialogs.Toast("Could not upload file");
+                UserDialogs.Toast("Could not upload file");
                 Log.Exception(ex);
                 ResetUIStateCommand?.Execute();
                 if (UploadNotificationsEnabled)
@@ -345,13 +340,13 @@ namespace SkyDrop.Core.ViewModels.Main
                 //avoid crashing android by NOT showing a toast before the scanner activity has closed
                 var error = "Invalid QR code";
                 if (DeviceInfo.Platform == DevicePlatform.iOS)
-                    userDialogs.Toast(error);
+                    UserDialogs.Toast(error);
                 else
                     errorMessage = error;
             }
         }
 
-        private void StageFiles(List<SkyFile> userFiles, bool keepExisting)
+        public void StageFiles(List<SkyFile> userFiles, bool keepExisting)
         {
             var newStagedFiles = userFiles.Select(s => new StagedFileDVM
             {
@@ -424,7 +419,7 @@ namespace SkyDrop.Core.ViewModels.Main
             var image = "Select Image";
             var video = "Select Video";
             var cancel = "cancel";
-            var fileType = await userDialogs.ActionSheetAsync("", cancel, null, null, file, image, video);
+            var fileType = await UserDialogs.ActionSheetAsync("", cancel, null, null, file, image, video);
             if (fileType == cancel)
             {
                 return null;
@@ -494,7 +489,28 @@ namespace SkyDrop.Core.ViewModels.Main
 
             StageFiles(pickedFiles, true);
         }
+        /*
+        public void StageFileFromPath(string path)
+        {
+            try
+            {
+                var file = File.OpenRead(path);
 
+                var skyFile = new SkyFile { FullFilePath = path, Filename = file.Name, FileSizeBytes = file.Length };
+                StageFiles(new List<SkyFile> { skyFile }, false);
+            }
+            catch (Exception ex)
+            {
+                Log.Exception(ex);
+                Log.Trace("Error picking file.");
+
+                IsStagingFiles = false;
+
+                //reset the UI
+                ResetUIStateCommand?.Execute();
+            }
+        }
+        */
         private void StartUploadTimer(long fileSizeBytes)
         {
             uploadTimerService.StartUploadTimer(fileSizeBytes, UpdateUploadProgress);
@@ -575,7 +591,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 await Xamarin.Essentials.Clipboard.SetTextAsync(skyLink);
 
                 Log.Trace("Set clipboard text to " + skyLink);
-                userDialogs.Toast("Copied SkyLink to clipboard");
+                UserDialogs.Toast("Copied SkyLink to clipboard");
             }
             catch (Exception e)
             {
@@ -628,7 +644,7 @@ namespace SkyDrop.Core.ViewModels.Main
             const string cancel = "Cancel";
             const string rename = "Rename";
             const string remove = "Remove";
-            var menuResult = await userDialogs.ActionSheetAsync("", cancel, "", null, new[] { rename, remove });
+            var menuResult = await UserDialogs.ActionSheetAsync("", cancel, "", null, new[] { rename, remove });
 
             switch(menuResult)
             {
@@ -647,7 +663,7 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             var fileExtension = skyFile.Filename.Split('.')?.LastOrDefault();
 
-            var result = await userDialogs.PromptAsync("Rename file");
+            var result = await UserDialogs.PromptAsync("Rename file");
             if (string.IsNullOrEmpty(result.Value)) return;
 
             var newName = $"{result.Value}.{fileExtension}";

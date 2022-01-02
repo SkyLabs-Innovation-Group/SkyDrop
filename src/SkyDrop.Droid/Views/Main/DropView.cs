@@ -18,6 +18,9 @@ using SkyDrop.Droid.Helper;
 using ZXing.Mobile;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 using static SkyDrop.Core.Utility.Util;
+using MvvmCross;
+using MvvmCross.ViewModels;
+using Android.Webkit;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -25,7 +28,7 @@ namespace SkyDrop.Droid.Views.Main
     /// File transfer screen
     /// </summary>
     [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden, ScreenOrientation = ScreenOrientation.Portrait)]
-    [IntentFilter(new[] { Intent.ActionSend }, Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable }, DataHost = "*", DataMimeType = "*/*")]
+    [IntentFilter(new[] { Intent.ActionSend }, Categories = new[] { Intent.CategoryDefault }, DataMimeTypes = new[] { "image/*", "video/*", "audio/*", "application/*" })]
     public class DropView : BaseActivity<DropViewModel>
     {
         protected override int ActivityLayoutId => Resource.Layout.DropView;
@@ -45,6 +48,13 @@ namespace SkyDrop.Droid.Views.Main
         protected override async void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+
+            if (ViewModel == null)
+            {
+                //user selected SkyDrop from another app's share menu
+                var loaderService = Mvx.IoCProvider.Resolve<IMvxViewModelLoader>();
+                ViewModel = (DropViewModel)loaderService.LoadViewModel(new MvxViewModelRequest(typeof(DropViewModel)), null);
+            }
 
             var toolbar = FindViewById<AndroidX.AppCompat.Widget.Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
@@ -75,6 +85,8 @@ namespace SkyDrop.Droid.Views.Main
             stagedFilesRecycler.SetLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false));
 
             CreateNavDots();
+
+            HandleInputFile();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -106,6 +118,40 @@ namespace SkyDrop.Droid.Views.Main
             }
 
             base.OnBackPressed();
+        }
+
+        /// <summary>
+        /// Handle file when SkyDrop is selected from share menu
+        /// </summary>
+        private void HandleInputFile()
+        {
+            try
+            {
+                if (Intent.Action != Intent.ActionSend)
+                    return;
+
+                var parcel = (IParcelable)Intent.GetParcelableExtra(Intent.ExtraStream);
+                var uri = (Android.Net.Uri)parcel;
+                var uriString = uri.ToString();
+
+                MimeTypeMap mime = MimeTypeMap.Singleton;
+                string fileExtension = mime.GetExtensionFromMimeType(ContentResolver.GetType(uri));
+                var skyFile = new SkyFile
+                {
+                    FullFilePath = uriString,
+                    Filename = $"{Guid.NewGuid()}.{fileExtension}"
+                };
+
+                using var stream = skyFile.GetStream();
+                    skyFile.FileSizeBytes = stream.Length;
+
+                ViewModel.StageFiles(new System.Collections.Generic.List<SkyFile> { skyFile }, false);
+            }
+            catch(Exception e)
+            {
+                ViewModel.Log.Exception(e);
+                ViewModel.UserDialogs.Toast("Failed to load file");
+            }
         }
 
         /// <summary>
