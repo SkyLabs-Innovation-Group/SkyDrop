@@ -82,7 +82,6 @@ namespace SkyDrop.Droid
             
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger(logProvider));
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISkyDropHttpClientFactory>(() => new AndroidHttpClientFactory());
-            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IContentResolverService>(() => new ContentResolverService());
 
             ImageService.Instance.Initialize(new Configuration()
             {

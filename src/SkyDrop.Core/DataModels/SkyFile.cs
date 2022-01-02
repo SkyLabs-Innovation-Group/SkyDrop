@@ -36,18 +36,17 @@ namespace SkyDrop.Core.DataModels
 
         public Stream GetStream()
         {
+            if (AndroidContentStream != null)
+                return AndroidContentStream;
+
             if (FullFilePath == null)
                 return null;
 
-            if (FullFilePath.StartsWith("content://"))
-            {
-                //this file was provided from android share menu, so we have a content URI instead of a file path
-                var contentResolver = Mvx.IoCProvider.Resolve<IContentResolverService>();
-                return contentResolver.GetContentStream(FullFilePath);
-            }
-            
             return File.OpenRead(FullFilePath);
         }
+
+        [Ignored]
+        public Stream AndroidContentStream { get; set; }
 
         /// <summary>
         /// Convert raw skylink to full skylink url

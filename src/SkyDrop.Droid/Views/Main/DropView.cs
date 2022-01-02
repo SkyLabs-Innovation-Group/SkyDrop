@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Acr.UserDialogs;
 using Android.App;
-using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
@@ -10,20 +8,15 @@ using Android.Views;
 using Android.Widget;
 using AndroidX.ConstraintLayout.Widget;
 using Google.Android.Material.Card;
+using MvvmCross;
 using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using SkyDrop.Core.DataModels;
-using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.Droid.Helper;
-using ZXing.Mobile;
-using static SkyDrop.Core.ViewModels.Main.DropViewModel;
-using static SkyDrop.Core.Utility.Util;
-using MvvmCross;
-using MvvmCross.ViewModels;
-using Android.Webkit;
-using MvvmCross.Platforms.Android.Core;
-using MvvmCross.Platforms.Android;
 using SkyDrop.Droid.Views.Splash;
+using static SkyDrop.Core.Utility.Util;
+using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -31,7 +24,6 @@ namespace SkyDrop.Droid.Views.Main
     /// File transfer screen
     /// </summary>
     [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden, ScreenOrientation = ScreenOrientation.Portrait)]
-    //[IntentFilter(new[] { Intent.ActionSend }, Categories = new[] { Intent.CategoryDefault }, DataMimeTypes = new[] { "image/*", "video/*", "audio/*", "application/*" })]
     public class DropView : BaseActivity<DropViewModel>
     {
         protected override int ActivityLayoutId => Resource.Layout.DropView;
@@ -89,9 +81,13 @@ namespace SkyDrop.Droid.Views.Main
 
             CreateNavDots();
 
-            SplashActivity.NewIntent += (s, e) => HandleInputFile();
+            //handle files sent to SkyDrop from another app's share menu
 
-            HandleInputFile();
+            //a) when SkyDrop is open in the background
+            SplashActivity.NewSkyFileInput += (s, skyFile) => HandleInputFile(skyFile);
+
+            //b) when SkyDrop was not open (cold launch)
+            HandleInputFile(SplashActivity.SkyFileInput);
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -127,32 +123,12 @@ namespace SkyDrop.Droid.Views.Main
         /// <summary>
         /// Handle file when SkyDrop is selected from share menu
         /// </summary>
-        private void HandleInputFile()
+        private void HandleInputFile(SkyFile skyFile)
         {
             try
             {
-                var startIntent = SplashActivity.StartupIntent;
-
-                ViewModel.UserDialogs.Toast($"Intent.Action = {startIntent.Action}");
-                if (startIntent.Action != Intent.ActionSend)
+                if (skyFile == null)
                     return;
-
-                var parcel = (IParcelable)startIntent.GetParcelableExtra(Intent.ExtraStream);
-                var uri = (Android.Net.Uri)parcel;
-                var uriString = uri.ToString();
-
-                MimeTypeMap mime = MimeTypeMap.Singleton;
-                string fileExtension = mime.GetExtensionFromMimeType(ContentResolver.GetType(uri));
-                var skyFile = new SkyFile
-                {
-                    FullFilePath = uriString,
-                    Filename = $"{Guid.NewGuid()}.{fileExtension}"
-                };
-
-                using var stream = skyFile.GetStream();
-                    skyFile.FileSizeBytes = stream.Length;
-
-                ViewModel.UserDialogs.Toast($"SkyFile.FullFilePath = {skyFile.FullFilePath}");
 
                 ViewModel.StageFiles(new System.Collections.Generic.List<SkyFile> { skyFile }, false);
             }

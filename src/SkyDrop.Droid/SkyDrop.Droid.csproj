@@ -91,8 +91,6 @@
     <Compile Include="Bindings\BarcodeBackgroundBinding.cs" />
     <Compile Include="Bindings\UploadProgressBinding.cs" />
     <Compile Include="Bindings\ImagePreviewBinding.cs" />
-    <Compile Include="Services\ContentResolverService.cs" />
-    <Compile Include="Views\Main\StartupView.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -412,10 +410,6 @@
       </SubType>
       <Generator>
       </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\StartupView.axml">
-      <SubType></SubType>
-      <Generator></Generator>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
