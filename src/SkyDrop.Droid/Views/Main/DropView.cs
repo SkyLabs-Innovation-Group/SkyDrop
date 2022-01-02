@@ -150,9 +150,6 @@ namespace SkyDrop.Droid.Views.Main
                     skyFile.FileSizeBytes = stream.Length;
 
                 ViewModel.StageFiles(new System.Collections.Generic.List<SkyFile> { skyFile }, false);
-
-                //update UI
-                AnimateSlideSendButton();
             }
             catch(Exception e)
             {
