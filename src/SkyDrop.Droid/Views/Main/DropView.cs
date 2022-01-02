@@ -21,6 +21,8 @@ using static SkyDrop.Core.Utility.Util;
 using MvvmCross;
 using MvvmCross.ViewModels;
 using Android.Webkit;
+using MvvmCross.Platforms.Android.Core;
+using MvvmCross.Platforms.Android;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -47,6 +49,9 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         protected override async void OnCreate(Bundle bundle)
         {
+            var setup = MvxAndroidSetupSingleton.EnsureSingletonAvailable(ApplicationContext);
+            setup.EnsureInitialized();
+            
             base.OnCreate(bundle);
 
             if (ViewModel == null)
@@ -99,9 +104,8 @@ namespace SkyDrop.Droid.Views.Main
         {
             if (item.ItemId == Resource.Id.menu_drop_settings)
             {
-                ViewModel.NavigateToSettings().GetAwaiter().GetResult();
+                ViewModel.NavigateToSettings();
             }
-
 
             return base.OnOptionsItemSelected(item);
         }
@@ -146,6 +150,9 @@ namespace SkyDrop.Droid.Views.Main
                     skyFile.FileSizeBytes = stream.Length;
 
                 ViewModel.StageFiles(new System.Collections.Generic.List<SkyFile> { skyFile }, false);
+
+                //update UI
+                AnimateSlideSendButton();
             }
             catch(Exception e)
             {
