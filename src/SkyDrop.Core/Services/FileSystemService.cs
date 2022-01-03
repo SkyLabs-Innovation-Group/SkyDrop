@@ -87,6 +87,7 @@ namespace SkyDrop.Core.Services
                     {
                         if (file.AndroidContentStream != null)
                         {
+                            //special treatment for files shared through Android intent
                             var fileInArchive = zip.CreateEntry(file.Filename, CompressionLevel.Optimal);
                             using (var entryStream = fileInArchive.Open())
                             using (var fileToCompressStream = file.AndroidContentStream)
@@ -95,7 +96,10 @@ namespace SkyDrop.Core.Services
                             }
                         }
                         else
+                        {
+                            //file picked from within SkyDrop
                             zip.CreateEntryFromFile(file.FullFilePath, file.Filename, CompressionLevel.Optimal);
+                        }
                     }               
                 }
 
