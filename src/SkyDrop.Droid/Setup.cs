@@ -28,6 +28,7 @@ using SkyDrop.Droid.Bindings;
 using SkyDrop.Droid.Services;
 using Xamarin.Essentials;
 using Log = Acr.UserDialogs.Infrastructure.Log;
+using Microsoft.Extensions.Logging;
 
 namespace SkyDrop.Droid
 {
@@ -46,14 +47,15 @@ namespace SkyDrop.Droid
             registry.RegisterCustomBindingFactory<MvxCachedImageView>(ImagePreviewBinding.Name, view => new ImagePreviewBinding(view));
         }
         
-        protected override IMvxApplication CreateApp()
+        protected override IMvxApplication CreateApp(IMvxIoCProvider iocProvider)
         {
             Debug.WriteLine("CreateApp() droid");
 
             UserDialogs.Init(topActivityProvider.Activity);
-            Mvx.IoCProvider.LazyConstructAndRegisterSingleton(() => UserDialogs.Instance);
+            iocProvider.LazyConstructAndRegisterSingleton(() => UserDialogs.Instance);
+            iocProvider.LazyConstructAndRegisterSingleton<ISkyDropHttpClientFactory>(() => new AndroidHttpClientFactory());
 
-            return base.CreateApp();
+            return base.CreateApp(iocProvider);
         }
 
         protected override IMvxAndroidCurrentTopActivity CreateAndroidCurrentTopActivity()
@@ -65,12 +67,10 @@ namespace SkyDrop.Droid
 
             return topActivityProvider;
         }
-        
-        public override MvxLogProviderType GetDefaultLogProviderType() => MvxLogProviderType.Serilog;
 
-        protected override IMvxLogProvider CreateLogProvider()
+        protected override ILoggerProvider CreateLogProvider()
         {
-            // From https://prin53.medium.com/logging-in-xamarin-application-logging-infrastructure-with-mvvmcross-2c9bef960c60
+            //    // From https://prin53.medium.com/logging-in-xamarin-application-logging-infrastructure-with-mvvmcross-2c9bef960c60
             Serilog.Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Verbose()
                 .Enrich.FromLogContext()
@@ -80,30 +80,72 @@ namespace SkyDrop.Droid
                     rollingInterval: RollingInterval.Day,
                     outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj} ({SourceContext}) {Exception}{NewLine}"
                 ).CreateLogger();
-            
-            var logProvider = base.CreateLogProvider();
-            
-            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger(logProvider));
-            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISkyDropHttpClientFactory>(() => new AndroidHttpClientFactory());
+
+            //var logProvider = base.CreateLogProvider();
+
+            //Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger(logProvider));
 
             ImageService.Instance.Initialize(new Configuration()
             {
                 ClearMemoryCacheOnOutOfMemory = true,
                 DownsampleInterpolationMode = InterpolationMode.Low,
-                
+
                 // Logging attributes 
-                Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>(),
+                //Logger = (IMiniLogger)Mvx.IoCProvider.Resolve<ILog>(),
                 // VerboseLogging = true,
                 // VerboseLoadingCancelledLogging = true,
                 // VerbosePerformanceLogging = true,
                 // VerboseMemoryCacheLogging = true,
             });
 
-            ImageService.Instance.Config.Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>();
+            //ImageService.Instance.Config.Logger = (IMiniLogger)Mvx.IoCProvider.Resolve<ILog>();
 
-            return logProvider;
+            return null;
         }
 
-  
+        protected override ILoggerFactory CreateLogFactory()
+        {
+            throw new NotImplementedException();
+        }
+
+        //public override MvxLogProviderType GetDefaultLogProviderType() => MvxLogProviderType.Serilog;
+
+        //protected override IMvxLogProvider CreateLogProvider()
+        //{
+        //    // From https://prin53.medium.com/logging-in-xamarin-application-logging-infrastructure-with-mvvmcross-2c9bef960c60
+        //    Serilog.Log.Logger = new LoggerConfiguration()
+        //        .MinimumLevel.Verbose()
+        //        .Enrich.FromLogContext()
+        //        .WriteTo.AndroidLog(outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj} ({SourceContext}) {Exception}")
+        //        .WriteTo.File(
+        //            Path.Combine(FileSystem.CacheDirectory, "Logs", "Log.log"),
+        //            rollingInterval: RollingInterval.Day,
+        //            outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj} ({SourceContext}) {Exception}{NewLine}"
+        //        ).CreateLogger();
+
+        //    var logProvider = base.CreateLogProvider();
+
+        //    Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger(logProvider));
+        //    Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISkyDropHttpClientFactory>(() => new AndroidHttpClientFactory());
+
+        //    ImageService.Instance.Initialize(new Configuration()
+        //    {
+        //        ClearMemoryCacheOnOutOfMemory = true,
+        //        DownsampleInterpolationMode = InterpolationMode.Low,
+
+        //        // Logging attributes 
+        //        Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>(),
+        //        // VerboseLogging = true,
+        //        // VerboseLoadingCancelledLogging = true,
+        //        // VerbosePerformanceLogging = true,
+        //        // VerboseMemoryCacheLogging = true,
+        //    });
+
+        //    ImageService.Instance.Config.Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>();
+
+        //    return logProvider;
+        //}
+
+
     }
 }

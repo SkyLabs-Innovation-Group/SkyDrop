@@ -77,7 +77,7 @@ namespace SkyDrop.iOS
             
             var logProvider = base.CreateLogProvider();
             
-            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger(logProvider));
+            //Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger(logProvider));
 
             ImageService.Instance.Initialize(new Configuration()
             {
@@ -85,14 +85,14 @@ namespace SkyDrop.iOS
                 DownsampleInterpolationMode = InterpolationMode.Low,
                 
                 // Logging attributes 
-                Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>(),
+                //Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>(),
                 // VerboseLogging = true,
                 // VerboseLoadingCancelledLogging = true,
                 // VerbosePerformanceLogging = true,
                 // VerboseMemoryCacheLogging = true,
             });
 
-            ImageService.Instance.Config.Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>();
+            //ImageService.Instance.Config.Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>();
 
             return logProvider;
         }

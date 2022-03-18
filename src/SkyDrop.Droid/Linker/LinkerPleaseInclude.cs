@@ -126,7 +126,6 @@ namespace SkyDrop.Droid.Linker
 
         public void Include(MvxNavigationService service, IMvxViewModelLoader loader)
         {
-            _ = new MvxNavigationService(null, loader);
             _ = new MvxAppStart<MvxNullViewModel>(null, null);
         }
 

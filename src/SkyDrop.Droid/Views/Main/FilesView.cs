@@ -38,7 +38,7 @@ namespace SkyDrop.Droid.Views.Main
 
             //ViewModel.SelectFileAsyncFunc = () => AndroidUtil.SelectFile(this);
             //ViewModel.SelectImageAsyncFunc = () => AndroidUtil.SelectImage(this);
-            ViewModel.OpenFileInBrowserCommand = new MvxCommand<SkyFile>(skyFile => AndroidUtil.OpenFileInBrowser(this, skyFile));
+            //ViewModel.OpenFileInBrowserCommand = new MvxCommand<SkyFile>(skyFile => AndroidUtil.OpenFileInBrowser(this, skyFile));
             ViewModel.AfterFileSelected = new MvxCommand(() => AfterFileWasSelected());
             ViewModel.ScrollToFileCommand = new MvxCommand(() => ScrollToFile());
         }
