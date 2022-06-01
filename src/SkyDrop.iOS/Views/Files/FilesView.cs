@@ -2,6 +2,7 @@
 using Acr.UserDialogs;
 using CoreGraphics;
 using MvvmCross.Platforms.Ios.Binding.Views;
+using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
@@ -9,8 +10,11 @@ using UIKit;
 
 namespace SkyDrop.iOS.Views.Files
 {
+    [MvxChildPresentationAttribute]
     public partial class FilesView : MvxViewController<FilesViewModel>
     {
+        private UIBarButtonItem layoutToggleButton;
+
         public FilesView() : base("FilesView", null)
         {
         }
@@ -24,6 +28,10 @@ namespace SkyDrop.iOS.Views.Files
 
             //setup nav bar
             NavigationController.NavigationBar.TintColor = UIColor.White;
+            layoutToggleButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_menu") };
+            layoutToggleButton.Clicked += (s, e) => ToggleViewLayout();
+            NavigationItem.RightBarButtonItem = layoutToggleButton;
+            NavigationItem.RightBarButtonItem.TintColor = UIColor.White;
 
             var collectionViewSource = new MvxCollectionViewSource(FilesCollectionView, FileCollectionViewCell.Key);
             FilesCollectionView.RegisterNibForCell(FileCollectionViewCell.Nib, FileCollectionViewCell.Key);
@@ -34,6 +42,11 @@ namespace SkyDrop.iOS.Views.Files
             set.Bind(collectionViewSource).For(f => f.ItemsSource).To(vm => vm.SkyFiles);
             set.Bind(collectionViewSource).For(f => f.SelectionChangedCommand).To(vm => vm.FileSelectedCommand);
             set.Apply();
+        }
+
+        private void ToggleViewLayout()
+        {
+            layoutToggleButton.Image = UIImage.FromBundle("ic_cancel");
         }
 
         public class FilesCollectionViewLayout : UICollectionViewFlowLayout
