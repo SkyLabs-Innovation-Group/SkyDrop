@@ -2,12 +2,13 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using MvvmCross.ViewModels;
 using Newtonsoft.Json;
 using Realms;
 
 namespace SkyDrop.Core.DataModels
 {
-    public class SkyFile : RealmObject, INotifyPropertyChanged
+    public class SkyFile : MvxNotifyPropertyChanged
     {
         /// <summary>
         /// If true, scanned SkyFiles use the scanned URL unmodified, if false, scanned skylinks uses the SkyDrop user's selected portal URL.
