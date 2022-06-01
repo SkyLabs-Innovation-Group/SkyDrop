@@ -46,7 +46,9 @@ namespace SkyDrop.iOS.Views.Files
 
         private void ToggleViewLayout()
         {
-            layoutToggleButton.Image = UIImage.FromBundle("ic_cancel");
+            var newLayoutType = ViewModel.LayoutType == FileLayoutType.Grid ? FileLayoutType.List : FileLayoutType.Grid;
+            ViewModel.LayoutType = newLayoutType;
+            layoutToggleButton.Image = newLayoutType == FileLayoutType.List ? UIImage.FromBundle("ic_cancel") : UIImage.FromBundle("ic_menu");
         }
 
         public class FilesCollectionViewLayout : UICollectionViewFlowLayout

@@ -14,6 +14,12 @@ using SkyDrop.Core.Utility;
 
 namespace SkyDrop.Core.ViewModels.Main
 {
+    public enum FileLayoutType
+    {
+        List = 0,
+        Grid = 1
+    }
+
     public class FilesViewModel : BaseViewModel<object, SkyFile>
     {
         public MvxObservableCollection<SkyFileDVM> SkyFiles { get; } = new MvxObservableCollection<SkyFileDVM>();
@@ -24,8 +30,9 @@ namespace SkyDrop.Core.ViewModels.Main
         public int CurrentlySelectedFileIndex { get; set; }
 
         public SkyFileDVM CurrentlySelectedFileDvm { get; set; }
-
         public SkyFileDVM PreviousSelectedSkyFileDvm { get; set; }
+
+        public FileLayoutType LayoutType { get; set; } = FileLayoutType.Grid;
 
         public bool IsLoading { get; set; }
 
