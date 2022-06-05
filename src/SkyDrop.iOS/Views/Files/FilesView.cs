@@ -29,7 +29,7 @@ namespace SkyDrop.iOS.Views.Files
 
             //setup nav bar
             NavigationController.NavigationBar.TintColor = UIColor.White;
-            layoutToggleButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_menu") };
+            layoutToggleButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_list") };
             layoutToggleButton.Clicked += (s, e) => ToggleViewLayout();
             NavigationItem.RightBarButtonItem = layoutToggleButton;
             NavigationItem.RightBarButtonItem.TintColor = UIColor.White;
@@ -67,7 +67,7 @@ namespace SkyDrop.iOS.Views.Files
         {
             var newLayoutType = ViewModel.LayoutType == FileLayoutType.Grid ? FileLayoutType.List : FileLayoutType.Grid;
             ViewModel.LayoutType = newLayoutType;
-            layoutToggleButton.Image = newLayoutType == FileLayoutType.List ? UIImage.FromBundle("ic_cancel") : UIImage.FromBundle("ic_menu");
+            layoutToggleButton.Image = newLayoutType == FileLayoutType.List ? UIImage.FromBundle("ic_grid") : UIImage.FromBundle("ic_list");
         }
 
         public class FilesCollectionViewLayout : UICollectionViewFlowLayout

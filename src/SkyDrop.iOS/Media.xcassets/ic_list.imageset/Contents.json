@@ -1,0 +1,27 @@
+{
+  "images" : [
+    {
+      "filename" : "format-list-bulleted-square.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "idiom" : "iphone"
+    },
+    {
+      "idiom" : "ipad"
+    },
+    {
+      "idiom" : "car"
+    },
+    {
+      "idiom" : "watch"
+    },
+    {
+      "idiom" : "tv"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -94,10 +94,7 @@
     <InterfaceDefinition Include="LaunchScreen.storyboard">
       <SubType>Designer</SubType>
     </InterfaceDefinition>
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Contents.json">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\LaunchImages.launchimage\Contents.json">
+    <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
     <InterfaceDefinition Include="Views\Menu\MenuView.xib" />
@@ -105,17 +102,7 @@
     <Compile Include="Views\Menu\MenuView.designer.cs">
       <DependentUpon>MenuView.cs</DependentUpon>
     </Compile>
-    <ImageAsset Include="Resources\Media.xcassets\ic_share.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Media.xcassets\ic_share.imageset\share.pdf" />
-    <ImageAsset Include="Resources\Media.xcassets\ic_cloud.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Media.xcassets\ic_cloud.imageset\cloud.pdf" />
-    <ImageAsset Include="Resources\Media.xcassets\ic_settings.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Media.xcassets\ic_settings.imageset\cog.pdf" />
     <InterfaceDefinition Include="Views\Drop\DropView.xib" />
-    <ImageAsset Include="Resources\Media.xcassets\ic_download.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Media.xcassets\ic_upload.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Media.xcassets\ic_upload.imageset\ic_upload.pdf" />
-    <ImageAsset Include="Resources\Media.xcassets\ic_download.imageset\ic_download.pdf" />
     <Compile Include="Views\Drop\DropView.cs" />
     <Compile Include="Views\Drop\DropView.designer.cs">
       <DependentUpon>DropView.cs</DependentUpon>
@@ -128,30 +115,10 @@
     <BundleResource Include="Resources\launch_image.png" />
     <BundleResource Include="Resources\launch_image%402x.png" />
     <BundleResource Include="Resources\launch_image%403x.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\29.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\40.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\60.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\58.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\87.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\80.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\120.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\120-1.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\180.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\20.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\40-1.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\58-1.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\40-2.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\80-1.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\76.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\152.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\167.png" />
-    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\SkyDrop Logo 1024.png" />
     <Compile Include="Bindings\ProgressFillHeightBinding.cs" />
     <Compile Include="Common\TouchInterceptor.cs" />
     <Compile Include="Bindings\SkyFileImageViewBinding.cs" />
     <Compile Include="Common\iOSUtil.cs" />
-    <ImageAsset Include="Resources\Media.xcassets\ic_cancel.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Media.xcassets\ic_cancel.imageset\cancel.pdf" />
     <Compile Include="Views\Settings\SettingsView.cs" />
     <Compile Include="Views\Settings\SettingsView.designer.cs">
       <DependentUpon>SettingsView.cs</DependentUpon>
@@ -167,14 +134,54 @@
     <Compile Include="Views\Files\FileCollectionViewCell.designer.cs">
       <DependentUpon>FileCollectionViewCell.cs</DependentUpon>
     </Compile>
-    <ImageAsset Include="Resources\Media.xcassets\ic_menu.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Media.xcassets\ic_menu.imageset\menu.pdf" />
     <Compile Include="Converters\NativeColorConverter.cs" />
     <InterfaceDefinition Include="Views\Files\FileTableViewCell.xib" />
     <Compile Include="Views\Files\FileTableViewCell.cs" />
     <Compile Include="Views\Files\FileTableViewCell.designer.cs">
       <DependentUpon>FileTableViewCell.cs</DependentUpon>
     </Compile>
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\120-1.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\120.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\152.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\167.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\180.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\20.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\29.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\40-1.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\40-2.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\40.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\58-1.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\58.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\60.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\76.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\80-1.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\80.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\87.png" />
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\AppIcons.appiconset\SkyDrop Logo 1024.png" />
+    <ImageAsset Include="Media.xcassets\ic_cancel.imageset\cancel.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_cancel.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_cloud.imageset\cloud.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_cloud.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_download.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_download.imageset\ic_download.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_list.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_list.imageset\format-list-bulleted-square.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_menu.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_menu.imageset\menu.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_settings.imageset\cog.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_settings.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_share.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_share.imageset\share.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_upload.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_upload.imageset\ic_upload.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_grid.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_grid.imageset\view-grid.pdf" />
+    <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -206,25 +213,14 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\LaunchImages.launchimage\Contents.json">
-      <Visible>false</Visible>
-    </ImageAsset>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Views\Menu\" />
-    <Folder Include="Resources\Media.xcassets\ic_share.imageset\" />
-    <Folder Include="Resources\Media.xcassets\ic_cloud.imageset\" />
-    <Folder Include="Resources\Media.xcassets\ic_settings.imageset\" />
     <Folder Include="Views\Drop\" />
-    <Folder Include="Resources\Media.xcassets\ic_download.imageset\" />
-    <Folder Include="Resources\Media.xcassets\ic_upload.imageset\" />
     <Folder Include="Bindings\" />
     <Folder Include="Common\" />
-    <Folder Include="Resources\Media.xcassets\ic_cancel.imageset\" />
     <Folder Include="Converters\" />
     <Folder Include="Views\Settings\" />
     <Folder Include="Views\Files\" />
-    <Folder Include="Resources\Media.xcassets\ic_menu.imageset\" />
+    <Folder Include="Media.xcassets\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
