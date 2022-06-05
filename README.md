@@ -1,10 +1,10 @@
 # [SkyDrop](http://app.skydrop.hns.to/)
 
-* [Get SkyDrop on Google Play](https://play.google.com/store/apps/details?id=to.hns.skydrop)
+* Android - [Get SkyDrop on Google Play](https://play.google.com/store/apps/details?id=to.hns.skydrop)
 
   * Alternatively, you can use the cryptographically secure app store by redsolver, [SkyDroid](https://skydroid.app/), to install SkyDrop instead! If you have trouble finding the app in SkyDroid, click the + and enter **skydrop**.
 
-* [Get SkyDrop on App Store for iOS](https://apps.apple.com/app/id1568591168#?platform=iphone)
+* iOS - [Get SkyDrop on App Store](https://apps.apple.com/app/id1568591168#?platform=iphone)
 
 ---
 

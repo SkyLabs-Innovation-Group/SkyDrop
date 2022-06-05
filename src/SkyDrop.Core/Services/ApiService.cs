@@ -118,7 +118,7 @@ namespace SkyDrop.Core.Services
             }
             catch (HttpRequestException httpEx) when (httpEx.Message.Contains("SSL") && DeviceInfo.Platform == DevicePlatform.Android)
             {
-                userDialogs.Alert("Failed to verify SSL certificate. If you trust this network, try disabling certificate verification");
+                userDialogs.Alert(Strings.SslPrompt);
                 Log.Exception(httpEx);
                 return false;
             }
