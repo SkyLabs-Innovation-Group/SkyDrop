@@ -25,6 +25,7 @@ namespace SkyDrop.iOS.Views.Files
 
             View.BackgroundColor = Colors.DarkGrey.ToNative();
             FilesCollectionView.BackgroundColor = Colors.DarkGrey.ToNative();
+            FilesTableView.BackgroundColor = Colors.DarkGrey.ToNative();
 
             //setup nav bar
             NavigationController.NavigationBar.TintColor = UIColor.White;
@@ -38,10 +39,28 @@ namespace SkyDrop.iOS.Views.Files
             FilesCollectionView.Source = collectionViewSource;
             FilesCollectionView.CollectionViewLayout = new FilesCollectionViewLayout();
 
+            var tableViewSource = new MvxSimpleTableViewSource(FilesTableView, FileTableViewCell.Key);
+            FilesTableView.RegisterNibForCellReuse(FileTableViewCell.Nib, FileTableViewCell.Key);
+            FilesTableView.Source = tableViewSource;
+
             var set = CreateBindingSet();
             set.Bind(collectionViewSource).For(f => f.ItemsSource).To(vm => vm.SkyFiles);
             set.Bind(collectionViewSource).For(f => f.SelectionChangedCommand).To(vm => vm.FileSelectedCommand);
+            set.Bind(tableViewSource).For(f => f.ItemsSource).To(vm => vm.SkyFiles);
+            set.Bind(tableViewSource).For(f => f.SelectionChangedCommand).To(vm => vm.FileSelectedCommand);
+
+            set.Bind(this).For(t => t.CollectionViewAndTableViewVisibility).To(vm => vm.LayoutType);
             set.Apply();
+        }
+
+        public FileLayoutType CollectionViewAndTableViewVisibility
+        {
+            get => FileLayoutType.List;
+            set
+            {
+                FilesCollectionView.Hidden = value == FileLayoutType.List;
+                FilesTableView.Hidden = value == FileLayoutType.Grid;
+            }
         }
 
         private void ToggleViewLayout()

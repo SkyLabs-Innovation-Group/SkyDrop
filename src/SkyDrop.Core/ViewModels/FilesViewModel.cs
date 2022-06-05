@@ -40,7 +40,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IStorageService storageService;
         private readonly IUserDialogs userDialogs;
         private readonly IMvxNavigationService navigationService;
-        private readonly ILog _log;
+        private readonly ILog log;
 
         public IMvxCommand SelectImageCommand { get; set; }
         public IMvxCommand<SkyFileDVM> FileSelectedCommand { get; set; }
@@ -77,7 +77,7 @@ namespace SkyDrop.Core.ViewModels.Main
             this.storageService = storageService;
             this.userDialogs = userDialogs;
             this.navigationService = navigationService;
-            _log = log;
+            this.log = log;
 
             FileSelectedCommand = new MvxAsyncCommand<SkyFileDVM>(SelectFile);
             SelectImageCommand = new MvxAsyncCommand(async () => await SelectImageAsyncFunc());

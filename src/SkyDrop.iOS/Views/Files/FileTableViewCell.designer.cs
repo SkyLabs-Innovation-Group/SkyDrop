@@ -9,25 +9,17 @@ using System.CodeDom.Compiler;
 
 namespace SkyDrop.iOS.Views.Files
 {
-	[Register ("FilesView")]
-	partial class FilesView
+	[Register ("FileTableViewCell")]
+	partial class FileTableViewCell
 	{
 		[Outlet]
-		UIKit.UICollectionView FilesCollectionView { get; set; }
-
-		[Outlet]
-		UIKit.UITableView FilesTableView { get; set; }
+		UIKit.UILabel FileNameLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (FilesCollectionView != null) {
-				FilesCollectionView.Dispose ();
-				FilesCollectionView = null;
-			}
-
-			if (FilesTableView != null) {
-				FilesTableView.Dispose ();
-				FilesTableView = null;
+			if (FileNameLabel != null) {
+				FileNameLabel.Dispose ();
+				FileNameLabel = null;
 			}
 		}
 	}

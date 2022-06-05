@@ -170,6 +170,11 @@
     <ImageAsset Include="Resources\Media.xcassets\ic_menu.imageset\Contents.json" />
     <ImageAsset Include="Resources\Media.xcassets\ic_menu.imageset\menu.pdf" />
     <Compile Include="Converters\NativeColorConverter.cs" />
+    <InterfaceDefinition Include="Views\Files\FileTableViewCell.xib" />
+    <Compile Include="Views\Files\FileTableViewCell.cs" />
+    <Compile Include="Views\Files\FileTableViewCell.designer.cs">
+      <DependentUpon>FileTableViewCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
