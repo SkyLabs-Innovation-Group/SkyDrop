@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using SkyDrop.Core.DataModels;
 
@@ -23,6 +24,15 @@ namespace SkyDrop.Core.Utility
             //adjust the format string to your preferences. For example "{0:0.#}{1}" would
             //show a single decimal place, and no space.
             return $"{bytes:0.##}{sizes[order]}";
+        }
+
+        public static bool ExtensionMatches(string filename, params string[] extensionsToMatch)
+        {
+            foreach (var extension in extensionsToMatch)
+                if (Path.GetExtension(filename).ToLower() == extension.ToLower())
+                    return true;
+
+            return false;
         }
     }
 }

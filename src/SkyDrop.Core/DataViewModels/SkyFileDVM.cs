@@ -17,14 +17,13 @@ namespace SkyDrop.Core.DataViewModels
         public SkyFile SkyFile { get; set; }
 
         public IMvxCommand TapCommand { get; set; }
-        public IMvxCommand OpenCommand { get; set; }
         public IMvxCommand CopySkyLinkCommand { get; set; }
         public IMvxCommand DeleteCommand { get; set; }
 
         public bool IsSelected { get; set; }
         public bool IsLoading { get; set; }
 
-        public Color FillColor => SkyFile.Status == FileStatus.Uploaded ? Colors.GradientGreen : Colors.MidGrey;
+        public Color FillColor => SkyFile.WasSent ? Colors.Primary : Colors.GradientOcean;
 
         public void SetUploaded(SkyFile skyFile)
         {

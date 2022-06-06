@@ -88,11 +88,6 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
-        public Task NavigateToSettings()
-        {
-            return navigationService.Navigate<SettingsViewModel>();
-        }
-
         public enum DropViewState
         {
             SendReceiveButtonState = 1,
@@ -256,6 +251,10 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 FirstFileUploaded = true;
 
+                //save skylink locally
+                UploadedFile.WasSent = true;
+                storageService.SaveSkyFiles(UploadedFile);
+
                 //wait for progressbar to complete
                 await Task.Delay(500);
 
@@ -335,6 +334,11 @@ namespace SkyDrop.Core.ViewModels.Main
                 {
                     string skylink = barcodeData.Substring(barcodeData.Length - 46, 46);
                     var skyFile = new SkyFile() { Skylink = skylink };
+
+                    var filename = await apiService.GetSkyFileFilename(skyFile);
+                    skyFile.Filename = filename;
+                    storageService.SaveSkyFiles(skyFile);
+
                     await OpenFileInBrowser(skyFile);
                 }
             }
@@ -695,6 +699,26 @@ namespace SkyDrop.Core.ViewModels.Main
                 LaunchMode = BrowserLaunchMode.SystemPreferred,
                 TitleMode = BrowserTitleMode.Show
             });
+        }
+
+        public Task NavigateToSettings()
+        {
+            return navigationService.Navigate<SettingsViewModel>();
+        }
+
+        public async Task NavigateToFiles()
+        {
+            var selectedFile = await navigationService.Navigate<FilesViewModel, object, SkyFile>(null);
+            if (selectedFile == null)
+                return;
+
+            FirstFileUploaded = true;
+            UploadedFile = selectedFile;
+
+            //show QR code
+            IsBarcodeLoading = true;
+            SkyFileFullUrl = UploadedFile.GetSkylinkUrl();
+            await GenerateBarcodeAsyncFunc();
         }
     }
 }

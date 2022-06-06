@@ -21,6 +21,7 @@ using SkyDrop.Core.Converters;
 using SkyDrop.Core.Services;
 using SkyDrop.iOS.Services;
 using Xamarin.Essentials;
+using SkyDrop.iOS.Converters;
 
 namespace SkyDrop.iOS
 {
@@ -37,6 +38,7 @@ namespace SkyDrop.iOS
         protected override void FillValueConverters(IMvxValueConverterRegistry registry)
         {
             registry.AddOrOverwrite(FileExtensionConverter.Name, new FileExtensionConverter());
+            registry.AddOrOverwrite(NativeColorConverter.Name, new NativeColorConverter());
 
             base.FillValueConverters(registry);
         }

@@ -80,6 +80,29 @@ namespace SkyDrop.Core.Services
             return skyFile;
         }
 
+        public async Task<string> GetSkyFileFilename(SkyFile skyfile)
+        {
+            var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
+            var request = new HttpRequestMessage(HttpMethod.Head, skyfile.GetSkylinkUrl());
+
+            var result = await httpClient.SendAsync(request);
+            if (result == null)
+                return null;
+
+            if (result.StatusCode != System.Net.HttpStatusCode.OK)
+                return null;
+
+            var headers = result.Content.Headers;
+            var filenameHeader = headers.GetValues("Content-Disposition").FirstOrDefault();
+
+            var filenamePrefix = "filename=\"";
+            var startIndex = filenameHeader.IndexOf(filenamePrefix) + filenamePrefix.Length;
+            filenameHeader = filenameHeader.Substring(startIndex);
+            var filename = filenameHeader.Substring(0, filenameHeader.Length - 1);
+
+            return filename;
+        }
+
         public async Task<bool> PingPortalForSkylink(string skylink, SkynetPortal skynetPortal)
         {
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(skynetPortal);
@@ -138,6 +161,8 @@ namespace SkyDrop.Core.Services
     public interface IApiService
     {
         Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationTokenSource);
+
+        Task<string> GetSkyFileFilename(SkyFile skyfile);
 
         Task<bool> PingPortalForSkylink(string skylink, SkynetPortal skynetPortal);
     }
