@@ -38,7 +38,7 @@ namespace SkyDrop.Core.Services
             realm.Write(() =>
             {
                 log.Trace("SaveSkyFiles() write for call #" + saveCallCount);
-                realm.Add(skyFiles.Select(SkyFileToRealmObject));
+                realm.Add(skyFiles.Select(SkyFileToRealmObject), true);
             });
         }
 
