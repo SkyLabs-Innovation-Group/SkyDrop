@@ -721,6 +721,7 @@ namespace SkyDrop.Core.ViewModels.Main
             IsBarcodeLoading = true;
             SkyFileFullUrl = UploadedFile.GetSkylinkUrl();
             await GenerateBarcodeAsyncFunc();
+            IsBarcodeLoading = false;
         }
     }
 }
