@@ -255,7 +255,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 selectedFileDVM.IsSelected = true;
 
-                AfterFileSelected.Execute();
+                AfterFileSelected?.Execute();
 
                 PreviousSelectedSkyFileDvm = selectedFileDVM;
             }
@@ -266,7 +266,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     skyFile.IsSelected = false;
                 }
 
-                AfterFileSelected.Execute();
+                AfterFileSelected?.Execute();
 
                 PreviousSelectedSkyFileDvm = null;
             }

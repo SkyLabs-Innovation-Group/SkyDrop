@@ -1,102 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     android:background="@color/darkGrey">
-    <LinearLayout
+    <include
+        android:id="@+id/layout_toolbar"
+        layout="@layout/layout_toolbar" />
+    <mvvmcross.droid.support.v7.recyclerview.MvxRecyclerView
+        android:id="@+id/UploadedFilesList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <include
-            android:id="@+id/layout_toolbar"
-            layout="@layout/layout_toolbar" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:padding="8dp"
-            android:clipToPadding="false"
-            android:weightSum="2">
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="96dp"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:layout_marginRight="8dp"
-                app:cardBackgroundColor="@color/midGrey"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardElevation="1dp"
-                android:clickable="true"
-                app:cardCornerRadius="8dp"
-                app:MvxBind="Click SelectFileCommand">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Select File"
-                    android:layout_gravity="center"
-                    android:textColor="#fff"/>
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="96dp"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                app:cardBackgroundColor="@color/midGrey"
-                app:cardElevation="1dp"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                app:cardCornerRadius="8dp"
-                app:MvxBind="Click SelectImageCommand">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Select Image"
-                    android:layout_gravity="center"
-                    android:textColor="#fff"/>
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:clipToPadding="false">
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="96dp"
-                app:cardBackgroundColor="@color/midGrey"
-                app:cardElevation="1dp"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                app:cardCornerRadius="8dp"
-                app:MvxBind="Click ClearDataCommand">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Clear Data"
-                    android:layout_gravity="center"
-                    android:textColor="#fff"/>
-                <ProgressBar
-                    android:id="@+id/ProgressBar"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_marginRight="32dp"
-                    android:layout_gravity="right|center_vertical"
-                    app:MvxBind="Visibility Visibility(IsLoading)"/>
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-
-        <mvvmcross.droid.support.v7.recyclerview.MvxRecyclerView
-            android:id="@+id/UploadedFilesList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:MvxItemTemplate="@layout/item_file_sky"
-            app:MvxBind="ItemsSource SkyFiles"
-            />
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content"
+        app:MvxItemTemplate="@layout/item_file_list"
+        app:MvxBind="ItemsSource SkyFiles; ItemClick FileSelectedCommand"
+        />
+</LinearLayout>
