@@ -14,7 +14,7 @@
         app:cardCornerRadius="8dp"
         app:cardElevation="1dp"
         app:cardBackgroundColor="@color/midGrey">
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -43,6 +43,6 @@
                     android:layout_gravity="center_vertical"
                     app:MvxBind="Visibility Visibility(IsLoading)"/>
             </LinearLayout>
-        </LinearLayout>
+        </FrameLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

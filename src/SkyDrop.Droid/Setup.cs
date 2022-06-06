@@ -44,8 +44,9 @@ namespace SkyDrop.Droid
             registry.RegisterCustomBindingFactory<View>(VisibleHiddenBinding.Name, view => new VisibleHiddenBinding(view));
             registry.RegisterCustomBindingFactory<ProgressBar>(UploadProgressBinding.Name, view => new UploadProgressBinding(view));
             registry.RegisterCustomBindingFactory<MvxCachedImageView>(ImagePreviewBinding.Name, view => new ImagePreviewBinding(view));
+            registry.RegisterCustomBindingFactory<ImageView>(LayoutImageBinding.Name, view => new LayoutImageBinding(view));
         }
-        
+
         protected override IMvxApplication CreateApp()
         {
             Debug.WriteLine("CreateApp() droid");

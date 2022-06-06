@@ -46,6 +46,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand<SkyFileDVM> FileSelectedCommand { get; set; }
         public IMvxCommand UploadCommand { get; set; }
         public IMvxCommand ClearDataCommand { get; set; }
+        public IMvxCommand ToggleLayoutCommand { get; set; }
+        public IMvxCommand BackCommand { get; set; }
 
         private Func<Task> _selectFileAsyncFunc;
         public Func<Task> SelectFileAsyncFunc
@@ -83,6 +85,8 @@ namespace SkyDrop.Core.ViewModels.Main
             SelectImageCommand = new MvxAsyncCommand(async () => await SelectImageAsyncFunc());
             UploadCommand = new MvxAsyncCommand(async () => await UploadStagedFiles());
             ClearDataCommand = new MvxCommand(() => ClearData());
+            ToggleLayoutCommand = new MvxCommand(() => LayoutType = LayoutType == FileLayoutType.List ? FileLayoutType.Grid : FileLayoutType.List);
+            BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
         }
 
         public override Task Initialize()
