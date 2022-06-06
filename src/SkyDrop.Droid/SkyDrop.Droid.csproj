@@ -91,6 +91,7 @@
     <Compile Include="Bindings\BarcodeBackgroundBinding.cs" />
     <Compile Include="Bindings\UploadProgressBinding.cs" />
     <Compile Include="Bindings\ImagePreviewBinding.cs" />
+    <Compile Include="Bindings\LayoutImageBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -410,6 +411,26 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\item_file_list.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_back.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\toolbar_gallery.axml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_list.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_grid.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\item_file_grid.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>

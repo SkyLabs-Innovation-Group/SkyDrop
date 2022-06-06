@@ -9,6 +9,7 @@ using Android.Views;
 using Android.Widget;
 using AndroidX.RecyclerView.Widget;
 using MvvmCross.Commands;
+using MvvmCross.Droid.Support.V7.RecyclerView;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.ViewModels.Main;
@@ -21,15 +22,17 @@ namespace SkyDrop.Droid.Views.Main
     {
         protected override int ActivityLayoutId => Resource.Layout.FilesView;
 
-        public RecyclerView UploadedFilesRecyclerView { get; set; }
+        public MvxRecyclerView RecyclerView { get; set; }
 
         protected override async void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
-            UploadedFilesRecyclerView = FindViewById<RecyclerView>(Resource.Id.UploadedFilesList);
+            RecyclerView = FindViewById<MvxRecyclerView>(Resource.Id.FilesRecycler);
 
-            await ViewModel.InitializeTask.Task;
+            var set = CreateBindingSet();
+            set.Bind(this).For(t => t.LayoutType).To(vm => vm.LayoutType);
+            set.Apply();
 
             Log.Trace("MainView OnCreate()");
         }
@@ -50,6 +53,32 @@ namespace SkyDrop.Droid.Views.Main
             }
 
             return true;
+        }
+
+        private FileLayoutType layoutType;
+        public FileLayoutType LayoutType
+        {
+            get => FileLayoutType.List;
+            set
+            {
+                if (layoutType == value)
+                    return;
+
+                layoutType = value;
+
+                if (layoutType == FileLayoutType.List)
+                {
+                    var layoutManager = new MvxGuardedLinearLayoutManager(this);
+                    RecyclerView.SetLayoutManager(layoutManager);
+                    RecyclerView.ItemTemplateId = Resource.Layout.item_file_list;
+                }
+                else
+                {
+                    var layoutManager = new MvxGuardedGridLayoutManager(this, 2);
+                    RecyclerView.SetLayoutManager(layoutManager);
+                    RecyclerView.ItemTemplateId = Resource.Layout.item_file_grid;
+                }
+            }
         }
     }
 }
