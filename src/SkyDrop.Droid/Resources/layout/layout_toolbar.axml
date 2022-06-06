@@ -11,6 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/skyDarkBlue">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left|start">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_menu"
+                app:MvxBind="Click MenuCommand"/>
+
+        </LinearLayout>
         <TextView
             android:id="@+id/textview_toolbar_title"
             android:layout_width="wrap_content"
