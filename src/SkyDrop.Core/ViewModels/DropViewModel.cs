@@ -62,7 +62,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsAnimatingBarcodeOut { get; set; }
         public string FileSize { get; set; }
         public double UploadProgress { get; set; } //0-1
-        public bool FirstFileUploaded { get; set; }
+        public bool FirstFileUploaded { get; set; } //determines whether user can swipe to the QR code screen
         public bool UserIsSwipingResult { get; set; }
         public bool BarcodeIsLoaded { get; set; }
         public bool NavDotsVisible => DropViewUIState != DropViewState.ConfirmFilesState && BarcodeIsLoaded;
@@ -249,6 +249,10 @@ namespace SkyDrop.Core.ViewModels.Main
                 UploadedFile = await UploadFile();
                 StopUploadTimer();
 
+                //fill progress bar
+                UploadProgress = 1;
+                UploadTimerText = "100%";
+
                 FirstFileUploaded = true;
 
                 //save skylink locally
@@ -271,26 +275,20 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             catch (TaskCanceledException tce)
             {
-                userDialogs.Toast("Upload cancelled");
-                ResetUIStateCommand?.Execute();
-                if (UploadNotificationsEnabled)
-                    UploadFinishedNotificationCommand?.Execute(FileUploadResult.Cancelled);
+                HandleUploadError(tce, "Upload cancelled", FileUploadResult.Cancelled);
+            }
+            catch (Exception cancelledEx) when (cancelledEx.Message == "Socket is closed" || cancelledEx.Message == "Socket closed" && DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                //catches Java.Net.SocketException when user cancels upload
+                HandleUploadError(cancelledEx, "Upload cancelled", FileUploadResult.Cancelled);
             }
             catch (HttpRequestException httpEx) when (httpEx.Message.Contains("SSL") && DeviceInfo.Platform == DevicePlatform.Android)
             {
-                userDialogs.Alert(Strings.SslPrompt);
-                Log.Exception(httpEx);
-                ResetUIStateCommand?.Execute();
-                if (UploadNotificationsEnabled)
-                    UploadFinishedNotificationCommand?.Execute(FileUploadResult.Fail);
+                HandleUploadError(httpEx, Strings.SslPrompt, FileUploadResult.Fail);
             }
             catch (Exception ex) // General error
             {
-                userDialogs.Toast("Could not upload file");
-                Log.Exception(ex);
-                ResetUIStateCommand?.Execute();
-                if (UploadNotificationsEnabled)
-                    UploadFinishedNotificationCommand?.Execute(FileUploadResult.Fail);
+                HandleUploadError(ex, "Could not upload file", FileUploadResult.Fail);
             }
             finally
             {
@@ -298,6 +296,26 @@ namespace SkyDrop.Core.ViewModels.Main
                 IsUploading = false;
                 IsBarcodeLoading = false;
             }
+        }
+
+        private void HandleUploadError(Exception ex, string prompt, FileUploadResult result)
+        {
+            if(result == FileUploadResult.Fail)
+            {
+                userDialogs.Alert(prompt);
+                Log.Exception(ex);
+            }
+            else if (result == FileUploadResult.Cancelled)
+            {
+                userDialogs.Toast(prompt);
+            }
+
+            //reset progress indicator for next attempt
+            UploadProgress = 0;
+            UploadTimerText = "";
+
+            if (UploadNotificationsEnabled)
+                UploadFinishedNotificationCommand?.Execute(result);
         }
 
         private async Task ReceiveFile()
@@ -374,6 +392,9 @@ namespace SkyDrop.Core.ViewModels.Main
                 newStagedFiles = newStagedFiles.GroupBy(x => x.SkyFile?.FullFilePath).Select(group => group.First()).ToList();
 
                 StagedFiles = newStagedFiles;
+
+                //file size will be recalculated on next upload
+                FileSize = "";
             }
             else
             {
@@ -501,15 +522,12 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void StartUploadTimer(long fileSizeBytes)
         {
+            UploadProgress = 0;
             uploadTimerService.StartUploadTimer(fileSizeBytes, UpdateUploadProgress);
         }
 
         private void StopUploadTimer()
         {
-            //fill progress bar
-            UploadProgress = 1;
-            UploadTimerText = "100%";
-
             uploadTimerService.StopUploadTimer();
         }
 
@@ -670,6 +688,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
             //make a new list without the specified skyFile
             StagedFiles = StagedFiles.Where(s => s.SkyFile?.FullFilePath != skyFile.FullFilePath).ToList();
+
+            //file size will be recalculated on next upload
+            FileSize = "";
         }
 
         private async Task OpenFileInBrowser(SkyFile skyFile = null)
