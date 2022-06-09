@@ -58,10 +58,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsStagedFilesVisible => DropViewUIState == DropViewState.ConfirmFilesState;
         public bool IsSendButtonGreen { get; set; } = true;
         public bool IsReceiveButtonGreen { get; set; } = true;
-        public string UploadTimerText
-        { get;
-            set;
-        }
+        public string UploadTimerText { get; set; }
         public bool IsAnimatingBarcodeOut { get; set; }
         public string FileSize { get; set; }
         public double UploadProgress { get; set; } //0-1
