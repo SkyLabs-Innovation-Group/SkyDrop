@@ -47,24 +47,6 @@ namespace SkyDrop.Droid.Views.Main
             Log.Trace("MainView OnCreate()");
         }
 
-        public override bool OnCreateOptionsMenu(IMenu menu)
-        {
-            MenuInflater.Inflate(Resource.Menu.FilesMenu, menu);
-            return true;
-        }
-
-        public override bool OnOptionsItemSelected(IMenuItem item)
-        {
-            switch (item.ItemId)
-            {
-                case Resource.Id.menu_files_upload:
-                    ViewModel.UploadCommand?.Execute();
-                    break;
-            }
-
-            return true;
-        }
-
         private FileLayoutType layoutType;
         public FileLayoutType LayoutType
         {
