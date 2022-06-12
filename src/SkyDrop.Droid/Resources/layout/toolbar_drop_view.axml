@@ -14,13 +14,15 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="left|start">
+            android:gravity="left"
+            app:MvxBind="Click MenuCommand">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:paddingRight="8dp"
                 android:src="@drawable/ic_menu"
-                app:MvxBind="Click MenuCommand"/>
+                />
 
         </LinearLayout>
         <TextView
@@ -32,5 +34,21 @@
             android:layout_gravity="center"
             app:MvxBind="Text Title"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
+        <!--
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            app:MvxBind="Click ToggleLayoutCommand">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="16dp"
+                android:src="@drawable/ic_list"
+                app:MvxBind="LayoutImage LayoutType"
+                />
+
+        </LinearLayout>-->
     </androidx.appcompat.widget.Toolbar>
 </com.google.android.material.appbar.AppBarLayout>
