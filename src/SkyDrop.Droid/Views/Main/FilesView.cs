@@ -5,11 +5,13 @@ using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
+using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using AndroidX.RecyclerView.Widget;
 using MvvmCross.Commands;
 using MvvmCross.Droid.Support.V7.RecyclerView;
+using MvvmCross.Platforms.Android.Binding.BindingContext;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.ViewModels.Main;
@@ -24,11 +26,18 @@ namespace SkyDrop.Droid.Views.Main
 
         public MvxRecyclerView RecyclerView { get; set; }
 
-        protected override async void OnCreate(Bundle bundle)
+        private FilesGridAdapter filesGridAdapter;
+        private MvxRecyclerAdapter filesListAdapter;
+
+        protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
+            filesGridAdapter = new FilesGridAdapter(BindingContext as IMvxAndroidBindingContext);
+            filesListAdapter = new MvxRecyclerAdapter(BindingContext as IMvxAndroidBindingContext);
+
             RecyclerView = FindViewById<MvxRecyclerView>(Resource.Id.FilesRecycler);
+            RecyclerView.Adapter = filesGridAdapter;
 
             var set = CreateBindingSet();
             set.Bind(this).For(t => t.LayoutType).To(vm => vm.LayoutType);
@@ -71,13 +80,36 @@ namespace SkyDrop.Droid.Views.Main
                     var layoutManager = new MvxGuardedLinearLayoutManager(this);
                     RecyclerView.SetLayoutManager(layoutManager);
                     RecyclerView.ItemTemplateId = Resource.Layout.item_file_list;
+                    RecyclerView.Adapter = filesListAdapter;
                 }
                 else
                 {
                     var layoutManager = new MvxGuardedGridLayoutManager(this, 2);
                     RecyclerView.SetLayoutManager(layoutManager);
                     RecyclerView.ItemTemplateId = Resource.Layout.item_file_grid;
+                    RecyclerView.Adapter = filesGridAdapter;
                 }
+            }
+        }
+
+        public class FilesGridAdapter : MvxRecyclerAdapter
+        {
+            protected override View InflateViewForHolder(ViewGroup parent, int viewType, IMvxAndroidBindingContext bindingContext)
+            {
+                //make the grid items square
+                var view = base.InflateViewForHolder(parent, viewType, bindingContext) as LinearLayout;
+                var layoutParams = view.LayoutParameters;
+                layoutParams.Height = AndroidUtil.DpToPx(128);
+                return view;
+            }
+
+            public FilesGridAdapter(IMvxAndroidBindingContext bindingContext) : base(bindingContext) => Init();
+
+            public FilesGridAdapter(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer) => Init();
+
+            public void Init()
+            {
+
             }
         }
     }

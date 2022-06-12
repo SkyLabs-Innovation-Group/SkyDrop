@@ -10,7 +10,7 @@
     android:clipToPadding="false">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:cardCornerRadius="8dp"
         app:cardElevation="1dp"
         app:cardBackgroundColor="@color/midGrey">
@@ -18,6 +18,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <FFImageLoading.Cross.MvxCachedImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:MvxBind="SkyFilePreviewImage SkyFile"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -62,7 +62,7 @@
             android:layout_margin="8dp"
             android:textColor="#fff"
             android:background="#555"
-            android:inputType="textNoSuggestions"  
+            android:inputType="textUri"  
             />
 
     </com.google.android.material.card.MaterialCardView>
