@@ -93,6 +93,7 @@
     <Compile Include="Bindings\LocalImagePreviewBinding.cs" />
     <Compile Include="Bindings\LayoutImageBinding.cs" />
     <Compile Include="Bindings\SkyFilePreviewImageBinding.cs" />
+    <Compile Include="Bindings\BackgroundColorBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">

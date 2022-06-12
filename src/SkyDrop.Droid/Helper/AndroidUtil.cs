@@ -4,6 +4,7 @@ using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
+using Android.Util;
 using Android.Widget;
 using AndroidX.Core.App;
 using MvvmCross;
@@ -32,6 +33,11 @@ namespace SkyDrop.Droid.Helper
         public static int DpToPx(int dp)
         {
             return (int)Math.Round(CrossCurrentActivity.Current.AppContext.Resources.DisplayMetrics.Density * dp);
+        }
+
+        public static (int width, int height) GetScreenSizePx()
+        {
+            return (CrossCurrentActivity.Current.AppContext.Resources.DisplayMetrics.WidthPixels, CrossCurrentActivity.Current.AppContext.Resources.DisplayMetrics.HeightPixels);
         }
 
         /// <summary>

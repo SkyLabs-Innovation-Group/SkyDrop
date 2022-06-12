@@ -25,10 +25,7 @@ namespace SkyDrop.Droid.Bindings
         protected override void SetValue(SkyFile value)
         {
             if (value == null)
-            {
-                Console.WriteLine("Error - SkyFile was null");
                 return;
-            }
 
             if (Util.ExtensionMatches(value.Filename, ".jpeg", ".jpg", ".png"))
             {

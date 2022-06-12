@@ -8,6 +8,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using AndroidX.CardView.Widget;
 using AndroidX.RecyclerView.Widget;
 using MvvmCross.Commands;
 using MvvmCross.Droid.Support.V7.RecyclerView;
@@ -96,21 +97,23 @@ namespace SkyDrop.Droid.Views.Main
         {
             protected override View InflateViewForHolder(ViewGroup parent, int viewType, IMvxAndroidBindingContext bindingContext)
             {
+                //calculate view size based on screen width
+                var (screenWidth, _) = AndroidUtil.GetScreenSizePx();
+                var gridItemSize = screenWidth / 2;
+                int previewCardSize = (int)(gridItemSize * 0.7);
+
                 //make the grid items square
                 var view = base.InflateViewForHolder(parent, viewType, bindingContext) as LinearLayout;
-                var layoutParams = view.LayoutParameters;
-                layoutParams.Height = AndroidUtil.DpToPx(128);
+                view.LayoutParameters.Height = gridItemSize;
+                var previewCard = view.FindViewById<CardView>(Resource.Id.PreviewCard);
+                previewCard.LayoutParameters.Width = previewCardSize;
+                previewCard.LayoutParameters.Height = previewCardSize;
                 return view;
             }
 
-            public FilesGridAdapter(IMvxAndroidBindingContext bindingContext) : base(bindingContext) => Init();
+            public FilesGridAdapter(IMvxAndroidBindingContext bindingContext) : base(bindingContext) { }
 
-            public FilesGridAdapter(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer) => Init();
-
-            public void Init()
-            {
-
-            }
+            public FilesGridAdapter(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer) { }
         }
     }
 }
