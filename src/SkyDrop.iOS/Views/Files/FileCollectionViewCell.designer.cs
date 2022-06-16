@@ -26,9 +26,17 @@ namespace SkyDrop.iOS.Views.Files
 
 		[Outlet]
 		FFImageLoading.Cross.MvxCachedImageView PreviewImage { get; set; }
+
+		[Outlet]
+		UIKit.UIView SelectedIndicatorView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (SelectedIndicatorView != null) {
+				SelectedIndicatorView.Dispose ();
+				SelectedIndicatorView = null;
+			}
+
 			if (BottomPanel != null) {
 				BottomPanel.Dispose ();
 				BottomPanel = null;

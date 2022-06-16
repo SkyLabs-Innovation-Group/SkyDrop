@@ -124,6 +124,7 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 SkyFile = skyFile,
                 TapCommand = new MvxCommand(() => ToggleSelectState(skyFile)),
+                LongTapCommand = new MvxCommand(() => ToggleSelectionActive()),
                 CopySkyLinkCommand = new MvxAsyncCommand(() => CopyFileLinkToClipboard(skyFile)),
                 DeleteCommand = new MvxCommand(() => DeleteSkyFileFromList(skyFile)),
             };
@@ -273,6 +274,19 @@ namespace SkyDrop.Core.ViewModels.Main
                 AfterFileSelected?.Execute();
 
                 PreviousSelectedSkyFileDvm = null;
+            }
+        }
+
+        private void ToggleSelectionActive()
+        {
+            var firstFile = SkyFiles.FirstOrDefault();
+            if  (firstFile == null)
+                return;
+
+            bool isSelectionActive = firstFile.IsSelectionActive;
+            foreach(var skyfile in SkyFiles)
+            {
+                skyfile.IsSelectionActive = !isSelectionActive;
             }
         }
 

@@ -32,6 +32,16 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (AddMoreFilesIcon != null) {
+				AddMoreFilesIcon.Dispose ();
+				AddMoreFilesIcon = null;
+			}
+
+			if (BackgroundView != null) {
+				BackgroundView.Dispose ();
+				BackgroundView = null;
+			}
+
 			if (FileExtensionLabel != null) {
 				FileExtensionLabel.Dispose ();
 				FileExtensionLabel = null;
@@ -50,16 +60,6 @@ namespace SkyDrop.iOS.Views.Drop
 			if (PreviewImage != null) {
 				PreviewImage.Dispose ();
 				PreviewImage = null;
-			}
-
-			if (AddMoreFilesIcon != null) {
-				AddMoreFilesIcon.Dispose ();
-				AddMoreFilesIcon = null;
-			}
-
-			if (BackgroundView != null) {
-				BackgroundView.Dispose ();
-				BackgroundView = null;
 			}
 		}
 	}

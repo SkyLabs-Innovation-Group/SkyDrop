@@ -10,10 +10,15 @@ using UIKit;
 
 namespace SkyDrop.iOS.Views.Files
 {
+    //cell for a grid file item in the gallery view
     public partial class FileCollectionViewCell : MvxCollectionViewCell
     {
         public static readonly NSString Key = new NSString("FileCollectionViewCell");
         public static readonly UINib Nib;
+
+        UILongPressGestureRecognizer longPressRecognizer;
+
+        private SkyFileDVM viewModel => DataContext as SkyFileDVM;
 
         static FileCollectionViewCell()
         {
@@ -28,6 +33,8 @@ namespace SkyDrop.iOS.Views.Files
                 set.Bind(FileNameLabel).To(vm => vm.SkyFile.Filename);
                 set.Bind(this).For(t => t.SkyFile).To(vm => vm.SkyFile);
                 set.Bind(BottomPanel).For(i => i.BackgroundColor).To(vm => vm.FillColor).WithConversion("NativeColor");
+                set.Bind(SelectedIndicatorView).For(i => i.BackgroundColor).To(vm => vm.FillColor).WithConversion("NativeColor");
+                set.Bind(SelectedIndicatorView).For("Visible").To(vm => vm.IsSelectionActive);
                 set.Apply();
             });
         }
@@ -39,8 +46,20 @@ namespace SkyDrop.iOS.Views.Files
             InnerView.BackgroundColor = Colors.MidGrey.ToNative();
             BottomPanel.BackgroundColor = Colors.MidGrey.ToNative();
 
+            longPressRecognizer = new UILongPressGestureRecognizer(LongPress);
+            ContainerView.AddGestureRecognizer(longPressRecognizer);
+
             InnerView.Layer.CornerRadius = 8;
             InnerView.Layer.MasksToBounds = true;
+        }
+
+        public void LongPress()
+        {
+            if (longPressRecognizer.State == UIGestureRecognizerState.Began)
+                viewModel.LongTapCommand?.Execute();
+
+            // stop recognizing long press gesture here
+            longPressRecognizer.State = UIGestureRecognizerState.Ended;
         }
 
         public SkyFile SkyFile
