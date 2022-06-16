@@ -14,9 +14,25 @@ namespace SkyDrop.iOS.Views.Files
 	{
 		[Outlet]
 		UIKit.UILabel FileNameLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIView SelectedIndicatorInnerView { get; set; }
+
+		[Outlet]
+		UIKit.UIView SelectedIndicatorView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (SelectedIndicatorInnerView != null) {
+				SelectedIndicatorInnerView.Dispose ();
+				SelectedIndicatorInnerView = null;
+			}
+
+			if (SelectedIndicatorView != null) {
+				SelectedIndicatorView.Dispose ();
+				SelectedIndicatorView = null;
+			}
+
 			if (FileNameLabel != null) {
 				FileNameLabel.Dispose ();
 				FileNameLabel = null;

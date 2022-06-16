@@ -58,10 +58,27 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rVf-Rx-c90">
                                 <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q1H-FO-jVF">
+                                        <rect key="frame" x="12" y="12" width="8" height="8"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="8" id="p0I-am-IDp"/>
+                                            <constraint firstAttribute="height" constant="8" id="qnw-Nj-KYt"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="4"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                </subviews>
                                 <color key="backgroundColor" systemColor="systemMintColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="32" id="YKs-Gg-dfl"/>
+                                    <constraint firstItem="q1H-FO-jVF" firstAttribute="centerY" secondItem="rVf-Rx-c90" secondAttribute="centerY" id="aw1-ck-pDl"/>
                                     <constraint firstAttribute="width" constant="32" id="yKz-rq-nVr"/>
+                                    <constraint firstItem="q1H-FO-jVF" firstAttribute="centerX" secondItem="rVf-Rx-c90" secondAttribute="centerX" id="zE2-bc-CAB"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -102,6 +119,7 @@
                 <outlet property="FileNameLabel" destination="bKK-Ps-LBN" id="5Xk-wt-z9p"/>
                 <outlet property="InnerView" destination="6hn-i9-ClJ" id="Pfq-EC-Tq7"/>
                 <outlet property="PreviewImage" destination="fz4-b1-uME" id="AWI-D1-jWC"/>
+                <outlet property="SelectedIndicatorInnerView" destination="q1H-FO-jVF" id="OVB-8I-TuD"/>
                 <outlet property="SelectedIndicatorView" destination="rVf-Rx-c90" id="AMN-LS-7xK"/>
             </connections>
             <point key="canvasLocation" x="200.00000000000003" y="54.910714285714285"/>
