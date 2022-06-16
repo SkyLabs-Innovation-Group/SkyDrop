@@ -26,6 +26,7 @@ namespace SkyDrop.iOS.Views.Files
             View.BackgroundColor = Colors.DarkGrey.ToNative();
             FilesCollectionView.BackgroundColor = Colors.DarkGrey.ToNative();
             FilesTableView.BackgroundColor = Colors.DarkGrey.ToNative();
+            FilesTableView.AllowsSelection = false;
 
             //setup nav bar
             NavigationController.NavigationBar.TintColor = UIColor.White;

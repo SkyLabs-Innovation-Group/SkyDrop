@@ -31,6 +31,7 @@ namespace SkyDrop.iOS
         {
             registry.RegisterCustomBindingFactory<UIView>(ProgressFillHeightBinding.Name, view => new ProgressFillHeightBinding(view));
             registry.RegisterCustomBindingFactory<UIImageView>(SkyFileImageViewBinding.Name, view => new SkyFileImageViewBinding(view));
+            registry.RegisterCustomBindingFactory<UIView>(LongPressBinding.Name, view => new LongPressBinding(view));
 
             base.FillTargetFactories(registry);
         }

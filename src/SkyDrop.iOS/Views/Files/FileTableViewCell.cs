@@ -24,6 +24,11 @@ namespace SkyDrop.iOS.Views.Files
 			{
 				var set = this.CreateBindingSet<FileTableViewCell, SkyFileDVM>();
 				set.Bind(FileNameLabel).To(vm => vm.SkyFile.Filename);
+				set.Bind(SelectedIndicatorView).For(i => i.BackgroundColor).To(vm => vm.SelectionIndicatorColor).WithConversion("NativeColor");
+				set.Bind(SelectedIndicatorView).For("Visible").To(vm => vm.IsSelectionActive);
+				set.Bind(SelectedIndicatorInnerView).For("Visible").To(vm => vm.IsSelected);
+				set.Bind(ContentView).For("Tap").To(vm => vm.TapCommand);
+				set.Bind(ContentView).For("LongPress").To(vm => vm.LongTapCommand);
 				set.Apply();
 			});
 		}
