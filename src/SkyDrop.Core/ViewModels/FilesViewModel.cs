@@ -82,7 +82,7 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 SkyFile = skyFile,
                 TapCommand = new MvxAsyncCommand(() => FileTapped(skyFile)),
-                LongTapCommand = new MvxCommand(() => ActivateSelectionMode(skyFile))
+                LongPressCommand = new MvxCommand(() => ActivateSelectionMode(skyFile))
             };
         }
 

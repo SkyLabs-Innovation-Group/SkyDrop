@@ -33,7 +33,7 @@ namespace SkyDrop.iOS.Views.Files
                 set.Bind(SelectedIndicatorView).For("Visible").To(vm => vm.IsSelectionActive);
                 set.Bind(SelectedIndicatorInnerView).For("Visible").To(vm => vm.IsSelected);
                 set.Bind(ContentView).For("Tap").To(vm => vm.TapCommand);
-                set.Bind(ContentView).For("LongPress").To(vm => vm.LongTapCommand);
+                set.Bind(ContentView).For("LongPress").To(vm => vm.LongPressCommand);
                 set.Apply();
             });
         }

@@ -6,10 +6,10 @@ using Android.Content;
 using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
+using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using AndroidX.CardView.Widget;
-using AndroidX.RecyclerView.Widget;
 using MvvmCross.Commands;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
@@ -30,11 +30,13 @@ namespace SkyDrop.Droid.Views.Main
         private FilesGridAdapter filesGridAdapter;
         private MvxRecyclerAdapter filesListAdapter;
 
+        private int gridMarginPx => AndroidUtil.DpToPx(16);
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
-            filesGridAdapter = new FilesGridAdapter(BindingContext as IMvxAndroidBindingContext);
+            filesGridAdapter = new FilesGridAdapter(BindingContext as IMvxAndroidBindingContext) { MarginPx = gridMarginPx };
             filesListAdapter = new MvxRecyclerAdapter(BindingContext as IMvxAndroidBindingContext);
 
             RecyclerView = FindViewById<MvxRecyclerView>(Resource.Id.FilesRecycler);
@@ -71,25 +73,25 @@ namespace SkyDrop.Droid.Views.Main
                     RecyclerView.SetLayoutManager(layoutManager);
                     RecyclerView.ItemTemplateId = Resource.Layout.item_file_grid;
                     RecyclerView.Adapter = filesGridAdapter;
+                    RecyclerView.SetPadding(0, 0, AndroidUtil.DpToPx(16), 0);
                 }
             }
         }
 
         public class FilesGridAdapter : MvxRecyclerAdapter
         {
+            public int MarginPx { get; set; }
+
             protected override View InflateViewForHolder(ViewGroup parent, int viewType, IMvxAndroidBindingContext bindingContext)
             {
                 //calculate view size based on screen width
                 var (screenWidth, _) = AndroidUtil.GetScreenSizePx();
-                var gridItemSize = screenWidth / 2;
-                int previewCardSize = (int)(gridItemSize * 0.7);
+                var gridItemSize = (screenWidth - MarginPx) / 2;
 
                 //make the grid items square
-                var view = base.InflateViewForHolder(parent, viewType, bindingContext) as LinearLayout;
+                var view = base.InflateViewForHolder(parent, viewType, bindingContext) as FrameLayout;
                 view.LayoutParameters.Height = gridItemSize;
-                var previewCard = view.FindViewById<CardView>(Resource.Id.PreviewCard);
-                previewCard.LayoutParameters.Width = previewCardSize;
-                previewCard.LayoutParameters.Height = previewCardSize;
+                view.LayoutParameters.Width = gridItemSize;
                 return view;
             }
 

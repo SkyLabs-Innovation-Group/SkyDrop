@@ -15,6 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:MvxItemTemplate="@layout/item_file_list"
-        app:MvxBind="ItemsSource SkyFiles; ItemClick FileSelectedCommand"
+        app:MvxBind="ItemsSource SkyFiles"
         />
 </LinearLayout>
