@@ -7,7 +7,8 @@
     android:orientation="horizontal"
     android:paddingTop="16dp"
     android:paddingHorizontal="16dp"
-    android:clipToPadding="false">
+    android:clipToPadding="false"
+    app:MvxBind="Click TapCommand;LongClick LongPressCommand">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,12 +23,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <ImageView
+                <FrameLayout
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_margin="8dp"
-                    android:orientation="vertical"
-                    android:src="@drawable/ic_siacoin"/>
+                    >
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_cloud"
+                        app:MvxBind="Visibility InvertedVisibility(IsSelectionActive)"/>
+
+                    <!--Selection Indicator-->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        app:cardCornerRadius="16dp"
+                        app:MvxBind="Visibility Visibility(IsSelectionActive);CardBackgroundColor SelectionIndicatorColor">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_gravity="center"
+                            app:cardCornerRadius="16dp"
+                            app:cardBackgroundColor="#fff"
+                            app:MvxBind="Visibility Visibility(IsSelected)"/>
+        
+                    </androidx.cardview.widget.CardView>
+                </FrameLayout>
                 <TextView
                     android:layout_width="0px"
                     android:layout_height="wrap_content"

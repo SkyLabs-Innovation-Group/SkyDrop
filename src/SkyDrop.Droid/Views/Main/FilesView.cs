@@ -66,6 +66,7 @@ namespace SkyDrop.Droid.Views.Main
                     RecyclerView.SetLayoutManager(layoutManager);
                     RecyclerView.ItemTemplateId = Resource.Layout.item_file_list;
                     RecyclerView.Adapter = filesListAdapter;
+                    RecyclerView.SetPadding(0, 0, 0, 0);
                 }
                 else
                 {

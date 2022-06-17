@@ -45,6 +45,7 @@
         </FrameLayout>
     </androidx.cardview.widget.CardView>
 
+    <!--Selection Indicator-->
     <androidx.cardview.widget.CardView
         android:layout_width="32dp"
         android:layout_height="32dp"
