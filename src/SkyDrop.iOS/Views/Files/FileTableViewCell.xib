@@ -39,7 +39,7 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EOc-a5-kbW">
                                         <rect key="frame" x="12" y="12" width="8" height="8"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="8" id="FUo-j9-Zr4"/>
                                             <constraint firstAttribute="height" constant="8" id="OY1-H5-YRw"/>
@@ -93,7 +93,9 @@
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
+                <outlet property="ContainerView" destination="vtK-tu-tx1" id="brO-BO-v8n"/>
                 <outlet property="FileNameLabel" destination="Vsp-4g-DY1" id="x0m-2C-XwX"/>
+                <outlet property="IconImage" destination="QYs-bf-LAT" id="lyh-hY-Hio"/>
                 <outlet property="SelectedIndicatorInnerView" destination="EOc-a5-kbW" id="sne-L2-8y4"/>
                 <outlet property="SelectedIndicatorView" destination="cIu-6I-swb" id="EOn-70-t0D"/>
             </connections>
@@ -102,9 +104,6 @@
     </objects>
     <resources>
         <image name="ic_cloud" width="18" height="18"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemMintColor">
             <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
