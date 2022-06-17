@@ -24,6 +24,8 @@ namespace SkyDrop.Droid.Bindings
 
         protected override void SetValue(SkyFile value)
         {
+            Target.ImagePath = null;
+
             if (value == null)
                 return;
 

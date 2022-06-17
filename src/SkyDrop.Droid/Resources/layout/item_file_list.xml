@@ -32,7 +32,7 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:src="@drawable/ic_cloud"
-                        app:MvxBind="Visibility InvertedVisibility(IsSelectionActive)"/>
+                        app:MvxBind="FileCategoryIcon SkyFile.Filename;Visibility InvertedVisibility(IsSelectionActive)"/>
 
                     <!--Selection Indicator-->
                     <androidx.cardview.widget.CardView

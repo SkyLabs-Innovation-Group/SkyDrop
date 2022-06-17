@@ -92,6 +92,7 @@
     <Compile Include="Bindings\LayoutImageBinding.cs" />
     <Compile Include="Bindings\SkyFilePreviewImageBinding.cs" />
     <Compile Include="Bindings\BackgroundColorBinding.cs" />
+    <Compile Include="Bindings\FileCategoryIconBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -417,6 +418,26 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\toolbar_settings.axml" />
+    <AndroidResource Include="Resources\drawable\ic_file_audio.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_file_image.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_file_document.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_file_video.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_file_generic.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\strings.xml" />
