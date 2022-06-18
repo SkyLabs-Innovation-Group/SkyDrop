@@ -193,6 +193,7 @@
       <Visible>false</Visible>
     </ImageAsset>
     <Compile Include="Bindings\LongPressBinding.cs" />
+    <Compile Include="Bindings\FileCategoryIconBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
