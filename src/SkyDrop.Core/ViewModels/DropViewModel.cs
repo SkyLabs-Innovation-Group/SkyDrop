@@ -48,6 +48,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand UploadStartedNotificationCommand { get; set; }
         public IMvxCommand<FileUploadResult> UploadFinishedNotificationCommand { get; set; }
         public IMvxCommand<double> UpdateNotificationProgressCommand { get; set; }
+        public IMvxCommand IosSelectFileCommand { get; set; }
 
         public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
@@ -69,6 +70,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public string SendButtonLabel => IsUploading ? StagedFiles?.Count > 2 ? "SENDING FILES" :
             "SENDING FILE" :
             DropViewUIState == DropViewState.ConfirmFilesState && StagedFiles?.Count > 2 ? "SEND FILES" : "SEND FILE";
+        public List<string> IosFilePathsFromMultiImageSelect { get; set; }
+        public TaskCompletionSource<bool> IosMultipleImageSelectTask { get; set; }
 
         public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile UploadedFile { get; set; }
@@ -445,6 +448,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task<List<SkyFile>> SelectFiles()
         {
+            if (IosSelectFileCommand != null)
+                return await IosPickImages();
+
             var file = "Select Files";
             var image = "Select Image";
             var video = "Select Video";
@@ -506,6 +512,51 @@ namespace SkyDrop.Core.ViewModels.Main
             IsStagingFiles = false;
 
             return userSkyFiles;
+        }
+
+        private async Task<List<SkyFile>> IosPickImages()
+        {
+            IosSelectFileCommand?.Execute();
+            IosMultipleImageSelectTask = new TaskCompletionSource<bool>();
+            var result = await IosMultipleImageSelectTask.Task;
+            if (!result)
+                return null;
+
+            IsStagingFiles = true;
+            var skyFiles = new List<SkyFile>();
+
+            foreach (var path in IosFilePathsFromMultiImageSelect)
+            {
+                if (path == null)
+                    continue;
+
+                skyFiles.Add(IosConvertFilePathToSkyFile(path));
+            }
+
+            IsStagingFiles = false;
+
+            return skyFiles;
+        }
+
+        private SkyFile IosConvertFilePathToSkyFile(string path)
+        {
+            return new SkyFile()
+            {
+                FullFilePath = path,
+                Filename = path,
+                FileSizeBytes = 0
+            };
+        }
+
+        public void IosStageFiles(List<string> paths)
+        {
+            var skyFiles = new List<SkyFile>();
+            foreach(var path in paths)
+            {
+                skyFiles.Add(IosConvertFilePathToSkyFile(path));
+            }
+
+            StageFiles(skyFiles, true);
         }
 
         private async Task AddMoreFiles()

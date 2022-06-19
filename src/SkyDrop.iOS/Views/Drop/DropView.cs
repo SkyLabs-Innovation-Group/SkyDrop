@@ -17,6 +17,12 @@ using ZXing.Rendering;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 using static SkyDrop.Core.Utility.Util;
 using UserNotifications;
+using GMImagePicker;
+using Photos;
+using System.Collections.Generic;
+using FFImageLoading.Extensions;
+using System.IO;
+using AssetsLibrary;
 
 namespace SkyDrop.iOS.Views.Drop
 {
@@ -60,6 +66,7 @@ namespace SkyDrop.iOS.Views.Drop
                 ViewModel.UploadStartedNotificationCommand = new MvxAsyncCommand(async() => await ShowUploadStartedNotification()); ;
                 ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>((result) => ShowUploadFinishedNotification(result));
                 ViewModel.UpdateNotificationProgressCommand = new MvxCommand<double>((progress) => UpdateUploadNotificationProgress(progress));
+                ViewModel.IosSelectFileCommand = new MvxCommand(SelectFile);
 
                 SetupGestureListener();
                 SetupNavDots();
@@ -155,6 +162,113 @@ namespace SkyDrop.iOS.Views.Drop
             {
                 ViewModel.Log.Exception(e);
             }
+        }
+
+        private void SelectFile()
+        {
+            SelectMultiplePhoto();
+        }
+
+        private async void SelectMultiplePhoto()
+        {
+            var picker = new GMImagePickerController();
+
+            picker.Title = "Multiple photo selection";
+            picker.ColsInPortrait = 3;
+            picker.ColsInLandscape = 5;
+            picker.MinimumInteritemSpacing = 2.0f;
+            picker.ShowCameraButton = false;
+            picker.AutoSelectCameraImages = false;
+            picker.MediaTypes = new[] { PHAssetMediaType.Image };
+
+            var hasPermission = await CheckPhotoPermissionAsync();
+            if (!hasPermission)
+                return;
+
+            picker.FinishedPickingAssets +=
+            async (sender, args) =>
+            {
+                foreach (var phasset in args.Assets)
+                {
+                    PHCachingImageManager manager = new PHCachingImageManager();
+                    var tcs = new TaskCompletionSource<bool>();
+                    var resultFilePaths = new List<string>();
+                    var image = manager.RequestImageForAsset(
+                        asset: phasset,
+                        targetSize: new CGSize(phasset.PixelWidth, phasset.PixelHeight),
+                        contentMode: PHImageContentMode.AspectFill,
+                        options: new PHImageRequestOptions() { ResizeMode = PHImageRequestOptionsResizeMode.None, DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat, NetworkAccessAllowed = true, Synchronous = true },
+                        resultHandler: async (img, info) =>
+                        {
+                            var res = PHAssetResource.GetAssetResources(phasset);
+                            phasset.RequestContentEditingInput(new PHContentEditingInputRequestOptions(), async (s, _) =>
+                            {
+                                try
+                                {
+                                    if (img != null)
+                                    {
+                                        string filePath = string.Empty;
+
+                                        using (img)
+                                        {
+                                            using (var stream = img.AsJpegStream())
+                                            {
+                                                var newFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Guid.NewGuid().ToString() + ".JPG");
+
+                                                using (var fileStream = File.Create(newFilePath))
+                                                {
+                                                    stream.Seek(0, SeekOrigin.Begin);
+                                                    await stream.CopyToAsync(fileStream);
+                                                }
+                                                filePath = newFilePath;
+                                            }
+                                        }
+                                        resultFilePaths.Add(filePath);
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex.Message);
+                                    ViewModel.IosMultipleImageSelectTask.TrySetResult(false);
+                                }
+                                finally
+                                {
+                                    tcs.TrySetResult(true);
+                                }
+                            });
+                        });
+                    await tcs.Task;
+                    ViewModel.IosFilePathsFromMultiImageSelect = resultFilePaths;
+
+                    if (!ViewModel.IosMultipleImageSelectTask.Task.IsCompleted)
+                        ViewModel.IosMultipleImageSelectTask.TrySetResult(true); //first file(s) loaded causes UI to continue to next stage
+                    else
+                        ViewModel.IosStageFiles(resultFilePaths); //subsequent files get staged in a "lazy" manner
+                }
+            };
+
+            PresentModalViewController(picker, true);
+        }
+
+        private async Task<bool> CheckPhotoPermissionAsync()
+        {
+            var status = ALAssetsLibrary.AuthorizationStatus;
+
+            if (status == ALAuthorizationStatus.Denied)
+            {
+                var alert = UIAlertController.Create(Strings.NoPhotoAccessTitle,
+                                Strings.NoPhotoAccessMessage,
+                                UIAlertControllerStyle.Alert);
+
+                alert.AddAction(UIAlertAction.Create(Strings.Cancel, UIAlertActionStyle.Cancel, null));
+                alert.AddAction(UIAlertAction.Create(Strings.Settings, UIAlertActionStyle.Default, (action) => UIApplication.SharedApplication.OpenUrl(NSUrl.FromString(UIApplication.OpenSettingsUrlString))));
+
+                await PresentViewControllerAsync(alert, true);
+
+                return false;
+            }
+
+            return true;
         }
 
         private void UpdateUploadNotificationProgress(double progress)
