@@ -182,6 +182,7 @@
     <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
+    <Compile Include="Common\ImageSelectionHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

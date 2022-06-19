@@ -448,9 +448,6 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task<List<SkyFile>> SelectFiles()
         {
-            if (IosSelectFileCommand != null)
-                return await IosPickImages();
-
             var file = "Select Files";
             var image = "Select Image";
             var video = "Select Video";
@@ -463,7 +460,12 @@ namespace SkyDrop.Core.ViewModels.Main
 
             SkyFilePickerType chosenType;
             if (fileType == image)
+            {
+                if (IosSelectFileCommand != null)
+                    return await IosPickImages();
+
                 chosenType = SkyFilePickerType.Image;
+            }
             else if (fileType == video)
                 chosenType = SkyFilePickerType.Video;
             else
@@ -543,7 +545,7 @@ namespace SkyDrop.Core.ViewModels.Main
             return new SkyFile()
             {
                 FullFilePath = path,
-                Filename = path,
+                Filename = Path.GetFileName(path),
                 FileSizeBytes = 0
             };
         }

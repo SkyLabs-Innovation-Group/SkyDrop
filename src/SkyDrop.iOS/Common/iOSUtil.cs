@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using UIKit;
 using ZXing.Common;
 using ZXing.Mobile;
