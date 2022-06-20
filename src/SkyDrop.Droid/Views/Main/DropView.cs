@@ -53,7 +53,7 @@ namespace SkyDrop.Droid.Views.Main
 
             Log.Trace("DropView OnCreate()");
 
-            ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
+            ViewModel.GenerateBarcodeAsyncFunc = t => ShowBarcode(t);
             ViewModel.ResetUIStateCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
             ViewModel.ResetBarcodeCommand = new MvxCommand(ResetBarcode);
             ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
@@ -110,14 +110,14 @@ namespace SkyDrop.Droid.Views.Main
         /// <summary>
         /// Generate and display QR code
         /// </summary>
-        private async Task ShowBarcode()
+        private async Task ShowBarcode(string url)
         {
             SetBarcodeCodeUiState(isSlow: true);
 
-            var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileFullUrl, barcodeImageView.Width, barcodeImageView.Height);
+            var matrix = ViewModel.GenerateBarcode(url, barcodeImageView.Width, barcodeImageView.Height);
             var bitmap = await AndroidUtil.BitMatrixToBitmap(matrix);
             barcodeImageView.SetImageBitmap(bitmap);
-            ViewModel.BarcodeIsLoaded = true;
+            ViewModel.SwipeNavigationEnabled = true;
         }
 
         /// <summary>
@@ -249,10 +249,8 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         private void AnimateSlideSendReceiveButtonsOut(bool toLeft)
         {
-            if (!ViewModel.BarcodeIsLoaded)
-            {
+            if (!ViewModel.SwipeNavigationEnabled)
                 AnimateSlideBarcodeToCenter();
-            }
 
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
             var duration = 250;

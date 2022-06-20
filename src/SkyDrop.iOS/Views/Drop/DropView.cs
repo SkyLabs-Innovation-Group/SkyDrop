@@ -54,7 +54,7 @@ namespace SkyDrop.iOS.Views.Drop
                 base.ViewDidLoad();
 
                 ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
-                ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
+                ViewModel.GenerateBarcodeAsyncFunc = t => ShowBarcode(t);
                 ViewModel.ResetUIStateCommand = new MvxCommand(SetSendReceiveButtonUiState);
                 ViewModel.UpdateNavDotsCommand = new MvxCommand(() => UpdateNavDots());
                 ViewModel.UploadStartedNotificationCommand = new MvxAsyncCommand(async() => await ShowUploadStartedNotification()); ;
@@ -263,12 +263,12 @@ namespace SkyDrop.iOS.Views.Drop
         /// <summary>
         /// Generate and display QR code
         /// </summary>
-        private async Task ShowBarcode()
+        private async Task ShowBarcode(string url)
         {
             try
             {
                 SetBarcodeCodeUiState(isSlow: true);
-                var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileFullUrl, (int)BarcodeImage.Frame.Width, (int)BarcodeImage.Frame.Height);
+                var matrix = ViewModel.GenerateBarcode(url, (int)BarcodeImage.Frame.Width, (int)BarcodeImage.Frame.Height);
                 var image = await iOSUtil.BitMatrixToImage(matrix);
                 BarcodeImage.Image = image;
                 ViewModel.SwipeNavigationEnabled = true;
@@ -283,7 +283,7 @@ namespace SkyDrop.iOS.Views.Drop
         private void ShowReceivedFilePreview()
         {
             SetBarcodeCodeUiState(isSlow: true);
-            BarcodeImage.ImagePath = ViewModel.ReceivedSkyFile.GetSkylinkUrl();
+            BarcodeImage.ImagePath = ViewModel.ReceivedFile.GetSkylinkUrl();
             ViewModel.SwipeNavigationEnabled = true;
         }
 

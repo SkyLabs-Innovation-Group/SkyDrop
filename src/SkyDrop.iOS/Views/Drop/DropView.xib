@@ -153,7 +153,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="382" height="382"/>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" systemColor="systemTealColor"/>
+                    <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="1Ig-6e-hog" firstAttribute="top" secondItem="d8B-sr-eBO" secondAttribute="top" id="3iR-1X-hjp"/>
                         <constraint firstAttribute="bottom" secondItem="1Ig-6e-hog" secondAttribute="bottom" id="CSa-ko-1Oh"/>
@@ -354,9 +354,6 @@
         </systemColor>
         <systemColor name="systemPurpleColor">
             <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemTealColor">
-            <color red="0.18823529411764706" green="0.69019607843137254" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -50,7 +50,6 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand<double> UpdateNotificationProgressCommand { get; set; }
         public IMvxCommand ShowReceivedFileCommand { get; set; }
 
-        public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
         public bool IsStagingFiles { get; set; }
         public bool IsUploadArrowVisible => !IsUploading && !IsStagingFiles;
@@ -73,7 +72,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile UploadedFile { get; set; }
         public SkyFile FileToUpload { get; set; }
-        public SkyFile ReceivedSkyFile { get; set; }
+        public SkyFile ReceivedFile { get; set; }
 
         private DropViewState _dropViewUIState;
 
@@ -106,8 +105,8 @@ namespace SkyDrop.Core.ViewModels.Main
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
 
-        private Func<Task> _generateBarcodeAsyncFunc;
-        public Func<Task> GenerateBarcodeAsyncFunc
+        private Func<string, Task> _generateBarcodeAsyncFunc;
+        public Func<string, Task> GenerateBarcodeAsyncFunc
         {
             get => _generateBarcodeAsyncFunc;
             set => _generateBarcodeAsyncFunc = value;
@@ -268,8 +267,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 //show QR code
                 IsUploading = false;
                 IsBarcodeLoading = true;
-                SkyFileFullUrl = UploadedFile.GetSkylinkUrl();
-                await GenerateBarcodeAsyncFunc();
+                await GenerateBarcodeAsyncFunc(UploadedFile.GetSkylinkUrl());
                 
                 if (UploadNotificationsEnabled)
                     UploadFinishedNotificationCommand?.Execute(FileUploadResult.Success);
@@ -352,11 +350,11 @@ namespace SkyDrop.Core.ViewModels.Main
                 else
                 {
                     string skylink = barcodeData.Substring(barcodeData.Length - 46, 46);
-                    ReceivedSkyFile = new SkyFile() { Skylink = skylink };
+                    ReceivedFile = new SkyFile() { Skylink = skylink };
 
-                    var filename = await apiService.GetSkyFileFilename(ReceivedSkyFile);
-                    ReceivedSkyFile.Filename = filename;
-                    storageService.SaveSkyFiles(ReceivedSkyFile);
+                    var filename = await apiService.GetSkyFileFilename(ReceivedFile);
+                    ReceivedFile.Filename = filename;
+                    storageService.SaveSkyFiles(ReceivedFile);
 
                     ShowReceivedFileCommand.Execute();
 
