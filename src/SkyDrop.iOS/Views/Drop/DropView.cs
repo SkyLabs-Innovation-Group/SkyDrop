@@ -60,6 +60,7 @@ namespace SkyDrop.iOS.Views.Drop
                 ViewModel.UploadStartedNotificationCommand = new MvxAsyncCommand(async() => await ShowUploadStartedNotification()); ;
                 ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>((result) => ShowUploadFinishedNotification(result));
                 ViewModel.UpdateNotificationProgressCommand = new MvxCommand<double>((progress) => UpdateUploadNotificationProgress(progress));
+                ViewModel.ShowReceivedFileCommand = new MvxCommand(ShowReceivedFilePreview);
 
                 SetupGestureListener();
                 SetupNavDots();
@@ -270,13 +271,20 @@ namespace SkyDrop.iOS.Views.Drop
                 var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileFullUrl, (int)BarcodeImage.Frame.Width, (int)BarcodeImage.Frame.Height);
                 var image = await iOSUtil.BitMatrixToImage(matrix);
                 BarcodeImage.Image = image;
-                ViewModel.BarcodeIsLoaded = true;
+                ViewModel.SwipeNavigationEnabled = true;
             }
             catch (Exception ex)
             {
                 ViewModel.Log.Error("Error in ShowBarcode(): ");
                 ViewModel.Log.Exception(ex);
             }
+        }
+
+        private void ShowReceivedFilePreview()
+        {
+            SetBarcodeCodeUiState(isSlow: true);
+            BarcodeImage.ImagePath = ViewModel.ReceivedSkyFile.GetSkylinkUrl();
+            ViewModel.SwipeNavigationEnabled = true;
         }
 
         /// <summary>
@@ -487,7 +495,7 @@ namespace SkyDrop.iOS.Views.Drop
 
         private bool IgnoreSwipes()
         {
-            return !ViewModel.FirstFileUploaded || //don't allow swipe before first file is uploaded
+            return !ViewModel.SwipeNavigationEnabled || //don't allow swipe before first file is uploaded
                 ViewModel.IsUploading || //don't allow swipe while file is uploading
                 ViewModel.DropViewUIState == DropViewState.ConfirmFilesState; //don't allow swipe on confirm file UI state
         }

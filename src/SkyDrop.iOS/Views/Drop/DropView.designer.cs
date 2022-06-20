@@ -19,7 +19,7 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView BarcodeContainer { get; set; }
 
 		[Outlet]
-		UIKit.UIImageView BarcodeImage { get; set; }
+		FFImageLoading.Cross.MvxCachedImageView BarcodeImage { get; set; }
 
 		[Outlet]
 		UIKit.UIView BarcodeMenu { get; set; }
@@ -114,6 +114,11 @@ namespace SkyDrop.iOS.Views.Drop
 				FileSizeLabel = null;
 			}
 
+			if (LeftNavDot != null) {
+				LeftNavDot.Dispose ();
+				LeftNavDot = null;
+			}
+
 			if (OpenButton != null) {
 				OpenButton.Dispose ();
 				OpenButton = null;
@@ -132,6 +137,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (ReceiveIcon != null) {
 				ReceiveIcon.Dispose ();
 				ReceiveIcon = null;
+			}
+
+			if (RightNavDot != null) {
+				RightNavDot.Dispose ();
+				RightNavDot = null;
 			}
 
 			if (SendButton != null) {
@@ -157,16 +167,6 @@ namespace SkyDrop.iOS.Views.Drop
 			if (ShareButton != null) {
 				ShareButton.Dispose ();
 				ShareButton = null;
-			}
-
-			if (LeftNavDot != null) {
-				LeftNavDot.Dispose ();
-				LeftNavDot = null;
-			}
-
-			if (RightNavDot != null) {
-				RightNavDot.Dispose ();
-				RightNavDot = null;
 			}
 		}
 	}

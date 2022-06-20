@@ -48,6 +48,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand UploadStartedNotificationCommand { get; set; }
         public IMvxCommand<FileUploadResult> UploadFinishedNotificationCommand { get; set; }
         public IMvxCommand<double> UpdateNotificationProgressCommand { get; set; }
+        public IMvxCommand ShowReceivedFileCommand { get; set; }
 
         public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
@@ -62,10 +63,9 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsAnimatingBarcodeOut { get; set; }
         public string FileSize { get; set; }
         public double UploadProgress { get; set; } //0-1
-        public bool FirstFileUploaded { get; set; } //determines whether user can swipe to the QR code screen
+        public bool SwipeNavigationEnabled { get; set; } //determines whether user can swipe to the QR code screen
         public bool UserIsSwipingResult { get; set; }
-        public bool BarcodeIsLoaded { get; set; }
-        public bool NavDotsVisible => DropViewUIState != DropViewState.ConfirmFilesState && BarcodeIsLoaded;
+        public bool NavDotsVisible => DropViewUIState != DropViewState.ConfirmFilesState && SwipeNavigationEnabled;
         public string SendButtonLabel => IsUploading ? StagedFiles?.Count > 2 ? "SENDING FILES" :
             "SENDING FILE" :
             DropViewUIState == DropViewState.ConfirmFilesState && StagedFiles?.Count > 2 ? "SEND FILES" : "SEND FILE";
@@ -73,6 +73,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile UploadedFile { get; set; }
         public SkyFile FileToUpload { get; set; }
+        public SkyFile ReceivedSkyFile { get; set; }
 
         private DropViewState _dropViewUIState;
 
@@ -253,7 +254,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 UploadProgress = 1;
                 UploadTimerText = "100%";
 
-                FirstFileUploaded = true;
+                SwipeNavigationEnabled = true;
 
                 //save skylink locally
                 UploadedFile.WasSent = true;
@@ -351,13 +352,15 @@ namespace SkyDrop.Core.ViewModels.Main
                 else
                 {
                     string skylink = barcodeData.Substring(barcodeData.Length - 46, 46);
-                    var skyFile = new SkyFile() { Skylink = skylink };
+                    ReceivedSkyFile = new SkyFile() { Skylink = skylink };
 
-                    var filename = await apiService.GetSkyFileFilename(skyFile);
-                    skyFile.Filename = filename;
-                    storageService.SaveSkyFiles(skyFile);
+                    var filename = await apiService.GetSkyFileFilename(ReceivedSkyFile);
+                    ReceivedSkyFile.Filename = filename;
+                    storageService.SaveSkyFiles(ReceivedSkyFile);
 
-                    await OpenFileInBrowser(skyFile);
+                    ShowReceivedFileCommand.Execute();
+
+                    //await OpenFileInBrowser(skyFile);
                 }
             }
             catch (Exception e)
@@ -733,7 +736,7 @@ namespace SkyDrop.Core.ViewModels.Main
             if (selectedFile == null)
                 return;
 
-            FirstFileUploaded = true;
+            SwipeNavigationEnabled = true;
             UploadedFile = selectedFile;
 
             //show QR code
