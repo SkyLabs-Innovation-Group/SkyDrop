@@ -15,8 +15,8 @@ using Xamarin.Essentials;
 
 namespace SkyDrop.iOS.Common
 {
-	public class ImageSelectionHelper
-	{
+    public class ImageSelectionHelper
+    {
         public static async void SelectMultiplePhoto(Action<string> successAction, Action failAction)
         {
             var hasPermission = await CheckPhotoPermission();
@@ -25,13 +25,13 @@ namespace SkyDrop.iOS.Common
 
             var picker = GetPicker();
             picker.Canceled += (s, e) => failAction();
-            picker.FinishedPickingAssets += async (s, e) => await HandlePickedImage(e, successAction, failAction);
+            picker.FinishedPickingAssets += async (s, e) => await HandlePickedImages(e, successAction, failAction);
 
             var vc = Platform.GetCurrentUIViewController();
             vc.PresentModalViewController(picker, true);
         }
 
-        private static async Task HandlePickedImage(MultiAssetEventArgs e, Action<string> successAction, Action failAction)
+        private static async Task HandlePickedImages(MultiAssetEventArgs e, Action<string> successAction, Action failAction)
         {
             foreach (var phasset in e.Assets)
             {
