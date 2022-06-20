@@ -460,7 +460,14 @@ namespace SkyDrop.Core.ViewModels.Main
             if (fileType == image)
             {
                 if (IosSelectFileCommand != null)
-                    return new List<SkyFile> { await IosPickImages() }; //native multi image selection iOS
+                {
+                    var imageFile = await IosPickImages(); //native multi image selection iOS
+                    if (imageFile == null)
+                        return null;
+
+                    return new List<SkyFile> { imageFile };
+                }
+                    
 
                 chosenType = SkyFilePickerType.Image;
             }
