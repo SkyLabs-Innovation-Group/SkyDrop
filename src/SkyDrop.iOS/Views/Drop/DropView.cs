@@ -53,7 +53,12 @@ namespace SkyDrop.iOS.Views.Drop
                 ViewModel.UploadStartedNotificationCommand = new MvxAsyncCommand(async() => await ShowUploadStartedNotification()); ;
                 ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>((result) => ShowUploadFinishedNotification(result));
                 ViewModel.UpdateNotificationProgressCommand = new MvxCommand<double>((progress) => UpdateUploadNotificationProgress(progress));
-                ViewModel.IosSelectFileCommand = new MvxCommand(() => ImageSelectionHelper.SelectMultiplePhoto(ViewModel));
+                ViewModel.IosSelectFileCommand = new MvxCommand(() =>
+                {
+                    var successAction = new Action<string>(path => ViewModel.IosStageImage(path));
+                    var failAction = new Action(() => ViewModel.IosImagePickerFailed());
+                    ImageSelectionHelper.SelectMultiplePhoto(successAction, failAction);
+                });
 
                 SetupGestureListener();
                 SetupNavDots();

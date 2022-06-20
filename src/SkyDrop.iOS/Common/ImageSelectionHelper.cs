@@ -17,94 +17,99 @@ namespace SkyDrop.iOS.Common
 {
 	public class ImageSelectionHelper
 	{
-        public static async void SelectMultiplePhoto(DropViewModel dropViewModel)
+        public static async void SelectMultiplePhoto(Action<string> successAction, Action failAction)
         {
-            var picker = new GMImagePickerController();
-
-            picker.Title = "Select Images";
-            picker.ColsInPortrait = 3;
-            picker.ColsInLandscape = 5;
-            picker.MinimumInteritemSpacing = 2.0f;
-            picker.ShowCameraButton = false;
-            picker.AutoSelectCameraImages = false;
-            picker.MediaTypes = new[] { PHAssetMediaType.Image };
-
-            picker.NavigationBarBackgroundColor = UIColor.White;
-            picker.NavigationBarTextColor = UIColor.Black;
-            picker.NavigationBarTintColor = UIColor.Black;
-
-            var hasPermission = await CheckPhotoPermissionAsync();
+            var hasPermission = await CheckPhotoPermission();
             if (!hasPermission)
                 return;
 
-            picker.Canceled += (s, e) => dropViewModel.IosMultipleImageSelectTask.TrySetResult(false);
-            picker.FinishedPickingAssets +=
-            async (sender, args) =>
-            {
-                foreach (var phasset in args.Assets)
-                {
-                    PHCachingImageManager manager = new PHCachingImageManager();
-                    var tcs = new TaskCompletionSource<bool>();
-                    var resultFilePaths = new List<string>();
-                    var image = manager.RequestImageForAsset(
-                        asset: phasset,
-                        targetSize: new CGSize(phasset.PixelWidth, phasset.PixelHeight),
-                        contentMode: PHImageContentMode.AspectFill,
-                        options: new PHImageRequestOptions() { ResizeMode = PHImageRequestOptionsResizeMode.None, DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat, NetworkAccessAllowed = true, Synchronous = true },
-                        resultHandler: async (img, info) =>
-                        {
-                            var res = PHAssetResource.GetAssetResources(phasset);
-                            phasset.RequestContentEditingInput(new PHContentEditingInputRequestOptions(), async (s, _) =>
-                            {
-                                try
-                                {
-                                    if (img != null)
-                                    {
-                                        string filePath = string.Empty;
-
-                                        using (img)
-                                        {
-                                            using (var stream = img.AsJpegStream())
-                                            {
-                                                var newFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Guid.NewGuid().ToString() + ".JPG");
-
-                                                using (var fileStream = File.Create(newFilePath))
-                                                {
-                                                    stream.Seek(0, SeekOrigin.Begin);
-                                                    await stream.CopyToAsync(fileStream);
-                                                }
-                                                filePath = newFilePath;
-                                            }
-                                        }
-                                        resultFilePaths.Add(filePath);
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine(ex.Message);
-                                    dropViewModel.IosMultipleImageSelectTask.TrySetResult(false);
-                                }
-                                finally
-                                {
-                                    tcs.TrySetResult(true);
-                                }
-                            });
-                        });
-                    await tcs.Task;
-                    dropViewModel.IosFilePathsFromMultiImageSelect = resultFilePaths;
-
-                    if (!dropViewModel.IosMultipleImageSelectTask.Task.IsCompleted)
-                        dropViewModel.IosMultipleImageSelectTask.TrySetResult(true); //first file(s) loaded causes UI to continue to next stage
-                    else
-                        dropViewModel.IosStageFiles(resultFilePaths); //subsequent files get staged in a "lazy" manner
-                }
-            };
+            var picker = GetPicker();
+            picker.Canceled += (s, e) => failAction();
+            picker.FinishedPickingAssets += async (s, e) => await HandlePickedImage(e, successAction, failAction);
 
             var vc = Platform.GetCurrentUIViewController();
             vc.PresentModalViewController(picker, true);
         }
 
-        private static async Task<bool> CheckPhotoPermissionAsync()
+        private static async Task HandlePickedImage(MultiAssetEventArgs e, Action<string> successAction, Action failAction)
+        {
+            foreach (var phasset in e.Assets)
+            {
+                var filePath = await GetPathForImage(phasset);
+                if (filePath == null)
+                    failAction();
+
+                successAction(filePath);
+            }
+        }
+
+        private static Task<string> GetPathForImage(PHAsset asset)
+        {
+            var manager = new PHCachingImageManager();
+            var tcs = new TaskCompletionSource<string>();
+            var image = manager.RequestImageForAsset(
+                asset: asset,
+                targetSize: new CGSize(asset.PixelWidth, asset.PixelHeight),
+                contentMode: PHImageContentMode.AspectFill,
+                options: new PHImageRequestOptions() { ResizeMode = PHImageRequestOptionsResizeMode.None, DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat, NetworkAccessAllowed = true, Synchronous = true },
+                resultHandler: (img, info) =>
+                {
+                    asset.RequestContentEditingInput(new PHContentEditingInputRequestOptions(), async (s, e) =>
+                    {
+                        var path = await UIImageToFile(img);
+                        tcs.TrySetResult(path);
+                    });
+                });
+
+            return tcs.Task;
+        }
+
+        private static async Task<string> UIImageToFile(UIImage image)
+        {
+            try
+            {
+                if (image == null)
+                    return null;
+
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Guid.NewGuid().ToString() + ".jpg");
+                using (image)
+                using (var stream = image.AsJpegStream())
+                {
+                    using (var fileStream = File.Create(path))
+                    {
+                        stream.Seek(0, SeekOrigin.Begin);
+                        await stream.CopyToAsync(fileStream);
+                    }
+                }
+
+                return path;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        private static GMImagePickerController GetPicker()
+        {
+            return new GMImagePickerController()
+            {
+                Title = "Select Images",
+                ColsInPortrait = 3,
+                ColsInLandscape = 5,
+                MinimumInteritemSpacing = 2.0f,
+                ShowCameraButton = false,
+                AutoSelectCameraImages = false,
+                MediaTypes = new[] { PHAssetMediaType.Image },
+
+                NavigationBarBackgroundColor = UIColor.White,
+                NavigationBarTextColor = UIColor.Black,
+                NavigationBarTintColor = UIColor.Black
+            };
+        }
+
+        private static async Task<bool> CheckPhotoPermission()
         {
             var status = ALAssetsLibrary.AuthorizationStatus;
 
