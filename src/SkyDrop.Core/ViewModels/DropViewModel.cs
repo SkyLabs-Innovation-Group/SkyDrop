@@ -452,9 +452,7 @@ namespace SkyDrop.Core.ViewModels.Main
             var cancel = "cancel";
             var fileType = await userDialogs.ActionSheetAsync("", cancel, null, null, file, image, video);
             if (fileType == cancel)
-            {
                 return null;
-            }
 
             SkyFilePickerType chosenType;
             if (fileType == image)
@@ -467,7 +465,6 @@ namespace SkyDrop.Core.ViewModels.Main
 
                     return new List<SkyFile> { imageFile };
                 }
-                    
 
                 chosenType = SkyFilePickerType.Image;
             }
