@@ -10,7 +10,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DropView">
             <connections>
-                <outlet property="ActivityIndicator" destination="WEo-01-0A0" id="Yay-To-vVz"/>
                 <outlet property="BarcodeContainer" destination="d8B-sr-eBO" id="Iky-Gr-hJJ"/>
                 <outlet property="BarcodeImage" destination="1Ig-6e-hog" id="N99-yB-WUp"/>
                 <outlet property="BarcodeMenu" destination="RQr-fo-ynZ" id="d2C-Fy-YkH"/>
@@ -21,9 +20,12 @@
                 <outlet property="LeftNavDot" destination="WPb-AT-AvM" id="upV-fs-Bzv"/>
                 <outlet property="OpenButton" destination="rhP-Ru-BgC" id="SIp-o7-VRB"/>
                 <outlet property="ProgressFillArea" destination="RUr-fo-czC" id="9Zk-Lf-VbU"/>
+                <outlet property="ReceiveActivityIndicator" destination="63E-KD-KMU" id="OkC-29-GR2"/>
                 <outlet property="ReceiveButton" destination="pjX-AC-hdv" id="JZq-8B-A1n"/>
                 <outlet property="ReceiveIcon" destination="Cq9-AE-Hf8" id="Bfi-nb-PGd"/>
+                <outlet property="ReceiveLabel" destination="OfC-3c-DrC" id="ZpR-ZP-akX"/>
                 <outlet property="RightNavDot" destination="aAF-UA-cRI" id="sUD-RO-UEc"/>
+                <outlet property="SendActivityIndicator" destination="WEo-01-0A0" id="SWQ-oy-smz"/>
                 <outlet property="SendButton" destination="EyF-1x-tNq" id="Zet-dE-ps3"/>
                 <outlet property="SendIcon" destination="3as-jp-js1" id="y9a-OO-QKZ"/>
                 <outlet property="SendLabel" destination="JFC-yr-fmz" id="Acd-cP-12D"/>
@@ -110,6 +112,10 @@
                                     <color key="textColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="63E-KD-KMU">
+                                    <rect key="frame" x="53.5" y="53.5" width="37" height="37"/>
+                                    <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </activityIndicatorView>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemGreenColor"/>
                             <constraints>
@@ -118,6 +124,8 @@
                                 <constraint firstAttribute="bottom" secondItem="OfC-3c-DrC" secondAttribute="bottom" constant="16" id="By6-21-SkF"/>
                                 <constraint firstItem="Cq9-AE-Hf8" firstAttribute="leading" secondItem="pjX-AC-hdv" secondAttribute="leading" constant="8" id="EDr-xT-SXN"/>
                                 <constraint firstAttribute="trailing" secondItem="Cq9-AE-Hf8" secondAttribute="trailing" constant="8" id="SQo-qv-xTk"/>
+                                <constraint firstItem="63E-KD-KMU" firstAttribute="centerX" secondItem="Cq9-AE-Hf8" secondAttribute="centerX" id="Vy3-9Y-gra"/>
+                                <constraint firstItem="63E-KD-KMU" firstAttribute="centerY" secondItem="Cq9-AE-Hf8" secondAttribute="centerY" id="hqI-ar-m1L"/>
                                 <constraint firstItem="OfC-3c-DrC" firstAttribute="top" secondItem="Cq9-AE-Hf8" secondAttribute="bottom" id="jFj-Of-Teb"/>
                             </constraints>
                         </view>

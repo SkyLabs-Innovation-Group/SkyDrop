@@ -54,6 +54,7 @@ namespace SkyDrop.iOS.Views.Drop
                 base.ViewDidLoad();
 
                 ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
+                ViewModel.SlideReceiveButtonToCenterCommand = new MvxCommand(AnimateSlideReceiveButton);
                 ViewModel.GenerateBarcodeAsyncFunc = t => ShowBarcode(t);
                 ViewModel.ResetUIStateCommand = new MvxCommand(SetSendReceiveButtonUiState);
                 ViewModel.UpdateNavDotsCommand = new MvxCommand(() => UpdateNavDots());
@@ -73,6 +74,7 @@ namespace SkyDrop.iOS.Views.Drop
                 };
 
                 View.BackgroundColor = Colors.DarkGrey.ToNative();
+                BarcodeContainer.BackgroundColor = Colors.DarkGrey.ToNative(); //so that preview image fades in from dark color
 
                 var menuButton = new UIBarButtonItem()
                 {
@@ -134,10 +136,13 @@ namespace SkyDrop.iOS.Views.Drop
                 set.Bind(BarcodeMenu).For("Visible").To(vm => vm.IsBarcodeVisible);
                 set.Bind(BarcodeContainer).For("Visible").To(vm => vm.IsBarcodeVisible);
 
-                set.Bind(ActivityIndicator).For("Visible").To(vm => vm.IsUploading);
+                set.Bind(SendActivityIndicator).For("Visible").To(vm => vm.IsUploading);
+                set.Bind(ReceiveActivityIndicator).For("Visible").To(vm => vm.IsReceivingFile);
                 set.Bind(SendIcon).For(v => v.Hidden).To(vm => vm.IsUploading);
+                set.Bind(ReceiveIcon).For(v => v.Hidden).To(vm => vm.IsReceivingFile);
 
                 set.Bind(SendLabel).To(vm => vm.SendButtonLabel);
+                set.Bind(ReceiveLabel).To(vm => vm.ReceiveButtonLabel);
 
                 set.Bind(FileSizeLabel).To(vm => vm.FileSize);
 
@@ -295,6 +300,8 @@ namespace SkyDrop.iOS.Views.Drop
             //DropViewUIState gets changed at the end of the animation 
             //that is to fix an issue with CheckUserIsSwiping() on barcode menu buttons
             AnimateSlideBarcodeOut();
+
+            ReceiveButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
         }
 
         /// <summary>
@@ -318,8 +325,6 @@ namespace SkyDrop.iOS.Views.Drop
         private void AnimateSlideSendButton()
         {
             var screenCenterX = UIScreen.MainScreen.Bounds.Width / 2;
-            var sendButtonLocation = new[] { 0, 0 };
-
             var sendButtonCenterX = SendButton.ConvertPointToView(new CGPoint(SendButton.Bounds.Width * 0.5, SendButton.Bounds.Height), null).X;
             var translationX = screenCenterX - sendButtonCenterX;
 
@@ -327,6 +332,23 @@ namespace SkyDrop.iOS.Views.Drop
             {
                 SendButton.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
                 ReceiveButton.Alpha = 0;
+            });
+        }
+
+        /// <summary>
+        /// Slide receive button to center
+        /// </summary>
+        private void AnimateSlideReceiveButton()
+        {
+            var screenCenterX = UIScreen.MainScreen.Bounds.Width / 2;
+
+            var receiveButtonCenterX = ReceiveButton.ConvertPointToView(new CGPoint(ReceiveButton.Bounds.Width * 0.5, ReceiveButton.Bounds.Height), null).X;
+            var translationX = screenCenterX - receiveButtonCenterX;
+
+            UIView.Animate(1, () =>
+            {
+                ReceiveButton.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
+                SendButton.Alpha = 0;
             });
         }
 
@@ -361,6 +383,7 @@ namespace SkyDrop.iOS.Views.Drop
             {
                 SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
                 SendButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
+                ReceiveButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
             });
         }
 
@@ -384,8 +407,9 @@ namespace SkyDrop.iOS.Views.Drop
                 BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(barcodeTranslationX, 0);
 
                 //slide send receive buttons in
-                ReceiveButton.Alpha = 1;
                 SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(0, 0);
+                SendButton.Alpha = 1;
+                ReceiveButton.Alpha = 1;
                 SendButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
 
             }, completion: () =>

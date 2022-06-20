@@ -13,9 +13,6 @@ namespace SkyDrop.iOS.Views.Drop
 	partial class DropView
 	{
 		[Outlet]
-		UIKit.UIActivityIndicatorView ActivityIndicator { get; set; }
-
-		[Outlet]
 		UIKit.UIView BarcodeContainer { get; set; }
 
 		[Outlet]
@@ -46,13 +43,22 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView ProgressFillArea { get; set; }
 
 		[Outlet]
+		UIKit.UIActivityIndicatorView ReceiveActivityIndicator { get; set; }
+
+		[Outlet]
 		UIKit.UIView ReceiveButton { get; set; }
 
 		[Outlet]
 		UIKit.UIImageView ReceiveIcon { get; set; }
 
 		[Outlet]
+		UIKit.UILabel ReceiveLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIImageView RightNavDot { get; set; }
+
+		[Outlet]
+		UIKit.UIActivityIndicatorView SendActivityIndicator { get; set; }
 
 		[Outlet]
 		UIKit.UIView SendButton { get; set; }
@@ -74,9 +80,14 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (ActivityIndicator != null) {
-				ActivityIndicator.Dispose ();
-				ActivityIndicator = null;
+			if (SendActivityIndicator != null) {
+				SendActivityIndicator.Dispose ();
+				SendActivityIndicator = null;
+			}
+
+			if (ReceiveActivityIndicator != null) {
+				ReceiveActivityIndicator.Dispose ();
+				ReceiveActivityIndicator = null;
 			}
 
 			if (BarcodeContainer != null) {
@@ -157,6 +168,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (SendLabel != null) {
 				SendLabel.Dispose ();
 				SendLabel = null;
+			}
+
+			if (ReceiveLabel != null) {
+				ReceiveLabel.Dispose ();
+				ReceiveLabel = null;
 			}
 
 			if (SendReceiveButtonsContainer != null) {

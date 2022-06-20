@@ -41,6 +41,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand ShareLinkCommand { get; set; }
         public IMvxCommand OpenFileInBrowserCommand { get; set; }
         public IMvxCommand SlideSendButtonToCenterCommand { get; set; }
+        public IMvxCommand SlideReceiveButtonToCenterCommand { get; set; }
         public IMvxCommand CancelUploadCommand { get; set; }
         public IMvxCommand CheckUserIsSwipingCommand { get; set; }
         public IMvxCommand<StagedFileDVM> ShowStagedFileMenuCommand { get; set; }
@@ -68,6 +69,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public string SendButtonLabel => IsUploading ? StagedFiles?.Count > 2 ? "SENDING FILES" :
             "SENDING FILE" :
             DropViewUIState == DropViewState.ConfirmFilesState && StagedFiles?.Count > 2 ? "SEND FILES" : "SEND FILE";
+        public string ReceiveButtonLabel { get; set; } = receiveFileText;
+        public bool IsReceivingFile { get; set; }
 
         public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile UploadedFile { get; set; }
@@ -102,6 +105,8 @@ namespace SkyDrop.Core.ViewModels.Main
             Cancelled = 3
         }
 
+        private const string receiveFileText = "RECEIVE FILE";
+        private const string receivingFileText = "RECEIVING FILE...";
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
 
@@ -332,6 +337,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 IsSendButtonGreen = false;
                 IsReceiveButtonGreen = true;
+                SlideReceiveButtonToCenterCommand.Execute();
+                ReceiveButtonLabel = receivingFileText;
+                IsReceivingFile = true;
 
                 //open the QR code scan view
                 var barcodeData = await barcodeService.ScanBarcode();
@@ -347,19 +355,14 @@ namespace SkyDrop.Core.ViewModels.Main
                     await OpenUrlInBrowser(barcodeData);
                     return;
                 }
-                else
-                {
-                    string skylink = barcodeData.Substring(barcodeData.Length - 46, 46);
-                    ReceivedFile = new SkyFile() { Skylink = skylink };
 
-                    var filename = await apiService.GetSkyFileFilename(ReceivedFile);
-                    ReceivedFile.Filename = filename;
-                    storageService.SaveSkyFiles(ReceivedFile);
+                string skylink = barcodeData.Substring(barcodeData.Length - 46, 46);
+                ReceivedFile = new SkyFile() { Skylink = skylink };
+                ShowReceivedFileCommand.Execute();
 
-                    ShowReceivedFileCommand.Execute();
-
-                    //await OpenFileInBrowser(skyFile);
-                }
+                var filename = await apiService.GetSkyFileFilename(ReceivedFile);
+                ReceivedFile.Filename = filename;
+                storageService.SaveSkyFiles(ReceivedFile);
             }
             catch (Exception e)
             {
@@ -371,6 +374,15 @@ namespace SkyDrop.Core.ViewModels.Main
                     userDialogs.Toast(error);
                 else
                     errorMessage = error;
+
+                ResetUIStateCommand.Execute();
+            }
+            finally
+            {
+                IsReceivingFile = false;
+                ReceiveButtonLabel = receiveFileText;
+                IsSendButtonGreen = true;
+                IsReceiveButtonGreen = true;
             }
         }
 
@@ -739,8 +751,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
             //show QR code
             IsBarcodeLoading = true;
-            SkyFileFullUrl = UploadedFile.GetSkylinkUrl();
-            await GenerateBarcodeAsyncFunc();
+            await GenerateBarcodeAsyncFunc(UploadedFile.GetSkylinkUrl());
         }
     }
 }
