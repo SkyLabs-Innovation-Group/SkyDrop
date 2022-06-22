@@ -13,13 +13,45 @@ namespace SkyDrop.iOS.Views.Files
 	partial class FileTableViewCell
 	{
 		[Outlet]
+		UIKit.UIView ContainerView { get; set; }
+
+		[Outlet]
 		UIKit.UILabel FileNameLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView IconImage { get; set; }
+
+		[Outlet]
+		UIKit.UIView SelectedIndicatorInnerView { get; set; }
+
+		[Outlet]
+		UIKit.UIView SelectedIndicatorView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (ContainerView != null) {
+				ContainerView.Dispose ();
+				ContainerView = null;
+			}
+
 			if (FileNameLabel != null) {
 				FileNameLabel.Dispose ();
 				FileNameLabel = null;
+			}
+
+			if (IconImage != null) {
+				IconImage.Dispose ();
+				IconImage = null;
+			}
+
+			if (SelectedIndicatorInnerView != null) {
+				SelectedIndicatorInnerView.Dispose ();
+				SelectedIndicatorInnerView = null;
+			}
+
+			if (SelectedIndicatorView != null) {
+				SelectedIndicatorView.Dispose ();
+				SelectedIndicatorView = null;
 			}
 		}
 	}

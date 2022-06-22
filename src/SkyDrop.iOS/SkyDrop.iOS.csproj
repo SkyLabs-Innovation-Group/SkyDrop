@@ -179,10 +179,22 @@
     <ImageAsset Include="Media.xcassets\ic_upload.imageset\ic_upload.pdf" />
     <ImageAsset Include="Media.xcassets\ic_grid.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_grid.imageset\view-grid.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_file_generic.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_file_generic.imageset\file.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_file_document.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_file_document.imageset\file-document.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_file_audio.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_file_audio.imageset\file-music.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_file_video.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_file_video.imageset\file-video.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_file_image.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_file_image.imageset\file-image.pdf" />
     <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
     <Compile Include="Common\ImageSelectionHelper.cs" />
+    <Compile Include="Bindings\LongPressBinding.cs" />
+    <Compile Include="Bindings\FileCategoryIconBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -1,9 +1,11 @@
 ﻿using System;
-
+using Acr.UserDialogs;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using SkyDrop.Core.DataViewModels;
+using SkyDrop.Core.Utility;
+using SkyDrop.iOS.Bindings;
 using UIKit;
 
 namespace SkyDrop.iOS.Views.Files
@@ -24,8 +26,22 @@ namespace SkyDrop.iOS.Views.Files
 			{
 				var set = this.CreateBindingSet<FileTableViewCell, SkyFileDVM>();
 				set.Bind(FileNameLabel).To(vm => vm.SkyFile.Filename);
+				set.Bind(SelectedIndicatorView).For(i => i.BackgroundColor).To(vm => vm.SelectionIndicatorColor).WithConversion("NativeColor");
+				set.Bind(SelectedIndicatorView).For("Visible").To(vm => vm.IsSelectionActive);
+				set.Bind(SelectedIndicatorInnerView).For("Visible").To(vm => vm.IsSelected);
+				set.Bind(IconImage).For(i => i.Hidden).To(vm => vm.IsSelectionActive);
+				set.Bind(IconImage).For(FileCategoryIconBinding.Name).To(vm => vm.SkyFile.Filename);
+				set.Bind(ContentView).For("Tap").To(vm => vm.TapCommand);
+				set.Bind(ContentView).For("LongPress").To(vm => vm.LongPressCommand);
 				set.Apply();
 			});
 		}
-	}
+
+        [Export("awakeFromNib")]
+        public void AwakeFromNib()
+        {
+			ContainerView.BackgroundColor = Colors.MidGrey.ToNative();
+			SelectedIndicatorView.BackgroundColor = Colors.LightGrey.ToNative();
+        }
+    }
 }

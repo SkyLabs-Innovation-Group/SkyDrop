@@ -49,6 +49,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand<FileUploadResult> UploadFinishedNotificationCommand { get; set; }
         public IMvxCommand<double> UpdateNotificationProgressCommand { get; set; }
         public IMvxCommand IosSelectFileCommand { get; set; }
+        public IMvxCommand MenuCommand { get; set; }
 
         public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
@@ -147,6 +148,7 @@ namespace SkyDrop.Core.ViewModels.Main
             CancelUploadCommand = new MvxCommand(CancelUpload);
             ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
+            MenuCommand = new MvxAsyncCommand(NavigateToFiles);
         }
 
         public override async Task Initialize()
@@ -784,6 +786,7 @@ namespace SkyDrop.Core.ViewModels.Main
             IsBarcodeLoading = true;
             SkyFileFullUrl = UploadedFile.GetSkylinkUrl();
             await GenerateBarcodeAsyncFunc();
+            IsBarcodeLoading = false;
         }
     }
 }
