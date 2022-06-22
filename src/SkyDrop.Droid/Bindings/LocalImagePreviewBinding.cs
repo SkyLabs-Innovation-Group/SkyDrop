@@ -32,14 +32,14 @@ namespace SkyDrop.Droid.Bindings
     ///
     /// FFImageLoading handles optimising the stream, so I am generating it only right before passing it to Target.ImageStream.
     /// </summary>
-    public class ImagePreviewBinding : MvxTargetBinding<MvxCachedImageView, SkyFile>
+    public class LocalImagePreviewBinding : MvxTargetBinding<MvxCachedImageView, SkyFile>
     {
         private ILog _log;
         private ILog log => _log ??= Mvx.IoCProvider.Resolve<ILog>();
         
         public static string Name => "ImagePreview";
 
-        public ImagePreviewBinding(MvxCachedImageView target) : base(target)
+        public LocalImagePreviewBinding(MvxCachedImageView target) : base(target)
         {
         }
         

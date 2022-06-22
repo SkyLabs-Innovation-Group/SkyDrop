@@ -6,7 +6,7 @@ namespace SkyDrop.Core.Utility
 {
     public static class Colors
     {
-        public static Color MidGrey => ColorConverters.FromHex("#4c555a");
+        public static Color MidGrey => ColorConverters.FromHex("#303a40");
         public static Color DarkGrey => ColorConverters.FromHex("#242c31");
         public static Color LightGrey => ColorConverters.FromHex("#eeeeee");
         public static Color White => ColorConverters.FromHex("#ffffff");

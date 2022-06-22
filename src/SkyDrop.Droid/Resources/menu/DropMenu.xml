@@ -7,7 +7,7 @@
         android:icon="@drawable/ic_cog"
         android:orderInCategory="100"
         app:showAsAction="always"
-        android:actionLayout="@layout/layout_toolbar"
+        android:actionLayout="@layout/toolbar_drop_view"
         android:title="Settings" />
 
 </menu>

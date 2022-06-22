@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.AppBarLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/appbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/darkGrey">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            app:MvxBind="Click MenuCommand">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingRight="8dp"
+                android:src="@drawable/ic_menu"
+                />
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/textview_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SkyDrop"
+            android:textColor="#fff"
+            android:layout_gravity="center"
+            app:MvxBind="Text Title"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
+        <!--
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            app:MvxBind="Click ToggleLayoutCommand">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="16dp"
+                android:src="@drawable/ic_list"
+                app:MvxBind="LayoutImage LayoutType"
+                />
+
+        </LinearLayout>-->
+    </androidx.appcompat.widget.Toolbar>
+</com.google.android.material.appbar.AppBarLayout>
