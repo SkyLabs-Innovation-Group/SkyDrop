@@ -57,7 +57,7 @@ namespace SkyDrop.Core.ViewModels
 
                 portalUrl = FormatPortalUrl(portalUrl);
                 var portal = new SkynetPortal(portalUrl);
-                bool success = await singletonService.ApiService.PingPortalForSkylink(RandomFileToQueryFor, portal);
+                bool success = await ValidatePortal(portal);
                 if (success)
                 {
                     bool userHasConfirmed = await singletonService.UserDialogs.ConfirmAsync($"Set your portal to {portalUrl} ?");
@@ -82,6 +82,12 @@ namespace SkyDrop.Core.ViewModels
             }
 
             return portalUrl;
+        }
+
+        public Task<bool> ValidatePortal(SkynetPortal portal)
+        {
+            return Task.FromResult(true); // for debugging pro portals disable broken query code
+            //return singletonService.ApiService.PingPortalForSkylink(RandomFileToQueryFor, portal);
         }
 
         public void SetUploadNotificationEnabled(bool value)

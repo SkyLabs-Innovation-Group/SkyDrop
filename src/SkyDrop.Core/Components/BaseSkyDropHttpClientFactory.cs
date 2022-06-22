@@ -7,6 +7,12 @@ namespace SkyDrop.Core.Components
 {
     public abstract class BaseSkyDropHttpClientFactory : ISkyDropHttpClientFactory
     {
+        /// <summary>
+        /// Keep secret!
+        /// </summary>
+        protected const string MyDevApiKey = "";
+        protected const string MyDevApiKeyHeader = "Skynet-Api-Key";
+
         // todo: nb that this might one day cause issues if we stored too many HttpClient instances e.g. for 100s of portals
         protected Dictionary<SkynetPortal, HttpClient> HttpClientsPerPortal { get; private set; } = new Dictionary<SkynetPortal, HttpClient>();
 
@@ -23,6 +29,14 @@ namespace SkyDrop.Core.Components
         public void ClearCachedClients()
         {
             HttpClientsPerPortal = new Dictionary<SkynetPortal, HttpClient>();
+        }
+
+        protected static void AddDevApiKeyHeader(HttpClient client, SkynetPortal portal)
+        {
+            if (portal.BaseUrl.Contains("pro"))
+            {
+                client.DefaultRequestHeaders.Add(MyDevApiKeyHeader, MyDevApiKey);
+            }
         }
     }
 }
