@@ -288,7 +288,7 @@ namespace SkyDrop.iOS.Views.Drop
         private void ShowReceivedFilePreview()
         {
             SetBarcodeCodeUiState(isSlow: true);
-            BarcodeImage.ImagePath = ViewModel.ReceivedFile.GetSkylinkUrl();
+            BarcodeImage.ImagePath = ViewModel.FocusedFile.GetSkylinkUrl();
             ViewModel.SwipeNavigationEnabled = true;
         }
 
