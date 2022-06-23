@@ -93,6 +93,7 @@
     <Compile Include="Bindings\SkyFilePreviewImageBinding.cs" />
     <Compile Include="Bindings\BackgroundColorBinding.cs" />
     <Compile Include="Bindings\FileCategoryIconBinding.cs" />
+    <Compile Include="Views\PortalPreferences\PortalPreferencesView.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -438,6 +439,10 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\PortalPreferencesView.axml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\strings.xml" />
@@ -467,6 +472,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\PortalPreferences\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

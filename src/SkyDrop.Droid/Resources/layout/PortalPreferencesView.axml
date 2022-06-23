@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,11 +10,12 @@
     <include
         android:id="@+id/layout_toolbar"
         layout="@layout/toolbar_settings" />
-    <mvvmcross.droid.support.v7.recyclerview.MvxRecyclerView
-        android:id="@+id/FilesRecycler"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:MvxItemTemplate="@layout/item_file_list"
-        app:MvxBind="ItemsSource SkyFiles"
-        />
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!--Content Goes Here-->
+
+    </FrameLayout>
 </LinearLayout>
