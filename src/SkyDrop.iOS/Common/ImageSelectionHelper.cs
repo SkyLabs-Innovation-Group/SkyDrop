@@ -47,21 +47,56 @@ namespace SkyDrop.iOS.Common
         {
             var manager = new PHCachingImageManager();
             var tcs = new TaskCompletionSource<string>();
-            var image = manager.RequestImageForAsset(
+            var image = manager.RequestImageData(
                 asset: asset,
-                targetSize: new CGSize(asset.PixelWidth, asset.PixelHeight),
-                contentMode: PHImageContentMode.AspectFill,
                 options: new PHImageRequestOptions() { ResizeMode = PHImageRequestOptionsResizeMode.None, DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat, NetworkAccessAllowed = true, Synchronous = true },
-                resultHandler: (img, info) =>
+                handler: async (data, dataUti, orientation, info) =>
                 {
                     asset.RequestContentEditingInput(new PHContentEditingInputRequestOptions(), async (s, e) =>
                     {
-                        var path = await UIImageToFile(img);
+                        var fileName = dataUti.ToString();
+                        if (Util.ExtensionMatches(fileName, ".heic"))
+                        {
+                            //photo taken on iPhone saved with H265
+                            //let's convert it to PNG
+                            var img = new UIImage(data);
+                            var pngPath = await UIImageToFile(img);
+
+                            tcs.TrySetResult(pngPath);
+                            return;
+                        }
+
+                        var path = await SaveImageFile(data, fileName);
                         tcs.TrySetResult(path);
                     });
                 });
 
             return tcs.Task;
+        }
+
+        private static async Task<string> SaveImageFile(NSData imageData, string fileName)
+        {
+            try
+            {
+                using (var stream = imageData.AsStream())
+                {
+                    string extension = Path.GetExtension(fileName);
+                    string newFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Guid.NewGuid().ToString() + extension);
+
+                    using (var fileStream = File.Create(newFilePath))
+                    {
+                        stream.Seek(0, SeekOrigin.Begin);
+                        await stream.CopyToAsync(fileStream);
+                    }
+
+                    return newFilePath;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
         }
 
         private static async Task<string> UIImageToFile(UIImage image)
@@ -71,7 +106,7 @@ namespace SkyDrop.iOS.Common
                 if (image == null)
                     return null;
 
-                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Guid.NewGuid().ToString() + ".jpg");
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Guid.NewGuid().ToString() + ".png");
                 using (image)
                 using (var stream = image.AsJpegStream())
                 {
@@ -101,7 +136,7 @@ namespace SkyDrop.iOS.Common
                 MinimumInteritemSpacing = 2.0f,
                 ShowCameraButton = false,
                 AutoSelectCameraImages = false,
-                MediaTypes = new[] { PHAssetMediaType.Image },
+                MediaTypes = new[] { PHAssetMediaType.Image, PHAssetMediaType.Video, PHAssetMediaType.Audio, PHAssetMediaType.Unknown },
 
                 NavigationBarBackgroundColor = UIColor.White,
                 NavigationBarTextColor = UIColor.Black,
