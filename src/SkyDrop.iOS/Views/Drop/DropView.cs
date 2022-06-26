@@ -21,6 +21,12 @@ using System.IO;
 using MvvmCross;
 using SkyDrop.Core.Services;
 using System.Linq;
+using GMImagePicker;
+using Photos;
+using System.Collections.Generic;
+using FFImageLoading.Extensions;
+using System.IO;
+using AssetsLibrary;
 
 namespace SkyDrop.iOS.Views.Drop
 {
@@ -53,6 +59,12 @@ namespace SkyDrop.iOS.Views.Drop
                 ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>((result) => ShowUploadFinishedNotification(result));
                 ViewModel.UpdateNotificationProgressCommand = new MvxCommand<double>((progress) => UpdateUploadNotificationProgress(progress));
                 ViewModel.ShowReceivedFileCommand = new MvxCommand(ShowReceivedFilePreview);
+                ViewModel.IosSelectFileCommand = new MvxCommand(() =>
+                {
+                    var successAction = new Action<string>(path => ViewModel.IosStageImage(path));
+                    var failAction = new Action(() => ViewModel.IosImagePickerFailed());
+                    ImageSelectionHelper.SelectMultiplePhoto(successAction, failAction);
+                });
 
                 var fileSystemService = Mvx.IoCProvider.Resolve<IFileSystemService>();
                 fileSystemService.DownloadsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
