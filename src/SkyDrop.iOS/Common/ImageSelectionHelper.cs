@@ -7,7 +7,9 @@ using CoreGraphics;
 using FFImageLoading.Extensions;
 using Foundation;
 using GMImagePicker;
+using MvvmCross;
 using Photos;
+using SkyDrop.Core.Services;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
 using UIKit;
@@ -50,22 +52,11 @@ namespace SkyDrop.iOS.Common
             var image = manager.RequestImageData(
                 asset: asset,
                 options: new PHImageRequestOptions() { ResizeMode = PHImageRequestOptionsResizeMode.None, DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat, NetworkAccessAllowed = true, Synchronous = true },
-                handler: async (data, dataUti, orientation, info) =>
+                handler: (data, dataUti, orientation, info) =>
                 {
                     asset.RequestContentEditingInput(new PHContentEditingInputRequestOptions(), async (s, e) =>
                     {
                         var fileName = dataUti.ToString();
-                        if (Util.ExtensionMatches(fileName, ".heic"))
-                        {
-                            //photo taken on iPhone saved with H265
-                            //let's convert it to PNG
-                            var img = new UIImage(data);
-                            var pngPath = await UIImageToFile(img);
-
-                            tcs.TrySetResult(pngPath);
-                            return;
-                        }
-
                         var path = await SaveImageFile(data, fileName);
                         tcs.TrySetResult(path);
                     });
@@ -78,10 +69,11 @@ namespace SkyDrop.iOS.Common
         {
             try
             {
+                var fileSystemService = Mvx.IoCProvider.Resolve<IFileSystemService>();
                 using (var stream = imageData.AsStream())
                 {
                     string extension = Path.GetExtension(fileName);
-                    string newFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Guid.NewGuid().ToString() + extension);
+                    string newFilePath = Path.Combine(fileSystemService.DownloadsFolderPath, Guid.NewGuid().ToString() + extension);
 
                     using (var fileStream = File.Create(newFilePath))
                     {
