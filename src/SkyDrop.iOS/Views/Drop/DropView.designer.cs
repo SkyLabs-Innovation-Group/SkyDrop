@@ -28,6 +28,9 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView CopyLinkButton { get; set; }
 
 		[Outlet]
+		UIKit.UIView DownloadButton { get; set; }
+
+		[Outlet]
 		UIKit.UICollectionView FilePreviewCollectionView { get; set; }
 
 		[Outlet]
@@ -74,22 +77,9 @@ namespace SkyDrop.iOS.Views.Drop
 
 		[Outlet]
 		UIKit.UIView ShareButton { get; set; }
-
-		[Action ("DropViewClickAction:")]
-		partial void DropViewClickAction (Foundation.NSObject sender);
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (SendActivityIndicator != null) {
-				SendActivityIndicator.Dispose ();
-				SendActivityIndicator = null;
-			}
-
-			if (ReceiveActivityIndicator != null) {
-				ReceiveActivityIndicator.Dispose ();
-				ReceiveActivityIndicator = null;
-			}
-
 			if (BarcodeContainer != null) {
 				BarcodeContainer.Dispose ();
 				BarcodeContainer = null;
@@ -140,6 +130,11 @@ namespace SkyDrop.iOS.Views.Drop
 				ProgressFillArea = null;
 			}
 
+			if (ReceiveActivityIndicator != null) {
+				ReceiveActivityIndicator.Dispose ();
+				ReceiveActivityIndicator = null;
+			}
+
 			if (ReceiveButton != null) {
 				ReceiveButton.Dispose ();
 				ReceiveButton = null;
@@ -150,9 +145,19 @@ namespace SkyDrop.iOS.Views.Drop
 				ReceiveIcon = null;
 			}
 
+			if (ReceiveLabel != null) {
+				ReceiveLabel.Dispose ();
+				ReceiveLabel = null;
+			}
+
 			if (RightNavDot != null) {
 				RightNavDot.Dispose ();
 				RightNavDot = null;
+			}
+
+			if (SendActivityIndicator != null) {
+				SendActivityIndicator.Dispose ();
+				SendActivityIndicator = null;
 			}
 
 			if (SendButton != null) {
@@ -170,11 +175,6 @@ namespace SkyDrop.iOS.Views.Drop
 				SendLabel = null;
 			}
 
-			if (ReceiveLabel != null) {
-				ReceiveLabel.Dispose ();
-				ReceiveLabel = null;
-			}
-
 			if (SendReceiveButtonsContainer != null) {
 				SendReceiveButtonsContainer.Dispose ();
 				SendReceiveButtonsContainer = null;
@@ -183,6 +183,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (ShareButton != null) {
 				ShareButton.Dispose ();
 				ShareButton = null;
+			}
+
+			if (DownloadButton != null) {
+				DownloadButton.Dispose ();
+				DownloadButton = null;
 			}
 		}
 	}

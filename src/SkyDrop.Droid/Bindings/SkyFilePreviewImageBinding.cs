@@ -29,7 +29,7 @@ namespace SkyDrop.Droid.Bindings
             if (value == null)
                 return;
 
-            if (Util.ExtensionMatches(value.Filename, ".jpeg", ".jpg", ".png"))
+            if (Util.CanDisplayPreview(value.Filename))
             {
                 var filePath = value?.GetSkylinkUrl();
                 Target.ImagePath = filePath;

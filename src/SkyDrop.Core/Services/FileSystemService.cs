@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using SkyDrop.Core.DataModels;
 using Xamarin.Essentials;
 
@@ -11,11 +12,15 @@ namespace SkyDrop.Core.Services
 {
     public class FileSystemService : IFileSystemService
     {
+        public string DownloadsFolderPath { get; set; }
         public ILog Log { get; }
 
-        public FileSystemService(ILog log)
+        private readonly IUserDialogs userDialogs;
+
+        public FileSystemService(ILog log, IUserDialogs userDialogs)
         {
             this.Log = log;
+            this.userDialogs = userDialogs;
         }
 
         public async Task<IEnumerable<FileResult>> PickFilesAsync(SkyFilePickerType fileType)
@@ -97,14 +102,38 @@ namespace SkyDrop.Core.Services
                 return false;
             }
         }
+
+        public void ClearCache()
+        {
+            try
+            {
+                var cachePath = System.IO.Path.GetTempPath();
+
+                // If exist, delete the cache directory and everything in it recursivly
+                if (System.IO.Directory.Exists(cachePath))
+                    System.IO.Directory.Delete(cachePath, true);
+
+                // If not exist, restore just the directory that was deleted
+                if (!System.IO.Directory.Exists(cachePath))
+                    System.IO.Directory.CreateDirectory(cachePath);
+            }
+            catch (Exception e)
+            {
+                userDialogs.Toast("Failed to clear cache");
+            }
+        }
     }
 
     public enum SkyFilePickerType { Generic = 0, Image = 1, Video = 2 }
 
     public interface IFileSystemService
     {
+        string DownloadsFolderPath { get; set; }
+
         Task<IEnumerable<FileResult>> PickFilesAsync(SkyFilePickerType fileType);
 
         bool CompressX(IEnumerable<SkyFile> filesToZip, string destinationZipFullPath);
+
+        void ClearCache();
     }
 }

@@ -40,6 +40,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand NavToSettingsCommand { get; set; }
         public IMvxCommand ShareLinkCommand { get; set; }
         public IMvxCommand OpenFileInBrowserCommand { get; set; }
+        public IMvxCommand DownloadFileCommand { get; set; }
         public IMvxCommand SlideSendButtonToCenterCommand { get; set; }
         public IMvxCommand SlideReceiveButtonToCenterCommand { get; set; }
         public IMvxCommand CancelUploadCommand { get; set; }
@@ -152,6 +153,7 @@ namespace SkyDrop.Core.ViewModels.Main
             ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
             MenuCommand = new MvxAsyncCommand(NavigateToFiles);
+            DownloadFileCommand = new MvxAsyncCommand(DownloadFile);
         }
 
         public override async Task Initialize()
@@ -266,6 +268,9 @@ namespace SkyDrop.Core.ViewModels.Main
                 FocusedFile.WasSent = true;
                 storageService.SaveSkyFiles(FocusedFile);
 
+                //clear cache
+                fileSystemService.ClearCache();
+
                 //wait for progressbar to complete
                 await Task.Delay(500);
 
@@ -363,7 +368,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 FocusedFile = new SkyFile() { Skylink = skylink };
                 ShowReceivedFileCommand.Execute();
 
-                var filename = await apiService.GetSkyFileFilename(FocusedFile);
+                var filename = await apiService.GetSkyFileFilename(FocusedFile.GetSkylinkUrl());
                 FocusedFile.Filename = filename;
                 storageService.SaveSkyFiles(FocusedFile);
             }
@@ -755,6 +760,18 @@ namespace SkyDrop.Core.ViewModels.Main
             //show QR code
             IsBarcodeLoading = true;
             await GenerateBarcodeAsyncFunc(FocusedFile.GetSkylinkUrl());
+        }
+
+        public async Task DownloadFile()
+        {
+            try
+            {
+                await apiService.DownloadFile(FocusedFile.GetSkylinkUrl());
+            }
+            catch(Exception e)
+            {
+                userDialogs.Toast("Failed to download file");
+            }
         }
     }
 }

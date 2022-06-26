@@ -17,6 +17,10 @@ using ZXing.Rendering;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 using static SkyDrop.Core.Utility.Util;
 using UserNotifications;
+using System.IO;
+using MvvmCross;
+using SkyDrop.Core.Services;
+using System.Linq;
 
 namespace SkyDrop.iOS.Views.Drop
 {
@@ -34,19 +38,6 @@ namespace SkyDrop.iOS.Views.Drop
         {
         }
 
-        //what is this?
-        partial void DropViewClickAction(NSObject sender)
-        {
-            try
-            {
-                ViewModel.NavToSettingsCommand.Execute();
-            }
-            catch (Exception ex)
-            {
-                ViewModel.Log.Exception(ex);
-            }
-        }
-
         public override void ViewDidLoad()
         {
             try
@@ -62,6 +53,9 @@ namespace SkyDrop.iOS.Views.Drop
                 ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>((result) => ShowUploadFinishedNotification(result));
                 ViewModel.UpdateNotificationProgressCommand = new MvxCommand<double>((progress) => UpdateUploadNotificationProgress(progress));
                 ViewModel.ShowReceivedFileCommand = new MvxCommand(ShowReceivedFilePreview);
+
+                var fileSystemService = Mvx.IoCProvider.Resolve<IFileSystemService>();
+                fileSystemService.DownloadsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
                 SetupGestureListener();
                 SetupNavDots();
@@ -105,9 +99,11 @@ namespace SkyDrop.iOS.Views.Drop
                 CopyLinkButton.BackgroundColor = Colors.Primary.ToNative();
                 OpenButton.BackgroundColor = Colors.GradientGreen.ToNative();
                 ShareButton.BackgroundColor = Colors.GradientOcean.ToNative();
+                DownloadButton.BackgroundColor = Colors.GradientTurqouise.ToNative();
                 CopyLinkButton.Layer.CornerRadius = 8;
                 OpenButton.Layer.CornerRadius = 8;
                 ShareButton.Layer.CornerRadius = 8;
+                DownloadButton.Layer.CornerRadius = 8;
 
                 ProgressFillArea.BackgroundColor = Colors.GradientTurqouise.ToNative();
                 ProgressFillArea.Layer.CornerRadius = 8;
@@ -130,6 +126,7 @@ namespace SkyDrop.iOS.Views.Drop
                 set.Bind(CopyLinkButton).For("Tap").To(vm => vm.CopyLinkCommand);
                 set.Bind(OpenButton).For("Tap").To(vm => vm.OpenFileInBrowserCommand);
                 set.Bind(ShareButton).For("Tap").To(vm => vm.ShareLinkCommand);
+                set.Bind(DownloadButton).For("Tap").To(vm => vm.DownloadFileCommand);
 
                 set.Bind(this).For(th => th.Title).To(vm => vm.Title);
 
@@ -189,6 +186,7 @@ namespace SkyDrop.iOS.Views.Drop
             if (!granted)
             {
                 // No notification permission
+                return;
             }
 
             var content = new UNMutableNotificationContent();

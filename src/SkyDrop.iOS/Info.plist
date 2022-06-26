@@ -45,5 +45,7 @@
 	<string>SkyDrop allows you to choose photos to upload to Skynet from your photo library</string>
 	<key>SBAppUsesLocalNotifications</key>
 	<true/>
+	<key>UISupportsDocumentBrowser</key>
+	<true/>
 </dict>
 </plist>

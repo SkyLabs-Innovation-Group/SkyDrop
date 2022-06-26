@@ -58,7 +58,7 @@ namespace SkyDrop.iOS.Views.Files
                 PreviewImage.ImagePath = null; 
 
                 //update preview image
-                if (Util.ExtensionMatches(value.Filename, ".jpeg", ".jpg", ".png"))
+                if (Util.CanDisplayPreview(value.Filename))
                 {
                     var filePath = value?.GetSkylinkUrl();
                     PreviewImage.ImagePath = filePath;
