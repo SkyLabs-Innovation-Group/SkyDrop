@@ -107,15 +107,12 @@ namespace SkyDrop.Core.Services
         {
             try
             {
-                var cachePath = System.IO.Path.GetTempPath();
-
-                // If exist, delete the cache directory and everything in it recursivly
-                if (System.IO.Directory.Exists(cachePath))
-                    System.IO.Directory.Delete(cachePath, true);
-
-                // If not exist, restore just the directory that was deleted
-                if (!System.IO.Directory.Exists(cachePath))
-                    System.IO.Directory.CreateDirectory(cachePath);
+                var cachePath = DownloadsFolderPath;
+                var di = new DirectoryInfo(cachePath);
+                foreach (var file in di.GetFiles())
+                    file.Delete();
+                foreach (var dir in di.GetDirectories())
+                    dir.Delete(true);
             }
             catch (Exception e)
             {
