@@ -348,6 +348,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (barcodeData == null)
                 {
                     Log.Trace("barcodeData is null");
+                    ResetUIStateCommand?.Execute();
                     return;
                 }
 
@@ -358,7 +359,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     return;
                 }
 
-                string skylink = barcodeData.Substring(barcodeData.Length - 46, 46);
+                var skylink = barcodeData.Substring(barcodeData.Length - 46, 46);
                 FocusedFile = new SkyFile() { Skylink = skylink };
                 ShowReceivedFileCommand.Execute();
 
