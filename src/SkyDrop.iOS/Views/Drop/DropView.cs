@@ -80,7 +80,7 @@ namespace SkyDrop.iOS.Views.Drop
                 {
                     Image = UIImage.FromBundle("ic_menu")
                 };
-                menuButton.Clicked += (s, e) => ViewModel.NavigateToFiles();
+                menuButton.Clicked += (s, e) => ViewModel.MenuCommand?.Execute();
 
                 NavigationItem.LeftBarButtonItem = menuButton;
                 NavigationItem.LeftBarButtonItem.TintColor = UIColor.White;

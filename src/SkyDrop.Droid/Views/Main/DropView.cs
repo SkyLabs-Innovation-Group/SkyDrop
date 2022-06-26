@@ -89,7 +89,6 @@ namespace SkyDrop.Droid.Views.Main
                 ViewModel.NavigateToSettings().GetAwaiter().GetResult();
             }
 
-
             return base.OnOptionsItemSelected(item);
         }
 

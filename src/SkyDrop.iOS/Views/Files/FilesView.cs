@@ -26,6 +26,7 @@ namespace SkyDrop.iOS.Views.Files
             View.BackgroundColor = Colors.DarkGrey.ToNative();
             FilesCollectionView.BackgroundColor = Colors.DarkGrey.ToNative();
             FilesTableView.BackgroundColor = Colors.DarkGrey.ToNative();
+            FilesTableView.AllowsSelection = false;
 
             //setup nav bar
             NavigationController.NavigationBar.TintColor = UIColor.White;
@@ -45,9 +46,7 @@ namespace SkyDrop.iOS.Views.Files
 
             var set = CreateBindingSet();
             set.Bind(collectionViewSource).For(f => f.ItemsSource).To(vm => vm.SkyFiles);
-            set.Bind(collectionViewSource).For(f => f.SelectionChangedCommand).To(vm => vm.FileSelectedCommand);
             set.Bind(tableViewSource).For(f => f.ItemsSource).To(vm => vm.SkyFiles);
-            set.Bind(tableViewSource).For(f => f.SelectionChangedCommand).To(vm => vm.FileSelectedCommand);
 
             set.Bind(this).For(t => t.CollectionViewAndTableViewVisibility).To(vm => vm.LayoutType);
             set.Apply();

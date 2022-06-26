@@ -50,6 +50,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand<FileUploadResult> UploadFinishedNotificationCommand { get; set; }
         public IMvxCommand<double> UpdateNotificationProgressCommand { get; set; }
         public IMvxCommand ShowReceivedFileCommand { get; set; }
+        public IMvxCommand MenuCommand { get; set; }
 
         public bool IsUploading { get; set; }
         public bool IsStagingFiles { get; set; }
@@ -150,6 +151,7 @@ namespace SkyDrop.Core.ViewModels.Main
             CancelUploadCommand = new MvxCommand(CancelUpload);
             ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
+            MenuCommand = new MvxAsyncCommand(NavigateToFiles);
         }
 
         public override async Task Initialize()

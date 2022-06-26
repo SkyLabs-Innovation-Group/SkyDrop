@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Services;
 using Xamarin.Essentials;
@@ -11,6 +13,7 @@ namespace SkyDrop.Core.ViewModels
         public bool UploadNotificationsEnabled { get; set; } = true;
         public bool VerifySslCertificates { get; set; } = true;
         public string SkynetPortalLabelText { get; set; } = "Enter a skynet portal to use in the app (default is siasky.net):";
+        public IMvxCommand BackCommand { get; set; }
 
         /// <summary>
         /// Currently, the best way to verify a Skynet portal that I can think of would be to query for a sky file's metadata.
@@ -20,11 +23,14 @@ namespace SkyDrop.Core.ViewModels
         private ISkyDropHttpClientFactory httpClientFactory;
 
         public SettingsViewModel(ISingletonService singletonService,
-                                 ISkyDropHttpClientFactory skyDropHttpClientFactory) : base(singletonService)
+                                 ISkyDropHttpClientFactory skyDropHttpClientFactory,
+                                 IMvxNavigationService navigationService) : base(singletonService)
         {
             this.httpClientFactory = skyDropHttpClientFactory;
 
             Title = "Advanced settings";
+
+            BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
         }
 
         public void Toast(string message)

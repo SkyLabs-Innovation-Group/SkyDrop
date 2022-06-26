@@ -10,6 +10,7 @@ using UIKit;
 
 namespace SkyDrop.iOS.Views.Files
 {
+    //cell for a grid file item in the gallery view
     public partial class FileCollectionViewCell : MvxCollectionViewCell
     {
         public static readonly NSString Key = new NSString("FileCollectionViewCell");
@@ -28,6 +29,11 @@ namespace SkyDrop.iOS.Views.Files
                 set.Bind(FileNameLabel).To(vm => vm.SkyFile.Filename);
                 set.Bind(this).For(t => t.SkyFile).To(vm => vm.SkyFile);
                 set.Bind(BottomPanel).For(i => i.BackgroundColor).To(vm => vm.FillColor).WithConversion("NativeColor");
+                set.Bind(SelectedIndicatorView).For(i => i.BackgroundColor).To(vm => vm.SelectionIndicatorColor).WithConversion("NativeColor");
+                set.Bind(SelectedIndicatorView).For("Visible").To(vm => vm.IsSelectionActive);
+                set.Bind(SelectedIndicatorInnerView).For("Visible").To(vm => vm.IsSelected);
+                set.Bind(ContentView).For("Tap").To(vm => vm.TapCommand);
+                set.Bind(ContentView).For("LongPress").To(vm => vm.LongPressCommand);
                 set.Apply();
             });
         }
@@ -48,6 +54,9 @@ namespace SkyDrop.iOS.Views.Files
             get => new SkyFile();
             set
             {
+                //clear previous preview image
+                PreviewImage.ImagePath = null; 
+
                 //update preview image
                 if (Util.ExtensionMatches(value.Filename, ".jpeg", ".jpg", ".png"))
                 {
