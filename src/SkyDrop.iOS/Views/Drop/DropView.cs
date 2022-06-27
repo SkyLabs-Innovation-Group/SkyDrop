@@ -111,8 +111,8 @@ namespace SkyDrop.iOS.Views.Drop
 
                 CopyLinkButton.BackgroundColor = Colors.Primary.ToNative();
                 OpenButton.BackgroundColor = Colors.GradientGreen.ToNative();
-                ShareButton.BackgroundColor = Colors.GradientOcean.ToNative();
-                DownloadButton.BackgroundColor = Colors.GradientTurqouise.ToNative();
+                ShareButton.BackgroundColor = Colors.GradientTurqouise.ToNative();
+                DownloadButton.BackgroundColor = Colors.GradientOcean.ToNative();
                 CopyLinkButton.Layer.CornerRadius = 8;
                 OpenButton.Layer.CornerRadius = 8;
                 ShareButton.Layer.CornerRadius = 8;
@@ -124,53 +124,58 @@ namespace SkyDrop.iOS.Views.Drop
                 BarcodeContainer.Layer.CornerRadius = 8;
                 BarcodeContainer.ClipsToBounds = true;
 
-                var set = CreateBindingSet();
-
-                //setup file preview collection view
-                var filePreviewSource = new MvxCollectionViewSource(FilePreviewCollectionView, FilePreviewCollectionViewCell.Key);
-                FilePreviewCollectionView.DataSource = filePreviewSource;
-                FilePreviewCollectionView.RegisterNibForCell(FilePreviewCollectionViewCell.Nib, FilePreviewCollectionViewCell.Key);
-                set.Bind(filePreviewSource).For(s => s.ItemsSource).To(vm => vm.StagedFiles);
-                set.Bind(FilePreviewCollectionView).For("Visible").To(vm => vm.IsStagedFilesVisible);
-
-                set.Bind(SendButton).For("Tap").To(vm => vm.SendCommand);
-                set.Bind(ReceiveButton).For("Tap").To(vm => vm.ReceiveCommand);
-
-                set.Bind(CopyLinkButton).For("Tap").To(vm => vm.CopyLinkCommand);
-                set.Bind(OpenButton).For("Tap").To(vm => vm.OpenFileInBrowserCommand);
-                set.Bind(ShareButton).For("Tap").To(vm => vm.ShareLinkCommand);
-                set.Bind(DownloadButton).For("Tap").To(vm => vm.DownloadFileCommand);
-
-                set.Bind(this).For(th => th.Title).To(vm => vm.Title);
-
-                set.Bind(BarcodeMenu).For("Visible").To(vm => vm.IsBarcodeVisible);
-                set.Bind(BarcodeContainer).For("Visible").To(vm => vm.IsBarcodeVisible);
-
-                set.Bind(SendActivityIndicator).For("Visible").To(vm => vm.IsUploading);
-                set.Bind(ReceiveActivityIndicator).For("Visible").To(vm => vm.IsReceivingFile);
-                set.Bind(SendIcon).For(v => v.Hidden).To(vm => vm.IsUploading);
-                set.Bind(ReceiveIcon).For(v => v.Hidden).To(vm => vm.IsReceivingFile);
-
-                set.Bind(SendLabel).To(vm => vm.SendButtonLabel);
-                set.Bind(ReceiveLabel).To(vm => vm.ReceiveButtonLabel);
-
-                set.Bind(FileSizeLabel).To(vm => vm.FileSize);
-
-                set.Bind(ProgressFillArea).For("Visible").To(vm => vm.IsUploading);
-                set.Bind(ProgressFillArea).For(ProgressFillHeightBinding.Name).To(vm => vm.UploadProgress);
-
-                set.Bind(CancelButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
-                set.Bind(CancelButton).For("Tap").To(vm => vm.CancelUploadCommand);
-
-                set.Bind(LeftNavDot).For("Visible").To(vm => vm.NavDotsVisible);
-                set.Bind(RightNavDot).For("Visible").To(vm => vm.NavDotsVisible);
-
-                set.Apply();
+                BindViews();
             }
             catch(Exception e)
             {
                 ViewModel.Log.Exception(e);
             }
+        }
+
+        private void BindViews()
+        {
+            var set = CreateBindingSet();
+
+            //setup file preview collection view
+            var filePreviewSource = new MvxCollectionViewSource(FilePreviewCollectionView, FilePreviewCollectionViewCell.Key);
+            FilePreviewCollectionView.DataSource = filePreviewSource;
+            FilePreviewCollectionView.RegisterNibForCell(FilePreviewCollectionViewCell.Nib, FilePreviewCollectionViewCell.Key);
+            set.Bind(filePreviewSource).For(s => s.ItemsSource).To(vm => vm.StagedFiles);
+            set.Bind(FilePreviewCollectionView).For("Visible").To(vm => vm.IsStagedFilesVisible);
+
+            set.Bind(SendButton).For("Tap").To(vm => vm.SendCommand);
+            set.Bind(ReceiveButton).For("Tap").To(vm => vm.ReceiveCommand);
+
+            set.Bind(CopyLinkButton).For("Tap").To(vm => vm.CopyLinkCommand);
+            set.Bind(OpenButton).For("Tap").To(vm => vm.OpenFileInBrowserCommand);
+            set.Bind(ShareButton).For("Tap").To(vm => vm.ShareLinkCommand);
+            set.Bind(DownloadButton).For("Tap").To(vm => vm.DownloadFileCommand);
+
+            set.Bind(this).For(th => th.Title).To(vm => vm.Title);
+
+            set.Bind(BarcodeMenu).For("Visible").To(vm => vm.IsBarcodeVisible);
+            set.Bind(BarcodeContainer).For("Visible").To(vm => vm.IsBarcodeVisible);
+
+            set.Bind(SendActivityIndicator).For("Visible").To(vm => vm.IsUploading);
+            set.Bind(ReceiveActivityIndicator).For("Visible").To(vm => vm.IsReceivingFile);
+            set.Bind(SendIcon).For(v => v.Hidden).To(vm => vm.IsUploading);
+            set.Bind(ReceiveIcon).For(v => v.Hidden).To(vm => vm.IsReceivingFile);
+
+            set.Bind(SendLabel).To(vm => vm.SendButtonLabel);
+            set.Bind(ReceiveLabel).To(vm => vm.ReceiveButtonLabel);
+
+            set.Bind(FileSizeLabel).To(vm => vm.FileSize);
+
+            set.Bind(ProgressFillArea).For("Visible").To(vm => vm.IsUploading);
+            set.Bind(ProgressFillArea).For(ProgressFillHeightBinding.Name).To(vm => vm.UploadProgress);
+
+            set.Bind(CancelButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
+            set.Bind(CancelButton).For("Tap").To(vm => vm.CancelUploadCommand);
+
+            set.Bind(LeftNavDot).For("Visible").To(vm => vm.NavDotsVisible);
+            set.Bind(RightNavDot).For("Visible").To(vm => vm.NavDotsVisible);
+
+            set.Apply();
         }
 
         private void UpdateUploadNotificationProgress(double progress)

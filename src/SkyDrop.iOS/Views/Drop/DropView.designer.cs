@@ -22,6 +22,9 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView BarcodeMenu { get; set; }
 
 		[Outlet]
+		UIKit.NSLayoutConstraint ButtonsSpacingConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIView CancelButton { get; set; }
 
 		[Outlet]
@@ -95,6 +98,11 @@ namespace SkyDrop.iOS.Views.Drop
 				BarcodeMenu = null;
 			}
 
+			if (ButtonsSpacingConstraint != null) {
+				ButtonsSpacingConstraint.Dispose ();
+				ButtonsSpacingConstraint = null;
+			}
+
 			if (CancelButton != null) {
 				CancelButton.Dispose ();
 				CancelButton = null;
@@ -103,6 +111,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (CopyLinkButton != null) {
 				CopyLinkButton.Dispose ();
 				CopyLinkButton = null;
+			}
+
+			if (DownloadButton != null) {
+				DownloadButton.Dispose ();
+				DownloadButton = null;
 			}
 
 			if (FilePreviewCollectionView != null) {
@@ -183,11 +196,6 @@ namespace SkyDrop.iOS.Views.Drop
 			if (ShareButton != null) {
 				ShareButton.Dispose ();
 				ShareButton = null;
-			}
-
-			if (DownloadButton != null) {
-				DownloadButton.Dispose ();
-				DownloadButton = null;
 			}
 		}
 	}
