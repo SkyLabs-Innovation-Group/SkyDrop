@@ -95,8 +95,8 @@ namespace SkyDrop.Core.Services
 
             //download
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
-            var fileName = await GetSkyFileFilename(url);
             var response = await httpClient.GetAsync(url);
+            var fileName = GetFilenameFromResponse(response);
 
             //save
             string filePath = Path.Combine(fileSystemService.DownloadsFolderPath, fileName);
@@ -111,15 +111,19 @@ namespace SkyDrop.Core.Services
         {
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var request = new HttpRequestMessage(HttpMethod.Head, skylink);
+            var response = await httpClient.SendAsync(request);
+            return GetFilenameFromResponse(response);
+        }
 
-            var result = await httpClient.SendAsync(request);
-            if (result == null)
+        private string GetFilenameFromResponse(HttpResponseMessage response)
+        {
+            if (response == null)
                 return null;
 
-            if (result.StatusCode != System.Net.HttpStatusCode.OK)
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 return null;
 
-            var headers = result.Content.Headers;
+            var headers = response.Content.Headers;
             var filenameHeader = headers.GetValues("Content-Disposition").FirstOrDefault();
 
             var filenamePrefix = "filename=\"";
