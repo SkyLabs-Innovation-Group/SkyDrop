@@ -68,6 +68,7 @@ namespace SkyDrop.iOS.Views.Drop
 
                 var fileSystemService = Mvx.IoCProvider.Resolve<IFileSystemService>();
                 fileSystemService.DownloadsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                fileSystemService.CacheFolderPath = System.IO.Path.GetTempPath();
 
                 SetupGestureListener();
                 SetupNavDots();

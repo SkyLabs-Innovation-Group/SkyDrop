@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using SkyDrop.Core.DataModels;
+using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
 
 namespace SkyDrop.Core.Services
@@ -13,6 +14,7 @@ namespace SkyDrop.Core.Services
     public class FileSystemService : IFileSystemService
     {
         public string DownloadsFolderPath { get; set; }
+        public string CacheFolderPath { get; set; }
         public ILog Log { get; }
 
         private readonly IUserDialogs userDialogs;
@@ -107,10 +109,17 @@ namespace SkyDrop.Core.Services
         {
             try
             {
-                var cachePath = DownloadsFolderPath;
+                var cachePath = CacheFolderPath;
                 var di = new DirectoryInfo(cachePath);
                 foreach (var file in di.GetFiles())
+                {
+                    //don't delete realm files
+                    if (file.Name.ExtensionMatches("realm", "realm.lock"))
+                        continue;
+
                     file.Delete();
+                }
+                    
                 foreach (var dir in di.GetDirectories())
                     dir.Delete(true);
             }
@@ -126,6 +135,7 @@ namespace SkyDrop.Core.Services
     public interface IFileSystemService
     {
         string DownloadsFolderPath { get; set; }
+        string CacheFolderPath { get; set; }
 
         Task<IEnumerable<FileResult>> PickFilesAsync(SkyFilePickerType fileType);
 

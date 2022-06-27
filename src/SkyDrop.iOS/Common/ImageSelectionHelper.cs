@@ -73,7 +73,7 @@ namespace SkyDrop.iOS.Common
                 using (var stream = imageData.AsStream())
                 {
                     string extension = Path.GetExtension(fileName);
-                    string newFilePath = Path.Combine(fileSystemService.DownloadsFolderPath, Guid.NewGuid().ToString() + extension);
+                    string newFilePath = Path.Combine(fileSystemService.CacheFolderPath, Guid.NewGuid().ToString() + extension);
 
                     using (var fileStream = File.Create(newFilePath))
                     {
