@@ -794,6 +794,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public async Task NavigateToFiles()
         {
+            if (IsUploading)
+                return;
+
             var selectedFile = await navigationService.Navigate<FilesViewModel, object, SkyFile>(null);
             if (selectedFile == null)
                 return;
