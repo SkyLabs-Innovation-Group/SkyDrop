@@ -34,6 +34,12 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView DownloadButton { get; set; }
 
 		[Outlet]
+		UIKit.UIActivityIndicatorView DownloadButtonActivityIndicator { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView DownloadButtonIcon { get; set; }
+
+		[Outlet]
 		UIKit.UICollectionView FilePreviewCollectionView { get; set; }
 
 		[Outlet]
@@ -196,6 +202,16 @@ namespace SkyDrop.iOS.Views.Drop
 			if (ShareButton != null) {
 				ShareButton.Dispose ();
 				ShareButton = null;
+			}
+
+			if (DownloadButtonActivityIndicator != null) {
+				DownloadButtonActivityIndicator.Dispose ();
+				DownloadButtonActivityIndicator = null;
+			}
+
+			if (DownloadButtonIcon != null) {
+				DownloadButtonIcon.Dispose ();
+				DownloadButtonIcon = null;
 			}
 		}
 	}

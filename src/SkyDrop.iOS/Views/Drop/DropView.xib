@@ -17,6 +17,8 @@
                 <outlet property="CancelButton" destination="ei9-jC-BaR" id="7Ee-UT-FXX"/>
                 <outlet property="CopyLinkButton" destination="B7a-we-xUR" id="mdr-aw-R0F"/>
                 <outlet property="DownloadButton" destination="GOe-En-owL" id="szX-1g-pS7"/>
+                <outlet property="DownloadButtonActivityIndicator" destination="mMT-9F-v2d" id="Jy0-JX-cEc"/>
+                <outlet property="DownloadButtonIcon" destination="YG0-rV-Ooz" id="JmG-d0-NlR"/>
                 <outlet property="FilePreviewCollectionView" destination="jiB-ne-gQ7" id="OAM-Sk-N3G"/>
                 <outlet property="FileSizeLabel" destination="qif-P7-gfN" id="S6w-Pg-oEg"/>
                 <outlet property="LeftNavDot" destination="WPb-AT-AvM" id="upV-fs-Bzv"/>
@@ -262,7 +264,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GOe-En-owL">
                             <rect key="frame" x="0.0" y="132.5" width="116.5" height="117"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Save" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rxX-5o-hxK">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Save to Disk" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rxX-5o-hxK">
                                     <rect key="frame" x="0.0" y="80.5" width="116.5" height="15"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                     <color key="textColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -275,6 +277,10 @@
                                         <constraint firstAttribute="height" constant="48" id="FUd-zR-ufM"/>
                                     </constraints>
                                 </imageView>
+                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="mMT-9F-v2d">
+                                    <rect key="frame" x="48.5" y="38.5" width="20" height="20"/>
+                                    <color key="color" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </activityIndicatorView>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemYellowColor"/>
                             <constraints>
@@ -282,7 +288,9 @@
                                 <constraint firstAttribute="trailing" secondItem="YG0-rV-Ooz" secondAttribute="trailing" constant="24" id="4a7-2j-eqz"/>
                                 <constraint firstItem="rxX-5o-hxK" firstAttribute="top" secondItem="YG0-rV-Ooz" secondAttribute="bottom" constant="8" id="Iaa-bS-7Yh"/>
                                 <constraint firstAttribute="width" secondItem="GOe-En-owL" secondAttribute="height" multiplier="1:1" id="Uhv-kR-8IN"/>
+                                <constraint firstItem="mMT-9F-v2d" firstAttribute="centerY" secondItem="YG0-rV-Ooz" secondAttribute="centerY" id="Uu4-9f-9c5"/>
                                 <constraint firstItem="rxX-5o-hxK" firstAttribute="leading" secondItem="GOe-En-owL" secondAttribute="leading" id="bXt-yQ-k4a"/>
+                                <constraint firstItem="mMT-9F-v2d" firstAttribute="centerX" secondItem="YG0-rV-Ooz" secondAttribute="centerX" id="rur-70-6Aw"/>
                                 <constraint firstItem="YG0-rV-Ooz" firstAttribute="leading" secondItem="GOe-En-owL" secondAttribute="leading" constant="24" id="vfK-8r-ESl"/>
                                 <constraint firstAttribute="trailing" secondItem="rxX-5o-hxK" secondAttribute="trailing" id="xsN-u0-z3B"/>
                             </constraints>

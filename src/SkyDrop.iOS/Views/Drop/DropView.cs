@@ -150,6 +150,8 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(OpenButton).For("Tap").To(vm => vm.OpenFileInBrowserCommand);
             set.Bind(ShareButton).For("Tap").To(vm => vm.ShareLinkCommand);
             set.Bind(DownloadButton).For("Tap").To(vm => vm.DownloadFileCommand);
+            set.Bind(DownloadButtonActivityIndicator).For("Visible").To(vm => vm.IsDownloadingFile);
+            set.Bind(DownloadButtonIcon).For(t => t.Hidden).To(vm => vm.IsDownloadingFile);
 
             set.Bind(this).For(th => th.Title).To(vm => vm.Title);
 
