@@ -304,6 +304,7 @@ namespace SkyDrop.iOS.Views.Drop
         private void ShowReceivedFilePreview()
         {
             SetBarcodeCodeUiState(isSlow: true);
+            BarcodeImage.ImagePath = null;
             BarcodeImage.ImagePath = ViewModel.FocusedFile.GetSkylinkUrl();
             ViewModel.SwipeNavigationEnabled = true;
         }
@@ -318,6 +319,7 @@ namespace SkyDrop.iOS.Views.Drop
             AnimateSlideBarcodeOut();
 
             ReceiveButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
+            SendButton.Alpha = 1;
         }
 
         /// <summary>
@@ -424,10 +426,12 @@ namespace SkyDrop.iOS.Views.Drop
 
                 //slide send receive buttons in
                 SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(0, 0);
+
                 SendButton.Alpha = 1;
-                ReceiveButton.Alpha = 1;
                 SendButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
 
+                ReceiveButton.Alpha = 1;
+                ReceiveButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
             }, completion: () =>
             {
                 ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState;

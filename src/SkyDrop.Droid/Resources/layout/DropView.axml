@@ -36,7 +36,7 @@
                     android:clickable="true"
                     app:cardCornerRadius="8dp"
                     app:MvxBind="BarcodeBackground IsBarcodeLoading">
-                    <ImageView
+                    <FFImageLoading.Cross.MvxCachedImageView
                         android:id="@+id/BarcodeImage"
                         android:src="@drawable/barcode_grey"
                         android:layout_width="match_parent"
@@ -255,11 +255,21 @@
                         android:gravity="center_horizontal"
                         android:padding="8dp"
                         android:clipToPadding="false">
-                        <ImageView
-                            android:id="@+id/ButtonIcon"
+                        <FrameLayout
                             android:layout_width="128dp"
-                            android:layout_height="128dp"
-                            android:src="@drawable/ic_download_grey"/>
+                            android:layout_height="128dp">
+                            <ImageView
+                                android:id="@+id/ButtonIcon"
+                                android:layout_width="128dp"
+                                android:layout_height="128dp"
+                                android:src="@drawable/ic_download_grey"
+                                app:MvxBind="Visibility InvertedVisibility(IsReceivingFile)"/>
+                            <ProgressBar
+                                android:layout_width="128dp"
+                                android:layout_height="128dp"
+                                android:padding="32dp"
+                                app:MvxBind="Visibility Visibility(IsReceivingFile)"/>
+                        </FrameLayout>
                         <TextView
                             android:id="@+id/ButtonLabel"
                             android:textStyle="bold"

@@ -21,6 +21,7 @@ using static SkyDrop.Core.Utility.Util;
 using MvvmCross;
 using SkyDrop.Core.Services;
 using System.IO;
+using FFImageLoading.Cross;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -38,7 +39,7 @@ namespace SkyDrop.Droid.Views.Main
         private MaterialCardView sendButton, receiveButton;
         private ConstraintLayout barcodeContainer;
         private LinearLayout barcodeMenu, sendReceiveButtonsContainer;
-        private ImageView barcodeImageView;
+        private MvxCachedImageView barcodeImageView;
         private View leftDot, rightDot;
 
         /// <summary>
@@ -60,20 +61,23 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.ResetUIStateCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
             ViewModel.ResetBarcodeCommand = new MvxCommand(ResetBarcode);
             ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
+            ViewModel.SlideReceiveButtonToCenterCommand = new MvxCommand(AnimateSlideReceiveButton);
+            ViewModel.ShowReceivedFileCommand = new MvxCommand(ShowReceivedFilePreview);
             ViewModel.CheckUserIsSwipingCommand = new MvxCommand(CheckUserIsSwiping);
             ViewModel.UpdateNavDotsCommand = new MvxCommand(() => UpdateNavDots());
             ViewModel.UploadStartedNotificationCommand = new MvxCommand(() => AndroidUtil.ShowUploadStartedNotification(this, $"{ViewModel.FileToUpload.Filename} {ViewModel.FileSize}"));
             ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>(result => AndroidUtil.ShowUploadFinishedNotification(this, result));
             ViewModel.UpdateNotificationProgressCommand = new MvxCommand<double>(progress => AndroidUtil.UpdateNotificationProgress(this, progress));
 
-            var apiService = Mvx.IoCProvider.Resolve<IApiService>();
-            apiService.DownloadsFolderPath = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Android.OS.Environment.DirectoryDownloads);
+            var fileSystemService = Mvx.IoCProvider.Resolve<IFileSystemService>();
+            fileSystemService.DownloadsFolderPath = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Android.OS.Environment.DirectoryDownloads);
+            fileSystemService.CacheFolderPath = System.IO.Path.GetTempPath();
 
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
             receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);
             barcodeContainer = FindViewById<ConstraintLayout>(Resource.Id.BarcodeContainer);
             barcodeMenu = FindViewById<LinearLayout>(Resource.Id.BarcodeMenu);
-            barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
+            barcodeImageView = FindViewById<MvxCachedImageView>(Resource.Id.BarcodeImage);
             sendReceiveButtonsContainer = FindViewById<LinearLayout>(Resource.Id.SendReceiveContainer);
 
             var stagedFilesRecycler = FindViewById<RecyclerView>(Resource.Id.StagedFilesRecycler);
@@ -156,6 +160,13 @@ namespace SkyDrop.Droid.Views.Main
             AnimateSlideSendReceiveButtonsOut(toLeft: true);
         }
 
+        private void ShowReceivedFilePreview()
+        {
+            SetBarcodeCodeUiState(isSlow: true);
+            barcodeImageView.ImagePath = ViewModel.FocusedFile.GetSkylinkUrl();
+            ViewModel.SwipeNavigationEnabled = true;
+        }
+
         /// <summary>
         /// Slide send button to center
         /// </summary>
@@ -173,6 +184,28 @@ namespace SkyDrop.Droid.Views.Main
                 .SetDuration(duration)
                 .Start();
             receiveButton.Animate()
+                .Alpha(0)
+                .SetDuration(duration)
+                .Start();
+        }
+
+        /// <summary>
+        /// Slide receive button to center
+        /// </summary>
+        private void AnimateSlideReceiveButton()
+        {
+            var screenCenterX = Resources.DisplayMetrics.WidthPixels / 2;
+            var receiveButtonLocation = new[] { 0, 0 };
+            receiveButton.GetLocationOnScreen(receiveButtonLocation);
+            var receiveButtonCenterX = receiveButtonLocation[0] + receiveButton.Width / 2;
+
+            var duration = 1000;
+            var translationX = screenCenterX - receiveButtonCenterX;
+            receiveButton.Animate()
+                .TranslationX(translationX)
+                .SetDuration(duration)
+                .Start();
+            sendButton.Animate()
                 .Alpha(0)
                 .SetDuration(duration)
                 .Start();
@@ -212,8 +245,10 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.FileSize = "";
 
             sendReceiveButtonsContainer.TranslationX = -screenWidth;
-            receiveButton.Alpha = 1;
+            sendButton.Alpha = 1;
             sendButton.TranslationX = 0;
+            receiveButton.Alpha = 1;
+            receiveButton.TranslationX = 0;
 
             var duration = 250;
             sendReceiveButtonsContainer.Animate()
