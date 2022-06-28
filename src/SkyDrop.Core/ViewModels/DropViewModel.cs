@@ -74,7 +74,7 @@ namespace SkyDrop.Core.ViewModels.Main
             DropViewUIState == DropViewState.ConfirmFilesState && StagedFiles?.Count > 2 ? "SEND FILES" : "SEND FILE";
         public string ReceiveButtonLabel { get; set; } = receiveFileText;
         public bool IsReceivingFile { get; set; }
-        public bool CurrentFileOrigin { get; set; }
+        public bool IsDownloadingFile { get; set; }
 
         public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile FocusedFile { get; set; } //most recently sent or received file
@@ -813,11 +813,16 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             try
             {
+                IsDownloadingFile = true;
                 await apiService.DownloadFile(FocusedFile.GetSkylinkUrl());
             }
             catch(Exception e)
             {
                 userDialogs.Toast("Failed to download file");
+            }
+            finally
+            {
+                IsDownloadingFile = false;
             }
         }
     }

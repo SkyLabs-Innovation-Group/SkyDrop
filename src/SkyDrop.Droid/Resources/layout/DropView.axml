@@ -180,11 +180,21 @@
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:orientation="vertical">
-                            <ImageView
+                            <FrameLayout
                                 android:layout_width="32dp"
                                 android:layout_height="60dp"
-                                android:src="@drawable/ic_download_grey"
-                                android:layout_marginTop="8dp" />
+                                android:layout_marginTop="8dp" >
+                                <ImageView
+                                    android:layout_width="32dp"
+                                    android:layout_height="60dp"
+                                    android:src="@drawable/ic_download_grey"
+                                    app:MvxBind="Visibility InvertedVisibility(IsDownloadingFile)"
+                                    />
+                                <ProgressBar
+                                    android:layout_width="32dp"
+                                    android:layout_height="60dp"
+                                    app:MvxBind="Visibility Visibility(IsDownloadingFile)"/>
+                            </FrameLayout>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
