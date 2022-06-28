@@ -69,91 +69,132 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_below="@id/BarcodeContainer"
                 android:gravity="center_horizontal"
+                android:orientation="vertical"
                 app:MvxBind="Visibility Visibility(IsBarcodeVisible)">
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0px"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginRight="16dp"
-                    app:cardElevation="1dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardBackgroundColor="@color/primaryColor"
-                    app:MvxBind="Click CopyLinkCommand">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    android:orientation="horizontal">
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0px"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="60dp"
-                            android:layout_marginTop="8dp"
-                            android:src="@drawable/ic_link"/>/>
-                        <TextView
+                        android:layout_weight="1"
+                        android:layout_marginRight="16dp"
+                        app:cardElevation="1dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardBackgroundColor="@color/primaryColor"
+                        app:MvxBind="Click CopyLinkCommand">
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Copy Link"
-                            android:textSize="12sp"
-                            android:textColor="@color/lightGrey"
-                            android:paddingBottom="16dp"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0px"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginRight="16dp"
-                    app:cardElevation="1dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardBackgroundColor="@color/skyGreen"
-                    app:MvxBind="Click OpenFileInBrowserCommand">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="60dp"
+                                android:layout_marginTop="8dp"
+                                android:src="@drawable/ic_link"/>/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Copy Link"
+                                android:textSize="12sp"
+                                android:textColor="@color/lightGrey"
+                                android:paddingBottom="16dp"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0px"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="60dp"
-                            android:src="@drawable/ic_file"
-                            android:layout_marginTop="8dp"/>
-                        <TextView
+                        android:layout_weight="1"
+                        android:layout_marginRight="16dp"
+                        app:cardElevation="1dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardBackgroundColor="@color/skyGreen"
+                        app:MvxBind="Click OpenFileInBrowserCommand">
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Open"
-                            android:textSize="12sp"
-                            android:textColor="@color/lightGrey"
-                            android:paddingBottom="16dp"/>/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0px"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:cardElevation="1dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardBackgroundColor="@color/skyOcean"
-                    app:MvxBind="Click ShareLinkCommand">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/ic_file"
+                                android:layout_marginTop="8dp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Open"
+                                android:textSize="12sp"
+                                android:textColor="@color/lightGrey"
+                                android:paddingBottom="16dp"/>/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0px"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="60dp"
-                            android:src="@drawable/ic_share"
-                            android:layout_marginTop="8dp" />
-                        <TextView
+                        android:layout_weight="1"
+                        app:cardElevation="1dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardBackgroundColor="@color/skyTurqouise"
+                        app:MvxBind="Click ShareLinkCommand">
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Share"
-                            android:textSize="12sp"
-                            android:textColor="@color/lightGrey"
-                            android:paddingBottom="16dp"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/ic_share"
+                                android:layout_marginTop="8dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Share"
+                                android:textSize="12sp"
+                                android:textColor="@color/lightGrey"
+                                android:paddingBottom="16dp"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal"
+                    android:weightSum="3.33333">
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0px"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:cardElevation="1dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardBackgroundColor="@color/skyOcean"
+                        app:MvxBind="Click DownloadFileCommand">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/ic_download_grey"
+                                android:layout_marginTop="8dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Save to Disk"
+                                android:textSize="12sp"
+                                android:textColor="@color/lightGrey"
+                                android:paddingBottom="16dp"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
             </LinearLayout>
 
             <!--send & receive buttons-->
