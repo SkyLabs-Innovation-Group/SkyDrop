@@ -31,14 +31,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     app:layout_constraintDimensionRatio="1:1" 
-                    app:cardBackgroundColor="@color/lightGrey"
+                    app:cardBackgroundColor="@color/clear"
                     app:cardElevation="1dp"
                     android:clickable="true"
-                    app:cardCornerRadius="8dp"
-                    app:MvxBind="BarcodeBackground IsBarcodeLoading">
+                    app:cardCornerRadius="8dp">
                     <FFImageLoading.Cross.MvxCachedImageView
                         android:id="@+id/BarcodeImage"
                         android:src="@drawable/barcode_grey"
+                        android:scaleType="centerCrop"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"/>

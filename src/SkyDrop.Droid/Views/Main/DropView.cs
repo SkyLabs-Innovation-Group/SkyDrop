@@ -163,6 +163,7 @@ namespace SkyDrop.Droid.Views.Main
         private void ShowReceivedFilePreview()
         {
             SetBarcodeCodeUiState(isSlow: true);
+            barcodeImageView.ImagePath = null;
             barcodeImageView.ImagePath = ViewModel.FocusedFile.GetSkylinkUrl();
             ViewModel.SwipeNavigationEnabled = true;
         }
