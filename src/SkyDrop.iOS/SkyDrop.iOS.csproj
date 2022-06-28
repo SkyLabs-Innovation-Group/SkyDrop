@@ -192,6 +192,7 @@
     <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
+    <Compile Include="Common\ImageSelectionHelper.cs" />
     <Compile Include="Bindings\LongPressBinding.cs" />
     <Compile Include="Bindings\FileCategoryIconBinding.cs" />
   </ItemGroup>
@@ -222,6 +223,9 @@
     </PackageReference>
     <PackageReference Include="Serilog.Sinks.Xamarin">
       <Version>0.2.0.64</Version>
+    </PackageReference>
+    <PackageReference Include="GMImagePicker.Xamarin">
+      <Version>2.5.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

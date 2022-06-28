@@ -48,6 +48,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand UploadStartedNotificationCommand { get; set; }
         public IMvxCommand<FileUploadResult> UploadFinishedNotificationCommand { get; set; }
         public IMvxCommand<double> UpdateNotificationProgressCommand { get; set; }
+        public IMvxCommand IosSelectFileCommand { get; set; }
         public IMvxCommand MenuCommand { get; set; }
 
         public string SkyFileFullUrl { get; set; }
@@ -105,6 +106,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
+        private TaskCompletionSource<SkyFile> iosMultipleImageSelectTask;
 
         private Func<Task> _generateBarcodeAsyncFunc;
         public Func<Task> GenerateBarcodeAsyncFunc
@@ -425,21 +427,20 @@ namespace SkyDrop.Core.ViewModels.Main
         private SkyFile MakeZipFile()
         {
             //TODO: add option to rename zip file in the renaming dialog
-            string skyArchive = "skydrop_archive.zip";
+            string archiveName = "skydrop_archive.zip";
 
-            string compressedFilePath = Path.Combine(Path.GetTempPath(), skyArchive);
+            string compressedFilePath = Path.Combine(Path.GetTempPath(), archiveName);
 
             var filesToUpload = StagedFiles.Where(s => !s.IsMoreFilesButton).Select(s => s.SkyFile).ToList();
             bool compressSuccess = fileSystemService.CompressX(filesToUpload, compressedFilePath);
             if (!compressSuccess)
                 throw new Exception("Failed to create archive");
 
-            var fileStream = File.OpenRead(compressedFilePath);
             var skyFile = new SkyFile()
             {
                 FullFilePath = compressedFilePath,
-                Filename = skyArchive,
-                FileSizeBytes = fileStream.Length,
+                Filename = archiveName,
+                FileSizeBytes = new FileInfo(compressedFilePath).Length
             };
             
             return skyFile;
@@ -453,13 +454,22 @@ namespace SkyDrop.Core.ViewModels.Main
             var cancel = "cancel";
             var fileType = await userDialogs.ActionSheetAsync("", cancel, null, null, file, image, video);
             if (fileType == cancel)
-            {
                 return null;
-            }
 
             SkyFilePickerType chosenType;
             if (fileType == image)
+            {
+                if (IosSelectFileCommand != null)
+                {
+                    var imageFile = await IosPickImages(); //native multi image selection iOS
+                    if (imageFile == null)
+                        return null;
+
+                    return new List<SkyFile> { imageFile };
+                }
+
                 chosenType = SkyFilePickerType.Image;
+            }
             else if (fileType == video)
                 chosenType = SkyFilePickerType.Video;
             else
@@ -482,12 +492,11 @@ namespace SkyDrop.Core.ViewModels.Main
                     if (pickedFile == null)
                         continue;
 
-                    using var stream = await pickedFile.OpenReadAsync();
                     var skyFile = new SkyFile()
                     {
                         FullFilePath = pickedFile.FullPath,
                         Filename = pickedFile.FileName,
-                        FileSizeBytes = stream.Length,
+                        FileSizeBytes = new FileInfo(pickedFile.FullPath).Length,
                     };
 
                     userSkyFiles.Add(skyFile);
@@ -508,6 +517,41 @@ namespace SkyDrop.Core.ViewModels.Main
             IsStagingFiles = false;
 
             return userSkyFiles;
+        }
+
+        private async Task<SkyFile> IosPickImages()
+        {
+            IosSelectFileCommand?.Execute();
+            iosMultipleImageSelectTask = new TaskCompletionSource<SkyFile>();
+            var skyFile = await iosMultipleImageSelectTask.Task;
+            if (skyFile == null)
+                return null;
+
+            return skyFile;
+        }
+
+        private SkyFile IosConvertFilePathToSkyFile(string path)
+        {
+            return new SkyFile()
+            {
+                FullFilePath = path,
+                Filename = Path.GetFileName(path),
+                FileSizeBytes = new FileInfo(path).Length
+            };
+        }
+
+        public void IosStageImage(string path)
+        {
+            var skyFile = IosConvertFilePathToSkyFile(path);
+            if (!iosMultipleImageSelectTask.Task.IsCompleted)
+                iosMultipleImageSelectTask.TrySetResult(skyFile); //first file(s) loaded causes UI to continue to next stage
+            else
+                StageFiles(new List<SkyFile> { skyFile }, true); //subsequent files get staged in a "lazy" manner
+        }
+
+        public void IosImagePickerFailed()
+        {
+            iosMultipleImageSelectTask.TrySetResult(null);
         }
 
         private async Task AddMoreFiles()
