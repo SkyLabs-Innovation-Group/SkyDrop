@@ -21,6 +21,7 @@ using SkyDrop.Core.Converters;
 using SkyDrop.Core.Services;
 using SkyDrop.iOS.Services;
 using Xamarin.Essentials;
+using SkyDrop.iOS.Converters;
 
 namespace SkyDrop.iOS
 {
@@ -30,6 +31,8 @@ namespace SkyDrop.iOS
         {
             registry.RegisterCustomBindingFactory<UIView>(ProgressFillHeightBinding.Name, view => new ProgressFillHeightBinding(view));
             registry.RegisterCustomBindingFactory<UIImageView>(SkyFileImageViewBinding.Name, view => new SkyFileImageViewBinding(view));
+            registry.RegisterCustomBindingFactory<UIView>(LongPressBinding.Name, view => new LongPressBinding(view));
+            registry.RegisterCustomBindingFactory<UIImageView>(FileCategoryIconBinding.Name, view => new FileCategoryIconBinding(view));
 
             base.FillTargetFactories(registry);
         }
@@ -37,6 +40,7 @@ namespace SkyDrop.iOS
         protected override void FillValueConverters(IMvxValueConverterRegistry registry)
         {
             registry.AddOrOverwrite(FileExtensionConverter.Name, new FileExtensionConverter());
+            registry.AddOrOverwrite(NativeColorConverter.Name, new NativeColorConverter());
 
             base.FillValueConverters(registry);
         }

@@ -5,10 +5,14 @@ using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
+using Android.Runtime;
+using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using AndroidX.RecyclerView.Widget;
+using AndroidX.CardView.Widget;
 using MvvmCross.Commands;
+using MvvmCross.Droid.Support.V7.RecyclerView;
+using MvvmCross.Platforms.Android.Binding.BindingContext;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.ViewModels.Main;
@@ -21,107 +25,80 @@ namespace SkyDrop.Droid.Views.Main
     {
         protected override int ActivityLayoutId => Resource.Layout.FilesView;
 
-        public RecyclerView UploadedFilesRecyclerView { get; set; }
+        public MvxRecyclerView RecyclerView { get; set; }
 
-        private IMenu menu;
+        private FilesGridAdapter filesGridAdapter;
+        private MvxRecyclerAdapter filesListAdapter;
 
-        protected override async void OnCreate(Bundle bundle)
+        private int gridMarginPx => AndroidUtil.DpToPx(16);
+
+        protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
-            UploadedFilesRecyclerView = FindViewById<RecyclerView>(Resource.Id.UploadedFilesList);
+            filesGridAdapter = new FilesGridAdapter(BindingContext as IMvxAndroidBindingContext) { MarginPx = gridMarginPx };
+            filesListAdapter = new MvxRecyclerAdapter(BindingContext as IMvxAndroidBindingContext);
 
-            await ViewModel.InitializeTask.Task;
-            ViewModel.PropertyChanged += HandlePropertyChanged;
+            RecyclerView = FindViewById<MvxRecyclerView>(Resource.Id.FilesRecycler);
+            RecyclerView.Adapter = filesGridAdapter;
+
+            var set = CreateBindingSet();
+            set.Bind(this).For(t => t.LayoutType).To(vm => vm.LayoutType);
+            set.Apply();
 
             Log.Trace("MainView OnCreate()");
-
-            //ViewModel.SelectFileAsyncFunc = () => AndroidUtil.SelectFile(this);
-            //ViewModel.SelectImageAsyncFunc = () => AndroidUtil.SelectImage(this);
-            ViewModel.OpenFileInBrowserCommand = new MvxCommand<SkyFile>(skyFile => AndroidUtil.OpenFileInBrowser(this, skyFile));
-            ViewModel.AfterFileSelected = new MvxCommand(() => AfterFileWasSelected());
-            ViewModel.ScrollToFileCommand = new MvxCommand(() => ScrollToFile());
         }
 
-        private void HandlePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private FileLayoutType layoutType;
+        public FileLayoutType LayoutType
         {
-            if (e.PropertyName == nameof(ViewModel.SkyFiles))
+            get => FileLayoutType.List;
+            set
             {
-                var uploadItem = menu.FindItem(Resource.Id.menu_files_upload);
-                if (ViewModel.SkyFiles.Where(sf => sf.SkyFile.Status == FileStatus.Staged).Count() > 0)
-                    uploadItem.SetIcon(GetDrawable(Resource.Drawable.ic_upload));
+                if (layoutType == value)
+                    return;
+
+                layoutType = value;
+
+                if (layoutType == FileLayoutType.List)
+                {
+                    var layoutManager = new MvxGuardedLinearLayoutManager(this);
+                    RecyclerView.SetLayoutManager(layoutManager);
+                    RecyclerView.ItemTemplateId = Resource.Layout.item_file_list;
+                    RecyclerView.Adapter = filesListAdapter;
+                    RecyclerView.SetPadding(0, 0, 0, 0);
+                }
                 else
-                    uploadItem.SetIcon(GetDrawable(Resource.Drawable.ic_upload_grey));
+                {
+                    var layoutManager = new MvxGuardedGridLayoutManager(this, 2);
+                    RecyclerView.SetLayoutManager(layoutManager);
+                    RecyclerView.ItemTemplateId = Resource.Layout.item_file_grid;
+                    RecyclerView.Adapter = filesGridAdapter;
+                    RecyclerView.SetPadding(0, 0, AndroidUtil.DpToPx(16), 0);
+                }
             }
         }
 
-        public override bool OnCreateOptionsMenu(IMenu menu)
+        public class FilesGridAdapter : MvxRecyclerAdapter
         {
-            MenuInflater.Inflate(Resource.Menu.FilesMenu, menu);
-            this.menu = menu;
-            return true;
-        }
+            public int MarginPx { get; set; }
 
-        public override bool OnOptionsItemSelected(IMenuItem item)
-        {
-            switch (item.ItemId)
+            protected override View InflateViewForHolder(ViewGroup parent, int viewType, IMvxAndroidBindingContext bindingContext)
             {
-                case Resource.Id.menu_files_upload:
-                    ViewModel.UploadCommand?.Execute();
-                    break;
+                //calculate view size based on screen width
+                var (screenWidth, _) = AndroidUtil.GetScreenSizePx();
+                var gridItemSize = (screenWidth - MarginPx) / 2;
+
+                //make the grid items square
+                var view = base.InflateViewForHolder(parent, viewType, bindingContext) as FrameLayout;
+                view.LayoutParameters.Height = gridItemSize;
+                view.LayoutParameters.Width = gridItemSize;
+                return view;
             }
 
-            return true;
+            public FilesGridAdapter(IMvxAndroidBindingContext bindingContext) : base(bindingContext) { }
+
+            public FilesGridAdapter(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer) { }
         }
-
-        private void ScrollToFile()
-        {
-            UploadedFilesRecyclerView.SmoothScrollToPosition(0);
-        }
-
-        private void AfterFileWasSelected()
-        {
-            int? previouslySelectedIndex = ViewModel.GetIndexForPreviouslySelectedFile();
-
-            if (previouslySelectedIndex == null)
-            {
-                UploadedFilesRecyclerView.GetAdapter().NotifyItemChanged(ViewModel.CurrentlySelectedFileIndex);
-            }
-            else if (ViewModel.CurrentlySelectedFileIndex == previouslySelectedIndex.Value)
-            {
-                UploadedFilesRecyclerView.GetAdapter().NotifyItemChanged(ViewModel.CurrentlySelectedFileIndex);
-            }
-            else
-            {
-                UploadedFilesRecyclerView.GetAdapter().NotifyItemChanged(previouslySelectedIndex.Value);
-                UploadedFilesRecyclerView.GetAdapter().NotifyItemChanged(ViewModel.CurrentlySelectedFileIndex);
-            }
-        }
-
-        //protected override async void OnActivityResult(int requestCode, Android.App.Result resultCode, Intent data)
-        //{
-        //    try
-        //    {
-        //        if (requestCode == AndroidUtil.PickFileRequestCode)
-        //        {
-        //            if (data == null)
-        //                return;
-
-        //            await HandlePickedFile(data);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Log.Exception(ex);
-        //    }
-
-        //    base.OnActivityResult(requestCode, resultCode, data);
-        //}
-
-        //private async Task HandlePickedFile(Intent data)
-        //{
-        //    var stagedFile = await AndroidUtil.HandlePickedFile(this, data);
-        //    ViewModel.StageFile(stagedFile);
-        //}
     }
 }

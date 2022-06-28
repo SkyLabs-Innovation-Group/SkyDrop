@@ -4,6 +4,7 @@ using System.Linq;
 using Realms;
 using Realms.Exceptions;
 using SkyDrop.Core.DataModels;
+using SkyDrop.Core.RealmObjects;
 
 namespace SkyDrop.Core.Services
 {
@@ -19,7 +20,7 @@ namespace SkyDrop.Core.Services
 
         public List<SkyFile> LoadSkyFiles()
         {
-            var realmSkyFiles = realm.All<SkyFile>().ToList();
+            var realmSkyFiles = realm.All<SkyFileRealmObject>().Select(SkyFileFromRealmObject).ToList();
             foreach(var skyFile in realmSkyFiles)
             {
                 skyFile.Status = FileStatus.Uploaded;
@@ -37,7 +38,7 @@ namespace SkyDrop.Core.Services
             realm.Write(() =>
             {
                 log.Trace("SaveSkyFiles() write for call #" + saveCallCount);
-                realm.Add(skyFiles);
+                realm.Add(skyFiles.Select(SkyFileToRealmObject), true);
             });
         }
 
@@ -45,7 +46,8 @@ namespace SkyDrop.Core.Services
         {
             realm.Write(() =>
             {
-                realm.Remove(skyFile);
+                var realmObject = realm.Find<SkyFileRealmObject>(skyFile.Skylink);
+                realm.Remove(realmObject);
             });
         }
 
@@ -93,7 +95,7 @@ namespace SkyDrop.Core.Services
             {
                 return Realm.GetInstance(realmConfiguration);
             }
-            catch (RealmMigrationNeededException e)
+            catch (RealmException e)
             {
                 try
                 {
@@ -110,6 +112,16 @@ namespace SkyDrop.Core.Services
                     throw ex;
                 }
             }
+        }
+
+        private SkyFileRealmObject SkyFileToRealmObject(SkyFile skyFile)
+        {
+            return new SkyFileRealmObject { Filename = skyFile.Filename, Skylink = skyFile.Skylink, WasSent = skyFile.WasSent };
+        }
+
+        private SkyFile SkyFileFromRealmObject(SkyFileRealmObject realmObject)
+        {
+            return new SkyFile { Filename = realmObject.Filename, Skylink = realmObject.Skylink, WasSent = realmObject.WasSent };
         }
     }
 

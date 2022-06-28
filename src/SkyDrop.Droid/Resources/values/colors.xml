@@ -13,7 +13,7 @@
 	<!-- Collective color scheme -->
 	<color name="skyLightBlue">#00BBFF</color>
 	<!--official skynet color-->
-	<color name="midGrey">#4c555a</color>
+	<color name="midGrey">#303a40</color>
 	<color name="darkGrey">#242c31</color>
 	<color name="lightGrey">#eeeeee</color>
 	<color name="primaryTextColor">#000000</color>

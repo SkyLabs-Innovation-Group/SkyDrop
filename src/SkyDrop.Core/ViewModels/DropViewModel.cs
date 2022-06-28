@@ -47,6 +47,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand UploadStartedNotificationCommand { get; set; }
         public IMvxCommand<FileUploadResult> UploadFinishedNotificationCommand { get; set; }
         public IMvxCommand<double> UpdateNotificationProgressCommand { get; set; }
+        public IMvxCommand MenuCommand { get; set; }
 
         public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
@@ -61,7 +62,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsAnimatingBarcodeOut { get; set; }
         public string FileSize { get; set; }
         public double UploadProgress { get; set; } //0-1
-        public bool FirstFileUploaded { get; set; }
+        public bool FirstFileUploaded { get; set; } //determines whether user can swipe to the QR code screen
         public bool UserIsSwipingResult { get; set; }
         public bool BarcodeIsLoaded { get; set; }
         public bool NavDotsVisible => DropViewUIState != DropViewState.ConfirmFilesState && BarcodeIsLoaded;
@@ -85,11 +86,6 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 UpdateNavDotsCommand?.Execute();
             }
-        }
-
-        public Task NavigateToSettings()
-        {
-            return navigationService.Navigate<SettingsViewModel>();
         }
 
         public enum DropViewState
@@ -145,6 +141,7 @@ namespace SkyDrop.Core.ViewModels.Main
             CancelUploadCommand = new MvxCommand(CancelUpload);
             ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
+            MenuCommand = new MvxAsyncCommand(NavigateToFiles);
         }
 
         public override async Task Initialize()
@@ -249,7 +246,15 @@ namespace SkyDrop.Core.ViewModels.Main
                 UploadedFile = await UploadFile();
                 StopUploadTimer();
 
+                //fill progress bar
+                UploadProgress = 1;
+                UploadTimerText = "100%";
+
                 FirstFileUploaded = true;
+
+                //save skylink locally
+                UploadedFile.WasSent = true;
+                storageService.SaveSkyFiles(UploadedFile);
 
                 //wait for progressbar to complete
                 await Task.Delay(500);
@@ -267,26 +272,20 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             catch (TaskCanceledException tce)
             {
-                UserDialogs.Toast("Upload cancelled");
-                ResetUIStateCommand?.Execute();
-                if (UploadNotificationsEnabled)
-                    UploadFinishedNotificationCommand?.Execute(FileUploadResult.Cancelled);
+                HandleUploadError(tce, "Upload cancelled", FileUploadResult.Cancelled);
+            }
+            catch (Exception cancelledEx) when (cancelledEx.Message == "Socket is closed" || cancelledEx.Message == "Socket closed" && DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                //catches Java.Net.SocketException when user cancels upload
+                HandleUploadError(cancelledEx, "Upload cancelled", FileUploadResult.Cancelled);
             }
             catch (HttpRequestException httpEx) when (httpEx.Message.Contains("SSL") && DeviceInfo.Platform == DevicePlatform.Android)
             {
-                UserDialogs.Alert(Strings.SslPrompt);
-                Log.Exception(httpEx);
-                ResetUIStateCommand?.Execute();
-                if (UploadNotificationsEnabled)
-                    UploadFinishedNotificationCommand?.Execute(FileUploadResult.Fail);
+                HandleUploadError(httpEx, Strings.SslPrompt, FileUploadResult.Fail);
             }
             catch (Exception ex) // General error
             {
-                //UserDialogs.Toast("Could not upload file");
-                Log.Exception(ex);
-                ResetUIStateCommand?.Execute();
-                if (UploadNotificationsEnabled)
-                    UploadFinishedNotificationCommand?.Execute(FileUploadResult.Fail);
+                HandleUploadError(ex, "Could not upload file", FileUploadResult.Fail);
             }
             finally
             {
@@ -294,6 +293,26 @@ namespace SkyDrop.Core.ViewModels.Main
                 IsUploading = false;
                 IsBarcodeLoading = false;
             }
+        }
+
+        private void HandleUploadError(Exception ex, string prompt, FileUploadResult result)
+        {
+            if(result == FileUploadResult.Fail)
+            {
+                UserDialogs.Alert(prompt);
+                Log.Exception(ex);
+            }
+            else if (result == FileUploadResult.Cancelled)
+            {
+                UserDialogs.Toast(prompt);
+            }
+
+            //reset progress indicator for next attempt
+            UploadProgress = 0;
+            UploadTimerText = "";
+
+            if (UploadNotificationsEnabled)
+                UploadFinishedNotificationCommand?.Execute(result);
         }
 
         private async Task ReceiveFile()
@@ -330,6 +349,11 @@ namespace SkyDrop.Core.ViewModels.Main
                 {
                     string skylink = barcodeData.Substring(barcodeData.Length - 46, 46);
                     var skyFile = new SkyFile() { Skylink = skylink };
+
+                    var filename = await apiService.GetSkyFileFilename(skyFile);
+                    skyFile.Filename = filename;
+                    storageService.SaveSkyFiles(skyFile);
+
                     await OpenFileInBrowser(skyFile);
                 }
             }
@@ -365,6 +389,9 @@ namespace SkyDrop.Core.ViewModels.Main
                 newStagedFiles = newStagedFiles.GroupBy(x => x.SkyFile?.FullFilePath).Select(group => group.First()).ToList();
 
                 StagedFiles = newStagedFiles;
+
+                //file size will be recalculated on next upload
+                FileSize = "";
             }
             else
             {
@@ -513,15 +540,12 @@ namespace SkyDrop.Core.ViewModels.Main
         */
         private void StartUploadTimer(long fileSizeBytes)
         {
+            UploadProgress = 0;
             uploadTimerService.StartUploadTimer(fileSizeBytes, UpdateUploadProgress);
         }
 
         private void StopUploadTimer()
         {
-            //fill progress bar
-            UploadProgress = 1;
-            UploadTimerText = "100%";
-
             uploadTimerService.StopUploadTimer();
         }
 
@@ -682,6 +706,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
             //make a new list without the specified skyFile
             StagedFiles = StagedFiles.Where(s => s.SkyFile?.FullFilePath != skyFile.FullFilePath).ToList();
+
+            //file size will be recalculated on next upload
+            FileSize = "";
         }
 
         private async Task OpenFileInBrowser(SkyFile skyFile = null)
@@ -711,6 +738,27 @@ namespace SkyDrop.Core.ViewModels.Main
                 LaunchMode = BrowserLaunchMode.SystemPreferred,
                 TitleMode = BrowserTitleMode.Show
             });
+        }
+
+        public Task NavigateToSettings()
+        {
+            return navigationService.Navigate<SettingsViewModel>();
+        }
+
+        public async Task NavigateToFiles()
+        {
+            var selectedFile = await navigationService.Navigate<FilesViewModel, object, SkyFile>(null);
+            if (selectedFile == null)
+                return;
+
+            FirstFileUploaded = true;
+            UploadedFile = selectedFile;
+
+            //show QR code
+            IsBarcodeLoading = true;
+            SkyFileFullUrl = UploadedFile.GetSkylinkUrl();
+            await GenerateBarcodeAsyncFunc();
+            IsBarcodeLoading = false;
         }
     }
 }

@@ -43,9 +43,13 @@ namespace SkyDrop.Droid
             registry.RegisterCustomBindingFactory<MaterialCardView>(BarcodeBackgroundBinding.Name, view => new BarcodeBackgroundBinding(view));
             registry.RegisterCustomBindingFactory<View>(VisibleHiddenBinding.Name, view => new VisibleHiddenBinding(view));
             registry.RegisterCustomBindingFactory<ProgressBar>(UploadProgressBinding.Name, view => new UploadProgressBinding(view));
-            registry.RegisterCustomBindingFactory<MvxCachedImageView>(ImagePreviewBinding.Name, view => new ImagePreviewBinding(view));
+            registry.RegisterCustomBindingFactory<MvxCachedImageView>(LocalImagePreviewBinding.Name, view => new LocalImagePreviewBinding(view));
+            registry.RegisterCustomBindingFactory<ImageView>(LayoutImageBinding.Name, view => new LayoutImageBinding(view));
+            registry.RegisterCustomBindingFactory<MvxCachedImageView>(SkyFilePreviewImageBinding.Name, view => new SkyFilePreviewImageBinding(view));
+            registry.RegisterCustomBindingFactory<View>(BackgroundColorBinding.Name, view => new BackgroundColorBinding(view));
+            registry.RegisterCustomBindingFactory<ImageView>(FileCategoryIconBinding.Name, view => new FileCategoryIconBinding(view));
         }
-        
+
         protected override IMvxApplication CreateApp()
         {
             Debug.WriteLine("CreateApp() droid");
@@ -83,6 +87,8 @@ namespace SkyDrop.Droid
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger(logProvider));
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISkyDropHttpClientFactory>(() => new AndroidHttpClientFactory());
 
+            var httpClientFactory = Mvx.IoCProvider.Resolve<ISkyDropHttpClientFactory>();
+
             ImageService.Instance.Initialize(new Configuration()
             {
                 ClearMemoryCacheOnOutOfMemory = true,
@@ -94,6 +100,8 @@ namespace SkyDrop.Droid
                 // VerboseLoadingCancelledLogging = true,
                 // VerbosePerformanceLogging = true,
                 // VerboseMemoryCacheLogging = true,
+
+                HttpClient = httpClientFactory.GetSkyDropHttpClientInstance()
             });
 
             ImageService.Instance.Config.Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>();

@@ -33,5 +33,9 @@
     <Folder Include="QA\" />
     <Folder Include="QA\Tooling\" />
     <Folder Include="Converters\" />
+    <Folder Include="RealmObjects\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="RealmObjects\" />
   </ItemGroup>
 </Project>

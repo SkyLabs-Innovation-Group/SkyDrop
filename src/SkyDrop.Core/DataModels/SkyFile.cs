@@ -3,13 +3,14 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using MvvmCross;
+using MvvmCross.ViewModels;
 using Newtonsoft.Json;
 using Realms;
 using SkyDrop.Core.Services;
 
 namespace SkyDrop.Core.DataModels
 {
-    public class SkyFile : RealmObject, INotifyPropertyChanged
+    public class SkyFile : MvxNotifyPropertyChanged
     {
         /// <summary>
         /// If true, scanned SkyFiles use the scanned URL unmodified, if false, scanned skylinks uses the SkyDrop user's selected portal URL.
@@ -83,6 +84,12 @@ namespace SkyDrop.Core.DataModels
             get => (FileStatus)statusInt;
             set => statusInt = (int)value;
         }
+
+        /// <summary>
+        /// True if this file was sent from this device
+        /// False if this file was recieved from another device
+        /// </summary>
+        public bool WasSent { get; set; }
     }
 
     public enum FileStatus

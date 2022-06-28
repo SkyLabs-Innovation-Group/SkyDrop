@@ -47,11 +47,6 @@ namespace SkyDrop.iOS.Views.Drop
             }
         }
 
-        private void NavigateToSettings(object sender, EventArgs e)
-        {
-            ViewModel.NavigateToSettings();
-        }
-
         public override void ViewDidLoad()
         {
             try
@@ -78,11 +73,20 @@ namespace SkyDrop.iOS.Views.Drop
 
                 View.BackgroundColor = Colors.DarkGrey.ToNative();
 
+                var menuButton = new UIBarButtonItem()
+                {
+                    Image = UIImage.FromBundle("ic_menu")
+                };
+                menuButton.Clicked += (s, e) => ViewModel.MenuCommand?.Execute();
+
+                NavigationItem.LeftBarButtonItem = menuButton;
+                NavigationItem.LeftBarButtonItem.TintColor = UIColor.White;
+
                 var settingsButton = new UIBarButtonItem()
                 {
                     Image = UIImage.FromBundle("ic_settings")
                 };
-                settingsButton.Clicked += NavigateToSettings;
+                settingsButton.Clicked += (s, e) => ViewModel.NavigateToSettings();
 
                 NavigationItem.RightBarButtonItem = settingsButton;
                 NavigationItem.RightBarButtonItem.TintColor = UIColor.White;
