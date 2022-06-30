@@ -71,6 +71,29 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 app:MvxBind="Visibility Visibility(IsBarcodeVisible)">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="16dp"
+                    app:cardElevation="1dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardBackgroundColor="@color/midGrey">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="https://siasky.net/da8d00p"
+                        android:textColor="@android:color/white"
+                        android:lines="1"
+                        android:ellipsize="middle"
+                        app:MvxBind="Text FocusedFileUrl"
+                        />
+
+                </com.google.android.material.card.MaterialCardView>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
