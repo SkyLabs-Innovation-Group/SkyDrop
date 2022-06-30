@@ -86,6 +86,12 @@ namespace SkyDrop.iOS.Views.Drop
 
 		[Outlet]
 		UIKit.UIView ShareButton { get; set; }
+
+		[Outlet]
+		UIKit.UILabel UrlLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIView UrlLabelContainer { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -122,6 +128,16 @@ namespace SkyDrop.iOS.Views.Drop
 			if (DownloadButton != null) {
 				DownloadButton.Dispose ();
 				DownloadButton = null;
+			}
+
+			if (DownloadButtonActivityIndicator != null) {
+				DownloadButtonActivityIndicator.Dispose ();
+				DownloadButtonActivityIndicator = null;
+			}
+
+			if (DownloadButtonIcon != null) {
+				DownloadButtonIcon.Dispose ();
+				DownloadButtonIcon = null;
 			}
 
 			if (FilePreviewCollectionView != null) {
@@ -204,14 +220,14 @@ namespace SkyDrop.iOS.Views.Drop
 				ShareButton = null;
 			}
 
-			if (DownloadButtonActivityIndicator != null) {
-				DownloadButtonActivityIndicator.Dispose ();
-				DownloadButtonActivityIndicator = null;
+			if (UrlLabel != null) {
+				UrlLabel.Dispose ();
+				UrlLabel = null;
 			}
 
-			if (DownloadButtonIcon != null) {
-				DownloadButtonIcon.Dispose ();
-				DownloadButtonIcon = null;
+			if (UrlLabelContainer != null) {
+				UrlLabelContainer.Dispose ();
+				UrlLabelContainer = null;
 			}
 		}
 	}

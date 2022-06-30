@@ -124,6 +124,9 @@ namespace SkyDrop.iOS.Views.Drop
                 BarcodeContainer.Layer.CornerRadius = 8;
                 BarcodeContainer.ClipsToBounds = true;
 
+                UrlLabelContainer.Layer.CornerRadius = 8;
+                UrlLabelContainer.BackgroundColor = Colors.MidGrey.ToNative();
+
                 BindViews();
             }
             catch(Exception e)
@@ -176,6 +179,8 @@ namespace SkyDrop.iOS.Views.Drop
 
             set.Bind(LeftNavDot).For("Visible").To(vm => vm.NavDotsVisible);
             set.Bind(RightNavDot).For("Visible").To(vm => vm.NavDotsVisible);
+
+            set.Bind(UrlLabel).To(vm => vm.FocusedFileUrl);
 
             set.Apply();
         }
