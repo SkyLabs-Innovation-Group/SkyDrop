@@ -364,6 +364,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 {
                     //not a skylink
                     await OpenUrlInBrowser(barcodeData);
+                    ResetUIStateCommand?.Execute();
                     return;
                 }
 
