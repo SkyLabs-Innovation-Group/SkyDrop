@@ -111,8 +111,8 @@ namespace SkyDrop.iOS.Views.Drop
 
                 CopyLinkButton.BackgroundColor = Colors.Primary.ToNative();
                 OpenButton.BackgroundColor = Colors.GradientGreen.ToNative();
-                ShareButton.BackgroundColor = Colors.GradientTurqouise.ToNative();
-                DownloadButton.BackgroundColor = Colors.GradientOcean.ToNative();
+                DownloadButton.BackgroundColor = Colors.GradientTurqouise.ToNative();
+                ShareButton.BackgroundColor = Colors.GradientOcean.ToNative();
                 CopyLinkButton.Layer.CornerRadius = 8;
                 OpenButton.Layer.CornerRadius = 8;
                 ShareButton.Layer.CornerRadius = 8;
