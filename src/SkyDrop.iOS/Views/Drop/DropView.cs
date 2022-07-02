@@ -127,6 +127,9 @@ namespace SkyDrop.iOS.Views.Drop
                 UrlLabelContainer.Layer.CornerRadius = 8;
                 UrlLabelContainer.BackgroundColor = Colors.MidGrey.ToNative();
 
+                BarcodeToggleButton.Layer.CornerRadius = 8;
+                BarcodeToggleButton.BackgroundColor = Colors.MidGrey.ToNative().ColorWithAlpha(0.25f);
+
                 BindViews();
             }
             catch(Exception e)

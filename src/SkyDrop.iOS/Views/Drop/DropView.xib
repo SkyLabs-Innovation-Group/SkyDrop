@@ -171,17 +171,17 @@
                             <rect key="frame" x="0.0" y="0.0" width="382" height="382"/>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bo9-nO-0cu">
-                            <rect key="frame" x="318" y="0.0" width="64" height="64"/>
+                            <rect key="frame" x="334" y="8" width="40" height="40"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_qr" translatesAutoresizingMaskIntoConstraints="NO" id="w9y-JH-LG8">
-                                    <rect key="frame" x="8" y="8" width="48" height="48"/>
-                                    <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <rect key="frame" x="8" y="8" width="24" height="24"/>
+                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </imageView>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="64" id="Aed-qh-iSO"/>
-                                <constraint firstAttribute="width" constant="64" id="CvP-i3-d6g"/>
+                                <constraint firstAttribute="height" constant="40" id="Aed-qh-iSO"/>
+                                <constraint firstAttribute="width" constant="40" id="CvP-i3-d6g"/>
                                 <constraint firstItem="w9y-JH-LG8" firstAttribute="top" secondItem="Bo9-nO-0cu" secondAttribute="top" constant="8" id="DXB-Wy-imC"/>
                                 <constraint firstAttribute="bottom" secondItem="w9y-JH-LG8" secondAttribute="bottom" constant="8" id="Hh8-7P-jbc"/>
                                 <constraint firstAttribute="trailing" secondItem="w9y-JH-LG8" secondAttribute="trailing" constant="8" id="K1O-Se-g8f"/>
@@ -195,10 +195,10 @@
                         <constraint firstItem="hFD-sB-3NN" firstAttribute="leading" secondItem="d8B-sr-eBO" secondAttribute="leading" id="5Df-T3-mf7"/>
                         <constraint firstAttribute="bottom" secondItem="1Ig-6e-hog" secondAttribute="bottom" id="CSa-ko-1Oh"/>
                         <constraint firstAttribute="trailing" secondItem="hFD-sB-3NN" secondAttribute="trailing" id="DXP-Af-7ut"/>
-                        <constraint firstAttribute="trailing" secondItem="Bo9-nO-0cu" secondAttribute="trailing" id="Dv2-Wx-lI7"/>
+                        <constraint firstAttribute="trailing" secondItem="Bo9-nO-0cu" secondAttribute="trailing" constant="8" id="Dv2-Wx-lI7"/>
                         <constraint firstItem="1Ig-6e-hog" firstAttribute="leading" secondItem="d8B-sr-eBO" secondAttribute="leading" id="UE2-Pd-ziL"/>
                         <constraint firstAttribute="bottom" secondItem="hFD-sB-3NN" secondAttribute="bottom" id="bea-y0-1oi"/>
-                        <constraint firstItem="Bo9-nO-0cu" firstAttribute="top" secondItem="d8B-sr-eBO" secondAttribute="top" id="ePW-lV-By3"/>
+                        <constraint firstItem="Bo9-nO-0cu" firstAttribute="top" secondItem="d8B-sr-eBO" secondAttribute="top" constant="8" id="ePW-lV-By3"/>
                         <constraint firstAttribute="width" secondItem="d8B-sr-eBO" secondAttribute="height" multiplier="1:1" id="o9N-qP-pV2"/>
                         <constraint firstItem="hFD-sB-3NN" firstAttribute="top" secondItem="d8B-sr-eBO" secondAttribute="top" id="ox7-3j-P2m"/>
                         <constraint firstAttribute="trailing" secondItem="1Ig-6e-hog" secondAttribute="trailing" id="z7Q-JB-N9h"/>
