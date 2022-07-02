@@ -53,12 +53,14 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand ShowReceivedFileCommand { get; set; }
         public IMvxCommand IosSelectFileCommand { get; set; }
         public IMvxCommand MenuCommand { get; set; }
+        public IMvxCommand ToggleBarcodeCommand { get; set; }
 
         public bool IsUploading { get; set; }
         public bool IsStagingFiles { get; set; }
         public bool IsUploadArrowVisible => !IsUploading && !IsStagingFiles;
         public bool IsBarcodeLoading { get; set; }
         public bool IsBarcodeVisible { get; set; }
+        public bool IsPreviewImageVisible { get; set; } //toggle for barcode / preview image
         public bool IsStagedFilesVisible => DropViewUIState == DropViewState.ConfirmFilesState;
         public bool IsSendButtonGreen { get; set; } = true;
         public bool IsReceiveButtonGreen { get; set; } = true;
@@ -75,6 +77,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public string ReceiveButtonLabel { get; set; } = receiveFileText;
         public bool IsReceivingFile { get; set; }
         public bool IsDownloadingFile { get; set; }
+        public string PreviewImageUrl { get; set; }
+        public bool CanDisplayPreview => FocusedFile?.Filename.CanDisplayPreview() ?? false;
 
         public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile FocusedFile { get; set; } //most recently sent or received file
@@ -157,6 +161,7 @@ namespace SkyDrop.Core.ViewModels.Main
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
             MenuCommand = new MvxAsyncCommand(NavigateToFiles);
             DownloadFileCommand = new MvxAsyncCommand(DownloadFile);
+            ToggleBarcodeCommand = new MvxCommand(ToggleBarcodeVisible);
         }
 
         public override async Task Initialize()
@@ -283,7 +288,11 @@ namespace SkyDrop.Core.ViewModels.Main
                 IsUploading = false;
                 IsBarcodeLoading = true;
                 await GenerateBarcodeAsyncFunc(FocusedFile.GetSkylinkUrl());
-                
+
+                IsPreviewImageVisible = false;
+
+                UpdatePreviewImage();
+
                 if (UploadNotificationsEnabled)
                     UploadFinishedNotificationCommand?.Execute(FileUploadResult.Success);
             }
@@ -371,6 +380,10 @@ namespace SkyDrop.Core.ViewModels.Main
                 var skylink = barcodeData.Substring(barcodeData.Length - 46, 46);
                 FocusedFile = new SkyFile() { Skylink = skylink };
                 ShowReceivedFileCommand.Execute();
+
+                UpdatePreviewImage();
+
+                IsPreviewImageVisible = true;
 
                 var filename = await apiService.GetSkyFileFilename(FocusedFile.GetSkylinkUrl());
                 FocusedFile.Filename = filename;
@@ -806,6 +819,8 @@ namespace SkyDrop.Core.ViewModels.Main
             SwipeNavigationEnabled = true;
             FocusedFile = selectedFile;
 
+            UpdatePreviewImage();
+
             //show QR code
             IsBarcodeLoading = true;
             await GenerateBarcodeAsyncFunc(FocusedFile.GetSkylinkUrl());
@@ -826,6 +841,18 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 IsDownloadingFile = false;
             }
+        }
+
+        private void ToggleBarcodeVisible()
+        {
+            IsPreviewImageVisible = !IsPreviewImageVisible;
+        }
+
+        private void UpdatePreviewImage()
+        {
+            PreviewImageUrl = null; //clear last preview image
+            if (CanDisplayPreview)
+                PreviewImageUrl = FocusedFileUrl; //load new preview image
         }
     }
 }

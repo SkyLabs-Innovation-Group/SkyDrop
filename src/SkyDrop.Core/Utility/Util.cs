@@ -28,6 +28,9 @@ namespace SkyDrop.Core.Utility
 
         public static bool ExtensionMatches(this string filename, params string[] extensionsToMatch)
         {
+            if (string.IsNullOrEmpty(filename))
+                return false;
+
             foreach (var extension in extensionsToMatch)
                 if (Path.GetExtension(filename).ToLower() == extension.ToLower())
                     return true;

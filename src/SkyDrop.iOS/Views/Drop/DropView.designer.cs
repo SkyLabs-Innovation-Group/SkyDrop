@@ -16,10 +16,13 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView BarcodeContainer { get; set; }
 
 		[Outlet]
-		FFImageLoading.Cross.MvxCachedImageView BarcodeImage { get; set; }
+		UIKit.UIImageView BarcodeImage { get; set; }
 
 		[Outlet]
 		UIKit.UIView BarcodeMenu { get; set; }
+
+		[Outlet]
+		UIKit.UIView BarcodeToggleButton { get; set; }
 
 		[Outlet]
 		UIKit.NSLayoutConstraint ButtonsSpacingConstraint { get; set; }
@@ -50,6 +53,9 @@ namespace SkyDrop.iOS.Views.Drop
 
 		[Outlet]
 		UIKit.UIView OpenButton { get; set; }
+
+		[Outlet]
+		FFImageLoading.Cross.MvxCachedImageView PreviewImage { get; set; }
 
 		[Outlet]
 		UIKit.UIView ProgressFillArea { get; set; }
@@ -103,6 +109,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (BarcodeImage != null) {
 				BarcodeImage.Dispose ();
 				BarcodeImage = null;
+			}
+
+			if (PreviewImage != null) {
+				PreviewImage.Dispose ();
+				PreviewImage = null;
 			}
 
 			if (BarcodeMenu != null) {
@@ -228,6 +239,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (UrlLabelContainer != null) {
 				UrlLabelContainer.Dispose ();
 				UrlLabelContainer = null;
+			}
+
+			if (BarcodeToggleButton != null) {
+				BarcodeToggleButton.Dispose ();
+				BarcodeToggleButton = null;
 			}
 		}
 	}

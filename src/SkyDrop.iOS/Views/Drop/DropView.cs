@@ -182,6 +182,13 @@ namespace SkyDrop.iOS.Views.Drop
 
             set.Bind(UrlLabel).To(vm => vm.FocusedFileUrl);
 
+            set.Bind(PreviewImage).For("Visible").To(vm => vm.IsPreviewImageVisible);
+            set.Bind(BarcodeImage).For(b => b.Hidden).To(vm => vm.IsPreviewImageVisible);
+
+            set.Bind(BarcodeToggleButton).For("Visible").To(vm => vm.CanDisplayPreview);
+            set.Bind(BarcodeToggleButton).For("Tap").To(vm => vm.ToggleBarcodeCommand);
+            set.Bind(PreviewImage).For(i => i.ImagePath).To(vm => vm.PreviewImageUrl);
+
             set.Apply();
         }
 
@@ -193,9 +200,7 @@ namespace SkyDrop.iOS.Views.Drop
 
             content.Title = "Upload started";
             if (progress > 1.0)
-            {
                 progressPercentage = 100;
-            }
 
             content.Body = $"{progressPercentage}% complete";
 
@@ -311,8 +316,6 @@ namespace SkyDrop.iOS.Views.Drop
         private void ShowReceivedFilePreview()
         {
             SetBarcodeCodeUiState(isSlow: true);
-            BarcodeImage.ImagePath = null;
-            BarcodeImage.ImagePath = ViewModel.FocusedFile.GetSkylinkUrl();
             ViewModel.SwipeNavigationEnabled = true;
         }
 
