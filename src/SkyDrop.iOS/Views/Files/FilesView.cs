@@ -23,6 +23,8 @@ namespace SkyDrop.iOS.Views.Files
         {
             base.ViewDidLoad();
 
+            CustomViewHolder.Add(FileExplorerView.CreateView());
+
             View.BackgroundColor = Colors.DarkGrey.ToNative();
             FilesCollectionView.BackgroundColor = Colors.DarkGrey.ToNative();
             FilesTableView.BackgroundColor = Colors.DarkGrey.ToNative();

@@ -13,6 +13,9 @@ namespace SkyDrop.iOS.Views.Files
 	partial class FilesView
 	{
 		[Outlet]
+		UIKit.UIView CustomViewHolder { get; set; }
+
+		[Outlet]
 		UIKit.UICollectionView FilesCollectionView { get; set; }
 
 		[Outlet]
@@ -28,6 +31,11 @@ namespace SkyDrop.iOS.Views.Files
 			if (FilesTableView != null) {
 				FilesTableView.Dispose ();
 				FilesTableView = null;
+			}
+
+			if (CustomViewHolder != null) {
+				CustomViewHolder.Dispose ();
+				CustomViewHolder = null;
 			}
 		}
 	}

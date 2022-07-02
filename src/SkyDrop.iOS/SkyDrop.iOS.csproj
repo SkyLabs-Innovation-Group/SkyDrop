@@ -195,6 +195,11 @@
     <Compile Include="Common\ImageSelectionHelper.cs" />
     <Compile Include="Bindings\LongPressBinding.cs" />
     <Compile Include="Bindings\FileCategoryIconBinding.cs" />
+    <InterfaceDefinition Include="Views\Files\FileExplorerView.xib" />
+    <Compile Include="Views\Files\FileExplorerView.cs" />
+    <Compile Include="Views\Files\FileExplorerView.designer.cs">
+        <DependentUpon>FileExplorerView.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

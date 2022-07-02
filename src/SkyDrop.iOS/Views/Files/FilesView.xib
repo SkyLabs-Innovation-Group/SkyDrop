@@ -10,6 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FilesView">
             <connections>
+                <outlet property="CustomViewHolder" destination="zf1-Qw-94o" id="fJc-kF-KN6"/>
                 <outlet property="FilesCollectionView" destination="QRV-E6-Axf" id="lME-ME-k24"/>
                 <outlet property="FilesTableView" destination="f3J-n7-Mnq" id="Utr-JF-ZYr"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
@@ -35,14 +36,24 @@
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zf1-Qw-94o">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="128" id="NXB-RZ-lm2"/>
+                        <constraint firstAttribute="width" constant="240" id="Phy-d8-98A"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstItem="zf1-Qw-94o" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="17o-fQ-Pdy"/>
                 <constraint firstAttribute="bottom" secondItem="QRV-E6-Axf" secondAttribute="bottom" constant="8" id="5rt-ZG-9ou"/>
                 <constraint firstAttribute="trailing" secondItem="f3J-n7-Mnq" secondAttribute="trailing" id="Jdd-OF-Q9K"/>
                 <constraint firstItem="QRV-E6-Axf" firstAttribute="top" secondItem="2" secondAttribute="topMargin" constant="8" id="Kaq-V8-3Li"/>
                 <constraint firstAttribute="bottom" secondItem="f3J-n7-Mnq" secondAttribute="bottom" id="UHF-EM-sZi"/>
                 <constraint firstItem="QRV-E6-Axf" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="8" id="VcD-sv-CF9"/>
+                <constraint firstItem="zf1-Qw-94o" firstAttribute="top" secondItem="2" secondAttribute="top" id="YyO-ih-Q6g"/>
                 <constraint firstAttribute="trailing" secondItem="QRV-E6-Axf" secondAttribute="trailing" constant="8" id="aXA-Xg-05G"/>
                 <constraint firstItem="f3J-n7-Mnq" firstAttribute="top" secondItem="2" secondAttribute="topMargin" id="k0h-Dd-Zlg"/>
                 <constraint firstItem="f3J-n7-Mnq" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="wXu-ky-pDK"/>
