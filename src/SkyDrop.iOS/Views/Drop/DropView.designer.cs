@@ -22,12 +22,6 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView BarcodeMenu { get; set; }
 
 		[Outlet]
-		UIKit.UIView BarcodeToggleButton { get; set; }
-
-		[Outlet]
-		UIKit.NSLayoutConstraint ButtonsSpacingConstraint { get; set; }
-
-		[Outlet]
 		UIKit.UIView CancelButton { get; set; }
 
 		[Outlet]
@@ -94,6 +88,15 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView ShareButton { get; set; }
 
 		[Outlet]
+		UIKit.UIView ShowBarcodeButton { get; set; }
+
+		[Outlet]
+		UIKit.UIView ShowPreviewButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView ShowPreviewIcon { get; set; }
+
+		[Outlet]
 		UIKit.UILabel UrlLabel { get; set; }
 
 		[Outlet]
@@ -111,19 +114,24 @@ namespace SkyDrop.iOS.Views.Drop
 				BarcodeImage = null;
 			}
 
-			if (PreviewImage != null) {
-				PreviewImage.Dispose ();
-				PreviewImage = null;
-			}
-
 			if (BarcodeMenu != null) {
 				BarcodeMenu.Dispose ();
 				BarcodeMenu = null;
 			}
 
-			if (ButtonsSpacingConstraint != null) {
-				ButtonsSpacingConstraint.Dispose ();
-				ButtonsSpacingConstraint = null;
+			if (ShowBarcodeButton != null) {
+				ShowBarcodeButton.Dispose ();
+				ShowBarcodeButton = null;
+			}
+
+			if (ShowPreviewButton != null) {
+				ShowPreviewButton.Dispose ();
+				ShowPreviewButton = null;
+			}
+
+			if (ShowPreviewIcon != null) {
+				ShowPreviewIcon.Dispose ();
+				ShowPreviewIcon = null;
 			}
 
 			if (CancelButton != null) {
@@ -169,6 +177,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (OpenButton != null) {
 				OpenButton.Dispose ();
 				OpenButton = null;
+			}
+
+			if (PreviewImage != null) {
+				PreviewImage.Dispose ();
+				PreviewImage = null;
 			}
 
 			if (ProgressFillArea != null) {
@@ -239,11 +252,6 @@ namespace SkyDrop.iOS.Views.Drop
 			if (UrlLabelContainer != null) {
 				UrlLabelContainer.Dispose ();
 				UrlLabelContainer = null;
-			}
-
-			if (BarcodeToggleButton != null) {
-				BarcodeToggleButton.Dispose ();
-				BarcodeToggleButton = null;
 			}
 		}
 	}

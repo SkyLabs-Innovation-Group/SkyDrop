@@ -53,7 +53,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand ShowReceivedFileCommand { get; set; }
         public IMvxCommand IosSelectFileCommand { get; set; }
         public IMvxCommand MenuCommand { get; set; }
-        public IMvxCommand ToggleBarcodeCommand { get; set; }
+        public IMvxCommand ShowBarcodeCommand { get; set; }
+        public IMvxCommand ShowPreviewImageCommand { get; set; }
 
         public bool IsUploading { get; set; }
         public bool IsStagingFiles { get; set; }
@@ -79,6 +80,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsDownloadingFile { get; set; }
         public string PreviewImageUrl { get; set; }
         public bool CanDisplayPreview => FocusedFile?.Filename.CanDisplayPreview() ?? false;
+        public bool IsShowBarcodeButtonVisible => CanDisplayPreview && IsPreviewImageVisible;
+        public bool IsShowPreviewButtonVisible => CanDisplayPreview && !IsPreviewImageVisible;
 
         public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile FocusedFile { get; set; } //most recently sent or received file
@@ -161,7 +164,8 @@ namespace SkyDrop.Core.ViewModels.Main
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
             MenuCommand = new MvxAsyncCommand(NavigateToFiles);
             DownloadFileCommand = new MvxAsyncCommand(DownloadFile);
-            ToggleBarcodeCommand = new MvxCommand(ToggleBarcodeVisible);
+            ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
+            ShowPreviewImageCommand = new MvxCommand(() => IsPreviewImageVisible = true);
         }
 
         public override async Task Initialize()
@@ -841,11 +845,6 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 IsDownloadingFile = false;
             }
-        }
-
-        private void ToggleBarcodeVisible()
-        {
-            IsPreviewImageVisible = !IsPreviewImageVisible;
         }
 
         private void UpdatePreviewImage()

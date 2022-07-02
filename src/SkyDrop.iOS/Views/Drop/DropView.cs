@@ -127,8 +127,10 @@ namespace SkyDrop.iOS.Views.Drop
                 UrlLabelContainer.Layer.CornerRadius = 8;
                 UrlLabelContainer.BackgroundColor = Colors.MidGrey.ToNative();
 
-                BarcodeToggleButton.Layer.CornerRadius = 8;
-                BarcodeToggleButton.BackgroundColor = Colors.MidGrey.ToNative().ColorWithAlpha(0.25f);
+                ShowBarcodeButton.Layer.CornerRadius = 8;
+                ShowBarcodeButton.BackgroundColor = Colors.MidGrey.ToNative().ColorWithAlpha(0.5f);
+
+                ShowPreviewIcon.TintColor = Colors.LightGrey.ToNative();
 
                 BindViews();
             }
@@ -188,8 +190,11 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(PreviewImage).For("Visible").To(vm => vm.IsPreviewImageVisible);
             set.Bind(BarcodeImage).For(b => b.Hidden).To(vm => vm.IsPreviewImageVisible);
 
-            set.Bind(BarcodeToggleButton).For("Visible").To(vm => vm.CanDisplayPreview);
-            set.Bind(BarcodeToggleButton).For("Tap").To(vm => vm.ToggleBarcodeCommand);
+            //for barcode / preview toggle
+            set.Bind(ShowBarcodeButton).For("Visible").To(vm => vm.IsShowBarcodeButtonVisible);
+            set.Bind(ShowBarcodeButton).For("Tap").To(vm => vm.ShowBarcodeCommand);
+            set.Bind(ShowPreviewButton).For("Visible").To(vm => vm.IsShowPreviewButtonVisible);
+            set.Bind(ShowPreviewButton).For("Tap").To(vm => vm.ShowPreviewImageCommand);
             set.Bind(PreviewImage).For(i => i.ImagePath).To(vm => vm.PreviewImageUrl);
 
             set.Apply();
