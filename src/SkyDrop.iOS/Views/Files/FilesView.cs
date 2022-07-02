@@ -8,6 +8,7 @@ using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.iOS.Common;
 using UIKit;
+using static SkyDrop.iOS.Common.iOSUtil;
 
 namespace SkyDrop.iOS.Views.Files
 {
@@ -28,14 +29,18 @@ namespace SkyDrop.iOS.Views.Files
             View.BackgroundColor = Colors.DarkGrey.ToNative();
 
             fileExplorerView = FileExplorerView.CreateView();
-            FileExplorerHolder.LayoutInsideWithConstraints(fileExplorerView);
+            FileExplorerHolder.LayoutInsideWithFrame(fileExplorerView);
 
             //setup nav bar
-            NavigationController.NavigationBar.TintColor = UIColor.White;
             layoutToggleButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_list") };
             layoutToggleButton.Clicked += (s, e) => ToggleViewLayout();
             NavigationItem.RightBarButtonItem = layoutToggleButton;
             NavigationItem.RightBarButtonItem.TintColor = UIColor.White;
+            NavigationController.NavigationBar.TintColor = UIColor.White;
+            NavigationController.View.BackgroundColor = UIColor.Clear;
+            NavigationController.NavigationBar.Translucent = true;
+            NavigationController.NavigationBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
+            NavigationController.NavigationBar.ShadowImage = new UIImage();
 
             var set = CreateBindingSet();
             set.Bind(fileExplorerView).For(f => f.ItemsSource).To(vm => vm.SkyFiles);
