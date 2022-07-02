@@ -16,5 +16,11 @@ namespace SkyDrop.iOS.Common
                 return renderer.Render(bitMatrix, ZXing.BarcodeFormat.QR_CODE, "");
             });
         }
+
+        public static void LayoutInsideWithFrame(this UIView parent, UIView child)
+        {
+            parent.Add(child);
+            child.Frame = new CoreGraphics.CGRect(0, 0, parent.Frame.Width, parent.Frame.Height);
+        }
     }
 }

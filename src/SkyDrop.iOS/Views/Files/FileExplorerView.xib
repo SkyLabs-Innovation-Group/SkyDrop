@@ -14,23 +14,44 @@
             <rect key="frame" x="0.0" y="0.0" width="307" height="262"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Banjo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QRJ-oj-jnk">
-                    <rect key="frame" x="0.0" y="0.0" width="43" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Edp-vy-hJr">
+                    <rect key="frame" x="8" y="8" width="291" height="246"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="e8J-oh-wtF">
+                        <size key="itemSize" width="128" height="128"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="OG6-1E-v3V">
+                    <rect key="frame" x="0.0" y="0.0" width="307" height="262"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </tableView>
             </subviews>
             <color key="backgroundColor" systemColor="systemPinkColor"/>
             <constraints>
-                <constraint firstItem="QRJ-oj-jnk" firstAttribute="top" secondItem="1" secondAttribute="top" id="3aa-NI-weR"/>
-                <constraint firstItem="QRJ-oj-jnk" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="soN-eC-j6v"/>
+                <constraint firstItem="Edp-vy-hJr" firstAttribute="top" secondItem="1" secondAttribute="top" constant="8" id="6SW-rU-5EM"/>
+                <constraint firstAttribute="trailing" secondItem="OG6-1E-v3V" secondAttribute="trailing" id="Mal-hI-lZd"/>
+                <constraint firstAttribute="trailing" secondItem="Edp-vy-hJr" secondAttribute="trailing" constant="8" id="NVt-uD-RXX"/>
+                <constraint firstItem="OG6-1E-v3V" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="RrQ-73-LVj"/>
+                <constraint firstItem="OG6-1E-v3V" firstAttribute="top" secondItem="1" secondAttribute="top" id="WOR-8Z-OFG"/>
+                <constraint firstAttribute="bottom" secondItem="Edp-vy-hJr" secondAttribute="bottom" constant="8" id="bXb-6y-3Vl"/>
+                <constraint firstAttribute="bottom" secondItem="OG6-1E-v3V" secondAttribute="bottom" id="cyi-xd-RZx"/>
+                <constraint firstItem="Edp-vy-hJr" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="8" id="xPf-Ek-GFx"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="FilesCollectionView" destination="Edp-vy-hJr" id="glN-8R-Bni"/>
+                <outlet property="FilesTableView" destination="OG6-1E-v3V" id="05G-oH-l8d"/>
+            </connections>
             <point key="canvasLocation" x="13.768115942028986" y="-195.53571428571428"/>
         </view>
     </objects>
     <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemPinkColor">
             <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
