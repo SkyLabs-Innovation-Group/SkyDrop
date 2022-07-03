@@ -10,7 +10,7 @@
     <include
         android:id="@+id/layout_toolbar"
         layout="@layout/toolbar_gallery" />
-    <mvvmcross.droid.support.v7.recyclerview.MvxRecyclerView
+    <skydrop.droid.views.files.FileExplorerView
         android:id="@+id/FilesRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

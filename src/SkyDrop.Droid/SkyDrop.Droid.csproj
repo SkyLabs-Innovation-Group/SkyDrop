@@ -93,6 +93,7 @@
     <Compile Include="Bindings\SkyFilePreviewImageBinding.cs" />
     <Compile Include="Bindings\BackgroundColorBinding.cs" />
     <Compile Include="Bindings\FileCategoryIconBinding.cs" />
+    <Compile Include="Views\Files\FileExplorerView.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -467,6 +468,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Files\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
