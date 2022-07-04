@@ -39,7 +39,7 @@ namespace SkyDrop.Droid.Views.Main
         private MaterialCardView sendButton, receiveButton;
         private ConstraintLayout barcodeContainer;
         private LinearLayout barcodeMenu, sendReceiveButtonsContainer;
-        private MvxCachedImageView barcodeImageView;
+        private ImageView barcodeImageView;
         private View leftDot, rightDot;
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace SkyDrop.Droid.Views.Main
             receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);
             barcodeContainer = FindViewById<ConstraintLayout>(Resource.Id.BarcodeContainer);
             barcodeMenu = FindViewById<LinearLayout>(Resource.Id.BarcodeMenu);
-            barcodeImageView = FindViewById<MvxCachedImageView>(Resource.Id.BarcodeImage);
+            barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
             sendReceiveButtonsContainer = FindViewById<LinearLayout>(Resource.Id.SendReceiveContainer);
 
             var stagedFilesRecycler = FindViewById<RecyclerView>(Resource.Id.StagedFilesRecycler);
