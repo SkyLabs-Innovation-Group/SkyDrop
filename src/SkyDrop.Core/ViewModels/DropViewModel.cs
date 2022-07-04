@@ -382,13 +382,13 @@ namespace SkyDrop.Core.ViewModels.Main
                 FocusedFile = new SkyFile() { Skylink = skylink };
                 ShowReceivedFileCommand.Execute();
 
-                UpdatePreviewImage();
-
-                IsPreviewImageVisible = true;
-
                 var filename = await apiService.GetSkyFileFilename(FocusedFile.GetSkylinkUrl());
                 FocusedFile.Filename = filename;
                 storageService.SaveSkyFiles(FocusedFile);
+
+                IsPreviewImageVisible = true;
+
+                UpdatePreviewImage();
             }
             catch (Exception e)
             {
