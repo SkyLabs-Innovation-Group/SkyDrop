@@ -39,12 +39,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:MvxBind="FileCategoryIcon FocusedFile.Filename"/>
-                    <FFImageLoading.Cross.MvxCachedImageView
+                    <ImageView
                         android:id="@+id/BarcodeImage"
                         android:scaleType="centerCrop"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center"/>
+                        android:layout_gravity="center"
+                        app:MvxBind="Visibility InvertedVisibility(IsPreviewImageVisible)"/>
+                    <FFImageLoading.Cross.MvxCachedImageView
+                        android:id="@+id/PreviewImage"
+                        android:scaleType="centerCrop"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        app:MvxBind="ImagePath PreviewImageUrl;Visibility Visibility(IsPreviewImageVisible)"/>
                 </com.google.android.material.card.MaterialCardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
 

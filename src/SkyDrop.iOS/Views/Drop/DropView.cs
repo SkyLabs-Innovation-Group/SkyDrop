@@ -327,7 +327,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        /// Slide view in to reveal file preview image
+        /// Slide file preview image view and menu in
         /// </summary>
         private void ShowReceivedFilePreview()
         {

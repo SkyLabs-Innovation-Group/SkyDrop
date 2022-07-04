@@ -151,11 +151,12 @@ namespace SkyDrop.Droid.Views.Main
             AnimateSlideSendReceiveButtonsOut(toLeft: true);
         }
 
+        /// <summary>
+        /// Slide file preview image view and menu in
+        /// </summary>
         private void ShowReceivedFilePreview()
         {
             SetBarcodeCodeUiState(isSlow: true);
-            barcodeImageView.ImagePath = null;
-            barcodeImageView.ImagePath = ViewModel.FocusedFile.GetSkylinkUrl();
             ViewModel.SwipeNavigationEnabled = true;
         }
 
