@@ -132,6 +132,8 @@ namespace SkyDrop.iOS.Views.Drop
 
                 ShowPreviewIcon.TintColor = UIColor.FromWhiteAlpha(0.8f, 1);
 
+                FileTypeIcon.TintColor = Colors.LightGrey.ToNative();
+
                 BindViews();
             }
             catch(Exception e)
@@ -324,6 +326,9 @@ namespace SkyDrop.iOS.Views.Drop
             }
         }
 
+        /// <summary>
+        /// Slide view in to reveal file preview image
+        /// </summary>
         private void ShowReceivedFilePreview()
         {
             SetBarcodeCodeUiState(isSlow: true);

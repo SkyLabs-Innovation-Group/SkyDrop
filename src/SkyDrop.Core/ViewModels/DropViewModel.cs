@@ -36,7 +36,6 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand ReceiveCommand { get; set; }
         public IMvxCommand CopyLinkCommand { get; set; }
         public IMvxCommand ResetUIStateCommand { get; set; }
-        public IMvxCommand ResetBarcodeCommand { get; set; }
         public IMvxCommand NavToSettingsCommand { get; set; }
         public IMvxCommand ShareLinkCommand { get; set; }
         public IMvxCommand OpenFileInBrowserCommand { get; set; }
@@ -285,8 +284,6 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 //wait for progressbar to complete
                 await Task.Delay(500);
-
-                ResetBarcodeCommand?.Execute();
 
                 //show QR code
                 IsUploading = false;

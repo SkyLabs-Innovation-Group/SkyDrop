@@ -59,7 +59,6 @@ namespace SkyDrop.Droid.Views.Main
 
             ViewModel.GenerateBarcodeAsyncFunc = t => ShowBarcode(t);
             ViewModel.ResetUIStateCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
-            ViewModel.ResetBarcodeCommand = new MvxCommand(ResetBarcode);
             ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
             ViewModel.SlideReceiveButtonToCenterCommand = new MvxCommand(AnimateSlideReceiveButton);
             ViewModel.ShowReceivedFileCommand = new MvxCommand(ShowReceivedFilePreview);
@@ -127,14 +126,6 @@ namespace SkyDrop.Droid.Views.Main
             var bitmap = await AndroidUtil.BitMatrixToBitmap(matrix);
             barcodeImageView.SetImageBitmap(bitmap);
             ViewModel.SwipeNavigationEnabled = true;
-        }
-
-        /// <summary>
-        /// Display grey placeholder QR code
-        /// </summary>
-        private void ResetBarcode()
-        {
-            barcodeImageView.SetImageResource(Resource.Drawable.barcode_grey);
         }
 
         /// <summary>

@@ -35,29 +35,16 @@
                     app:cardElevation="1dp"
                     android:clickable="true"
                     app:cardCornerRadius="8dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:MvxBind="FileCategoryIcon FocusedFile.Filename"/>
                     <FFImageLoading.Cross.MvxCachedImageView
                         android:id="@+id/BarcodeImage"
-                        android:src="@drawable/barcode_grey"
                         android:scaleType="centerCrop"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"/>
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="84dp"
-                        android:layout_height="84dp"
-                        android:layout_gravity="center"
-                        app:strokeColor="@color/midGrey"
-                        app:cardBackgroundColor="@color/darkGrey"
-                        app:cardElevation="4dp"
-                        android:clickable="true"
-                        app:cardCornerRadius="42dp"
-                        app:MvxBind="Visibility Visibility(IsBarcodeLoading)">
-                        <ProgressBar
-                            android:background="@color/darkGrey"
-                            android:layout_gravity="center"
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"/>
-                    </com.google.android.material.card.MaterialCardView>
                 </com.google.android.material.card.MaterialCardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
