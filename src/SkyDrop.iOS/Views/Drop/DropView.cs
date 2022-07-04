@@ -130,7 +130,7 @@ namespace SkyDrop.iOS.Views.Drop
                 ShowBarcodeButton.Layer.CornerRadius = 4;
                 ShowBarcodeButton.BackgroundColor = Colors.MidGrey.ToNative().ColorWithAlpha(0.5f);
 
-                ShowPreviewIcon.TintColor = UIColor.FromWhiteAlpha(0.8f, 1);//Colors.LightGrey.ToNative();
+                ShowPreviewIcon.TintColor = UIColor.FromWhiteAlpha(0.8f, 1);
 
                 BindViews();
             }
@@ -196,6 +196,9 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(ShowPreviewButton).For("Visible").To(vm => vm.IsShowPreviewButtonVisible);
             set.Bind(ShowPreviewButton).For("Tap").To(vm => vm.ShowPreviewImageCommand);
             set.Bind(PreviewImage).For(i => i.ImagePath).To(vm => vm.PreviewImageUrl);
+
+            //icon behind preview image, to show while preview is loading
+            set.Bind(FileTypeIcon).For(FileCategoryIconBinding.Name).To(vm => vm.FocusedFile.Filename); 
 
             set.Apply();
         }

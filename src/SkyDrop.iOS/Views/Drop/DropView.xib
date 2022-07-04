@@ -20,6 +20,7 @@
                 <outlet property="DownloadButtonIcon" destination="QSi-Va-Zxh" id="ubj-Pu-Tov"/>
                 <outlet property="FilePreviewCollectionView" destination="jiB-ne-gQ7" id="OAM-Sk-N3G"/>
                 <outlet property="FileSizeLabel" destination="qif-P7-gfN" id="S6w-Pg-oEg"/>
+                <outlet property="FileTypeIcon" destination="2xc-82-PNR" id="dRv-Ag-oyT"/>
                 <outlet property="LeftNavDot" destination="WPb-AT-AvM" id="upV-fs-Bzv"/>
                 <outlet property="OpenButton" destination="rhP-Ru-BgC" id="SIp-o7-VRB"/>
                 <outlet property="PreviewImage" destination="hFD-sB-3NN" id="8Hh-3q-Tiy"/>
@@ -166,6 +167,9 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d8B-sr-eBO" userLabel="BarcodeContainer">
                     <rect key="frame" x="16" y="68" width="382" height="382"/>
                     <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2xc-82-PNR" userLabel="File Type Icon">
+                            <rect key="frame" x="0.0" y="0.0" width="382" height="382"/>
+                        </imageView>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1Ig-6e-hog" userLabel="Barcode Image">
                             <rect key="frame" x="0.0" y="0.0" width="382" height="382"/>
                         </imageView>
@@ -215,16 +219,20 @@
                     <constraints>
                         <constraint firstItem="1Ig-6e-hog" firstAttribute="top" secondItem="d8B-sr-eBO" secondAttribute="top" id="3iR-1X-hjp"/>
                         <constraint firstItem="hFD-sB-3NN" firstAttribute="leading" secondItem="d8B-sr-eBO" secondAttribute="leading" id="5Df-T3-mf7"/>
+                        <constraint firstItem="2xc-82-PNR" firstAttribute="leading" secondItem="d8B-sr-eBO" secondAttribute="leading" id="B9U-Dh-ggP"/>
                         <constraint firstAttribute="bottom" secondItem="1Ig-6e-hog" secondAttribute="bottom" id="CSa-ko-1Oh"/>
                         <constraint firstAttribute="trailing" secondItem="hFD-sB-3NN" secondAttribute="trailing" id="DXP-Af-7ut"/>
                         <constraint firstItem="Bo9-nO-0cu" firstAttribute="centerX" secondItem="HH6-iv-3WC" secondAttribute="centerX" id="GKk-M5-76S"/>
+                        <constraint firstAttribute="trailing" secondItem="2xc-82-PNR" secondAttribute="trailing" id="Tpn-Vc-BtO"/>
                         <constraint firstItem="1Ig-6e-hog" firstAttribute="leading" secondItem="d8B-sr-eBO" secondAttribute="leading" id="UE2-Pd-ziL"/>
                         <constraint firstItem="Bo9-nO-0cu" firstAttribute="centerY" secondItem="HH6-iv-3WC" secondAttribute="centerY" id="avq-No-h2K"/>
                         <constraint firstAttribute="bottom" secondItem="hFD-sB-3NN" secondAttribute="bottom" id="bea-y0-1oi"/>
+                        <constraint firstAttribute="bottom" secondItem="2xc-82-PNR" secondAttribute="bottom" id="fzi-Q5-5dn"/>
                         <constraint firstItem="HH6-iv-3WC" firstAttribute="top" secondItem="d8B-sr-eBO" secondAttribute="top" constant="6" id="k3Y-Jw-c27"/>
                         <constraint firstAttribute="width" secondItem="d8B-sr-eBO" secondAttribute="height" multiplier="1:1" id="o9N-qP-pV2"/>
                         <constraint firstAttribute="trailing" secondItem="HH6-iv-3WC" secondAttribute="trailing" constant="6" id="oWk-S7-qgP"/>
                         <constraint firstItem="hFD-sB-3NN" firstAttribute="top" secondItem="d8B-sr-eBO" secondAttribute="top" id="ox7-3j-P2m"/>
+                        <constraint firstItem="2xc-82-PNR" firstAttribute="top" secondItem="d8B-sr-eBO" secondAttribute="top" id="uZv-gf-0lx"/>
                         <constraint firstAttribute="trailing" secondItem="1Ig-6e-hog" secondAttribute="trailing" id="z7Q-JB-N9h"/>
                     </constraints>
                 </view>

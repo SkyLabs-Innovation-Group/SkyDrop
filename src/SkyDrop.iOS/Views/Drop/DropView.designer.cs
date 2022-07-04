@@ -43,6 +43,9 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UILabel FileSizeLabel { get; set; }
 
 		[Outlet]
+		UIKit.UIImageView FileTypeIcon { get; set; }
+
+		[Outlet]
 		UIKit.UIImageView LeftNavDot { get; set; }
 
 		[Outlet]
@@ -117,21 +120,6 @@ namespace SkyDrop.iOS.Views.Drop
 			if (BarcodeMenu != null) {
 				BarcodeMenu.Dispose ();
 				BarcodeMenu = null;
-			}
-
-			if (ShowBarcodeButton != null) {
-				ShowBarcodeButton.Dispose ();
-				ShowBarcodeButton = null;
-			}
-
-			if (ShowPreviewButton != null) {
-				ShowPreviewButton.Dispose ();
-				ShowPreviewButton = null;
-			}
-
-			if (ShowPreviewIcon != null) {
-				ShowPreviewIcon.Dispose ();
-				ShowPreviewIcon = null;
 			}
 
 			if (CancelButton != null) {
@@ -244,6 +232,21 @@ namespace SkyDrop.iOS.Views.Drop
 				ShareButton = null;
 			}
 
+			if (ShowBarcodeButton != null) {
+				ShowBarcodeButton.Dispose ();
+				ShowBarcodeButton = null;
+			}
+
+			if (ShowPreviewButton != null) {
+				ShowPreviewButton.Dispose ();
+				ShowPreviewButton = null;
+			}
+
+			if (ShowPreviewIcon != null) {
+				ShowPreviewIcon.Dispose ();
+				ShowPreviewIcon = null;
+			}
+
 			if (UrlLabel != null) {
 				UrlLabel.Dispose ();
 				UrlLabel = null;
@@ -252,6 +255,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (UrlLabelContainer != null) {
 				UrlLabelContainer.Dispose ();
 				UrlLabelContainer = null;
+			}
+
+			if (FileTypeIcon != null) {
+				FileTypeIcon.Dispose ();
+				FileTypeIcon = null;
 			}
 		}
 	}
