@@ -53,6 +53,25 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         app:MvxBind="ImagePath PreviewImageUrl;Visibility Visibility(IsPreviewImageVisible)"/>
+
+                    <!--Show Barcode Button, bg color is mid grey with 50% opacity-->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="11dp"
+                        android:layout_marginRight="11dp"
+                        app:cardBackgroundColor="#80303a40"
+                        app:cardElevation="1dp"
+                        android:clickable="true"
+                        app:cardCornerRadius="4dp"
+                        app:MvxBind="Click ShowBarcodeCommand">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_qr"/>
+                    </com.google.android.material.card.MaterialCardView>
                 </com.google.android.material.card.MaterialCardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
