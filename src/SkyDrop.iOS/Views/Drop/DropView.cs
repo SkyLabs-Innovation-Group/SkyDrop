@@ -80,7 +80,7 @@ namespace SkyDrop.iOS.Views.Drop
                 };
 
                 View.BackgroundColor = Colors.DarkGrey.ToNative();
-                BarcodeContainer.BackgroundColor = Colors.DarkGrey.ToNative(); //so that preview image fades in from dark color
+                BarcodeContainer.BackgroundColor = Colors.MidGrey.ToNative(); //so that preview image fades in from dark color
 
                 var menuButton = new UIBarButtonItem()
                 {
