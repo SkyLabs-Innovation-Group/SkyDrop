@@ -162,10 +162,8 @@ namespace SkyDrop.Core.ViewModels.Main
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
             MenuCommand = new MvxAsyncCommand(NavigateToFiles);
             DownloadFileCommand = new MvxAsyncCommand(DownloadFile);
-            ShowBarcodeCommand = new MvxCommand(() =>
-                IsPreviewImageVisible = false);
-            ShowPreviewImageCommand = new MvxCommand(() =>
-                IsPreviewImageVisible = true);
+            ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
+            ShowPreviewImageCommand = new MvxCommand(() => IsPreviewImageVisible = true);
         }
 
         public override async Task Initialize()
