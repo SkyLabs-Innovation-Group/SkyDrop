@@ -61,7 +61,6 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.ResetUIStateCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
             ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
             ViewModel.SlideReceiveButtonToCenterCommand = new MvxCommand(AnimateSlideReceiveButton);
-            ViewModel.ShowReceivedFileCommand = new MvxCommand(ShowReceivedFilePreview);
             ViewModel.CheckUserIsSwipingCommand = new MvxCommand(CheckUserIsSwiping);
             ViewModel.UpdateNavDotsCommand = new MvxCommand(() => UpdateNavDots());
             ViewModel.UploadStartedNotificationCommand = new MvxCommand(() => AndroidUtil.ShowUploadStartedNotification(this, $"{ViewModel.FileToUpload.Filename} {ViewModel.FileSize}"));
@@ -149,15 +148,6 @@ namespace SkyDrop.Droid.Views.Main
 
             AnimateSlideBarcodeIn(fromLeft: false, isSlow);
             AnimateSlideSendReceiveButtonsOut(toLeft: true);
-        }
-
-        /// <summary>
-        /// Slide file preview image view and menu in
-        /// </summary>
-        private void ShowReceivedFilePreview()
-        {
-            SetBarcodeCodeUiState(isSlow: true);
-            ViewModel.SwipeNavigationEnabled = true;
         }
 
         /// <summary>

@@ -49,7 +49,6 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand UploadStartedNotificationCommand { get; set; }
         public IMvxCommand<FileUploadResult> UploadFinishedNotificationCommand { get; set; }
         public IMvxCommand<double> UpdateNotificationProgressCommand { get; set; }
-        public IMvxCommand ShowReceivedFileCommand { get; set; }
         public IMvxCommand IosSelectFileCommand { get; set; }
         public IMvxCommand MenuCommand { get; set; }
         public IMvxCommand ShowBarcodeCommand { get; set; }
@@ -163,8 +162,10 @@ namespace SkyDrop.Core.ViewModels.Main
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
             MenuCommand = new MvxAsyncCommand(NavigateToFiles);
             DownloadFileCommand = new MvxAsyncCommand(DownloadFile);
-            ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
-            ShowPreviewImageCommand = new MvxCommand(() => IsPreviewImageVisible = true);
+            ShowBarcodeCommand = new MvxCommand(() =>
+                IsPreviewImageVisible = false);
+            ShowPreviewImageCommand = new MvxCommand(() =>
+                IsPreviewImageVisible = true);
         }
 
         public override async Task Initialize()
@@ -380,14 +381,16 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 var skylink = barcodeData.Substring(barcodeData.Length - 46, 46);
                 FocusedFile = new SkyFile() { Skylink = skylink };
-                ShowReceivedFileCommand.Execute();
+
+                IsPreviewImageVisible = true;
+
+                await GenerateBarcodeAsyncFunc(FocusedFileUrl);
 
                 var filename = await apiService.GetSkyFileFilename(FocusedFile.GetSkylinkUrl());
                 FocusedFile.Filename = filename;
                 storageService.SaveSkyFiles(FocusedFile);
 
-                IsPreviewImageVisible = true;
-
+                //can only do this after getting filename from Skynet
                 UpdatePreviewImage();
             }
             catch (Exception e)

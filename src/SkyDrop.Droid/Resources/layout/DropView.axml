@@ -31,7 +31,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     app:layout_constraintDimensionRatio="1:1" 
-                    app:cardBackgroundColor="@color/clear"
+                    app:cardBackgroundColor="@color/midGrey"
                     app:cardElevation="1dp"
                     android:clickable="true"
                     app:cardCornerRadius="8dp">
@@ -54,23 +54,30 @@
                         app:MvxBind="ImagePath PreviewImageUrl;Visibility Visibility(IsPreviewImageVisible)"/>
 
                     <!--Show Barcode Button, bg color is mid grey with 50% opacity-->
-                    <com.google.android.material.card.MaterialCardView
+                    <androidx.cardview.widget.CardView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="right"
                         android:layout_marginTop="11dp"
                         android:layout_marginRight="11dp"
-                        app:cardBackgroundColor="#80303a40"
-                        app:cardElevation="1dp"
+                        app:cardBackgroundColor="@color/clear"
+                        app:cardElevation="0dp"
                         android:clickable="true"
                         app:cardCornerRadius="4dp"
                         app:MvxBind="Click ShowBarcodeCommand">
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_qr"/>
-                    </com.google.android.material.card.MaterialCardView>
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="#80303a40"
+                            >
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:background="@android:color/transparent"
+                                android:src="@drawable/ic_qr"/>
+                        </FrameLayout>
+                    </androidx.cardview.widget.CardView>
                 </com.google.android.material.card.MaterialCardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
