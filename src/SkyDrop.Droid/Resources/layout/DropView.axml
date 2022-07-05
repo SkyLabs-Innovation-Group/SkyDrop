@@ -64,7 +64,7 @@
                         app:cardElevation="0dp"
                         android:clickable="true"
                         app:cardCornerRadius="4dp"
-                        app:MvxBind="Click ShowBarcodeCommand;Visibility Visibility(IsPreviewImageVisible)">
+                        app:MvxBind="Click ShowBarcodeCommand;Visibility Visibility(IsShowBarcodeButtonVisible)">
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
@@ -79,7 +79,7 @@
                         android:layout_gravity="right"
                         android:layout_margin="6dp"
                         android:src="@drawable/ic_image"
-                        app:MvxBind="Click ShowPreviewImageCommand;Visibility InvertedVisibility(IsPreviewImageVisible)"/>
+                        app:MvxBind="Click ShowPreviewImageCommand;Visibility Visibility(IsShowPreviewButtonVisible)"/>
                 </com.google.android.material.card.MaterialCardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
 

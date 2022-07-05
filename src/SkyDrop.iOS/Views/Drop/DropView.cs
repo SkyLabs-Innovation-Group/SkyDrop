@@ -58,7 +58,6 @@ namespace SkyDrop.iOS.Views.Drop
                 ViewModel.UploadStartedNotificationCommand = new MvxAsyncCommand(async() => await ShowUploadStartedNotification()); ;
                 ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>((result) => ShowUploadFinishedNotification(result));
                 ViewModel.UpdateNotificationProgressCommand = new MvxCommand<double>((progress) => UpdateUploadNotificationProgress(progress));
-                ViewModel.ShowReceivedFileCommand = new MvxCommand(ShowReceivedFilePreview);
                 ViewModel.IosSelectFileCommand = new MvxCommand(() =>
                 {
                     var successAction = new Action<string>(path => ViewModel.IosStageImage(path));
@@ -324,15 +323,6 @@ namespace SkyDrop.iOS.Views.Drop
                 ViewModel.Log.Error("Error in ShowBarcode(): ");
                 ViewModel.Log.Exception(ex);
             }
-        }
-
-        /// <summary>
-        /// Slide file preview image view and menu in
-        /// </summary>
-        private void ShowReceivedFilePreview()
-        {
-            SetBarcodeCodeUiState(isSlow: true);
-            ViewModel.SwipeNavigationEnabled = true;
         }
 
         /// <summary>
