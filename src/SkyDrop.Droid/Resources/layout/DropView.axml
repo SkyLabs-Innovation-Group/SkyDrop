@@ -60,23 +60,17 @@
                         android:layout_gravity="right"
                         android:layout_marginTop="11dp"
                         android:layout_marginRight="11dp"
-                        app:cardBackgroundColor="@color/clear"
+                        app:cardBackgroundColor="#80303a40"
                         app:cardElevation="0dp"
                         android:clickable="true"
                         app:cardCornerRadius="4dp"
                         app:MvxBind="Click ShowBarcodeCommand">
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="#80303a40"
-                            >
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_gravity="center"
-                                android:background="@android:color/transparent"
-                                android:src="@drawable/ic_qr"/>
-                        </FrameLayout>
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:background="@android:color/transparent"
+                            android:src="@drawable/ic_qr"/>
                     </androidx.cardview.widget.CardView>
                 </com.google.android.material.card.MaterialCardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
