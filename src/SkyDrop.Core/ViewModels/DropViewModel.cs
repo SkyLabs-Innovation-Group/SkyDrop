@@ -388,8 +388,8 @@ namespace SkyDrop.Core.ViewModels.Main
                 FocusedFile.Filename = filename;
                 storageService.SaveSkyFiles(FocusedFile);
 
-                _ = RaisePropertyChanged(() => IsShowBarcodeButtonVisible);
-                _ = RaisePropertyChanged(() => IsShowPreviewButtonVisible);
+                RaisePropertyChanged(() => IsShowBarcodeButtonVisible).Forget();
+                RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
 
                 //can only do this after getting filename from Skynet
                 UpdatePreviewImage();

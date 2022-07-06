@@ -40,6 +40,8 @@ namespace SkyDrop.Core.Utility
 
         public static FileCategory GetFileCategory(string filename)
         {
+            filename = filename.ToLowerInvariant();
+
             if (filename.ExtensionMatches(new[] { ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx", ".ods", ".odt", ".pdf", ".txt", ".html", ".htm" }))
                 return FileCategory.Document;
 
@@ -66,6 +68,7 @@ namespace SkyDrop.Core.Utility
 
         public static bool CanDisplayPreview(this string filename)
         {
+            filename = filename.ToLowerInvariant();
             return filename.ExtensionMatches(".jpg", ".jpeg", ".bmp", ".png", ".gif", ".webp", ".heic");
         }
     }
