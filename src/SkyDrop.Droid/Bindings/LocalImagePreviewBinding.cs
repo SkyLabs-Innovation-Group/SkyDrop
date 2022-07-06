@@ -53,25 +53,8 @@ namespace SkyDrop.Droid.Bindings
                 
                 if (string.IsNullOrEmpty(value?.FullFilePath))
                     return;
-
-                string extension = Path.GetExtension(value.FullFilePath).ToLowerInvariant();
-
-                bool shouldSetImagePreview;
-                switch (extension) 
-                {
-                    case ".jpg":
-                    case ".jpeg":
-                    case ".png":
-                    case ".bmp":
-                    case ".tiff":
-                        shouldSetImagePreview = true;
-                        break;
-                    default:
-                        shouldSetImagePreview = false;
-                        break;
-                }
                 
-                if (!shouldSetImagePreview)
+                if (!Util.CanDisplayPreview(value.FullFilePath))
                     return;
 
                 Task.Run(async () =>

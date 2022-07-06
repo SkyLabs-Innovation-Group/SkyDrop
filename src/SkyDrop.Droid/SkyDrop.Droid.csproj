@@ -86,7 +86,6 @@
     <Compile Include="Views\Main\DropView.cs" />
     <Compile Include="Bindings\VisibleHiddenBinding.cs" />
     <Compile Include="Bindings\CardStateBinding.cs" />
-    <Compile Include="Bindings\BarcodeBackgroundBinding.cs" />
     <Compile Include="Bindings\UploadProgressBinding.cs" />
     <Compile Include="Bindings\LocalImagePreviewBinding.cs" />
     <Compile Include="Bindings\LayoutImageBinding.cs" />
@@ -223,12 +222,6 @@
       </Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\launch_skydrop_background.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\barcode_grey.png">
       <SubType>
       </SubType>
       <Generator>
@@ -436,6 +429,14 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\ic_file_generic.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_qr.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_image.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>

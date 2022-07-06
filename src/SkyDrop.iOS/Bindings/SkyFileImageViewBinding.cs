@@ -12,6 +12,7 @@ using Serilog;
 using SkyDrop.Core;
 using SkyDrop.Core.DataModels;
 using Xamarin.Essentials;
+using SkyDrop.Core.Utility;
 
 namespace SkyDrop.iOS.Bindings
 {
@@ -37,24 +38,7 @@ namespace SkyDrop.iOS.Bindings
                 if (value == null)
                     return;
                 
-                string extension = Path.GetExtension(value.FullFilePath).ToLowerInvariant();
-
-                bool shouldSetImagePreview;
-                switch (extension) 
-                {
-                    case ".jpg":
-                    case ".jpeg":
-                    case ".bmp":
-                    case ".png":
-                    case ".tiff":
-                        shouldSetImagePreview = true;
-                        break;
-                    default:
-                        shouldSetImagePreview = false;
-                        break;
-                }
-                
-                if (!shouldSetImagePreview)
+                if (!Util.CanDisplayPreview(value.FullFilePath))
                     return;
 
                 Task.Run(async () =>

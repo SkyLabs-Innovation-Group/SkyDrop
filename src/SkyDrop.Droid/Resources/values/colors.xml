@@ -2,9 +2,9 @@
 <resources>
 	<color name="primaryDark">#02A275</color>
 	<color name="primaryLight">#70d379</color>
-	<!-- Gradient color scheme -->
-	<!--<color name="primaryColor">#58b560</color>-->
+	<!--official skynet color-->
 	<color name="primaryColor">#58b560</color>
+	<!-- Gradient color scheme -->
 	<color name="skyGreen">#02A275</color>
 	<color name="skyTurqouise">#008C80</color>
 	<color name="skyOcean">#00757F</color>
@@ -12,10 +12,10 @@
 	<color name="skyDarkBlue">#2F4858</color>
 	<!-- Collective color scheme -->
 	<color name="skyLightBlue">#00BBFF</color>
-	<!--official skynet color-->
 	<color name="midGrey">#303a40</color>
 	<color name="darkGrey">#242c31</color>
 	<color name="lightGrey">#eeeeee</color>
+	<color name="clear">#00ffffff</color>
 	<color name="primaryTextColor">#000000</color>
 	<color name="secondaryTextColor">#ffffff</color>
 </resources>
