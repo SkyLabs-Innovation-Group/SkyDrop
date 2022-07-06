@@ -13,9 +13,6 @@ namespace SkyDrop.iOS.Views.Drop
 	partial class DropView
 	{
 		[Outlet]
-		UIKit.UIActivityIndicatorView ActivityIndicator { get; set; }
-
-		[Outlet]
 		UIKit.UIView BarcodeContainer { get; set; }
 
 		[Outlet]
@@ -31,10 +28,22 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView CopyLinkButton { get; set; }
 
 		[Outlet]
+		UIKit.UIView DownloadButton { get; set; }
+
+		[Outlet]
+		UIKit.UIActivityIndicatorView DownloadButtonActivityIndicator { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView DownloadButtonIcon { get; set; }
+
+		[Outlet]
 		UIKit.UICollectionView FilePreviewCollectionView { get; set; }
 
 		[Outlet]
 		UIKit.UILabel FileSizeLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView FileTypeIcon { get; set; }
 
 		[Outlet]
 		UIKit.UIImageView LeftNavDot { get; set; }
@@ -43,7 +52,13 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView OpenButton { get; set; }
 
 		[Outlet]
+		FFImageLoading.Cross.MvxCachedImageView PreviewImage { get; set; }
+
+		[Outlet]
 		UIKit.UIView ProgressFillArea { get; set; }
+
+		[Outlet]
+		UIKit.UIActivityIndicatorView ReceiveActivityIndicator { get; set; }
 
 		[Outlet]
 		UIKit.UIView ReceiveButton { get; set; }
@@ -52,7 +67,13 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIImageView ReceiveIcon { get; set; }
 
 		[Outlet]
+		UIKit.UILabel ReceiveLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIImageView RightNavDot { get; set; }
+
+		[Outlet]
+		UIKit.UIActivityIndicatorView SendActivityIndicator { get; set; }
 
 		[Outlet]
 		UIKit.UIView SendButton { get; set; }
@@ -69,16 +90,23 @@ namespace SkyDrop.iOS.Views.Drop
 		[Outlet]
 		UIKit.UIView ShareButton { get; set; }
 
-		[Action ("DropViewClickAction:")]
-		partial void DropViewClickAction (Foundation.NSObject sender);
+		[Outlet]
+		UIKit.UIView ShowBarcodeButton { get; set; }
+
+		[Outlet]
+		UIKit.UIView ShowPreviewButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView ShowPreviewIcon { get; set; }
+
+		[Outlet]
+		UIKit.UILabel UrlLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIView UrlLabelContainer { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (ActivityIndicator != null) {
-				ActivityIndicator.Dispose ();
-				ActivityIndicator = null;
-			}
-
 			if (BarcodeContainer != null) {
 				BarcodeContainer.Dispose ();
 				BarcodeContainer = null;
@@ -104,6 +132,21 @@ namespace SkyDrop.iOS.Views.Drop
 				CopyLinkButton = null;
 			}
 
+			if (DownloadButton != null) {
+				DownloadButton.Dispose ();
+				DownloadButton = null;
+			}
+
+			if (DownloadButtonActivityIndicator != null) {
+				DownloadButtonActivityIndicator.Dispose ();
+				DownloadButtonActivityIndicator = null;
+			}
+
+			if (DownloadButtonIcon != null) {
+				DownloadButtonIcon.Dispose ();
+				DownloadButtonIcon = null;
+			}
+
 			if (FilePreviewCollectionView != null) {
 				FilePreviewCollectionView.Dispose ();
 				FilePreviewCollectionView = null;
@@ -124,9 +167,19 @@ namespace SkyDrop.iOS.Views.Drop
 				OpenButton = null;
 			}
 
+			if (PreviewImage != null) {
+				PreviewImage.Dispose ();
+				PreviewImage = null;
+			}
+
 			if (ProgressFillArea != null) {
 				ProgressFillArea.Dispose ();
 				ProgressFillArea = null;
+			}
+
+			if (ReceiveActivityIndicator != null) {
+				ReceiveActivityIndicator.Dispose ();
+				ReceiveActivityIndicator = null;
 			}
 
 			if (ReceiveButton != null) {
@@ -139,9 +192,19 @@ namespace SkyDrop.iOS.Views.Drop
 				ReceiveIcon = null;
 			}
 
+			if (ReceiveLabel != null) {
+				ReceiveLabel.Dispose ();
+				ReceiveLabel = null;
+			}
+
 			if (RightNavDot != null) {
 				RightNavDot.Dispose ();
 				RightNavDot = null;
+			}
+
+			if (SendActivityIndicator != null) {
+				SendActivityIndicator.Dispose ();
+				SendActivityIndicator = null;
 			}
 
 			if (SendButton != null) {
@@ -167,6 +230,36 @@ namespace SkyDrop.iOS.Views.Drop
 			if (ShareButton != null) {
 				ShareButton.Dispose ();
 				ShareButton = null;
+			}
+
+			if (ShowBarcodeButton != null) {
+				ShowBarcodeButton.Dispose ();
+				ShowBarcodeButton = null;
+			}
+
+			if (ShowPreviewButton != null) {
+				ShowPreviewButton.Dispose ();
+				ShowPreviewButton = null;
+			}
+
+			if (ShowPreviewIcon != null) {
+				ShowPreviewIcon.Dispose ();
+				ShowPreviewIcon = null;
+			}
+
+			if (UrlLabel != null) {
+				UrlLabel.Dispose ();
+				UrlLabel = null;
+			}
+
+			if (UrlLabelContainer != null) {
+				UrlLabelContainer.Dispose ();
+				UrlLabelContainer = null;
+			}
+
+			if (FileTypeIcon != null) {
+				FileTypeIcon.Dispose ();
+				FileTypeIcon = null;
 			}
 		}
 	}

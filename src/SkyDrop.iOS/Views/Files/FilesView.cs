@@ -29,11 +29,15 @@ namespace SkyDrop.iOS.Views.Files
             FilesTableView.AllowsSelection = false;
 
             //setup nav bar
-            NavigationController.NavigationBar.TintColor = UIColor.White;
             layoutToggleButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_list") };
             layoutToggleButton.Clicked += (s, e) => ToggleViewLayout();
             NavigationItem.RightBarButtonItem = layoutToggleButton;
             NavigationItem.RightBarButtonItem.TintColor = UIColor.White;
+            NavigationController.NavigationBar.TintColor = UIColor.White;
+            NavigationController.View.BackgroundColor = UIColor.Clear;
+            NavigationController.NavigationBar.Translucent = true;
+            NavigationController.NavigationBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
+            NavigationController.NavigationBar.ShadowImage = new UIImage();
 
             var collectionViewSource = new MvxCollectionViewSource(FilesCollectionView, FileCollectionViewCell.Key);
             FilesCollectionView.RegisterNibForCell(FileCollectionViewCell.Nib, FileCollectionViewCell.Key);

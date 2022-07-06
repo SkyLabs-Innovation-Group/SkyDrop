@@ -189,6 +189,10 @@
     <ImageAsset Include="Media.xcassets\ic_file_video.imageset\file-video.pdf" />
     <ImageAsset Include="Media.xcassets\ic_file_image.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_file_image.imageset\file-image.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_qr.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_qr.imageset\qrcode.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_image.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_image.imageset\image.pdf" />
     <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>

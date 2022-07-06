@@ -28,6 +28,9 @@ namespace SkyDrop.Core.Utility
 
         public static bool ExtensionMatches(this string filename, params string[] extensionsToMatch)
         {
+            if (string.IsNullOrEmpty(filename))
+                return false;
+
             foreach (var extension in extensionsToMatch)
                 if (Path.GetExtension(filename).ToLower() == extension.ToLower())
                     return true;
@@ -37,10 +40,12 @@ namespace SkyDrop.Core.Utility
 
         public static FileCategory GetFileCategory(string filename)
         {
+            filename = filename.ToLowerInvariant();
+
             if (filename.ExtensionMatches(new[] { ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx", ".ods", ".odt", ".pdf", ".txt", ".html", ".htm" }))
                 return FileCategory.Document;
 
-            if (filename.ExtensionMatches(new[] { ".jpg", ".jpeg", ".bmp", ".png", ".gif", ".webp", ".tiff", ".psd", ".raw", ".svg" }))
+            if (filename.ExtensionMatches(new[] { ".jpg", ".jpeg", ".bmp", ".png", ".gif", ".webp", ".tiff", ".psd", ".raw", ".svg", ".heic" }))
                 return FileCategory.Image;
 
             if (filename.ExtensionMatches(new[] { ".wav", ".mp3", ".aac", ".ogg", ".aiff", ".wma", ".flac", ".alac" }))
@@ -59,6 +64,12 @@ namespace SkyDrop.Core.Utility
             Image,
             Audio,
             Video,
+        }
+
+        public static bool CanDisplayPreview(this string filename)
+        {
+            filename = filename.ToLowerInvariant();
+            return filename.ExtensionMatches(".jpg", ".jpeg", ".bmp", ".png", ".gif", ".webp", ".heic");
         }
     }
 }
