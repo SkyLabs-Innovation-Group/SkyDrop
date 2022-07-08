@@ -105,6 +105,15 @@ namespace SkyDrop.Core.Services
             }
         }
 
+        public async Task SaveFile(Stream data, string fileName, bool isPersistent)
+        {
+            string directory = isPersistent ? DownloadsFolderPath : CacheFolderPath;
+            string filePath = Path.Combine(directory, fileName);
+            using var fileStream = File.OpenWrite(filePath);
+            await data.CopyToAsync(fileStream);
+            data.Dispose();
+        }
+
         public void ClearCache()
         {
             try
@@ -142,5 +151,7 @@ namespace SkyDrop.Core.Services
         bool CompressX(IEnumerable<SkyFile> filesToZip, string destinationZipFullPath);
 
         void ClearCache();
+
+        Task SaveFile(Stream data, string fileName, bool isPersistent);
     }
 }

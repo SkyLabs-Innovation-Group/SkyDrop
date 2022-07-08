@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -857,7 +858,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     return;
                 }
 
-                await apiService.DownloadFile(FocusedFile.GetSkylinkUrl());
+                await apiService.DownloadAndSaveSkyfile(FocusedFileUrl);
             }
             catch(Exception e)
             {
@@ -894,13 +895,25 @@ namespace SkyDrop.Core.ViewModels.Main
                 PreviewImageUrl = FocusedFileUrl; //load new preview image
         }
 
-        private void UnzipArchive()
+        private async Task UnzipArchive()
         {
             IsUnzippedFilesVisible = true;
-            UnzippedFiles = GetUnzippedFileDVMs(new List<SkyFile> { FocusedFile });
+
+            //download the archive to RAM
+            var stream = await apiService.DownloadFile(FocusedFileUrl);
+            var zipFile = new ZipArchive(stream);
+
+            //peek into the zip file and display the contents
+            var skyFiles = zipFile.Entries.Select(e => new SkyFile { Filename = e.FullName, FileSizeBytes = e.Length });
+            UnzippedFiles = GetUnzippedFileDVMs(skyFiles);
+
+            //unzip the archive, saving files to temp folder
+            //zipFile.ExtractToDirectory(fileSystemService.CacheFolderPath);
+
+            //represent the temp files as SkyFile objects, put them into UnzippedFiles collection
         }
 
-        private MvxObservableCollection<SkyFileDVM> GetUnzippedFileDVMs(List<SkyFile> skyFiles)
+        private MvxObservableCollection<SkyFileDVM> GetUnzippedFileDVMs(IEnumerable<SkyFile> skyFiles)
         {
             var dvms = new MvxObservableCollection<SkyFileDVM>();
             foreach (var skyFile in skyFiles)
