@@ -6,7 +6,9 @@ using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
+using SkyDrop.iOS.Common;
 using UIKit;
+using static SkyDrop.iOS.Common.iOSUtil;
 
 namespace SkyDrop.iOS.Views.Files
 {
@@ -14,6 +16,7 @@ namespace SkyDrop.iOS.Views.Files
     public partial class FilesView : MvxViewController<FilesViewModel>
     {
         private UIBarButtonItem layoutToggleButton;
+        private FileExplorerView fileExplorerView;
 
         public FilesView() : base("FilesView", null)
         {
@@ -24,9 +27,9 @@ namespace SkyDrop.iOS.Views.Files
             base.ViewDidLoad();
 
             View.BackgroundColor = Colors.DarkGrey.ToNative();
-            FilesCollectionView.BackgroundColor = Colors.DarkGrey.ToNative();
-            FilesTableView.BackgroundColor = Colors.DarkGrey.ToNative();
-            FilesTableView.AllowsSelection = false;
+
+            fileExplorerView = FileExplorerView.CreateView();
+            FileExplorerHolder.LayoutInsideWithFrame(fileExplorerView);
 
             //setup nav bar
             layoutToggleButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_list") };
@@ -39,31 +42,10 @@ namespace SkyDrop.iOS.Views.Files
             NavigationController.NavigationBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
             NavigationController.NavigationBar.ShadowImage = new UIImage();
 
-            var collectionViewSource = new MvxCollectionViewSource(FilesCollectionView, FileCollectionViewCell.Key);
-            FilesCollectionView.RegisterNibForCell(FileCollectionViewCell.Nib, FileCollectionViewCell.Key);
-            FilesCollectionView.Source = collectionViewSource;
-            FilesCollectionView.CollectionViewLayout = new FilesCollectionViewLayout();
-
-            var tableViewSource = new MvxSimpleTableViewSource(FilesTableView, FileTableViewCell.Key);
-            FilesTableView.RegisterNibForCellReuse(FileTableViewCell.Nib, FileTableViewCell.Key);
-            FilesTableView.Source = tableViewSource;
-
             var set = CreateBindingSet();
-            set.Bind(collectionViewSource).For(f => f.ItemsSource).To(vm => vm.SkyFiles);
-            set.Bind(tableViewSource).For(f => f.ItemsSource).To(vm => vm.SkyFiles);
-
-            set.Bind(this).For(t => t.CollectionViewAndTableViewVisibility).To(vm => vm.LayoutType);
+            set.Bind(fileExplorerView).For(f => f.ItemsSource).To(vm => vm.SkyFiles);
+            set.Bind(fileExplorerView).For(t => t.CollectionViewAndTableViewVisibility).To(vm => vm.LayoutType);
             set.Apply();
-        }
-
-        public FileLayoutType CollectionViewAndTableViewVisibility
-        {
-            get => FileLayoutType.List;
-            set
-            {
-                FilesCollectionView.Hidden = value == FileLayoutType.List;
-                FilesTableView.Hidden = value == FileLayoutType.Grid;
-            }
         }
 
         private void ToggleViewLayout()
@@ -71,21 +53,6 @@ namespace SkyDrop.iOS.Views.Files
             var newLayoutType = ViewModel.LayoutType == FileLayoutType.Grid ? FileLayoutType.List : FileLayoutType.Grid;
             ViewModel.LayoutType = newLayoutType;
             layoutToggleButton.Image = newLayoutType == FileLayoutType.List ? UIImage.FromBundle("ic_grid") : UIImage.FromBundle("ic_list");
-        }
-
-        public class FilesCollectionViewLayout : UICollectionViewFlowLayout
-        {
-            private const int horizontalMargins = 16;
-            private nfloat itemWidth => (UIScreen.MainScreen.Bounds.Width - horizontalMargins) / 2;
-
-            public override CGSize ItemSize
-            {
-                get => new CGSize(itemWidth, itemWidth);
-                set => base.ItemSize = value;
-            }
-
-            public override nfloat MinimumInteritemSpacing => 0;
-            public override nfloat MinimumLineSpacing => 0;
         }
     }
 }

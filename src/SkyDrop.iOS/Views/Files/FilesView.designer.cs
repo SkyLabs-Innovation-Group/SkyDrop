@@ -13,21 +13,13 @@ namespace SkyDrop.iOS.Views.Files
 	partial class FilesView
 	{
 		[Outlet]
-		UIKit.UICollectionView FilesCollectionView { get; set; }
-
-		[Outlet]
-		UIKit.UITableView FilesTableView { get; set; }
+		UIKit.UIView FileExplorerHolder { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (FilesCollectionView != null) {
-				FilesCollectionView.Dispose ();
-				FilesCollectionView = null;
-			}
-
-			if (FilesTableView != null) {
-				FilesTableView.Dispose ();
-				FilesTableView = null;
+			if (FileExplorerHolder != null) {
+				FileExplorerHolder.Dispose ();
+				FileExplorerHolder = null;
 			}
 		}
 	}

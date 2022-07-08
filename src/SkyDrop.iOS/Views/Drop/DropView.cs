@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using FFImageLoading.Extensions;
 using System.IO;
 using AssetsLibrary;
+using SkyDrop.iOS.Views.Files;
 
 namespace SkyDrop.iOS.Views.Drop
 {
