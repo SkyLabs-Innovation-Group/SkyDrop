@@ -73,6 +73,9 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIImageView RightNavDot { get; set; }
 
 		[Outlet]
+		UIKit.UILabel SaveFileLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIActivityIndicatorView SendActivityIndicator { get; set; }
 
 		[Outlet]
@@ -147,6 +150,11 @@ namespace SkyDrop.iOS.Views.Drop
 				DownloadButtonIcon = null;
 			}
 
+			if (SaveFileLabel != null) {
+				SaveFileLabel.Dispose ();
+				SaveFileLabel = null;
+			}
+
 			if (FilePreviewCollectionView != null) {
 				FilePreviewCollectionView.Dispose ();
 				FilePreviewCollectionView = null;
@@ -155,6 +163,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (FileSizeLabel != null) {
 				FileSizeLabel.Dispose ();
 				FileSizeLabel = null;
+			}
+
+			if (FileTypeIcon != null) {
+				FileTypeIcon.Dispose ();
+				FileTypeIcon = null;
 			}
 
 			if (LeftNavDot != null) {
@@ -255,11 +268,6 @@ namespace SkyDrop.iOS.Views.Drop
 			if (UrlLabelContainer != null) {
 				UrlLabelContainer.Dispose ();
 				UrlLabelContainer = null;
-			}
-
-			if (FileTypeIcon != null) {
-				FileTypeIcon.Dispose ();
-				FileTypeIcon = null;
 			}
 		}
 	}

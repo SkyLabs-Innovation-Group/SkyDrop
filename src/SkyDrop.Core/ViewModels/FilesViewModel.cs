@@ -82,7 +82,7 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 SkyFile = skyFile,
                 TapCommand = new MvxAsyncCommand(() => FileTapped(skyFile)),
-                LongPressCommand = new MvxCommand(() => ActivateSelectionMode(skyFile))
+                LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(SkyFiles, skyFile))
             };
         }
 
@@ -91,40 +91,12 @@ namespace SkyDrop.Core.ViewModels.Main
             var selectedFileDVM = SkyFiles.FirstOrDefault(s => s.SkyFile.Skylink == selectedFile.Skylink);
             if (selectedFileDVM.IsSelectionActive)
             {
-                ToggleFileSelected(selectedFile);
+                FileExplorerViewUtil.ToggleFileSelected(selectedFile, SkyFiles);
                 return;
             }
 
             //show the file
             await navigationService.Close(this, selectedFile);
-        }
-
-        private void ToggleFileSelected(SkyFile selectedFile)
-        {
-            var selectedFileDVM = SkyFiles.FirstOrDefault(s => s.SkyFile.Skylink == selectedFile.Skylink);
-            selectedFileDVM.IsSelected = !selectedFileDVM.IsSelected;
-
-            //if no files are selected, exit selection mode
-            if (!SkyFiles.Any(a => a.IsSelected))
-            {
-                foreach(var skyFile in SkyFiles)
-                {
-                    skyFile.IsSelectionActive = false;
-                }
-            }
-        }
-
-        private void ActivateSelectionMode(SkyFile skyFile)
-        {
-            //select the skyfile that was long pressed
-            var selectedSkyFile = SkyFiles.FirstOrDefault(s => s.SkyFile.Skylink == skyFile.Skylink);
-            selectedSkyFile.IsSelected = true;
-
-            //show empty selection circles for all other skyfiles
-            foreach(var skyfile in SkyFiles)
-            {
-                skyfile.IsSelectionActive = true;
-            }
         }
 
         public override void Prepare(object parameter)

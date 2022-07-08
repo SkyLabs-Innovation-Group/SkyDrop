@@ -37,9 +37,9 @@ namespace SkyDrop.iOS.Views.Drop
         private const int swipeMarginX = 20;
         private bool isPressed;
         private nfloat tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
-        const string DropUploadNotifRequestId = "drop_upload_notification_id";
-
+        private const string DropUploadNotifRequestId = "drop_upload_notification_id";
         private nfloat screenWidth => UIScreen.MainScreen.Bounds.Width;
+        private FileExplorerView fileExplorerView;
 
         public DropView() : base("DropView", null)
         {
@@ -134,6 +134,9 @@ namespace SkyDrop.iOS.Views.Drop
 
                 FileTypeIcon.TintColor = Colors.LightGrey.ToNative();
 
+                fileExplorerView = FileExplorerView.CreateView();
+                BarcodeContainer.LayoutInsideWithFrame(fileExplorerView);
+
                 BindViews();
             }
             catch(Exception e)
@@ -162,6 +165,7 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(DownloadButton).For("Tap").To(vm => vm.DownloadFileCommand);
             set.Bind(DownloadButtonActivityIndicator).For("Visible").To(vm => vm.IsDownloadingFile);
             set.Bind(DownloadButtonIcon).For(t => t.Hidden).To(vm => vm.IsDownloadingFile);
+            set.Bind(this).For(t => t.SaveFileLabelText).To(vm => vm.IsFocusedFileAnArchive);
 
             set.Bind(this).For(th => th.Title).To(vm => vm.Title);
 
@@ -200,7 +204,11 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(PreviewImage).For(i => i.ImagePath).To(vm => vm.PreviewImageUrl);
 
             //icon behind preview image, to show while preview is loading
-            set.Bind(FileTypeIcon).For(FileCategoryIconBinding.Name).To(vm => vm.FocusedFile.Filename); 
+            set.Bind(FileTypeIcon).For(FileCategoryIconBinding.Name).To(vm => vm.FocusedFile.Filename);
+
+            set.Bind(fileExplorerView).For(f => f.ItemsSource).To(vm => vm.UnzippedFiles);
+            set.Bind(fileExplorerView).For(t => t.CollectionViewAndTableViewVisibility).To(vm => vm.UnzippedFilesLayoutType);
+            set.Bind(fileExplorerView).For("Visible").To(vm => vm.IsUnzippedFilesVisible);
 
             set.Apply();
         }
@@ -559,6 +567,15 @@ namespace SkyDrop.iOS.Views.Drop
             return !ViewModel.SwipeNavigationEnabled || //don't allow swipe before first file is uploaded
                 ViewModel.IsUploading || //don't allow swipe while file is uploading
                 ViewModel.DropViewUIState == DropViewState.ConfirmFilesState; //don't allow swipe on confirm file UI state
+        }
+
+        public bool SaveFileLabelText
+        {
+            get => false;
+            set
+            {
+                SaveFileLabel.Text = value ? "Unzip" : "Save";
+            }
         }
     }
 }

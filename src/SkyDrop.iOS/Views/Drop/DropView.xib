@@ -30,6 +30,7 @@
                 <outlet property="ReceiveIcon" destination="Cq9-AE-Hf8" id="Bfi-nb-PGd"/>
                 <outlet property="ReceiveLabel" destination="OfC-3c-DrC" id="ZpR-ZP-akX"/>
                 <outlet property="RightNavDot" destination="aAF-UA-cRI" id="sUD-RO-UEc"/>
+                <outlet property="SaveFileLabel" destination="kBj-vM-qAb" id="lDz-k4-MO9"/>
                 <outlet property="SendActivityIndicator" destination="WEo-01-0A0" id="SWQ-oy-smz"/>
                 <outlet property="SendButton" destination="EyF-1x-tNq" id="Zet-dE-ps3"/>
                 <outlet property="SendIcon" destination="3as-jp-js1" id="y9a-OO-QKZ"/>

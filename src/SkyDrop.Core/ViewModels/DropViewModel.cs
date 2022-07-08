@@ -11,6 +11,7 @@ using System.Timers;
 using Acr.UserDialogs;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
 using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
@@ -80,8 +81,12 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool CanDisplayPreview => FocusedFile?.Filename.CanDisplayPreview() ?? false;
         public bool IsShowBarcodeButtonVisible => CanDisplayPreview && IsPreviewImageVisible;
         public bool IsShowPreviewButtonVisible => CanDisplayPreview && !IsPreviewImageVisible;
+        public bool IsUnzippedFilesVisible { get; set; }
+        public bool IsFocusedFileAnArchive => FocusedFile.Filename.ExtensionMatches(".zip");
 
         public List<StagedFileDVM> StagedFiles { get; set; }
+        public MvxObservableCollection<SkyFileDVM> UnzippedFiles { get; set; }
+        public FileLayoutType UnzippedFilesLayoutType { get; set; } = FileLayoutType.Grid;
         public SkyFile FocusedFile { get; set; } //most recently sent or received file
         public string FocusedFileUrl => FocusedFile.GetSkylinkUrl();
         public SkyFile FileToUpload { get; set; }
@@ -161,7 +166,7 @@ namespace SkyDrop.Core.ViewModels.Main
             ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
             MenuCommand = new MvxAsyncCommand(NavigateToFiles);
-            DownloadFileCommand = new MvxAsyncCommand(DownloadFile);
+            DownloadFileCommand = new MvxAsyncCommand(SaveOrUnzipFocusedFile);
             ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
             ShowPreviewImageCommand = new MvxCommand(() => IsPreviewImageVisible = true);
         }
@@ -278,6 +283,10 @@ namespace SkyDrop.Core.ViewModels.Main
                 FocusedFile.WasSent = true;
                 storageService.SaveSkyFiles(FocusedFile);
 
+                RaisePropertyChanged(() => IsShowBarcodeButtonVisible).Forget();
+                RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
+                RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
+
                 //clear cache
                 fileSystemService.ClearCache();
 
@@ -390,6 +399,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 RaisePropertyChanged(() => IsShowBarcodeButtonVisible).Forget();
                 RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
+                RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
 
                 //can only do this after getting filename from Skynet
                 UpdatePreviewImage();
@@ -824,6 +834,10 @@ namespace SkyDrop.Core.ViewModels.Main
             SwipeNavigationEnabled = true;
             FocusedFile = selectedFile;
 
+            RaisePropertyChanged(() => IsShowBarcodeButtonVisible).Forget();
+            RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
+            RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
+
             UpdatePreviewImage();
 
             //show QR code
@@ -831,16 +845,41 @@ namespace SkyDrop.Core.ViewModels.Main
             await GenerateBarcodeAsyncFunc(FocusedFile.GetSkylinkUrl());
         }
 
-        public async Task DownloadFile()
+        private async Task SaveOrUnzipFocusedFile()
         {
             try
             {
                 IsDownloadingFile = true;
+
+                if (IsFocusedFileAnArchive)
+                {
+                    UnzipArchive();
+                    return;
+                }
+
                 await apiService.DownloadFile(FocusedFile.GetSkylinkUrl());
             }
             catch(Exception e)
             {
-                userDialogs.Toast("Failed to download file");
+                userDialogs.Toast("Failed to save file");
+            }
+            finally
+            {
+                IsDownloadingFile = false;
+            }
+        }
+
+        private async Task SaveUnzippedFile(SkyFile file)
+        {
+            try
+            {
+                IsDownloadingFile = true;
+                await Task.Delay(1000);
+                userDialogs.Toast($"Saved {file.Filename}");
+            }
+            catch (Exception e)
+            {
+                userDialogs.Toast("Failed to save file");
             }
             finally
             {
@@ -853,6 +892,44 @@ namespace SkyDrop.Core.ViewModels.Main
             PreviewImageUrl = null; //clear last preview image
             if (CanDisplayPreview)
                 PreviewImageUrl = FocusedFileUrl; //load new preview image
+        }
+
+        private void UnzipArchive()
+        {
+            IsUnzippedFilesVisible = true;
+            UnzippedFiles = GetUnzippedFileDVMs(new List<SkyFile> { FocusedFile });
+        }
+
+        private MvxObservableCollection<SkyFileDVM> GetUnzippedFileDVMs(List<SkyFile> skyFiles)
+        {
+            var dvms = new MvxObservableCollection<SkyFileDVM>();
+            foreach (var skyFile in skyFiles)
+                dvms.Add(GetUnzippedFileDVM(skyFile));
+
+            return dvms;
+        }
+
+        private SkyFileDVM GetUnzippedFileDVM(SkyFile skyFile)
+        {
+            return new SkyFileDVM
+            {
+                SkyFile = skyFile,
+                TapCommand = new MvxAsyncCommand(() => UnzippedFileTapped(skyFile)),
+                LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(UnzippedFiles, skyFile))
+            };
+        }
+
+        private async Task UnzippedFileTapped(SkyFile selectedFile)
+        {
+            var selectedFileDVM = UnzippedFiles.FirstOrDefault(s => s.SkyFile.Skylink == selectedFile.Skylink);
+            if (selectedFileDVM.IsSelectionActive)
+            {
+                FileExplorerViewUtil.ToggleFileSelected(selectedFile, UnzippedFiles);
+                return;
+            }
+
+            //save the file
+            await SaveUnzippedFile(selectedFile);
         }
     }
 }
