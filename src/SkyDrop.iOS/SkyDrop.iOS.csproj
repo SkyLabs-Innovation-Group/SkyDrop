@@ -117,7 +117,7 @@
     <BundleResource Include="Resources\launch_image%403x.png" />
     <Compile Include="Bindings\ProgressFillHeightBinding.cs" />
     <Compile Include="Common\TouchInterceptor.cs" />
-    <Compile Include="Bindings\SkyFileImageViewBinding.cs" />
+    <Compile Include="Bindings\LocalImagePreviewBinding.cs" />
     <Compile Include="Common\iOSUtil.cs" />
     <Compile Include="Views\Settings\SettingsView.cs" />
     <Compile Include="Views\Settings\SettingsView.designer.cs">

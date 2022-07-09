@@ -60,7 +60,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsStagingFiles { get; set; }
         public bool IsUploadArrowVisible => !IsUploading && !IsStagingFiles;
         public bool IsBarcodeLoading { get; set; }
-        public bool IsBarcodeVisible { get; set; }
+        public bool IsBarcodeVisible { get; set; } //visibility for BarcodeContainer and BarcodeMenu
+        public bool IsBarcodeContainerVisible => IsBarcodeVisible && !IsUnzippedFilesVisible;
         public bool IsPreviewImageVisible { get; set; } //toggle for barcode / preview image
         public bool IsStagedFilesVisible => DropViewUIState == DropViewState.ConfirmFilesState;
         public bool IsSendButtonGreen { get; set; } = true;
@@ -482,7 +483,7 @@ namespace SkyDrop.Core.ViewModels.Main
             string compressedFilePath = Path.Combine(Path.GetTempPath(), archiveName);
 
             var filesToUpload = StagedFiles.Where(s => !s.IsMoreFilesButton).Select(s => s.SkyFile).ToList();
-            bool compressSuccess = fileSystemService.CompressX(filesToUpload, compressedFilePath);
+            bool compressSuccess = fileSystemService.CreateZipArchive(filesToUpload, compressedFilePath);
             if (!compressSuccess)
                 throw new Exception("Failed to create archive");
 
@@ -854,7 +855,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 if (IsFocusedFileAnArchive)
                 {
-                    UnzipArchive();
+                    await DownloadAndUnzipArchive();
                     return;
                 }
 
@@ -895,22 +896,13 @@ namespace SkyDrop.Core.ViewModels.Main
                 PreviewImageUrl = FocusedFileUrl; //load new preview image
         }
 
-        private async Task UnzipArchive()
+        private async Task DownloadAndUnzipArchive()
         {
+            using var stream = await apiService.DownloadFile(FocusedFileUrl);
+            var files = fileSystemService.UnzipArchive(stream);
+            UnzippedFiles = GetUnzippedFileDVMs(files);
+
             IsUnzippedFilesVisible = true;
-
-            //download the archive to RAM
-            var stream = await apiService.DownloadFile(FocusedFileUrl);
-            var zipFile = new ZipArchive(stream);
-
-            //peek into the zip file and display the contents
-            var skyFiles = zipFile.Entries.Select(e => new SkyFile { Filename = e.FullName, FileSizeBytes = e.Length });
-            UnzippedFiles = GetUnzippedFileDVMs(skyFiles);
-
-            //unzip the archive, saving files to temp folder
-            //zipFile.ExtractToDirectory(fileSystemService.CacheFolderPath);
-
-            //represent the temp files as SkyFile objects, put them into UnzippedFiles collection
         }
 
         private MvxObservableCollection<SkyFileDVM> GetUnzippedFileDVMs(IEnumerable<SkyFile> skyFiles)

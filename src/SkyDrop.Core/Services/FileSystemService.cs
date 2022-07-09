@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using SkyDrop.Core.DataModels;
@@ -80,7 +81,7 @@ namespace SkyDrop.Core.Services
             return pickedFiles;
         }
 
-        public bool CompressX(IEnumerable<SkyFile> filesToZip, string destinationZipFullPath)
+        public bool CreateZipArchive(IEnumerable<SkyFile> filesToZip, string destinationZipFullPath)
         {
             try
             {
@@ -103,6 +104,27 @@ namespace SkyDrop.Core.Services
                 Log.Exception(e);
                 return false;
             }
+        }
+
+        public List<SkyFile> UnzipArchive(Stream data)
+        {
+            var unzipFolder = Path.Combine(CacheFolderPath, "unzipped/");
+            if (!Directory.Exists(unzipFolder))
+                Directory.CreateDirectory(unzipFolder);
+
+            //clear unzip folder
+            var di = new DirectoryInfo(unzipFolder);
+            foreach (var file in di.GetFiles())
+                file.Delete();
+            foreach (var dir in di.GetDirectories())
+                dir.Delete(true);
+
+            //extract
+            var zipFile = new ZipArchive(data);
+            zipFile.ExtractToDirectory(unzipFolder);
+
+            di = new DirectoryInfo(unzipFolder);
+            return di.GetFiles().Select(f => new SkyFile { Filename = f.Name, FullFilePath = f.FullName }).ToList();
         }
 
         public async Task SaveFile(Stream data, string fileName, bool isPersistent)
@@ -148,7 +170,9 @@ namespace SkyDrop.Core.Services
 
         Task<IEnumerable<FileResult>> PickFilesAsync(SkyFilePickerType fileType);
 
-        bool CompressX(IEnumerable<SkyFile> filesToZip, string destinationZipFullPath);
+        bool CreateZipArchive(IEnumerable<SkyFile> filesToZip, string destinationZipFullPath);
+
+        List<SkyFile> UnzipArchive(Stream data);
 
         void ClearCache();
 

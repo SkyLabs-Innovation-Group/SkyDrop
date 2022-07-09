@@ -71,5 +71,10 @@ namespace SkyDrop.Core.Utility
             filename = filename.ToLowerInvariant();
             return filename.ExtensionMatches(".jpg", ".jpeg", ".bmp", ".png", ".gif", ".webp", ".heic");
         }
+
+        public static bool IsNullOrEmpty(this string text)
+        {
+            return string.IsNullOrEmpty(text);
+        }
     }
 }

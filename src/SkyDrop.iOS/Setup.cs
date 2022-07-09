@@ -30,7 +30,7 @@ namespace SkyDrop.iOS
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterCustomBindingFactory<UIView>(ProgressFillHeightBinding.Name, view => new ProgressFillHeightBinding(view));
-            registry.RegisterCustomBindingFactory<UIImageView>(SkyFileImageViewBinding.Name, view => new SkyFileImageViewBinding(view));
+            registry.RegisterCustomBindingFactory<UIImageView>(LocalImagePreviewBinding.Name, view => new LocalImagePreviewBinding(view));
             registry.RegisterCustomBindingFactory<UIView>(LongPressBinding.Name, view => new LongPressBinding(view));
             registry.RegisterCustomBindingFactory<UIImageView>(FileCategoryIconBinding.Name, view => new FileCategoryIconBinding(view));
 

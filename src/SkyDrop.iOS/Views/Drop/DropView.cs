@@ -135,7 +135,7 @@ namespace SkyDrop.iOS.Views.Drop
                 FileTypeIcon.TintColor = Colors.LightGrey.ToNative();
 
                 fileExplorerView = FileExplorerView.CreateView();
-                BarcodeContainer.LayoutInsideWithFrame(fileExplorerView);
+                UnzippedFilesContainer.LayoutInsideWithFrame(fileExplorerView);
 
                 BindViews();
             }
@@ -170,7 +170,7 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(this).For(th => th.Title).To(vm => vm.Title);
 
             set.Bind(BarcodeMenu).For("Visible").To(vm => vm.IsBarcodeVisible);
-            set.Bind(BarcodeContainer).For("Visible").To(vm => vm.IsBarcodeVisible);
+            set.Bind(BarcodeContainer).For("Visible").To(vm => vm.IsBarcodeContainerVisible);
 
             set.Bind(SendActivityIndicator).For("Visible").To(vm => vm.IsUploading);
             set.Bind(ReceiveActivityIndicator).For("Visible").To(vm => vm.IsReceivingFile);
@@ -208,7 +208,7 @@ namespace SkyDrop.iOS.Views.Drop
 
             set.Bind(fileExplorerView).For(f => f.ItemsSource).To(vm => vm.UnzippedFiles);
             set.Bind(fileExplorerView).For(t => t.CollectionViewAndTableViewVisibility).To(vm => vm.UnzippedFilesLayoutType);
-            set.Bind(fileExplorerView).For("Visible").To(vm => vm.IsUnzippedFilesVisible);
+            set.Bind(UnzippedFilesContainer).For("Visible").To(vm => vm.IsUnzippedFilesVisible);
 
             set.Apply();
         }

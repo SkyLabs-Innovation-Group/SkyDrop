@@ -110,6 +110,7 @@ namespace SkyDrop.Core.Services
             //download
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var response = await httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsStreamAsync();
         }
 

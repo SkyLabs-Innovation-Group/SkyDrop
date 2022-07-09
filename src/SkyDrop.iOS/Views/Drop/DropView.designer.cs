@@ -103,6 +103,9 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIImageView ShowPreviewIcon { get; set; }
 
 		[Outlet]
+		UIKit.UIView UnzippedFilesContainer { get; set; }
+
+		[Outlet]
 		UIKit.UILabel UrlLabel { get; set; }
 
 		[Outlet]
@@ -110,6 +113,11 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (UnzippedFilesContainer != null) {
+				UnzippedFilesContainer.Dispose ();
+				UnzippedFilesContainer = null;
+			}
+
 			if (BarcodeContainer != null) {
 				BarcodeContainer.Dispose ();
 				BarcodeContainer = null;

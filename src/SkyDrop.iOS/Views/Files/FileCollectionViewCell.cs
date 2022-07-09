@@ -6,6 +6,7 @@ using MvvmCross.Platforms.Ios.Binding.Views;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Utility;
+using SkyDrop.iOS.Common;
 using UIKit;
 
 namespace SkyDrop.iOS.Views.Files
@@ -60,8 +61,16 @@ namespace SkyDrop.iOS.Views.Files
                 //update preview image
                 if (Util.CanDisplayPreview(value.Filename))
                 {
-                    var filePath = value?.GetSkylinkUrl();
-                    PreviewImage.ImagePath = filePath;
+                    if (value.Skylink.IsNullOrEmpty())
+                    {
+                        //this is an "unzipped" file
+                        iOSUtil.LoadLocalImagePreview(value.FullFilePath, PreviewImage);
+                        return;
+                    }
+
+                    //this is a SkyFile
+                    var url = value.GetSkylinkUrl();
+                    PreviewImage.ImagePath = url;
                 }
             }
         }
