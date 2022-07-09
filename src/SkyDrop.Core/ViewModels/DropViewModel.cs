@@ -926,7 +926,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task UnzippedFileTapped(SkyFile selectedFile)
         {
-            var selectedFileDVM = UnzippedFiles.FirstOrDefault(s => s.SkyFile.Skylink == selectedFile.Skylink);
+            var selectedFileDVM = UnzippedFiles.FirstOrDefault(s => s.SkyFile.FullFilePath == selectedFile.FullFilePath);
             if (selectedFileDVM.IsSelectionActive)
             {
                 FileExplorerViewUtil.ToggleFileSelected(selectedFile, UnzippedFiles);

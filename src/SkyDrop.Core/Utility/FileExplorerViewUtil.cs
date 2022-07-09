@@ -12,8 +12,13 @@ namespace SkyDrop.Core.Utility
         public static void ActivateSelectionMode(MvxObservableCollection<SkyFileDVM> skyFiles, SkyFile selectedFile)
         {
             //select the skyfile that was long pressed
-            var selectedSkyFile = skyFiles.FirstOrDefault(s => s.SkyFile.Skylink == selectedFile.Skylink);
-            selectedSkyFile.IsSelected = true;
+            SkyFileDVM selectedFileDVM;
+            if(selectedFile.Skylink.IsNullOrEmpty())
+                selectedFileDVM = skyFiles.FirstOrDefault(s => s.SkyFile.FullFilePath == selectedFile.FullFilePath); //unzipped file
+            else
+                selectedFileDVM = skyFiles.FirstOrDefault(s => s.SkyFile.Skylink == selectedFile.Skylink); //skyfile
+
+            selectedFileDVM.IsSelected = true;
 
             //show empty selection circles for all other skyfiles
             foreach (var skyfile in skyFiles)
@@ -24,7 +29,13 @@ namespace SkyDrop.Core.Utility
 
         public static void ToggleFileSelected(SkyFile selectedFile, IEnumerable<SkyFileDVM> skyFiles)
         {
-            var selectedFileDVM = skyFiles.FirstOrDefault(s => s.SkyFile.Skylink == selectedFile.Skylink);
+            //select the skyfile that was long pressed
+            SkyFileDVM selectedFileDVM;
+            if (selectedFile.Skylink.IsNullOrEmpty())
+                selectedFileDVM = skyFiles.FirstOrDefault(s => s.SkyFile.FullFilePath == selectedFile.FullFilePath); //unzipped file
+            else
+                selectedFileDVM = skyFiles.FirstOrDefault(s => s.SkyFile.Skylink == selectedFile.Skylink); //skyfile
+
             selectedFileDVM.IsSelected = !selectedFileDVM.IsSelected;
 
             //if no files are selected, exit selection mode
