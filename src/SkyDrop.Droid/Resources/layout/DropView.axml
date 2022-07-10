@@ -201,10 +201,10 @@
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
                                 android:layout_marginTop="8dp" >
-                                <FFImageLoading.Cross.MvxCachedImageView
+                                <ImageView
                                     android:layout_width="32dp"
                                     android:layout_height="32dp"
-                                    app:MvxBind="ImagePath SaveUnzipIcon(IsFocusedFileAnArchive);Visibility InvertedVisibility(IsDownloadingFile);"
+                                    app:MvxBind="Icon SaveUnzipIcon(IsFocusedFileAnArchive);Visibility InvertedVisibility(IsDownloadingFile);"
                                     />
                                 <ProgressBar
                                     android:layout_width="32dp"

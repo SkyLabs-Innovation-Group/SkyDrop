@@ -93,6 +93,7 @@
     <Compile Include="Bindings\BackgroundColorBinding.cs" />
     <Compile Include="Bindings\FileCategoryIconBinding.cs" />
     <Compile Include="Views\Files\FileExplorerView.cs" />
+    <Compile Include="Bindings\IconBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
