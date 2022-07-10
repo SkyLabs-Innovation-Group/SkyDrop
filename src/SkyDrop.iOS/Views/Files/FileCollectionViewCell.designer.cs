@@ -25,6 +25,9 @@ namespace SkyDrop.iOS.Views.Files
 		UIKit.UILabel FileNameLabel { get; set; }
 
 		[Outlet]
+		UIKit.UIImageView IconImage { get; set; }
+
+		[Outlet]
 		UIKit.UIView InnerView { get; set; }
 
 		[Outlet]
@@ -38,6 +41,11 @@ namespace SkyDrop.iOS.Views.Files
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (IconImage != null) {
+				IconImage.Dispose ();
+				IconImage = null;
+			}
+
 			if (ActivityIndicatorContainer != null) {
 				ActivityIndicatorContainer.Dispose ();
 				ActivityIndicatorContainer = null;

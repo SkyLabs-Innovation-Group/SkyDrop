@@ -95,6 +95,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 {
                     didDownload = true;
                     LoadingLabelText = "Unzipping...";
+                    await Task.Delay(500);
                     files = fileSystemService.UnzipArchive(stream);
                 }
                 

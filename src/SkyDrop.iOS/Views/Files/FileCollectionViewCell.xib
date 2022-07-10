@@ -44,13 +44,23 @@
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fz4-b1-uME" customClass="MvxCachedImageView">
                                         <rect key="frame" x="0.0" y="0.0" width="112" height="80"/>
                                     </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QBO-UZ-lj9">
+                                        <rect key="frame" x="40" y="24" width="32" height="32"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="32" id="Du1-dK-efd"/>
+                                            <constraint firstAttribute="width" constant="32" id="PAM-oq-js8"/>
+                                        </constraints>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
+                                    <constraint firstItem="QBO-UZ-lj9" firstAttribute="centerY" secondItem="fz4-b1-uME" secondAttribute="centerY" id="CYD-tS-YSO"/>
                                     <constraint firstItem="TMc-ne-gGF" firstAttribute="top" secondItem="fz4-b1-uME" secondAttribute="bottom" id="MAd-Ct-N83"/>
                                     <constraint firstItem="fz4-b1-uME" firstAttribute="leading" secondItem="6hn-i9-ClJ" secondAttribute="leading" id="V3f-mL-pF4"/>
                                     <constraint firstAttribute="trailing" secondItem="TMc-ne-gGF" secondAttribute="trailing" id="WfK-DL-F0d"/>
                                     <constraint firstItem="TMc-ne-gGF" firstAttribute="leading" secondItem="6hn-i9-ClJ" secondAttribute="leading" id="ciN-ic-UWh"/>
+                                    <constraint firstItem="QBO-UZ-lj9" firstAttribute="centerX" secondItem="fz4-b1-uME" secondAttribute="centerX" id="rbS-2T-ZnB"/>
                                     <constraint firstAttribute="trailing" secondItem="fz4-b1-uME" secondAttribute="trailing" id="tfa-N6-36g"/>
                                     <constraint firstItem="fz4-b1-uME" firstAttribute="top" secondItem="6hn-i9-ClJ" secondAttribute="top" id="yu5-nA-2nT"/>
                                     <constraint firstAttribute="bottom" secondItem="TMc-ne-gGF" secondAttribute="bottom" id="zLP-Pr-Fr8"/>
@@ -141,6 +151,7 @@
                 <outlet property="BottomPanel" destination="TMc-ne-gGF" id="MY4-7M-x2b"/>
                 <outlet property="ContainerView" destination="LOh-kW-72d" id="aIk-Zx-Bxi"/>
                 <outlet property="FileNameLabel" destination="bKK-Ps-LBN" id="5Xk-wt-z9p"/>
+                <outlet property="IconImage" destination="QBO-UZ-lj9" id="QLp-vM-Q9N"/>
                 <outlet property="InnerView" destination="6hn-i9-ClJ" id="Pfq-EC-Tq7"/>
                 <outlet property="PreviewImage" destination="fz4-b1-uME" id="AWI-D1-jWC"/>
                 <outlet property="SelectedIndicatorInnerView" destination="q1H-FO-jVF" id="OVB-8I-TuD"/>

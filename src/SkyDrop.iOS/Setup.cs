@@ -41,6 +41,8 @@ namespace SkyDrop.iOS
         {
             registry.AddOrOverwrite(FileExtensionConverter.Name, new FileExtensionConverter());
             registry.AddOrOverwrite(NativeColorConverter.Name, new NativeColorConverter());
+            registry.AddOrOverwrite(CanDisplayPreviewConverter.Name, new CanDisplayPreviewConverter(invert: false));
+            registry.AddOrOverwrite(CanDisplayPreviewConverter.InvertName, new CanDisplayPreviewConverter(invert: true));
 
             base.FillValueConverters(registry);
         }
@@ -51,7 +53,6 @@ namespace SkyDrop.iOS
 
             UserDialogs.Instance = new UserDialogsImpl();
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IUserDialogs>(() => UserDialogs.Instance);
-
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISkyDropHttpClientFactory>(() => new NSUrlHttpClientFactory());
             
             return base.CreateApp();

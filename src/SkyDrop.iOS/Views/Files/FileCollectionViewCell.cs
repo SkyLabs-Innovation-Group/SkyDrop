@@ -3,9 +3,11 @@ using Acr.UserDialogs;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding.Views;
+using SkyDrop.Core.Converters;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Utility;
+using SkyDrop.iOS.Bindings;
 using SkyDrop.iOS.Common;
 using UIKit;
 
@@ -37,6 +39,8 @@ namespace SkyDrop.iOS.Views.Files
                 set.Bind(ContentView).For("LongPress").To(vm => vm.LongPressCommand);
                 set.Bind(ActivityIndicatorContainer).For("Visible").To(vm => vm.IsLoading);
                 set.Bind(ActivityIndicatorContainer).For(i => i.BackgroundColor).To(vm => vm.FillColor).WithConversion("NativeColor");
+                set.Bind(IconImage).For(FileCategoryIconBinding.Name).To(vm => vm.SkyFile.Filename);
+                set.Bind(IconImage).For("Visible").To(vm => vm.SkyFile.Filename).WithConversion(CanDisplayPreviewConverter.InvertName);
                 set.Apply();
             });
         }
