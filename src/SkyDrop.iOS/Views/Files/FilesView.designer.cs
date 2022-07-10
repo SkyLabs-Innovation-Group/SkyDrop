@@ -13,10 +13,26 @@ namespace SkyDrop.iOS.Views.Files
 	partial class FilesView
 	{
 		[Outlet]
+		UIKit.UIView ActivityIndicatorContainer { get; set; }
+
+		[Outlet]
 		UIKit.UIView FileExplorerHolder { get; set; }
+
+		[Outlet]
+		UIKit.UILabel LoadingLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (LoadingLabel != null) {
+				LoadingLabel.Dispose ();
+				LoadingLabel = null;
+			}
+
+			if (ActivityIndicatorContainer != null) {
+				ActivityIndicatorContainer.Dispose ();
+				ActivityIndicatorContainer = null;
+			}
+
 			if (FileExplorerHolder != null) {
 				FileExplorerHolder.Dispose ();
 				FileExplorerHolder = null;

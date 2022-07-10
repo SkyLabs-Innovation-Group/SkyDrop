@@ -13,6 +13,9 @@ namespace SkyDrop.iOS.Views.Files
 	partial class FileCollectionViewCell
 	{
 		[Outlet]
+		UIKit.UIView ActivityIndicatorContainer { get; set; }
+
+		[Outlet]
 		UIKit.UIView BottomPanel { get; set; }
 
 		[Outlet]
@@ -35,14 +38,9 @@ namespace SkyDrop.iOS.Views.Files
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (SelectedIndicatorInnerView != null) {
-				SelectedIndicatorInnerView.Dispose ();
-				SelectedIndicatorInnerView = null;
-			}
-
-			if (SelectedIndicatorView != null) {
-				SelectedIndicatorView.Dispose ();
-				SelectedIndicatorView = null;
+			if (ActivityIndicatorContainer != null) {
+				ActivityIndicatorContainer.Dispose ();
+				ActivityIndicatorContainer = null;
 			}
 
 			if (BottomPanel != null) {
@@ -68,6 +66,16 @@ namespace SkyDrop.iOS.Views.Files
 			if (PreviewImage != null) {
 				PreviewImage.Dispose ();
 				PreviewImage = null;
+			}
+
+			if (SelectedIndicatorInnerView != null) {
+				SelectedIndicatorInnerView.Dispose ();
+				SelectedIndicatorInnerView = null;
+			}
+
+			if (SelectedIndicatorView != null) {
+				SelectedIndicatorView.Dispose ();
+				SelectedIndicatorView = null;
 			}
 		}
 	}

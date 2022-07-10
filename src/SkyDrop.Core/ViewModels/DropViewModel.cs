@@ -829,7 +829,7 @@ namespace SkyDrop.Core.ViewModels.Main
             if (IsUploading)
                 return;
 
-            var selectedFile = await navigationService.Navigate<FilesViewModel, object, SkyFile>(null);
+            var selectedFile = await navigationService.Navigate<FilesViewModel, FilesViewModel.NavParam, SkyFile>(new FilesViewModel.NavParam());
             if (selectedFile == null)
                 return;
 
@@ -855,7 +855,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 if (IsFocusedFileAnArchive)
                 {
-                    await DownloadAndUnzipArchive();
+                    DownloadAndUnzipArchive();
                     return;
                 }
 
@@ -871,22 +871,9 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
-        private async Task SaveUnzippedFile(SkyFile file)
+        private void DownloadAndUnzipArchive()
         {
-            try
-            {
-                IsDownloadingFile = true;
-                await Task.Delay(1000);
-                userDialogs.Toast($"Saved {file.Filename}");
-            }
-            catch (Exception e)
-            {
-                userDialogs.Toast("Failed to save file");
-            }
-            finally
-            {
-                IsDownloadingFile = false;
-            }
+            navigationService.Navigate<FilesViewModel, FilesViewModel.NavParam>(new FilesViewModel.NavParam { IsUnzippedFilesMode = true, ArchiveUrl = FocusedFileUrl });
         }
 
         private void UpdatePreviewImage()
@@ -894,47 +881,6 @@ namespace SkyDrop.Core.ViewModels.Main
             PreviewImageUrl = null; //clear last preview image
             if (CanDisplayPreview)
                 PreviewImageUrl = FocusedFileUrl; //load new preview image
-        }
-
-        private async Task DownloadAndUnzipArchive()
-        {
-            using var stream = await apiService.DownloadFile(FocusedFileUrl);
-            var files = fileSystemService.UnzipArchive(stream);
-            UnzippedFiles = GetUnzippedFileDVMs(files);
-
-            IsUnzippedFilesVisible = true;
-        }
-
-        private MvxObservableCollection<SkyFileDVM> GetUnzippedFileDVMs(IEnumerable<SkyFile> skyFiles)
-        {
-            var dvms = new MvxObservableCollection<SkyFileDVM>();
-            foreach (var skyFile in skyFiles)
-                dvms.Add(GetUnzippedFileDVM(skyFile));
-
-            return dvms;
-        }
-
-        private SkyFileDVM GetUnzippedFileDVM(SkyFile skyFile)
-        {
-            return new SkyFileDVM
-            {
-                SkyFile = skyFile,
-                TapCommand = new MvxAsyncCommand(() => UnzippedFileTapped(skyFile)),
-                LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(UnzippedFiles, skyFile))
-            };
-        }
-
-        private async Task UnzippedFileTapped(SkyFile selectedFile)
-        {
-            var selectedFileDVM = UnzippedFiles.FirstOrDefault(s => s.SkyFile.FullFilePath == selectedFile.FullFilePath);
-            if (selectedFileDVM.IsSelectionActive)
-            {
-                FileExplorerViewUtil.ToggleFileSelected(selectedFile, UnzippedFiles);
-                return;
-            }
-
-            //save the file
-            await SaveUnzippedFile(selectedFile);
         }
     }
 }

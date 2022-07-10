@@ -86,10 +86,32 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3i4-Ix-wxy" userLabel="ActivityIndicatorContainer">
+                                <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="zSx-WM-G5r">
+                                        <rect key="frame" x="6" y="6" width="20" height="20"/>
+                                        <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                <constraints>
+                                    <constraint firstItem="zSx-WM-G5r" firstAttribute="centerX" secondItem="3i4-Ix-wxy" secondAttribute="centerX" id="jlk-sU-34i"/>
+                                    <constraint firstAttribute="height" constant="32" id="qnd-YX-Jf4"/>
+                                    <constraint firstAttribute="width" constant="32" id="rdo-hS-1im"/>
+                                    <constraint firstItem="zSx-WM-G5r" firstAttribute="centerY" secondItem="3i4-Ix-wxy" secondAttribute="centerY" id="wbR-L3-lCh"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="16"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemGreenColor"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="6hn-i9-ClJ" secondAttribute="bottom" constant="8" id="2TP-Uz-vrg"/>
+                            <constraint firstItem="3i4-Ix-wxy" firstAttribute="centerY" secondItem="rVf-Rx-c90" secondAttribute="centerY" id="6Tl-nX-afj"/>
                             <constraint firstItem="6hn-i9-ClJ" firstAttribute="leading" secondItem="LOh-kW-72d" secondAttribute="leading" constant="8" id="Fl1-rS-1rh"/>
                             <constraint firstAttribute="width" constant="128" id="IQa-3T-xX6"/>
                             <constraint firstItem="rVf-Rx-c90" firstAttribute="leading" secondItem="6hn-i9-ClJ" secondAttribute="leading" constant="-8" id="Iwx-YV-I4R"/>
@@ -97,6 +119,7 @@
                             <constraint firstAttribute="trailing" secondItem="6hn-i9-ClJ" secondAttribute="trailing" constant="8" id="Tge-53-hUb"/>
                             <constraint firstItem="rVf-Rx-c90" firstAttribute="top" secondItem="6hn-i9-ClJ" secondAttribute="top" constant="-8" id="aMg-dD-trg"/>
                             <constraint firstAttribute="width" secondItem="LOh-kW-72d" secondAttribute="height" multiplier="1:1" id="mEX-ah-eFs"/>
+                            <constraint firstItem="3i4-Ix-wxy" firstAttribute="centerX" secondItem="rVf-Rx-c90" secondAttribute="centerX" id="tb5-71-mg9"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -114,6 +137,7 @@
             </constraints>
             <size key="customSize" width="194" height="211"/>
             <connections>
+                <outlet property="ActivityIndicatorContainer" destination="3i4-Ix-wxy" id="OI6-6c-0Ud"/>
                 <outlet property="BottomPanel" destination="TMc-ne-gGF" id="MY4-7M-x2b"/>
                 <outlet property="ContainerView" destination="LOh-kW-72d" id="aIk-Zx-Bxi"/>
                 <outlet property="FileNameLabel" destination="bKK-Ps-LBN" id="5Xk-wt-z9p"/>
@@ -137,6 +161,9 @@
         </systemColor>
         <systemColor name="systemMintColor">
             <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemOrangeColor">
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

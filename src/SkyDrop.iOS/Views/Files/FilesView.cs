@@ -45,6 +45,8 @@ namespace SkyDrop.iOS.Views.Files
             var set = CreateBindingSet();
             set.Bind(fileExplorerView).For(f => f.ItemsSource).To(vm => vm.SkyFiles);
             set.Bind(fileExplorerView).For(t => t.CollectionViewAndTableViewVisibility).To(vm => vm.LayoutType);
+            set.Bind(ActivityIndicatorContainer).For("Visible").To(vm => vm.IsLoading);
+            set.Bind(LoadingLabel).To(vm => vm.LoadingLabelText);
             set.Apply();
         }
 
