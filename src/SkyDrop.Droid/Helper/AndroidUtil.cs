@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
@@ -7,6 +8,7 @@ using Android.OS;
 using Android.Util;
 using Android.Widget;
 using AndroidX.Core.App;
+using FFImageLoading;
 using MvvmCross;
 using Plugin.CurrentActivity;
 using SkyDrop.Core.DataModels;
@@ -235,6 +237,27 @@ namespace SkyDrop.Droid.Helper
         private static NotificationManager GetNotificationManager(Context context)
         {
             return context.GetSystemService(Context.NotificationService) as NotificationManager;
+        }
+
+        public static void LoadLocalImagePreview(string filePath, ImageView target)
+        {
+            var log = Mvx.IoCProvider.Resolve<ILog>();
+            Task.Run(async () =>
+            {
+                try
+                {
+                    var task = ImageService.Instance.LoadStream(
+                        c => Task.FromResult((Stream)System.IO.File.OpenRead(filePath)))
+                        .DownSampleInDip()
+                        .IntoAsync(target);
+
+                    await task;
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Error setting SkyFile preview", ex);
+                }
+            });
         }
     }
 }
