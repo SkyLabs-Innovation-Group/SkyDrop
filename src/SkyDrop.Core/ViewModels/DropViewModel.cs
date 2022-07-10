@@ -61,7 +61,6 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsUploadArrowVisible => !IsUploading && !IsStagingFiles;
         public bool IsBarcodeLoading { get; set; }
         public bool IsBarcodeVisible { get; set; } //visibility for BarcodeContainer and BarcodeMenu
-        public bool IsBarcodeContainerVisible => IsBarcodeVisible && !IsUnzippedFilesVisible;
         public bool IsPreviewImageVisible { get; set; } //toggle for barcode / preview image
         public bool IsStagedFilesVisible => DropViewUIState == DropViewState.ConfirmFilesState;
         public bool IsSendButtonGreen { get; set; } = true;
@@ -83,12 +82,9 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool CanDisplayPreview => FocusedFile?.Filename.CanDisplayPreview() ?? false;
         public bool IsShowBarcodeButtonVisible => CanDisplayPreview && IsPreviewImageVisible;
         public bool IsShowPreviewButtonVisible => CanDisplayPreview && !IsPreviewImageVisible;
-        public bool IsUnzippedFilesVisible { get; set; }
         public bool IsFocusedFileAnArchive => FocusedFile.Filename.ExtensionMatches(".zip");
 
         public List<StagedFileDVM> StagedFiles { get; set; }
-        public MvxObservableCollection<SkyFileDVM> UnzippedFiles { get; set; }
-        public FileLayoutType UnzippedFilesLayoutType { get; set; } = FileLayoutType.Grid;
         public SkyFile FocusedFile { get; set; } //most recently sent or received file
         public string FocusedFileUrl => FocusedFile.GetSkylinkUrl();
         public SkyFile FileToUpload { get; set; }
@@ -851,14 +847,15 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             try
             {
-                IsDownloadingFile = true;
-
                 if (IsFocusedFileAnArchive)
                 {
+                    //unzip
                     DownloadAndUnzipArchive();
                     return;
                 }
 
+                //save
+                IsDownloadingFile = true;
                 await apiService.DownloadAndSaveSkyfile(FocusedFileUrl);
             }
             catch(Exception e)

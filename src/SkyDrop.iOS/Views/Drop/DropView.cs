@@ -39,7 +39,6 @@ namespace SkyDrop.iOS.Views.Drop
         private nfloat tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
         private const string DropUploadNotifRequestId = "drop_upload_notification_id";
         private nfloat screenWidth => UIScreen.MainScreen.Bounds.Width;
-        private FileExplorerView fileExplorerView;
 
         public DropView() : base("DropView", null)
         {
@@ -134,9 +133,6 @@ namespace SkyDrop.iOS.Views.Drop
 
                 FileTypeIcon.TintColor = Colors.LightGrey.ToNative();
 
-                fileExplorerView = FileExplorerView.CreateView();
-                UnzippedFilesContainer.LayoutInsideWithFrame(fileExplorerView);
-
                 BindViews();
             }
             catch(Exception e)
@@ -170,7 +166,7 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(this).For(th => th.Title).To(vm => vm.Title);
 
             set.Bind(BarcodeMenu).For("Visible").To(vm => vm.IsBarcodeVisible);
-            set.Bind(BarcodeContainer).For("Visible").To(vm => vm.IsBarcodeContainerVisible);
+            set.Bind(BarcodeContainer).For("Visible").To(vm => vm.IsBarcodeVisible);
 
             set.Bind(SendActivityIndicator).For("Visible").To(vm => vm.IsUploading);
             set.Bind(ReceiveActivityIndicator).For("Visible").To(vm => vm.IsReceivingFile);
@@ -205,11 +201,6 @@ namespace SkyDrop.iOS.Views.Drop
 
             //icon behind preview image, to show while preview is loading
             set.Bind(FileTypeIcon).For(FileCategoryIconBinding.Name).To(vm => vm.FocusedFile.Filename);
-
-            set.Bind(fileExplorerView).For(f => f.ItemsSource).To(vm => vm.UnzippedFiles);
-            set.Bind(fileExplorerView).For(t => t.CollectionViewAndTableViewVisibility).To(vm => vm.UnzippedFilesLayoutType);
-            set.Bind(UnzippedFilesContainer).For("Visible").To(vm => vm.IsUnzippedFilesVisible);
-
             set.Apply();
         }
 
