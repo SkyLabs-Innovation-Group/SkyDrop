@@ -43,6 +43,7 @@ namespace SkyDrop.iOS
             registry.AddOrOverwrite(NativeColorConverter.Name, new NativeColorConverter());
             registry.AddOrOverwrite(CanDisplayPreviewConverter.Name, new CanDisplayPreviewConverter(invert: false));
             registry.AddOrOverwrite(CanDisplayPreviewConverter.InvertName, new CanDisplayPreviewConverter(invert: true));
+            registry.AddOrOverwrite(SaveUnzipIconConverter.Name, new SaveUnzipIconConverter());
 
             base.FillValueConverters(registry);
         }

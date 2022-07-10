@@ -83,6 +83,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsShowBarcodeButtonVisible => CanDisplayPreview && IsPreviewImageVisible;
         public bool IsShowPreviewButtonVisible => CanDisplayPreview && !IsPreviewImageVisible;
         public bool IsFocusedFileAnArchive => FocusedFile.Filename.ExtensionMatches(".zip");
+        public string SaveButtonText => IsFocusedFileAnArchive ? "Unzip" : "Save";
 
         public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile FocusedFile { get; set; } //most recently sent or received file

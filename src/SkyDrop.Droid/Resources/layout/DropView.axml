@@ -144,7 +144,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Copy Link"
+                                android:text="Copy"
                                 android:textSize="12sp"
                                 android:textColor="@color/lightGrey"
                                 android:paddingTop="2dp"
@@ -201,11 +201,10 @@
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
                                 android:layout_marginTop="8dp" >
-                                <ImageView
+                                <FFImageLoading.Cross.MvxCachedImageView
                                     android:layout_width="32dp"
                                     android:layout_height="32dp"
-                                    android:src="@drawable/ic_download_grey"
-                                    app:MvxBind="Visibility InvertedVisibility(IsDownloadingFile)"
+                                    app:MvxBind="ImagePath SaveUnzipIcon(IsFocusedFileAnArchive);Visibility InvertedVisibility(IsDownloadingFile);"
                                     />
                                 <ProgressBar
                                     android:layout_width="32dp"
@@ -219,7 +218,8 @@
                                 android:textSize="12sp"
                                 android:textColor="@color/lightGrey"
                                 android:paddingTop="2dp"
-                                android:paddingBottom="12dp"/>
+                                android:paddingBottom="12dp"
+                                app:MvxBind="Text SaveButtonText"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
                     <com.google.android.material.card.MaterialCardView
@@ -369,7 +369,7 @@
                                 android:id="@+id/ButtonIcon"
                                 android:layout_width="128dp"
                                 android:layout_height="128dp"
-                                android:src="@drawable/ic_download_grey"
+                                android:src="@drawable/ic_download"
                                 app:MvxBind="Visibility InvertedVisibility(IsReceivingFile)"/>
                             <ProgressBar
                                 android:layout_width="128dp"

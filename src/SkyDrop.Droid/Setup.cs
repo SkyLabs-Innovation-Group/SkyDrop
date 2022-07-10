@@ -56,6 +56,7 @@ namespace SkyDrop.Droid
             base.FillValueConverters(registry);
             registry.AddOrOverwrite(CanDisplayPreviewConverter.Name, new CanDisplayPreviewConverter(invert: false));
             registry.AddOrOverwrite(CanDisplayPreviewConverter.InvertName, new CanDisplayPreviewConverter(invert: true));
+            registry.AddOrOverwrite(SaveUnzipIconConverter.Name, new SaveUnzipIconConverter());
         }
 
         protected override IMvxApplication CreateApp()

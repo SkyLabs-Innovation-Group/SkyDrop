@@ -209,7 +209,7 @@
       <Generator>
       </Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_download_grey.xml">
+    <AndroidResource Include="Resources\drawable\ic_download.xml">
       <SubType>
       </SubType>
       <Generator>
@@ -437,6 +437,10 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\ic_image.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_zip.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>

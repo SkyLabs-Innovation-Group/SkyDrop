@@ -17842,7 +17842,7 @@ namespace SkyDrop.Droid
 			public const int ic_delete = 2131165299;
 			
 			// aapt resource value: 0x7F070074
-			public const int ic_download_grey = 2131165300;
+			public const int ic_download = 2131165300;
 			
 			// aapt resource value: 0x7F070075
 			public const int ic_errorstatus = 2131165301;
@@ -17920,76 +17920,79 @@ namespace SkyDrop.Droid
 			public const int ic_upload_grey = 2131165325;
 			
 			// aapt resource value: 0x7F07008E
-			public const int launch_skydrop_background = 2131165326;
+			public const int ic_zip = 2131165326;
 			
 			// aapt resource value: 0x7F07008F
-			public const int launch_skydrop_foreground = 2131165327;
+			public const int launch_skydrop_background = 2131165327;
 			
 			// aapt resource value: 0x7F070090
-			public const int mtrl_snackbar_background = 2131165328;
+			public const int launch_skydrop_foreground = 2131165328;
 			
 			// aapt resource value: 0x7F070091
-			public const int mtrl_tabs_default_indicator = 2131165329;
+			public const int mtrl_snackbar_background = 2131165329;
 			
 			// aapt resource value: 0x7F070092
-			public const int navigation_empty_icon = 2131165330;
+			public const int mtrl_tabs_default_indicator = 2131165330;
 			
 			// aapt resource value: 0x7F070093
-			public const int notification_action_background = 2131165331;
+			public const int navigation_empty_icon = 2131165331;
 			
 			// aapt resource value: 0x7F070094
-			public const int notification_bg = 2131165332;
+			public const int notification_action_background = 2131165332;
 			
 			// aapt resource value: 0x7F070095
-			public const int notification_bg_low = 2131165333;
+			public const int notification_bg = 2131165333;
 			
 			// aapt resource value: 0x7F070096
-			public const int notification_bg_low_normal = 2131165334;
+			public const int notification_bg_low = 2131165334;
 			
 			// aapt resource value: 0x7F070097
-			public const int notification_bg_low_pressed = 2131165335;
+			public const int notification_bg_low_normal = 2131165335;
 			
 			// aapt resource value: 0x7F070098
-			public const int notification_bg_normal = 2131165336;
+			public const int notification_bg_low_pressed = 2131165336;
 			
 			// aapt resource value: 0x7F070099
-			public const int notification_bg_normal_pressed = 2131165337;
+			public const int notification_bg_normal = 2131165337;
 			
 			// aapt resource value: 0x7F07009A
-			public const int notification_icon_background = 2131165338;
+			public const int notification_bg_normal_pressed = 2131165338;
 			
 			// aapt resource value: 0x7F07009B
-			public const int notification_template_icon_bg = 2131165339;
+			public const int notification_icon_background = 2131165339;
 			
 			// aapt resource value: 0x7F07009C
-			public const int notification_template_icon_low_bg = 2131165340;
+			public const int notification_template_icon_bg = 2131165340;
 			
 			// aapt resource value: 0x7F07009D
-			public const int notification_tile_bg = 2131165341;
+			public const int notification_template_icon_low_bg = 2131165341;
 			
 			// aapt resource value: 0x7F07009E
-			public const int notify_panel_notification_icon_bg = 2131165342;
+			public const int notification_tile_bg = 2131165342;
 			
 			// aapt resource value: 0x7F07009F
-			public const int preference_list_divider_material = 2131165343;
+			public const int notify_panel_notification_icon_bg = 2131165343;
 			
 			// aapt resource value: 0x7F0700A0
-			public const int progress_circular = 2131165344;
+			public const int preference_list_divider_material = 2131165344;
 			
 			// aapt resource value: 0x7F0700A1
-			public const int roundedbg = 2131165345;
+			public const int progress_circular = 2131165345;
 			
 			// aapt resource value: 0x7F0700A2
-			public const int roundedbgdark = 2131165346;
+			public const int roundedbg = 2131165346;
 			
 			// aapt resource value: 0x7F0700A3
-			public const int splash_screen = 2131165347;
+			public const int roundedbgdark = 2131165347;
 			
 			// aapt resource value: 0x7F0700A4
-			public const int tooltip_frame_dark = 2131165348;
+			public const int splash_screen = 2131165348;
 			
 			// aapt resource value: 0x7F0700A5
-			public const int tooltip_frame_light = 2131165349;
+			public const int tooltip_frame_dark = 2131165349;
+			
+			// aapt resource value: 0x7F0700A6
+			public const int tooltip_frame_light = 2131165350;
 			
 			static Drawable()
 			{

@@ -34,7 +34,7 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIActivityIndicatorView DownloadButtonActivityIndicator { get; set; }
 
 		[Outlet]
-		UIKit.UIImageView DownloadButtonIcon { get; set; }
+		FFImageLoading.Cross.MvxCachedImageView DownloadButtonIcon { get; set; }
 
 		[Outlet]
 		UIKit.UICollectionView FilePreviewCollectionView { get; set; }

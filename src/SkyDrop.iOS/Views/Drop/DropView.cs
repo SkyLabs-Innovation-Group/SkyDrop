@@ -28,6 +28,7 @@ using FFImageLoading.Extensions;
 using System.IO;
 using AssetsLibrary;
 using SkyDrop.iOS.Views.Files;
+using SkyDrop.Core.Converters;
 
 namespace SkyDrop.iOS.Views.Drop
 {
@@ -161,7 +162,8 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(DownloadButton).For("Tap").To(vm => vm.DownloadFileCommand);
             set.Bind(DownloadButtonActivityIndicator).For("Visible").To(vm => vm.IsDownloadingFile);
             set.Bind(DownloadButtonIcon).For(t => t.Hidden).To(vm => vm.IsDownloadingFile);
-            set.Bind(this).For(t => t.SaveFileLabelText).To(vm => vm.IsFocusedFileAnArchive);
+            set.Bind(SaveFileLabel).For(t => t.Text).To(vm => vm.SaveButtonText);
+            set.Bind(DownloadButtonIcon).For(a => a.ImagePath).To(vm => vm.IsFocusedFileAnArchive).WithConversion(new SaveUnzipIconConverter());
 
             set.Bind(this).For(th => th.Title).To(vm => vm.Title);
 
@@ -558,15 +560,6 @@ namespace SkyDrop.iOS.Views.Drop
             return !ViewModel.SwipeNavigationEnabled || //don't allow swipe before first file is uploaded
                 ViewModel.IsUploading || //don't allow swipe while file is uploading
                 ViewModel.DropViewUIState == DropViewState.ConfirmFilesState; //don't allow swipe on confirm file UI state
-        }
-
-        public bool SaveFileLabelText
-        {
-            get => false;
-            set
-            {
-                SaveFileLabel.Text = value ? "Unzip" : "Save";
-            }
         }
     }
 }
