@@ -10,7 +10,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FilesView">
             <connections>
+                <outlet property="ActivityIndicator" destination="e9i-ad-nT2" id="58H-LM-Ykx"/>
                 <outlet property="ActivityIndicatorContainer" destination="5oH-N5-wcr" id="TJm-gk-zd6"/>
+                <outlet property="ErrorIcon" destination="yip-kG-nNl" id="cIU-Iq-nJA"/>
                 <outlet property="FileExplorerHolder" destination="zf1-Qw-94o" id="wgn-17-XpC"/>
                 <outlet property="LoadingLabel" destination="e8w-Et-Jcp" id="GHf-8m-DFZ"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
@@ -38,11 +40,21 @@
                             <color key="textColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_error" translatesAutoresizingMaskIntoConstraints="NO" id="yip-kG-nNl">
+                            <rect key="frame" x="187" y="-1.5" width="40" height="40"/>
+                            <color key="tintColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="ahP-hm-FNH"/>
+                                <constraint firstAttribute="width" constant="40" id="qlx-VZ-u0g"/>
+                            </constraints>
+                        </imageView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="e9i-ad-nT2" firstAttribute="centerX" secondItem="5oH-N5-wcr" secondAttribute="centerX" id="5hS-AT-IHN"/>
+                        <constraint firstItem="e9i-ad-nT2" firstAttribute="centerX" secondItem="yip-kG-nNl" secondAttribute="centerX" id="Gft-X5-8E0"/>
                         <constraint firstItem="e8w-Et-Jcp" firstAttribute="centerX" secondItem="5oH-N5-wcr" secondAttribute="centerX" id="Gtf-SL-Djy"/>
+                        <constraint firstItem="e9i-ad-nT2" firstAttribute="centerY" secondItem="yip-kG-nNl" secondAttribute="centerY" id="N0a-FN-Ldf"/>
                         <constraint firstItem="e9i-ad-nT2" firstAttribute="top" secondItem="5oH-N5-wcr" secondAttribute="top" id="fYj-7h-2jB"/>
                         <constraint firstItem="e8w-Et-Jcp" firstAttribute="top" secondItem="e9i-ad-nT2" secondAttribute="bottom" constant="24" id="mf8-Jm-t8R"/>
                         <constraint firstAttribute="height" constant="96" id="uM2-sh-5lb"/>
@@ -63,6 +75,7 @@
         </view>
     </objects>
     <resources>
+        <image name="ic_error" width="18" height="18"/>
         <systemColor name="systemIndigoColor">
             <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

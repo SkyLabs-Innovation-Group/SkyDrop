@@ -13,7 +13,13 @@ namespace SkyDrop.iOS.Views.Files
 	partial class FilesView
 	{
 		[Outlet]
+		UIKit.UIActivityIndicatorView ActivityIndicator { get; set; }
+
+		[Outlet]
 		UIKit.UIView ActivityIndicatorContainer { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView ErrorIcon { get; set; }
 
 		[Outlet]
 		UIKit.UIView FileExplorerHolder { get; set; }
@@ -23,11 +29,6 @@ namespace SkyDrop.iOS.Views.Files
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (LoadingLabel != null) {
-				LoadingLabel.Dispose ();
-				LoadingLabel = null;
-			}
-
 			if (ActivityIndicatorContainer != null) {
 				ActivityIndicatorContainer.Dispose ();
 				ActivityIndicatorContainer = null;
@@ -36,6 +37,21 @@ namespace SkyDrop.iOS.Views.Files
 			if (FileExplorerHolder != null) {
 				FileExplorerHolder.Dispose ();
 				FileExplorerHolder = null;
+			}
+
+			if (LoadingLabel != null) {
+				LoadingLabel.Dispose ();
+				LoadingLabel = null;
+			}
+
+			if (ActivityIndicator != null) {
+				ActivityIndicator.Dispose ();
+				ActivityIndicator = null;
+			}
+
+			if (ErrorIcon != null) {
+				ErrorIcon.Dispose ();
+				ErrorIcon = null;
 			}
 		}
 	}

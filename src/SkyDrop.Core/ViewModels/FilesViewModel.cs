@@ -35,7 +35,9 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand BackCommand { get; set; }
         public bool IsUnzippedFilesMode { get; set; }
         public string ArchiveUrl { get; set; }
+        public bool IsError { get; set; }
         public bool IsLoading { get; set; }
+        public bool IsLoadingLabelVisible => IsLoading || IsError;
         public string LoadingLabelText { get; set; }
 
         private readonly IApiService apiService;
@@ -90,6 +92,7 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 IsLoading = true;
                 LoadingLabelText = "Downloading...";
+
                 List<SkyFile> files;
                 using (var stream = await apiService.DownloadFile(ArchiveUrl))
                 {
@@ -103,8 +106,9 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             catch(Exception e)
             {
+                IsError = true;
                 var actionName = didDownload ? "unzip" : "download";
-                userDialogs.Toast($"Failed to {actionName} file");
+                LoadingLabelText = $"Failed to {actionName} file";
                 log.Exception(e);
                 return null;
             }

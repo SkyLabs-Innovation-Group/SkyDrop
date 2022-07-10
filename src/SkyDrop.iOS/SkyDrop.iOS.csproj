@@ -193,6 +193,8 @@
     <ImageAsset Include="Media.xcassets\ic_zip.imageset\zip-box.pdf" />
     <ImageAsset Include="Media.xcassets\ic_qr.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_qr.imageset\qrcode.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_error.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_error.imageset\alert-circle.pdf" />
     <ImageAsset Include="Media.xcassets\ic_image.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_image.imageset\image.pdf" />
     <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
