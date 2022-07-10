@@ -16,15 +16,27 @@
         app:cardCornerRadius="8dp"
         app:cardElevation="1dp"
         app:cardBackgroundColor="@color/midGrey">
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <FFImageLoading.Cross.MvxCachedImageView
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                app:MvxBind="SkyFilePreviewImage SkyFile"/>
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <FFImageLoading.Cross.MvxCachedImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    app:MvxBind="SkyFilePreviewImage SkyFile"/>
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_cloud"
+                    app:MvxBind="FileCategoryIcon SkyFile.Filename;Visibility InvertedVisibility(CanDisplayPreview(SkyFile.Filename))"/>
+            </FrameLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,8 +53,10 @@
                     android:layout_gravity="center_vertical"
                     app:MvxBind="Text SkyFile.Filename"
                     />
+
             </LinearLayout>
-        </FrameLayout>
+            
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <!--Selection Indicator-->
