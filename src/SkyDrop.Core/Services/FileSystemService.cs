@@ -128,18 +128,21 @@ namespace SkyDrop.Core.Services
         {
             string directory = isPersistent ? DownloadsFolderPath : CacheFolderPath;
             string filePath = Path.Combine(directory, fileName);
-            filePath = GetNextFilename(filePath); //ensure path is unique by adding a number at the end if it already exists
+
+            //ensure path is unique by adding a number at the end if it already exists
+            filePath = GetNextFilename(filePath); 
+
             using var fileStream = File.OpenWrite(filePath);
             await data.CopyToAsync(fileStream);
             data.Dispose();
-            return filePath;
+            return Path.GetFileName(filePath);
         }
 
         private string GetNextFilename(string filename)
         {
             int i = 1;
             string dir = Path.GetDirectoryName(filename);
-            string file = Path.GetFileNameWithoutExtension(filename) + "{0}";
+            string file = Path.GetFileNameWithoutExtension(filename) + " {0}";
             string extension = Path.GetExtension(filename);
 
             while (System.IO.File.Exists(filename))
