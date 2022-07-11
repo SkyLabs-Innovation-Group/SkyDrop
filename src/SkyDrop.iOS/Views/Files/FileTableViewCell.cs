@@ -33,6 +33,8 @@ namespace SkyDrop.iOS.Views.Files
 				set.Bind(IconImage).For(FileCategoryIconBinding.Name).To(vm => vm.SkyFile.Filename);
 				set.Bind(ContentView).For("Tap").To(vm => vm.TapCommand);
 				set.Bind(ContentView).For("LongPress").To(vm => vm.LongPressCommand);
+				set.Bind(ActivityIndicatorContainer).For("Visible").To(vm => vm.IsLoading);
+				set.Bind(ActivityIndicatorContainer).For(c => c.BackgroundColor).To(vm => vm.FillColor).WithConversion("NativeColor");
 				set.Apply();
 			});
 		}
