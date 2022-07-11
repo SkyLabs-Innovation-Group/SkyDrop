@@ -37,6 +37,8 @@ namespace SkyDrop.iOS.Bindings
                     return "ic_file_audio";
                 case FileCategory.Video:
                     return "ic_file_video";
+                case FileCategory.Zip:
+                    return "ic_zip";
                 case FileCategory.None:
                 default:
                     return "ic_file_generic";

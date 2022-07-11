@@ -84,7 +84,7 @@ namespace SkyDrop.Core.Services
             return skyFile;
         }
 
-        public async Task DownloadFile(string url)
+        public async Task DownloadAndSaveSkyfile(string url)
         {
             var permissionResult = await Permissions.RequestAsync<Permissions.StorageWrite>();
             if (permissionResult != PermissionStatus.Granted)
@@ -99,12 +99,19 @@ namespace SkyDrop.Core.Services
             var fileName = GetFilenameFromResponse(response);
 
             //save
-            string filePath = Path.Combine(fileSystemService.DownloadsFolderPath, fileName);
             using var responseStream = await response.Content.ReadAsStreamAsync();
-            using var fileStream = File.OpenWrite(filePath);
-            await responseStream.CopyToAsync(fileStream);
+            var newFileName = await fileSystemService.SaveFile(responseStream, fileName, true);
 
-            userDialogs.Toast($"Saved {fileName}");
+            userDialogs.Toast($"Saved {newFileName}");
+        }
+
+        public async Task<Stream> DownloadFile(string url)
+        {
+            //download
+            var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
+            var response = await httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStreamAsync();
         }
 
         public async Task<string> GetSkyFileFilename(string skylink)
@@ -193,7 +200,9 @@ namespace SkyDrop.Core.Services
     {
         Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationTokenSource);
 
-        Task DownloadFile(string url);
+        Task DownloadAndSaveSkyfile(string url);
+
+        Task<Stream> DownloadFile(string url);
 
         Task<string> GetSkyFileFilename(string skyfile);
 

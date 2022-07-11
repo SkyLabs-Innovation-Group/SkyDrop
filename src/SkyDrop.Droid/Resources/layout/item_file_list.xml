@@ -50,6 +50,22 @@
                             app:MvxBind="Visibility Visibility(IsSelected)"/>
         
                     </androidx.cardview.widget.CardView>
+
+                    <!--Saving File Indicator-->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        app:cardCornerRadius="16dp"
+                        app:MvxBind="Visibility Visibility(IsLoading);CardBackgroundColor FillColor">
+
+                        <ProgressBar
+                            android:id="@+id/ProgressBar"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:progressTint="#eee"/>
+        
+                    </androidx.cardview.widget.CardView>
                 </FrameLayout>
                 <TextView
                     android:layout_width="0px"
@@ -58,13 +74,6 @@
                     app:MvxBind="Text SkyFile.Filename"
                     android:textColor="#fff"
                     android:layout_gravity="center_vertical"/>
-                <ProgressBar
-                    android:id="@+id/ProgressBar"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_gravity="center_vertical"
-                    app:MvxBind="Visibility Visibility(IsLoading)"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

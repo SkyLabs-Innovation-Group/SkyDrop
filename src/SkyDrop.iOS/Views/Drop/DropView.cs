@@ -28,6 +28,7 @@ using FFImageLoading.Extensions;
 using System.IO;
 using AssetsLibrary;
 using SkyDrop.iOS.Views.Files;
+using SkyDrop.Core.Converters;
 
 namespace SkyDrop.iOS.Views.Drop
 {
@@ -37,8 +38,7 @@ namespace SkyDrop.iOS.Views.Drop
         private const int swipeMarginX = 20;
         private bool isPressed;
         private nfloat tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
-        const string DropUploadNotifRequestId = "drop_upload_notification_id";
-
+        private const string DropUploadNotifRequestId = "drop_upload_notification_id";
         private nfloat screenWidth => UIScreen.MainScreen.Bounds.Width;
 
         public DropView() : base("DropView", null)
@@ -162,6 +162,8 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(DownloadButton).For("Tap").To(vm => vm.DownloadFileCommand);
             set.Bind(DownloadButtonActivityIndicator).For("Visible").To(vm => vm.IsDownloadingFile);
             set.Bind(DownloadButtonIcon).For(t => t.Hidden).To(vm => vm.IsDownloadingFile);
+            set.Bind(SaveFileLabel).For(t => t.Text).To(vm => vm.SaveButtonText);
+            set.Bind(DownloadButtonIcon).For(a => a.ImagePath).To(vm => vm.IsFocusedFileAnArchive).WithConversion(new SaveUnzipIconConverter());
 
             set.Bind(this).For(th => th.Title).To(vm => vm.Title);
 
@@ -200,8 +202,7 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(PreviewImage).For(i => i.ImagePath).To(vm => vm.PreviewImageUrl);
 
             //icon behind preview image, to show while preview is loading
-            set.Bind(FileTypeIcon).For(FileCategoryIconBinding.Name).To(vm => vm.FocusedFile.Filename); 
-
+            set.Bind(FileTypeIcon).For(FileCategoryIconBinding.Name).To(vm => vm.FocusedFile.Filename);
             set.Apply();
         }
 

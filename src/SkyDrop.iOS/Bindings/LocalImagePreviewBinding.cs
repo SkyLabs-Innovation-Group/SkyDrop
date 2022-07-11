@@ -13,17 +13,18 @@ using SkyDrop.Core;
 using SkyDrop.Core.DataModels;
 using Xamarin.Essentials;
 using SkyDrop.Core.Utility;
+using SkyDrop.iOS.Common;
 
 namespace SkyDrop.iOS.Bindings
 {
     /// <summary>
-    /// Binds SkyFile to an ImageView for image previews
+    /// Binds local file to an ImageView for image previews
     /// </summary>
-    public class SkyFileImageViewBinding : MvxTargetBinding<UIImageView, SkyFile>
+    public class LocalImagePreviewBinding : MvxTargetBinding<UIImageView, SkyFile>
     {
         public static string Name => "ImagePreview";
 
-        public SkyFileImageViewBinding(UIImageView target) : base(target)
+        public LocalImagePreviewBinding(UIImageView target) : base(target)
         {
         }
 
@@ -41,22 +42,7 @@ namespace SkyDrop.iOS.Bindings
                 if (!Util.CanDisplayPreview(value.FullFilePath))
                     return;
 
-                Task.Run(async () =>
-                {
-                    try
-                    {
-                        var task = ImageService.Instance.LoadStream(
-                                c => Task.FromResult((Stream) System.IO.File.OpenRead(value.FullFilePath)))
-                            .DownSampleInDip()
-                            .IntoAsync(Target);
-
-                        await task;
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Logger.Error(ex, "Error setting SkyFile preview");
-                    }
-                }).Forget();
+                iOSUtil.LoadLocalImagePreview(value.FullFilePath, Target);
             }
             catch (Exception e)
             {

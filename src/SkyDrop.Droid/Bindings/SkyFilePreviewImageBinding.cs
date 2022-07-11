@@ -29,11 +29,17 @@ namespace SkyDrop.Droid.Bindings
             if (value == null)
                 return;
 
-            if (Util.CanDisplayPreview(value.Filename))
+            if (!Util.CanDisplayPreview(value.Filename))
+                return;
+
+            if (value.Skylink.IsNullOrEmpty())
             {
-                var filePath = value?.GetSkylinkUrl();
-                Target.ImagePath = filePath;
+                AndroidUtil.LoadLocalImagePreview(value.FullFilePath, Target);
+                return;
             }
+
+            var filePath = value?.GetSkylinkUrl();
+            Target.ImagePath = filePath;
         }
     }
 }

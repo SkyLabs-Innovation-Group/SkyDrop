@@ -93,6 +93,7 @@
     <Compile Include="Bindings\BackgroundColorBinding.cs" />
     <Compile Include="Bindings\FileCategoryIconBinding.cs" />
     <Compile Include="Views\Files\FileExplorerView.cs" />
+    <Compile Include="Bindings\IconBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -209,7 +210,7 @@
       <Generator>
       </Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_download_grey.xml">
+    <AndroidResource Include="Resources\drawable\ic_download.xml">
       <SubType>
       </SubType>
       <Generator>
@@ -437,6 +438,14 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\ic_image.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_zip.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_error.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>

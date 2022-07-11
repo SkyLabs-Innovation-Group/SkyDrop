@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -11,6 +12,7 @@ using System.Timers;
 using Acr.UserDialogs;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
 using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
@@ -58,7 +60,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsStagingFiles { get; set; }
         public bool IsUploadArrowVisible => !IsUploading && !IsStagingFiles;
         public bool IsBarcodeLoading { get; set; }
-        public bool IsBarcodeVisible { get; set; }
+        public bool IsBarcodeVisible { get; set; } //visibility for BarcodeContainer and BarcodeMenu
         public bool IsPreviewImageVisible { get; set; } //toggle for barcode / preview image
         public bool IsStagedFilesVisible => DropViewUIState == DropViewState.ConfirmFilesState;
         public bool IsSendButtonGreen { get; set; } = true;
@@ -80,6 +82,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool CanDisplayPreview => FocusedFile?.Filename.CanDisplayPreview() ?? false;
         public bool IsShowBarcodeButtonVisible => CanDisplayPreview && IsPreviewImageVisible;
         public bool IsShowPreviewButtonVisible => CanDisplayPreview && !IsPreviewImageVisible;
+        public bool IsFocusedFileAnArchive => FocusedFile.Filename.ExtensionMatches(".zip");
+        public string SaveButtonText => IsFocusedFileAnArchive ? "Unzip" : "Save";
 
         public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile FocusedFile { get; set; } //most recently sent or received file
@@ -161,7 +165,7 @@ namespace SkyDrop.Core.ViewModels.Main
             ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
             MenuCommand = new MvxAsyncCommand(NavigateToFiles);
-            DownloadFileCommand = new MvxAsyncCommand(DownloadFile);
+            DownloadFileCommand = new MvxAsyncCommand(SaveOrUnzipFocusedFile);
             ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
             ShowPreviewImageCommand = new MvxCommand(() => IsPreviewImageVisible = true);
         }
@@ -278,6 +282,10 @@ namespace SkyDrop.Core.ViewModels.Main
                 FocusedFile.WasSent = true;
                 storageService.SaveSkyFiles(FocusedFile);
 
+                RaisePropertyChanged(() => IsShowBarcodeButtonVisible).Forget();
+                RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
+                RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
+
                 //clear cache
                 fileSystemService.ClearCache();
 
@@ -390,6 +398,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 RaisePropertyChanged(() => IsShowBarcodeButtonVisible).Forget();
                 RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
+                RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
 
                 //can only do this after getting filename from Skynet
                 UpdatePreviewImage();
@@ -471,7 +480,7 @@ namespace SkyDrop.Core.ViewModels.Main
             string compressedFilePath = Path.Combine(Path.GetTempPath(), archiveName);
 
             var filesToUpload = StagedFiles.Where(s => !s.IsMoreFilesButton).Select(s => s.SkyFile).ToList();
-            bool compressSuccess = fileSystemService.CompressX(filesToUpload, compressedFilePath);
+            bool compressSuccess = fileSystemService.CreateZipArchive(filesToUpload, compressedFilePath);
             if (!compressSuccess)
                 throw new Exception("Failed to create archive");
 
@@ -817,12 +826,16 @@ namespace SkyDrop.Core.ViewModels.Main
             if (IsUploading)
                 return;
 
-            var selectedFile = await navigationService.Navigate<FilesViewModel, object, SkyFile>(null);
+            var selectedFile = await navigationService.Navigate<FilesViewModel, FilesViewModel.NavParam, SkyFile>(new FilesViewModel.NavParam());
             if (selectedFile == null)
                 return;
 
             SwipeNavigationEnabled = true;
             FocusedFile = selectedFile;
+
+            RaisePropertyChanged(() => IsShowBarcodeButtonVisible).Forget();
+            RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
+            RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
 
             UpdatePreviewImage();
 
@@ -831,21 +844,34 @@ namespace SkyDrop.Core.ViewModels.Main
             await GenerateBarcodeAsyncFunc(FocusedFile.GetSkylinkUrl());
         }
 
-        public async Task DownloadFile()
+        private async Task SaveOrUnzipFocusedFile()
         {
             try
             {
+                if (IsFocusedFileAnArchive)
+                {
+                    //unzip
+                    DownloadAndUnzipArchive();
+                    return;
+                }
+
+                //save
                 IsDownloadingFile = true;
-                await apiService.DownloadFile(FocusedFile.GetSkylinkUrl());
+                await apiService.DownloadAndSaveSkyfile(FocusedFileUrl);
             }
             catch(Exception e)
             {
-                userDialogs.Toast("Failed to download file");
+                userDialogs.Toast("Failed to save file");
             }
             finally
             {
                 IsDownloadingFile = false;
             }
+        }
+
+        private void DownloadAndUnzipArchive()
+        {
+            navigationService.Navigate<FilesViewModel, FilesViewModel.NavParam>(new FilesViewModel.NavParam { IsUnzippedFilesMode = true, ArchiveUrl = FocusedFileUrl });
         }
 
         private void UpdatePreviewImage()

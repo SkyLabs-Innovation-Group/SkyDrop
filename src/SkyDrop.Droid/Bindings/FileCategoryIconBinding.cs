@@ -39,6 +39,8 @@ namespace SkyDrop.Droid.Bindings
                     return Resource.Drawable.ic_file_audio;
                 case FileCategory.Video:
                     return Resource.Drawable.ic_file_video;
+                case FileCategory.Zip:
+                    return Resource.Drawable.ic_zip;
                 case FileCategory.None:
                 default:
                     return Resource.Drawable.ic_file_generic;

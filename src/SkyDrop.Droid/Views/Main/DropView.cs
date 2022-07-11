@@ -22,6 +22,11 @@ using MvvmCross;
 using SkyDrop.Core.Services;
 using System.IO;
 using FFImageLoading.Cross;
+using Android;
+using AndroidX.Core.Content;
+using AndroidX.Core.App;
+using Java.IO;
+using Plugin.CurrentActivity;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -48,6 +53,8 @@ namespace SkyDrop.Droid.Views.Main
         protected override async void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+
+            CrossCurrentActivity.Current.Init(this, bundle);
 
             var toolbar = FindViewById<AndroidX.AppCompat.Widget.Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);

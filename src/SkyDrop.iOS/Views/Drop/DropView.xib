@@ -30,6 +30,7 @@
                 <outlet property="ReceiveIcon" destination="Cq9-AE-Hf8" id="Bfi-nb-PGd"/>
                 <outlet property="ReceiveLabel" destination="OfC-3c-DrC" id="ZpR-ZP-akX"/>
                 <outlet property="RightNavDot" destination="aAF-UA-cRI" id="sUD-RO-UEc"/>
+                <outlet property="SaveFileLabel" destination="kBj-vM-qAb" id="lDz-k4-MO9"/>
                 <outlet property="SendActivityIndicator" destination="WEo-01-0A0" id="SWQ-oy-smz"/>
                 <outlet property="SendButton" destination="EyF-1x-tNq" id="Zet-dE-ps3"/>
                 <outlet property="SendIcon" destination="3as-jp-js1" id="y9a-OO-QKZ"/>
@@ -335,7 +336,7 @@
                                     <color key="textColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_download" translatesAutoresizingMaskIntoConstraints="NO" id="QSi-Va-Zxh">
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_download" translatesAutoresizingMaskIntoConstraints="NO" id="QSi-Va-Zxh" customClass="MvxCachedImageView">
                                     <rect key="frame" x="24" y="8" width="35.5" height="48"/>
                                     <color key="tintColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>

@@ -54,6 +54,9 @@ namespace SkyDrop.Core.Utility
             if (filename.ExtensionMatches(new[] { ".mp4", ".m4p", ".m4v", ".mov", ".avi", ".webm", ".mpg", ".mp2", ".mpeg", ".mpe", ".mpv", ".wmv", ".qt", ".mkv" }))
                 return FileCategory.Video;
 
+            if (filename.ExtensionMatches(".zip"))
+                return FileCategory.Zip;
+
             return FileCategory.None;
         }
 
@@ -64,12 +67,18 @@ namespace SkyDrop.Core.Utility
             Image,
             Audio,
             Video,
+            Zip
         }
 
         public static bool CanDisplayPreview(this string filename)
         {
             filename = filename.ToLowerInvariant();
             return filename.ExtensionMatches(".jpg", ".jpeg", ".bmp", ".png", ".gif", ".webp", ".heic");
+        }
+
+        public static bool IsNullOrEmpty(this string text)
+        {
+            return string.IsNullOrEmpty(text);
         }
     }
 }

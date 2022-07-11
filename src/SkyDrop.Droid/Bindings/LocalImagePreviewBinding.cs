@@ -24,6 +24,7 @@ using Serilog;
 using Serilog.Core;
 using File = Java.IO.File;
 using Path = System.IO.Path;
+using SkyDrop.Droid.Helper;
 
 namespace SkyDrop.Droid.Bindings
 {
@@ -57,6 +58,8 @@ namespace SkyDrop.Droid.Bindings
                 if (!Util.CanDisplayPreview(value.FullFilePath))
                     return;
 
+                AndroidUtil.LoadLocalImagePreview(value.FullFilePath, Target);
+                /*
                 Task.Run(async () =>
                 {
                     try
@@ -72,7 +75,7 @@ namespace SkyDrop.Droid.Bindings
                     {
                         Log.Logger.Error(ex, "Error loading image binding");
                     }
-                }).Forget();
+                }).Forget();*/
             }
             catch(Exception e)
             {

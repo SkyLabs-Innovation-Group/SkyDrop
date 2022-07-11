@@ -30,7 +30,7 @@ namespace SkyDrop.iOS
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterCustomBindingFactory<UIView>(ProgressFillHeightBinding.Name, view => new ProgressFillHeightBinding(view));
-            registry.RegisterCustomBindingFactory<UIImageView>(SkyFileImageViewBinding.Name, view => new SkyFileImageViewBinding(view));
+            registry.RegisterCustomBindingFactory<UIImageView>(LocalImagePreviewBinding.Name, view => new LocalImagePreviewBinding(view));
             registry.RegisterCustomBindingFactory<UIView>(LongPressBinding.Name, view => new LongPressBinding(view));
             registry.RegisterCustomBindingFactory<UIImageView>(FileCategoryIconBinding.Name, view => new FileCategoryIconBinding(view));
 
@@ -41,6 +41,9 @@ namespace SkyDrop.iOS
         {
             registry.AddOrOverwrite(FileExtensionConverter.Name, new FileExtensionConverter());
             registry.AddOrOverwrite(NativeColorConverter.Name, new NativeColorConverter());
+            registry.AddOrOverwrite(CanDisplayPreviewConverter.Name, new CanDisplayPreviewConverter(invert: false));
+            registry.AddOrOverwrite(CanDisplayPreviewConverter.InvertName, new CanDisplayPreviewConverter(invert: true));
+            registry.AddOrOverwrite(SaveUnzipIconConverter.Name, new SaveUnzipIconConverter());
 
             base.FillValueConverters(registry);
         }
@@ -51,7 +54,6 @@ namespace SkyDrop.iOS
 
             UserDialogs.Instance = new UserDialogsImpl();
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IUserDialogs>(() => UserDialogs.Instance);
-
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISkyDropHttpClientFactory>(() => new NSUrlHttpClientFactory());
             
             return base.CreateApp();

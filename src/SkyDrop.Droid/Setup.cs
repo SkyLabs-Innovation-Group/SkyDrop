@@ -28,6 +28,8 @@ using SkyDrop.Droid.Bindings;
 using SkyDrop.Droid.Services;
 using Xamarin.Essentials;
 using Log = Acr.UserDialogs.Infrastructure.Log;
+using MvvmCross.Converters;
+using SkyDrop.Core.Converters;
 
 namespace SkyDrop.Droid
 {
@@ -47,6 +49,15 @@ namespace SkyDrop.Droid
             registry.RegisterCustomBindingFactory<MvxCachedImageView>(SkyFilePreviewImageBinding.Name, view => new SkyFilePreviewImageBinding(view));
             registry.RegisterCustomBindingFactory<View>(BackgroundColorBinding.Name, view => new BackgroundColorBinding(view));
             registry.RegisterCustomBindingFactory<ImageView>(FileCategoryIconBinding.Name, view => new FileCategoryIconBinding(view));
+            registry.RegisterCustomBindingFactory<ImageView>(IconBinding.Name, view => new IconBinding(view));
+        }
+
+        protected override void FillValueConverters(IMvxValueConverterRegistry registry)
+        {
+            base.FillValueConverters(registry);
+            registry.AddOrOverwrite(CanDisplayPreviewConverter.Name, new CanDisplayPreviewConverter(invert: false));
+            registry.AddOrOverwrite(CanDisplayPreviewConverter.InvertName, new CanDisplayPreviewConverter(invert: true));
+            registry.AddOrOverwrite(SaveUnzipIconConverter.Name, new SaveUnzipIconConverter());
         }
 
         protected override IMvxApplication CreateApp()
@@ -64,8 +75,6 @@ namespace SkyDrop.Droid
             Debug.WriteLine("CreateAndroidCurrentTopActivity() droid");
 
             topActivityProvider = base.CreateAndroidCurrentTopActivity();
-            
-
             return topActivityProvider;
         }
         
