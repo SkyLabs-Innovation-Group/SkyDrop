@@ -29,16 +29,13 @@ namespace SkyDrop.Core.Services
         public async Task<IEnumerable<FileResult>> PickFilesAsync(SkyFilePickerType fileType)
         {
             var permissionResult = await Permissions.RequestAsync<Permissions.StorageRead>();
-
             if (permissionResult != PermissionStatus.Granted)
             {
                 Log.Error("StorageRead permission not granted.");
                 return null;
             }
-            else
-            {
-                Log.Trace("PickFilesAsync() was called, with StorageRead permission granted");
-            }
+
+            Log.Trace("PickFilesAsync() called with StorageRead permission granted");
 
             IEnumerable<FileResult> pickedFiles = null;
             switch (fileType)
@@ -131,9 +128,23 @@ namespace SkyDrop.Core.Services
         {
             string directory = isPersistent ? DownloadsFolderPath : CacheFolderPath;
             string filePath = Path.Combine(directory, fileName);
+            filePath = GetNextFilename(filePath); //ensure path is unique by adding a number at the end if it already exists
             using var fileStream = File.OpenWrite(filePath);
             await data.CopyToAsync(fileStream);
             data.Dispose();
+        }
+
+        private string GetNextFilename(string filename)
+        {
+            int i = 1;
+            string dir = Path.GetDirectoryName(filename);
+            string file = Path.GetFileNameWithoutExtension(filename) + "{0}";
+            string extension = Path.GetExtension(filename);
+
+            while (System.IO.File.Exists(filename))
+                filename = Path.Combine(dir, string.Format(file, "(" + i++ + ")") + extension);
+
+            return filename;
         }
 
         public void ClearCache()
