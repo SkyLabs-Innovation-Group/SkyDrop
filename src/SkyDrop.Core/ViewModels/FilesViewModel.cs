@@ -126,8 +126,8 @@ namespace SkyDrop.Core.ViewModels.Main
             try
             {
                 await Task.Delay(1000); //wait for animation
-                await fileSystemService.SaveFile(file.GetStream(), file.Filename, isPersistent: true);
-                userDialogs.Toast($"Saved {file.Filename}");
+                var newFileName = await fileSystemService.SaveFile(file.GetStream(), file.Filename, isPersistent: true);
+                userDialogs.Toast($"Saved {newFileName}");
             }
             catch (Exception e)
             {

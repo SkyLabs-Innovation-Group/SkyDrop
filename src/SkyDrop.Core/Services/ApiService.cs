@@ -100,9 +100,9 @@ namespace SkyDrop.Core.Services
 
             //save
             using var responseStream = await response.Content.ReadAsStreamAsync();
-            await fileSystemService.SaveFile(responseStream, fileName, true);
+            var newFileName = await fileSystemService.SaveFile(responseStream, fileName, true);
 
-            userDialogs.Toast($"Saved {fileName}");
+            userDialogs.Toast($"Saved {newFileName}");
         }
 
         public async Task<Stream> DownloadFile(string url)

@@ -124,7 +124,7 @@ namespace SkyDrop.Core.Services
             return di.GetFiles().Select(f => new SkyFile { Filename = f.Name, FullFilePath = f.FullName }).ToList();
         }
 
-        public async Task SaveFile(Stream data, string fileName, bool isPersistent)
+        public async Task<string> SaveFile(Stream data, string fileName, bool isPersistent)
         {
             string directory = isPersistent ? DownloadsFolderPath : CacheFolderPath;
             string filePath = Path.Combine(directory, fileName);
@@ -132,6 +132,7 @@ namespace SkyDrop.Core.Services
             using var fileStream = File.OpenWrite(filePath);
             await data.CopyToAsync(fileStream);
             data.Dispose();
+            return filePath;
         }
 
         private string GetNextFilename(string filename)
@@ -187,6 +188,6 @@ namespace SkyDrop.Core.Services
 
         void ClearCache();
 
-        Task SaveFile(Stream data, string fileName, bool isPersistent);
+        Task<string> SaveFile(Stream data, string fileName, bool isPersistent);
     }
 }
