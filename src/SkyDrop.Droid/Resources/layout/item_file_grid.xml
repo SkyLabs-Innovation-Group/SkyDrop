@@ -77,4 +77,22 @@
             app:MvxBind="Visibility Visibility(IsSelected)"/>
         
     </androidx.cardview.widget.CardView>
+
+    <!--Saving File Indicator-->
+    <androidx.cardview.widget.CardView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:translationX="-8dp"
+        android:translationY="-8dp"
+        app:cardCornerRadius="16dp"
+        app:MvxBind="Visibility Visibility(IsLoading);CardBackgroundColor FillColor">
+
+        <ProgressBar
+            android:id="@+id/ProgressBar"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:progressTint="#eee"/>
+        
+    </androidx.cardview.widget.CardView>
 </FrameLayout>
