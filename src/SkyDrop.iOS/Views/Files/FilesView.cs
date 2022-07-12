@@ -49,6 +49,7 @@ namespace SkyDrop.iOS.Views.Files
             set.Bind(ActivityIndicator).For(a => a.Hidden).To(vm => vm.IsError);
             set.Bind(ErrorIcon).For("Visible").To(vm => vm.IsError);
             set.Bind(LoadingLabel).To(vm => vm.LoadingLabelText);
+            set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Apply();
         }
 

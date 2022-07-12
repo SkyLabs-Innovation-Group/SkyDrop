@@ -146,6 +146,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Copy"
                                 android:textSize="12sp"
+                                android:textStyle="bold"
                                 android:textColor="@color/lightGrey"
                                 android:paddingTop="2dp"
                                 android:paddingBottom="12dp"/>
@@ -176,6 +177,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Open"
                                 android:textSize="12sp"
+                                android:textStyle="bold"
                                 android:textColor="@color/lightGrey"
                                 android:paddingTop="2dp"
                                 android:paddingBottom="12dp"/>
@@ -216,6 +218,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Save"
                                 android:textSize="12sp"
+                                android:textStyle="bold"
                                 android:textColor="@color/lightGrey"
                                 android:paddingTop="2dp"
                                 android:paddingBottom="12dp"
@@ -246,6 +249,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Share"
                                 android:textSize="12sp"
+                                android:textStyle="bold"
                                 android:textColor="@color/lightGrey"
                                 android:paddingTop="2dp"
                                 android:paddingBottom="12dp"/>

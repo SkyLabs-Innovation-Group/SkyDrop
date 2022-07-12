@@ -871,7 +871,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void DownloadAndUnzipArchive()
         {
-            navigationService.Navigate<FilesViewModel, FilesViewModel.NavParam>(new FilesViewModel.NavParam { IsUnzippedFilesMode = true, ArchiveUrl = FocusedFileUrl });
+            navigationService.Navigate<FilesViewModel, FilesViewModel.NavParam>(new FilesViewModel.NavParam { IsUnzippedFilesMode = true, ArchiveUrl = FocusedFileUrl, ArchiveName = FocusedFile.Filename });
         }
 
         private void UpdatePreviewImage()
