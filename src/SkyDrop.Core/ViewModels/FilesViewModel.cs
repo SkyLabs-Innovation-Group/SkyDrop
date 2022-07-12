@@ -27,6 +27,7 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             public bool IsUnzippedFilesMode { get; set; }
             public string ArchiveUrl { get; set; }
+            public string ArchiveName { get; set; }
         }
 
         public MvxObservableCollection<SkyFileDVM> SkyFiles { get; } = new MvxObservableCollection<SkyFileDVM>();
@@ -55,7 +56,7 @@ namespace SkyDrop.Core.ViewModels.Main
                              IMvxNavigationService navigationService,
                              ILog log) : base(singletonService)
         {
-            Title = "File Storage";
+            Title = "SkyDrive";
 
             this.apiService = apiService;
             this.storageService = storageService;
@@ -207,6 +208,8 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             this.IsUnzippedFilesMode = parameter.IsUnzippedFilesMode;
             this.ArchiveUrl = parameter.ArchiveUrl;
+            if (IsUnzippedFilesMode)
+                Title = parameter.ArchiveName;
         }
     }
 }
