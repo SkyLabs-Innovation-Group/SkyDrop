@@ -879,6 +879,8 @@ namespace SkyDrop.Core.ViewModels.Main
             PreviewImageUrl = null; //clear last preview image
             if (CanDisplayPreview)
                 PreviewImageUrl = FocusedFileUrl; //load new preview image
+            else
+                IsPreviewImageVisible = false;
         }
     }
 }
