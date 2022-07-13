@@ -285,6 +285,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 RaisePropertyChanged(() => IsShowBarcodeButtonVisible).Forget();
                 RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
                 RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
+                RaisePropertyChanged(() => SaveButtonText).Forget();
 
                 //clear cache
                 fileSystemService.ClearCache();
@@ -399,6 +400,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 RaisePropertyChanged(() => IsShowBarcodeButtonVisible).Forget();
                 RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
                 RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
+                RaisePropertyChanged(() => SaveButtonText).Forget();
 
                 //can only do this after getting filename from Skynet
                 UpdatePreviewImage();
@@ -836,6 +838,7 @@ namespace SkyDrop.Core.ViewModels.Main
             RaisePropertyChanged(() => IsShowBarcodeButtonVisible).Forget();
             RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
             RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
+            RaisePropertyChanged(() => SaveButtonText).Forget();
 
             UpdatePreviewImage();
 
