@@ -282,10 +282,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 FocusedFile.WasSent = true;
                 storageService.SaveSkyFiles(FocusedFile);
 
-                RaisePropertyChanged(() => IsShowBarcodeButtonVisible).Forget();
-                RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
-                RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
-                RaisePropertyChanged(() => SaveButtonText).Forget();
+                RaiseFocusedFileChanged();
 
                 //clear cache
                 fileSystemService.ClearCache();
@@ -397,10 +394,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 FocusedFile.Filename = filename;
                 storageService.SaveSkyFiles(FocusedFile);
 
-                RaisePropertyChanged(() => IsShowBarcodeButtonVisible).Forget();
-                RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
-                RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
-                RaisePropertyChanged(() => SaveButtonText).Forget();
+                RaiseFocusedFileChanged();
 
                 //can only do this after getting filename from Skynet
                 UpdatePreviewImage();
@@ -835,10 +829,7 @@ namespace SkyDrop.Core.ViewModels.Main
             SwipeNavigationEnabled = true;
             FocusedFile = selectedFile;
 
-            RaisePropertyChanged(() => IsShowBarcodeButtonVisible).Forget();
-            RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
-            RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
-            RaisePropertyChanged(() => SaveButtonText).Forget();
+            RaiseFocusedFileChanged();
 
             UpdatePreviewImage();
 
@@ -884,6 +875,14 @@ namespace SkyDrop.Core.ViewModels.Main
                 PreviewImageUrl = FocusedFileUrl; //load new preview image
             else
                 IsPreviewImageVisible = false;
+        }
+
+        private void RaiseFocusedFileChanged()
+        {
+            RaisePropertyChanged(() => IsShowBarcodeButtonVisible).Forget();
+            RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
+            RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
+            RaisePropertyChanged(() => SaveButtonText).Forget();
         }
     }
 }
