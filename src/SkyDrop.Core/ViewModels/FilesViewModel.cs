@@ -47,6 +47,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IUserDialogs userDialogs;
         private readonly IMvxNavigationService navigationService;
         private readonly ILog log;
+        private readonly IEncryptionService encryptionService;
 
         public FilesViewModel(ISingletonService singletonService,
                              IApiService apiService,
@@ -54,6 +55,7 @@ namespace SkyDrop.Core.ViewModels.Main
                              IFileSystemService fileSystemService,
                              IUserDialogs userDialogs,
                              IMvxNavigationService navigationService,
+                             IEncryptionService encryptionService,
                              ILog log) : base(singletonService)
         {
             Title = "SkyDrive";
@@ -63,6 +65,7 @@ namespace SkyDrop.Core.ViewModels.Main
             this.fileSystemService = fileSystemService;
             this.userDialogs = userDialogs;
             this.navigationService = navigationService;
+            this.encryptionService = encryptionService;
             this.log = log;
 
             ToggleLayoutCommand = new MvxCommand(() => LayoutType = LayoutType == FileLayoutType.List ? FileLayoutType.Grid : FileLayoutType.List);
@@ -73,6 +76,8 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             await base.Initialize();
             await LoadSkyFiles();
+
+            encryptionService.RunExchange();
         }
 
         private async Task LoadSkyFiles()

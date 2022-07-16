@@ -23,6 +23,7 @@
     <PackageReference Include="ConfigureAwait.Fody" Version="3.3.1" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.2.0" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.2.0" />
+    <PackageReference Include="BouncyCastle.NetCore" Version="1.9.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common" />
@@ -37,5 +38,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="RealmObjects\" />
+    <None Remove="System.Core" />
+    <None Remove="Portable.BouncyCastle" />
+    <None Remove="BouncyCastle" />
+    <None Remove="BouncyCastle.NetCore" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Core">
+      <HintPath>..\..\..\..\..\..\Library\Frameworks\Xamarin.iOS.framework\Versions\15.10.0.1\lib\mono\Xamarin.iOS\System.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

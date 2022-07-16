@@ -33,6 +33,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IBarcodeService barcodeService;
         private readonly IShareLinkService shareLinkService;
         private readonly IUploadTimerService uploadTimerService;
+        private readonly IEncryptionService encryptionService;
 
         public IMvxCommand SendCommand { get; set; }
         public IMvxCommand ReceiveCommand { get; set; }
@@ -142,6 +143,7 @@ namespace SkyDrop.Core.ViewModels.Main
             IUserDialogs userDialogs,
             IMvxNavigationService navigationService,
             IFileSystemService fileSystemService,
+            IEncryptionService encryptionService,
             ILog log) : base(singletonService)
         {
             Log = log;
@@ -155,6 +157,7 @@ namespace SkyDrop.Core.ViewModels.Main
             this.barcodeService = barcodeService;
             this.shareLinkService = shareLinkService;
             this.uploadTimerService = uploadTimerService;
+            this.encryptionService = encryptionService;
 
             SendCommand = new MvxAsyncCommand(async () => await SendButtonTapped());
             ReceiveCommand = new MvxAsyncCommand(async () => await ReceiveFile());
