@@ -24,11 +24,10 @@ namespace SkyDrop.iOS.Views.Certificates
 			View.BackgroundColor = Colors.DarkGrey.ToNative();
 
 			var addButton = new UIBarButtonItem(UIBarButtonSystemItem.Add);
-			addButton.Clicked += (s, e) =>
-			{
-				ViewModel.AddContactCommand.Execute();
-			};
-			NavigationItem.RightBarButtonItem = addButton;
+			addButton.Clicked += (s, e) => ViewModel.AddContactCommand.Execute();
+			var shareButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_qr") };
+            shareButton.Clicked += (s, e) => ViewModel.SharePublicKeyCommand.Execute();
+			NavigationItem.RightBarButtonItems = new[]{ addButton, shareButton };
 
 			var set = CreateBindingSet();
 			set.Apply();

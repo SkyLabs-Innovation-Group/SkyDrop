@@ -4,7 +4,6 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Org.BouncyCastle.Crypto;
-//using System.Security.Cryptography;
 using Org.BouncyCastle.Crypto.Agreement;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Generators;
@@ -29,6 +28,11 @@ namespace SkyDrop.Core.Services
         {
             this.userDialogs = userDialogs;
             this.storageService = storageService;
+        }
+
+        public string GetMyPublicKey()
+        {
+            return Convert.ToBase64String(myPublicKey.GetEncoded());
         }
 
         public Task<string> EncodeFileFor(string filePath, AsymmetricKeyParameter recipientPublicKey)
@@ -89,6 +93,8 @@ namespace SkyDrop.Core.Services
 
             var newContact = new Contact { Name = result.Value, PublicKey = publicKey };
             storageService.AddContact(newContact);
+
+            userDialogs.Toast($"{newContact.Name} added");
         }
 
         private X25519PublicKeyParameters DecodePublicKey(string publicKeyEncoded)
@@ -116,10 +122,10 @@ namespace SkyDrop.Core.Services
             return System.Text.Encoding.ASCII.GetString(bytes);
         }
 
-        private AsymmetricKeyParameter myPrivateKey;// = new X25519PrivateKeyParameters(Hex.Decode("a546e36bf0527c9d3b16154b82465edd62144c0ac1fc5a18506a2244ba449ac4"), 0);
-        private AsymmetricKeyParameter myPublicKey;
-        private AsymmetricKeyParameter opponentPrivateKey;
-        private AsymmetricKeyParameter opponentPublicKey;// = new X25519PublicKeyParameters(Hex.Decode("e6db6867583030db3594c1a424b15f7c726624ec26b3353b10a903a6d0ab1c4c"), 0);
+        private X25519PrivateKeyParameters myPrivateKey;// = new X25519PrivateKeyParameters(Hex.Decode("a546e36bf0527c9d3b16154b82465edd62144c0ac1fc5a18506a2244ba449ac4"), 0);
+        private X25519PublicKeyParameters myPublicKey;
+        private X25519PrivateKeyParameters opponentPrivateKey;
+        private X25519PublicKeyParameters opponentPublicKey;// = new X25519PublicKeyParameters(Hex.Decode("e6db6867583030db3594c1a424b15f7c726624ec26b3353b10a903a6d0ab1c4c"), 0);
 
         private byte[] GetSharedSecret(AsymmetricKeyParameter myPrivateKey, AsymmetricKeyParameter opponentPublicKey)
         {
@@ -133,11 +139,11 @@ namespace SkyDrop.Core.Services
             return sharedSecret;
         }
 
-        private (AsymmetricKeyParameter privateKey, AsymmetricKeyParameter publicKey) GenerateKeyPair()
+        private (X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey) GenerateKeyPair()
         {
             keyGen.Init(new KeyGenerationParameters(new Org.BouncyCastle.Security.SecureRandom(), 256));
             var pair = keyGen.GenerateKeyPair();
-            return (pair.Private, pair.Public);
+            return (pair.Private as X25519PrivateKeyParameters, pair.Public as X25519PublicKeyParameters);
         }
 
         private void GenerateKeys()
@@ -183,6 +189,8 @@ namespace SkyDrop.Core.Services
 
     public interface IEncryptionService
     {
+        string GetMyPublicKey();
+
         void RunExchange();
 
         Task AddPublicKey(string publicKeyEncoded);

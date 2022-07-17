@@ -13,6 +13,7 @@ namespace SkyDrop.Core.ViewModels
     {
         public List<Contact> Contacts { get; set; }
         public IMvxCommand AddContactCommand { get; set; }
+        public IMvxCommand SharePublicKeyCommand { get; set; }
 
         private readonly IApiService apiService;
         private readonly IStorageService storageService;
@@ -50,6 +51,7 @@ namespace SkyDrop.Core.ViewModels
             this.encryptionService = encryptionService;
 
             AddContactCommand = new MvxAsyncCommand(AddContact);
+            SharePublicKeyCommand = new MvxAsyncCommand(SharePublicKey);
         }
 
         public override async Task Initialize()
@@ -82,6 +84,11 @@ namespace SkyDrop.Core.ViewModels
             {
                 Log.Exception(e);
             }
+        }
+
+        private Task SharePublicKey()
+        {
+            return navigationService.Navigate<SharePublicKeyViewModel>();
         }
     }
 }
