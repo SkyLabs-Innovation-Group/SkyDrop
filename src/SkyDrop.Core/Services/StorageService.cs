@@ -5,6 +5,7 @@ using Realms;
 using Realms.Exceptions;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.RealmObjects;
+using SkyDrop.Core.Utility;
 
 namespace SkyDrop.Core.Services
 {
@@ -75,6 +76,29 @@ namespace SkyDrop.Core.Services
             });
         }
 
+        public List<Contact> LoadContacts()
+        {
+            try
+            {
+                var realmObjects = realm.All<ContactRealmObject>().ToArray();
+                return ContactsFromRealmObjects(realmObjects);
+            }
+            catch (InvalidOperationException)
+            {
+                log.Trace("No contacts found");
+                return null;
+            }
+        }
+
+        public void AddContact(Contact contact)
+        {
+            var realmObject = ContactToRealmObject(contact);
+            realm.Write(() =>
+            {
+                realm.Add(realmObject);
+            });
+        }
+
         public void ClearAllData()
         {
             realm.Write(() =>
@@ -123,6 +147,16 @@ namespace SkyDrop.Core.Services
         {
             return new SkyFile { Filename = realmObject.Filename, Skylink = realmObject.Skylink, WasSent = realmObject.WasSent };
         }
+
+        private ContactRealmObject ContactToRealmObject(Contact contact)
+        {
+            return new ContactRealmObject { Name = contact.Name, PublicKeySerialized = Util.PublicKeyToBase64String(contact.PublicKey) };
+        }
+
+        private List<Contact> ContactsFromRealmObjects(params ContactRealmObject[] contactRealmObjects)
+        {
+            return contactRealmObjects.Select(c => new Contact { Name = c.Name, PublicKey = Util.Base64StringToPublicKey(c.PublicKeySerialized) }).ToList();
+        }
     }
 
     public interface IStorageService
@@ -138,5 +172,9 @@ namespace SkyDrop.Core.Services
         void SetAverageUploadRate(UploadAverage uploadAverage);
 
         void ClearAllData();
+
+        List<Contact> LoadContacts();
+
+        void AddContact(Contact contact);
     }
 }

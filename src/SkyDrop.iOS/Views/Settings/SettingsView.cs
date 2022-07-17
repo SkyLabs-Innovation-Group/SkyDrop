@@ -46,6 +46,8 @@ namespace SkyDrop.iOS.Views.Settings
                 PortalTextView.Text = formattedPortalUrl;
             };
 
+            ContactsButton.TouchUpInside += (s, e) => ViewModel.NavigateToContactsCommand.Execute();
+
             EnableUploadNotificationsSwitch.On = ViewModel.UploadNotificationsEnabled;
             EnableUploadNotificationsSwitch.ValueChanged += EnableUploadNotificationsSwitch_ValueChanged;
 

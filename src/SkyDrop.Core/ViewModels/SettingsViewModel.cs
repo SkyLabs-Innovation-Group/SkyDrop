@@ -14,6 +14,7 @@ namespace SkyDrop.Core.ViewModels
         public bool VerifySslCertificates { get; set; } = true;
         public string SkynetPortalLabelText { get; set; } = "Enter a skynet portal to use in the app (default is siasky.net):";
         public IMvxCommand BackCommand { get; set; }
+        public IMvxCommand NavigateToContactsCommand { get; set; }
 
         /// <summary>
         /// Currently, the best way to verify a Skynet portal that I can think of would be to query for a sky file's metadata.
@@ -21,16 +22,19 @@ namespace SkyDrop.Core.ViewModels
         private const string RandomFileToQueryFor = "AACEA6yg7OM0_gl6_sHx2D7ztt20-g0oXum5GNbCc0ycRg";
 
         private ISkyDropHttpClientFactory httpClientFactory;
+        private IMvxNavigationService navigationService;
 
         public SettingsViewModel(ISingletonService singletonService,
                                  ISkyDropHttpClientFactory skyDropHttpClientFactory,
                                  IMvxNavigationService navigationService) : base(singletonService)
         {
             this.httpClientFactory = skyDropHttpClientFactory;
+            this.navigationService = navigationService;
 
             Title = "Advanced settings";
 
             BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
+            NavigateToContactsCommand = new MvxCommand(NavigateToContacts);
         }
 
         public void Toast(string message)
@@ -110,6 +114,11 @@ namespace SkyDrop.Core.ViewModels
                 portalUrl = $"https://{portalUrl.Substring(7)}";
 
             return portalUrl.TrimEnd('/');
+        }
+
+        private void NavigateToContacts()
+        {
+            navigationService.Navigate<CertificatesViewModel>();
         }
     }
 }

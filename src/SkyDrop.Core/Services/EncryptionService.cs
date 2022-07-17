@@ -2,6 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using Org.BouncyCastle.Crypto;
 //using System.Security.Cryptography;
 using Org.BouncyCastle.Crypto.Agreement;
@@ -11,6 +12,7 @@ using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Paddings;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Utilities.Encoders;
+using SkyDrop.Core.DataModels;
 
 namespace SkyDrop.Core.Services
 {
@@ -18,6 +20,16 @@ namespace SkyDrop.Core.Services
     {
         private IBlockCipher engine = new DesEngine(); //the cipher engine for encryption
         private IAsymmetricCipherKeyPairGenerator keyGen = new X25519KeyPairGenerator(); //keypair generator for X25519 key agreement scheme
+
+        private readonly IUserDialogs userDialogs;
+        private readonly IStorageService storageService;
+
+        public EncryptionService(IUserDialogs userDialogs,
+                                 IStorageService storageService)
+        {
+            this.userDialogs = userDialogs;
+            this.storageService = storageService;
+        }
 
         public Task<string> EncodeFileFor(string filePath, AsymmetricKeyParameter recipientPublicKey)
         {
@@ -60,6 +72,38 @@ namespace SkyDrop.Core.Services
 
             var opponentDecryptedMessage = Decrypt(opponentSharedSecret, encryptedMessage);
             Console.WriteLine($"Opponent decrypted message: {BytesToAsciiString(opponentDecryptedMessage)}");
+        }
+
+        public async Task AddPublicKey(string publicKeyEncoded)
+        {
+            var publicKey = DecodePublicKey(publicKeyEncoded);
+            if (publicKey == null)
+            {
+                userDialogs.Alert("Invalid key");
+                return;
+            }
+
+            var result = await userDialogs.PromptAsync("Enter contact name: ", null, null, null, "David Vorick");
+            if (!result.Ok)
+                return;
+
+            var newContact = new Contact { Name = result.Value, PublicKey = publicKey };
+            storageService.AddContact(newContact);
+        }
+
+        private X25519PublicKeyParameters DecodePublicKey(string publicKeyEncoded)
+        {
+            try
+            { 
+                var bytes = Convert.FromBase64String(publicKeyEncoded);
+                var publicKey = new X25519PublicKeyParameters(bytes);
+                var sharedSecret = GetSharedSecret(myPrivateKey, publicKey);
+                return publicKey;
+            }
+            catch(Exception e)
+            {
+                return null;
+            }
         }
 
         private static byte[] AsciiStringToBytes(string text)
@@ -136,9 +180,12 @@ namespace SkyDrop.Core.Services
             return rv;
         }
     }
+
     public interface IEncryptionService
     {
-        public void RunExchange();
+        void RunExchange();
+
+        Task AddPublicKey(string publicKeyEncoded);
     }
 }
 

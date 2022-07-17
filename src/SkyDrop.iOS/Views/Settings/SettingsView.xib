@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsView">
             <connections>
+                <outlet property="ContactsButton" destination="etf-lG-ucL" id="0KW-2x-cuB"/>
                 <outlet property="EnableUploadNotificationsSwitch" destination="hpJ-eu-1Ju" id="DPk-rK-Pj8"/>
                 <outlet property="PortalTextView" destination="6GC-oA-PHg" id="jFy-rc-kGF"/>
                 <outlet property="SavePortalButton" destination="cVG-P6-CxS" id="iqT-Tv-VFe"/>
@@ -57,6 +58,11 @@
                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hpJ-eu-1Ju">
                     <rect key="frame" x="349" y="152" width="51" height="31"/>
                 </switch>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="etf-lG-ucL">
+                    <rect key="frame" x="16" y="298.5" width="82.5" height="31"/>
+                    <state key="normal" title="Button"/>
+                    <buttonConfiguration key="configuration" style="plain" title="Contacts"/>
+                </button>
             </subviews>
             <color key="backgroundColor" red="0.14901961389999999" green="0.1725490093" blue="0.18823529780000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
@@ -67,7 +73,9 @@
                 <constraint firstItem="pZA-MF-C9R" firstAttribute="top" secondItem="aX5-Kq-34w" secondAttribute="topMargin" constant="113" id="GLW-ey-Noe"/>
                 <constraint firstAttribute="trailing" secondItem="cVG-P6-CxS" secondAttribute="trailing" constant="16" id="IxD-kH-hW7"/>
                 <constraint firstItem="6GC-oA-PHg" firstAttribute="leading" secondItem="aX5-Kq-34w" secondAttribute="leading" constant="16" id="Jdg-FF-SDR"/>
+                <constraint firstItem="etf-lG-ucL" firstAttribute="top" secondItem="6GC-oA-PHg" secondAttribute="bottom" constant="16" id="PqU-5e-oEQ"/>
                 <constraint firstItem="6GC-oA-PHg" firstAttribute="top" secondItem="J2S-Mi-hf3" secondAttribute="bottom" constant="18" id="QDU-ci-bmk"/>
+                <constraint firstItem="etf-lG-ucL" firstAttribute="leading" secondItem="aX5-Kq-34w" secondAttribute="leading" constant="16" id="X2V-KX-6KJ"/>
                 <constraint firstAttribute="trailing" secondItem="J2S-Mi-hf3" secondAttribute="trailing" constant="42" id="mOn-Ad-mCY"/>
                 <constraint firstAttribute="trailing" secondItem="hpJ-eu-1Ju" secondAttribute="trailing" constant="16" id="ndV-5J-fE8"/>
                 <constraint firstItem="hpJ-eu-1Ju" firstAttribute="leading" relation="lessThanOrEqual" secondItem="pZA-MF-C9R" secondAttribute="trailing" constant="103" id="wb2-ex-HUB"/>

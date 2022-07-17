@@ -13,6 +13,9 @@ namespace SkyDrop.iOS.Views.Settings
 	partial class SettingsView
 	{
 		[Outlet]
+		UIKit.UIButton ContactsButton { get; set; }
+
+		[Outlet]
 		UIKit.UISwitch EnableUploadNotificationsSwitch { get; set; }
 
 		[Outlet]
@@ -44,6 +47,11 @@ namespace SkyDrop.iOS.Views.Settings
 			if (SetPortalLabel != null) {
 				SetPortalLabel.Dispose ();
 				SetPortalLabel = null;
+			}
+
+			if (ContactsButton != null) {
+				ContactsButton.Dispose ();
+				ContactsButton = null;
 			}
 		}
 	}

@@ -1,6 +1,10 @@
 using System;
 using System.IO;
 using System.Linq;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Generators;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Utilities.IO.Pem;
 using SkyDrop.Core.DataModels;
 
 namespace SkyDrop.Core.Utility
@@ -79,6 +83,17 @@ namespace SkyDrop.Core.Utility
         public static bool IsNullOrEmpty(this string text)
         {
             return string.IsNullOrEmpty(text);
+        }
+
+        public static string PublicKeyToBase64String(this X25519PublicKeyParameters key)
+        {
+            return Convert.ToBase64String(key.GetEncoded());
+        }
+
+        public static X25519PublicKeyParameters Base64StringToPublicKey(this string key)
+        {
+            var bytes = Convert.FromBase64String(key);
+            return new X25519PublicKeyParameters(bytes);
         }
     }
 }
