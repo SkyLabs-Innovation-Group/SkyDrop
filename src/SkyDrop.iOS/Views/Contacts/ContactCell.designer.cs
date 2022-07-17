@@ -1,4 +1,4 @@
-﻿// WARNING
+// WARNING
 //
 // This file has been generated automatically by Visual Studio to store outlets and
 // actions made in the UI designer. If it is removed, they will be lost.
@@ -7,19 +7,19 @@
 using Foundation;
 using System.CodeDom.Compiler;
 
-namespace SkyDrop.iOS.Views.Certificates
+namespace SkyDrop.iOS.Views.Contacts
 {
-	[Register ("ContactsView")]
-	partial class ContactsView
+	[Register ("ContactCell")]
+	partial class ContactCell
 	{
 		[Outlet]
-		UIKit.UITableView ContactsTableView { get; set; }
+		UIKit.UILabel NameLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (ContactsTableView != null) {
-				ContactsTableView.Dispose ();
-				ContactsTableView = null;
+			if (NameLabel != null) {
+				NameLabel.Dispose ();
+				NameLabel = null;
 			}
 		}
 	}

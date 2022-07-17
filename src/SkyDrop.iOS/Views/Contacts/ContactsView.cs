@@ -1,9 +1,11 @@
 ﻿using System;
 using Acr.UserDialogs;
+using MvvmCross.Platforms.Ios.Binding.Views;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels;
+using SkyDrop.iOS.Views.Contacts;
 using UIKit;
 
 namespace SkyDrop.iOS.Views.Certificates
@@ -29,7 +31,11 @@ namespace SkyDrop.iOS.Views.Certificates
             shareButton.Clicked += (s, e) => ViewModel.SharePublicKeyCommand.Execute();
 			NavigationItem.RightBarButtonItems = new[]{ addButton, shareButton };
 
+			var source = new MvxSimpleTableViewSource(ContactsTableView, ContactCell.Key);
+			ContactsTableView.Source = source;
+
 			var set = CreateBindingSet();
+			set.Bind(source).For(s => s.ItemsSource).To(vm => vm.Contacts);
 			set.Apply();
 		}
 	}

@@ -218,6 +218,11 @@
     <Compile Include="Views\Contacts\SharePublicKeyView.designer.cs">
       <DependentUpon>SharePublicKeyView.cs</DependentUpon>
     </Compile>
+    <InterfaceDefinition Include="Views\Contacts\ContactCell.xib" />
+    <Compile Include="Views\Contacts\ContactCell.cs" />
+    <Compile Include="Views\Contacts\ContactCell.designer.cs">
+      <DependentUpon>ContactCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
