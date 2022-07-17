@@ -208,10 +208,10 @@
     <Compile Include="Views\Files\FileExplorerView.designer.cs">
         <DependentUpon>FileExplorerView.cs</DependentUpon>
     </Compile>
-    <InterfaceDefinition Include="Views\Certificates\CertificatesView.xib" />
-    <Compile Include="Views\Certificates\CertificatesView.cs" />
-    <Compile Include="Views\Certificates\CertificatesView.designer.cs">
-      <DependentUpon>CertificatesView.cs</DependentUpon>
+    <InterfaceDefinition Include="Views\Contacts\ContactsView.xib" />
+    <Compile Include="Views\Contacts\ContactsView.cs" />
+    <Compile Include="Views\Contacts\ContactsView.designer.cs">
+      <DependentUpon>ContactsView.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -255,7 +255,7 @@
     <Folder Include="Views\Settings\" />
     <Folder Include="Views\Files\" />
     <Folder Include="Media.xcassets\" />
-    <Folder Include="Views\Certificates\" />
+    <Folder Include="Views\Contacts\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

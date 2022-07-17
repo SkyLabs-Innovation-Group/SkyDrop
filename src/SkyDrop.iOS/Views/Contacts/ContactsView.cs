@@ -9,9 +9,9 @@ using UIKit;
 namespace SkyDrop.iOS.Views.Certificates
 {
 	[MvxChildPresentationAttribute]
-	public partial class CertificatesView : MvxViewController<CertificatesViewModel>
+	public partial class ContactsView : MvxViewController<ContactsViewModel>
 	{
-		public CertificatesView() : base ("CertificatesView", null)
+		public ContactsView() : base ("ContactsView", null)
 		{
 		}
 

@@ -118,7 +118,7 @@ namespace SkyDrop.Core.ViewModels
 
         private void NavigateToContacts()
         {
-            navigationService.Navigate<CertificatesViewModel>();
+            navigationService.Navigate<ContactsViewModel>();
         }
     }
 }

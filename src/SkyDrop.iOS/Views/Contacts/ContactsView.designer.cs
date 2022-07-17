@@ -11,8 +11,8 @@ using UIKit;
 
 namespace SkyDrop.iOS.Views.Certificates
 {
-	[Register ("CertificatesView")]
-	partial class CertificatesView
+	[Register ("ContactsView")]
+	partial class ContactsView
 	{
 		void ReleaseDesignerOutlets ()
 		{

@@ -9,7 +9,7 @@ using SkyDrop.Core.Services;
 
 namespace SkyDrop.Core.ViewModels
 {
-    public class CertificatesViewModel : BaseViewModel
+    public class ContactsViewModel : BaseViewModel
     {
         public List<Contact> Contacts { get; set; }
         public IMvxCommand AddContactCommand { get; set; }
@@ -24,7 +24,7 @@ namespace SkyDrop.Core.ViewModels
         private readonly IUploadTimerService uploadTimerService;
         private readonly IEncryptionService encryptionService;
 
-        public CertificatesViewModel(ISingletonService singletonService,
+        public ContactsViewModel(ISingletonService singletonService,
             IApiService apiService,
             IStorageService storageService,
             IBarcodeService barcodeService,
