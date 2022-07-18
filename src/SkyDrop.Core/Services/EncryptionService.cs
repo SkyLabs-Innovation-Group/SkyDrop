@@ -17,7 +17,7 @@ namespace SkyDrop.Core.Services
 {
     public class EncryptionService : IEncryptionService
     {
-        private IBlockCipher engine = new DesEngine(); //the cipher engine for encryption
+        private IBlockCipher engine = new ThreefishEngine(255); //the cipher engine for encryption
         private IAsymmetricCipherKeyPairGenerator keyGen = new X25519KeyPairGenerator(); //keypair generator for X25519 key agreement scheme
 
         private readonly IUserDialogs userDialogs;
@@ -63,6 +63,7 @@ namespace SkyDrop.Core.Services
             GenerateKeys();
 
             var sharedSecret = GetSharedSecret(myPrivateKey, opponentPublicKey);
+
             Console.WriteLine($"Shared secret: {BytesToAsciiString(sharedSecret)}");
 
             var encryptedMessage = Encrypt(sharedSecret, plainTextMessage);

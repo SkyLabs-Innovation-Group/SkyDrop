@@ -18,6 +18,7 @@
                 <outlet property="DownloadButton" destination="39U-MZ-Zba" id="Z7h-zu-dkt"/>
                 <outlet property="DownloadButtonActivityIndicator" destination="mMT-9F-v2d" id="Jy0-JX-cEc"/>
                 <outlet property="DownloadButtonIcon" destination="QSi-Va-Zxh" id="ubj-Pu-Tov"/>
+                <outlet property="EncryptButton" destination="KYr-5h-ah4" id="aUz-RT-QPz"/>
                 <outlet property="FilePreviewCollectionView" destination="jiB-ne-gQ7" id="OAM-Sk-N3G"/>
                 <outlet property="FileSizeLabel" destination="qif-P7-gfN" id="S6w-Pg-oEg"/>
                 <outlet property="FileTypeIcon" destination="2xc-82-PNR" id="dRv-Ag-oyT"/>
@@ -151,6 +152,30 @@
                         <constraint firstItem="EyF-1x-tNq" firstAttribute="leading" secondItem="xZc-Mi-WtT" secondAttribute="leading" id="rmz-Xc-5bB"/>
                         <constraint firstAttribute="trailing" secondItem="pjX-AC-hdv" secondAttribute="trailing" id="s8c-1u-E9X"/>
                     </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KYr-5h-ah4">
+                    <rect key="frame" x="170.5" y="564.5" width="73.5" height="64"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Encrypt" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Dm-l9-ohz">
+                            <rect key="frame" x="8" y="8" width="57.5" height="48"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.7910023384" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="5Dm-l9-ohz" secondAttribute="trailing" constant="8" id="715-uU-2H7"/>
+                        <constraint firstAttribute="bottom" secondItem="5Dm-l9-ohz" secondAttribute="bottom" constant="8" id="FSM-d3-G9a"/>
+                        <constraint firstItem="5Dm-l9-ohz" firstAttribute="top" secondItem="KYr-5h-ah4" secondAttribute="top" constant="8" id="RNS-7U-apz"/>
+                        <constraint firstAttribute="height" constant="64" id="apw-M2-22u"/>
+                        <constraint firstItem="5Dm-l9-ohz" firstAttribute="leading" secondItem="KYr-5h-ah4" secondAttribute="leading" constant="8" id="yGB-Vr-iT6"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="8"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                 </view>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="jiB-ne-gQ7" userLabel="File Preview Collection View">
                     <rect key="frame" x="0.0" y="734" width="414" height="128"/>
@@ -467,7 +492,9 @@
                 <constraint firstItem="RQr-fo-ynZ" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="hIj-Tk-o8x"/>
                 <constraint firstItem="d8B-sr-eBO" firstAttribute="top" secondItem="2" secondAttribute="topMargin" constant="24" id="iA6-Bf-wdK"/>
                 <constraint firstItem="jiB-ne-gQ7" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="jdU-8L-Orb"/>
+                <constraint firstItem="KYr-5h-ah4" firstAttribute="top" secondItem="xZc-Mi-WtT" secondAttribute="bottom" constant="32" id="nKh-e5-2lN"/>
                 <constraint firstItem="RQr-fo-ynZ" firstAttribute="top" secondItem="d8B-sr-eBO" secondAttribute="bottom" constant="16" id="vbA-Kl-kZG"/>
+                <constraint firstItem="KYr-5h-ah4" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="wyF-2h-TIz"/>
                 <constraint firstAttribute="trailing" secondItem="jiB-ne-gQ7" secondAttribute="trailing" id="zOI-GD-mkc"/>
             </constraints>
             <point key="canvasLocation" x="144.92753623188406" y="-44.196428571428569"/>

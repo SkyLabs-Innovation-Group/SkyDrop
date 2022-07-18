@@ -20,6 +20,8 @@ using SkyDrop.Core.Services;
 using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
 using ZXing.Common;
+using static SkyDrop.Core.ViewModels.Main.FilesViewModel;
+using Contact = SkyDrop.Core.DataModels.Contact;
 
 namespace SkyDrop.Core.ViewModels.Main
 {
@@ -124,6 +126,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
         private TaskCompletionSource<SkyFile> iosMultipleImageSelectTask;
+        private Contact encryptionContact;
 
         private Func<string, Task> _generateBarcodeAsyncFunc;
         public Func<string, Task> GenerateBarcodeAsyncFunc
@@ -886,6 +889,12 @@ namespace SkyDrop.Core.ViewModels.Main
             RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
             RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
             RaisePropertyChanged(() => SaveButtonText).Forget();
+        }
+
+        private async Task OpenContactsMenu()
+        {
+            var item = await navigationService.Navigate<ContactsViewModel, Contact>();
+            encryptionContact = item;
         }
     }
 }

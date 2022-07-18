@@ -37,6 +37,9 @@ namespace SkyDrop.iOS.Views.Drop
 		FFImageLoading.Cross.MvxCachedImageView DownloadButtonIcon { get; set; }
 
 		[Outlet]
+		UIKit.UIView EncryptButton { get; set; }
+
+		[Outlet]
 		UIKit.UICollectionView FilePreviewCollectionView { get; set; }
 
 		[Outlet]
@@ -110,6 +113,11 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (EncryptButton != null) {
+				EncryptButton.Dispose ();
+				EncryptButton = null;
+			}
+
 			if (BarcodeContainer != null) {
 				BarcodeContainer.Dispose ();
 				BarcodeContainer = null;
