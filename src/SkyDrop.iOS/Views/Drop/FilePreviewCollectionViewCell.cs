@@ -29,7 +29,7 @@ namespace SkyDrop.iOS.Views.Drop
                 var set = this.CreateBindingSet<FilePreviewCollectionViewCell, StagedFileDVM>();
                 set.Bind(FilenameLabel).To(stagedFile => stagedFile.SkyFile.Filename);
                 set.Bind(FileExtensionLabel).To(stagedFile => stagedFile.SkyFile.Filename).WithConversion(FileExtensionConverter.Name);
-                set.Bind(PreviewImage).For(SkyFileImageViewBinding.Name).To(stagedFile => stagedFile.SkyFile);
+                set.Bind(PreviewImage).For(LocalImagePreviewBinding.Name).To(stagedFile => stagedFile.SkyFile);
                 set.Bind(ContentView).For("Tap").To(stagedFile => stagedFile.TapCommand);
                 set.Bind(AddMoreFilesIcon).For("Visible").To(stagedFile => stagedFile.IsMoreFilesButton);
                 set.Apply();

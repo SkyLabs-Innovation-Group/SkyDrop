@@ -18,6 +18,15 @@ using SkyDrop.Droid.Helper;
 using ZXing.Mobile;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 using static SkyDrop.Core.Utility.Util;
+using MvvmCross;
+using SkyDrop.Core.Services;
+using System.IO;
+using FFImageLoading.Cross;
+using Android;
+using AndroidX.Core.Content;
+using AndroidX.Core.App;
+using Java.IO;
+using Plugin.CurrentActivity;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -45,6 +54,8 @@ namespace SkyDrop.Droid.Views.Main
         {
             base.OnCreate(bundle);
 
+            CrossCurrentActivity.Current.Init(this, bundle);
+
             var toolbar = FindViewById<AndroidX.AppCompat.Widget.Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
             SupportActionBar.SetDisplayShowTitleEnabled(false);
@@ -53,15 +64,19 @@ namespace SkyDrop.Droid.Views.Main
 
             Log.Trace("DropView OnCreate()");
 
-            ViewModel.GenerateBarcodeAsyncFunc = ShowBarcode;
+            ViewModel.GenerateBarcodeAsyncFunc = t => ShowBarcode(t);
             ViewModel.ResetUIStateCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
-            ViewModel.ResetBarcodeCommand = new MvxCommand(ResetBarcode);
             ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
+            ViewModel.SlideReceiveButtonToCenterCommand = new MvxCommand(AnimateSlideReceiveButton);
             ViewModel.CheckUserIsSwipingCommand = new MvxCommand(CheckUserIsSwiping);
             ViewModel.UpdateNavDotsCommand = new MvxCommand(() => UpdateNavDots());
             ViewModel.UploadStartedNotificationCommand = new MvxCommand(() => AndroidUtil.ShowUploadStartedNotification(this, $"{ViewModel.FileToUpload.Filename} {ViewModel.FileSize}"));
             ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>(result => AndroidUtil.ShowUploadFinishedNotification(this, result));
             ViewModel.UpdateNotificationProgressCommand = new MvxCommand<double>(progress => AndroidUtil.UpdateNotificationProgress(this, progress));
+
+            var fileSystemService = Mvx.IoCProvider.Resolve<IFileSystemService>();
+            fileSystemService.DownloadsFolderPath = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Android.OS.Environment.DirectoryDownloads);
+            fileSystemService.CacheFolderPath = System.IO.Path.GetTempPath();
 
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
             receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);
@@ -109,22 +124,14 @@ namespace SkyDrop.Droid.Views.Main
         /// <summary>
         /// Generate and display QR code
         /// </summary>
-        private async Task ShowBarcode()
+        private async Task ShowBarcode(string url)
         {
             SetBarcodeCodeUiState(isSlow: true);
 
-            var matrix = ViewModel.GenerateBarcode(ViewModel.SkyFileFullUrl, barcodeImageView.Width, barcodeImageView.Height);
+            var matrix = ViewModel.GenerateBarcode(url, barcodeImageView.Width, barcodeImageView.Height);
             var bitmap = await AndroidUtil.BitMatrixToBitmap(matrix);
             barcodeImageView.SetImageBitmap(bitmap);
-            ViewModel.BarcodeIsLoaded = true;
-        }
-
-        /// <summary>
-        /// Display grey placeholder QR code
-        /// </summary>
-        private void ResetBarcode()
-        {
-            barcodeImageView.SetImageResource(Resource.Drawable.barcode_grey);
+            ViewModel.SwipeNavigationEnabled = true;
         }
 
         /// <summary>
@@ -173,6 +180,28 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
+        /// Slide receive button to center
+        /// </summary>
+        private void AnimateSlideReceiveButton()
+        {
+            var screenCenterX = Resources.DisplayMetrics.WidthPixels / 2;
+            var receiveButtonLocation = new[] { 0, 0 };
+            receiveButton.GetLocationOnScreen(receiveButtonLocation);
+            var receiveButtonCenterX = receiveButtonLocation[0] + receiveButton.Width / 2;
+
+            var duration = 1000;
+            var translationX = screenCenterX - receiveButtonCenterX;
+            receiveButton.Animate()
+                .TranslationX(translationX)
+                .SetDuration(duration)
+                .Start();
+            sendButton.Animate()
+                .Alpha(0)
+                .SetDuration(duration)
+                .Start();
+        }
+
+        /// <summary>
         /// Slide in the QR code from the left or right
         /// </summary>
         private void AnimateSlideBarcodeIn(bool fromLeft, bool isSlow)
@@ -206,8 +235,10 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.FileSize = "";
 
             sendReceiveButtonsContainer.TranslationX = -screenWidth;
-            receiveButton.Alpha = 1;
+            sendButton.Alpha = 1;
             sendButton.TranslationX = 0;
+            receiveButton.Alpha = 1;
+            receiveButton.TranslationX = 0;
 
             var duration = 250;
             sendReceiveButtonsContainer.Animate()
@@ -248,10 +279,8 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         private void AnimateSlideSendReceiveButtonsOut(bool toLeft)
         {
-            if (!ViewModel.BarcodeIsLoaded)
-            {
+            if (!ViewModel.SwipeNavigationEnabled)
                 AnimateSlideBarcodeToCenter();
-            }
 
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
             var duration = 250;
@@ -278,7 +307,7 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         public override bool DispatchTouchEvent(MotionEvent e)
         {
-            if (!ViewModel.FirstFileUploaded || //don't allow swipe before first file is uploaded
+            if (!ViewModel.SwipeNavigationEnabled || //don't allow swipe before first file is uploaded
                 ViewModel.IsUploading || //don't allow swipe while file is uploading
                 ViewModel.DropViewUIState == DropViewState.ConfirmFilesState) //don't allow swipe on confirm file UI state
                 return base.DispatchTouchEvent(e);

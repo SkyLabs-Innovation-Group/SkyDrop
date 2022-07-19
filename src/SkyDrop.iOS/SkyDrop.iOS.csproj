@@ -117,7 +117,7 @@
     <BundleResource Include="Resources\launch_image%403x.png" />
     <Compile Include="Bindings\ProgressFillHeightBinding.cs" />
     <Compile Include="Common\TouchInterceptor.cs" />
-    <Compile Include="Bindings\SkyFileImageViewBinding.cs" />
+    <Compile Include="Bindings\LocalImagePreviewBinding.cs" />
     <Compile Include="Common\iOSUtil.cs" />
     <Compile Include="Views\Settings\SettingsView.cs" />
     <Compile Include="Views\Settings\SettingsView.designer.cs">
@@ -189,15 +189,31 @@
     <ImageAsset Include="Media.xcassets\ic_file_video.imageset\file-video.pdf" />
     <ImageAsset Include="Media.xcassets\ic_file_image.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_file_image.imageset\file-image.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_zip.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_zip.imageset\zip-box.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_qr.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_qr.imageset\qrcode.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_error.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_error.imageset\alert-circle.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_image.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_image.imageset\image.pdf" />
     <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
+    <Compile Include="Common\ImageSelectionHelper.cs" />
     <Compile Include="Bindings\LongPressBinding.cs" />
     <Compile Include="Bindings\FileCategoryIconBinding.cs" />
+<<<<<<< HEAD
     <InterfaceDefinition Include="Views\PortalPreferences\PortalPreferencesView.xib" />
     <Compile Include="Views\PortalPreferences\PortalPreferencesView.cs" />
     <Compile Include="Views\PortalPreferences\PortalPreferencesView.designer.cs">
       <DependentUpon>PortalPreferencesView.cs</DependentUpon>
+=======
+    <InterfaceDefinition Include="Views\Files\FileExplorerView.xib" />
+    <Compile Include="Views\Files\FileExplorerView.cs" />
+    <Compile Include="Views\Files\FileExplorerView.designer.cs">
+        <DependentUpon>FileExplorerView.cs</DependentUpon>
+>>>>>>> main
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -227,6 +243,9 @@
     </PackageReference>
     <PackageReference Include="Serilog.Sinks.Xamarin">
       <Version>0.2.0.64</Version>
+    </PackageReference>
+    <PackageReference Include="GMImagePicker.Xamarin">
+      <Version>2.5.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

@@ -9,12 +9,59 @@
     android:background="@color/darkGrey">
     <include
         android:id="@+id/layout_toolbar"
+<<<<<<< HEAD
         layout="@layout/toolbar_settings" />
     <mvvmcross.droid.support.v7.recyclerview.MvxRecyclerView
         android:id="@+id/FilesRecycler"
+=======
+        layout="@layout/toolbar_gallery" />
+    <FrameLayout
+>>>>>>> main
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:MvxItemTemplate="@layout/item_file_list"
-        app:MvxBind="ItemsSource SkyFiles"
-        />
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <skydrop.droid.views.files.FileExplorerView
+            android:id="@+id/FilesRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:MvxItemTemplate="@layout/item_file_list"
+            app:MvxBind="ItemsSource SkyFiles"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            app:MvxBind="Visibility Visibility(IsLoadingLabelVisible)">
+            <FrameLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp">
+                <ProgressBar
+                    android:id="@+id/ProgressBar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:progressTint="#eee"
+                    app:MvxBind="Visibility InvertedVisibility(IsError)"/>
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_error"
+                    app:MvxBind="Visibility Visibility(IsError)"/>
+            </FrameLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_horizontal"
+                android:textSize="17dp"
+                android:textStyle="bold"
+                android:textColor="#eee"
+                android:text="Doing something..."
+                app:MvxBind="Text LoadingLabelText"
+                />
+        </LinearLayout>
+    </FrameLayout>
+    
 </LinearLayout>
