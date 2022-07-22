@@ -25,12 +25,15 @@ namespace SkyDrop.Core.Services
 
         private readonly IUserDialogs userDialogs;
         private readonly IStorageService storageService;
+        private readonly IFileSystemService fileSystemService;
 
         public EncryptionService(IUserDialogs userDialogs,
-                                 IStorageService storageService)
+                                 IStorageService storageService,
+                                 IFileSystemService fileSystemService)
         {
             this.userDialogs = userDialogs;
             this.storageService = storageService;
+            this.fileSystemService = fileSystemService;
 
             GetKeys();
         }
@@ -54,10 +57,31 @@ namespace SkyDrop.Core.Services
                 var encryptedBytes = Encrypt(sharedSecret, fileBytes);
 
                 //save the file
-                var encryptedFilePath = Path.Combine(Path.GetTempPath(), Path.GetFileName(filePath)); //TODO: replace with temp cache path
+                var encryptedFilePath = Path.Combine(fileSystemService.CacheFolderPath, $"{Path.GetFileName(filePath)}.skydrop");
                 File.WriteAllBytes(encryptedFilePath, encryptedBytes);
 
                 return encryptedFilePath;
+            });
+        }
+
+        public Task<string> DecodeFileFrom(string filePath, AsymmetricKeyParameter senderPublicKey)
+        {
+            return Task.Run(() =>
+            {
+                //get shared secret
+                var sharedSecret = GetSharedSecret(myPrivateKey, senderPublicKey);
+
+                //load the file
+                var fileBytes = File.ReadAllBytes(filePath);
+
+                //decrypt the file
+                var decryptedBytes = Decrypt(sharedSecret, fileBytes);
+
+                //save the file
+                var decryptedFilePath = Path.Combine(fileSystemService.CacheFolderPath, $"{Path.GetFileName(filePath)}.skydrop");
+                File.WriteAllBytes(decryptedFilePath, decryptedBytes);
+
+                return decryptedFilePath;
             });
         }
 
@@ -184,9 +208,11 @@ namespace SkyDrop.Core.Services
     {
         string GetMyPublicKey();
 
-        //void RunExchange();
-
         Task AddPublicKey(string publicKeyEncoded);
+
+        Task<string> EncodeFileFor(string filePath, AsymmetricKeyParameter recipientPublicKey);
+
+        Task<string> DecodeFileFrom(string filePath, AsymmetricKeyParameter senderPublicKey);
     }
 }
 

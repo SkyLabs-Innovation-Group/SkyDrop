@@ -277,6 +277,14 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (UploadNotificationsEnabled)
                     UploadStartedNotificationCommand?.Execute();
 
+                //TODO: show some kind of spinner for "Encrypting"
+                if (encryptionContact != null)
+                {
+                    var encryptedPath = await encryptionService.EncodeFileFor(FileToUpload.FullFilePath, encryptionContact.PublicKey);
+                    FileToUpload.FullFilePath = encryptedPath;
+                    FileToUpload.Filename = Path.GetFileName(encryptedPath);
+                }
+
                 StartUploadTimer(FileToUpload.FileSizeBytes);
                 FocusedFile = await UploadFile();
                 StopUploadTimer();
