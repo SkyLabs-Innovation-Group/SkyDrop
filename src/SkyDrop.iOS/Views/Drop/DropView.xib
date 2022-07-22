@@ -19,6 +19,7 @@
                 <outlet property="DownloadButtonActivityIndicator" destination="mMT-9F-v2d" id="Jy0-JX-cEc"/>
                 <outlet property="DownloadButtonIcon" destination="QSi-Va-Zxh" id="ubj-Pu-Tov"/>
                 <outlet property="EncryptButton" destination="KYr-5h-ah4" id="aUz-RT-QPz"/>
+                <outlet property="EncryptionLabel" destination="5Dm-l9-ohz" id="Prw-Vi-yat"/>
                 <outlet property="FilePreviewCollectionView" destination="jiB-ne-gQ7" id="OAM-Sk-N3G"/>
                 <outlet property="FileSizeLabel" destination="qif-P7-gfN" id="S6w-Pg-oEg"/>
                 <outlet property="FileTypeIcon" destination="2xc-82-PNR" id="dRv-Ag-oyT"/>

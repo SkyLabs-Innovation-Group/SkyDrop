@@ -40,6 +40,9 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView EncryptButton { get; set; }
 
 		[Outlet]
+		UIKit.UILabel EncryptionLabel { get; set; }
+
+		[Outlet]
 		UIKit.UICollectionView FilePreviewCollectionView { get; set; }
 
 		[Outlet]
@@ -113,9 +116,9 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (EncryptButton != null) {
-				EncryptButton.Dispose ();
-				EncryptButton = null;
+			if (EncryptionLabel != null) {
+				EncryptionLabel.Dispose ();
+				EncryptionLabel = null;
 			}
 
 			if (BarcodeContainer != null) {
@@ -156,6 +159,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (DownloadButtonIcon != null) {
 				DownloadButtonIcon.Dispose ();
 				DownloadButtonIcon = null;
+			}
+
+			if (EncryptButton != null) {
+				EncryptButton.Dispose ();
+				EncryptButton = null;
 			}
 
 			if (FilePreviewCollectionView != null) {

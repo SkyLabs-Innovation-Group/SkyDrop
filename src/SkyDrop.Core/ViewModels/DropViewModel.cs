@@ -88,6 +88,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsShowPreviewButtonVisible => CanDisplayPreview && !IsPreviewImageVisible;
         public bool IsFocusedFileAnArchive => FocusedFile.Filename.ExtensionMatches(".zip");
         public string SaveButtonText => IsFocusedFileAnArchive ? "Unzip" : "Save";
+        public string EncryptionText => GetVisibilityText();
 
         public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile FocusedFile { get; set; } //most recently sent or received file
@@ -895,8 +896,21 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task OpenContactsMenu()
         {
-            var item = await navigationService.Navigate<ContactsViewModel, Contact>();
-            encryptionContact = item;
+            var item = await navigationService.Navigate<ContactsViewModel, IContactItem>();
+            if (item == null)
+                return; //user tapped back button
+
+            //set encryptionContact to null if item is AnyoneWithTheLinkItem
+            encryptionContact = item is ContactDVM contactDvm ? contactDvm.Contact : null;
+            RaisePropertyChanged(() => EncryptionText).Forget();
+        }
+
+        public string GetVisibilityText()
+        {
+            if (encryptionContact == null)
+                return "Anyone with the link";
+
+            return encryptionContact.Name;
         }
     }
 }

@@ -35,6 +35,7 @@ namespace SkyDrop.iOS.Views.Certificates
 			var source = new MvxSimpleTableViewSource(ContactsTableView, ContactCell.Key);
 			ContactsTableView.Source = source;
 			ContactsTableView.AllowsSelection = false;
+			ContactsTableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
 			var set = CreateBindingSet();
 			set.Bind(source).For(s => s.ItemsSource).To(vm => vm.Contacts);
