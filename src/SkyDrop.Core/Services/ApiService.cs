@@ -20,22 +20,25 @@ namespace SkyDrop.Core.Services
     {
         public ILog Log { get; }
 
-        private IFileSystemService fileSystemService;
-        private ISkyDropHttpClientFactory httpClientFactory;
-        private ISingletonService singletonService;
-        private IUserDialogs userDialogs;
+        private readonly IFileSystemService fileSystemService;
+        private readonly ISkyDropHttpClientFactory httpClientFactory;
+        private readonly ISingletonService singletonService;
+        private readonly IUserDialogs userDialogs;
+        private readonly IEncryptionService encryptionService;
 
         public ApiService(ILog log,
             ISkyDropHttpClientFactory skyDropHttpClientFactory,
             ISingletonService singletonService,
             IUserDialogs userDialogs,
-            IFileSystemService fileSystemService)
+            IFileSystemService fileSystemService,
+            IEncryptionService encryptionService)
         {
             Log = log;
             httpClientFactory = skyDropHttpClientFactory;
             this.singletonService = singletonService;
             this.userDialogs = userDialogs;
             this.fileSystemService = fileSystemService;
+            this.encryptionService = encryptionService;
         }
         
         public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationTokenSource)
@@ -97,8 +100,19 @@ namespace SkyDrop.Core.Services
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var response = await httpClient.GetAsync(url);
             var fileName = GetFilenameFromResponse(response);
+            
+            if (fileName.ExtensionMatches(".skydrop"))
+            {
+                //save encrypted file
+                var encryptedFilePath = await fileSystemService.SaveFile(await response.Content.ReadAsStreamAsync(), fileName, false);
 
-            //save
+                //decrypt
+                var decryptedFilePath = await encryptionService.DecodeFileFrom(encryptedFilePath, null);//TODO: add sender public key here
+                userDialogs.Toast($"Saved {Path.GetFileName(decryptedFilePath)}");
+                return;
+            }
+
+            //save directly
             using var responseStream = await response.Content.ReadAsStreamAsync();
             var newFileName = await fileSystemService.SaveFile(responseStream, fileName, true);
 

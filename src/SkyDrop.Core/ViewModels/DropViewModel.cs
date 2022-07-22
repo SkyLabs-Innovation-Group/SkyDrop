@@ -283,6 +283,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     var encryptedPath = await encryptionService.EncodeFileFor(FileToUpload.FullFilePath, encryptionContact.PublicKey);
                     FileToUpload.FullFilePath = encryptedPath;
                     FileToUpload.Filename = Path.GetFileName(encryptedPath);
+                    FileToUpload.FileSizeBytes = new FileInfo(encryptedPath).Length;
                 }
 
                 StartUploadTimer(FileToUpload.FileSizeBytes);

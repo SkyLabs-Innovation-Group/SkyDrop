@@ -126,6 +126,8 @@ namespace SkyDrop.iOS.Views.Drop
 
                 FileTypeIcon.TintColor = Colors.LightGrey.ToNative();
 
+                EncryptButton.BackgroundColor = Colors.Primary.ToNative();
+
                 BindViews();
             }
             catch(Exception e)

@@ -43,13 +43,6 @@ namespace SkyDrop.iOS.Views.Certificates
 			set.Bind(this).For(s => s.Title).To(vm => vm.Title);
 			set.Apply();
 		}
-
-        public override void ViewDidDisappear(bool animated)
-        {
-            base.ViewDidDisappear(animated);
-
-			//ViewModel.Close();
-        }
     }
 }
 

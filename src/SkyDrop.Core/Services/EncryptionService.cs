@@ -68,6 +68,9 @@ namespace SkyDrop.Core.Services
         {
             return Task.Run(() =>
             {
+                if (!filePath.EndsWith(".skydrop"))
+                    throw new Exception("File must have .skydrop extension");
+
                 //get shared secret
                 var sharedSecret = GetSharedSecret(myPrivateKey, senderPublicKey);
 
@@ -77,8 +80,11 @@ namespace SkyDrop.Core.Services
                 //decrypt the file
                 var decryptedBytes = Decrypt(sharedSecret, fileBytes);
 
+                //remove ".skydrop" from the end of the file
+                var fileName = Path.GetFileName(filePath).Substring(0, -8);
+
                 //save the file
-                var decryptedFilePath = Path.Combine(fileSystemService.CacheFolderPath, $"{Path.GetFileName(filePath)}.skydrop");
+                var decryptedFilePath = Path.Combine(fileSystemService.DownloadsFolderPath, fileName);
                 File.WriteAllBytes(decryptedFilePath, decryptedBytes);
 
                 return decryptedFilePath;

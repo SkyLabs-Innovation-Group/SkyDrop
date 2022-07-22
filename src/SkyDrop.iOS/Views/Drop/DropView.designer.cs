@@ -116,11 +116,6 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (EncryptionLabel != null) {
-				EncryptionLabel.Dispose ();
-				EncryptionLabel = null;
-			}
-
 			if (BarcodeContainer != null) {
 				BarcodeContainer.Dispose ();
 				BarcodeContainer = null;
@@ -164,6 +159,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (EncryptButton != null) {
 				EncryptButton.Dispose ();
 				EncryptButton = null;
+			}
+
+			if (EncryptionLabel != null) {
+				EncryptionLabel.Dispose ();
+				EncryptionLabel = null;
 			}
 
 			if (FilePreviewCollectionView != null) {
