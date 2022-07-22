@@ -1,5 +1,6 @@
 ﻿using System;
 using Acr.UserDialogs;
+using CoreGraphics;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
@@ -10,10 +11,10 @@ using UIKit;
 
 namespace SkyDrop.iOS.Views.Certificates
 {
-	[MvxChildPresentationAttribute]
-	public partial class ContactsView : MvxViewController<ContactsViewModel>
+	[MvxChildPresentation]
+	public partial class ContactsView : BaseViewController<ContactsViewModel>
 	{
-		public ContactsView() : base ("ContactsView", null)
+		public ContactsView() : base("ContactsView", null)
 		{
 		}
 
@@ -21,9 +22,9 @@ namespace SkyDrop.iOS.Views.Certificates
 		{
 			base.ViewDidLoad();
 
-			//setup nav bar
-			NavigationController.NavigationBar.TintColor = UIColor.White;
-			View.BackgroundColor = Colors.DarkGrey.ToNative();
+			PreferredContentSize = new CGSize(300, 300);
+
+			ContactsTableView.BackgroundColor = Colors.DarkGrey.ToNative();
 
 			var addButton = new UIBarButtonItem(UIBarButtonSystemItem.Add);
 			addButton.Clicked += (s, e) => ViewModel.AddContactCommand.Execute();
@@ -33,12 +34,22 @@ namespace SkyDrop.iOS.Views.Certificates
 
 			var source = new MvxSimpleTableViewSource(ContactsTableView, ContactCell.Key);
 			ContactsTableView.Source = source;
+			ContactsTableView.AllowsSelection = false;
 
 			var set = CreateBindingSet();
 			set.Bind(source).For(s => s.ItemsSource).To(vm => vm.Contacts);
+			set.Bind(ErrorView).For("Visible").To(vm => vm.IsNoContacts);
+			set.Bind(this).For(s => s.Title).To(vm => vm.Title);
 			set.Apply();
 		}
-	}
+
+        public override void ViewDidDisappear(bool animated)
+        {
+            base.ViewDidDisappear(animated);
+
+			//ViewModel.Close();
+        }
+    }
 }
 
 

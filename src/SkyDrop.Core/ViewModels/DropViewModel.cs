@@ -58,6 +58,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand MenuCommand { get; set; }
         public IMvxCommand ShowBarcodeCommand { get; set; }
         public IMvxCommand ShowPreviewImageCommand { get; set; }
+        public IMvxCommand OpenContactsMenuCommand { get; set; }
 
         public bool IsUploading { get; set; }
         public bool IsStagingFiles { get; set; }
@@ -174,6 +175,7 @@ namespace SkyDrop.Core.ViewModels.Main
             DownloadFileCommand = new MvxAsyncCommand(SaveOrUnzipFocusedFile);
             ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
             ShowPreviewImageCommand = new MvxCommand(() => IsPreviewImageVisible = true);
+            OpenContactsMenuCommand = new MvxAsyncCommand(OpenContactsMenu);
         }
 
         public override async Task Initialize()

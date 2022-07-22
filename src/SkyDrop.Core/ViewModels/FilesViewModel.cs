@@ -76,8 +76,6 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             await base.Initialize();
             await LoadSkyFiles();
-
-            encryptionService.RunExchange();
         }
 
         private async Task LoadSkyFiles()

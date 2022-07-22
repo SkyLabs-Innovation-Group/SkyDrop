@@ -11,7 +11,7 @@ using UIKit;
 namespace SkyDrop.iOS.Views.Contacts
 {
 	[MvxModalPresentation(WrapInNavigationController = true, ModalPresentationStyle = UIModalPresentationStyle.Popover)]
-	public partial class SharePublicKeyView : MvxViewController<SharePublicKeyViewModel>
+	public partial class SharePublicKeyView : BaseViewController<SharePublicKeyViewModel>
 	{
 		public SharePublicKeyView() : base("SharePublicKeyView", null)
 		{
@@ -24,6 +24,10 @@ namespace SkyDrop.iOS.Views.Contacts
             await ShowBarcode();
 
             View.BackgroundColor = Colors.DarkGrey.ToNative();
+
+            var set = CreateBindingSet();
+            set.Bind(this).For(t => t.Title).To(vm => vm.Title);
+            set.Apply();
 		}
 
         /// <summary>
@@ -42,6 +46,13 @@ namespace SkyDrop.iOS.Views.Contacts
                 ViewModel.Log.Error("Error in ShowBarcode(): ");
                 ViewModel.Log.Exception(ex);
             }
+        }
+
+        public override void ViewDidDisappear(bool animated)
+        {
+            base.ViewDidDisappear(animated);
+
+            ViewModel.Close();
         }
     }
 }

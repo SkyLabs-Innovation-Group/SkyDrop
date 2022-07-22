@@ -4,6 +4,7 @@ using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using SkyDrop.Core.DataModels;
+using SkyDrop.Core.DataViewModels;
 using UIKit;
 
 namespace SkyDrop.iOS.Views.Contacts
@@ -22,8 +23,8 @@ namespace SkyDrop.iOS.Views.Contacts
 		{
 			this.DelayBind(() =>
 			{
-				var set = this.CreateBindingSet<ContactCell, Contact>();
-				set.Bind(NameLabel).To(vm => vm.Name);
+				var set = this.CreateBindingSet<ContactCell, ContactDVM>();
+				set.Bind(NameLabel).To(vm => vm.Contact.Name);
 				set.Apply();
 			});
 		}

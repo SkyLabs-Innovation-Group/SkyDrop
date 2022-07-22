@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using SkyDrop.Core.DataModels;
+using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Services;
 using static SkyDrop.Core.ViewModels.ContactsViewModel;
 
@@ -12,14 +14,12 @@ namespace SkyDrop.Core.ViewModels
 {
     public class ContactsViewModel : BaseViewModel<NavParam, Contact>
     {
-        public class NavParam
-        {
-        }
+        public class NavParam { }
 
-        public List<Contact> Contacts { get; set; }
+        public List<ContactDVM> Contacts { get; set; }
         public IMvxCommand AddContactCommand { get; set; }
         public IMvxCommand SharePublicKeyCommand { get; set; }
-        public IMvxCommand ItemSelectedCommand { get; set; }
+        public bool IsNoContacts { get; set; }
 
         private readonly IApiService apiService;
         private readonly IStorageService storageService;
@@ -44,7 +44,7 @@ namespace SkyDrop.Core.ViewModels
             ILog log) : base(singletonService)
         {
             Log = log;
-            Title = "SkyDrop";
+            Title = "Contacts";
 
             this.apiService = apiService;
             this.storageService = storageService;
@@ -58,7 +58,6 @@ namespace SkyDrop.Core.ViewModels
 
             AddContactCommand = new MvxAsyncCommand(AddContact);
             SharePublicKeyCommand = new MvxCommand(SharePublicKey);
-            ItemSelectedCommand = new MvxCommand<Contact>(ItemSelected);
         }
 
         public override async Task Initialize()
@@ -70,7 +69,9 @@ namespace SkyDrop.Core.ViewModels
 
         private void LoadCertificates()
         {
-            Contacts = storageService.LoadContacts();
+            Contacts = storageService.LoadContacts().Select(GetContactDVM).ToList();
+            if (Contacts == null || Contacts.Count == 0)
+                IsNoContacts = true;
         }
 
         private async Task AddContact()
@@ -95,6 +96,11 @@ namespace SkyDrop.Core.ViewModels
             }
         }
 
+        public ContactDVM GetContactDVM(Contact contact)
+        {
+            return new ContactDVM { Contact = contact, TapCommand = new MvxCommand(() => ItemSelected(contact)) };
+        }
+
         private void SharePublicKey()
         {
             navigationService.Navigate<SharePublicKeyViewModel>();
@@ -108,6 +114,11 @@ namespace SkyDrop.Core.ViewModels
         public override void Prepare(NavParam parameter)
         {
 
+        }
+
+        public void Close()
+        {
+            ItemSelected(null);
         }
     }
 }

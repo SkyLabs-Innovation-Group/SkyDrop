@@ -33,7 +33,7 @@ using SkyDrop.Core.Converters;
 namespace SkyDrop.iOS.Views.Drop
 {
     [MvxRootPresentation(WrapInNavigationController = true)]
-    public partial class DropView : MvxViewController<DropViewModel>
+    public partial class DropView : BaseViewController<DropViewModel>
     {
         private const int swipeMarginX = 20;
         private bool isPressed;
@@ -73,14 +73,6 @@ namespace SkyDrop.iOS.Views.Drop
                 SetupGestureListener();
                 SetupNavDots();
 
-                //setup nav bar
-                NavigationController.NavigationBar.BarTintColor = Colors.GradientDark.ToNative();
-                NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes()
-                {
-                    ForegroundColor = Colors.White.ToNative()
-                };
-
-                View.BackgroundColor = Colors.DarkGrey.ToNative();
                 BarcodeContainer.BackgroundColor = Colors.MidGrey.ToNative(); //so that preview image fades in from dark color
 
                 var menuButton = new UIBarButtonItem()
@@ -203,6 +195,8 @@ namespace SkyDrop.iOS.Views.Drop
 
             //icon behind preview image, to show while preview is loading
             set.Bind(FileTypeIcon).For(FileCategoryIconBinding.Name).To(vm => vm.FocusedFile.Filename);
+
+            set.Bind(EncryptButton).For("Tap").To(vm => vm.OpenContactsMenuCommand);
             set.Apply();
         }
 

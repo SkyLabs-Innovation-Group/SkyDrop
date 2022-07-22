@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
@@ -17,8 +18,10 @@ namespace SkyDrop.Core.Services
 {
     public class EncryptionService : IEncryptionService
     {
-        private IBlockCipher engine = new ThreefishEngine(255); //the cipher engine for encryption
+        private IBlockCipher engine = new DesEngine(); //the cipher engine for encryption
         private IAsymmetricCipherKeyPairGenerator keyGen = new X25519KeyPairGenerator(); //keypair generator for X25519 key agreement scheme
+        private X25519PrivateKeyParameters myPrivateKey;
+        private X25519PublicKeyParameters myPublicKey;
 
         private readonly IUserDialogs userDialogs;
         private readonly IStorageService storageService;
@@ -28,6 +31,8 @@ namespace SkyDrop.Core.Services
         {
             this.userDialogs = userDialogs;
             this.storageService = storageService;
+
+            GetKeys();
         }
 
         public string GetMyPublicKey()
@@ -56,35 +61,18 @@ namespace SkyDrop.Core.Services
             });
         }
 
-        public void RunExchange()
-        {
-            var plainTextMessage = AsciiStringToBytes("Hello Sir,");
-
-            GenerateKeys();
-
-            var sharedSecret = GetSharedSecret(myPrivateKey, opponentPublicKey);
-
-            Console.WriteLine($"Shared secret: {BytesToAsciiString(sharedSecret)}");
-
-            var encryptedMessage = Encrypt(sharedSecret, plainTextMessage);
-            Console.WriteLine($"Encrypted message: {BytesToAsciiString(encryptedMessage)}");
-
-            var decryptedMessage = Decrypt(sharedSecret, encryptedMessage);
-            Console.WriteLine($"Decrypted message: {BytesToAsciiString(decryptedMessage)}");
-
-            var opponentSharedSecret = GetSharedSecret(opponentPrivateKey, myPublicKey);
-            Console.WriteLine($"Opponent shared secret: {BytesToAsciiString(opponentSharedSecret)}");
-
-            var opponentDecryptedMessage = Decrypt(opponentSharedSecret, encryptedMessage);
-            Console.WriteLine($"Opponent decrypted message: {BytesToAsciiString(opponentDecryptedMessage)}");
-        }
-
         public async Task AddPublicKey(string publicKeyEncoded)
         {
             var publicKey = DecodePublicKey(publicKeyEncoded);
             if (publicKey == null)
             {
                 userDialogs.Alert("Invalid key");
+                return;
+            }
+
+            if (storageService.ContactExists(publicKeyEncoded))
+            {
+                userDialogs.Alert("Contact already exists");
                 return;
             }
 
@@ -123,11 +111,6 @@ namespace SkyDrop.Core.Services
             return System.Text.Encoding.ASCII.GetString(bytes);
         }
 
-        private X25519PrivateKeyParameters myPrivateKey;// = new X25519PrivateKeyParameters(Hex.Decode("a546e36bf0527c9d3b16154b82465edd62144c0ac1fc5a18506a2244ba449ac4"), 0);
-        private X25519PublicKeyParameters myPublicKey;
-        private X25519PrivateKeyParameters opponentPrivateKey;
-        private X25519PublicKeyParameters opponentPublicKey;// = new X25519PublicKeyParameters(Hex.Decode("e6db6867583030db3594c1a424b15f7c726624ec26b3353b10a903a6d0ab1c4c"), 0);
-
         private byte[] GetSharedSecret(AsymmetricKeyParameter myPrivateKey, AsymmetricKeyParameter opponentPublicKey)
         {
             var keyAgreement = new X25519Agreement();
@@ -135,7 +118,7 @@ namespace SkyDrop.Core.Services
             byte[] sharedSecret = new byte[keyAgreement.AgreementSize];
             keyAgreement.CalculateAgreement(opponentPublicKey, sharedSecret, 0);
 
-            Console.WriteLine(Hex.ToHexString(sharedSecret)); // c3da55379de9c6908e94ea4df28d084f32eccf03491c71f754b4075577a28552
+            Console.WriteLine(Hex.ToHexString(sharedSecret));
 
             return sharedSecret;
         }
@@ -147,10 +130,19 @@ namespace SkyDrop.Core.Services
             return (pair.Private as X25519PrivateKeyParameters, pair.Public as X25519PublicKeyParameters);
         }
 
-        private void GenerateKeys()
+        private void GetKeys()
         {
-            (myPrivateKey, myPublicKey) = GenerateKeyPair();
-            (opponentPrivateKey, opponentPublicKey) = GenerateKeyPair();
+            var keys = storageService.GetMyEncryptionKeys();
+            if (keys == null)
+            {
+                (myPrivateKey, myPublicKey) = GenerateKeyPair();
+                storageService.SaveMyEncryptionKeys(myPrivateKey, myPublicKey);
+
+                return;
+            }
+
+            myPrivateKey = new X25519PrivateKeyParameters(Convert.FromBase64String(keys.PrivateKeyBase64));
+            myPublicKey = new X25519PublicKeyParameters(Convert.FromBase64String(keys.PublicKeyBase64));
         }
 
         private byte[] Encrypt(byte[] key, byte[] plainTextBytes)
@@ -192,7 +184,7 @@ namespace SkyDrop.Core.Services
     {
         string GetMyPublicKey();
 
-        void RunExchange();
+        //void RunExchange();
 
         Task AddPublicKey(string publicKeyEncoded);
     }

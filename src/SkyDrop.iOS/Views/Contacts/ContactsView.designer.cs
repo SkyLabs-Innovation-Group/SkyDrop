@@ -14,12 +14,20 @@ namespace SkyDrop.iOS.Views.Certificates
 	{
 		[Outlet]
 		UIKit.UITableView ContactsTableView { get; set; }
+
+		[Outlet]
+		UIKit.UIView ErrorView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
 			if (ContactsTableView != null) {
 				ContactsTableView.Dispose ();
 				ContactsTableView = null;
+			}
+
+			if (ErrorView != null) {
+				ErrorView.Dispose ();
+				ErrorView = null;
 			}
 		}
 	}

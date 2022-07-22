@@ -10,6 +10,7 @@ namespace SkyDrop.Core.ViewModels
     {
         private readonly IBarcodeService barcodeService;
         private readonly IEncryptionService encryptionService;
+        private readonly IMvxNavigationService navigationService;
 
         public SharePublicKeyViewModel(ISingletonService singletonService,
             IApiService apiService,
@@ -23,14 +24,22 @@ namespace SkyDrop.Core.ViewModels
             IEncryptionService encryptionService,
             ILog log) : base(singletonService)
         {
+            Title = "Public Key";
+
             this.barcodeService = barcodeService;
             this.encryptionService = encryptionService;
+            this.navigationService = navigationService;
         }
 
         public BitMatrix GenerateBarcode(int width, int height)
         {
             string publicKey = encryptionService.GetMyPublicKey();
             return barcodeService.GenerateBarcode(publicKey, width, height);
+        }
+
+        public void Close()
+        {
+            navigationService.Close(this);
         }
     }
 }

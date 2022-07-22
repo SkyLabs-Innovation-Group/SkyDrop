@@ -223,6 +223,7 @@
     <Compile Include="Views\Contacts\ContactCell.designer.cs">
       <DependentUpon>ContactCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\BaseViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
