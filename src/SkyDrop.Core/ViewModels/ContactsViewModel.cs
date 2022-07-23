@@ -93,6 +93,8 @@ namespace SkyDrop.Core.ViewModels
 
                 await encryptionService.AddPublicKey(barcodeData);
 
+                await Task.Delay(500);
+
                 LoadCertificates();
             }
             catch(Exception e)

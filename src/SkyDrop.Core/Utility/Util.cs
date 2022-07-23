@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -94,6 +95,26 @@ namespace SkyDrop.Core.Utility
         {
             var bytes = Convert.FromBase64String(key);
             return new X25519PublicKeyParameters(bytes);
+        }
+
+        public static byte[] Combine(params byte[][] arrays)
+        {
+            byte[] rv = new byte[arrays.Sum(a => a.Length)];
+            int offset = 0;
+            foreach (byte[] array in arrays)
+            {
+                System.Buffer.BlockCopy(array, 0, rv, offset, array.Length);
+                offset += array.Length;
+            }
+            return rv;
+        }
+
+        /// <summary>
+        /// Enables matching extensions with multiple periods correctly e.g. .jpeg.skydrop
+        /// </summary>
+        public static string GetFilenameExtension(string filename)
+        {
+            return Regex.Match(filename, @"\..*").Value;
         }
     }
 }

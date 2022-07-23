@@ -93,19 +93,19 @@ namespace SkyDrop.Core.Services
 
         public void AddContact(Contact contact)
         {
-            var realmObject = ContactToRealmObject(contact);
-            if (ContactExists(realmObject.PublicKeyBase64))
+            if (ContactExists(contact.Id))
                 throw new Exception("Contact already exists");
 
             realm.Write(() =>
             {
+                var realmObject = ContactToRealmObject(contact);
                 realm.Add(realmObject);
             });
         }
 
-        public bool ContactExists(string publicKeyBase64)
+        public bool ContactExists(Guid id)
         {
-            return realm.Find<ContactRealmObject>(publicKeyBase64) != null;
+            return realm.Find<ContactRealmObject>(id.ToString()) != null;
         }
 
         public EncryptionKeyPairRealmObject GetMyEncryptionKeys()
@@ -113,7 +113,7 @@ namespace SkyDrop.Core.Services
             return realm.All<EncryptionKeyPairRealmObject>().FirstOrDefault();
         }
 
-        public void SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey)
+        public void SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id)
         {
             var privateBytes = privateKey.GetEncoded();
             var privateKeyString = Convert.ToBase64String(privateBytes);
@@ -124,7 +124,8 @@ namespace SkyDrop.Core.Services
             var keys = new EncryptionKeyPairRealmObject()
             {
                 PrivateKeyBase64 = privateKeyString,
-                PublicKeyBase64 = publicKeyString
+                PublicKeyBase64 = publicKeyString,
+                Id = id.ToString()
             };
 
             realm.Write(() =>
@@ -185,12 +186,12 @@ namespace SkyDrop.Core.Services
 
         private ContactRealmObject ContactToRealmObject(Contact contact)
         {
-            return new ContactRealmObject { Name = contact.Name, PublicKeyBase64 = Util.PublicKeyToBase64String(contact.PublicKey) };
+            return new ContactRealmObject { Id = contact.Id.ToString(), Name = contact.Name, PublicKeyBase64 = Util.PublicKeyToBase64String(contact.PublicKey) };
         }
 
         private List<Contact> ContactsFromRealmObjects(params ContactRealmObject[] contactRealmObjects)
         {
-            return contactRealmObjects.Select(c => new Contact { Name = c.Name, PublicKey = Util.Base64StringToPublicKey(c.PublicKeyBase64) }).ToList();
+            return contactRealmObjects.Select(c => new Contact { Id = new Guid(c.Id), Name = c.Name, PublicKey = Util.Base64StringToPublicKey(c.PublicKeyBase64) }).ToList();
         }
     }
 
@@ -212,9 +213,9 @@ namespace SkyDrop.Core.Services
 
         void AddContact(Contact contact);
 
-        bool ContactExists(string publicKeyBase64);
+        bool ContactExists(Guid publicKeyBase64);
 
-        void SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey);
+        void SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id);
 
         EncryptionKeyPairRealmObject GetMyEncryptionKeys();
     }

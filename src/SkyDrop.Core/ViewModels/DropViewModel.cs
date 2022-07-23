@@ -280,7 +280,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 //TODO: show some kind of spinner for "Encrypting"
                 if (encryptionContact != null)
                 {
-                    var encryptedPath = await encryptionService.EncodeFileFor(FileToUpload.FullFilePath, encryptionContact.PublicKey);
+                    var encryptedPath = await encryptionService.EncodeFileFor(FileToUpload.FullFilePath, encryptionContact);
                     FileToUpload.FullFilePath = encryptedPath;
                     FileToUpload.Filename = Path.GetFileName(encryptedPath);
                     FileToUpload.FileSizeBytes = new FileInfo(encryptedPath).Length;
@@ -869,7 +869,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 //save
                 IsDownloadingFile = true;
-                await apiService.DownloadAndSaveSkyfile(FocusedFileUrl);
+                await apiService.DownloadAndSaveSkyfile(FocusedFileUrl, FocusedFile.WasSent);
             }
             catch(Exception e)
             {

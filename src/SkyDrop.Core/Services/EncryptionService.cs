@@ -11,8 +11,11 @@ using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Paddings;
 using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities.Encoders;
+using Plugin.Permissions.Abstractions;
 using SkyDrop.Core.DataModels;
+using SkyDrop.Core.Utility;
 
 namespace SkyDrop.Core.Services
 {
@@ -22,6 +25,9 @@ namespace SkyDrop.Core.Services
         private IAsymmetricCipherKeyPairGenerator keyGen = new X25519KeyPairGenerator(); //keypair generator for X25519 key agreement scheme
         private X25519PrivateKeyParameters myPrivateKey;
         private X25519PublicKeyParameters myPublicKey;
+        private Guid myId;
+        private readonly SecureRandom random = new SecureRandom();
+        private const int metaDataSizeBytes = 16;
 
         private readonly IUserDialogs userDialogs;
         private readonly IStorageService storageService;
@@ -35,20 +41,31 @@ namespace SkyDrop.Core.Services
             this.storageService = storageService;
             this.fileSystemService = fileSystemService;
 
-            GetKeys();
+            try
+            {
+                GetKeys();
+            }
+            catch(Exception e)
+            {
+                var message = e.Message;
+                userDialogs.Toast(message);
+            }
         }
 
-        public string GetMyPublicKey()
+        public string GetMyPublicKeyWithId()
         {
-            return Convert.ToBase64String(myPublicKey.GetEncoded());
+            var id = myId.ToByteArray();
+            var key = myPublicKey.GetEncoded();
+            var publicKeyWithId = Util.Combine(id, key);
+            return Convert.ToBase64String(publicKeyWithId);
         }
 
-        public Task<string> EncodeFileFor(string filePath, AsymmetricKeyParameter recipientPublicKey)
+        public Task<string> EncodeFileFor(string filePath, Contact recipient)
         {
             return Task.Run(() =>
             {
                 //get shared secret
-                var sharedSecret = GetSharedSecret(myPrivateKey, recipientPublicKey);
+                var sharedSecret = GetSharedSecret(myPrivateKey, recipient.PublicKey);
 
                 //load the file
                 var fileBytes = File.ReadAllBytes(filePath);
@@ -56,29 +73,40 @@ namespace SkyDrop.Core.Services
                 //encrypt the file
                 var encryptedBytes = Encrypt(sharedSecret, fileBytes);
 
+                //add the metadata
+                var metaData = GetMetaDataForFile(recipient);
+                var encryptedFileWithMetaData = Util.Combine(metaData, encryptedBytes);
+
                 //save the file
                 var encryptedFilePath = Path.Combine(fileSystemService.CacheFolderPath, $"{Path.GetFileName(filePath)}.skydrop");
-                File.WriteAllBytes(encryptedFilePath, encryptedBytes);
+                File.WriteAllBytes(encryptedFilePath, encryptedFileWithMetaData);
 
                 return encryptedFilePath;
             });
         }
 
-        public Task<string> DecodeFileFrom(string filePath, AsymmetricKeyParameter senderPublicKey)
+        public Task<string> DecodeFile(string filePath)
         {
             return Task.Run(() =>
             {
                 if (!filePath.EndsWith(".skydrop"))
                     throw new Exception("File must have .skydrop extension");
 
-                //get shared secret
-                var sharedSecret = GetSharedSecret(myPrivateKey, senderPublicKey);
-
                 //load the file
                 var fileBytes = File.ReadAllBytes(filePath);
 
+                //separate encryptedData and metaData
+                var (encryptedData, metaData) = ReadMetaDataFromFile(fileBytes);
+
+                var sender = GetContactWithId(new Guid(metaData));
+                if (sender == null)
+                    throw new Exception("SkyFile sender not in contacts list");
+
+                //get shared secret
+                var sharedSecret = GetSharedSecret(myPrivateKey, sender.PublicKey);
+
                 //decrypt the file
-                var decryptedBytes = Decrypt(sharedSecret, fileBytes);
+                var decryptedBytes = Decrypt(sharedSecret, encryptedData);
 
                 //remove ".skydrop" from the end of the file
                 var fileName = Path.GetFileName(filePath).Substring(0, -8);
@@ -93,52 +121,62 @@ namespace SkyDrop.Core.Services
 
         public async Task AddPublicKey(string publicKeyEncoded)
         {
-            var publicKey = DecodePublicKey(publicKeyEncoded);
+            var (publicKey, id) = DecodePublicKey(publicKeyEncoded);
             if (publicKey == null)
             {
                 userDialogs.Alert("Invalid key");
                 return;
             }
 
-            if (storageService.ContactExists(publicKeyEncoded))
+            if (storageService.ContactExists(id))
             {
                 userDialogs.Alert("Contact already exists");
                 return;
             }
 
-            var result = await userDialogs.PromptAsync("Enter contact name: ", null, null, null, "David Vorick");
+            var result = await userDialogs.PromptAsync("Enter contact name: ", null, null, null, "name");
             if (!result.Ok)
                 return;
 
-            var newContact = new Contact { Name = result.Value, PublicKey = publicKey };
+            var newContact = new Contact { Name = result.Value, PublicKey = publicKey, Id = id };
             storageService.AddContact(newContact);
 
             userDialogs.Toast($"{newContact.Name} added");
         }
 
-        private X25519PublicKeyParameters DecodePublicKey(string publicKeyEncoded)
+        private byte[] GetMetaDataForFile(Contact recipient)
+        {
+            //add sender id so it's clear how to decrypt
+            var senderId = recipient.Id.ToByteArray();
+            return senderId; //16 bytes
+        }
+
+        private (byte[] encryptedData, byte[] metaData) ReadMetaDataFromFile(byte[] file)
+        {
+            return (file.Take(metaDataSizeBytes).ToArray(), file.Skip(metaDataSizeBytes).ToArray());
+        }
+
+        private Contact GetContactWithId(Guid id)
+        {
+            var contacts = storageService.LoadContacts();
+            return contacts.FirstOrDefault(c => c.Id == id);
+        }
+
+        private (X25519PublicKeyParameters key, Guid id) DecodePublicKey(string publicKeyEncoded)
         {
             try
             { 
                 var bytes = Convert.FromBase64String(publicKeyEncoded);
-                var publicKey = new X25519PublicKeyParameters(bytes);
+                var id = new Guid(bytes.Take(metaDataSizeBytes).ToArray());
+                var keyBytes = bytes.Skip(metaDataSizeBytes).ToArray();
+                var publicKey = new X25519PublicKeyParameters(keyBytes);
                 var sharedSecret = GetSharedSecret(myPrivateKey, publicKey);
-                return publicKey;
+                return (publicKey, id);
             }
             catch(Exception e)
             {
-                return null;
+                return (null, default);
             }
-        }
-
-        private static byte[] AsciiStringToBytes(string text)
-        {
-            return System.Text.Encoding.ASCII.GetBytes(text);
-        }
-
-        private static string BytesToAsciiString(byte[] bytes)
-        {
-            return System.Text.Encoding.ASCII.GetString(bytes);
         }
 
         private byte[] GetSharedSecret(AsymmetricKeyParameter myPrivateKey, AsymmetricKeyParameter opponentPublicKey)
@@ -165,14 +203,20 @@ namespace SkyDrop.Core.Services
             var keys = storageService.GetMyEncryptionKeys();
             if (keys == null)
             {
+                //generate a random ID
+                var randomIdBytes = new byte[16];
+                random.NextBytes(randomIdBytes);
+                myId = new Guid(randomIdBytes);
+
                 (myPrivateKey, myPublicKey) = GenerateKeyPair();
-                storageService.SaveMyEncryptionKeys(myPrivateKey, myPublicKey);
+                storageService.SaveMyEncryptionKeys(myPrivateKey, myPublicKey, myId);
 
                 return;
             }
 
             myPrivateKey = new X25519PrivateKeyParameters(Convert.FromBase64String(keys.PrivateKeyBase64));
             myPublicKey = new X25519PublicKeyParameters(Convert.FromBase64String(keys.PublicKeyBase64));
+            myId = new Guid(keys.Id);
         }
 
         private byte[] Encrypt(byte[] key, byte[] plainTextBytes)
@@ -212,13 +256,13 @@ namespace SkyDrop.Core.Services
 
     public interface IEncryptionService
     {
-        string GetMyPublicKey();
+        string GetMyPublicKeyWithId();
 
         Task AddPublicKey(string publicKeyEncoded);
 
-        Task<string> EncodeFileFor(string filePath, AsymmetricKeyParameter recipientPublicKey);
+        Task<string> EncodeFileFor(string filePath, Contact recipientPublicKey);
 
-        Task<string> DecodeFileFrom(string filePath, AsymmetricKeyParameter senderPublicKey);
+        Task<string> DecodeFile(string filePath);
     }
 }
 

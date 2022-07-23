@@ -87,7 +87,7 @@ namespace SkyDrop.Core.Services
             return skyFile;
         }
 
-        public async Task DownloadAndSaveSkyfile(string url)
+        public async Task DownloadAndSaveSkyfile(string url, bool wasSentByMe)
         {
             var permissionResult = await Permissions.RequestAsync<Permissions.StorageWrite>();
             if (permissionResult != PermissionStatus.Granted)
@@ -107,7 +107,7 @@ namespace SkyDrop.Core.Services
                 var encryptedFilePath = await fileSystemService.SaveFile(await response.Content.ReadAsStreamAsync(), fileName, false);
 
                 //decrypt
-                var decryptedFilePath = await encryptionService.DecodeFileFrom(encryptedFilePath, null);//TODO: add sender public key here
+                var decryptedFilePath = await encryptionService.DecodeFile(encryptedFilePath);
                 userDialogs.Toast($"Saved {Path.GetFileName(decryptedFilePath)}");
                 return;
             }
@@ -214,7 +214,7 @@ namespace SkyDrop.Core.Services
     {
         Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationTokenSource);
 
-        Task DownloadAndSaveSkyfile(string url);
+        Task DownloadAndSaveSkyfile(string url, bool wasSentByMe);
 
         Task<Stream> DownloadFile(string url);
 

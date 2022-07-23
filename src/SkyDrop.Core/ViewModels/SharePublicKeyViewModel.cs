@@ -33,7 +33,7 @@ namespace SkyDrop.Core.ViewModels
 
         public BitMatrix GenerateBarcode(int width, int height)
         {
-            string publicKey = encryptionService.GetMyPublicKey();
+            string publicKey = encryptionService.GetMyPublicKeyWithId();
             return barcodeService.GenerateBarcode(publicKey, width, height);
         }
 
