@@ -103,7 +103,7 @@ namespace SkyDrop.Core.Services
 
                 var senderId = new Guid(metaData);
                 if (senderId == myId)
-                    userDialogs.Toast("Sent files can only be decrypted by their recipients");
+                    throw new Exception("Sent files can only be decrypted by their recipients");
 
                 var sender = GetContactWithId(senderId);
                 if (sender == null)
