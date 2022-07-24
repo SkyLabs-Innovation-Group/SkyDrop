@@ -199,6 +199,7 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(FileTypeIcon).For(FileCategoryIconBinding.Name).To(vm => vm.FocusedFile.Filename);
 
             set.Bind(EncryptButton).For("Tap").To(vm => vm.OpenContactsMenuCommand);
+            set.Bind(EncryptButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
 
             set.Bind(EncryptionLabel).To(vm => vm.EncryptionText);
             set.Apply();

@@ -74,7 +74,7 @@ namespace SkyDrop.Core.Services
                 var encryptedBytes = Encrypt(sharedSecret, fileBytes);
 
                 //add the metadata
-                var metaData = GetMetaDataForFile(recipient);
+                var metaData = GetMetaDataForFile();
                 var encryptedFileWithMetaData = Util.Combine(metaData, encryptedBytes);
 
                 //save the file
@@ -93,12 +93,19 @@ namespace SkyDrop.Core.Services
                     throw new Exception("File must have .skydrop extension");
 
                 //load the file
+                if (!File.Exists(filePath))
+                    throw new Exception("File does not exist");
+                    
                 var fileBytes = File.ReadAllBytes(filePath);
 
                 //separate encryptedData and metaData
-                var (encryptedData, metaData) = ReadMetaDataFromFile(fileBytes);
+                var (metaData, encryptedData) = ReadMetaDataFromFile(fileBytes);
 
-                var sender = GetContactWithId(new Guid(metaData));
+                var senderId = new Guid(metaData);
+                if (senderId == myId)
+                    userDialogs.Toast("Sent files can only be decrypted by their recipients");
+
+                var sender = GetContactWithId(senderId);
                 if (sender == null)
                     throw new Exception("SkyFile sender not in contacts list");
 
@@ -108,8 +115,9 @@ namespace SkyDrop.Core.Services
                 //decrypt the file
                 var decryptedBytes = Decrypt(sharedSecret, encryptedData);
 
-                //remove ".skydrop" from the end of the file
-                var fileName = Path.GetFileName(filePath).Substring(0, -8);
+                //remove ".skydrop" from the end of the filename
+                var fileName = Path.GetFileName(filePath);
+                fileName = fileName.Substring(0, fileName.Length - 8);
 
                 //save the file
                 var decryptedFilePath = Path.Combine(fileSystemService.DownloadsFolderPath, fileName);
@@ -144,10 +152,10 @@ namespace SkyDrop.Core.Services
             userDialogs.Toast($"{newContact.Name} added");
         }
 
-        private byte[] GetMetaDataForFile(Contact recipient)
+        private byte[] GetMetaDataForFile()
         {
             //add sender id so it's clear how to decrypt
-            var senderId = recipient.Id.ToByteArray();
+            var senderId = myId.ToByteArray();
             return senderId; //16 bytes
         }
 

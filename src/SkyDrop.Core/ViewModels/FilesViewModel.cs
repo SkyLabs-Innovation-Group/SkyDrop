@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -130,8 +131,8 @@ namespace SkyDrop.Core.ViewModels.Main
             try
             {
                 await Task.Delay(1000); //wait for animation
-                var newFileName = await fileSystemService.SaveFile(file.GetStream(), file.Filename, isPersistent: true);
-                userDialogs.Toast($"Saved {newFileName}");
+                var newFilePath = await fileSystemService.SaveFile(file.GetStream(), file.Filename, isPersistent: true);
+                userDialogs.Toast($"Saved {Path.GetFileName(newFilePath)}");
             }
             catch (Exception e)
             {

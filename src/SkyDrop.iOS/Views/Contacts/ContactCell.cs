@@ -35,6 +35,7 @@ namespace SkyDrop.iOS.Views.Contacts
         public void AwakeFromNib()
         {
 			ContentView.BackgroundColor = Colors.DarkGrey.ToNative();
-        }
-    }
+			ContainerView.BackgroundColor = Colors.MidGrey.ToNative();
+		}
+	}
 }

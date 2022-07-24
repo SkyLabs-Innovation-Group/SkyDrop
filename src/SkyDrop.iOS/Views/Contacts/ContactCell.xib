@@ -68,6 +68,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="ContainerView" destination="r4l-Ey-Mmc" id="BJi-Qb-qii"/>
                 <outlet property="NameLabel" destination="x3x-MA-UK9" id="FwQ-ox-pWK"/>
             </connections>
             <point key="canvasLocation" x="91.304347826086968" y="20.758928571428569"/>

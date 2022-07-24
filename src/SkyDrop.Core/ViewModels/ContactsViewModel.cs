@@ -69,14 +69,19 @@ namespace SkyDrop.Core.ViewModels
 
         private void LoadCertificates()
         {
-            Contacts = storageService.LoadContacts().Select(GetContactDVM).ToList();
-
+            var newContacts = storageService.LoadContacts().Select(GetContactDVM).ToList();
             var anyoneWithTheLinkItem = new AnyoneWithTheLinkItem();
             anyoneWithTheLinkItem.TapCommand = new MvxCommand(() => ItemSelected(anyoneWithTheLinkItem));
-            Contacts.Insert(0, anyoneWithTheLinkItem);
 
-            if (Contacts == null || Contacts.Count == 0)
+            if (newContacts == null || newContacts.Count == 0)
                 IsNoContacts = true;
+            else 
+                newContacts.Insert(0, anyoneWithTheLinkItem);
+
+            Contacts = newContacts;
+
+            RaisePropertyChanged(() => Contacts).Forget();
+            RaisePropertyChanged(() => IsNoContacts).Forget();
         }
 
         private async Task AddContact()

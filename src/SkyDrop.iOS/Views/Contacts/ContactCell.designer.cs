@@ -13,6 +13,9 @@ namespace SkyDrop.iOS.Views.Contacts
 	partial class ContactCell
 	{
 		[Outlet]
+		UIKit.UIView ContainerView { get; set; }
+
+		[Outlet]
 		UIKit.UILabel NameLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
@@ -20,6 +23,11 @@ namespace SkyDrop.iOS.Views.Contacts
 			if (NameLabel != null) {
 				NameLabel.Dispose ();
 				NameLabel = null;
+			}
+
+			if (ContainerView != null) {
+				ContainerView.Dispose ();
+				ContainerView = null;
 			}
 		}
 	}

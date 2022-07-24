@@ -135,7 +135,7 @@ namespace SkyDrop.Core.Services
             using var fileStream = File.OpenWrite(filePath);
             await data.CopyToAsync(fileStream);
             data.Dispose();
-            return Path.GetFileName(filePath);
+            return filePath;
         }
 
         private string GetNextFilename(string filename)

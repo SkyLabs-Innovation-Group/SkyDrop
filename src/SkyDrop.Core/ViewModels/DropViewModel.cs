@@ -335,7 +335,7 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             catch (Exception ex) // General error
             {
-                HandleUploadError(ex, "Could not upload file", FileUploadResult.Fail);
+                HandleUploadError(ex, "Upload failed", FileUploadResult.Fail);
             }
             finally
             {
@@ -873,7 +873,7 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             catch(Exception e)
             {
-                userDialogs.Toast("Failed to save file");
+                userDialogs.Toast(e.Message);
             }
             finally
             {
