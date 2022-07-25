@@ -21,7 +21,7 @@ namespace SkyDrop.Core.Services
 {
     public class EncryptionService : IEncryptionService
     {
-        private IBlockCipher engine = new DesEngine(); //the cipher engine for encryption
+        private IBlockCipher engine = new ThreefishEngine(256); //the cipher engine for encryption
         private IAsymmetricCipherKeyPairGenerator keyGen = new X25519KeyPairGenerator(); //keypair generator for X25519 key agreement scheme
         private X25519PrivateKeyParameters myPrivateKey;
         private X25519PublicKeyParameters myPublicKey;
