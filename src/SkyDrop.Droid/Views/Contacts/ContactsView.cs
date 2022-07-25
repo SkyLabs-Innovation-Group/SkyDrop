@@ -20,8 +20,6 @@ namespace SkyDrop.Droid.Views.Main
     {
         protected override int ActivityLayoutId => Resource.Layout.ContactsView;
 
-        public FileExplorerView FileExplorerView { get; set; }
-
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);

@@ -95,6 +95,7 @@
     <Compile Include="Bindings\IconBinding.cs" />
     <Compile Include="Views\Contacts\ContactsView.cs" />
     <Compile Include="Views\Files\FilesView.cs" />
+    <Compile Include="Views\Contacts\SharePublicKeyView.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -459,6 +460,10 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\toolbar_contacts.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\SharePublicKeyView.axml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>

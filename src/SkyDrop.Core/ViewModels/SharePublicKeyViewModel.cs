@@ -1,5 +1,6 @@
 ﻿using System;
 using Acr.UserDialogs;
+using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using SkyDrop.Core.Services;
 using ZXing.Common;
@@ -11,6 +12,8 @@ namespace SkyDrop.Core.ViewModels
         private readonly IBarcodeService barcodeService;
         private readonly IEncryptionService encryptionService;
         private readonly IMvxNavigationService navigationService;
+
+        public IMvxCommand BackCommand { get; set; }
 
         public SharePublicKeyViewModel(ISingletonService singletonService,
             IApiService apiService,
@@ -29,6 +32,8 @@ namespace SkyDrop.Core.ViewModels
             this.barcodeService = barcodeService;
             this.encryptionService = encryptionService;
             this.navigationService = navigationService;
+
+            BackCommand = new MvxCommand(() => navigationService.Close(this));
         }
 
         public BitMatrix GenerateBarcode(int width, int height)

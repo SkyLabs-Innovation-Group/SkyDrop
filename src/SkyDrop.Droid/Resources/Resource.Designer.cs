@@ -19502,25 +19502,28 @@ namespace SkyDrop.Droid
 			public const int SettingsView = 2131427423;
 			
 			// aapt resource value: 0x7F0B0060
-			public const int support_simple_spinner_dropdown_item = 2131427424;
+			public const int SharePublicKeyView = 2131427424;
 			
 			// aapt resource value: 0x7F0B0061
-			public const int toolbar_contacts = 2131427425;
+			public const int support_simple_spinner_dropdown_item = 2131427425;
 			
 			// aapt resource value: 0x7F0B0062
-			public const int toolbar_drop_view = 2131427426;
+			public const int toolbar_contacts = 2131427426;
 			
 			// aapt resource value: 0x7F0B0063
-			public const int toolbar_gallery = 2131427427;
+			public const int toolbar_drop_view = 2131427427;
 			
 			// aapt resource value: 0x7F0B0064
-			public const int toolbar_settings = 2131427428;
+			public const int toolbar_gallery = 2131427428;
 			
 			// aapt resource value: 0x7F0B0065
-			public const int zxingscanneractivitylayout = 2131427429;
+			public const int toolbar_settings = 2131427429;
 			
 			// aapt resource value: 0x7F0B0066
-			public const int zxingscannerfragmentlayout = 2131427430;
+			public const int zxingscanneractivitylayout = 2131427430;
+			
+			// aapt resource value: 0x7F0B0067
+			public const int zxingscannerfragmentlayout = 2131427431;
 			
 			static Layout()
 			{
