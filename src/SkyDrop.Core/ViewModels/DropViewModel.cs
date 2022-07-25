@@ -278,7 +278,6 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (UploadNotificationsEnabled)
                     UploadStartedNotificationCommand?.Execute();
 
-                //TODO: show some kind of spinner for "Encrypting"
                 if (encryptionContact != null)
                 {
                     IsEncrypting = true;
