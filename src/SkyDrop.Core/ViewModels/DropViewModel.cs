@@ -76,8 +76,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool SwipeNavigationEnabled { get; set; } //determines whether user can swipe to the QR code screen
         public bool UserIsSwipingResult { get; set; }
         public bool NavDotsVisible => DropViewUIState != DropViewState.ConfirmFilesState && SwipeNavigationEnabled;
-        public string SendButtonLabel => IsUploading ? StagedFiles?.Count > 2 ? "SENDING FILES" :
-            "SENDING FILE" :
+        public string SendButtonLabel => IsEncrypting ? "ENCRYPTING" :
+            IsUploading ? StagedFiles?.Count > 2 ? "SENDING FILES" : "SENDING FILE" :
             DropViewUIState == DropViewState.ConfirmFilesState && StagedFiles?.Count > 2 ? "SEND FILES" : "SEND FILE";
         public string ReceiveButtonLabel { get; set; } = receiveFileText;
         public bool IsReceivingFile { get; set; }
@@ -89,6 +89,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsFocusedFileAnArchive => FocusedFile.Filename.ExtensionMatches(".zip");
         public string SaveButtonText => IsFocusedFileAnArchive ? "Unzip" : "Save";
         public string EncryptionText => GetVisibilityText();
+        public bool IsEncrypting { get; set; }
 
         public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile FocusedFile { get; set; } //most recently sent or received file
@@ -280,10 +281,14 @@ namespace SkyDrop.Core.ViewModels.Main
                 //TODO: show some kind of spinner for "Encrypting"
                 if (encryptionContact != null)
                 {
+                    IsEncrypting = true;
+
                     var encryptedPath = await encryptionService.EncodeFileFor(FileToUpload.FullFilePath, encryptionContact);
                     FileToUpload.FullFilePath = encryptedPath;
                     FileToUpload.Filename = Path.GetFileName(encryptedPath);
                     FileToUpload.FileSizeBytes = new FileInfo(encryptedPath).Length;
+
+                    IsEncrypting = false;
                 }
 
                 StartUploadTimer(FileToUpload.FileSizeBytes);
@@ -333,6 +338,10 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 HandleUploadError(httpEx, Strings.SslPrompt, FileUploadResult.Fail);
             }
+            catch (System.UnauthorizedAccessException authEx)
+            {
+                HandleUploadError(authEx, "Access denied when reading selected files", FileUploadResult.Fail);
+            }
             catch (Exception ex) // General error
             {
                 HandleUploadError(ex, "Upload failed", FileUploadResult.Fail);
@@ -342,6 +351,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 StopUploadTimer();
                 IsUploading = false;
                 IsBarcodeLoading = false;
+                IsEncrypting = false;
             }
         }
 
