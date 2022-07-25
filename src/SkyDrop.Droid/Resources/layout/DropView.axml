@@ -73,7 +73,7 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintWidth_percent="0.775"
+                        app:layout_constraintWidth_percent="0.75"
                         app:layout_constraintDimensionRatio="1:1"
                         app:cardBackgroundColor="#80303a40"
                         app:cardElevation="0dp"
