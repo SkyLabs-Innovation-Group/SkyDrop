@@ -76,7 +76,6 @@
     <Compile Include="Setup.cs" />
     <Compile Include="Views\BaseActivity.cs" />
     <Compile Include="Views\BaseFragment.cs" />
-    <Compile Include="Views\Main\FilesView.cs" />
     <Compile Include="Views\Main\SettingsView.cs" />
     <Compile Include="Views\Splash\SplashActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -94,6 +93,8 @@
     <Compile Include="Bindings\FileCategoryIconBinding.cs" />
     <Compile Include="Views\Files\FileExplorerView.cs" />
     <Compile Include="Bindings\IconBinding.cs" />
+    <Compile Include="Views\Contacts\ContactsView.cs" />
+    <Compile Include="Views\Files\FilesView.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -388,7 +389,7 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\item_file_list.xml">
+    <AndroidResource Include="Resources\layout\item_contact.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
@@ -449,6 +450,18 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\ContactsView.axml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\item_file_list.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\toolbar_contacts.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\strings.xml" />
@@ -481,6 +494,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Files\" />
+    <Folder Include="Views\Contacts\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

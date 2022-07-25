@@ -19,6 +19,7 @@ namespace SkyDrop.Core.ViewModels
         public List<IContactItem> Contacts { get; set; }
         public IMvxCommand AddContactCommand { get; set; }
         public IMvxCommand SharePublicKeyCommand { get; set; }
+        public IMvxCommand BackCommand { get; set; }
         public bool IsNoContacts { get; set; }
 
         private readonly IApiService apiService;
@@ -58,6 +59,7 @@ namespace SkyDrop.Core.ViewModels
 
             AddContactCommand = new MvxAsyncCommand(AddContact);
             SharePublicKeyCommand = new MvxCommand(SharePublicKey);
+            BackCommand = new MvxCommand(() => navigationService.Close(this));
         }
 
         public override async Task Initialize()
@@ -96,9 +98,10 @@ namespace SkyDrop.Core.ViewModels
                     return;
                 }
 
-                await encryptionService.AddPublicKey(barcodeData);
-
+                //solves issue with disappearing name entry dialog on Android
                 await Task.Delay(500);
+
+                await encryptionService.AddPublicKey(barcodeData);
 
                 LoadCertificates();
             }

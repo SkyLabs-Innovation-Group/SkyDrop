@@ -11,6 +11,10 @@ namespace SkyDrop.Core.DataViewModels
 		public IMvxCommand TapCommand { get; set; }
 
 		public string Name => Contact.Name;
+
+		public bool IsSelectionActive { get; set; }
+
+		public bool IsSelected { get; set; }
 	}
 
 	public interface IContactItem
