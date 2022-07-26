@@ -127,7 +127,7 @@ namespace SkyDrop.iOS.Views.Drop
                 UrlLabelContainer.Layer.CornerRadius = 8;
                 UrlLabelContainer.BackgroundColor = Colors.MidGrey.ToNative();
 
-                ShowBarcodeButton.Layer.CornerRadius = 4;
+                ShowBarcodeButton.Layer.CornerRadius = 3;
                 ShowBarcodeButton.BackgroundColor = Colors.MidGrey.ToNative().ColorWithAlpha(0.5f);
 
                 ShowPreviewIcon.TintColor = UIColor.FromWhiteAlpha(0.8f, 1);
@@ -211,7 +211,6 @@ namespace SkyDrop.iOS.Views.Drop
             int progressPercentage = (int)Math.Floor(progress * 100);
 
             var content = new UNMutableNotificationContent();
-
             content.Title = "Upload started";
             if (progress > 1.0)
                 progressPercentage = 100;
