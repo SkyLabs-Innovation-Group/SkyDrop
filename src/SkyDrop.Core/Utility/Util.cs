@@ -40,6 +40,9 @@ namespace SkyDrop.Core.Utility
 
         public static FileCategory GetFileCategory(string filename)
         {
+            if (filename == null)
+                return FileCategory.None;
+
             filename = filename.ToLowerInvariant();
 
             if (filename.ExtensionMatches(new[] { ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx", ".ods", ".odt", ".pdf", ".txt", ".html", ".htm" }))
