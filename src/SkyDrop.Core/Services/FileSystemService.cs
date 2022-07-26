@@ -142,7 +142,7 @@ namespace SkyDrop.Core.Services
         {
             int i = 1;
             string dir = Path.GetDirectoryName(filename);
-            string extension = Util.GetFilenameExtension(filename);
+            string extension = Util.GetFullExtension(filename);
             string file = Path.GetFileName(filename);
             string fileWithoutExtension = file.Substring(0, file.Length - extension.Length) + " {0}";
 

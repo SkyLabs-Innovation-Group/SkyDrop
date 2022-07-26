@@ -97,6 +97,9 @@ namespace SkyDrop.Core.Utility
             return new X25519PublicKeyParameters(bytes);
         }
 
+        /// <summary>
+        /// Concatenate byte arrays
+        /// </summary>
         public static byte[] Combine(params byte[][] arrays)
         {
             byte[] rv = new byte[arrays.Sum(a => a.Length)];
@@ -112,8 +115,10 @@ namespace SkyDrop.Core.Utility
         /// <summary>
         /// Enables matching extensions with multiple periods correctly e.g. .jpeg.skydrop
         /// </summary>
-        public static string GetFilenameExtension(string filename)
+        public static string GetFullExtension(string filename)
         {
+            int lastSlashIndex = filename.LastIndexOf("/") + 1;
+            filename = filename.Substring(lastSlashIndex, filename.Length - lastSlashIndex);
             return Regex.Match(filename, @"\..*").Value;
         }
     }
