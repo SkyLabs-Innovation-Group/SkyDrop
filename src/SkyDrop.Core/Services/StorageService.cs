@@ -5,6 +5,7 @@ using Realms;
 using Realms.Exceptions;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.RealmObjects;
+using SkyDrop.Core.Utility;
 
 namespace SkyDrop.Core.Services
 {
@@ -43,7 +44,9 @@ namespace SkyDrop.Core.Services
 
         public List<SkyFile> LoadSkyFilesWithSkylinks(List<string> skylinks)
         {
-            var realmSkyFiles = realm.All<SkyFileRealmObject>().Where(a => skylinks.Contains(a.Skylink)).Select(SkyFileFromRealmObject).ToList();
+            var realmSkyFiles = realm.All<SkyFileRealmObject>().ToList() //additional ToList() fixes "Contains not supported" error
+                .Where(a => skylinks.Contains(a.Skylink)).Select(SkyFileFromRealmObject).ToList();
+
             foreach (var skyFile in realmSkyFiles)
             {
                 skyFile.Status = FileStatus.Uploaded;
@@ -164,7 +167,7 @@ namespace SkyDrop.Core.Services
 
         private Folder FolderFromRealmObject(FolderRealmObject realmObject)
         {
-            return new Folder { Id = new Guid(realmObject.Id), Name = realmObject.Name, SkyLinks = realmObject.SkyLinks.Split(',').ToList() };
+            return new Folder { Id = new Guid(realmObject.Id), Name = realmObject.Name, SkyLinks = realmObject.SkyLinks.IsNullOrEmpty() ? new List<string>() : realmObject.SkyLinks.Split(',').ToList()  };
         }
 
         private FolderRealmObject FolderToRealmObject(Folder folder)
