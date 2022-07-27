@@ -19511,7 +19511,7 @@ namespace SkyDrop.Droid
 			public const int toolbar_drop_view = 2131427424;
 			
 			// aapt resource value: 0x7F0B0061
-			public const int toolbar_gallery = 2131427425;
+			public const int toolbar_files = 2131427425;
 			
 			// aapt resource value: 0x7F0B0062
 			public const int toolbar_settings = 2131427426;

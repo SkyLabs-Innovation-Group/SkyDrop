@@ -35,6 +35,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public FileLayoutType LayoutType { get; set; } = FileLayoutType.Grid;
         public IMvxCommand ToggleLayoutCommand { get; set; }
         public IMvxCommand BackCommand { get; set; }
+        public IMvxCommand AddFolderCommand { get; set; }
         public bool IsUnzippedFilesMode { get; set; }
         public string ArchiveUrl { get; set; }
         public bool IsError { get; set; }
@@ -69,6 +70,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
             ToggleLayoutCommand = new MvxCommand(() => LayoutType = LayoutType == FileLayoutType.List ? FileLayoutType.Grid : FileLayoutType.List);
             BackCommand = new MvxAsyncCommand(GoBack);
+            AddFolderCommand = new MvxAsyncCommand(AddFolder);
         }
 
         public override async Task Initialize()
@@ -89,8 +91,8 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             var folders = storageService.LoadFolders();
             var folderItems = folders.Select(GetFolderDVM).ToList();
-            folderItems.Add(GetSentFolderItem());
-            folderItems.Add(GetReceivedFolderItem());
+            folderItems.Insert(0, GetSentFolderItem());
+            folderItems.Insert(1, GetReceivedFolderItem());
             Folders.SwitchTo(folderItems);
         }
         /*
@@ -249,6 +251,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 SkyFiles.SwitchTo(GetSkyFileDVMs(receivedFiles));
             }
 
+            Title = folder.Name;
             IsFoldersVisible = false;
         }
 
@@ -272,10 +275,29 @@ namespace SkyDrop.Core.ViewModels.Main
                 //go back to folders
                 SkyFiles.Clear();
                 IsFoldersVisible = true;
+                Title = "SkyDrive";
                 return;
             }
 
             await navigationService.Close(this);
+        }
+
+        private async Task AddFolder()
+        {
+            var result = await userDialogs.PromptAsync("Folder name");
+            if (!result.Ok)
+                return;
+
+            if (result.Value.IsNullOrEmpty())
+                return;
+
+            var folderName = result.Value.Trim();
+            var newFolder = new Folder { Name = folderName, Id = Guid.NewGuid(), SkyLinks = new List<string>() };
+            storageService.SaveFolder(newFolder);
+
+            LoadFolders();
+
+            userDialogs.Toast($"Added folder {folderName}");
         }
 
         public override void Prepare(NavParam parameter)

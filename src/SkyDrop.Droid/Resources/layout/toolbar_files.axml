@@ -37,15 +37,22 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="right"
-            app:MvxBind="Click ToggleLayoutCommand">
+            android:layout_gravity="right">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingHorizontal="16dp"
                 android:src="@drawable/ic_list"
-                app:MvxBind="LayoutImage LayoutType"
+                app:MvxBind="LayoutImage LayoutType;Click ToggleLayoutCommand;Visibility InvertedVisibility(IsFoldersVisible)"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="16dp"
+                android:src="@drawable/ic_plus"
+                app:MvxBind="Click AddFolderCommand;Visibility Visibility(IsFoldersVisible)"
                 />
 
         </LinearLayout>
