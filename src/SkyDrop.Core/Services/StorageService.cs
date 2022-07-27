@@ -17,8 +17,8 @@ namespace SkyDrop.Core.Services
         {
             this.log = log;
         }
-
-        public List<SkyFile> LoadSkyFiles()
+        /*
+        public List<SkyFile> LoadAllSkyFiles()
         {
             var realmSkyFiles = realm.All<SkyFileRealmObject>().Select(SkyFileFromRealmObject).ToList();
             foreach(var skyFile in realmSkyFiles)
@@ -27,6 +27,44 @@ namespace SkyDrop.Core.Services
             }
 
             return realmSkyFiles;
+        }
+        */
+        public List<SkyFile> LoadSentSkyFiles()
+        {
+            var realmSkyFiles = realm.All<SkyFileRealmObject>().Where(f => f.WasSent);
+            return realmSkyFiles.Select(SkyFileFromRealmObject).ToList();
+        }
+
+        public List<SkyFile> LoadReceivedSkyFiles()
+        {
+            var realmSkyFiles = realm.All<SkyFileRealmObject>().Where(f => !f.WasSent);
+            return realmSkyFiles.Select(SkyFileFromRealmObject).ToList();
+        }
+
+        public List<SkyFile> LoadSkyFilesWithSkylinks(List<string> skylinks)
+        {
+            var realmSkyFiles = realm.All<SkyFileRealmObject>().Where(a => skylinks.Contains(a.Skylink)).Select(SkyFileFromRealmObject).ToList();
+            foreach (var skyFile in realmSkyFiles)
+            {
+                skyFile.Status = FileStatus.Uploaded;
+            }
+
+            return realmSkyFiles;
+        }
+
+        public List<Folder> LoadFolders()
+        {
+            var folders = realm.All<FolderRealmObject>();
+            return folders.Select(FolderFromRealmObject).ToList();
+        }
+
+        public void SaveFolder(Folder folder)
+        {
+            var realmObject = FolderToRealmObject(folder);
+            realm.Write(() =>
+            {
+                realm.Add(realmObject, true);
+            });
         }
 
         int saveCallCount = 0;
@@ -123,11 +161,31 @@ namespace SkyDrop.Core.Services
         {
             return new SkyFile { Filename = realmObject.Filename, Skylink = realmObject.Skylink, WasSent = realmObject.WasSent };
         }
+
+        private Folder FolderFromRealmObject(FolderRealmObject realmObject)
+        {
+            return new Folder { Id = new Guid(realmObject.Id), Name = realmObject.Name, SkyLinks = realmObject.SkyLinks.Split(',').ToList() };
+        }
+
+        private FolderRealmObject FolderToRealmObject(Folder folder)
+        {
+            return new FolderRealmObject { Id = folder.Id.ToString(), Name = folder.Name, SkyLinks = string.Join(",", folder.SkyLinks) };
+        }
     }
 
     public interface IStorageService
     {
-        List<SkyFile> LoadSkyFiles();
+        //List<SkyFile> LoadAllSkyFiles();
+
+        List<SkyFile> LoadSkyFilesWithSkylinks(List<string> skylinks);
+
+        List<SkyFile> LoadSentSkyFiles();
+
+        List<SkyFile> LoadReceivedSkyFiles();
+
+        List<Folder> LoadFolders();
+
+        void SaveFolder(Folder folder);
 
         void SaveSkyFiles(params SkyFile[] skyFile);
 

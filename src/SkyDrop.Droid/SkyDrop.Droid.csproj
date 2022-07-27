@@ -76,7 +76,6 @@
     <Compile Include="Setup.cs" />
     <Compile Include="Views\BaseActivity.cs" />
     <Compile Include="Views\BaseFragment.cs" />
-    <Compile Include="Views\Main\FilesView.cs" />
     <Compile Include="Views\Main\SettingsView.cs" />
     <Compile Include="Views\Splash\SplashActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -94,6 +93,7 @@
     <Compile Include="Bindings\FileCategoryIconBinding.cs" />
     <Compile Include="Views\Files\FileExplorerView.cs" />
     <Compile Include="Bindings\IconBinding.cs" />
+    <Compile Include="Views\Files\FilesView.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -446,6 +446,14 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\ic_error.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\item_folder.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_folder.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
