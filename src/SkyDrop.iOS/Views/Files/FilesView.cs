@@ -42,7 +42,16 @@ namespace SkyDrop.iOS.Views.Files
             NavigationController.NavigationBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
             NavigationController.NavigationBar.ShadowImage = new UIImage();
 
+            var folderSource = new MvxSimpleTableViewSource(FoldersTableView, FolderCell.Key);
+            FoldersTableView.Source = folderSource;
+            FoldersTableView.RegisterNibForCellReuse(FolderCell.Nib, FolderCell.Key);
+            FoldersTableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
+            FoldersTableView.BackgroundColor = Colors.DarkGrey.ToNative();
+
             var set = CreateBindingSet();
+            set.Bind(FoldersTableView).For("Visible").To(vm => vm.IsFoldersVisible);
+            set.Bind(fileExplorerView).For(a => a.Hidden).To(vm => vm.IsFoldersVisible);
+            set.Bind(folderSource).For(f => f.ItemsSource).To(vm => vm.Folders);
             set.Bind(fileExplorerView).For(f => f.ItemsSource).To(vm => vm.SkyFiles);
             set.Bind(fileExplorerView).For(t => t.CollectionViewAndTableViewVisibility).To(vm => vm.LayoutType);
             set.Bind(ActivityIndicatorContainer).For("Visible").To(vm => vm.IsLoadingLabelVisible);

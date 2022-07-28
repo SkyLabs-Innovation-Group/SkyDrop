@@ -208,6 +208,11 @@
     <Compile Include="Views\Files\FileExplorerView.designer.cs">
         <DependentUpon>FileExplorerView.cs</DependentUpon>
     </Compile>
+    <InterfaceDefinition Include="Views\Files\FolderCell.xib" />
+    <Compile Include="Views\Files\FolderCell.cs" />
+    <Compile Include="Views\Files\FolderCell.designer.cs">
+      <DependentUpon>FolderCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
