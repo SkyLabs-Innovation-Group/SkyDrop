@@ -95,6 +95,7 @@
     <Compile Include="Views\PortalPreferences\PortalPreferencesView.cs" />
     <Compile Include="Views\Files\FileExplorerView.cs" />
     <Compile Include="Bindings\IconBinding.cs" />
+    <Compile Include="Views\PortalPreferences\PortalPreferencesListView.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -451,6 +452,14 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\ic_error.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\item_skynet_portal.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_skynet_logo.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>

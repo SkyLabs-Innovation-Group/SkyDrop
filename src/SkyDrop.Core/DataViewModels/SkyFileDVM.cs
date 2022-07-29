@@ -18,6 +18,7 @@ namespace SkyDrop.Core.DataViewModels
 
         public IMvxCommand TapCommand { get; set; }
         public IMvxCommand LongPressCommand { get; set; }
+        public IMvxCommand ReorderDragCommand { get; set; }
         public IMvxCommand CopySkyLinkCommand { get; set; }
         public IMvxCommand DeleteCommand { get; set; }
 

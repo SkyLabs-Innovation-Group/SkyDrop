@@ -10,12 +10,15 @@
     <include
         android:id="@+id/layout_toolbar"
         layout="@layout/toolbar_settings" />
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
 
-        <!--Content Goes Here-->
 
-    </FrameLayout>
+        <skydrop.droid.views.portalpreferences.PortalPreferencesListView
+            android:id="@+id/PortalPreferencesListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            app:MvxItemTemplate="@layout/item_skynet_portal"
+            app:MvxBind="ItemsSource UserPortals;"/>
+
+
 </LinearLayout>
