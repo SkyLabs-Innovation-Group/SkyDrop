@@ -203,6 +203,8 @@
     <ImageAsset Include="Media.xcassets\ic_plus.imageset\plus.pdf" />
     <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\folder-plus.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_back.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_back.imageset\back_button.pdf" />
     <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
@@ -219,6 +221,7 @@
     <Compile Include="Views\Files\FolderCell.designer.cs">
       <DependentUpon>FolderCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\BaseViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

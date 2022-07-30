@@ -13,7 +13,7 @@ using static SkyDrop.iOS.Common.iOSUtil;
 namespace SkyDrop.iOS.Views.Files
 {
     [MvxChildPresentationAttribute]
-    public partial class FilesView : MvxViewController<FilesViewModel>
+    public partial class FilesView : BaseViewController<FilesViewModel>
     {
         private UIBarButtonItem layoutToggleButton;
         private FileExplorerView fileExplorerView;
@@ -44,12 +44,7 @@ namespace SkyDrop.iOS.Views.Files
 
 
             //TODO: find some way to override back button behavior
-            var backButton = new UIBarButtonItem();// { Image = UIImage.FromBundle("ic_folder_add") };
-            backButton.Clicked += (s, e) =>
-            {
-
-            };
-            NavigationItem.BackBarButtonItem = backButton;
+            AddBackButton(() => ViewModel.BackCommand.Execute());
 
                 
 
