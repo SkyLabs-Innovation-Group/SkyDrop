@@ -105,6 +105,8 @@
     <Compile Include="Bindings\ButtonClickBinding.cs" />
     <Compile Include="Helper\HomeMenuAnimator.cs" />
     <Compile Include="Views\PortalPreferences\PortalPreferencesListView.cs" />
+    <Compile Include="Views\PortalPreferences\PortalViewHolder.cs" />
+    <Compile Include="Helper\BaseOnDragListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
