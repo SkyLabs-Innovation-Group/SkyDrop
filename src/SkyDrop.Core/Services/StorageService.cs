@@ -88,9 +88,22 @@ namespace SkyDrop.Core.Services
         {
             if (folder == null)
             {
-                //delete all records of the SkyFile, remove it from all folders
+                var folders = realm.All<FolderRealmObject>().ToList() //additional ToList() fixes "Contains not supported" error
+                    .Where(f => f.SkyLinks.Contains(skyFile.Skylink)).ToList();
+
                 realm.Write(() =>
                 {
+                    //remove the skylink from all folders
+                    foreach (var oldFolderObj in folders)
+                    {
+                        var oldFolder = FolderFromRealmObject(oldFolderObj);
+                        oldFolder.SkyLinks = oldFolder.SkyLinks.Where(s => s != skyFile.Skylink).ToList();
+                        var newFolderObj = FolderToRealmObject(oldFolder);
+                        realm.Remove(oldFolderObj);
+                        realm.Add(newFolderObj);
+                    }
+
+                    //delete SkyFile record
                     var fileObject = realm.Find<SkyFileRealmObject>(skyFile.Skylink);
                     realm.Remove(fileObject);
                 });
