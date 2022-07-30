@@ -17,6 +17,12 @@ namespace SkyDrop.iOS.Views.Files
 
 		[Outlet]
 		UIKit.UILabel NameLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIView SelectedIndicatorInnerView { get; set; }
+
+		[Outlet]
+		UIKit.UIView SelectedIndicatorView { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -28,6 +34,16 @@ namespace SkyDrop.iOS.Views.Files
 			if (NameLabel != null) {
 				NameLabel.Dispose ();
 				NameLabel = null;
+			}
+
+			if (SelectedIndicatorInnerView != null) {
+				SelectedIndicatorInnerView.Dispose ();
+				SelectedIndicatorInnerView = null;
+			}
+
+			if (SelectedIndicatorView != null) {
+				SelectedIndicatorView.Dispose ();
+				SelectedIndicatorView = null;
 			}
 		}
 	}

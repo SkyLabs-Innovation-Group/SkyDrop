@@ -182,12 +182,14 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private SkyFileDVM GetUnzippedFileDVM(SkyFile skyFile)
         {
-            return new SkyFileDVM
+            var dvm = new SkyFileDVM
             {
                 SkyFile = skyFile,
                 TapCommand = new MvxAsyncCommand(() => UnzippedFileTapped(skyFile)),
-                LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(SkyFiles, skyFile, updateSelectionStateAction))
             };
+
+            dvm.LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(SkyFiles, dvm, updateSelectionStateAction));
+            return dvm;
         }
 
         private async Task UnzippedFileTapped(SkyFile selectedFile)
@@ -195,7 +197,7 @@ namespace SkyDrop.Core.ViewModels.Main
             var selectedFileDVM = SkyFiles.FirstOrDefault(s => s.SkyFile.FullFilePath == selectedFile.FullFilePath);
             if (selectedFileDVM.IsSelectionActive)
             {
-                FileExplorerViewUtil.ToggleFileSelected(selectedFile, SkyFiles, updateSelectionStateAction);
+                FileExplorerViewUtil.ToggleItemSelected(selectedFileDVM, SkyFiles, updateSelectionStateAction);
                 return;
             }
 
@@ -214,19 +216,27 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private SkyFileDVM GetSkyFileDVM(SkyFile skyFile)
         {
-            return new SkyFileDVM
+            var dvm = new SkyFileDVM
             {
                 SkyFile = skyFile,
-                TapCommand = new MvxAsyncCommand(() => FileTapped(skyFile)),
-                LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(SkyFiles, skyFile, updateSelectionStateAction))
+                TapCommand = new MvxAsyncCommand(() => FileTapped(skyFile))
             };
+
+            dvm.LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(SkyFiles, dvm, updateSelectionStateAction));
+            return dvm;
         }
 
         private IFolderItem GetFolderDVM(Folder folder)
         {
             var dvm = new FolderDVM { Folder = folder };
-            dvm.TapCommand = new MvxCommand(() => SelectFolder(dvm));
+            dvm.TapCommand = new MvxCommand(() => FolderTapped(dvm));
+            dvm.LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(ConvertFolderCollectionType(Folders), dvm, updateSelectionStateAction));
             return dvm;
+        }
+
+        private MvxObservableCollection<FolderDVM> ConvertFolderCollectionType(MvxObservableCollection<IFolderItem> folders)
+        {
+            return new MvxObservableCollection<FolderDVM>(folders.Where(a => a is FolderDVM).Select(a => a as FolderDVM).ToList());
         }
 
         private IFolderItem GetSentFolderItem()
@@ -241,6 +251,17 @@ namespace SkyDrop.Core.ViewModels.Main
             var receivedFolder = new ReceivedFolder();
             receivedFolder.TapCommand = new MvxCommand(() => SelectFolder(receivedFolder));
             return receivedFolder;
+        }
+
+        private void FolderTapped(IFolderItem item)
+        {
+            if (item is FolderDVM folder && folder.IsSelectionActive)
+            {
+                FileExplorerViewUtil.ToggleItemSelected(folder, ConvertFolderCollectionType(Folders), updateSelectionStateAction);
+                return;
+            }
+
+            SelectFolder(item);
         }
 
         private void SelectFolder(IFolderItem folder)
@@ -280,7 +301,7 @@ namespace SkyDrop.Core.ViewModels.Main
             var selectedFileDVM = SkyFiles.FirstOrDefault(s => s.SkyFile.Skylink == selectedFile.Skylink);
             if (selectedFileDVM.IsSelectionActive)
             {
-                FileExplorerViewUtil.ToggleFileSelected(selectedFile, SkyFiles, updateSelectionStateAction);
+                FileExplorerViewUtil.ToggleItemSelected(selectedFileDVM, SkyFiles, updateSelectionStateAction);
                 return;
             }
 

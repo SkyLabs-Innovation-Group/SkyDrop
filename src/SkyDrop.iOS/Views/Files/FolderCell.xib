@@ -27,6 +27,42 @@
                                     <constraint firstAttribute="height" constant="32" id="wD7-1O-rsI"/>
                                 </constraints>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ilr-Ml-RCA">
+                                <rect key="frame" x="8" y="8" width="32" height="32"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pBf-0I-etT">
+                                        <rect key="frame" x="12" y="12" width="8" height="8"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="8" id="tRj-fE-hNB"/>
+                                            <constraint firstAttribute="height" constant="8" id="zsH-vp-5gb"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="4"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.63915603741496607" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="32" id="K90-Ij-kuU"/>
+                                    <constraint firstItem="pBf-0I-etT" firstAttribute="centerX" secondItem="ilr-Ml-RCA" secondAttribute="centerX" id="Qmb-Nn-Cer"/>
+                                    <constraint firstItem="pBf-0I-etT" firstAttribute="centerY" secondItem="ilr-Ml-RCA" secondAttribute="centerY" id="hF5-aG-Nar"/>
+                                    <constraint firstAttribute="height" constant="32" id="l6y-Tg-t9G">
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="16"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </constraint>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="16"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k5v-pR-OeB">
                                 <rect key="frame" x="48" y="15" width="248" height="18"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -40,8 +76,11 @@
                             <constraint firstItem="k5v-pR-OeB" firstAttribute="centerY" secondItem="YK8-O9-Ocq" secondAttribute="centerY" id="B8a-4a-GLk"/>
                             <constraint firstItem="k5v-pR-OeB" firstAttribute="leading" secondItem="AGI-vg-Qxp" secondAttribute="trailing" constant="8" id="Gxs-TG-vyz"/>
                             <constraint firstAttribute="bottom" secondItem="AGI-vg-Qxp" secondAttribute="bottom" constant="8" id="K9s-Yo-iRs"/>
+                            <constraint firstItem="AGI-vg-Qxp" firstAttribute="centerY" secondItem="YK8-O9-Ocq" secondAttribute="centerY" id="MFn-mH-7K7"/>
                             <constraint firstItem="AGI-vg-Qxp" firstAttribute="leading" secondItem="YK8-O9-Ocq" secondAttribute="leading" constant="8" id="XGs-bf-eo4"/>
+                            <constraint firstItem="ilr-Ml-RCA" firstAttribute="centerY" secondItem="AGI-vg-Qxp" secondAttribute="centerY" id="d4R-f3-ttN"/>
                             <constraint firstItem="AGI-vg-Qxp" firstAttribute="top" secondItem="YK8-O9-Ocq" secondAttribute="top" constant="8" id="i2V-aK-RCu"/>
+                            <constraint firstItem="ilr-Ml-RCA" firstAttribute="centerX" secondItem="AGI-vg-Qxp" secondAttribute="centerX" id="mgs-ic-YVY"/>
                             <constraint firstAttribute="trailing" secondItem="k5v-pR-OeB" secondAttribute="trailing" constant="8" id="nhQ-Yq-AYy"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
@@ -62,6 +101,8 @@
             <connections>
                 <outlet property="ContainerView" destination="YK8-O9-Ocq" id="swt-Zo-XWF"/>
                 <outlet property="NameLabel" destination="k5v-pR-OeB" id="nS2-df-zAP"/>
+                <outlet property="SelectedIndicatorInnerView" destination="pBf-0I-etT" id="ZyT-Nz-abe"/>
+                <outlet property="SelectedIndicatorView" destination="ilr-Ml-RCA" id="984-Wp-nWJ"/>
             </connections>
             <point key="canvasLocation" x="91.304347826086968" y="20.758928571428569"/>
         </tableViewCell>
