@@ -389,6 +389,8 @@ namespace SkyDrop.Core.ViewModels.Main
                 storageService.DeleteSkyFile(file.SkyFile, folder);
                 SkyFiles.Remove(file);
             }
+
+            ExitSelection();
         }
 
         public override void Prepare(NavParam parameter)
