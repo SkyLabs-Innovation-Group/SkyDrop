@@ -96,6 +96,8 @@
     <Compile Include="Views\Files\FileExplorerView.cs" />
     <Compile Include="Bindings\IconBinding.cs" />
     <Compile Include="Views\PortalPreferences\PortalPreferencesListView.cs" />
+    <Compile Include="Views\PortalPreferences\PortalViewHolder.cs" />
+    <Compile Include="Helper\BaseOnDragListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
