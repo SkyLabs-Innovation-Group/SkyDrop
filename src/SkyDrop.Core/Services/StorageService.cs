@@ -71,6 +71,15 @@ namespace SkyDrop.Core.Services
             });
         }
 
+        public void DeleteFolder(Folder folder)
+        {
+            realm.Write(() =>
+            {
+                var realmObject = realm.Find<FolderRealmObject>(folder.Id.ToString());
+                realm.Remove(realmObject);
+            });
+        }
+
         int saveCallCount = 0;
 
         public void SaveSkyFiles(params SkyFile[] skyFiles)
@@ -236,6 +245,8 @@ namespace SkyDrop.Core.Services
         List<Folder> LoadFolders();
 
         void SaveFolder(Folder folder);
+
+        void DeleteFolder(Folder folder);
 
         void SaveSkyFiles(params SkyFile[] skyFile);
 

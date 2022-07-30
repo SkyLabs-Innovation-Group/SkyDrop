@@ -399,7 +399,8 @@ namespace SkyDrop.Core.ViewModels.Main
                 return;
             }
 
-            storageService.MoveSkyFiles(selectedFiles.Select(s => s.SkyFile).ToList(), (folder as FolderDVM).Folder);
+            var folderDvm = folder as FolderDVM;
+            storageService.MoveSkyFiles(selectedFiles.Select(s => s.SkyFile).ToList(), folderDvm.Folder);
 
             userDialogs.Toast($"Moved {selectedFiles.Count} file{s} to {folder.Name}");
 
@@ -408,23 +409,42 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task DeleteFiles()
         {
-            //delete all selected files
-
-            var selectedFiles = SkyFiles.Where(s => s.IsSelected).ToList();
-            var s = selectedFiles.Count == 1 ? "" : "s";
-
-            bool isSentOrReceivedFolder = CurrentFolder is SentFolder || CurrentFolder is ReceivedFolder;
-            var folder = isSentOrReceivedFolder ? null : (CurrentFolder as FolderDVM).Folder;
-            var folderName = isSentOrReceivedFolder ? "all folders" : folder.Name;
-
-            if (!await userDialogs.ConfirmAsync($"Are you sure you want to delete {selectedFiles.Count} file{s} from {folderName}?"))
-                return;
-
-            foreach (var file in selectedFiles)
+            if (IsFoldersVisible)
             {
-                storageService.DeleteSkyFile(file.SkyFile, folder);
-                SkyFiles.Remove(file);
+                //delete all selected folders
+
+                var selectedFolders = ConvertFolderCollectionType(Folders).Where(s => s.IsSelected).ToList();
+                var s = selectedFolders.Count == 1 ? "" : "s";
+                if (!await userDialogs.ConfirmAsync($"Are you sure you want to delete {selectedFolders.Count} folder{s}?"))
+                    return;
+
+                foreach (var folder in selectedFolders)
+                {
+                    storageService.DeleteFolder(folder.Folder);
+                    Folders.Remove(folder);
+                }
             }
+            else
+            {
+                //delete all selected files
+
+                var selectedFiles = SkyFiles.Where(s => s.IsSelected).ToList();
+                var s = selectedFiles.Count == 1 ? "" : "s";
+
+                bool isSentOrReceivedFolder = CurrentFolder is SentFolder || CurrentFolder is ReceivedFolder;
+                var folder = isSentOrReceivedFolder ? null : (CurrentFolder as FolderDVM).Folder;
+                var folderName = isSentOrReceivedFolder ? "all folders" : folder.Name;
+
+                if (!await userDialogs.ConfirmAsync($"Are you sure you want to delete {selectedFiles.Count} file{s} from {folderName}?"))
+                    return;
+
+                foreach (var file in selectedFiles)
+                {
+                    storageService.DeleteSkyFile(file.SkyFile, folder);
+                    SkyFiles.Remove(file);
+                }
+            }
+            
 
             ExitSelection();
         }
