@@ -205,6 +205,10 @@
     <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\folder-plus.pdf" />
     <ImageAsset Include="Media.xcassets\ic_back.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_back.imageset\back_button.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_bin.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_bin.imageset\bin.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\folder-arrow-right.pdf" />
     <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>

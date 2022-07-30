@@ -9,7 +9,7 @@ namespace SkyDrop.Core.Utility
 {
 	public static class FileExplorerViewUtil
 	{
-        public static void ActivateSelectionMode(MvxObservableCollection<SkyFileDVM> skyFiles, SkyFile selectedFile)
+        public static void ActivateSelectionMode(MvxObservableCollection<SkyFileDVM> skyFiles, SkyFile selectedFile, Action selectionStartedAction)
         {
             //select the skyfile that was long pressed
             SkyFileDVM selectedFileDVM;
@@ -25,9 +25,11 @@ namespace SkyDrop.Core.Utility
             {
                 skyfile.IsSelectionActive = true;
             }
+
+            selectionStartedAction?.Invoke();
         }
 
-        public static void ToggleFileSelected(SkyFile selectedFile, IEnumerable<SkyFileDVM> skyFiles)
+        public static void ToggleFileSelected(SkyFile selectedFile, IEnumerable<SkyFileDVM> skyFiles, Action selectionEndedAction)
         {
             //select the skyfile that was long pressed
             SkyFileDVM selectedFileDVM;
@@ -45,6 +47,8 @@ namespace SkyDrop.Core.Utility
                 {
                     skyFile.IsSelectionActive = false;
                 }
+
+                selectionEndedAction?.Invoke();
             }
         }
     }

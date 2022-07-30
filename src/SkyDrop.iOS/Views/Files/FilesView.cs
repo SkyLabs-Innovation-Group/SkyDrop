@@ -15,7 +15,7 @@ namespace SkyDrop.iOS.Views.Files
     [MvxChildPresentationAttribute]
     public partial class FilesView : BaseViewController<FilesViewModel>
     {
-        private UIBarButtonItem layoutToggleButton;
+        private UIBarButtonItem layoutToggleButton, deleteButton, moveButton;
         private FileExplorerView fileExplorerView;
 
         public FilesView() : base("FilesView", null)
@@ -32,6 +32,10 @@ namespace SkyDrop.iOS.Views.Files
             FileExplorerHolder.LayoutInsideWithFrame(fileExplorerView);
 
             //setup nav bar
+            deleteButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_bin") };
+            deleteButton.Clicked += (s, e) => ViewModel.DeleteFileCommand.Execute();
+            moveButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_folder_move") };
+            moveButton.Clicked += (s, e) => ViewModel.MoveFileCommand.Execute();
             layoutToggleButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_folder_add") };
             layoutToggleButton.Clicked += (s, e) => RightButtonTapped();
             NavigationItem.RightBarButtonItem = layoutToggleButton;
@@ -42,11 +46,7 @@ namespace SkyDrop.iOS.Views.Files
             NavigationController.NavigationBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
             NavigationController.NavigationBar.ShadowImage = new UIImage();
 
-
-            //TODO: find some way to override back button behavior
             AddBackButton(() => ViewModel.BackCommand.Execute());
-
-                
 
             var folderSource = new MvxSimpleTableViewSource(FoldersTableView, FolderCell.Key);
             FoldersTableView.Source = folderSource;
@@ -65,6 +65,7 @@ namespace SkyDrop.iOS.Views.Files
             set.Bind(ErrorIcon).For("Visible").To(vm => vm.IsError);
             set.Bind(LoadingLabel).To(vm => vm.LoadingLabelText);
             set.Bind(this).For(t => t.ShowHideFolders).To(vm => vm.IsFoldersVisible);
+            set.Bind(this).For(t => t.ShowHideFileOptionsButtons).To(vm => vm.IsSelectionActive);
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Apply();
         }
@@ -75,6 +76,24 @@ namespace SkyDrop.iOS.Views.Files
             set
             {
                 UpdateButtonIcon(value);
+            }
+        }
+
+        public bool ShowHideFileOptionsButtons
+        {
+            get => false;
+            set
+            {
+                if (value)
+                {
+                    //show file options buttons
+                    NavigationItem.RightBarButtonItems = new[] { moveButton, deleteButton };
+                }
+                else
+                {
+                    //show add folder / layout toggle button
+                    NavigationItem.RightBarButtonItems = new[] { layoutToggleButton };
+                }
             }
         }
 

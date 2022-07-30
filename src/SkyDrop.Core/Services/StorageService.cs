@@ -4,6 +4,7 @@ using System.Linq;
 using Realms;
 using Realms.Exceptions;
 using SkyDrop.Core.DataModels;
+using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.RealmObjects;
 using SkyDrop.Core.Utility;
 
@@ -83,12 +84,45 @@ namespace SkyDrop.Core.Services
             });
         }
 
-        public void DeleteSkyFile(SkyFile skyFile)
+        public void DeleteSkyFile(SkyFile skyFile, Folder folder)
         {
+            if (folder == null)
+            {
+                //delete all records of the SkyFile, remove it from all folders
+                realm.Write(() =>
+                {
+                    var fileObject = realm.Find<SkyFileRealmObject>(skyFile.Skylink);
+                    realm.Remove(fileObject);
+                });
+
+                return;
+            }
+
+            //remove the file from a custom folder
+
+            folder.SkyLinks = folder.SkyLinks.Where(s => s != skyFile.Skylink).ToList();
+            var newFolderObject = FolderToRealmObject(folder);
+
             realm.Write(() =>
             {
-                var realmObject = realm.Find<SkyFileRealmObject>(skyFile.Skylink);
-                realm.Remove(realmObject);
+                var oldFolderObject = realm.Find<FolderRealmObject>(folder.Id.ToString());
+                realm.Remove(oldFolderObject);
+
+                realm.Add(newFolderObject);
+            });
+        }
+
+        public void MoveSkyFiles(List<SkyFile> skyFiles, Folder folder)
+        {
+            folder.SkyLinks = skyFiles.Select(s => s.Skylink).ToList();
+            var newFolderObject = FolderToRealmObject(folder);
+
+            realm.Write(() =>
+            {
+                var oldFolderObject = realm.Find<FolderRealmObject>(folder.Id.ToString());
+                realm.Remove(oldFolderObject);
+
+                realm.Add(newFolderObject);
             });
         }
 
@@ -192,7 +226,9 @@ namespace SkyDrop.Core.Services
 
         void SaveSkyFiles(params SkyFile[] skyFile);
 
-        void DeleteSkyFile(SkyFile skyFile);
+        void DeleteSkyFile(SkyFile skyFile, Folder folder);
+
+        void MoveSkyFiles(List<SkyFile> skyFiles, Folder folder);
 
         UploadAverage GetAverageUploadRate();
 
