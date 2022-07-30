@@ -32,8 +32,8 @@ namespace SkyDrop.iOS.Views.Files
             FileExplorerHolder.LayoutInsideWithFrame(fileExplorerView);
 
             //setup nav bar
-            layoutToggleButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_list") };
-            layoutToggleButton.Clicked += (s, e) => ToggleViewLayout();
+            layoutToggleButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_folder_add") };
+            layoutToggleButton.Clicked += (s, e) => RightButtonTapped();
             NavigationItem.RightBarButtonItem = layoutToggleButton;
             NavigationItem.RightBarButtonItem.TintColor = UIColor.White;
             NavigationController.NavigationBar.TintColor = UIColor.White;
@@ -41,6 +41,17 @@ namespace SkyDrop.iOS.Views.Files
             NavigationController.NavigationBar.Translucent = true;
             NavigationController.NavigationBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
             NavigationController.NavigationBar.ShadowImage = new UIImage();
+
+
+            //TODO: find some way to override back button behavior
+            var backButton = new UIBarButtonItem();// { Image = UIImage.FromBundle("ic_folder_add") };
+            backButton.Clicked += (s, e) =>
+            {
+
+            };
+            NavigationItem.BackBarButtonItem = backButton;
+
+                
 
             var folderSource = new MvxSimpleTableViewSource(FoldersTableView, FolderCell.Key);
             FoldersTableView.Source = folderSource;
@@ -58,15 +69,39 @@ namespace SkyDrop.iOS.Views.Files
             set.Bind(ActivityIndicator).For(a => a.Hidden).To(vm => vm.IsError);
             set.Bind(ErrorIcon).For("Visible").To(vm => vm.IsError);
             set.Bind(LoadingLabel).To(vm => vm.LoadingLabelText);
+            set.Bind(this).For(t => t.ShowHideFolders).To(vm => vm.IsFoldersVisible);
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Apply();
+        }
+
+        public bool ShowHideFolders
+        {
+            get => false;
+            set
+            {
+                UpdateButtonIcon(value);
+            }
+        }
+
+        private void RightButtonTapped()
+        {
+            if (ViewModel.IsFoldersVisible)
+                ViewModel.AddFolderCommand?.Execute();
+            else
+                ToggleViewLayout();
         }
 
         private void ToggleViewLayout()
         {
             var newLayoutType = ViewModel.LayoutType == FileLayoutType.Grid ? FileLayoutType.List : FileLayoutType.Grid;
             ViewModel.LayoutType = newLayoutType;
-            layoutToggleButton.Image = newLayoutType == FileLayoutType.List ? UIImage.FromBundle("ic_grid") : UIImage.FromBundle("ic_list");
+            UpdateButtonIcon(false);
+        }
+
+        private void UpdateButtonIcon(bool showFolders)
+        {
+            var iconName = showFolders ? "ic_folder_add" : ViewModel.LayoutType == FileLayoutType.List ? "ic_grid" : "ic_list";
+            layoutToggleButton.Image = UIImage.FromBundle(iconName);
         }
     }
 }

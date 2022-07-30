@@ -197,6 +197,12 @@
     <ImageAsset Include="Media.xcassets\ic_error.imageset\alert-circle.pdf" />
     <ImageAsset Include="Media.xcassets\ic_image.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_image.imageset\image.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_folder.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_folder.imageset\folder.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_plus.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_plus.imageset\plus.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\folder-plus.pdf" />
     <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
