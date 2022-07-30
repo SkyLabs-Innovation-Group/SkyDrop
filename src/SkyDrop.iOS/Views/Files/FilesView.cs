@@ -86,8 +86,10 @@ namespace SkyDrop.iOS.Views.Files
             {
                 if (value)
                 {
-                    //show file options buttons
-                    NavigationItem.RightBarButtonItems = new[] { moveButton, deleteButton };
+                    if (ViewModel.IsFoldersVisible)
+                        NavigationItem.RightBarButtonItems = new[] { deleteButton }; //show folder options buttons
+                    else
+                        NavigationItem.RightBarButtonItems = new[] { moveButton, deleteButton }; //show file options buttons
                 }
                 else
                 {

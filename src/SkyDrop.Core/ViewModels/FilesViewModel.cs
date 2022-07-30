@@ -45,7 +45,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsLoadingLabelVisible => IsLoading || IsError;
         public string LoadingLabelText { get; set; }
         public bool IsFoldersVisible { get; set; } = true;
-        public bool IsSelectionActive => SkyFiles.FirstOrDefault()?.IsSelectionActive ?? false;
+        public bool IsSelectionActive => GetIsSelectionActive();
         public bool IsMovingFile { get; set; }
         public List<SkyFileDVM> FilesToMove { get; set; }
         public IFolderItem CurrentFolder { get; set; }
@@ -331,11 +331,26 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void ExitSelection()
         {
-            //exit selection
-            foreach (var file in SkyFiles)
+            if (IsFoldersVisible)
             {
-                file.IsSelectionActive = false;
-                file.IsSelected = false;
+                //exit folder selection
+                foreach (var folderItem in Folders)
+                {
+                    if (folderItem is FolderDVM folder)
+                    {
+                        folder.IsSelectionActive = false;
+                        folder.IsSelected = false;
+                    }
+                }
+            }
+            else
+            {
+                //exit file selection
+                foreach (var file in SkyFiles)
+                {
+                    file.IsSelectionActive = false;
+                    file.IsSelected = false;
+                }
             }
 
             updateSelectionStateAction.Invoke();
@@ -412,6 +427,13 @@ namespace SkyDrop.Core.ViewModels.Main
             }
 
             ExitSelection();
+        }
+
+        private bool GetIsSelectionActive()
+        {
+            return IsFoldersVisible ?
+                Folders.Where(f => f is FolderDVM)?.Select(f => f as FolderDVM).FirstOrDefault() ?.IsSelectionActive ?? false :
+                SkyFiles.FirstOrDefault()?.IsSelectionActive ?? false;
         }
 
         public override void Prepare(NavParam parameter)
