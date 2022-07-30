@@ -444,7 +444,6 @@ namespace SkyDrop.Core.ViewModels.Main
                     SkyFiles.Remove(file);
                 }
             }
-            
 
             ExitSelection();
         }
