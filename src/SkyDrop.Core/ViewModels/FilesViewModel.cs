@@ -101,7 +101,16 @@ namespace SkyDrop.Core.ViewModels.Main
 
             try
             {
-                LoadFolders();
+                if (IsUnzippedFilesMode)
+                {
+                    var unzippedFiles = await DownloadAndUnzipArchive();
+                    SkyFiles.SwitchTo(unzippedFiles);
+                    IsFoldersVisible = false;
+                }
+                else
+                {
+                    LoadFolders();
+                }
             }
             catch(Exception e)
             {
@@ -117,15 +126,7 @@ namespace SkyDrop.Core.ViewModels.Main
             folderItems.Insert(1, GetReceivedFolderItem());
             Folders.SwitchTo(folderItems);
         }
-        /*
-        private async Task LoadSkyFiles()
-        {
-            if (IsUnzippedFilesMode)
-                allSkyFiles = await DownloadAndUnzipArchive();
-            else
-                allSkyFiles = GetSkyFileDVMs(storageService.LoadAllSkyFiles());
-        }
-        */
+
         private async Task<List<SkyFileDVM>> DownloadAndUnzipArchive()
         {
             var didDownload = false;
@@ -326,7 +327,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 return;
             }
 
-            if (!IsFoldersVisible)
+            if (!IsFoldersVisible && !IsUnzippedFilesMode)
             {
                 //go back to folders
                 SkyFiles.Clear();

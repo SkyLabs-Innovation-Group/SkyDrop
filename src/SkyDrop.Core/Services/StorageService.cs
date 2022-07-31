@@ -19,18 +19,7 @@ namespace SkyDrop.Core.Services
         {
             this.log = log;
         }
-        /*
-        public List<SkyFile> LoadAllSkyFiles()
-        {
-            var realmSkyFiles = realm.All<SkyFileRealmObject>().Select(SkyFileFromRealmObject).ToList();
-            foreach(var skyFile in realmSkyFiles)
-            {
-                skyFile.Status = FileStatus.Uploaded;
-            }
 
-            return realmSkyFiles;
-        }
-        */
         public List<SkyFile> LoadSentSkyFiles()
         {
             var realmSkyFiles = realm.All<SkyFileRealmObject>().Where(f => f.WasSent);
@@ -59,7 +48,7 @@ namespace SkyDrop.Core.Services
         public List<Folder> LoadFolders()
         {
             var folders = realm.All<FolderRealmObject>();
-            return folders.Select(FolderFromRealmObject).ToList();
+            return folders.Select(FolderFromRealmObject).OrderBy(f => f.Name).ToList();
         }
 
         public void SaveFolder(Folder folder)
@@ -234,8 +223,6 @@ namespace SkyDrop.Core.Services
 
     public interface IStorageService
     {
-        //List<SkyFile> LoadAllSkyFiles();
-
         List<SkyFile> LoadSkyFilesWithSkylinks(List<string> skylinks);
 
         List<SkyFile> LoadSentSkyFiles();
