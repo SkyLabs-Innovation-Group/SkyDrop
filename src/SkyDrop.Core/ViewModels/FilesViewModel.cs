@@ -47,6 +47,9 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsFoldersVisible { get; set; } = true;
         public bool IsSelectionActive => GetIsSelectionActive();
         public bool IsMovingFile { get; set; }
+        public bool IsMoveButtonVisible => IsSelectionActive && !IsFoldersVisible;
+        public bool IsLayoutButtonVisible => !IsSelectionActive && !IsFoldersVisible;
+        public bool IsAddFolderButtonVisible => !IsSelectionActive && IsFoldersVisible;
         public List<SkyFileDVM> FilesToMove { get; set; }
         public IFolderItem CurrentFolder { get; set; }
 
@@ -83,7 +86,13 @@ namespace SkyDrop.Core.ViewModels.Main
             MoveFileCommand = new MvxAsyncCommand(MoveFiles);
             DeleteFileCommand = new MvxAsyncCommand(DeleteFiles);
 
-            updateSelectionStateAction = () => RaisePropertyChanged(() => IsSelectionActive);
+            updateSelectionStateAction = () =>
+            {
+                RaisePropertyChanged(() => IsSelectionActive).Forget();
+                RaisePropertyChanged(() => IsMoveButtonVisible).Forget();
+                RaisePropertyChanged(() => IsLayoutButtonVisible).Forget();
+                RaisePropertyChanged(() => IsAddFolderButtonVisible).Forget();
+            };
         }
 
         public override async Task Initialize()

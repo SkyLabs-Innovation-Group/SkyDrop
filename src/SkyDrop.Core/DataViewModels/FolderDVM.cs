@@ -28,6 +28,9 @@ namespace SkyDrop.Core.DataViewModels
 		public string Name => "Sent Files";
 
 		public IMvxCommand TapCommand { get; set; }
+
+		public bool IsSelected => false;
+		public bool IsSelectionActive => false;
 	}
 
 	public class ReceivedFolder : IFolderItem
@@ -35,6 +38,9 @@ namespace SkyDrop.Core.DataViewModels
 		public string Name => "Received Files";
 
 		public IMvxCommand TapCommand { get; set; }
+
+		public bool IsSelected => false;
+		public bool IsSelectionActive => false;
 	}
 
 	public interface IFolderItem

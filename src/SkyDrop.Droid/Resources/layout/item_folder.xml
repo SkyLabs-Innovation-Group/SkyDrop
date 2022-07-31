@@ -34,7 +34,7 @@
                         android:src="@drawable/ic_folder"
                         app:MvxBind="Visibility InvertedVisibility(IsSelectionActive)"/>
 
-                    <!--Selection Indicator
+                    <!--Selection Indicator-->
                     <androidx.cardview.widget.CardView
                         android:layout_width="32dp"
                         android:layout_height="32dp"
@@ -49,7 +49,7 @@
                             app:cardBackgroundColor="#fff"
                             app:MvxBind="Visibility Visibility(IsSelected)"/>
         
-                    </androidx.cardview.widget.CardView>-->
+                    </androidx.cardview.widget.CardView>
                 </FrameLayout>
                 <TextView
                     android:layout_width="0px"
