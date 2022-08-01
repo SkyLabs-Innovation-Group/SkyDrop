@@ -82,12 +82,12 @@ namespace SkyDrop.iOS.Views.Drop
 
                 View.BackgroundColor = Colors.DarkGrey.ToNative();
                 BarcodeContainer.BackgroundColor = Colors.MidGrey.ToNative(); //so that preview image fades in from dark color
-
+                /*
                 var menuButton = new UIBarButtonItem()
                 {
                     Image = UIImage.FromBundle("ic_menu")
                 };
-                menuButton.Clicked += (s, e) => ViewModel.MenuCommand?.Execute();
+                menuButton.Clicked += (s, e) => ViewModel.OpenSkyDriveCommand?.Execute();
 
                 NavigationItem.LeftBarButtonItem = menuButton;
                 NavigationItem.LeftBarButtonItem.TintColor = UIColor.White;
@@ -100,7 +100,7 @@ namespace SkyDrop.iOS.Views.Drop
 
                 NavigationItem.RightBarButtonItem = settingsButton;
                 NavigationItem.RightBarButtonItem.TintColor = UIColor.White;
-
+                */
                 CancelButton.BackgroundColor = Colors.GradientOcean.ToNative();
                 CancelButton.Layer.CornerRadius = 32;
 
@@ -109,6 +109,7 @@ namespace SkyDrop.iOS.Views.Drop
                 SendButton.Layer.CornerRadius = 8;
                 ReceiveButton.Layer.CornerRadius = 8;
 
+                //QR menu
                 CopyLinkButton.BackgroundColor = Colors.Primary.ToNative();
                 OpenButton.BackgroundColor = Colors.GradientGreen.ToNative();
                 DownloadButton.BackgroundColor = Colors.GradientTurqouise.ToNative();
@@ -117,6 +118,24 @@ namespace SkyDrop.iOS.Views.Drop
                 OpenButton.Layer.CornerRadius = 8;
                 ShareButton.Layer.CornerRadius = 8;
                 DownloadButton.Layer.CornerRadius = 8;
+
+                //home menu
+                SkyDriveButton.BackgroundColor = Colors.DarkGrey.ToNative();
+                PortalsButton.BackgroundColor = Colors.DarkGrey.ToNative();
+                ContactsButton.BackgroundColor = Colors.DarkGrey.ToNative();
+                SettingsButton.BackgroundColor = Colors.DarkGrey.ToNative();
+                SkyDriveButton.Layer.BorderColor = Colors.GradientOcean.ToNative().CGColor;
+                PortalsButton.Layer.BorderColor = Colors.GradientTurqouise.ToNative().CGColor;
+                ContactsButton.Layer.BorderColor = Colors.GradientGreen.ToNative().CGColor;
+                SettingsButton.Layer.BorderColor = Colors.Primary.ToNative().CGColor;
+                SkyDriveButton.Layer.BorderWidth = 2;
+                PortalsButton.Layer.BorderWidth = 2;
+                ContactsButton.Layer.BorderWidth = 2;
+                SettingsButton.Layer.BorderWidth = 2;
+                SkyDriveButton.Layer.CornerRadius = 8;
+                PortalsButton.Layer.CornerRadius = 8;
+                ContactsButton.Layer.CornerRadius = 8;
+                SettingsButton.Layer.CornerRadius = 8;
 
                 ProgressFillArea.BackgroundColor = Colors.GradientTurqouise.ToNative();
                 ProgressFillArea.Layer.CornerRadius = 8;
@@ -156,10 +175,18 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(SendButton).For("Tap").To(vm => vm.SendCommand);
             set.Bind(ReceiveButton).For("Tap").To(vm => vm.ReceiveCommand);
 
+            //home menu
+            set.Bind(SkyDriveButton).For("Tap").To(vm => vm.OpenSkyDriveCommand);
+            //set.Bind(PortalsButton).For("Tap").To(vm => vm.NavigateToPortalsCommand);
+            //set.Bind(ContactsButton).For("Tap").To(vm => vm.NavigateToContactsCommand);
+            set.Bind(SettingsButton).For("Tap").To(vm => vm.NavToSettingsCommand);
+
+            //QR menu
             set.Bind(CopyLinkButton).For("Tap").To(vm => vm.CopyLinkCommand);
             set.Bind(OpenButton).For("Tap").To(vm => vm.OpenFileInBrowserCommand);
             set.Bind(ShareButton).For("Tap").To(vm => vm.ShareLinkCommand);
             set.Bind(DownloadButton).For("Tap").To(vm => vm.DownloadFileCommand);
+
             set.Bind(DownloadButtonActivityIndicator).For("Visible").To(vm => vm.IsDownloadingFile);
             set.Bind(DownloadButtonIcon).For(t => t.Hidden).To(vm => vm.IsDownloadingFile);
             set.Bind(SaveFileLabel).For(t => t.Text).To(vm => vm.SaveButtonText);
