@@ -28,9 +28,9 @@
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>XSAppIconAssets</key>
-	<string>Resources/Media.xcassets/AppIcons.appiconset</string>
+	<string>Media.xcassets/AppIcons.appiconset</string>
 	<key>XSLaunchImageAssets</key>
-	<string>Resources/Media.xcassets/LaunchImages.launchimage</string>
+	<string>Media.xcassets/LaunchImages.launchimage</string>
 	<key>MinimumOSVersion</key>
 	<string>12.0</string>
 	<key>NSAllowsArbitraryLoadsInWebContent</key>
