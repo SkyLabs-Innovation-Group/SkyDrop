@@ -697,7 +697,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private Task NavToSettings()
         {
-            return navigationService.Navigate<MenuViewModel>();
+            return navigationService.Navigate<SettingsViewModel>();
         }
 
         private async Task ShareLink()
