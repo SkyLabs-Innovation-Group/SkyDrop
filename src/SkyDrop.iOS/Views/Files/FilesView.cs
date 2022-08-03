@@ -116,7 +116,10 @@ namespace SkyDrop.iOS.Views.Files
 
         private void UpdateButtonIcon(bool showFolders)
         {
-            var iconName = showFolders ? "ic_folder_add" : ViewModel.LayoutType == FileLayoutType.List ? "ic_grid" : "ic_list";
+            //if folders are visible, show add folder icon
+            //otherwise show files layout toggle icon
+            var iconName = showFolders ? "ic_folder_add" :
+                (ViewModel.LayoutType == FileLayoutType.List) ? "ic_grid" : "ic_list";
             layoutToggleButton.Image = UIImage.FromBundle(iconName);
         }
     }
