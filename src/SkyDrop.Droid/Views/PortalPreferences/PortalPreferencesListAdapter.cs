@@ -14,19 +14,21 @@ namespace SkyDrop.Droid.Views.PortalPreferences
         {
             this.view = view;
         }
-
+        
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
-            var portalViewHolder = (PortalViewHolder) holder;
+            base.OnBindViewHolder(holder, position);
+
+            var portalViewHolder = holder as PortalViewHolder;
             portalViewHolder.Bind(this);
         }
-
+        
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
-            var itemView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.item_skynet_portal, parent, false);
-            return new PortalViewHolder(itemView, BindingContext);
+            var itemBindingContext = new MvxAndroidBindingContext(parent.Context, BindingContext.LayoutInflaterHolder, (object)null);
+            return new PortalViewHolder(InflateViewForHolder(parent, viewType, itemBindingContext), itemBindingContext);
         }
-
+        
         internal void ReorderPortals(int position, int newPosition) => view.ReorderPortals(position, newPosition);
     }
 }
