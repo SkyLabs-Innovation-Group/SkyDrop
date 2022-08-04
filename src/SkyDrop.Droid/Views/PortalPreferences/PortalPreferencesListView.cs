@@ -20,9 +20,9 @@ namespace SkyDrop.Droid.Views.PortalPreferences
         protected PortalPreferencesListView(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
         { }
 
-        public void Init(PortalPreferencesView view, IMvxBindingContext bindingContext)
+        public void Init(PortalPreferencesView view, IMvxAndroidBindingContext bindingContext)
         {
-            portalPrefsAdapter = new PortalPreferencesListAdapter(this, bindingContext as IMvxAndroidBindingContext);
+            portalPrefsAdapter = new PortalPreferencesListAdapter(this, bindingContext);
             Adapter = portalPrefsAdapter;
             this.view = view;
         }

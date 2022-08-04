@@ -9,8 +9,7 @@
     android:paddingTop="16dp"
     android:paddingHorizontal="16dp"
     android:clipToPadding="false"
-    android:background="@color/skyDarkBlue"
-    app:MvxBind="Click TapCommand;LongClick LongPressCommand">
+    android:background="@color/skyDarkBlue">
     <ImageView
         android:layout_width="54dp"
         android:layout_height="match_parent"

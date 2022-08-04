@@ -3,13 +3,14 @@ using System.Diagnostics;
 using Android.Views;
 using Android.Widget;
 using Java.Interop;
+using MvvmCross;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using SkyDrop.Droid.Helper;
 
 namespace SkyDrop.Droid.Views.PortalPreferences
 {
-    internal class PortalViewHolder : MvxRecyclerViewHolder
+    public class PortalViewHolder : MvxRecyclerViewHolder
     {
         private PortalPreferencesListAdapter listAdapter;
         private ImageView reorderIcon;
@@ -41,47 +42,47 @@ namespace SkyDrop.Droid.Views.PortalPreferences
         private void ReorderIcon_Touch(object sender, View.TouchEventArgs e)
         {
             double GetY() => e.Event.GetY();
-          
 
-            var touchEvent = GetTouchEventType(e.Event.Action);
-            switch (touchEvent)
+            try
             {
-                case TouchEventType.Start:
-                    // Save initial position
-                    startPosition = GetY();
+                var touchEvent = GetTouchEventType(e.Event.Action);
+                switch (touchEvent)
+                {
+                    case TouchEventType.Start:
+                        // Save initial position
+                        startPosition = reorderIcon.GetY();
 
-                    Debug.WriteLine($"[Drag] START {e.Event.Action}: ({startPosition})");
+                        Debug.WriteLine($"[Drag] START {e.Event.Action}: ({startPosition})");
 
-                    break;
+                        break;
 
-                case TouchEventType.Drag:
-                    // Do nothing?
-                    break;
+                    case TouchEventType.Drag:
+                        // Do nothing?
+                        break;
 
-                case TouchEventType.End:
+                    case TouchEventType.End:
 
-                    double endPosition = GetY();
+                        double endPosition = GetY();
 
-                    Debug.WriteLine($"[Drag] END {e.Event.Action}: ({endPosition})");
+                        Debug.WriteLine($"[Drag] END {e.Event.Action}: ({endPosition})");
 
-                    int newIndex = (int)Math.Round(endPosition / itemSize) - 1;
+                        int newIndex = (int)Math.Round((endPosition + (AdapterPosition * itemSize)) / itemSize);
 
-                    // TODO - Trigger reload of the row and the rows above or below depending on change value
-                    listAdapter.ReorderPortals(AdapterPosition, newIndex);
+                        // TODO - Trigger reload of the row and the rows above or below depending on change value
+                        listAdapter.ReorderPortals(AdapterPosition, newIndex);
 
-                    break;
+                        break;
 
 
-                default:
-                    Debug.WriteLine($"[Drag] invalid? {e.Event.Action}: ({e.Event.GetX()},{e.Event.GetY()})");
-                    break;
+                    default:
+                        Debug.WriteLine($"[Drag] invalid? {e.Event.Action}: ({e.Event.GetX()},{e.Event.GetY()})");
+                        break;
+                }
             }
-        }
-
-
-        private void ReorderIcon_Click(object sender, EventArgs e)
-        {
-            reorderIcon.StartDragAndDrop(null, null, null, 0);
+            catch (Exception ex)
+            {
+                Mvx.IoCProvider.Resolve<ILog>().Exception(ex);
+            }
         }
     }
 }

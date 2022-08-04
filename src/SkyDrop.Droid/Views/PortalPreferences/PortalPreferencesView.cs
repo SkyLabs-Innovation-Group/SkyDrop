@@ -32,7 +32,7 @@ namespace SkyDrop.Droid.Views.PortalPreferences
             
         }
 
-        internal void ReorderPortals(int position, int newPosition) => ViewModel.ReorderPortals(position, newPosition);
+        internal void ReorderPortals(int position, int newPosition) => ViewModel?.ReorderPortals(position, newPosition);
 
         private void BindViews()
         {
