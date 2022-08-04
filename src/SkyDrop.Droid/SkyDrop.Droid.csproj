@@ -43,6 +43,7 @@
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <MandroidI18n />
     <AndroidTlsProvider>btls</AndroidTlsProvider>
+    <MandroidExtraArgs>-v -v -v -v</MandroidExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -98,6 +99,7 @@
     <Compile Include="Views\PortalPreferences\PortalPreferencesListView.cs" />
     <Compile Include="Views\PortalPreferences\PortalViewHolder.cs" />
     <Compile Include="Helper\BaseOnDragListener.cs" />
+    <Compile Include="Views\PortalPreferences\PortalPreferencesListAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
