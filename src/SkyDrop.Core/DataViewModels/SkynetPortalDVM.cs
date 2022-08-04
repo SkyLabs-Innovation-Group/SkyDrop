@@ -1,9 +1,10 @@
 ﻿using System;
 using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 
 namespace SkyDrop.Core.DataViewModels
 {
-    public class SkynetPortalDVM
+    public class SkynetPortalDVM : MvxNotifyPropertyChanged
     {
         public SkynetPortalDVM(string baseUrl, string name)
         {
