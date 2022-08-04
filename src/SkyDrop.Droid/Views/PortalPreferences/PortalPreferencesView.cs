@@ -32,10 +32,12 @@ namespace SkyDrop.Droid.Views.PortalPreferences
             
         }
 
+        internal void ReorderPortals(int position, int newPosition) => ViewModel.ReorderPortals(position, newPosition);
+
         private void BindViews()
         {
             portalPrefsListview = FindViewById<PortalPreferencesListView>(Resource.Id.PortalPreferencesListView);
-            portalPrefsListview.Init(BindingContext as IMvxAndroidBindingContext);
+            portalPrefsListview.Init(this, BindingContext as IMvxAndroidBindingContext);
             //saveButton = FindViewById<Button>(Resource.Id.saveButton);
         }
     }

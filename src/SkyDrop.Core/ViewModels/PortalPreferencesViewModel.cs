@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
@@ -38,6 +39,24 @@ namespace SkyDrop.Core.ViewModels
             Title = "Portal Preferences";
 
             BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
+        }
+
+        public void ReorderPortals(int position, int newPosition)
+        {
+            Log.Trace($"ReorderPortals(position: {position}, newPosition: {newPosition})");
+
+            if (position == newPosition)
+                return;
+
+            var copy = new MvxObservableCollection<SkynetPortalDVM>(UserPortals);
+            var portalCopy = copy[position];
+            copy.RemoveAt(position);
+
+            int newIndex = Math.Max(0, Math.Min(UserPortals.Count - 1, newPosition));
+
+            copy.Insert(newIndex, portalCopy);
+
+            UserPortals.SwitchTo(copy);
         }
 
         public override Task Initialize()

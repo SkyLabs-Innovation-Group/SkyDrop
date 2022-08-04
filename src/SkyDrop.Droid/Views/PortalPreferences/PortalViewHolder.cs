@@ -11,14 +11,16 @@ namespace SkyDrop.Droid.Views.PortalPreferences
 {
     internal class PortalViewHolder : MvxRecyclerViewHolder
     {
+        private PortalPreferencesListAdapter listAdapter;
         private ImageView reorderIcon;
 
         public PortalViewHolder(View itemView, IMvxAndroidBindingContext context) : base(itemView, context)
         {
         }
 
-        public void Bind()
+        public void Bind(PortalPreferencesListAdapter adapter)
         {
+            listAdapter = adapter;
             reorderIcon = ItemView.FindViewById<ImageView>(Resource.Id.chevron);
             reorderIcon.Touch += ReorderIcon_Touch;
         }
@@ -32,19 +34,21 @@ namespace SkyDrop.Droid.Views.PortalPreferences
             _ => TouchEventType.End
         };
 
-        private (double, double) startPosition = (0, 0);
+        private double startPosition = 0;
 
+
+        private int itemSize => ItemView.Height;
         private void ReorderIcon_Touch(object sender, View.TouchEventArgs e)
         {
-            (double, double) getPosition(View.TouchEventArgs e) => (e.Event.GetX(), e.Event.GetY());
+            double GetY() => e.Event.GetY();
+          
 
             var touchEvent = GetTouchEventType(e.Event.Action);
             switch (touchEvent)
             {
                 case TouchEventType.Start:
                     // Save initial position
-
-                    startPosition = getPosition(e);
+                    startPosition = GetY();
 
                     Debug.WriteLine($"[Drag] START {e.Event.Action}: ({startPosition})");
 
@@ -56,14 +60,14 @@ namespace SkyDrop.Droid.Views.PortalPreferences
 
                 case TouchEventType.End:
 
-                    (double, double) endPosition = getPosition(e);
+                    double endPosition = GetY();
 
                     Debug.WriteLine($"[Drag] END {e.Event.Action}: ({endPosition})");
 
-                    double vector = endPosition.Item2 - startPosition.Item2;
+                    int newIndex = (int)Math.Round(endPosition / itemSize) - 1;
 
-                    // TODO Calculate if re-ordered based on vertical change 
-                    Debug.WriteLine($"[Drag] END vertical change: ({vector})");
+                    // TODO - Trigger reload of the row and the rows above or below depending on change value
+                    listAdapter.ReorderPortals(AdapterPosition, newIndex);
 
                     break;
 
