@@ -13,9 +13,9 @@ using static SkyDrop.iOS.Common.iOSUtil;
 namespace SkyDrop.iOS.Views.Files
 {
     [MvxChildPresentationAttribute]
-    public partial class FilesView : MvxViewController<FilesViewModel>
+    public partial class FilesView : BaseViewController<FilesViewModel>
     {
-        private UIBarButtonItem layoutToggleButton;
+        private UIBarButtonItem layoutToggleButton, deleteButton, moveButton;
         private FileExplorerView fileExplorerView;
 
         public FilesView() : base("FilesView", null)
@@ -32,8 +32,12 @@ namespace SkyDrop.iOS.Views.Files
             FileExplorerHolder.LayoutInsideWithFrame(fileExplorerView);
 
             //setup nav bar
-            layoutToggleButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_list") };
-            layoutToggleButton.Clicked += (s, e) => ToggleViewLayout();
+            deleteButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_bin") };
+            deleteButton.Clicked += (s, e) => ViewModel.DeleteFileCommand.Execute();
+            moveButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_folder_move") };
+            moveButton.Clicked += (s, e) => ViewModel.MoveFileCommand.Execute();
+            layoutToggleButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_folder_add") };
+            layoutToggleButton.Clicked += (s, e) => RightButtonTapped();
             NavigationItem.RightBarButtonItem = layoutToggleButton;
             NavigationItem.RightBarButtonItem.TintColor = UIColor.White;
             NavigationController.NavigationBar.TintColor = UIColor.White;
@@ -42,22 +46,81 @@ namespace SkyDrop.iOS.Views.Files
             NavigationController.NavigationBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
             NavigationController.NavigationBar.ShadowImage = new UIImage();
 
+            AddBackButton(() => ViewModel.BackCommand.Execute());
+
+            var folderSource = new MvxSimpleTableViewSource(FoldersTableView, FolderCell.Key);
+            FoldersTableView.Source = folderSource;
+            FoldersTableView.RegisterNibForCellReuse(FolderCell.Nib, FolderCell.Key);
+            FoldersTableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
+            FoldersTableView.BackgroundColor = Colors.DarkGrey.ToNative();
+
             var set = CreateBindingSet();
+            set.Bind(FoldersTableView).For("Visible").To(vm => vm.IsFoldersVisible);
+            set.Bind(fileExplorerView).For(a => a.Hidden).To(vm => vm.IsFoldersVisible);
+            set.Bind(folderSource).For(f => f.ItemsSource).To(vm => vm.Folders);
             set.Bind(fileExplorerView).For(f => f.ItemsSource).To(vm => vm.SkyFiles);
             set.Bind(fileExplorerView).For(t => t.CollectionViewAndTableViewVisibility).To(vm => vm.LayoutType);
             set.Bind(ActivityIndicatorContainer).For("Visible").To(vm => vm.IsLoadingLabelVisible);
             set.Bind(ActivityIndicator).For(a => a.Hidden).To(vm => vm.IsError);
             set.Bind(ErrorIcon).For("Visible").To(vm => vm.IsError);
             set.Bind(LoadingLabel).To(vm => vm.LoadingLabelText);
+            set.Bind(this).For(t => t.ShowHideFolders).To(vm => vm.IsFoldersVisible);
+            set.Bind(this).For(t => t.ShowHideFileOptionsButtons).To(vm => vm.IsSelectionActive);
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Apply();
+        }
+
+        public bool ShowHideFolders
+        {
+            get => false;
+            set
+            {
+                UpdateButtonIcon(value);
+            }
+        }
+
+        public bool ShowHideFileOptionsButtons
+        {
+            get => false;
+            set
+            {
+                if (value)
+                {
+                    if (ViewModel.IsFoldersVisible)
+                        NavigationItem.RightBarButtonItems = new[] { deleteButton }; //show folder options buttons
+                    else
+                        NavigationItem.RightBarButtonItems = new[] { moveButton, deleteButton }; //show file options buttons
+                }
+                else
+                {
+                    //show add folder / layout toggle button
+                    NavigationItem.RightBarButtonItems = new[] { layoutToggleButton };
+                }
+            }
+        }
+
+        private void RightButtonTapped()
+        {
+            if (ViewModel.IsFoldersVisible)
+                ViewModel.AddFolderCommand?.Execute();
+            else
+                ToggleViewLayout();
         }
 
         private void ToggleViewLayout()
         {
             var newLayoutType = ViewModel.LayoutType == FileLayoutType.Grid ? FileLayoutType.List : FileLayoutType.Grid;
             ViewModel.LayoutType = newLayoutType;
-            layoutToggleButton.Image = newLayoutType == FileLayoutType.List ? UIImage.FromBundle("ic_grid") : UIImage.FromBundle("ic_list");
+            UpdateButtonIcon(false);
+        }
+
+        private void UpdateButtonIcon(bool showFolders)
+        {
+            //if folders are visible, show add folder icon
+            //otherwise show files layout toggle icon
+            var iconName = showFolders ? "ic_folder_add" :
+                (ViewModel.LayoutType == FileLayoutType.List) ? "ic_grid" : "ic_list";
+            layoutToggleButton.Image = UIImage.FromBundle(iconName);
         }
     }
 }

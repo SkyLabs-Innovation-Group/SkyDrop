@@ -31,15 +31,27 @@ namespace SkyDrop.Core.ViewModels.Main
         }
 
         public MvxObservableCollection<SkyFileDVM> SkyFiles { get; } = new MvxObservableCollection<SkyFileDVM>();
+        public MvxObservableCollection<IFolderItem> Folders { get; } = new MvxObservableCollection<IFolderItem>();
         public FileLayoutType LayoutType { get; set; } = FileLayoutType.Grid;
         public IMvxCommand ToggleLayoutCommand { get; set; }
         public IMvxCommand BackCommand { get; set; }
+        public IMvxCommand AddFolderCommand { get; set; }
+        public IMvxCommand MoveFileCommand { get; set; }
+        public IMvxCommand DeleteFileCommand { get; set; }
         public bool IsUnzippedFilesMode { get; set; }
         public string ArchiveUrl { get; set; }
         public bool IsError { get; set; }
         public bool IsLoading { get; set; }
         public bool IsLoadingLabelVisible => IsLoading || IsError;
         public string LoadingLabelText { get; set; }
+        public bool IsFoldersVisible { get; set; } = true;
+        public bool IsSelectionActive => GetIsSelectionActive();
+        public bool IsMovingFile { get; set; }
+        public bool IsMoveButtonVisible => IsSelectionActive && !IsFoldersVisible;
+        public bool IsLayoutButtonVisible => !IsSelectionActive && !IsFoldersVisible;
+        public bool IsAddFolderButtonVisible => !IsSelectionActive && IsFoldersVisible;
+        public List<SkyFileDVM> FilesToMove { get; set; }
+        public IFolderItem CurrentFolder { get; set; }
 
         private readonly IApiService apiService;
         private readonly IFileSystemService fileSystemService;
@@ -47,6 +59,9 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IUserDialogs userDialogs;
         private readonly IMvxNavigationService navigationService;
         private readonly ILog log;
+
+        private Action updateSelectionStateAction;
+        private TaskCompletionSource<IFolderItem> moveFilesCompletionSource;
 
         public FilesViewModel(ISingletonService singletonService,
                              IApiService apiService,
@@ -66,24 +81,50 @@ namespace SkyDrop.Core.ViewModels.Main
             this.log = log;
 
             ToggleLayoutCommand = new MvxCommand(() => LayoutType = LayoutType == FileLayoutType.List ? FileLayoutType.Grid : FileLayoutType.List);
-            BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
+            BackCommand = new MvxAsyncCommand(GoBack);
+            AddFolderCommand = new MvxAsyncCommand(AddFolder);
+            MoveFileCommand = new MvxAsyncCommand(MoveFiles);
+            DeleteFileCommand = new MvxAsyncCommand(DeleteFiles);
+
+            updateSelectionStateAction = () =>
+            {
+                RaisePropertyChanged(() => IsSelectionActive).Forget();
+                RaisePropertyChanged(() => IsMoveButtonVisible).Forget();
+                RaisePropertyChanged(() => IsLayoutButtonVisible).Forget();
+                RaisePropertyChanged(() => IsAddFolderButtonVisible).Forget();
+            };
         }
 
         public override async Task Initialize()
         {
             await base.Initialize();
-            await LoadSkyFiles();
+
+            try
+            {
+                if (IsUnzippedFilesMode)
+                {
+                    var unzippedFiles = await DownloadAndUnzipArchive();
+                    SkyFiles.SwitchTo(unzippedFiles);
+                    IsFoldersVisible = false;
+                }
+                else
+                {
+                    LoadFolders();
+                }
+            }
+            catch(Exception e)
+            {
+                userDialogs.Toast(e.Message);
+            }
         }
 
-        private async Task LoadSkyFiles()
+        private void LoadFolders()
         {
-            List<SkyFileDVM> loadedSkyFiles;
-            if (IsUnzippedFilesMode)
-                loadedSkyFiles = await DownloadAndUnzipArchive();
-            else
-                loadedSkyFiles = GetSkyFileDVMs(storageService.LoadSkyFiles());
-
-            SkyFiles.SwitchTo(loadedSkyFiles);
+            var folders = storageService.LoadFolders();
+            var folderItems = folders.Select(GetFolderDVM).ToList();
+            folderItems.Insert(0, GetSentFolderItem());
+            folderItems.Insert(1, GetReceivedFolderItem());
+            Folders.SwitchTo(folderItems);
         }
 
         private async Task<List<SkyFileDVM>> DownloadAndUnzipArchive()
@@ -151,12 +192,14 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private SkyFileDVM GetUnzippedFileDVM(SkyFile skyFile)
         {
-            return new SkyFileDVM
+            var dvm = new SkyFileDVM
             {
                 SkyFile = skyFile,
                 TapCommand = new MvxAsyncCommand(() => UnzippedFileTapped(skyFile)),
-                LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(SkyFiles, skyFile))
             };
+
+            dvm.LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(SkyFiles, dvm, updateSelectionStateAction));
+            return dvm;
         }
 
         private async Task UnzippedFileTapped(SkyFile selectedFile)
@@ -164,7 +207,7 @@ namespace SkyDrop.Core.ViewModels.Main
             var selectedFileDVM = SkyFiles.FirstOrDefault(s => s.SkyFile.FullFilePath == selectedFile.FullFilePath);
             if (selectedFileDVM.IsSelectionActive)
             {
-                FileExplorerViewUtil.ToggleFileSelected(selectedFile, SkyFiles);
+                FileExplorerViewUtil.ToggleItemSelected(selectedFileDVM, SkyFiles, updateSelectionStateAction);
                 return;
             }
 
@@ -183,12 +226,84 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private SkyFileDVM GetSkyFileDVM(SkyFile skyFile)
         {
-            return new SkyFileDVM
+            var dvm = new SkyFileDVM
             {
                 SkyFile = skyFile,
-                TapCommand = new MvxAsyncCommand(() => FileTapped(skyFile)),
-                LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(SkyFiles, skyFile))
+                TapCommand = new MvxAsyncCommand(() => FileTapped(skyFile))
             };
+
+            dvm.LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(SkyFiles, dvm, updateSelectionStateAction));
+            return dvm;
+        }
+
+        private IFolderItem GetFolderDVM(Folder folder)
+        {
+            var dvm = new FolderDVM { Folder = folder };
+            dvm.TapCommand = new MvxCommand(() => FolderTapped(dvm));
+            dvm.LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(ConvertFolderCollectionType(Folders), dvm, updateSelectionStateAction));
+            return dvm;
+        }
+
+        private MvxObservableCollection<FolderDVM> ConvertFolderCollectionType(MvxObservableCollection<IFolderItem> folders)
+        {
+            return new MvxObservableCollection<FolderDVM>(folders.Where(a => a is FolderDVM).Select(a => a as FolderDVM).ToList());
+        }
+
+        private IFolderItem GetSentFolderItem()
+        {
+            var sentFolder = new SentFolder();
+            sentFolder.TapCommand = new MvxCommand(() => SelectFolder(sentFolder));
+            return sentFolder;
+        }
+
+        private IFolderItem GetReceivedFolderItem()
+        {
+            var receivedFolder = new ReceivedFolder();
+            receivedFolder.TapCommand = new MvxCommand(() => SelectFolder(receivedFolder));
+            return receivedFolder;
+        }
+
+        private void FolderTapped(IFolderItem item)
+        {
+            if (item is FolderDVM folder && folder.IsSelectionActive)
+            {
+                FileExplorerViewUtil.ToggleItemSelected(folder, ConvertFolderCollectionType(Folders), updateSelectionStateAction);
+                return;
+            }
+
+            SelectFolder(item);
+        }
+
+        private void SelectFolder(IFolderItem folder)
+        {
+            if (IsMovingFile)
+            {
+                moveFilesCompletionSource.TrySetResult(folder);
+                return;
+            }
+
+            if (folder is FolderDVM folderDVM)
+            {
+                //show files for this folder
+                var files = storageService.LoadSkyFilesWithSkylinks(folderDVM.Folder.SkyLinks);
+                SkyFiles.SwitchTo(GetSkyFileDVMs(files));
+            }
+            else if (folder is SentFolder)
+            {
+                //show sent files
+                var sentFiles = storageService.LoadSentSkyFiles();
+                SkyFiles.SwitchTo(GetSkyFileDVMs(sentFiles));
+            }
+            else if(folder is ReceivedFolder)
+            {
+                //show received files
+                var receivedFiles = storageService.LoadReceivedSkyFiles();
+                SkyFiles.SwitchTo(GetSkyFileDVMs(receivedFiles));
+            }
+
+            Title = folder.Name;
+            IsFoldersVisible = false;
+            CurrentFolder = folder;
         }
 
         private async Task FileTapped(SkyFile selectedFile)
@@ -196,12 +311,158 @@ namespace SkyDrop.Core.ViewModels.Main
             var selectedFileDVM = SkyFiles.FirstOrDefault(s => s.SkyFile.Skylink == selectedFile.Skylink);
             if (selectedFileDVM.IsSelectionActive)
             {
-                FileExplorerViewUtil.ToggleFileSelected(selectedFile, SkyFiles);
+                FileExplorerViewUtil.ToggleItemSelected(selectedFileDVM, SkyFiles, updateSelectionStateAction);
                 return;
             }
 
             //show the file
             await navigationService.Close(this, selectedFile);
+        }
+
+        private async Task GoBack()
+        {
+            if (IsSelectionActive)
+            {
+                ExitSelection();
+                return;
+            }
+
+            if (!IsFoldersVisible && !IsUnzippedFilesMode)
+            {
+                //go back to folders
+                SkyFiles.Clear();
+                IsFoldersVisible = true;
+                Title = "SkyDrive";
+                return;
+            }
+
+            await navigationService.Close(this);
+        }
+
+        private void ExitSelection()
+        {
+            if (IsFoldersVisible)
+            {
+                //exit folder selection
+                foreach (var folderItem in Folders)
+                {
+                    if (folderItem is FolderDVM folder)
+                    {
+                        folder.IsSelectionActive = false;
+                        folder.IsSelected = false;
+                    }
+                }
+            }
+            else
+            {
+                //exit file selection
+                foreach (var file in SkyFiles)
+                {
+                    file.IsSelectionActive = false;
+                    file.IsSelected = false;
+                }
+            }
+
+            updateSelectionStateAction.Invoke();
+        }
+
+        private async Task AddFolder()
+        {
+            var result = await userDialogs.PromptAsync("Folder name");
+            if (!result.Ok)
+                return;
+
+            if (result.Value.IsNullOrEmpty())
+                return;
+
+            var folderName = result.Value.Trim();
+            var newFolder = new Folder { Name = folderName, Id = Guid.NewGuid(), SkyLinks = new List<string>() };
+            storageService.SaveFolder(newFolder);
+
+            LoadFolders();
+
+            userDialogs.Toast($"Added folder {folderName}");
+        }
+
+        private async Task MoveFiles()
+        {
+            //move all selected files to new folder
+            var selectedFiles = SkyFiles.Where(s => s.IsSelected).ToList();
+            var s = selectedFiles.Count == 1 ? "" : "s";
+
+            //exit selection so that nav bar buttons get reset
+            ExitSelection();
+
+            //ask user to select a folder
+            FilesToMove = selectedFiles;
+            IsMovingFile = true;
+            IsFoldersVisible = true;
+            Title = $"Moving {selectedFiles.Count} file{s}";
+
+            moveFilesCompletionSource = new TaskCompletionSource<IFolderItem>();
+            var folder = await moveFilesCompletionSource.Task;
+            IsMovingFile = false;
+            if (folder is SentFolder || folder is ReceivedFolder)
+            {
+                userDialogs.Toast($"Cannot move file{s} to {folder.Name}");
+                Title = "SkyDrive";
+                return;
+            }
+
+            var folderDvm = folder as FolderDVM;
+            storageService.MoveSkyFiles(selectedFiles.Select(s => s.SkyFile).ToList(), folderDvm.Folder);
+
+            userDialogs.Toast($"Moved {selectedFiles.Count} file{s} to {folder.Name}");
+
+            SelectFolder(folder);
+        }
+
+        private async Task DeleteFiles()
+        {
+            if (IsFoldersVisible)
+            {
+                //delete all selected folders
+
+                var selectedFolders = ConvertFolderCollectionType(Folders).Where(s => s.IsSelected).ToList();
+                var s = selectedFolders.Count == 1 ? "" : "s";
+                if (!await userDialogs.ConfirmAsync($"Are you sure you want to delete {selectedFolders.Count} folder{s}?"))
+                    return;
+
+                foreach (var folder in selectedFolders)
+                {
+                    storageService.DeleteFolder(folder.Folder);
+                    Folders.Remove(folder);
+                }
+            }
+            else
+            {
+                //delete all selected files
+
+                var selectedFiles = SkyFiles.Where(s => s.IsSelected).ToList();
+                var s = selectedFiles.Count == 1 ? "" : "s";
+
+                bool isSentOrReceivedFolder = CurrentFolder is SentFolder || CurrentFolder is ReceivedFolder;
+                var folder = isSentOrReceivedFolder ? null : (CurrentFolder as FolderDVM).Folder;
+                var folderName = isSentOrReceivedFolder ? "all folders" : folder.Name;
+
+                if (!await userDialogs.ConfirmAsync($"Are you sure you want to delete {selectedFiles.Count} file{s} from {folderName}?"))
+                    return;
+
+                foreach (var file in selectedFiles)
+                {
+                    storageService.DeleteSkyFile(file.SkyFile, folder);
+                    SkyFiles.Remove(file);
+                }
+            }
+
+            ExitSelection();
+        }
+
+        private bool GetIsSelectionActive()
+        {
+            return IsFoldersVisible ?
+                Folders.Where(f => f is FolderDVM)?.Select(f => f as FolderDVM).FirstOrDefault() ?.IsSelectionActive ?? false :
+                SkyFiles.FirstOrDefault()?.IsSelectionActive ?? false;
         }
 
         public override void Prepare(NavParam parameter)

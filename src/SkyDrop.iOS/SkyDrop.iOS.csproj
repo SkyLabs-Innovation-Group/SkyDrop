@@ -197,6 +197,18 @@
     <ImageAsset Include="Media.xcassets\ic_error.imageset\alert-circle.pdf" />
     <ImageAsset Include="Media.xcassets\ic_image.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_image.imageset\image.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_folder.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_folder.imageset\folder.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_plus.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_plus.imageset\plus.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\folder-plus.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_back.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_back.imageset\back_button.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_bin.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_bin.imageset\bin.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\folder-arrow-right.pdf" />
     <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
@@ -208,6 +220,12 @@
     <Compile Include="Views\Files\FileExplorerView.designer.cs">
         <DependentUpon>FileExplorerView.cs</DependentUpon>
     </Compile>
+    <InterfaceDefinition Include="Views\Files\FolderCell.xib" />
+    <Compile Include="Views\Files\FolderCell.cs" />
+    <Compile Include="Views\Files\FolderCell.designer.cs">
+      <DependentUpon>FolderCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BaseViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
