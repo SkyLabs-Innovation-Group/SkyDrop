@@ -6,7 +6,7 @@ using MvvmCross.Platforms.Android.Binding.BindingContext;
 
 namespace SkyDrop.Droid.Views.PortalPreferences
 {
-    internal class PortalPreferencesListAdapter : MvxRecyclerAdapter
+    public class PortalPreferencesListAdapter : MvxRecyclerAdapter
     {
         private readonly PortalPreferencesListView view;
 

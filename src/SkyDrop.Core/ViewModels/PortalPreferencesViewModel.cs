@@ -20,7 +20,7 @@ namespace SkyDrop.Core.ViewModels
 
         public MvxObservableCollection<SkynetPortalDVM> UserPortals { get; } = new MvxObservableCollection<SkynetPortalDVM>();
 
-        public static MvxObservableCollection<SkynetPortalDVM> PresetPortals => new MvxObservableCollection<SkynetPortalDVM>(
+        public MvxObservableCollection<SkynetPortalDVM> PresetPortals => new MvxObservableCollection<SkynetPortalDVM>(
             new List<SkynetPortalDVM>()
         {
             new SkynetPortalDVM("https://siasky.net", "Siasky.net"),
@@ -37,38 +37,41 @@ namespace SkyDrop.Core.ViewModels
             this.navigationService = navigationService;
 
             Title = "Portal Preferences";
-
+            UserPortals = new MvxObservableCollection<SkynetPortalDVM>();
             BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
-        }
-
-        public void ReorderPortals(int position, int newPosition)
-        {
-            Log.Trace($"ReorderPortals(position: {position}, newPosition: {newPosition})");
-
-            if (position == newPosition)
-                return;
-
-            var copy = new MvxObservableCollection<SkynetPortalDVM>(UserPortals);
-            var portalCopy = copy[position];
-            copy.RemoveAt(position);
-
-            int newIndex = Math.Max(0, Math.Min(UserPortals.Count - 1, newPosition));
-
-            copy.Insert(newIndex, portalCopy);
-
-            UserPortals.SwitchTo(copy);
         }
 
         public override Task Initialize()
         {
             LoadUserPortals();
 
-            return base.Initialize();
+            return Task.CompletedTask;
         }
 
         public void LoadUserPortals()
         {
             UserPortals.SwitchTo(PresetPortals);
+        }
+
+        public void ReorderPortals(int position, int newPosition)
+        {
+            Log.Trace($"[Drag] ReorderPortals(position: {position}, newPosition: {newPosition})");
+
+            if (position == newPosition)
+                return;
+
+            var copy = new MvxObservableCollection<SkynetPortalDVM>(UserPortals);
+            var portalCopy = copy[position];
+
+            int newIndex = Math.Max(0, Math.Min(UserPortals.Count - 1, newPosition));
+            copy.Move(position, newIndex);
+
+            foreach (var portal in copy)
+            {
+                Log.Trace(portal.Name);
+            }
+
+            UserPortals.SwitchTo(copy);
         }
     }
 }
