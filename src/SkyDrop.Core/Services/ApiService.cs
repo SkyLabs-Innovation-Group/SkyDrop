@@ -24,18 +24,21 @@ namespace SkyDrop.Core.Services
         private ISkyDropHttpClientFactory httpClientFactory;
         private ISingletonService singletonService;
         private IUserDialogs userDialogs;
+        private ISaveToGalleryService saveToGalleryService;
 
         public ApiService(ILog log,
             ISkyDropHttpClientFactory skyDropHttpClientFactory,
             ISingletonService singletonService,
             IUserDialogs userDialogs,
-            IFileSystemService fileSystemService)
+            IFileSystemService fileSystemService,
+            ISaveToGalleryService saveToGalleryService)
         {
             Log = log;
             httpClientFactory = skyDropHttpClientFactory;
             this.singletonService = singletonService;
             this.userDialogs = userDialogs;
             this.fileSystemService = fileSystemService;
+            this.saveToGalleryService = saveToGalleryService;
         }
         
         public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationTokenSource)
@@ -84,7 +87,7 @@ namespace SkyDrop.Core.Services
             return skyFile;
         }
 
-        public async Task DownloadAndSaveSkyfile(string url)
+        public async Task DownloadAndSaveSkyfile(string url, bool saveToGallery)
         {
             var permissionResult = await Permissions.RequestAsync<Permissions.StorageWrite>();
             if (permissionResult != PermissionStatus.Granted)
@@ -97,10 +100,23 @@ namespace SkyDrop.Core.Services
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var response = await httpClient.GetAsync(url);
             var fileName = GetFilenameFromResponse(response);
+            string newFileName = "";
 
-            //save
-            using var responseStream = await response.Content.ReadAsStreamAsync();
-            var newFileName = await fileSystemService.SaveFile(responseStream, fileName, true);
+            if (saveToGallery)
+            {
+                if (DeviceInfo.Platform == DevicePlatform.Android)
+                    throw new Exception("Save to gallery is not available on Android");
+
+                using var responseStream = await response.Content.ReadAsStreamAsync();
+                await saveToGalleryService.SaveToGallery(responseStream);
+                newFileName = fileName;
+            }
+            else
+            {
+                //save to downloads folder
+                using var responseStream = await response.Content.ReadAsStreamAsync();
+                newFileName = await fileSystemService.SaveFile(responseStream, fileName, true);
+            }
 
             userDialogs.Toast($"Saved {newFileName}");
         }
@@ -200,7 +216,7 @@ namespace SkyDrop.Core.Services
     {
         Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationTokenSource);
 
-        Task DownloadAndSaveSkyfile(string url);
+        Task DownloadAndSaveSkyfile(string url, bool saveToGallery);
 
         Task<Stream> DownloadFile(string url);
 

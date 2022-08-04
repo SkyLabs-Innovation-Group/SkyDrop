@@ -850,8 +850,30 @@ namespace SkyDrop.Core.ViewModels.Main
                 }
 
                 //save
+                bool saveToGallery = false;
+                if (Util.CanDisplayPreview(FocusedFile.Filename) && DeviceInfo.Platform == DevicePlatform.iOS)
+                {
+                    //focused file is an image
+
+                    const string cancel = "Cancel";
+                    const string gallery = "Gallery";
+                    const string files = "Files";
+                    var result = await userDialogs.ActionSheetAsync("Save image to Gallery or Files?", cancel, null, null, new[] { gallery, files });
+                    switch (result)
+                    {
+                        case cancel:
+                            return;
+                        case gallery:
+                            saveToGallery = true;
+                            break;
+                        case files:
+                            saveToGallery = false;
+                            break;
+                    }
+                }
+
                 IsDownloadingFile = true;
-                await apiService.DownloadAndSaveSkyfile(FocusedFileUrl);
+                await apiService.DownloadAndSaveSkyfile(FocusedFileUrl, saveToGallery);
             }
             catch(Exception e)
             {

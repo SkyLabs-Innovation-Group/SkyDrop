@@ -55,7 +55,8 @@ namespace SkyDrop.iOS
             UserDialogs.Instance = new UserDialogsImpl();
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IUserDialogs>(() => UserDialogs.Instance);
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISkyDropHttpClientFactory>(() => new NSUrlHttpClientFactory());
-            
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISaveToGalleryService>(() => new iOSSaveToGalleryService());
+
             return base.CreateApp();
         }
         

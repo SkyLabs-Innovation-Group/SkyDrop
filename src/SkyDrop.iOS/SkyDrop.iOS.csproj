@@ -226,6 +226,7 @@
       <DependentUpon>FolderCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\BaseViewController.cs" />
+    <Compile Include="Services\iOSSaveToGalleryService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
