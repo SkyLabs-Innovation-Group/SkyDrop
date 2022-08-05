@@ -125,7 +125,7 @@ namespace SkyDrop.Core.Services
 
         public void MoveSkyFiles(List<SkyFile> skyFiles, Folder folder)
         {
-            folder.SkyLinks = skyFiles.Select(s => s.Skylink).ToList();
+            folder.SkyLinks.AddRange(skyFiles.Select(s => s.Skylink));
             var newFolderObject = FolderToRealmObject(folder);
 
             realm.Write(() =>
