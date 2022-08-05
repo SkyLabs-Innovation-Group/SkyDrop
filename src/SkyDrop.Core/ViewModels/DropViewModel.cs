@@ -849,41 +849,12 @@ namespace SkyDrop.Core.ViewModels.Main
                     return;
                 }
 
-                //save
-                bool saveToGallery = false;
-                if (Util.CanDisplayPreview(FocusedFile.Filename))
-                {
-                    //focused file is an image
-
-                    if (DeviceInfo.Platform == DevicePlatform.iOS)
-                    {
-                        //show gallery / files menu
-
-                        const string cancel = "Cancel";
-                        const string gallery = "Photos";
-                        const string files = "Files";
-                        var result = await userDialogs.ActionSheetAsync("Save image to Gallery or Files?", cancel, null, null, new[] { gallery, files });
-                        switch (result)
-                        {
-                            case cancel:
-                                return;
-                            case gallery:
-                                saveToGallery = true;
-                                break;
-                            case files:
-                                saveToGallery = false;
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        //always save images to gallery on Android
-                        saveToGallery = true;
-                    }
-                }
+                var saveType = await Util.GetSaveType(FocusedFile.Filename);
+                if (saveType == Util.SaveType.Cancel)
+                    return;
 
                 IsDownloadingFile = true;
-                await apiService.DownloadAndSaveSkyfile(FocusedFileUrl, saveToGallery);
+                await apiService.DownloadAndSaveSkyfile(FocusedFileUrl, saveType);
             }
             catch(Exception e)
             {

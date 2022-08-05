@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
+using static SkyDrop.Core.Utility.Util;
 
 namespace SkyDrop.Core.Services
 {
@@ -24,21 +25,18 @@ namespace SkyDrop.Core.Services
         private ISkyDropHttpClientFactory httpClientFactory;
         private ISingletonService singletonService;
         private IUserDialogs userDialogs;
-        private ISaveToGalleryService saveToGalleryService;
 
         public ApiService(ILog log,
             ISkyDropHttpClientFactory skyDropHttpClientFactory,
             ISingletonService singletonService,
             IUserDialogs userDialogs,
-            IFileSystemService fileSystemService,
-            ISaveToGalleryService saveToGalleryService)
+            IFileSystemService fileSystemService)
         {
             Log = log;
             httpClientFactory = skyDropHttpClientFactory;
             this.singletonService = singletonService;
             this.userDialogs = userDialogs;
             this.fileSystemService = fileSystemService;
-            this.saveToGalleryService = saveToGalleryService;
         }
         
         public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationTokenSource)
@@ -87,7 +85,7 @@ namespace SkyDrop.Core.Services
             return skyFile;
         }
 
-        public async Task DownloadAndSaveSkyfile(string url, bool saveToGallery)
+        public async Task DownloadAndSaveSkyfile(string url, SaveType saveType)
         {
             var permissionResult = await Permissions.RequestAsync<Permissions.StorageWrite>();
             if (permissionResult != PermissionStatus.Granted)
@@ -99,24 +97,10 @@ namespace SkyDrop.Core.Services
             //download
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var response = await httpClient.GetAsync(url);
-            var fileName = GetFilenameFromResponse(response);
-            string newFileName = "";
+            var filename = GetFilenameFromResponse(response);
 
-            if (saveToGallery)
-            {
-                using var responseStream = await response.Content.ReadAsStreamAsync();
-                var newPath = await saveToGalleryService.SaveToGallery(responseStream, fileName);
-                newFileName = Path.GetFileName(newPath);
-            }
-            else
-            {
-                //save to downloads folder
-                using var responseStream = await response.Content.ReadAsStreamAsync();
-                var newPath = await fileSystemService.SaveFile(responseStream, fileName, true);
-                newFileName = Path.GetFileName(newPath);
-            }
-
-            userDialogs.Toast($"Saved {newFileName}");
+            using var responseStream = await response.Content.ReadAsStreamAsync();
+            await fileSystemService.SaveToGalleryOrFiles(responseStream, filename, saveType);
         }
 
         public async Task<Stream> DownloadFile(string url)
@@ -214,7 +198,7 @@ namespace SkyDrop.Core.Services
     {
         Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationTokenSource);
 
-        Task DownloadAndSaveSkyfile(string url, bool saveToGallery);
+        Task DownloadAndSaveSkyfile(string url, SaveType saveType);
 
         Task<Stream> DownloadFile(string url);
 
