@@ -860,7 +860,7 @@ namespace SkyDrop.Core.ViewModels.Main
                         //show gallery / files menu
 
                         const string cancel = "Cancel";
-                        const string gallery = "Gallery";
+                        const string gallery = "Photos";
                         const string files = "Files";
                         var result = await userDialogs.ActionSheetAsync("Save image to Gallery or Files?", cancel, null, null, new[] { gallery, files });
                         switch (result)
