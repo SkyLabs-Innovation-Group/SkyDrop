@@ -364,7 +364,7 @@ namespace SkyDrop.iOS.Views.Drop
         {
             ViewModel.DropViewUIState = DropViewState.QRCodeState;
             ViewModel.IsBarcodeVisible = true;
-            ViewModel.Title = ViewModel.FocusedFile.Filename;
+            ViewModel.Title = ViewModel.FocusedFile?.Filename;
 
             ViewModel.Log.Trace("Sliding in QR code view");
 
