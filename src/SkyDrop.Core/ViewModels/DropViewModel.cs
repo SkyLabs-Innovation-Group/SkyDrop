@@ -284,6 +284,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 RaiseFocusedFileChanged();
 
+                //show filename
+                Title = FocusedFile.Filename;
+
                 //clear cache
                 fileSystemService.ClearCache();
 
@@ -393,6 +396,9 @@ namespace SkyDrop.Core.ViewModels.Main
                 var filename = await apiService.GetSkyFileFilename(FocusedFile.GetSkylinkUrl());
                 FocusedFile.Filename = filename;
                 storageService.SaveSkyFiles(FocusedFile);
+
+                //show filename
+                Title = FocusedFile.Filename;
 
                 RaiseFocusedFileChanged();
 
@@ -788,9 +794,7 @@ namespace SkyDrop.Core.ViewModels.Main
             if (UserIsSwiping())
                 return;
 
-            var fileToOpen = FocusedFile ?? FocusedFile;
-
-            string skylinkUrl = fileToOpen.GetSkylinkUrl();
+            string skylinkUrl = FocusedFile.GetSkylinkUrl();
             Log.Trace("Opening Skylink " + skylinkUrl);
             await Browser.OpenAsync(skylinkUrl, new BrowserLaunchOptions
             {
@@ -828,6 +832,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
             SwipeNavigationEnabled = true;
             FocusedFile = selectedFile;
+
+            //show filename
+            Title = FocusedFile.Filename;
 
             RaiseFocusedFileChanged();
 
