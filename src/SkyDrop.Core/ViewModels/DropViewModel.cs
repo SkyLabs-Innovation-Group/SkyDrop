@@ -851,24 +851,34 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 //save
                 bool saveToGallery = false;
-                if (Util.CanDisplayPreview(FocusedFile.Filename) && DeviceInfo.Platform == DevicePlatform.iOS)
+                if (Util.CanDisplayPreview(FocusedFile.Filename))
                 {
                     //focused file is an image
 
-                    const string cancel = "Cancel";
-                    const string gallery = "Gallery";
-                    const string files = "Files";
-                    var result = await userDialogs.ActionSheetAsync("Save image to Gallery or Files?", cancel, null, null, new[] { gallery, files });
-                    switch (result)
+                    if (DeviceInfo.Platform == DevicePlatform.iOS)
                     {
-                        case cancel:
-                            return;
-                        case gallery:
-                            saveToGallery = true;
-                            break;
-                        case files:
-                            saveToGallery = false;
-                            break;
+                        //show gallery / files menu
+
+                        const string cancel = "Cancel";
+                        const string gallery = "Gallery";
+                        const string files = "Files";
+                        var result = await userDialogs.ActionSheetAsync("Save image to Gallery or Files?", cancel, null, null, new[] { gallery, files });
+                        switch (result)
+                        {
+                            case cancel:
+                                return;
+                            case gallery:
+                                saveToGallery = true;
+                                break;
+                            case files:
+                                saveToGallery = false;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        //always save images to gallery on Android
+                        saveToGallery = true;
                     }
                 }
 

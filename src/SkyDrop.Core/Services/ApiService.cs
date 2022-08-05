@@ -104,18 +104,16 @@ namespace SkyDrop.Core.Services
 
             if (saveToGallery)
             {
-                if (DeviceInfo.Platform == DevicePlatform.Android)
-                    throw new Exception("Save to gallery is not available on Android");
-
                 using var responseStream = await response.Content.ReadAsStreamAsync();
-                await saveToGalleryService.SaveToGallery(responseStream);
-                newFileName = fileName;
+                var newPath = await saveToGalleryService.SaveToGallery(responseStream, fileName);
+                newFileName = Path.GetFileName(newPath);
             }
             else
             {
                 //save to downloads folder
                 using var responseStream = await response.Content.ReadAsStreamAsync();
-                newFileName = await fileSystemService.SaveFile(responseStream, fileName, true);
+                var newPath = await fileSystemService.SaveFile(responseStream, fileName, true);
+                newFileName = Path.GetFileName(newPath);
             }
 
             userDialogs.Toast($"Saved {newFileName}");

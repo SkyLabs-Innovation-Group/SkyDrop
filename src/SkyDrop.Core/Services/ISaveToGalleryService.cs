@@ -6,7 +6,7 @@ namespace SkyDrop.Core.Services
 {
 	public interface ISaveToGalleryService
 	{
-		Task SaveToGallery(Stream imageData);
+		Task<string> SaveToGallery(Stream imageData, string filename);
 	}
 }
 

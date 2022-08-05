@@ -10,9 +10,9 @@ namespace SkyDrop.iOS.Services
 {
 	public class iOSSaveToGalleryService : ISaveToGalleryService
 	{
-		public Task SaveToGallery(Stream imageData)
+		public async Task<string> SaveToGallery(Stream imageData, string filename)
         {
-			return MainThread.InvokeOnMainThreadAsync(() =>
+			await MainThread.InvokeOnMainThreadAsync(() =>
 			{
 				var nsData = NSData.FromStream(imageData);
 				var image = new UIImage(nsData);
@@ -20,6 +20,8 @@ namespace SkyDrop.iOS.Services
 				image.SaveToPhotosAlbum((UIImage img, NSError error) => taskCompletionSource.SetResult(error == null));
 				return taskCompletionSource.Task;
 			});
+
+			return filename;
 		}
 	}
 }
