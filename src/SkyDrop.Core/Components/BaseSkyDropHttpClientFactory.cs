@@ -7,10 +7,6 @@ namespace SkyDrop.Core.Components
 {
     public abstract class BaseSkyDropHttpClientFactory : ISkyDropHttpClientFactory
     {
-        /// <summary>
-        /// Keep secret!
-        /// </summary>
-        protected const string MyDevApiKey = "";
         protected const string PortalApiTokenHeader = "Skynet-Api-Key";
 
         // todo: nb that this might one day cause issues if we stored too many HttpClient instances e.g. for 100s of portals
