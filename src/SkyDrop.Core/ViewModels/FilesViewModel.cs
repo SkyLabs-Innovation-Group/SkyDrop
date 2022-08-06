@@ -50,9 +50,11 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsFoldersVisible { get; set; } = true;
         public bool IsSelectionActive => GetIsSelectionActive();
         public bool IsMovingFile { get; set; }
-        public bool IsMoveButtonVisible => IsSelectionActive && !IsFoldersVisible;
+        public bool IsDeleteButtonVisible => IsSelectionActive && !IsUnzippedFilesMode;
+        public bool IsMoveButtonVisible => IsSelectionActive && !IsFoldersVisible && !IsUnzippedFilesMode;
         public bool IsLayoutButtonVisible => !IsSelectionActive && !IsFoldersVisible;
         public bool IsAddFolderButtonVisible => !IsSelectionActive && IsFoldersVisible;
+        public bool IsUnzippedSelectionActive => IsSelectionActive && IsUnzippedFilesMode;
         public List<SkyFileDVM> FilesToMove { get; set; }
         public IFolderItem CurrentFolder { get; set; }
 
@@ -97,6 +99,8 @@ namespace SkyDrop.Core.ViewModels.Main
                 RaisePropertyChanged(() => IsMoveButtonVisible).Forget();
                 RaisePropertyChanged(() => IsLayoutButtonVisible).Forget();
                 RaisePropertyChanged(() => IsAddFolderButtonVisible).Forget();
+                RaisePropertyChanged(() => IsUnzippedSelectionActive).Forget();
+                RaisePropertyChanged(() => IsDeleteButtonVisible).Forget();
             };
         }
 
@@ -108,9 +112,9 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 if (IsUnzippedFilesMode)
                 {
+                    IsFoldersVisible = false;
                     var unzippedFiles = await DownloadAndUnzipArchive();
                     SkyFiles.SwitchTo(unzippedFiles);
-                    IsFoldersVisible = false;
                 }
                 else
                 {

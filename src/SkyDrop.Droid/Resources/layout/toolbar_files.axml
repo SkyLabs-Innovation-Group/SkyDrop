@@ -61,7 +61,7 @@
                 android:layout_height="match_parent"
                 android:paddingHorizontal="16dp"
                 android:src="@drawable/ic_bin"
-                app:MvxBind="Click DeleteFileCommand;Visibility Visibility(IsSelectionActive)"
+                app:MvxBind="Click DeleteFileCommand;Visibility Visibility(IsDeleteButtonVisible)"
                 />
 
             <ImageView
@@ -70,6 +70,22 @@
                 android:paddingHorizontal="16dp"
                 android:src="@drawable/ic_folder_move"
                 app:MvxBind="Click MoveFileCommand;Visibility Visibility(IsMoveButtonVisible)"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="16dp"
+                android:src="@drawable/ic_select_all"
+                app:MvxBind="Click SelectAllCommand;Visibility Visibility(IsUnzippedSelectionActive)"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="16dp"
+                android:src="@drawable/ic_download"
+                app:MvxBind="Click SaveSelectedUnzippedFilesCommand;Visibility Visibility(IsUnzippedSelectionActive)"
                 />
 
         </LinearLayout>
