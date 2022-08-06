@@ -43,6 +43,7 @@
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <MandroidI18n />
     <AndroidTlsProvider>btls</AndroidTlsProvider>
+    <MandroidExtraArgs>-v -v -v -v</MandroidExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -91,10 +92,15 @@
     <Compile Include="Bindings\SkyFilePreviewImageBinding.cs" />
     <Compile Include="Bindings\BackgroundColorBinding.cs" />
     <Compile Include="Bindings\FileCategoryIconBinding.cs" />
+    <Compile Include="Views\PortalPreferences\PortalPreferencesView.cs" />
     <Compile Include="Views\Files\FileExplorerView.cs" />
     <Compile Include="Bindings\IconBinding.cs" />
     <Compile Include="Views\Files\FilesView.cs" />
     <Compile Include="Services\AndroidSaveToGalleryService.cs" />
+    <Compile Include="Views\PortalPreferences\PortalPreferencesListView.cs" />
+    <Compile Include="Views\PortalPreferences\PortalViewHolder.cs" />
+    <Compile Include="Helper\BaseOnDragListener.cs" />
+    <Compile Include="Views\PortalPreferences\PortalPreferencesListAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -430,6 +436,10 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\PortalPreferencesView.axml">
+          <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
     <AndroidResource Include="Resources\drawable\ic_qr.xml">
       <SubType></SubType>
       <Generator></Generator>
@@ -446,6 +456,7 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
+<<<<<<< HEAD
     <AndroidResource Include="Resources\layout\item_folder.xml">
       <SubType></SubType>
       <Generator></Generator>
@@ -471,6 +482,13 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\ic_select_all.xml">
+=======
+    <AndroidResource Include="Resources\layout\item_skynet_portal.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_skynet_logo.xml">
+>>>>>>> portal-preferences-view
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
@@ -505,6 +523,7 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\PortalPreferences\" />
     <Folder Include="Views\Files\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

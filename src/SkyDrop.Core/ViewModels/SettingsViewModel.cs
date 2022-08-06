@@ -14,6 +14,7 @@ namespace SkyDrop.Core.ViewModels
         public bool VerifySslCertificates { get; set; } = true;
         public string SkynetPortalLabelText { get; set; } = "Enter a skynet portal to use in the app (default is siasky.net):";
         public IMvxCommand BackCommand { get; set; }
+        public IMvxCommand NavigateToPortalPreferencesCommand { get; set; }
 
         /// <summary>
         /// Currently, the best way to verify a Skynet portal that I can think of would be to query for a sky file's metadata.
@@ -30,9 +31,10 @@ namespace SkyDrop.Core.ViewModels
             this.httpClientFactory = skyDropHttpClientFactory;
             this.navigationService = navigationService;
 
-            Title = "Advanced settings";
+            Title = "Advanced Settings";
 
             BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
+            NavigateToPortalPreferencesCommand = new MvxAsyncCommand(async () => await navigationService.Navigate<PortalPreferencesViewModel>());
         }
 
         public void Toast(string message)
