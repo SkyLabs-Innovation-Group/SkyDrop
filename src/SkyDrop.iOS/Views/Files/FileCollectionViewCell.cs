@@ -54,6 +54,9 @@ namespace SkyDrop.iOS.Views.Files
             get => new SkyFile();
             set
             {
+                //clear previous preview image
+                PreviewImage.ImagePath = null; 
+
                 //update preview image
                 if (Util.ExtensionMatches(value.Filename, ".jpeg", ".jpg", ".png"))
                 {

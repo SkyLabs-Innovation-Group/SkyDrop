@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Foundation;
+using ObjCRuntime;
 using SkyDrop.Core.Components;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Services;
@@ -23,9 +24,11 @@ namespace SkyDrop.iOS.Services
                 return HttpClientsPerPortal[portal];
 
             // Create a background configuration for the application, enables background upload or download
-            var configuration = NSUrlSessionConfiguration.CreateBackgroundSessionConfiguration ($"skydrop.skydrop.{HttpClientsPerPortal.Count}");
+            // On simulator we use DefaultSessionConfiguration because background session causes upload to fail
+            var configuration = Runtime.Arch == Arch.DEVICE
+                ? NSUrlSessionConfiguration.CreateBackgroundSessionConfiguration($"skydrop.skydrop.{HttpClientsPerPortal.Count}")
+                : NSUrlSessionConfiguration.DefaultSessionConfiguration;
 
-            
             var client = new HttpClient(new NSUrlSessionHandler(configuration))
             {
                 BaseAddress = new Uri(portal.BaseUrl), 
