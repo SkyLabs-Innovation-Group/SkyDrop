@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
+using static SkyDrop.Core.Utility.Util;
 
 namespace SkyDrop.Core.Services
 {
@@ -84,7 +85,7 @@ namespace SkyDrop.Core.Services
             return skyFile;
         }
 
-        public async Task DownloadAndSaveSkyfile(string url)
+        public async Task DownloadAndSaveSkyfile(string url, SaveType saveType)
         {
             var permissionResult = await Permissions.RequestAsync<Permissions.StorageWrite>();
             if (permissionResult != PermissionStatus.Granted)
@@ -96,13 +97,10 @@ namespace SkyDrop.Core.Services
             //download
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var response = await httpClient.GetAsync(url);
-            var fileName = GetFilenameFromResponse(response);
+            var filename = GetFilenameFromResponse(response);
 
-            //save
             using var responseStream = await response.Content.ReadAsStreamAsync();
-            var newFileName = await fileSystemService.SaveFile(responseStream, fileName, true);
-
-            userDialogs.Toast($"Saved {newFileName}");
+            await fileSystemService.SaveToGalleryOrFiles(responseStream, filename, saveType);
         }
 
         public async Task<Stream> DownloadFile(string url)
@@ -200,7 +198,7 @@ namespace SkyDrop.Core.Services
     {
         Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationTokenSource);
 
-        Task DownloadAndSaveSkyfile(string url);
+        Task DownloadAndSaveSkyfile(string url, SaveType saveType);
 
         Task<Stream> DownloadFile(string url);
 

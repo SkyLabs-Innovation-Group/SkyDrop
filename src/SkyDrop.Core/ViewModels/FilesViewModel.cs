@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -163,13 +164,17 @@ namespace SkyDrop.Core.ViewModels.Main
         private async Task SaveUnzippedFile(SkyFile file)
         {
             var selectedFileDVM = SkyFiles.FirstOrDefault(f => f.SkyFile.FullFilePath == file.FullFilePath);
-            selectedFileDVM.IsLoading = true;
 
             try
             {
+                var saveType = await Util.GetSaveType(file.Filename);
+                if (saveType == Util.SaveType.Cancel)
+                    return;
+
+                selectedFileDVM.IsLoading = true;
+
                 await Task.Delay(1000); //wait for animation
-                var newFileName = await fileSystemService.SaveFile(file.GetStream(), file.Filename, isPersistent: true);
-                userDialogs.Toast($"Saved {newFileName}");
+                await fileSystemService.SaveToGalleryOrFiles(file.GetStream(), file.Filename, saveType);
             }
             catch (Exception e)
             {

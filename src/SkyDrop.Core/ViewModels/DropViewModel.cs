@@ -849,9 +849,12 @@ namespace SkyDrop.Core.ViewModels.Main
                     return;
                 }
 
-                //save
+                var saveType = await Util.GetSaveType(FocusedFile.Filename);
+                if (saveType == Util.SaveType.Cancel)
+                    return;
+
                 IsDownloadingFile = true;
-                await apiService.DownloadAndSaveSkyfile(FocusedFileUrl);
+                await apiService.DownloadAndSaveSkyfile(FocusedFileUrl, saveType);
             }
             catch(Exception e)
             {

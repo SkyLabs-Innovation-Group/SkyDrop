@@ -9,6 +9,7 @@ using Acr.UserDialogs;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
+using static SkyDrop.Core.Utility.Util;
 
 namespace SkyDrop.Core.Services
 {
@@ -19,11 +20,13 @@ namespace SkyDrop.Core.Services
         public ILog Log { get; }
 
         private readonly IUserDialogs userDialogs;
+        private readonly ISaveToGalleryService saveToGalleryService;
 
-        public FileSystemService(ILog log, IUserDialogs userDialogs)
+        public FileSystemService(ILog log, IUserDialogs userDialogs, ISaveToGalleryService saveToGalleryService)
         {
             this.Log = log;
             this.userDialogs = userDialogs;
+            this.saveToGalleryService = saveToGalleryService;
         }
 
         public async Task<IEnumerable<FileResult>> PickFilesAsync(SkyFilePickerType fileType)
@@ -135,7 +138,26 @@ namespace SkyDrop.Core.Services
             using var fileStream = File.OpenWrite(filePath);
             await data.CopyToAsync(fileStream);
             data.Dispose();
-            return Path.GetFileName(filePath);
+            return filePath;
+        }
+
+        public async Task SaveToGalleryOrFiles(Stream data, string filename, SaveType saveType)
+        {
+            string newFileName = "";
+            if (saveType == SaveType.Photos)
+            {
+                //save to photos gallery
+                var newPath = await saveToGalleryService.SaveToGallery(data, filename);
+                newFileName = Path.GetFileName(newPath);
+            }
+            else
+            {
+                //save to downloads folder
+                var newPath = await SaveFile(data, filename, true);
+                newFileName = Path.GetFileName(newPath);
+            }
+
+            userDialogs.Toast($"Saved {newFileName}");
         }
 
         private string GetNextFilename(string filename)
@@ -192,5 +214,7 @@ namespace SkyDrop.Core.Services
         void ClearCache();
 
         Task<string> SaveFile(Stream data, string fileName, bool isPersistent);
+
+        Task SaveToGalleryOrFiles(Stream data, string filename, SaveType saveType);
     }
 }

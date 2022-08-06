@@ -1,7 +1,11 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using Acr.UserDialogs;
+using MvvmCross;
 using SkyDrop.Core.DataModels;
+using Xamarin.Essentials;
 
 namespace SkyDrop.Core.Utility
 {
@@ -82,6 +86,48 @@ namespace SkyDrop.Core.Utility
         public static bool IsNullOrEmpty(this string text)
         {
             return string.IsNullOrEmpty(text);
+        }
+
+        public static async Task<SaveType> GetSaveType(string filename)
+        {
+            if (!Util.CanDisplayPreview(filename))
+            {
+                //not an image
+                return SaveType.Files;
+            }
+
+            //file is an image
+
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                //always save images to gallery on Android
+                return SaveType.Photos;
+            }
+
+            //show gallery / files menu on iOS
+
+            const string cancel = "Cancel";
+            const string photos = "Photos";
+            const string files = "Files";
+            var userDialogs = Mvx.IoCProvider.Resolve<IUserDialogs>();
+            var result = await userDialogs.ActionSheetAsync("Save image to Photos or Files?", cancel, null, null, new[] { photos, files });
+            switch (result)
+            {
+                case photos:
+                    return SaveType.Photos;
+                case files:
+                    return SaveType.Files;
+                case cancel:
+                default:
+                    return SaveType.Cancel;
+            }
+        }
+
+        public enum SaveType
+        {
+            Cancel, //do nothing
+            Photos, //save image to gallery
+            Files //save to files
         }
     }
 }
