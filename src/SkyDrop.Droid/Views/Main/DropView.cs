@@ -142,6 +142,8 @@ namespace SkyDrop.Droid.Views.Main
             //DropViewUIState gets changed at the end of the animation 
             //that is to fix an issue with CheckUserIsSwiping() on barcode menu buttons
             AnimateSlideBarcodeOut();
+
+            ViewModel.Title = "SkyDrop";
         }
 
         /// <summary>
@@ -150,7 +152,7 @@ namespace SkyDrop.Droid.Views.Main
         private void SetBarcodeCodeUiState(bool isSlow = false)
         {
             ViewModel.DropViewUIState = DropViewState.QRCodeState;
-
+            ViewModel.Title = ViewModel.FocusedFile?.Filename;
             ViewModel.IsBarcodeVisible = true;
 
             AnimateSlideBarcodeIn(fromLeft: false, isSlow);
