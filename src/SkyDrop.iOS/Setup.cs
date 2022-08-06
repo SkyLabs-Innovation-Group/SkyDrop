@@ -86,6 +86,8 @@ namespace SkyDrop.iOS
             
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger(logProvider));
 
+            var httpClientFactory = Mvx.IoCProvider.Resolve<ISkyDropHttpClientFactory>();
+
             ImageService.Instance.Initialize(new Configuration()
             {
                 ClearMemoryCacheOnOutOfMemory = true,
@@ -97,6 +99,7 @@ namespace SkyDrop.iOS
                 // VerboseLoadingCancelledLogging = true,
                 // VerbosePerformanceLogging = true,
                 // VerboseMemoryCacheLogging = true,
+                HttpClient = httpClientFactory.GetSkyDropHttpClientInstance(),
             });
 
             ImageService.Instance.Config.Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>();
