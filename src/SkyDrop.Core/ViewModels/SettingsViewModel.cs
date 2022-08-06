@@ -63,6 +63,9 @@ namespace SkyDrop.Core.ViewModels
                 if (success)
                 {
                     bool userHasConfirmed = await singletonService.UserDialogs.ConfirmAsync($"Set your portal to {portalUrl} ?");
+                    var promptResult =await singletonService.UserDialogs
+                        .PromptAsync("Paste your API token here", "Optional Authentication", "Save", "Close", "", Acr.UserDialogs.InputType.Default);
+                    portal.UserApiToken = promptResult.Text;
                     if (userHasConfirmed)
                         SkynetPortal.SelectedPortal = portal;
 

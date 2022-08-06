@@ -35,7 +35,8 @@ namespace SkyDrop.iOS.Services
                 Timeout = TimeSpan.FromMinutes(120)
             };
 
-            AddDevApiKeyHeader(client, portal); // comment out in release
+            if (portal.HasApiToken())
+                AddApiTokenHeader(client, portal); // comment out in release
 
             client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
 

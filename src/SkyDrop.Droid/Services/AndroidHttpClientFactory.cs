@@ -49,7 +49,8 @@ namespace SkyDrop.Droid.Services
                 };
             }
 
-            AddDevApiKeyHeader(client, portal);
+            if (portal.HasApiToken())
+                AddApiTokenHeader(client, portal);
 
             client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
 

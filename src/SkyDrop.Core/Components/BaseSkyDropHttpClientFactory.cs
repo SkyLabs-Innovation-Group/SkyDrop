@@ -11,7 +11,7 @@ namespace SkyDrop.Core.Components
         /// Keep secret!
         /// </summary>
         protected const string MyDevApiKey = "";
-        protected const string MyDevApiKeyHeader = "Skynet-Api-Key";
+        protected const string PortalApiTokenHeader = "Skynet-Api-Key";
 
         // todo: nb that this might one day cause issues if we stored too many HttpClient instances e.g. for 100s of portals
         protected Dictionary<SkynetPortal, HttpClient> HttpClientsPerPortal { get; private set; } = new Dictionary<SkynetPortal, HttpClient>();
@@ -31,11 +31,19 @@ namespace SkyDrop.Core.Components
             HttpClientsPerPortal = new Dictionary<SkynetPortal, HttpClient>();
         }
 
-        protected static void AddDevApiKeyHeader(HttpClient client, SkynetPortal portal)
+        public void UpdateHttpClientWithNewToken(SkynetPortal portal)
         {
-            if (portal.BaseUrl.Contains("pro"))
+            var httpClient = GetSkyDropHttpClientInstance(portal);
+
+            if (!httpClient.DefaultRequestHeaders.Contains(PortalApiTokenHeader))
+                AddApiTokenHeader(httpClient, portal);
+        }
+
+        protected static void AddApiTokenHeader(HttpClient client, SkynetPortal portal)
+        {
+            if (portal.HasApiToken())
             {
-                client.DefaultRequestHeaders.Add(MyDevApiKeyHeader, MyDevApiKey);
+                client.DefaultRequestHeaders.Add(PortalApiTokenHeader, portal.UserApiToken);
             }
         }
     }
