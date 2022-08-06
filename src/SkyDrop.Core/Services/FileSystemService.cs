@@ -141,7 +141,7 @@ namespace SkyDrop.Core.Services
             return filePath;
         }
 
-        public async Task SaveToGalleryOrFiles(Stream data, string filename, SaveType saveType)
+        public async Task<string> SaveToGalleryOrFiles(Stream data, string filename, SaveType saveType)
         {
             string newFileName = "";
             if (saveType == SaveType.Photos)
@@ -157,7 +157,7 @@ namespace SkyDrop.Core.Services
                 newFileName = Path.GetFileName(newPath);
             }
 
-            userDialogs.Toast($"Saved {newFileName}");
+            return newFileName;
         }
 
         private string GetNextFilename(string filename)
@@ -215,6 +215,6 @@ namespace SkyDrop.Core.Services
 
         Task<string> SaveFile(Stream data, string fileName, bool isPersistent);
 
-        Task SaveToGalleryOrFiles(Stream data, string filename, SaveType saveType);
+        Task<string> SaveToGalleryOrFiles(Stream data, string filename, SaveType saveType);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -106,11 +107,36 @@ namespace SkyDrop.Core.Utility
 
             //show gallery / files menu on iOS
 
+            return await SaveTypePromptAsync(false);
+        }
+
+        public static async Task<SaveType> GetSaveTypeForMultiple(List<string> filenames)
+        {
+            if (!filenames.Any(f => Util.CanDisplayPreview(f)))
+            {
+                //none of the files are images
+                return SaveType.Files;
+            }
+
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                //always save images to gallery on Android
+                return SaveType.Photos;
+            }
+
+            //show gallery / files menu on iOS
+
+            return await SaveTypePromptAsync(true);
+        }
+
+        private static async Task<SaveType> SaveTypePromptAsync(bool isPlural)
+        {
             const string cancel = "Cancel";
             const string photos = "Photos";
             const string files = "Files";
             var userDialogs = Mvx.IoCProvider.Resolve<IUserDialogs>();
-            var result = await userDialogs.ActionSheetAsync("Save image to Photos or Files?", cancel, null, null, new[] { photos, files });
+            var s = isPlural ? "s" : "";
+            var result = await userDialogs.ActionSheetAsync($"Save image{s} to Photos or Files?", cancel, null, null, new[] { photos, files });
             switch (result)
             {
                 case photos:

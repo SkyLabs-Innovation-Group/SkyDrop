@@ -100,7 +100,9 @@ namespace SkyDrop.Core.Services
             var filename = GetFilenameFromResponse(response);
 
             using var responseStream = await response.Content.ReadAsStreamAsync();
-            await fileSystemService.SaveToGalleryOrFiles(responseStream, filename, saveType);
+            var newFileName = await fileSystemService.SaveToGalleryOrFiles(responseStream, filename, saveType);
+
+            userDialogs.Toast($"Saved {newFileName}");
         }
 
         public async Task<Stream> DownloadFile(string url)

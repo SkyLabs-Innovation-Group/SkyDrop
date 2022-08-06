@@ -15,7 +15,7 @@ namespace SkyDrop.iOS.Views.Files
     [MvxChildPresentationAttribute]
     public partial class FilesView : BaseViewController<FilesViewModel>
     {
-        private UIBarButtonItem layoutToggleButton, deleteButton, moveButton;
+        private UIBarButtonItem layoutToggleButton, deleteButton, moveButton, selectAllButton, saveUnzippedFilesButton;
         private FileExplorerView fileExplorerView;
 
         public FilesView() : base("FilesView", null)
@@ -32,6 +32,10 @@ namespace SkyDrop.iOS.Views.Files
             FileExplorerHolder.LayoutInsideWithFrame(fileExplorerView);
 
             //setup nav bar
+            selectAllButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_select_all") };
+            selectAllButton.Clicked += (s, e) => ViewModel.SelectAllCommand.Execute();
+            saveUnzippedFilesButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_download") };
+            saveUnzippedFilesButton.Clicked += (s, e) => ViewModel.SaveSelectedUnzippedFilesCommand.Execute();
             deleteButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_bin") };
             deleteButton.Clicked += (s, e) => ViewModel.DeleteFileCommand.Execute();
             moveButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_folder_move") };
@@ -86,13 +90,19 @@ namespace SkyDrop.iOS.Views.Files
             {
                 if (value)
                 {
+                    //user is selecting something
+
                     if (ViewModel.IsFoldersVisible)
                         NavigationItem.RightBarButtonItems = new[] { deleteButton }; //show folder options buttons
+                    else if (ViewModel.IsUnzippedFilesMode)
+                        NavigationItem.RightBarButtonItems = new[] { saveUnzippedFilesButton, selectAllButton }; //show unzipped file options buttons
                     else
                         NavigationItem.RightBarButtonItems = new[] { moveButton, deleteButton }; //show file options buttons
                 }
                 else
                 {
+                    //no selection
+
                     //show add folder / layout toggle button
                     NavigationItem.RightBarButtonItems = new[] { layoutToggleButton };
                 }

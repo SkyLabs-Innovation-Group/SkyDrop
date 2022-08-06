@@ -209,6 +209,8 @@
     <ImageAsset Include="Media.xcassets\ic_bin.imageset\bin.pdf" />
     <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\folder-arrow-right.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_select_all.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_select_all.imageset\select-all.pdf" />
     <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
