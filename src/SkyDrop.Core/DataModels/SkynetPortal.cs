@@ -9,9 +9,6 @@ namespace SkyDrop.Core.DataModels
 {
     public class SkynetPortal
     {
-        public const string SiaskyPortalUrl = "https://siasky.net";
-        public static SkynetPortal SiaskyPortal = new SkynetPortal(SiaskyPortalUrl);
-
         private static SkynetPortal _selectedPortalInstance;
         public static SkynetPortal SelectedPortal { get => _selectedPortalInstance ?? GetSelectedSkynetPortal(); set => _selectedPortalInstance = SetSelectedSkynetPortal(value); }
 
@@ -38,21 +35,19 @@ namespace SkyDrop.Core.DataModels
             return portal;
         }
 
+        public const string SiaskyPortalUrl = "https://siasky.net";
+
+        public const string SkyportalXyzUrl = "https://skyportal.xyz";
         
+        public static SkynetPortal SiaskyPortal = new SkynetPortal(SiaskyPortalUrl);
+        
+        public static SkynetPortal SkyportalXyz = new SkynetPortal(SkyportalXyzUrl);
+
         public SkynetPortal(string baseUrl)
         {
             this.BaseUrl = baseUrl;
             this.InitialBaseUrl = baseUrl;
         }
-
-        public SkynetPortal(string baseUrl, string name)
-        {
-            this.BaseUrl = baseUrl;
-            this.InitialBaseUrl = baseUrl;
-            this.Name = name;
-        }
-
-        public string Name { get; set; }
         
         // Used for Fody.Weaver
         public string BaseUrl { get; set; }

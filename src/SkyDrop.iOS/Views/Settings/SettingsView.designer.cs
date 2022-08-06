@@ -16,9 +16,6 @@ namespace SkyDrop.iOS.Views.Settings
 		UIKit.UISwitch EnableUploadNotificationsSwitch { get; set; }
 
 		[Outlet]
-		UIKit.UIButton PortalPreferencesButton { get; set; }
-
-		[Outlet]
 		UIKit.UITextView PortalTextView { get; set; }
 
 		[Outlet]
@@ -42,11 +39,6 @@ namespace SkyDrop.iOS.Views.Settings
 			if (SavePortalButton != null) {
 				SavePortalButton.Dispose ();
 				SavePortalButton = null;
-			}
-
-			if (PortalPreferencesButton != null) {
-				PortalPreferencesButton.Dispose ();
-				PortalPreferencesButton = null;
 			}
 
 			if (SetPortalLabel != null) {

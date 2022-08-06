@@ -85,26 +85,5 @@
             />
 
     </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_gravity="left"
-        app:cardBackgroundColor="#555"
-        app:cardCornerRadius="8dp"
-        >
-
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="112dp"
-            android:layout_height="40dp"
-            android:text="portal preferences"
-            android:background="#555"
-            android:textColor="#fff"
-            app:MvxBind="Click NavigateToPortalPreferencesCommand"
-            />
-
-    </com.google.android.material.card.MaterialCardView>
     
 </LinearLayout>

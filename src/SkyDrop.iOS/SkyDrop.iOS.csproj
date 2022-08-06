@@ -217,11 +217,6 @@
     <Compile Include="Common\ImageSelectionHelper.cs" />
     <Compile Include="Bindings\LongPressBinding.cs" />
     <Compile Include="Bindings\FileCategoryIconBinding.cs" />
-    <InterfaceDefinition Include="Views\PortalPreferences\PortalPreferencesView.xib" />
-    <Compile Include="Views\PortalPreferences\PortalPreferencesView.cs" />
-    <Compile Include="Views\PortalPreferences\PortalPreferencesView.designer.cs">
-      <DependentUpon>PortalPreferencesView.cs</DependentUpon>
-    </Compile>
     <InterfaceDefinition Include="Views\Files\FileExplorerView.xib" />
     <Compile Include="Views\Files\FileExplorerView.cs" />
     <Compile Include="Views\Files\FileExplorerView.designer.cs">
@@ -276,7 +271,6 @@
     <Folder Include="Views\Settings\" />
     <Folder Include="Views\Files\" />
     <Folder Include="Media.xcassets\" />
-    <Folder Include="Views\PortalPreferences\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
