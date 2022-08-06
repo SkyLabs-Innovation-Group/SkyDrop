@@ -59,10 +59,13 @@ namespace SkyDrop.Core.ViewModels
 
                 portalUrl = FormatPortalUrl(portalUrl);
                 var portal = new SkynetPortal(portalUrl);
-                bool success = await singletonService.ApiService.PingPortalForSkylink(RandomFileToQueryFor, portal);
+                bool success = await ValidatePortal(portal);
                 if (success)
                 {
                     bool userHasConfirmed = await singletonService.UserDialogs.ConfirmAsync($"Set your portal to {portalUrl} ?");
+                    var promptResult =await singletonService.UserDialogs
+                        .PromptAsync("Paste your API key if you have one, close if you already entered one for this portal before", "Optional Authentication", "Save", "Close", "", Acr.UserDialogs.InputType.Default);
+                    portal.UserApiToken = promptResult.Text;
                     if (userHasConfirmed)
                         SkynetPortal.SelectedPortal = portal;
 
@@ -84,6 +87,12 @@ namespace SkyDrop.Core.ViewModels
             }
 
             return portalUrl;
+        }
+
+        public Task<bool> ValidatePortal(SkynetPortal portal)
+        {
+            return Task.FromResult(true); // for debugging pro portals disable broken query code
+            //return singletonService.ApiService.PingPortalForSkylink(RandomFileToQueryFor, portal);
         }
 
         public void SetUploadNotificationEnabled(bool value)

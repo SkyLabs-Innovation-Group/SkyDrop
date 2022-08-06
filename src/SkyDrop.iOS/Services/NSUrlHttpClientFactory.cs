@@ -34,7 +34,10 @@ namespace SkyDrop.iOS.Services
                 BaseAddress = new Uri(portal.BaseUrl), 
                 Timeout = TimeSpan.FromMinutes(120)
             };
-            
+
+            if (portal.HasApiToken())
+                AddApiTokenHeader(client, portal); // comment out in release
+
             client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
 
             // Save the HttpClient for efficient re-use
