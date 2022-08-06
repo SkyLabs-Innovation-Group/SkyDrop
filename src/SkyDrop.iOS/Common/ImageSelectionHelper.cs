@@ -128,7 +128,7 @@ namespace SkyDrop.iOS.Common
                 MinimumInteritemSpacing = 2.0f,
                 ShowCameraButton = false,
                 AutoSelectCameraImages = false,
-                MediaTypes = new[] { PHAssetMediaType.Image, PHAssetMediaType.Video, PHAssetMediaType.Audio, PHAssetMediaType.Unknown },
+                MediaTypes = new[] { PHAssetMediaType.Image },
 
                 NavigationBarBackgroundColor = UIColor.White,
                 NavigationBarTextColor = UIColor.Black,
@@ -139,7 +139,6 @@ namespace SkyDrop.iOS.Common
         private static async Task<bool> CheckPhotoPermission()
         {
             var status = ALAssetsLibrary.AuthorizationStatus;
-
             if (status == ALAuthorizationStatus.Denied)
             {
                 var alert = UIAlertController.Create(Strings.NoPhotoAccessTitle, Strings.NoPhotoAccessMessage, UIAlertControllerStyle.Alert);
