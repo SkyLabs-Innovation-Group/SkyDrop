@@ -13,6 +13,9 @@ namespace SkyDrop.iOS.Views.Files
 	partial class FileTableViewCell
 	{
 		[Outlet]
+		UIKit.UIView ActivityIndicatorContainer { get; set; }
+
+		[Outlet]
 		UIKit.UIView ContainerView { get; set; }
 
 		[Outlet]
@@ -29,6 +32,11 @@ namespace SkyDrop.iOS.Views.Files
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (ActivityIndicatorContainer != null) {
+				ActivityIndicatorContainer.Dispose ();
+				ActivityIndicatorContainer = null;
+			}
+
 			if (ContainerView != null) {
 				ContainerView.Dispose ();
 				ContainerView = null;

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -11,6 +12,7 @@ using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
+using static SkyDrop.Core.Utility.Util;
 
 namespace SkyDrop.Core.Services
 {
@@ -18,7 +20,8 @@ namespace SkyDrop.Core.Services
     public class ApiService : IApiService
     {
         public ILog Log { get; }
-        
+
+        private IFileSystemService fileSystemService;
         private ISkyDropHttpClientFactory httpClientFactory;
         private ISingletonService singletonService;
         private IUserDialogs userDialogs;
@@ -26,12 +29,14 @@ namespace SkyDrop.Core.Services
         public ApiService(ILog log,
             ISkyDropHttpClientFactory skyDropHttpClientFactory,
             ISingletonService singletonService,
-            IUserDialogs userDialogs)
+            IUserDialogs userDialogs,
+            IFileSystemService fileSystemService)
         {
             Log = log;
             httpClientFactory = skyDropHttpClientFactory;
             this.singletonService = singletonService;
             this.userDialogs = userDialogs;
+            this.fileSystemService = fileSystemService;
         }
         
         public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationTokenSource)
@@ -80,19 +85,52 @@ namespace SkyDrop.Core.Services
             return skyFile;
         }
 
-        public async Task<string> GetSkyFileFilename(SkyFile skyfile)
+        public async Task DownloadAndSaveSkyfile(string url, SaveType saveType)
+        {
+            var permissionResult = await Permissions.RequestAsync<Permissions.StorageWrite>();
+            if (permissionResult != PermissionStatus.Granted)
+            {
+                userDialogs.Toast("Storage permission not granted.");
+                return;
+            }
+
+            //download
+            var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
+            var response = await httpClient.GetAsync(url);
+            var filename = GetFilenameFromResponse(response);
+
+            using var responseStream = await response.Content.ReadAsStreamAsync();
+            var newFileName = await fileSystemService.SaveToGalleryOrFiles(responseStream, filename, saveType);
+
+            userDialogs.Toast($"Saved {newFileName}");
+        }
+
+        public async Task<Stream> DownloadFile(string url)
+        {
+            //download
+            var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
+            var response = await httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStreamAsync();
+        }
+
+        public async Task<string> GetSkyFileFilename(string skylink)
         {
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
-            var request = new HttpRequestMessage(HttpMethod.Head, skyfile.GetSkylinkUrl());
+            var request = new HttpRequestMessage(HttpMethod.Head, skylink);
+            var response = await httpClient.SendAsync(request);
+            return GetFilenameFromResponse(response);
+        }
 
-            var result = await httpClient.SendAsync(request);
-            if (result == null)
+        private string GetFilenameFromResponse(HttpResponseMessage response)
+        {
+            if (response == null)
                 return null;
 
-            if (result.StatusCode != System.Net.HttpStatusCode.OK)
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 return null;
 
-            var headers = result.Content.Headers;
+            var headers = response.Content.Headers;
             var filenameHeader = headers.GetValues("Content-Disposition").FirstOrDefault();
 
             var filenamePrefix = "filename=\"";
@@ -162,7 +200,11 @@ namespace SkyDrop.Core.Services
     {
         Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationTokenSource);
 
-        Task<string> GetSkyFileFilename(SkyFile skyfile);
+        Task DownloadAndSaveSkyfile(string url, SaveType saveType);
+
+        Task<Stream> DownloadFile(string url);
+
+        Task<string> GetSkyFileFilename(string skyfile);
 
         Task<bool> PingPortalForSkylink(string skylink, SkynetPortal skynetPortal);
     }

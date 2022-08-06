@@ -21,7 +21,7 @@
                         <rect key="frame" x="8" y="8" width="335" height="48"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Filename.jpg" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vsp-4g-DY1">
-                                <rect key="frame" x="48" y="15" width="271" height="18"/>
+                                <rect key="frame" x="48" y="15" width="279" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" white="0.91698008779999995" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -64,17 +64,40 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vja-PF-a3I">
+                                <rect key="frame" x="8" y="8" width="32" height="32"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="0oY-UM-PNd">
+                                        <rect key="frame" x="6" y="6" width="20" height="20"/>
+                                        <color key="color" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="32" id="RoS-Pt-UQz"/>
+                                    <constraint firstItem="0oY-UM-PNd" firstAttribute="centerY" secondItem="vja-PF-a3I" secondAttribute="centerY" id="TEK-hI-Zcg"/>
+                                    <constraint firstAttribute="height" constant="32" id="qFe-Fi-bsy"/>
+                                    <constraint firstItem="0oY-UM-PNd" firstAttribute="centerX" secondItem="vja-PF-a3I" secondAttribute="centerX" id="zSU-ny-vKP"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="16"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Vsp-4g-DY1" firstAttribute="centerY" secondItem="vtK-tu-tx1" secondAttribute="centerY" id="Ajf-NH-ZwP"/>
                             <constraint firstItem="cIu-6I-swb" firstAttribute="centerY" secondItem="QYs-bf-LAT" secondAttribute="centerY" id="JJ1-Dv-8RO"/>
-                            <constraint firstAttribute="trailing" secondItem="Vsp-4g-DY1" secondAttribute="trailing" constant="16" id="Phf-9i-yIG"/>
+                            <constraint firstAttribute="trailing" secondItem="Vsp-4g-DY1" secondAttribute="trailing" constant="8" id="Phf-9i-yIG"/>
                             <constraint firstItem="QYs-bf-LAT" firstAttribute="top" secondItem="vtK-tu-tx1" secondAttribute="top" constant="8" id="SLc-Z8-xcG"/>
+                            <constraint firstItem="vja-PF-a3I" firstAttribute="centerY" secondItem="cIu-6I-swb" secondAttribute="centerY" id="UMF-Pg-TfD"/>
                             <constraint firstItem="cIu-6I-swb" firstAttribute="centerX" secondItem="QYs-bf-LAT" secondAttribute="centerX" id="cwm-pr-bKw"/>
                             <constraint firstItem="QYs-bf-LAT" firstAttribute="leading" secondItem="vtK-tu-tx1" secondAttribute="leading" constant="8" id="pSP-eK-dd4"/>
                             <constraint firstAttribute="bottom" secondItem="QYs-bf-LAT" secondAttribute="bottom" constant="8" id="rnz-x0-rhh"/>
                             <constraint firstItem="Vsp-4g-DY1" firstAttribute="leading" secondItem="QYs-bf-LAT" secondAttribute="trailing" constant="8" id="tGw-8Z-1FT"/>
+                            <constraint firstItem="vja-PF-a3I" firstAttribute="centerX" secondItem="cIu-6I-swb" secondAttribute="centerX" id="y47-Ix-FZK"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -93,6 +116,7 @@
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
+                <outlet property="ActivityIndicatorContainer" destination="vja-PF-a3I" id="Oys-2V-6A0"/>
                 <outlet property="ContainerView" destination="vtK-tu-tx1" id="brO-BO-v8n"/>
                 <outlet property="FileNameLabel" destination="Vsp-4g-DY1" id="x0m-2C-XwX"/>
                 <outlet property="IconImage" destination="QYs-bf-LAT" id="lyh-hY-Hio"/>
@@ -106,6 +130,9 @@
         <image name="ic_cloud" width="18" height="18"/>
         <systemColor name="systemMintColor">
             <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemOrangeColor">
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

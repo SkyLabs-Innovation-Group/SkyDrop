@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -11,6 +12,7 @@ using System.Timers;
 using Acr.UserDialogs;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
 using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
@@ -36,11 +38,12 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand ReceiveCommand { get; set; }
         public IMvxCommand CopyLinkCommand { get; set; }
         public IMvxCommand ResetUIStateCommand { get; set; }
-        public IMvxCommand ResetBarcodeCommand { get; set; }
         public IMvxCommand NavToSettingsCommand { get; set; }
         public IMvxCommand ShareLinkCommand { get; set; }
         public IMvxCommand OpenFileInBrowserCommand { get; set; }
+        public IMvxCommand DownloadFileCommand { get; set; }
         public IMvxCommand SlideSendButtonToCenterCommand { get; set; }
+        public IMvxCommand SlideReceiveButtonToCenterCommand { get; set; }
         public IMvxCommand CancelUploadCommand { get; set; }
         public IMvxCommand CheckUserIsSwipingCommand { get; set; }
         public IMvxCommand<StagedFileDVM> ShowStagedFileMenuCommand { get; set; }
@@ -48,14 +51,17 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand UploadStartedNotificationCommand { get; set; }
         public IMvxCommand<FileUploadResult> UploadFinishedNotificationCommand { get; set; }
         public IMvxCommand<double> UpdateNotificationProgressCommand { get; set; }
+        public IMvxCommand IosSelectFileCommand { get; set; }
         public IMvxCommand MenuCommand { get; set; }
+        public IMvxCommand ShowBarcodeCommand { get; set; }
+        public IMvxCommand ShowPreviewImageCommand { get; set; }
 
-        public string SkyFileFullUrl { get; set; }
         public bool IsUploading { get; set; }
         public bool IsStagingFiles { get; set; }
         public bool IsUploadArrowVisible => !IsUploading && !IsStagingFiles;
         public bool IsBarcodeLoading { get; set; }
-        public bool IsBarcodeVisible { get; set; }
+        public bool IsBarcodeVisible { get; set; } //visibility for BarcodeContainer and BarcodeMenu
+        public bool IsPreviewImageVisible { get; set; } //toggle for barcode / preview image
         public bool IsStagedFilesVisible => DropViewUIState == DropViewState.ConfirmFilesState;
         public bool IsSendButtonGreen { get; set; } = true;
         public bool IsReceiveButtonGreen { get; set; } = true;
@@ -63,16 +69,25 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsAnimatingBarcodeOut { get; set; }
         public string FileSize { get; set; }
         public double UploadProgress { get; set; } //0-1
-        public bool FirstFileUploaded { get; set; } //determines whether user can swipe to the QR code screen
+        public bool SwipeNavigationEnabled { get; set; } //determines whether user can swipe to the QR code screen
         public bool UserIsSwipingResult { get; set; }
-        public bool BarcodeIsLoaded { get; set; }
-        public bool NavDotsVisible => DropViewUIState != DropViewState.ConfirmFilesState && BarcodeIsLoaded;
+        public bool NavDotsVisible => DropViewUIState != DropViewState.ConfirmFilesState && SwipeNavigationEnabled;
         public string SendButtonLabel => IsUploading ? StagedFiles?.Count > 2 ? "SENDING FILES" :
             "SENDING FILE" :
             DropViewUIState == DropViewState.ConfirmFilesState && StagedFiles?.Count > 2 ? "SEND FILES" : "SEND FILE";
+        public string ReceiveButtonLabel { get; set; } = receiveFileText;
+        public bool IsReceivingFile { get; set; }
+        public bool IsDownloadingFile { get; set; }
+        public string PreviewImageUrl { get; set; }
+        public bool CanDisplayPreview => FocusedFile?.Filename.CanDisplayPreview() ?? false;
+        public bool IsShowBarcodeButtonVisible => CanDisplayPreview && IsPreviewImageVisible;
+        public bool IsShowPreviewButtonVisible => CanDisplayPreview && !IsPreviewImageVisible;
+        public bool IsFocusedFileAnArchive => FocusedFile.Filename.ExtensionMatches(".zip");
+        public string SaveButtonText => IsFocusedFileAnArchive ? "Unzip" : "Save";
 
         public List<StagedFileDVM> StagedFiles { get; set; }
-        public SkyFile UploadedFile { get; set; }
+        public SkyFile FocusedFile { get; set; } //most recently sent or received file
+        public string FocusedFileUrl => FocusedFile.GetSkylinkUrl();
         public SkyFile FileToUpload { get; set; }
 
         private DropViewState _dropViewUIState;
@@ -103,11 +118,14 @@ namespace SkyDrop.Core.ViewModels.Main
             Cancelled = 3
         }
 
+        private const string receiveFileText = "RECEIVE FILE";
+        private const string receivingFileText = "RECEIVING FILE...";
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
+        private TaskCompletionSource<SkyFile> iosMultipleImageSelectTask;
 
-        private Func<Task> _generateBarcodeAsyncFunc;
-        public Func<Task> GenerateBarcodeAsyncFunc
+        private Func<string, Task> _generateBarcodeAsyncFunc;
+        public Func<string, Task> GenerateBarcodeAsyncFunc
         {
             get => _generateBarcodeAsyncFunc;
             set => _generateBarcodeAsyncFunc = value;
@@ -147,6 +165,9 @@ namespace SkyDrop.Core.ViewModels.Main
             ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
             MenuCommand = new MvxAsyncCommand(NavigateToFiles);
+            DownloadFileCommand = new MvxAsyncCommand(SaveOrUnzipFocusedFile);
+            ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
+            ShowPreviewImageCommand = new MvxCommand(() => IsPreviewImageVisible = true);
         }
 
         public override async Task Initialize()
@@ -248,30 +269,39 @@ namespace SkyDrop.Core.ViewModels.Main
                     UploadStartedNotificationCommand?.Execute();
 
                 StartUploadTimer(FileToUpload.FileSizeBytes);
-                UploadedFile = await UploadFile();
+                FocusedFile = await UploadFile();
                 StopUploadTimer();
 
                 //fill progress bar
                 UploadProgress = 1;
                 UploadTimerText = "100%";
 
-                FirstFileUploaded = true;
+                SwipeNavigationEnabled = true;
 
                 //save skylink locally
-                UploadedFile.WasSent = true;
-                storageService.SaveSkyFiles(UploadedFile);
+                FocusedFile.WasSent = true;
+                storageService.SaveSkyFiles(FocusedFile);
+
+                RaiseFocusedFileChanged();
+
+                //show filename
+                Title = FocusedFile.Filename;
+
+                //clear cache
+                fileSystemService.ClearCache();
 
                 //wait for progressbar to complete
                 await Task.Delay(500);
 
-                ResetBarcodeCommand?.Execute();
-
                 //show QR code
                 IsUploading = false;
                 IsBarcodeLoading = true;
-                SkyFileFullUrl = UploadedFile.GetSkylinkUrl();
-                await GenerateBarcodeAsyncFunc();
-                
+                await GenerateBarcodeAsyncFunc(FocusedFile.GetSkylinkUrl());
+
+                IsPreviewImageVisible = false;
+
+                UpdatePreviewImage();
+
                 if (UploadNotificationsEnabled)
                     UploadFinishedNotificationCommand?.Execute(FileUploadResult.Success);
             }
@@ -335,12 +365,16 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 IsSendButtonGreen = false;
                 IsReceiveButtonGreen = true;
+                SlideReceiveButtonToCenterCommand.Execute();
+                ReceiveButtonLabel = receivingFileText;
+                IsReceivingFile = true;
 
                 //open the QR code scan view
                 var barcodeData = await barcodeService.ScanBarcode();
                 if (barcodeData == null)
                 {
                     Log.Trace("barcodeData is null");
+                    ResetUIStateCommand?.Execute();
                     return;
                 }
 
@@ -348,19 +382,28 @@ namespace SkyDrop.Core.ViewModels.Main
                 {
                     //not a skylink
                     await OpenUrlInBrowser(barcodeData);
+                    ResetUIStateCommand?.Execute();
                     return;
                 }
-                else
-                {
-                    string skylink = barcodeData.Substring(barcodeData.Length - 46, 46);
-                    var skyFile = new SkyFile() { Skylink = skylink };
 
-                    var filename = await apiService.GetSkyFileFilename(skyFile);
-                    skyFile.Filename = filename;
-                    storageService.SaveSkyFiles(skyFile);
+                var skylink = barcodeData.Substring(barcodeData.Length - 46, 46);
+                FocusedFile = new SkyFile() { Skylink = skylink };
 
-                    await OpenFileInBrowser(skyFile);
-                }
+                IsPreviewImageVisible = true;
+
+                await GenerateBarcodeAsyncFunc(FocusedFileUrl);
+
+                var filename = await apiService.GetSkyFileFilename(FocusedFile.GetSkylinkUrl());
+                FocusedFile.Filename = filename;
+                storageService.SaveSkyFiles(FocusedFile);
+
+                //show filename
+                Title = FocusedFile.Filename;
+
+                RaiseFocusedFileChanged();
+
+                //can only do this after getting filename from Skynet
+                UpdatePreviewImage();
             }
             catch (Exception e)
             {
@@ -372,6 +415,15 @@ namespace SkyDrop.Core.ViewModels.Main
                     userDialogs.Toast(error);
                 else
                     errorMessage = error;
+
+                ResetUIStateCommand.Execute();
+            }
+            finally
+            {
+                IsReceivingFile = false;
+                ReceiveButtonLabel = receiveFileText;
+                IsSendButtonGreen = true;
+                IsReceiveButtonGreen = true;
             }
         }
 
@@ -425,21 +477,20 @@ namespace SkyDrop.Core.ViewModels.Main
         private SkyFile MakeZipFile()
         {
             //TODO: add option to rename zip file in the renaming dialog
-            string skyArchive = "skydrop_archive.zip";
+            string archiveName = "skydrop_archive.zip";
 
-            string compressedFilePath = Path.Combine(Path.GetTempPath(), skyArchive);
+            string compressedFilePath = Path.Combine(Path.GetTempPath(), archiveName);
 
             var filesToUpload = StagedFiles.Where(s => !s.IsMoreFilesButton).Select(s => s.SkyFile).ToList();
-            bool compressSuccess = fileSystemService.CompressX(filesToUpload, compressedFilePath);
+            bool compressSuccess = fileSystemService.CreateZipArchive(filesToUpload, compressedFilePath);
             if (!compressSuccess)
                 throw new Exception("Failed to create archive");
 
-            var fileStream = File.OpenRead(compressedFilePath);
             var skyFile = new SkyFile()
             {
                 FullFilePath = compressedFilePath,
-                Filename = skyArchive,
-                FileSizeBytes = fileStream.Length,
+                Filename = archiveName,
+                FileSizeBytes = new FileInfo(compressedFilePath).Length
             };
             
             return skyFile;
@@ -453,13 +504,22 @@ namespace SkyDrop.Core.ViewModels.Main
             var cancel = "cancel";
             var fileType = await userDialogs.ActionSheetAsync("", cancel, null, null, file, image, video);
             if (fileType == cancel)
-            {
                 return null;
-            }
 
             SkyFilePickerType chosenType;
             if (fileType == image)
+            {
+                if (IosSelectFileCommand != null)
+                {
+                    var imageFile = await IosPickImages(); //native multi image selection iOS
+                    if (imageFile == null)
+                        return null;
+
+                    return new List<SkyFile> { imageFile };
+                }
+
                 chosenType = SkyFilePickerType.Image;
+            }
             else if (fileType == video)
                 chosenType = SkyFilePickerType.Video;
             else
@@ -482,12 +542,11 @@ namespace SkyDrop.Core.ViewModels.Main
                     if (pickedFile == null)
                         continue;
 
-                    using var stream = await pickedFile.OpenReadAsync();
                     var skyFile = new SkyFile()
                     {
                         FullFilePath = pickedFile.FullPath,
                         Filename = pickedFile.FileName,
-                        FileSizeBytes = stream.Length,
+                        FileSizeBytes = new FileInfo(pickedFile.FullPath).Length,
                     };
 
                     userSkyFiles.Add(skyFile);
@@ -508,6 +567,41 @@ namespace SkyDrop.Core.ViewModels.Main
             IsStagingFiles = false;
 
             return userSkyFiles;
+        }
+
+        private async Task<SkyFile> IosPickImages()
+        {
+            IosSelectFileCommand?.Execute();
+            iosMultipleImageSelectTask = new TaskCompletionSource<SkyFile>();
+            var skyFile = await iosMultipleImageSelectTask.Task;
+            if (skyFile == null)
+                return null;
+
+            return skyFile;
+        }
+
+        private SkyFile IosConvertFilePathToSkyFile(string path)
+        {
+            return new SkyFile()
+            {
+                FullFilePath = path,
+                Filename = Path.GetFileName(path),
+                FileSizeBytes = new FileInfo(path).Length
+            };
+        }
+
+        public void IosStageImage(string path)
+        {
+            var skyFile = IosConvertFilePathToSkyFile(path);
+            if (!iosMultipleImageSelectTask.Task.IsCompleted)
+                iosMultipleImageSelectTask.TrySetResult(skyFile); //first file(s) loaded causes UI to continue to next stage
+            else
+                StageFiles(new List<SkyFile> { skyFile }, true); //subsequent files get staged in a "lazy" manner
+        }
+
+        public void IosImagePickerFailed()
+        {
+            iosMultipleImageSelectTask.TrySetResult(null);
         }
 
         private async Task AddMoreFiles()
@@ -577,13 +671,13 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private string GetUploadedSkyLink()
         {
-            if (UploadedFile == null)
+            if (FocusedFile == null)
             {
                 Log.Error("User tried to copy skylink before file was uploaded");
                 return null;
             }
 
-            return UploadedFile.GetSkylinkUrl();
+            return FocusedFile.GetSkylinkUrl();
         }
 
         private async Task CopySkyLinkToClipboard()
@@ -695,14 +789,12 @@ namespace SkyDrop.Core.ViewModels.Main
             FileSize = "";
         }
 
-        private async Task OpenFileInBrowser(SkyFile skyFile = null)
+        private async Task OpenFileInBrowser()
         {
             if (UserIsSwiping())
                 return;
 
-            var fileToOpen = skyFile ?? UploadedFile;
-
-            string skylinkUrl = fileToOpen.GetSkylinkUrl();
+            string skylinkUrl = FocusedFile.GetSkylinkUrl();
             Log.Trace("Opening Skylink " + skylinkUrl);
             await Browser.OpenAsync(skylinkUrl, new BrowserLaunchOptions
             {
@@ -731,18 +823,76 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public async Task NavigateToFiles()
         {
-            var selectedFile = await navigationService.Navigate<FilesViewModel, object, SkyFile>(null);
+            if (IsUploading)
+                return;
+
+            var selectedFile = await navigationService.Navigate<FilesViewModel, FilesViewModel.NavParam, SkyFile>(new FilesViewModel.NavParam());
             if (selectedFile == null)
                 return;
 
-            FirstFileUploaded = true;
-            UploadedFile = selectedFile;
+            SwipeNavigationEnabled = true;
+            FocusedFile = selectedFile;
+
+            //show filename
+            Title = FocusedFile.Filename;
+
+            RaiseFocusedFileChanged();
+
+            UpdatePreviewImage();
 
             //show QR code
             IsBarcodeLoading = true;
-            SkyFileFullUrl = UploadedFile.GetSkylinkUrl();
-            await GenerateBarcodeAsyncFunc();
-            IsBarcodeLoading = false;
+            await GenerateBarcodeAsyncFunc(FocusedFile.GetSkylinkUrl());
+        }
+
+        private async Task SaveOrUnzipFocusedFile()
+        {
+            try
+            {
+                if (IsFocusedFileAnArchive)
+                {
+                    //unzip
+                    DownloadAndUnzipArchive();
+                    return;
+                }
+
+                var saveType = await Util.GetSaveType(FocusedFile.Filename);
+                if (saveType == Util.SaveType.Cancel)
+                    return;
+
+                IsDownloadingFile = true;
+                await apiService.DownloadAndSaveSkyfile(FocusedFileUrl, saveType);
+            }
+            catch(Exception e)
+            {
+                userDialogs.Toast("Failed to save file");
+            }
+            finally
+            {
+                IsDownloadingFile = false;
+            }
+        }
+
+        private void DownloadAndUnzipArchive()
+        {
+            navigationService.Navigate<FilesViewModel, FilesViewModel.NavParam>(new FilesViewModel.NavParam { IsUnzippedFilesMode = true, ArchiveUrl = FocusedFileUrl, ArchiveName = FocusedFile.Filename });
+        }
+
+        private void UpdatePreviewImage()
+        {
+            PreviewImageUrl = null; //clear last preview image
+            if (CanDisplayPreview)
+                PreviewImageUrl = FocusedFileUrl; //load new preview image
+            else
+                IsPreviewImageVisible = false;
+        }
+
+        private void RaiseFocusedFileChanged()
+        {
+            RaisePropertyChanged(() => IsShowBarcodeButtonVisible).Forget();
+            RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
+            RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
+            RaisePropertyChanged(() => SaveButtonText).Forget();
         }
     }
 }

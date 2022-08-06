@@ -20,13 +20,15 @@ namespace SkyDrop.Core.ViewModels
         /// </summary>
         private const string RandomFileToQueryFor = "AACEA6yg7OM0_gl6_sHx2D7ztt20-g0oXum5GNbCc0ycRg";
 
-        private ISkyDropHttpClientFactory httpClientFactory;
+        private readonly ISkyDropHttpClientFactory httpClientFactory;
+        private readonly IMvxNavigationService navigationService;
 
         public SettingsViewModel(ISingletonService singletonService,
                                  ISkyDropHttpClientFactory skyDropHttpClientFactory,
                                  IMvxNavigationService navigationService) : base(singletonService)
         {
             this.httpClientFactory = skyDropHttpClientFactory;
+            this.navigationService = navigationService;
 
             Title = "Advanced settings";
 
@@ -116,6 +118,11 @@ namespace SkyDrop.Core.ViewModels
                 portalUrl = $"https://{portalUrl.Substring(7)}";
 
             return portalUrl.TrimEnd('/');
+        }
+
+        public void Close()
+        {
+            navigationService.Close(this);
         }
     }
 }

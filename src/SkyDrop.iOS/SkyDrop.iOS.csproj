@@ -117,7 +117,7 @@
     <BundleResource Include="Resources\launch_image%403x.png" />
     <Compile Include="Bindings\ProgressFillHeightBinding.cs" />
     <Compile Include="Common\TouchInterceptor.cs" />
-    <Compile Include="Bindings\SkyFileImageViewBinding.cs" />
+    <Compile Include="Bindings\LocalImagePreviewBinding.cs" />
     <Compile Include="Common\iOSUtil.cs" />
     <Compile Include="Views\Settings\SettingsView.cs" />
     <Compile Include="Views\Settings\SettingsView.designer.cs">
@@ -189,11 +189,46 @@
     <ImageAsset Include="Media.xcassets\ic_file_video.imageset\file-video.pdf" />
     <ImageAsset Include="Media.xcassets\ic_file_image.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_file_image.imageset\file-image.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_zip.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_zip.imageset\zip-box.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_qr.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_qr.imageset\qrcode.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_error.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_error.imageset\alert-circle.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_image.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_image.imageset\image.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_folder.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_folder.imageset\folder.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_plus.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_plus.imageset\plus.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\folder-plus.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_back.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_back.imageset\back_button.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_bin.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_bin.imageset\bin.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\folder-arrow-right.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_select_all.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_select_all.imageset\select-all.pdf" />
     <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
+    <Compile Include="Common\ImageSelectionHelper.cs" />
     <Compile Include="Bindings\LongPressBinding.cs" />
     <Compile Include="Bindings\FileCategoryIconBinding.cs" />
+    <InterfaceDefinition Include="Views\Files\FileExplorerView.xib" />
+    <Compile Include="Views\Files\FileExplorerView.cs" />
+    <Compile Include="Views\Files\FileExplorerView.designer.cs">
+        <DependentUpon>FileExplorerView.cs</DependentUpon>
+    </Compile>
+    <InterfaceDefinition Include="Views\Files\FolderCell.xib" />
+    <Compile Include="Views\Files\FolderCell.cs" />
+    <Compile Include="Views\Files\FolderCell.designer.cs">
+      <DependentUpon>FolderCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BaseViewController.cs" />
+    <Compile Include="Services\iOSSaveToGalleryService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -222,6 +257,9 @@
     </PackageReference>
     <PackageReference Include="Serilog.Sinks.Xamarin">
       <Version>0.2.0.64</Version>
+    </PackageReference>
+    <PackageReference Include="GMImagePicker.Xamarin">
+      <Version>2.5.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

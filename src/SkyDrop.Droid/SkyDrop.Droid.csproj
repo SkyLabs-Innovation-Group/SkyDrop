@@ -76,7 +76,6 @@
     <Compile Include="Setup.cs" />
     <Compile Include="Views\BaseActivity.cs" />
     <Compile Include="Views\BaseFragment.cs" />
-    <Compile Include="Views\Main\FilesView.cs" />
     <Compile Include="Views\Main\SettingsView.cs" />
     <Compile Include="Views\Splash\SplashActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -86,13 +85,16 @@
     <Compile Include="Views\Main\DropView.cs" />
     <Compile Include="Bindings\VisibleHiddenBinding.cs" />
     <Compile Include="Bindings\CardStateBinding.cs" />
-    <Compile Include="Bindings\BarcodeBackgroundBinding.cs" />
     <Compile Include="Bindings\UploadProgressBinding.cs" />
     <Compile Include="Bindings\LocalImagePreviewBinding.cs" />
     <Compile Include="Bindings\LayoutImageBinding.cs" />
     <Compile Include="Bindings\SkyFilePreviewImageBinding.cs" />
     <Compile Include="Bindings\BackgroundColorBinding.cs" />
     <Compile Include="Bindings\FileCategoryIconBinding.cs" />
+    <Compile Include="Views\Files\FileExplorerView.cs" />
+    <Compile Include="Bindings\IconBinding.cs" />
+    <Compile Include="Views\Files\FilesView.cs" />
+    <Compile Include="Services\AndroidSaveToGalleryService.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -209,7 +211,7 @@
       <Generator>
       </Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_download_grey.xml">
+    <AndroidResource Include="Resources\drawable\ic_download.xml">
       <SubType>
       </SubType>
       <Generator>
@@ -222,12 +224,6 @@
       </Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\launch_skydrop_background.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\barcode_grey.png">
       <SubType>
       </SubType>
       <Generator>
@@ -401,10 +397,6 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\toolbar_gallery.axml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable\ic_list.xml">
       <SubType></SubType>
       <Generator></Generator>
@@ -438,6 +430,50 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_qr.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_image.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_zip.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_error.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\item_folder.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_folder.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\toolbar_files.axml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_folder_add.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_bin.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_folder_move.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_select_all.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\strings.xml" />
@@ -467,6 +503,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Files\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
