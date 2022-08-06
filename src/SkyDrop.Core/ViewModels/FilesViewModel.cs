@@ -204,7 +204,8 @@ namespace SkyDrop.Core.ViewModels.Main
                 }
                 updateSelectionStateAction?.Invoke();
 
-                userDialogs.Toast($"Saved {selectedFilesDVMs.Count} files");
+                var s = selectedFilesDVMs.Count == 1 ? "" : "s";
+                userDialogs.Toast($"Saved {selectedFilesDVMs.Count} file{s}");
             }
             catch (Exception e)
             {

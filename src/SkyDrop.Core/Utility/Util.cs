@@ -107,7 +107,7 @@ namespace SkyDrop.Core.Utility
 
             //show gallery / files menu on iOS
 
-            return await SaveTypePromptAsync();
+            return await SaveTypePromptAsync(false);
         }
 
         public static async Task<SaveType> GetSaveTypeForMultiple(List<string> filenames)
@@ -126,16 +126,17 @@ namespace SkyDrop.Core.Utility
 
             //show gallery / files menu on iOS
 
-            return await SaveTypePromptAsync();
+            return await SaveTypePromptAsync(true);
         }
 
-        private static async Task<SaveType> SaveTypePromptAsync()
+        private static async Task<SaveType> SaveTypePromptAsync(bool isPlural)
         {
             const string cancel = "Cancel";
             const string photos = "Photos";
             const string files = "Files";
             var userDialogs = Mvx.IoCProvider.Resolve<IUserDialogs>();
-            var result = await userDialogs.ActionSheetAsync("Save image to Photos or Files?", cancel, null, null, new[] { photos, files });
+            var s = isPlural ? "s" : "";
+            var result = await userDialogs.ActionSheetAsync($"Save image{s} to Photos or Files?", cancel, null, null, new[] { photos, files });
             switch (result)
             {
                 case photos:
