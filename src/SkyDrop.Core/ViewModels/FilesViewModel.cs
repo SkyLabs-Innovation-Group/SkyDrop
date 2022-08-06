@@ -39,6 +39,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand AddFolderCommand { get; set; }
         public IMvxCommand MoveFileCommand { get; set; }
         public IMvxCommand DeleteFileCommand { get; set; }
+        public IMvxCommand SelectAllCommand { get; set; }
+        public IMvxCommand SaveSelectedUnzippedFilesCommand { get; set; }
         public bool IsUnzippedFilesMode { get; set; }
         public string ArchiveUrl { get; set; }
         public bool IsError { get; set; }
@@ -86,6 +88,8 @@ namespace SkyDrop.Core.ViewModels.Main
             AddFolderCommand = new MvxAsyncCommand(AddFolder);
             MoveFileCommand = new MvxAsyncCommand(MoveFiles);
             DeleteFileCommand = new MvxAsyncCommand(DeleteFiles);
+            SelectAllCommand = new MvxCommand(SelectAllFiles);
+            SaveSelectedUnzippedFilesCommand = new MvxAsyncCommand(SaveSelectedUnzippedFiles);
 
             updateSelectionStateAction = () =>
             {
@@ -161,6 +165,57 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
+        private async Task SaveSelectedUnzippedFiles()
+        {
+            var selectedFilesDVMs = SkyFiles.Where(s => s.IsSelected).ToList();
+
+            try
+            {
+                var selectedFilenames = selectedFilesDVMs.Select(s => s.SkyFile.Filename).ToList();
+                var saveType = await Util.GetSaveTypeForMultiple(selectedFilenames);
+                if (saveType == Util.SaveType.Cancel)
+                    return;
+
+                //show spinners
+                foreach (var dvm in selectedFilesDVMs)
+                {
+                    dvm.IsLoading = true;
+                }
+
+                await Task.Delay(1000); //wait for animation
+
+                //save files
+                foreach (var dvm in selectedFilesDVMs)
+                {
+                    //if user selected "Photos" (or is using Android) and the file is an image, save it to gallery
+                    var fileSaveType = dvm.SkyFile.Filename.CanDisplayPreview() && saveType == Util.SaveType.Photos ? Util.SaveType.Photos : Util.SaveType.Files;
+                    await fileSystemService.SaveToGalleryOrFiles(dvm.SkyFile.GetStream(), dvm.SkyFile.Filename, fileSaveType);
+                }
+
+                //reset selection
+                foreach (var file in SkyFiles)
+                {
+                    file.IsSelectionActive = false;
+                    file.IsSelected = false;
+                }
+                updateSelectionStateAction?.Invoke();
+
+                userDialogs.Toast($"Saved {selectedFilesDVMs.Count} files");
+            }
+            catch (Exception e)
+            {
+                userDialogs.Toast("Failed to save files");
+            }
+            finally
+            {
+                //hide spinners
+                foreach (var dvm in selectedFilesDVMs)
+                {
+                    dvm.IsLoading = false;
+                }
+            }
+        }
+        /*
         private async Task SaveUnzippedFile(SkyFile file)
         {
             var selectedFileDVM = SkyFiles.FirstOrDefault(f => f.SkyFile.FullFilePath == file.FullFilePath);
@@ -185,7 +240,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 selectedFileDVM.IsLoading = false;
             }
         }
-
+        */
         private List<SkyFileDVM> GetUnzippedFileDVMs(IEnumerable<SkyFile> skyFiles)
         {
             var dvms = new List<SkyFileDVM>();
@@ -197,16 +252,13 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private SkyFileDVM GetUnzippedFileDVM(SkyFile skyFile)
         {
-            var dvm = new SkyFileDVM
-            {
-                SkyFile = skyFile,
-                TapCommand = new MvxAsyncCommand(() => UnzippedFileTapped(skyFile)),
-            };
-
-            dvm.LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(SkyFiles, dvm, updateSelectionStateAction));
+            var dvm = new SkyFileDVM { SkyFile = skyFile };
+            var tapCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(SkyFiles, dvm, updateSelectionStateAction));
+            dvm.TapCommand = tapCommand;
+            dvm.LongPressCommand = tapCommand;
             return dvm;
         }
-
+        /*
         private async Task UnzippedFileTapped(SkyFile selectedFile)
         {
             var selectedFileDVM = SkyFiles.FirstOrDefault(s => s.SkyFile.FullFilePath == selectedFile.FullFilePath);
@@ -219,7 +271,7 @@ namespace SkyDrop.Core.ViewModels.Main
             //save the file
             await SaveUnzippedFile(selectedFile);
         }
-
+        */
         private List<SkyFileDVM> GetSkyFileDVMs(List<SkyFile> skyFiles)
         {
             var dvms = new List<SkyFileDVM>();
@@ -322,6 +374,18 @@ namespace SkyDrop.Core.ViewModels.Main
 
             //show the file
             await navigationService.Close(this, selectedFile);
+        }
+
+        //currently only used for unzipped files
+        private void SelectAllFiles()
+        {
+            foreach(var file in SkyFiles)
+            {
+                file.IsSelectionActive = true;
+                file.IsSelected = true;
+            }
+
+            updateSelectionStateAction?.Invoke();
         }
 
         private async Task GoBack()

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -106,6 +107,30 @@ namespace SkyDrop.Core.Utility
 
             //show gallery / files menu on iOS
 
+            return await SaveTypePromptAsync();
+        }
+
+        public static async Task<SaveType> GetSaveTypeForMultiple(List<string> filenames)
+        {
+            if (!filenames.Any(f => Util.CanDisplayPreview(f)))
+            {
+                //none of the files are images
+                return SaveType.Files;
+            }
+
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                //always save images to gallery on Android
+                return SaveType.Photos;
+            }
+
+            //show gallery / files menu on iOS
+
+            return await SaveTypePromptAsync();
+        }
+
+        private static async Task<SaveType> SaveTypePromptAsync()
+        {
             const string cancel = "Cancel";
             const string photos = "Photos";
             const string files = "Files";

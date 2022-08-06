@@ -216,6 +216,7 @@ namespace SkyDrop.iOS.Views.Drop
                 TextAlignment = UITextAlignment.Center,
                 Font = UIFont.BoldSystemFontOfSize(17),
                 Text = "SkyDrop",
+                TextColor = Colors.LightGrey.ToNative(),
                 LineBreakMode = UILineBreakMode.MiddleTruncation
             };
 
