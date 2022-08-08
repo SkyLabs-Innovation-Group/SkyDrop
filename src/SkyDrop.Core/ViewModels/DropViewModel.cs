@@ -33,6 +33,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IBarcodeService barcodeService;
         private readonly IShareLinkService shareLinkService;
         private readonly IUploadTimerService uploadTimerService;
+        private readonly IFFImageService ffImageService;
 
         public IMvxCommand SendCommand { get; set; }
         public IMvxCommand ReceiveCommand { get; set; }
@@ -142,7 +143,8 @@ namespace SkyDrop.Core.ViewModels.Main
             IUserDialogs userDialogs,
             IMvxNavigationService navigationService,
             IFileSystemService fileSystemService,
-            ILog log) : base(singletonService)
+            ILog log,
+            IFFImageService fFImageService) : base(singletonService)
         {
             Log = log;
             Title = "SkyDrop";
@@ -155,6 +157,7 @@ namespace SkyDrop.Core.ViewModels.Main
             this.barcodeService = barcodeService;
             this.shareLinkService = shareLinkService;
             this.uploadTimerService = uploadTimerService;
+            this.ffImageService = fFImageService;
 
             SendCommand = new MvxAsyncCommand(async () => await SendButtonTapped());
             ReceiveCommand = new MvxAsyncCommand(async () => await ReceiveFile());
@@ -173,6 +176,9 @@ namespace SkyDrop.Core.ViewModels.Main
         public override async Task Initialize()
         {
             DropViewUIState = DropViewState.SendReceiveButtonState;
+
+            await ffImageService.Initialise();
+
             await base.Initialize();
         }
 
