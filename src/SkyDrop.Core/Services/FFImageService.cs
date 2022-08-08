@@ -39,10 +39,10 @@ namespace SkyDrop.Core.Services
 
                 // Logging attributes 
                 Logger = (IMiniLogger)Mvx.IoCProvider.Resolve<ILog>(),
-                VerboseLogging = true,
-                VerboseLoadingCancelledLogging = true,
-                VerbosePerformanceLogging = true,
-                VerboseMemoryCacheLogging = true,
+                //VerboseLogging = true,
+                //VerboseLoadingCancelledLogging = true,
+                //VerbosePerformanceLogging = true,
+                //VerboseMemoryCacheLogging = true,
                 HttpClient = httpClientFactory.GetSkyDropHttpClientInstance(selectedPortal),
             });
 
