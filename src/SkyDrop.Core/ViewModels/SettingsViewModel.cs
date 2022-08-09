@@ -65,25 +65,28 @@ namespace SkyDrop.Core.ViewModels
 
                 portalUrl = FormatPortalUrl(portalUrl);
                 var portal = new SkynetPortal(portalUrl);
-
-                singletonService.UserDialogs.ShowLoading("Validating portal...");
-                bool success = await ValidatePortal(portal);
-                singletonService.UserDialogs.HideLoading();
-
-                if (!success)
-                    return;
-
+             
                 bool userHasConfirmed = await singletonService.UserDialogs.ConfirmAsync($"Set your portal to {portalUrl} ?");
+
+                void ShowCancelledToast() => singletonService.UserDialogs.Toast("Cancelled", TimeSpan.FromSeconds(3));
+
                 if (!userHasConfirmed)
-                    return;
+                {
+                    ShowCancelledToast();
+                    return null;
+                }
 
                 var promptResult = await singletonService.UserDialogs
                     .PromptAsync("Paste your API key if you have one, close if you already entered one for this portal before", "Optional Authentication", "Save", "Close", "", Acr.UserDialogs.InputType.Default);
                 portal.UserApiToken = promptResult.Text;
-                if (userHasConfirmed)
-                    SkynetPortal.SelectedPortal = portal;
 
-                singletonService.UserDialogs.Toast("Your SkyDrop portal is now set to " + portalUrl);
+                bool success = await ValidatePortal(portal);
+
+                if (success)
+                {
+                    singletonService.UserDialogs.Toast("Your SkyDrop portal is now set to " + portalUrl);
+                    SkynetPortal.SelectedPortal = portal;
+                }
                 // Once the user updates SkynetPortal.SelectedPortal, file downloads and uploads should use their preferred portal
                 // If this degrades performance significantly, I think it would be ideal to make toggling between portals:
                 // 1) Suggested by the app with a dialog if net is slow,
@@ -103,9 +106,7 @@ namespace SkyDrop.Core.ViewModels
         }
 
         public Task<bool> ValidatePortal(SkynetPortal portal)
-        {
-            return singletonService.ApiService.PingPortalForSkylink(RandomFileToQueryFor, portal);
-        }
+            => singletonService.ApiService.PingPortalForSkylink(RandomFileToQueryFor, portal);
 
         public void SetUploadNotificationEnabled(bool value)
         {
