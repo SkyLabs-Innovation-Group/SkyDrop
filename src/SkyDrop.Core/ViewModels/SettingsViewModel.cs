@@ -65,7 +65,11 @@ namespace SkyDrop.Core.ViewModels
 
                 portalUrl = FormatPortalUrl(portalUrl);
                 var portal = new SkynetPortal(portalUrl);
+
+                singletonService.UserDialogs.ShowLoading("Validating portal...");
                 bool success = await ValidatePortal(portal);
+                singletonService.UserDialogs.HideLoading();
+
                 if (!success)
                     return;
 
