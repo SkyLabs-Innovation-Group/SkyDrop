@@ -158,6 +158,10 @@ namespace SkyDrop.Core.Services
             {
                 // Store oldToken while validating the new token using a HEAD request, swap back in FailedPortalCheck()
                 oldToken = httpClientFactory.GetTokenForHttpClient(skynetPortal);
+
+                if (oldToken == skynetPortal.UserApiToken) // if oldToken == newToken, treat as a new token
+                    oldToken = null;
+
                 httpClientFactory.UpdateHttpClientWithNewToken(skynetPortal);
             }
 

@@ -33,8 +33,7 @@ namespace SkyDrop.Core.Components
         {
             var httpClient = GetSkyDropHttpClientInstance(portal);
 
-            if (!httpClient.DefaultRequestHeaders.Contains(PortalApiTokenHeader))
-                AddApiTokenHeader(httpClient, portal);
+            AddApiTokenHeader(httpClient, portal);
         }
 
         public string GetTokenForHttpClient(SkynetPortal portal) => GetTokenForHttpClient(GetSkyDropHttpClientInstance(portal));
@@ -53,6 +52,8 @@ namespace SkyDrop.Core.Components
 
         protected static void AddApiTokenHeader(HttpClient client, SkynetPortal portal)
         {
+            client.DefaultRequestHeaders.Remove(PortalApiTokenHeader);
+
             if (portal.HasApiToken())
             {
                 client.DefaultRequestHeaders.Add(PortalApiTokenHeader, portal.UserApiToken);
