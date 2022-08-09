@@ -13,7 +13,10 @@ namespace SkyDrop.Core.ViewModels
         public bool UploadNotificationsEnabled { get; set; } = true;
         public bool VerifySslCertificates { get; set; } = true;
         public string SkynetPortalLabelText { get; set; } = "Enter a skynet portal to use in the app (default is siasky.net):";
+        public string SkynetPortalUrl { get; set; }
+
         public IMvxCommand BackCommand { get; set; }
+        public IMvxAsyncCommand<string> ValidateAndTrySetSkynetPortalCommand { get; set; }
 
         /// <summary>
         /// Currently, the best way to verify a Skynet portal that I can think of would be to query for a sky file's metadata.
@@ -33,6 +36,9 @@ namespace SkyDrop.Core.ViewModels
             Title = "Advanced settings";
 
             BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
+            ValidateAndTrySetSkynetPortalCommand = new MvxAsyncCommand<string>(async url => await ValidateAndTrySetSkynetPortal(url));
+
+            SkynetPortalUrl = SkynetPortal.SelectedPortal.BaseUrl;
         }
 
         public void Toast(string message)
@@ -47,25 +53,25 @@ namespace SkyDrop.Core.ViewModels
             base.ViewCreated();
         }
 
-        public async Task<string> ValidateAndTrySetSkynetPortal(string portalUrl)
+        private async Task ValidateAndTrySetSkynetPortal(string portalUrl)
         {
             try
             {
                 if (string.IsNullOrEmpty(portalUrl))
                 {
                     Log.Error("User entered null or empty portal");
-                    return portalUrl;
+                    return;
                 }
 
                 portalUrl = FormatPortalUrl(portalUrl);
                 var portal = new SkynetPortal(portalUrl);
                 bool success = await ValidatePortal(portal);
                 if (!success)
-                    return null;
+                    return;
 
                 bool userHasConfirmed = await singletonService.UserDialogs.ConfirmAsync($"Set your portal to {portalUrl} ?");
                 if (!userHasConfirmed)
-                    return null;
+                    return;
 
                 var promptResult = await singletonService.UserDialogs
                     .PromptAsync("Paste your API key if you have one, close if you already entered one for this portal before", "Optional Authentication", "Save", "Close", "", Acr.UserDialogs.InputType.Default);
@@ -89,7 +95,7 @@ namespace SkyDrop.Core.ViewModels
                 Log.Exception(ex);
             }
 
-            return portalUrl;
+            SkynetPortalUrl = portalUrl;
         }
 
         public Task<bool> ValidatePortal(SkynetPortal portal)

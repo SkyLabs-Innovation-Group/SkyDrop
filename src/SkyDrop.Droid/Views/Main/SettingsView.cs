@@ -27,9 +27,8 @@ namespace SkyDrop.Droid.Views.Main
             saveButton.Click += async (s, e) =>
             {
                 HideKeyboard();
-                var formattedPortalAddress = await ViewModel.ValidateAndTrySetSkynetPortal(portalEditText.Text);
-                if (formattedPortalAddress != null)
-                    portalEditText.Text = formattedPortalAddress;
+                await ViewModel.ValidateAndTrySetSkynetPortalCommand.ExecuteAsync(portalEditText.Text);
+                portalEditText.Text = ViewModel.SkynetPortalUrl;
             };
         }
 
