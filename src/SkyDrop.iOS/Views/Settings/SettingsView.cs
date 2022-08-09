@@ -45,7 +45,7 @@ namespace SkyDrop.iOS.Views.Settings
             {
                 UIApplication.SharedApplication.KeyWindow.EndEditing(true);
                 await ViewModel.ValidateAndTrySetSkynetPortalCommand.ExecuteAsync(PortalTextView.Text);
-                PortalTextView.Text = ViewModel.SkynetPortalUrl;
+                PortalTextView.Text = SkynetPortal.SelectedPortal.BaseUrl;
             };
 
             EnableUploadNotificationsSwitch.On = ViewModel.UploadNotificationsEnabled;

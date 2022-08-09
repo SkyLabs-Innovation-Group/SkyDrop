@@ -13,7 +13,6 @@ namespace SkyDrop.Core.ViewModels
         public bool UploadNotificationsEnabled { get; set; } = true;
         public bool VerifySslCertificates { get; set; } = true;
         public string SkynetPortalLabelText { get; set; } = "Enter a skynet portal to use in the app (default is siasky.net):";
-        public string SkynetPortalUrl { get; set; }
 
         public IMvxCommand BackCommand { get; set; }
         public IMvxAsyncCommand<string> ValidateAndTrySetSkynetPortalCommand { get; set; }
@@ -37,8 +36,6 @@ namespace SkyDrop.Core.ViewModels
 
             BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
             ValidateAndTrySetSkynetPortalCommand = new MvxAsyncCommand<string>(async url => await ValidateAndTrySetSkynetPortal(url));
-
-            SkynetPortalUrl = SkynetPortal.SelectedPortal.BaseUrl;
         }
 
         public void Toast(string message)
@@ -67,26 +64,22 @@ namespace SkyDrop.Core.ViewModels
                 var portal = new SkynetPortal(portalUrl);
              
                 bool userHasConfirmed = await singletonService.UserDialogs.ConfirmAsync($"Set your portal to {portalUrl} ?");
-
-                void ShowCancelledToast() => singletonService.UserDialogs.Toast("Cancelled", TimeSpan.FromSeconds(3));
-
                 if (!userHasConfirmed)
-                {
-                    ShowCancelledToast();
-                    return null;
-                }
+                    return;
 
                 var promptResult = await singletonService.UserDialogs
                     .PromptAsync("Paste your API key if you have one, close if you already entered one for this portal before", "Optional Authentication", "Save", "Close", "", Acr.UserDialogs.InputType.Default);
                 portal.UserApiToken = promptResult.Text;
 
+                singletonService.UserDialogs.ShowLoading("Validating portal...");
                 bool success = await ValidatePortal(portal);
+                singletonService.UserDialogs.HideLoading();
 
-                if (success)
-                {
-                    singletonService.UserDialogs.Toast("Your SkyDrop portal is now set to " + portalUrl);
-                    SkynetPortal.SelectedPortal = portal;
-                }
+                if (!success)
+                    return;
+
+                singletonService.UserDialogs.Toast("Your SkyDrop portal is now set to " + portalUrl);
+                SkynetPortal.SelectedPortal = portal;
                 // Once the user updates SkynetPortal.SelectedPortal, file downloads and uploads should use their preferred portal
                 // If this degrades performance significantly, I think it would be ideal to make toggling between portals:
                 // 1) Suggested by the app with a dialog if net is slow,
@@ -101,8 +94,6 @@ namespace SkyDrop.Core.ViewModels
                 singletonService.UserDialogs.Toast("Error - couldn't reach portal " + portalUrl);
                 Log.Exception(ex);
             }
-
-            SkynetPortalUrl = portalUrl;
         }
 
         public Task<bool> ValidatePortal(SkynetPortal portal)
