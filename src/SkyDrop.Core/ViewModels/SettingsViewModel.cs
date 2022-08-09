@@ -60,21 +60,24 @@ namespace SkyDrop.Core.ViewModels
                 portalUrl = FormatPortalUrl(portalUrl);
                 var portal = new SkynetPortal(portalUrl);
                 bool success = await ValidatePortal(portal);
-                if (success)
-                {
-                    bool userHasConfirmed = await singletonService.UserDialogs.ConfirmAsync($"Set your portal to {portalUrl} ?");
-                    var promptResult =await singletonService.UserDialogs
-                        .PromptAsync("Paste your API key if you have one, close if you already entered one for this portal before", "Optional Authentication", "Save", "Close", "", Acr.UserDialogs.InputType.Default);
-                    portal.UserApiToken = promptResult.Text;
-                    if (userHasConfirmed)
-                        SkynetPortal.SelectedPortal = portal;
+                if (!success)
+                    return null;
 
-                    singletonService.UserDialogs.Toast("Your SkyDrop portal is now set to " + portalUrl);
-                    // Once the user updates SkynetPortal.SelectedPortal, file downloads and uploads should use their preferred portal
-                    // If this degrades performance significantly, I think it would be ideal to make toggling between portals:
-                    // 1) Suggested by the app with a dialog if net is slow,
-                    // 2) Manually toggleable between saved portals in settings
-                }
+                bool userHasConfirmed = await singletonService.UserDialogs.ConfirmAsync($"Set your portal to {portalUrl} ?");
+                if (!userHasConfirmed)
+                    return null;
+
+                var promptResult = await singletonService.UserDialogs
+                    .PromptAsync("Paste your API key if you have one, close if you already entered one for this portal before", "Optional Authentication", "Save", "Close", "", Acr.UserDialogs.InputType.Default);
+                portal.UserApiToken = promptResult.Text;
+                if (userHasConfirmed)
+                    SkynetPortal.SelectedPortal = portal;
+
+                singletonService.UserDialogs.Toast("Your SkyDrop portal is now set to " + portalUrl);
+                // Once the user updates SkynetPortal.SelectedPortal, file downloads and uploads should use their preferred portal
+                // If this degrades performance significantly, I think it would be ideal to make toggling between portals:
+                // 1) Suggested by the app with a dialog if net is slow,
+                // 2) Manually toggleable between saved portals in settings
             }
             catch (UriFormatException)
             {
@@ -91,8 +94,7 @@ namespace SkyDrop.Core.ViewModels
 
         public Task<bool> ValidatePortal(SkynetPortal portal)
         {
-            return Task.FromResult(true); // for debugging pro portals disable broken query code
-            //return singletonService.ApiService.PingPortalForSkylink(RandomFileToQueryFor, portal);
+            return singletonService.ApiService.PingPortalForSkylink(RandomFileToQueryFor, portal);
         }
 
         public void SetUploadNotificationEnabled(bool value)
