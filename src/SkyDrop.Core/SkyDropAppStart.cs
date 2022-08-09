@@ -11,24 +11,28 @@ namespace SkyDrop.Core
     {
         private readonly IMvxNavigationService navigationService;
         private readonly IFileSystemService fileSystemService;
+        private readonly IFFImageService ffImageService;
 
         public SkyDropAppStart(IMvxApplication application,
             IMvxNavigationService navigationService,
             IFileSystemService fileSystemService,
+            IFFImageService ffImageService,
             ILog log) : base(application, navigationService)
         {
             this.navigationService = navigationService;
             this.fileSystemService = fileSystemService;
+            this.ffImageService = ffImageService;
 
             log.Trace(""); //blank line to separate launch sessions
             log.Trace("App launched");
         }
 
-        protected override Task NavigateToFirstViewModel(object hint = null)
+        protected override async Task NavigateToFirstViewModel(object hint = null)
         {
             fileSystemService.ClearCache();
+            await ffImageService.Initialise();
 
-            return navigationService.Navigate<DropViewModel>();
+            await navigationService.Navigate<DropViewModel>();
         }
     }
 }

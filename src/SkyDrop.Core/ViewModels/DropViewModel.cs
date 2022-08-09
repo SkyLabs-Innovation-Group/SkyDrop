@@ -177,8 +177,6 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             DropViewUIState = DropViewState.SendReceiveButtonState;
 
-            await ffImageService.Initialise();
-
             await base.Initialize();
         }
 
