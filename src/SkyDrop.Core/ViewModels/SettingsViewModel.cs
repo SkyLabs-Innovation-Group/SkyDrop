@@ -63,11 +63,21 @@ namespace SkyDrop.Core.ViewModels
                 if (success)
                 {
                     bool userHasConfirmed = await singletonService.UserDialogs.ConfirmAsync($"Set your portal to {portalUrl} ?");
-                    var promptResult =await singletonService.UserDialogs
+
+                    void ShowCancelledToast() => singletonService.UserDialogs.Toast("Cancelled", TimeSpan.FromSeconds(3));
+
+                    if (!userHasConfirmed)
+                    {
+                        ShowCancelledToast();
+                        return null;
+                    }
+
+
+                    var promptResult = await singletonService.UserDialogs
                         .PromptAsync("Paste your API key if you have one, close if you already entered one for this portal before", "Optional Authentication", "Save", "Close", "", Acr.UserDialogs.InputType.Default);
                     portal.UserApiToken = promptResult.Text;
-                    if (userHasConfirmed)
-                        SkynetPortal.SelectedPortal = portal;
+
+                    SkynetPortal.SelectedPortal = portal;
 
                     singletonService.UserDialogs.Toast("Your SkyDrop portal is now set to " + portalUrl);
                     // Once the user updates SkynetPortal.SelectedPortal, file downloads and uploads should use their preferred portal
