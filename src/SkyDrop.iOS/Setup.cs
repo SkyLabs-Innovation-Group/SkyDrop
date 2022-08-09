@@ -83,10 +83,36 @@ namespace SkyDrop.iOS
                 ).CreateLogger();
             
             var logProvider = base.CreateLogProvider();
-            
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger(logProvider));
-
             return logProvider;
+        }
+
+        protected override void InitializeLastChance()
+        {
+            base.InitializeLastChance();
+
+            InitializeFFImageLoading();
+        }
+
+        private void InitializeFFImageLoading()
+        {
+            var httpClientFactory = Mvx.IoCProvider.Resolve<ISkyDropHttpClientFactory>();
+
+            ImageService.Instance.Initialize(new Configuration()
+            {
+                ClearMemoryCacheOnOutOfMemory = true,
+                DownsampleInterpolationMode = InterpolationMode.Low,
+
+                // Logging attributes 
+                Logger = (IMiniLogger)Mvx.IoCProvider.Resolve<ILog>(),
+                // VerboseLogging = true,
+                // VerboseLoadingCancelledLogging = true,
+                // VerbosePerformanceLogging = true,
+                // VerboseMemoryCacheLogging = true,
+                HttpClient = httpClientFactory.GetSkyDropHttpClientInstance(),
+            });
+
+            ImageService.Instance.Config.Logger = (IMiniLogger)Mvx.IoCProvider.Resolve<ILog>();
         }
     }
 }
