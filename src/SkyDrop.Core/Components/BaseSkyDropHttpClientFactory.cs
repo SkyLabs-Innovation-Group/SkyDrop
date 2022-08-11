@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Services;
@@ -31,12 +33,27 @@ namespace SkyDrop.Core.Components
         {
             var httpClient = GetSkyDropHttpClientInstance(portal);
 
-            if (!httpClient.DefaultRequestHeaders.Contains(PortalApiTokenHeader))
-                AddApiTokenHeader(httpClient, portal);
+            AddApiTokenHeader(httpClient, portal);
+        }
+
+        public string GetTokenForHttpClient(SkynetPortal portal) => GetTokenForHttpClient(GetSkyDropHttpClientInstance(portal));
+
+        public string GetTokenForHttpClient(HttpClient client)
+        {
+            string apiTokenHeader = null;
+            try
+            {
+                apiTokenHeader = client.DefaultRequestHeaders.Where(c => c.Key == PortalApiTokenHeader).FirstOrDefault().Value.FirstOrDefault();
+            }
+            catch (Exception ex) { }
+
+            return apiTokenHeader;
         }
 
         protected static void AddApiTokenHeader(HttpClient client, SkynetPortal portal)
         {
+            client.DefaultRequestHeaders.Remove(PortalApiTokenHeader);
+
             if (portal.HasApiToken())
             {
                 client.DefaultRequestHeaders.Add(PortalApiTokenHeader, portal.UserApiToken);

@@ -12,5 +12,9 @@ namespace SkyDrop.Core.Services
         void ClearCachedClients();
 
         void UpdateHttpClientWithNewToken(SkynetPortal portal);
+
+        string GetTokenForHttpClient(SkynetPortal portal);
+
+        string GetTokenForHttpClient(HttpClient client);
     }
 }
