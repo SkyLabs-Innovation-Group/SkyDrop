@@ -73,8 +73,6 @@ namespace SkyDrop.Core.ViewModels
 
                 singletonService.UserDialogs.ShowLoading("Validating portal...");
                 bool success = await ValidatePortal(portal);
-                singletonService.UserDialogs.HideLoading();
-
                 if (!success)
                     return;
 
@@ -93,6 +91,10 @@ namespace SkyDrop.Core.ViewModels
             {
                 singletonService.UserDialogs.Toast("Error - couldn't reach portal " + portalUrl);
                 Log.Exception(ex);
+            }
+            finally
+            {
+                singletonService.UserDialogs.HideLoading();
             }
         }
 
