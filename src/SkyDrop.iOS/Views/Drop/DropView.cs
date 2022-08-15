@@ -217,7 +217,10 @@ namespace SkyDrop.iOS.Views.Drop
                 Font = UIFont.BoldSystemFontOfSize(17),
                 Text = "SkyDrop",
                 TextColor = Colors.LightGrey.ToNative(),
-                LineBreakMode = UILineBreakMode.MiddleTruncation
+                LineBreakMode = UILineBreakMode.MiddleTruncation,
+
+                //makes label auto resize after text changes
+                TranslatesAutoresizingMaskIntoConstraints = true
             };
 
             NavigationItem.TitleView = titleLabel;
