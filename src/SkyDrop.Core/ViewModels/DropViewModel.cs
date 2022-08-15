@@ -121,6 +121,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private const string receiveFileText = "RECEIVE FILE";
         private const string receivingFileText = "RECEIVING FILE...";
+        private const string noInternetPrompt = "Please check your internet connection";
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
         private TaskCompletionSource<SkyFile> iosMultipleImageSelectTask;
@@ -336,7 +337,10 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void HandleUploadError(Exception ex, string prompt, FileUploadResult result)
         {
-            if(result == FileUploadResult.Fail)
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+                prompt = noInternetPrompt;
+
+            if (result == FileUploadResult.Fail)
             {
                 userDialogs.Alert(prompt);
                 Log.Exception(ex);
