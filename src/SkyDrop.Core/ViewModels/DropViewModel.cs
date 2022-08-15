@@ -502,9 +502,10 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task<List<SkyFile>> SelectFiles()
         {
-            var file = "Select Files";
-            var image = "Select Image";
-            var video = "Select Video";
+            bool isIos = DeviceInfo.Platform == DevicePlatform.iOS;
+            var file = isIos ? "Select Files" : "Select Multiple Files";
+            var image = isIos ? "Select Images" : "Select Image File";
+            var video = isIos ? "Select Video" : "Select Video File";
             var cancel = "cancel";
             var fileType = await userDialogs.ActionSheetAsync("", cancel, null, null, file, image, video);
             if (fileType == cancel)
