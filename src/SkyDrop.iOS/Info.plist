@@ -7,9 +7,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>skydrop.skydrop</string>
 	<key>CFBundleShortVersionString</key>
-	<string>6</string>
+	<string>8</string>
 	<key>CFBundleVersion</key>
-	<string>1.1.0.2</string>
+	<string>1.8.0.1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIDeviceFamily</key>
@@ -28,9 +28,9 @@
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>XSAppIconAssets</key>
-	<string>Resources/Media.xcassets/AppIcons.appiconset</string>
+	<string>Media.xcassets/AppIcons.appiconset</string>
 	<key>XSLaunchImageAssets</key>
-	<string>Resources/Media.xcassets/LaunchImages.launchimage</string>
+	<string>Media.xcassets/LaunchImages.launchimage</string>
 	<key>MinimumOSVersion</key>
 	<string>12.0</string>
 	<key>NSAllowsArbitraryLoadsInWebContent</key>

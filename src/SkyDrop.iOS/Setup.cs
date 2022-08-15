@@ -55,7 +55,8 @@ namespace SkyDrop.iOS
             UserDialogs.Instance = new UserDialogsImpl();
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IUserDialogs>(() => UserDialogs.Instance);
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISkyDropHttpClientFactory>(() => new NSUrlHttpClientFactory());
-            
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISaveToGalleryService>(() => new iOSSaveToGalleryService());
+
             return base.CreateApp();
         }
         
@@ -82,24 +83,7 @@ namespace SkyDrop.iOS
                 ).CreateLogger();
             
             var logProvider = base.CreateLogProvider();
-            
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger(logProvider));
-
-            ImageService.Instance.Initialize(new Configuration()
-            {
-                ClearMemoryCacheOnOutOfMemory = true,
-                DownsampleInterpolationMode = InterpolationMode.Low,
-                
-                // Logging attributes 
-                Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>(),
-                // VerboseLogging = true,
-                // VerboseLoadingCancelledLogging = true,
-                // VerbosePerformanceLogging = true,
-                // VerboseMemoryCacheLogging = true,
-            });
-
-            ImageService.Instance.Config.Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>();
-
             return logProvider;
         }
     }

@@ -96,6 +96,8 @@
     <Compile Include="Views\Contacts\ContactsView.cs" />
     <Compile Include="Views\Files\FilesView.cs" />
     <Compile Include="Views\Contacts\SharePublicKeyView.cs" />
+    <Compile Include="Views\Files\FilesView.cs" />
+    <Compile Include="Services\AndroidSaveToGalleryService.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -398,10 +400,6 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\toolbar_gallery.axml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable\ic_list.xml">
       <SubType></SubType>
       <Generator></Generator>
@@ -464,6 +462,34 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\SharePublicKeyView.axml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\item_folder.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_folder.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\toolbar_files.axml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_folder_add.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_bin.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_folder_move.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_select_all.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>

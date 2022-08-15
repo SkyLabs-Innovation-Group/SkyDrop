@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
+using MvvmCross;
 using Newtonsoft.Json;
 using Realms;
+using SkyDrop.Core.Services;
 using Xamarin.Essentials;
 
 namespace SkyDrop.Core.DataModels
@@ -19,10 +21,21 @@ namespace SkyDrop.Core.DataModels
 
             string portalUrl = Preferences.Get(PreferenceKey.SelectedSkynetPortal, "");
 
-            if (!string.IsNullOrEmpty(portalUrl))
-                return new SkynetPortal(portalUrl);
-            else // No saved portal => use default siasky.net/
+            if (string.IsNullOrEmpty(portalUrl))
                 return SiaskyPortal;
+            else
+            {
+                var portal = new SkynetPortal(portalUrl);
+                portal.UserApiToken = SecureStorage.GetAsync(portal.GetApiTokenPrefKey()).GetAwaiter().GetResult();
+
+                if (portal.HasApiToken())
+                {
+                    var httpClientFactory = Mvx.IoCProvider.GetSingleton<ISkyDropHttpClientFactory>();
+                    httpClientFactory.UpdateHttpClientWithNewToken(portal);
+                }
+
+                return portal;
+            }
         }
 
         private static SkynetPortal SetSelectedSkynetPortal(SkynetPortal portal)
@@ -32,12 +45,30 @@ namespace SkyDrop.Core.DataModels
 
             Preferences.Remove(PreferenceKey.SelectedSkynetPortal);
             Preferences.Set(PreferenceKey.SelectedSkynetPortal, portal.ToString());
+
+            if (portal.HasApiToken())
+            {
+                string key = portal.GetApiTokenPrefKey();
+                SecureStorage.Remove(key);
+                SecureStorage.SetAsync(key, portal.UserApiToken).GetAwaiter().GetResult();
+
+                var httpClientFactory = Mvx.IoCProvider.GetSingleton<ISkyDropHttpClientFactory>();
+                httpClientFactory.UpdateHttpClientWithNewToken(portal);
+
+                var ffImageService = Mvx.IoCProvider.GetSingleton<IFFImageService>();
+                ffImageService.UpdateHttpClient(httpClientFactory.GetSkyDropHttpClientInstance(portal));
+            }
             return portal;
         }
 
         public const string SiaskyPortalUrl = "https://siasky.net";
 
         public const string SkyportalXyzUrl = "https://skyportal.xyz";
+        public string GetApiTokenPrefKey()
+        {
+            return $"{PreferenceKey.PrefixPortalApiToken}{BaseUrl}";
+        }
+
         
         public static SkynetPortal SiaskyPortal = new SkynetPortal(SiaskyPortalUrl);
         
@@ -51,6 +82,10 @@ namespace SkyDrop.Core.DataModels
         
         // Used for Fody.Weaver
         public string BaseUrl { get; set; }
+
+        public string UserApiToken { get; set; }
+
+        public bool HasApiToken() => !string.IsNullOrEmpty(UserApiToken);
 
         public readonly string InitialBaseUrl;
 

@@ -36,6 +36,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IShareLinkService shareLinkService;
         private readonly IUploadTimerService uploadTimerService;
         private readonly IEncryptionService encryptionService;
+        private readonly IFFImageService ffImageService;
 
         public IMvxCommand SendCommand { get; set; }
         public IMvxCommand ReceiveCommand { get; set; }
@@ -150,7 +151,8 @@ namespace SkyDrop.Core.ViewModels.Main
             IMvxNavigationService navigationService,
             IFileSystemService fileSystemService,
             IEncryptionService encryptionService,
-            ILog log) : base(singletonService)
+            ILog log,
+            IFFImageService fFImageService) : base(singletonService)
         {
             Log = log;
             Title = "SkyDrop";
@@ -164,6 +166,7 @@ namespace SkyDrop.Core.ViewModels.Main
             this.shareLinkService = shareLinkService;
             this.uploadTimerService = uploadTimerService;
             this.encryptionService = encryptionService;
+            this.ffImageService = fFImageService;
 
             SendCommand = new MvxAsyncCommand(async () => await SendButtonTapped());
             ReceiveCommand = new MvxAsyncCommand(async () => await ReceiveFile());
@@ -183,6 +186,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public override async Task Initialize()
         {
             DropViewUIState = DropViewState.SendReceiveButtonState;
+
             await base.Initialize();
         }
 
@@ -306,6 +310,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 RaiseFocusedFileChanged();
 
+                //show filename
+                Title = FocusedFile.Filename;
+
                 //clear cache
                 fileSystemService.ClearCache();
 
@@ -420,6 +427,9 @@ namespace SkyDrop.Core.ViewModels.Main
                 var filename = await apiService.GetSkyFileFilename(FocusedFile.GetSkylinkUrl());
                 FocusedFile.Filename = filename;
                 storageService.SaveSkyFiles(FocusedFile);
+
+                //show filename
+                Title = FocusedFile.Filename;
 
                 RaiseFocusedFileChanged();
 
@@ -815,9 +825,7 @@ namespace SkyDrop.Core.ViewModels.Main
             if (UserIsSwiping())
                 return;
 
-            var fileToOpen = FocusedFile ?? FocusedFile;
-
-            string skylinkUrl = fileToOpen.GetSkylinkUrl();
+            string skylinkUrl = FocusedFile.GetSkylinkUrl();
             Log.Trace("Opening Skylink " + skylinkUrl);
             await Browser.OpenAsync(skylinkUrl, new BrowserLaunchOptions
             {
@@ -856,6 +864,9 @@ namespace SkyDrop.Core.ViewModels.Main
             SwipeNavigationEnabled = true;
             FocusedFile = selectedFile;
 
+            //show filename
+            Title = FocusedFile.Filename;
+
             RaiseFocusedFileChanged();
 
             UpdatePreviewImage();
@@ -876,9 +887,12 @@ namespace SkyDrop.Core.ViewModels.Main
                     return;
                 }
 
-                //save
+                var saveType = await Util.GetSaveType(FocusedFile.Filename);
+                if (saveType == Util.SaveType.Cancel)
+                    return;
+
                 IsDownloadingFile = true;
-                await apiService.DownloadAndSaveSkyfile(FocusedFileUrl, FocusedFile.WasSent);
+                await apiService.DownloadAndSaveSkyfile(FocusedFileUrl, saveType);
             }
             catch(Exception e)
             {

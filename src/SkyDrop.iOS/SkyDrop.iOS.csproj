@@ -197,6 +197,20 @@
     <ImageAsset Include="Media.xcassets\ic_error.imageset\alert-circle.pdf" />
     <ImageAsset Include="Media.xcassets\ic_image.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_image.imageset\image.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_folder.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_folder.imageset\folder.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_plus.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_plus.imageset\plus.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\folder-plus.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_back.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_back.imageset\back_button.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_bin.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_bin.imageset\bin.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\folder-arrow-right.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_select_all.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_select_all.imageset\select-all.pdf" />
     <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
@@ -224,6 +238,13 @@
       <DependentUpon>ContactCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\BaseViewController.cs" />
+    <InterfaceDefinition Include="Views\Files\FolderCell.xib" />
+    <Compile Include="Views\Files\FolderCell.cs" />
+    <Compile Include="Views\Files\FolderCell.designer.cs">
+      <DependentUpon>FolderCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BaseViewController.cs" />
+    <Compile Include="Services\iOSSaveToGalleryService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

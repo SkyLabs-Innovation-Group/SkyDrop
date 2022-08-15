@@ -40,6 +40,7 @@ namespace SkyDrop.iOS.Views.Drop
         private nfloat tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
         private const string DropUploadNotifRequestId = "drop_upload_notification_id";
         private nfloat screenWidth => UIScreen.MainScreen.Bounds.Width;
+        private UILabel titleLabel;
 
         public DropView() : base("DropView", null)
         {
@@ -73,6 +74,16 @@ namespace SkyDrop.iOS.Views.Drop
                 SetupGestureListener();
                 SetupNavDots();
 
+                //setup nav bar
+                NavigationController.NavigationBar.BarTintColor = Colors.GradientDark.ToNative();
+                NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes()
+                {
+                    ForegroundColor = Colors.White.ToNative()
+                };
+
+                MakeTitleTruncateFromMiddle();
+
+                View.BackgroundColor = Colors.DarkGrey.ToNative();
                 BarcodeContainer.BackgroundColor = Colors.MidGrey.ToNative(); //so that preview image fades in from dark color
 
                 var menuButton = new UIBarButtonItem()
@@ -119,7 +130,7 @@ namespace SkyDrop.iOS.Views.Drop
                 UrlLabelContainer.Layer.CornerRadius = 8;
                 UrlLabelContainer.BackgroundColor = Colors.MidGrey.ToNative();
 
-                ShowBarcodeButton.Layer.CornerRadius = 4;
+                ShowBarcodeButton.Layer.CornerRadius = 3;
                 ShowBarcodeButton.BackgroundColor = Colors.MidGrey.ToNative().ColorWithAlpha(0.5f);
 
                 ShowPreviewIcon.TintColor = UIColor.FromWhiteAlpha(0.8f, 1);
@@ -159,7 +170,7 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(SaveFileLabel).For(t => t.Text).To(vm => vm.SaveButtonText);
             set.Bind(DownloadButtonIcon).For(a => a.ImagePath).To(vm => vm.IsFocusedFileAnArchive).WithConversion(new SaveUnzipIconConverter());
 
-            set.Bind(this).For(th => th.Title).To(vm => vm.Title);
+            set.Bind(titleLabel).To(vm => vm.Title);
 
             set.Bind(BarcodeMenu).For("Visible").To(vm => vm.IsBarcodeVisible);
             set.Bind(BarcodeContainer).For("Visible").To(vm => vm.IsBarcodeVisible);
@@ -205,12 +216,25 @@ namespace SkyDrop.iOS.Views.Drop
             set.Apply();
         }
 
+        private void MakeTitleTruncateFromMiddle()
+        {
+            titleLabel = new UILabel
+            {
+                TextAlignment = UITextAlignment.Center,
+                Font = UIFont.BoldSystemFontOfSize(17),
+                Text = "SkyDrop",
+                TextColor = Colors.LightGrey.ToNative(),
+                LineBreakMode = UILineBreakMode.MiddleTruncation
+            };
+
+            NavigationItem.TitleView = titleLabel;
+        }
+
         private void UpdateUploadNotificationProgress(double progress)
         {
             int progressPercentage = (int)Math.Floor(progress * 100);
 
             var content = new UNMutableNotificationContent();
-
             content.Title = "Upload started";
             if (progress > 1.0)
                 progressPercentage = 100;
@@ -335,6 +359,8 @@ namespace SkyDrop.iOS.Views.Drop
             //that is to fix an issue with CheckUserIsSwiping() on barcode menu buttons
             AnimateSlideBarcodeOut();
 
+            ViewModel.Title = "SkyDrop";
+
             ReceiveButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
             SendButton.Alpha = 1;
         }
@@ -345,9 +371,9 @@ namespace SkyDrop.iOS.Views.Drop
         private void SetBarcodeCodeUiState(bool isSlow)
         {
             ViewModel.DropViewUIState = DropViewState.QRCodeState;
-
             ViewModel.IsBarcodeVisible = true;
-            
+            ViewModel.Title = ViewModel.FocusedFile?.Filename;
+
             ViewModel.Log.Trace("Sliding in QR code view");
 
             AnimateSlideBarcodeIn(isSlow);

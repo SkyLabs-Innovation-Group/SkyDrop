@@ -9,7 +9,7 @@ using UIKit;
 
 namespace SkyDrop.iOS.Views.Settings
 {
-    partial class SettingsView : MvxViewController<SettingsViewModel>
+    partial class SettingsView : BaseViewController<SettingsViewModel>
     {
         public SettingsView() : base("SettingsView", null)
         {
@@ -18,6 +18,8 @@ namespace SkyDrop.iOS.Views.Settings
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            AddBackButton(() => ViewModel.Close());
 
             var set = CreateBindingSet();
             set.Bind(SetPortalLabel).For(v => v.Text).To(vm => vm.SkynetPortalLabelText);
@@ -42,8 +44,8 @@ namespace SkyDrop.iOS.Views.Settings
             SavePortalButton.TouchUpInside += async (s, e) =>
             {
                 UIApplication.SharedApplication.KeyWindow.EndEditing(true);
-                var formattedPortalUrl = await ViewModel.ValidateAndTrySetSkynetPortal(PortalTextView.Text);
-                PortalTextView.Text = formattedPortalUrl;
+                await ViewModel.ValidateAndTrySetSkynetPortalCommand.ExecuteAsync(PortalTextView.Text);
+                PortalTextView.Text = SkynetPortal.SelectedPortal.BaseUrl;
             };
 
             ContactsButton.TouchUpInside += (s, e) => ViewModel.NavigateToContactsCommand.Execute();

@@ -19,7 +19,7 @@ namespace SkyDrop.Core
                 .AsInterfaces()
                 .RegisterAsLazySingleton();
             
-            RegisterAppStart<DropViewModel>();
+            RegisterCustomAppStart<SkyDropAppStart>();
         }
     }
 }
