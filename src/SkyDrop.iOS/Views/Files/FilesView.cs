@@ -46,9 +46,6 @@ namespace SkyDrop.iOS.Views.Files
             NavigationItem.RightBarButtonItem.TintColor = UIColor.White;
             NavigationController.NavigationBar.TintColor = UIColor.White;
             NavigationController.View.BackgroundColor = UIColor.Clear;
-            NavigationController.NavigationBar.Translucent = true;
-            NavigationController.NavigationBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
-            NavigationController.NavigationBar.ShadowImage = new UIImage();
 
             AddBackButton(() => ViewModel.BackCommand.Execute());
 

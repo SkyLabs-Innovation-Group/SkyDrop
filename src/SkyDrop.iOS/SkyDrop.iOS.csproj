@@ -211,6 +211,10 @@
     <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\folder-arrow-right.pdf" />
     <ImageAsset Include="Media.xcassets\ic_select_all.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_select_all.imageset\select-all.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_user.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_user.imageset\user.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_user_multiple.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_user_multiple.imageset\user-multiple.pdf" />
     <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>

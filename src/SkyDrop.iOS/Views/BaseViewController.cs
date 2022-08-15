@@ -34,7 +34,12 @@ namespace SkyDrop.iOS.Views
 
 			//set background color
 			View.BackgroundColor = Colors.DarkGrey.ToNative();
-		}
+
+            //fixes issues where nav bar changes color when scrolling down
+            NavigationController.NavigationBar.Translucent = true;
+            NavigationController.NavigationBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
+            NavigationController.NavigationBar.ShadowImage = new UIImage();
+        }
         
         protected void AddBackButton(Action backAction)
         {
