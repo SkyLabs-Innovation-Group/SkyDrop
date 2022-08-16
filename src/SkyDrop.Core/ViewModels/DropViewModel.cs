@@ -419,7 +419,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 Log.Exception(e);
 
                 //avoid crashing android by NOT showing a toast before the scanner activity has closed
-                var error = "Invalid QR code, contents copied to clipboard";
+                var error = "Not a skylink, QR code content was copied to clipboard";
                 if (DeviceInfo.Platform == DevicePlatform.iOS)
                     userDialogs.Toast(error);
                 else
