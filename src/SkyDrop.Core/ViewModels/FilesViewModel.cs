@@ -357,10 +357,12 @@ namespace SkyDrop.Core.ViewModels.Main
         //currently only used for unzipped files
         private void SelectAllFiles()
         {
+            var shouldSelectAll = SkyFiles.Any(s => !s.IsSelected); //if one is not selected, select all, otherwise deselect all
+
             foreach(var file in SkyFiles)
             {
-                file.IsSelectionActive = true;
-                file.IsSelected = true;
+                file.IsSelectionActive = shouldSelectAll;
+                file.IsSelected = shouldSelectAll;
             }
 
             updateSelectionStateAction?.Invoke();
