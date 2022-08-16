@@ -360,6 +360,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task ReceiveFile()
         {
+            string barcodeData = null;
             try
             {
                 //don't allow user to scan barcode while a file is uploading
@@ -378,7 +379,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 IsReceivingFile = true;
 
                 //open the QR code scan view
-                var barcodeData = await barcodeService.ScanBarcode();
+                barcodeData = await barcodeService.ScanBarcode();
                 if (barcodeData == null)
                 {
                     Log.Trace("barcodeData is null");
@@ -418,13 +419,15 @@ namespace SkyDrop.Core.ViewModels.Main
                 Log.Exception(e);
 
                 //avoid crashing android by NOT showing a toast before the scanner activity has closed
-                var error = "Invalid QR code";
+                var error = "Invalid QR code, contents copied to clipboard";
                 if (DeviceInfo.Platform == DevicePlatform.iOS)
                     userDialogs.Toast(error);
                 else
                     errorMessage = error;
 
                 ResetUIStateCommand.Execute();
+
+                await Clipboard.SetTextAsync(barcodeData);
             }
             finally
             {
