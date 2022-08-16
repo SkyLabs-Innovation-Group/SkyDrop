@@ -88,7 +88,7 @@ namespace SkyDrop.iOS.Views.Drop
 
                 var menuButton = new UIBarButtonItem()
                 {
-                    Image = UIImage.FromBundle("ic_menu")
+                    Image = UIImage.FromBundle("ic_cloud")
                 };
                 menuButton.Clicked += (s, e) => ViewModel.MenuCommand?.Execute();
 
