@@ -14,9 +14,17 @@ namespace SkyDrop.iOS.Views.Contacts
 	{
 		[Outlet]
 		UIKit.UIImageView BarcodeImage { get; set; }
+
+		[Outlet]
+		UIKit.UIView ScannerContainer { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (ScannerContainer != null) {
+				ScannerContainer.Dispose ();
+				ScannerContainer = null;
+			}
+
 			if (BarcodeImage != null) {
 				BarcodeImage.Dispose ();
 				BarcodeImage = null;
