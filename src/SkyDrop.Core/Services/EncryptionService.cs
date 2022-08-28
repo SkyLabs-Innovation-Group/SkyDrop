@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Org.BouncyCastle.Crypto;
@@ -13,7 +12,6 @@ using Org.BouncyCastle.Crypto.Paddings;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities.Encoders;
-using Plugin.Permissions.Abstractions;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Utility;
 using static SkyDrop.Core.Services.EncryptionService;
@@ -26,9 +24,11 @@ namespace SkyDrop.Core.Services
         {
             Default,
             AlreadyExists,
-            ContactAdded,
             InvalidKey,
-            Canceled
+            WrongDevice,
+            Canceled,
+            ContactAdded,
+            DevicesPaired
         }
 
         private IBlockCipher engine = new ThreefishEngine(256); //the cipher engine for encryption
@@ -37,7 +37,7 @@ namespace SkyDrop.Core.Services
         private X25519PublicKeyParameters myPublicKey;
         private Guid myId;
         private readonly SecureRandom random = new SecureRandom();
-        private const int metaDataSizeBytes = 16;
+        private const int guidSizeBytes = 16;
 
         private readonly IUserDialogs userDialogs;
         private readonly IStorageService storageService;
@@ -62,11 +62,12 @@ namespace SkyDrop.Core.Services
             }
         }
 
-        public string GetMyPublicKeyWithId()
+        public string GetMyPublicKeyWithId(Guid justScannedId)
         {
-            var id = myId.ToByteArray();
-            var key = myPublicKey.GetEncoded();
-            var publicKeyWithId = Util.Combine(id, key);
+            var myIdBytes = myId.ToByteArray();
+            var justScannedIdBytes = justScannedId.ToByteArray();
+            var keyBytes = myPublicKey.GetEncoded();
+            var publicKeyWithId = Util.Combine(myIdBytes, justScannedIdBytes, keyBytes);
             return Convert.ToBase64String(publicKeyWithId);
         }
 
@@ -137,31 +138,42 @@ namespace SkyDrop.Core.Services
             });
         }
 
-        public async Task<AddContactResult> AddPublicKey(string publicKeyEncoded)
+        public async Task<(AddContactResult result, Guid newContactId)> AddPublicKey(string publicKeyEncoded)
         {
-            var (publicKey, id) = DecodePublicKey(publicKeyEncoded);
+            var (publicKey, keyId, justScannedId) = DecodePublicKey(publicKeyEncoded);
             if (publicKey == null)
             {
                 userDialogs.Alert("Invalid key");
-                return AddContactResult.InvalidKey;
+                return (AddContactResult.InvalidKey, default);
             }
 
-            if (storageService.ContactExists(id))
+            if (storageService.ContactExists(keyId))
             {
                 userDialogs.Alert("Contact already exists");
-                return AddContactResult.AlreadyExists;
+                return (AddContactResult.AlreadyExists, default);
+            }
+
+            if (justScannedId != default && justScannedId != myId)
+            {
+                //you scanned the QR code with the wrong phone
+                userDialogs.Alert("Unexpected device! Please go back and try to pair again");
+                return (AddContactResult.WrongDevice, default);
             }
 
             var result = await userDialogs.PromptAsync("Enter contact name: ", null, null, null, "name");
             if (!result.Ok)
-                return AddContactResult.Canceled;
+                return (AddContactResult.Canceled, default);
 
-            var newContact = new Contact { Name = result.Value, PublicKey = publicKey, Id = id };
+            var newContact = new Contact { Name = result.Value, PublicKey = publicKey, Id = keyId };
             storageService.AddContact(newContact);
 
-            userDialogs.Toast($"{newContact.Name} added");
+            bool didPair = justScannedId == myId; //if justScannedId == default, then we still need to scan this device's QR code to pair
+            string message = didPair ? $"Paired with {newContact.Name} successfully" : $"{newContact.Name} added, now scan this QR code on the other device";
+            var addContactResult = didPair ? AddContactResult.DevicesPaired : AddContactResult.ContactAdded;
 
-            return AddContactResult.ContactAdded;
+            userDialogs.Toast(message);
+
+            return (addContactResult, newContact.Id);
         }
 
         private byte[] GetMetaDataForFile()
@@ -173,7 +185,7 @@ namespace SkyDrop.Core.Services
 
         private (byte[] encryptedData, byte[] metaData) ReadMetaDataFromFile(byte[] file)
         {
-            return (file.Take(metaDataSizeBytes).ToArray(), file.Skip(metaDataSizeBytes).ToArray());
+            return (file.Take(guidSizeBytes).ToArray(), file.Skip(guidSizeBytes).ToArray());
         }
 
         private Contact GetContactWithId(Guid id)
@@ -182,20 +194,21 @@ namespace SkyDrop.Core.Services
             return contacts.FirstOrDefault(c => c.Id == id);
         }
 
-        private (X25519PublicKeyParameters key, Guid id) DecodePublicKey(string publicKeyEncoded)
+        private (X25519PublicKeyParameters key, Guid keyId, Guid justScannedId) DecodePublicKey(string publicKeyEncoded)
         {
             try
             { 
                 var bytes = Convert.FromBase64String(publicKeyEncoded);
-                var id = new Guid(bytes.Take(metaDataSizeBytes).ToArray());
-                var keyBytes = bytes.Skip(metaDataSizeBytes).ToArray();
+                var keyId = new Guid(bytes.Take(guidSizeBytes).ToArray());
+                var justScannedId = new Guid(bytes.Skip(guidSizeBytes).Take(guidSizeBytes).ToArray());
+                var keyBytes = bytes.Skip(guidSizeBytes).Skip(guidSizeBytes).ToArray();
                 var publicKey = new X25519PublicKeyParameters(keyBytes);
                 var sharedSecret = GetSharedSecret(myPrivateKey, publicKey);
-                return (publicKey, id);
+                return (publicKey, keyId, justScannedId);
             }
             catch(Exception e)
             {
-                return (null, default);
+                return (null, default, default);
             }
         }
 
@@ -276,9 +289,14 @@ namespace SkyDrop.Core.Services
 
     public interface IEncryptionService
     {
-        string GetMyPublicKeyWithId();
+        /// <summary>
+        /// Get data for QR code for pairing devices
+        /// </summary>
+        /// <param name="justScannedId">The ID of the public key QR code you just scanned OR a GUID filled with zeros by default</param>
+        /// <returns></returns>
+        string GetMyPublicKeyWithId(Guid justScannedId);
 
-        Task<AddContactResult> AddPublicKey(string publicKeyEncoded);
+        Task<(AddContactResult result, Guid newContactId)> AddPublicKey(string publicKeyEncoded);
 
         Task<string> EncodeFileFor(string filePath, Contact recipientPublicKey);
 

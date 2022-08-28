@@ -10,6 +10,7 @@ using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels;
 using SkyDrop.iOS.Common;
 using UIKit;
+using Xamarin.Essentials;
 using ZXing.Mobile;
 using static SkyDrop.Core.Services.EncryptionService;
 
@@ -29,6 +30,7 @@ namespace SkyDrop.iOS.Views.Contacts
             base.ViewDidLoad();
 
             ViewModel.ScanAgainCommand = new MvxCommand(ScanAgain);
+            ViewModel.RefreshBarcodeCommand = new MvxAsyncCommand(ShowBarcode);
 
             View.BackgroundColor = Colors.DarkGrey.ToNative();
             ScannerOverlay.BackgroundColor = Colors.Primary.ToNative();
@@ -50,10 +52,13 @@ namespace SkyDrop.iOS.Views.Contacts
         {
             try
             {
-                var screenDensity = (int)UIScreen.MainScreen.Scale;
-                var matrix = ViewModel.GenerateBarcode((int)BarcodeImage.Frame.Width * screenDensity, (int)BarcodeImage.Frame.Height * screenDensity);
-                var image = await iOSUtil.BitMatrixToImage(matrix);
-                BarcodeImage.Image = image;
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                {
+                    var screenDensity = (int)UIScreen.MainScreen.Scale;
+                    var matrix = ViewModel.GenerateBarcode((int)BarcodeImage.Frame.Width * screenDensity, (int)BarcodeImage.Frame.Height * screenDensity);
+                    var image = await iOSUtil.BitMatrixToImage(matrix);
+                    BarcodeImage.Image = image;
+                });
             }
             catch (Exception ex)
             {
@@ -96,7 +101,7 @@ namespace SkyDrop.iOS.Views.Contacts
 
         private void ScanAgain()
         {
-            ViewModel.AddContactResult = AddContactResult.Default;
+            ViewModel.AddContactResult = AddContactResult.Default; //reset ui
         }
     }
 }

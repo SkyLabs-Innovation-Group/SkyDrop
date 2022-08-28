@@ -101,7 +101,7 @@ namespace SkyDrop.Core.ViewModels
                 //solves issue with disappearing name entry dialog on Android
                 await Task.Delay(500);
 
-                var result = await encryptionService.AddPublicKey(barcodeData);
+                var (result, newId) = await encryptionService.AddPublicKey(barcodeData);
                 if (result == EncryptionService.AddContactResult.ContactAdded)
                     LoadCertificates();
             }
@@ -115,6 +115,7 @@ namespace SkyDrop.Core.ViewModels
         {
             var contactItem = new ContactDVM { Contact = contact };
             contactItem.TapCommand = new MvxCommand(() => ItemSelected(contactItem));
+            contactItem.DeleteCommand = new MvxAsyncCommand(async () => await DeleteContact(contactItem));
             return contactItem;
         }
 
@@ -126,6 +127,18 @@ namespace SkyDrop.Core.ViewModels
         private void ItemSelected(IContactItem item)
         {
             navigationService.Close(this, item);
+        }
+
+        private async Task DeleteContact(IContactItem item)
+        {
+            if (item is ContactDVM contactDVM)
+            {
+                if (!await userDialogs.ConfirmAsync($"Delete contact {contactDVM.Name}?"))
+                    return;
+
+                storageService.DeleteContact(contactDVM.Contact);
+                Contacts = Contacts.Where(c => c != item).ToList();
+            }
         }
 
         public override void Prepare(NavParam parameter)

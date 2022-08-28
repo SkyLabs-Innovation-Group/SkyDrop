@@ -10,7 +10,9 @@ namespace SkyDrop.Core.DataViewModels
 
 		public IMvxCommand TapCommand { get; set; }
 
-		public string Name => Contact.Name;
+        public IMvxCommand DeleteCommand { get; set; }
+
+        public string Name => Contact.Name;
 
 		public bool IsSelectionActive { get; set; }
 

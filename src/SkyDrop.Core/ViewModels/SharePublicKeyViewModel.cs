@@ -18,6 +18,10 @@ namespace SkyDrop.Core.ViewModels
         public AddContactResult AddContactResult { get; set; }
         public IMvxCommand BackCommand { get; set; }
         public IMvxCommand ScanAgainCommand { get; set; }
+        public IMvxCommand RefreshBarcodeCommand { get; set; }
+
+        private Guid justScannedId = default;
+        private bool isBusy;
 
         public SharePublicKeyViewModel(ISingletonService singletonService,
             IApiService apiService,
@@ -42,7 +46,7 @@ namespace SkyDrop.Core.ViewModels
 
         public BitMatrix GenerateBarcode(int width, int height)
         {
-            string publicKey = encryptionService.GetMyPublicKeyWithId();
+            string publicKey = encryptionService.GetMyPublicKeyWithId(justScannedId);
             return barcodeService.GenerateBarcode(publicKey, width, height);
         }
 
@@ -56,13 +60,19 @@ namespace SkyDrop.Core.ViewModels
                     return;
                 }
 
-                if (AddContactResult != AddContactResult.Default)
+                //wait for user interaction before scanning again
+                if (AddContactResult != AddContactResult.Default) 
                     return;
 
-                //solves issue with disappearing name entry dialog on Android
-                //await Task.Delay(500);
+                //prevents double dialog issue
+                if (isBusy) 
+                    return;
 
-                AddContactResult = await encryptionService.AddPublicKey(barcodeData);
+                isBusy = true;
+                (AddContactResult, justScannedId) = await encryptionService.AddPublicKey(barcodeData);
+                isBusy = false;
+
+                RefreshBarcodeCommand.Execute();
             }
             catch (Exception e)
             {

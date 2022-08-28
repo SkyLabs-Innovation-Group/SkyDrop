@@ -27,7 +27,8 @@ namespace SkyDrop.iOS.Views.Contacts
 				var set = this.CreateBindingSet<ContactCell, ContactDVM>();
 				set.Bind(NameLabel).To(vm => vm.Name);
 				set.Bind(ContentView).For("Tap").To(vm => vm.TapCommand);
-				set.Bind(this).For(t => t.IconImage).To(vm => vm);
+                set.Bind(DeleteButton).For("Tap").To(vm => vm.DeleteCommand);
+                set.Bind(this).For(t => t.IconImage).To(vm => vm);
 				set.Apply();
 			});
 		}
@@ -47,6 +48,9 @@ namespace SkyDrop.iOS.Views.Contacts
 				//show multiple contacts icon on first cell
 				var icon = value is AnyoneWithTheLinkItem ? "ic_user_multiple" : "ic_user";
 				Icon.Image = UIImage.FromBundle(icon);
+
+				//hide delete button for top item
+				DeleteButton.Hidden = value is AnyoneWithTheLinkItem;
 			}
 		}
 	}

@@ -193,6 +193,15 @@ namespace SkyDrop.Core.Services
             return realm.Find<ContactRealmObject>(id.ToString()) != null;
         }
 
+        public void DeleteContact(Contact contact)
+        {
+            realm.Write(() =>
+            {
+                var realmObject = realm.Find<ContactRealmObject>(contact.Id.ToString());
+                realm.Remove(realmObject);
+            });
+        }
+
         public EncryptionKeyPairRealmObject GetMyEncryptionKeys()
         {
             return realm.All<EncryptionKeyPairRealmObject>().FirstOrDefault();
@@ -321,6 +330,8 @@ namespace SkyDrop.Core.Services
         void AddContact(Contact contact);
 
         bool ContactExists(Guid publicKeyBase64);
+
+        void DeleteContact(Contact contact);
 
         void SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id);
 

@@ -16,6 +16,9 @@ namespace SkyDrop.iOS.Views.Contacts
 		UIKit.UIView ContainerView { get; set; }
 
 		[Outlet]
+		UIKit.UIImageView DeleteButton { get; set; }
+
+		[Outlet]
 		UIKit.UIImageView Icon { get; set; }
 
 		[Outlet]
@@ -29,9 +32,24 @@ namespace SkyDrop.iOS.Views.Contacts
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (ContainerView != null) {
+				ContainerView.Dispose ();
+				ContainerView = null;
+			}
+
 			if (Icon != null) {
 				Icon.Dispose ();
 				Icon = null;
+			}
+
+			if (DeleteButton != null) {
+				DeleteButton.Dispose ();
+				DeleteButton = null;
+			}
+
+			if (NameLabel != null) {
+				NameLabel.Dispose ();
+				NameLabel = null;
 			}
 
 			if (SelectedIndicatorInnerView != null) {
@@ -42,16 +60,6 @@ namespace SkyDrop.iOS.Views.Contacts
 			if (SelectedIndicatorView != null) {
 				SelectedIndicatorView.Dispose ();
 				SelectedIndicatorView = null;
-			}
-
-			if (ContainerView != null) {
-				ContainerView.Dispose ();
-				ContainerView = null;
-			}
-
-			if (NameLabel != null) {
-				NameLabel.Dispose ();
-				NameLabel = null;
 			}
 		}
 	}
