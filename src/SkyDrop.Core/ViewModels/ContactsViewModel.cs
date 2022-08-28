@@ -101,9 +101,9 @@ namespace SkyDrop.Core.ViewModels
                 //solves issue with disappearing name entry dialog on Android
                 await Task.Delay(500);
 
-                await encryptionService.AddPublicKey(barcodeData);
-
-                LoadCertificates();
+                var result = await encryptionService.AddPublicKey(barcodeData);
+                if (result == EncryptionService.AddContactResult.ContactAdded)
+                    LoadCertificates();
             }
             catch(Exception e)
             {

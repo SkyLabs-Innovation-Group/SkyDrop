@@ -16,11 +16,21 @@ using Org.BouncyCastle.Utilities.Encoders;
 using Plugin.Permissions.Abstractions;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Utility;
+using static SkyDrop.Core.Services.EncryptionService;
 
 namespace SkyDrop.Core.Services
 {
     public class EncryptionService : IEncryptionService
     {
+        public enum AddContactResult
+        {
+            Default,
+            AlreadyExists,
+            ContactAdded,
+            InvalidKey,
+            Canceled
+        }
+
         private IBlockCipher engine = new ThreefishEngine(256); //the cipher engine for encryption
         private IAsymmetricCipherKeyPairGenerator keyGen = new X25519KeyPairGenerator(); //keypair generator for X25519 key agreement scheme
         private X25519PrivateKeyParameters myPrivateKey;
@@ -127,29 +137,31 @@ namespace SkyDrop.Core.Services
             });
         }
 
-        public async Task AddPublicKey(string publicKeyEncoded)
+        public async Task<AddContactResult> AddPublicKey(string publicKeyEncoded)
         {
             var (publicKey, id) = DecodePublicKey(publicKeyEncoded);
             if (publicKey == null)
             {
                 userDialogs.Alert("Invalid key");
-                return;
+                return AddContactResult.InvalidKey;
             }
 
             if (storageService.ContactExists(id))
             {
                 userDialogs.Alert("Contact already exists");
-                return;
+                return AddContactResult.AlreadyExists;
             }
 
             var result = await userDialogs.PromptAsync("Enter contact name: ", null, null, null, "name");
             if (!result.Ok)
-                return;
+                return AddContactResult.Canceled;
 
             var newContact = new Contact { Name = result.Value, PublicKey = publicKey, Id = id };
             storageService.AddContact(newContact);
 
             userDialogs.Toast($"{newContact.Name} added");
+
+            return AddContactResult.ContactAdded;
         }
 
         private byte[] GetMetaDataForFile()
@@ -266,7 +278,7 @@ namespace SkyDrop.Core.Services
     {
         string GetMyPublicKeyWithId();
 
-        Task AddPublicKey(string publicKeyEncoded);
+        Task<AddContactResult> AddPublicKey(string publicKeyEncoded);
 
         Task<string> EncodeFileFor(string filePath, Contact recipientPublicKey);
 

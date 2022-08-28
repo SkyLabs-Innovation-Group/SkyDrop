@@ -11,7 +11,9 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SharePublicKeyView">
             <connections>
                 <outlet property="BarcodeImage" destination="UE5-Ad-uTR" id="BUB-tB-lsf"/>
+                <outlet property="ScanAgainButton" destination="wiu-a6-NzW" id="p76-Q0-Sk7"/>
                 <outlet property="ScannerContainer" destination="ayI-tS-9Td" id="zId-Iq-XXj"/>
+                <outlet property="ScannerOverlay" destination="co5-JP-3oc" id="MFk-t2-xIY"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
         </placeholder>
@@ -43,9 +45,55 @@
                 </view>
                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ayI-tS-9Td" userLabel="ScannerContainer">
                     <rect key="frame" x="6" y="478" width="402" height="402"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="co5-JP-3oc" userLabel="ScannerOverlay">
+                            <rect key="frame" x="0.0" y="0.0" width="402" height="402"/>
+                            <subviews>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="2oo-T3-pr9">
+                                    <rect key="frame" x="153" y="155" width="96" height="92.5"/>
+                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="96" id="EWH-Qe-WVq"/>
+                                        <constraint firstAttribute="height" constant="96" id="Qni-FH-2NP"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add another contact" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wiu-a6-NzW">
+                                    <rect key="frame" x="0.0" y="306" width="402" height="96"/>
+                                    <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="96" id="PjQ-FN-3U9"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contact added" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O9O-tb-mto">
+                                    <rect key="frame" x="0.0" y="116.5" width="402" height="20.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                            <constraints>
+                                <constraint firstAttribute="bottom" secondItem="wiu-a6-NzW" secondAttribute="bottom" id="4mH-x7-FQS"/>
+                                <constraint firstItem="2oo-T3-pr9" firstAttribute="centerY" secondItem="co5-JP-3oc" secondAttribute="centerY" id="B3D-xY-iWP"/>
+                                <constraint firstItem="2oo-T3-pr9" firstAttribute="centerX" secondItem="co5-JP-3oc" secondAttribute="centerX" id="DRC-ac-MeT"/>
+                                <constraint firstAttribute="trailing" secondItem="O9O-tb-mto" secondAttribute="trailing" id="SKJ-Cz-wrs"/>
+                                <constraint firstItem="wiu-a6-NzW" firstAttribute="leading" secondItem="co5-JP-3oc" secondAttribute="leading" id="Zxx-MT-GaM"/>
+                                <constraint firstItem="O9O-tb-mto" firstAttribute="leading" secondItem="co5-JP-3oc" secondAttribute="leading" id="fpc-Zq-2Jh"/>
+                                <constraint firstAttribute="trailing" secondItem="wiu-a6-NzW" secondAttribute="trailing" id="l2R-Hv-N0N"/>
+                                <constraint firstItem="2oo-T3-pr9" firstAttribute="top" secondItem="O9O-tb-mto" secondAttribute="bottom" constant="16" id="p1n-Wu-s0Q"/>
+                            </constraints>
+                        </view>
+                    </subviews>
                     <color key="backgroundColor" systemColor="systemOrangeColor"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="ayI-tS-9Td" secondAttribute="height" multiplier="1:1" id="800-cL-xNc"/>
+                        <constraint firstItem="co5-JP-3oc" firstAttribute="leading" secondItem="ayI-tS-9Td" secondAttribute="leading" id="CRR-Rq-MVC"/>
+                        <constraint firstAttribute="trailing" secondItem="co5-JP-3oc" secondAttribute="trailing" id="GAO-oW-vSX"/>
+                        <constraint firstAttribute="bottom" secondItem="co5-JP-3oc" secondAttribute="bottom" id="vvb-ES-pgN"/>
+                        <constraint firstItem="co5-JP-3oc" firstAttribute="top" secondItem="ayI-tS-9Td" secondAttribute="top" id="wHa-Y4-KjY"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -67,8 +115,15 @@
         </view>
     </objects>
     <resources>
+        <image name="checkmark" catalog="system" width="128" height="114"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemIndigoColor">
+            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemOrangeColor">
             <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -16,13 +16,29 @@ namespace SkyDrop.iOS.Views.Contacts
 		UIKit.UIImageView BarcodeImage { get; set; }
 
 		[Outlet]
+		UIKit.UILabel ScanAgainButton { get; set; }
+
+		[Outlet]
 		UIKit.UIView ScannerContainer { get; set; }
+
+		[Outlet]
+		UIKit.UIView ScannerOverlay { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
 			if (ScannerContainer != null) {
 				ScannerContainer.Dispose ();
 				ScannerContainer = null;
+			}
+
+			if (ScannerOverlay != null) {
+				ScannerOverlay.Dispose ();
+				ScannerOverlay = null;
+			}
+
+			if (ScanAgainButton != null) {
+				ScanAgainButton.Dispose ();
+				ScanAgainButton = null;
 			}
 
 			if (BarcodeImage != null) {
