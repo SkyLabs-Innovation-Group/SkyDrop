@@ -88,7 +88,7 @@ namespace SkyDrop.iOS.Views.Drop
 
                 var menuButton = new UIBarButtonItem()
                 {
-                    Image = UIImage.FromBundle("ic_menu")
+                    Image = UIImage.FromBundle("ic_cloud")
                 };
                 menuButton.Clicked += (s, e) => ViewModel.MenuCommand?.Execute();
 
@@ -341,7 +341,9 @@ namespace SkyDrop.iOS.Views.Drop
             try
             {
                 SetBarcodeCodeUiState(isSlow: true);
-                var matrix = ViewModel.GenerateBarcode(url, (int)BarcodeImage.Frame.Width, (int)BarcodeImage.Frame.Height);
+
+                var screenDensity = (int)UIScreen.MainScreen.Scale;
+                var matrix = ViewModel.GenerateBarcode(url, (int)BarcodeImage.Frame.Width * screenDensity, (int)BarcodeImage.Frame.Height * screenDensity);
                 var image = await iOSUtil.BitMatrixToImage(matrix);
                 BarcodeImage.Image = image;
                 ViewModel.SwipeNavigationEnabled = true;

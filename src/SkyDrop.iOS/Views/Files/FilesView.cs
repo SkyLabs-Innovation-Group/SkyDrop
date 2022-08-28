@@ -100,8 +100,10 @@ namespace SkyDrop.iOS.Views.Files
                 {
                     //no selection
 
-                    //show add folder / layout toggle button
-                    NavigationItem.RightBarButtonItems = new[] { layoutToggleButton };
+                    if (ViewModel.IsUnzippedFilesMode)
+                        NavigationItem.RightBarButtonItems = new[] { layoutToggleButton, selectAllButton };
+                    else
+                        NavigationItem.RightBarButtonItems = new[] { layoutToggleButton }; //show add folder / layout toggle button
                 }
             }
         }

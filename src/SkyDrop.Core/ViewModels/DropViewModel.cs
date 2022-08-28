@@ -127,6 +127,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private const string receiveFileText = "RECEIVE FILE";
         private const string receivingFileText = "RECEIVING FILE...";
+        private const string noInternetPrompt = "Please check your internet connection";
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
         private TaskCompletionSource<SkyFile> iosMultipleImageSelectTask;
@@ -363,7 +364,10 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void HandleUploadError(Exception ex, string prompt, FileUploadResult result)
         {
-            if(result == FileUploadResult.Fail)
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+                prompt = noInternetPrompt;
+
+            if (result == FileUploadResult.Fail)
             {
                 userDialogs.Alert(prompt);
                 Log.Exception(ex);
@@ -383,6 +387,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task ReceiveFile()
         {
+            string barcodeData = null;
             try
             {
                 //don't allow user to scan barcode while a file is uploading
@@ -401,7 +406,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 IsReceivingFile = true;
 
                 //open the QR code scan view
-                var barcodeData = await barcodeService.ScanBarcode();
+                barcodeData = await barcodeService.ScanBarcode();
                 if (barcodeData == null)
                 {
                     Log.Trace("barcodeData is null");
@@ -441,13 +446,15 @@ namespace SkyDrop.Core.ViewModels.Main
                 Log.Exception(e);
 
                 //avoid crashing android by NOT showing a toast before the scanner activity has closed
-                var error = "Invalid QR code";
+                var error = "Not a link, QR code content was copied to clipboard";
                 if (DeviceInfo.Platform == DevicePlatform.iOS)
                     userDialogs.Toast(error);
                 else
                     errorMessage = error;
 
                 ResetUIStateCommand.Execute();
+
+                await Clipboard.SetTextAsync(barcodeData);
             }
             finally
             {
@@ -529,9 +536,10 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task<List<SkyFile>> SelectFiles()
         {
-            var file = "Select Files";
-            var image = "Select Image";
-            var video = "Select Video";
+            bool isIos = DeviceInfo.Platform == DevicePlatform.iOS;
+            var file = isIos ? "Select Files" : "Select Multiple Files";
+            var image = isIos ? "Select Images" : "Select Image File";
+            var video = isIos ? "Select Video" : "Select Video File";
             var cancel = "cancel";
             var fileType = await userDialogs.ActionSheetAsync("", cancel, null, null, file, image, video);
             if (fileType == cancel)
