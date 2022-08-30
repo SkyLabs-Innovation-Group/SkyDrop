@@ -98,6 +98,7 @@
     <Compile Include="Views\Contacts\SharePublicKeyView.cs" />
     <Compile Include="Views\Files\FilesView.cs" />
     <Compile Include="Services\AndroidSaveToGalleryService.cs" />
+    <Compile Include="Helper\QRScannerHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">

@@ -19,8 +19,6 @@ namespace SkyDrop.iOS.Views.Contacts
     [MvxChildPresentation]
     public partial class SharePublicKeyView : BaseViewController<SharePublicKeyViewModel>
     {
-        private ZXingScannerView scannerView;
-
         public SharePublicKeyView() : base("SharePublicKeyView", null)
         {
         }
@@ -69,7 +67,7 @@ namespace SkyDrop.iOS.Views.Contacts
 
         private void ShowScanner()
         {
-            scannerView = new ZXingScannerView(new CGRect(0, 0, ScannerContainer.Frame.Width, ScannerContainer.Frame.Height))
+            var scannerView = new ZXingScannerView(new CGRect(0, 0, ScannerContainer.Frame.Width, ScannerContainer.Frame.Height))
             {
                 AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
                 UseCustomOverlayView = true //hides red line overlay

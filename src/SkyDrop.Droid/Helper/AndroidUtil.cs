@@ -5,7 +5,6 @@ using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
-using Android.Util;
 using Android.Widget;
 using AndroidX.Core.App;
 using FFImageLoading;

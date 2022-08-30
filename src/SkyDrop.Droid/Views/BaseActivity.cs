@@ -1,3 +1,4 @@
+using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.Widget;
@@ -21,6 +22,8 @@ namespace SkyDrop.Droid.Views
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+
+            RequestedOrientation = ScreenOrientation.Portrait;
 
             SetContentView(ActivityLayoutId);
 
