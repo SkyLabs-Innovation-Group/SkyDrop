@@ -22,14 +22,14 @@
             android:layout_gravity="center_horizontal|top"
             android:padding="16dp"
             app:MvxBind="Visibility InvertedVisibility(IsNameInputVisible)">
-            <!--QR code-->
+            <!--Scanner-->
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/QRContainer"
+                android:id="@+id/ScannerContainer"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/ScannerContainer"
+                app:layout_constraintBottom_toTopOf="@+id/QRContainer"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginBottom="16dp"
@@ -37,27 +37,7 @@
                 app:cardElevation="1dp"
                 android:clickable="true"
                 app:cardCornerRadius="8dp">
-                <ImageView
-                    android:id="@+id/BarcodeImage"
-                    android:scaleType="centerCrop"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"/>
-            </com.google.android.material.card.MaterialCardView>
-            <!--Scanner-->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/ScannerContainer"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintTop_toBottomOf="@+id/QRContainer"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:cardBackgroundColor="@color/midGrey"
-                app:cardElevation="1dp"
-                android:clickable="true"
-                app:cardCornerRadius="8dp">
+                
                 <FrameLayout
                     android:background="@color/primaryColor"
                     android:layout_width="match_parent"
@@ -79,6 +59,28 @@
                         android:textColor="@color/lightGrey"
                         android:text="Pairing is complete when both devices show this icon"/>
                 </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+            
+             <!--QR code-->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@id/QRContainer"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintTop_toBottomOf="@+id/ScannerContainer"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:cardBackgroundColor="@color/midGrey"
+                app:cardElevation="1dp"
+                android:clickable="true"
+                app:cardCornerRadius="8dp">
+                <ImageView
+                    android:id="@+id/BarcodeImage"
+                    android:scaleType="centerCrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"/>
             </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -45,7 +45,7 @@ namespace SkyDrop.Core.Services
         public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationTokenSource)
         {
             var fileSizeBytes = skyfile.FileSizeBytes;
-            var filename = skyfile.Filename;
+            var filename = skyfile.EncryptedFilename ?? skyfile.Filename;
 
             var url = $"{SkynetPortal.SelectedPortal}/skynet/skyfile";
 

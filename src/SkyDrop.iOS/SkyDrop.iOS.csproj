@@ -251,6 +251,9 @@
     </Compile>
     <Compile Include="Views\BaseViewController.cs" />
     <Compile Include="Services\iOSSaveToGalleryService.cs" />
+    <ImageAsset Include="Media.xcassets\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_pair.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_pair.imageset\account-multiple-plus.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

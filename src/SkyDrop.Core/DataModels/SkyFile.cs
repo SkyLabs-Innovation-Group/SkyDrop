@@ -28,17 +28,22 @@ namespace SkyDrop.Core.DataModels
         public SkynetPortal UploadPortal { get; set; }
 
         public string Filename { get; set; }
-        
+
+        public string EncryptedFilename { get; set; }
+
         public string FullFilePath { get; set; }
+
+        public string EncryptedFilePath { get; set; }
 
         public long FileSizeBytes { get; set; }
 
         public Stream GetStream()
         {
-            if (FullFilePath == null)
+            var filePath = EncryptedFilePath ?? FullFilePath;
+            if (filePath == null)
                 return null;
             
-            return File.OpenRead(FullFilePath);
+            return File.OpenRead(filePath);
         }
 
         /// <summary>

@@ -21,6 +21,7 @@ namespace SkyDrop.Core.ViewModels
         public IMvxCommand RefreshBarcodeCommand { get; set; }
         public IMvxCommand ConfirmContactNameCommand { get; set; }
         public IMvxCommand HideKeyboardCommand { get; set; }
+        public IMvxCommand StopScanningCommand { get; set; }
         public bool IsNameInputVisible { get; set; } = true;
         public string ContactName { get; set; }
         public bool IsNextButtonVisible => IsNameInputVisible && !ContactName.IsNullOrWhiteSpace();
@@ -77,6 +78,9 @@ namespace SkyDrop.Core.ViewModels
                 isBusy = true;
                 (AddContactResult, justScannedId) = await encryptionService.AddPublicKey(barcodeData, ContactName);
                 isBusy = false;
+
+                if (AddContactResult == AddContactResult.ContactAdded || AddContactResult == AddContactResult.DevicesPaired || AddContactResult == AddContactResult.AlreadyExists)
+                    StopScanningCommand.Execute(); //success
 
                 RefreshBarcodeCommand.Execute();
             }

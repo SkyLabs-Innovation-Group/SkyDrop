@@ -32,6 +32,7 @@ namespace SkyDrop.iOS.Views.Contacts
 
             ViewModel.RefreshBarcodeCommand = new MvxAsyncCommand(ShowBarcode);
             ViewModel.HideKeyboardCommand = new MvxCommand(() => View.EndEditing(true));
+            ViewModel.StopScanningCommand = new MvxCommand(StopScanning);
 
             View.BackgroundColor = Colors.DarkGrey.ToNative();
             ScannerOverlay.BackgroundColor = Colors.Primary.ToNative();
@@ -59,8 +60,7 @@ namespace SkyDrop.iOS.Views.Contacts
         {
             base.ViewDidUnload();
 
-            scannerView.StopScanning();
-            scannerView.Dispose();
+            StopScanning();
         }
 
         /// <summary>
@@ -124,6 +124,12 @@ namespace SkyDrop.iOS.Views.Contacts
             {
                 NavigationItem.RightBarButtonItem = value ? nextButton : null;
             }
+        }
+
+        private void StopScanning()
+        {
+            scannerView.StopScanning();
+            scannerView.Dispose();
         }
     }
 }

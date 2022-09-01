@@ -36,6 +36,7 @@ namespace SkyDrop.Droid.Views.Main
 
             ViewModel.RefreshBarcodeCommand = new MvxAsyncCommand(ShowBarcode);
             ViewModel.HideKeyboardCommand = new MvxCommand(this.HideKeyboard);
+            ViewModel.StopScanningCommand = new MvxCommand(StopScanning);
 
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
 
@@ -46,8 +47,7 @@ namespace SkyDrop.Droid.Views.Main
         {
             base.Dispose(disposing);
 
-            scannerView.StopScanning();
-            scannerView.Dispose();
+            StopScanning();
         }
 
         /// <summary>
@@ -84,6 +84,12 @@ namespace SkyDrop.Droid.Views.Main
             scannerContainer.AddView(scannerView);
 
             scannerView.StartScanning(HandleScanResult, scanningOptions);
+        }
+
+        private void StopScanning()
+        {
+            scannerView.StopScanning();
+            scannerView.Dispose();
         }
 
         private void HandleScanResult(ZXing.Result result)
