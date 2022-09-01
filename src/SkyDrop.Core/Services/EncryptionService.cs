@@ -26,7 +26,6 @@ namespace SkyDrop.Core.Services
             AlreadyExists,
             InvalidKey,
             WrongDevice,
-            Canceled,
             ContactAdded,
             DevicesPaired
         }
@@ -138,7 +137,7 @@ namespace SkyDrop.Core.Services
             });
         }
 
-        public async Task<(AddContactResult result, Guid newContactId)> AddPublicKey(string publicKeyEncoded)
+        public async Task<(AddContactResult result, Guid newContactId)> AddPublicKey(string publicKeyEncoded, string contactName)
         {
             var (publicKey, keyId, justScannedId) = DecodePublicKey(publicKeyEncoded);
             if (publicKey == null)
@@ -160,11 +159,7 @@ namespace SkyDrop.Core.Services
                 return (AddContactResult.WrongDevice, default);
             }
 
-            var result = await userDialogs.PromptAsync("Enter contact name: ", null, null, null, "name");
-            if (!result.Ok)
-                return (AddContactResult.Canceled, default);
-
-            var newContact = new Contact { Name = result.Value, PublicKey = publicKey, Id = keyId };
+            var newContact = new Contact { Name = contactName.Trim(), PublicKey = publicKey, Id = keyId };
             storageService.AddContact(newContact);
 
             bool didPair = justScannedId == myId; //if justScannedId == default, then we still need to scan this device's QR code to pair
@@ -296,7 +291,7 @@ namespace SkyDrop.Core.Services
         /// <returns></returns>
         string GetMyPublicKeyWithId(Guid justScannedId);
 
-        Task<(AddContactResult result, Guid newContactId)> AddPublicKey(string publicKeyEncoded);
+        Task<(AddContactResult result, Guid newContactId)> AddPublicKey(string publicKeyEncoded, string contactName);
 
         Task<string> EncodeFileFor(string filePath, Contact recipientPublicKey);
 

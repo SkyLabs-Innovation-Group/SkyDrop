@@ -50,6 +50,7 @@ namespace SkyDrop.Droid
             registry.RegisterCustomBindingFactory<View>(BackgroundColorBinding.Name, view => new BackgroundColorBinding(view));
             registry.RegisterCustomBindingFactory<ImageView>(FileCategoryIconBinding.Name, view => new FileCategoryIconBinding(view));
             registry.RegisterCustomBindingFactory<ImageView>(IconBinding.Name, view => new IconBinding(view));
+            registry.RegisterCustomBindingFactory<View>(PairingOverlayBinding.Name, view => new PairingOverlayBinding(view));
         }
 
         protected override void FillValueConverters(IMvxValueConverterRegistry registry)

@@ -48,14 +48,6 @@
                 app:MvxBind="Click SharePublicKeyCommand"
                 />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingHorizontal="16dp"
-                android:src="@drawable/ic_plus"
-                app:MvxBind="Click AddContactCommand"
-                />
-
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 </com.google.android.material.appbar.AppBarLayout>

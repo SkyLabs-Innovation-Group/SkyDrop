@@ -4,6 +4,7 @@ using Acr.UserDialogs;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using SkyDrop.Core.Services;
+using SkyDrop.Core.Utility;
 using ZXing.Common;
 using static SkyDrop.Core.Services.EncryptionService;
 
@@ -17,8 +18,12 @@ namespace SkyDrop.Core.ViewModels
 
         public AddContactResult AddContactResult { get; set; }
         public IMvxCommand BackCommand { get; set; }
-        public IMvxCommand ScanAgainCommand { get; set; }
         public IMvxCommand RefreshBarcodeCommand { get; set; }
+        public IMvxCommand ConfirmContactNameCommand { get; set; }
+        public IMvxCommand HideKeyboardCommand { get; set; }
+        public bool IsNameInputVisible { get; set; } = true;
+        public string ContactName { get; set; }
+        public bool IsNextButtonVisible => IsNameInputVisible && !ContactName.IsNullOrWhiteSpace();
 
         private Guid justScannedId = default;
         private bool isBusy;
@@ -42,6 +47,7 @@ namespace SkyDrop.Core.ViewModels
             this.navigationService = navigationService;
 
             BackCommand = new MvxCommand(() => navigationService.Close(this));
+            ConfirmContactNameCommand = new MvxCommand(ConfirmContactName);
         }
 
         public BitMatrix GenerateBarcode(int width, int height)
@@ -69,7 +75,7 @@ namespace SkyDrop.Core.ViewModels
                     return;
 
                 isBusy = true;
-                (AddContactResult, justScannedId) = await encryptionService.AddPublicKey(barcodeData);
+                (AddContactResult, justScannedId) = await encryptionService.AddPublicKey(barcodeData, ContactName);
                 isBusy = false;
 
                 RefreshBarcodeCommand.Execute();
@@ -78,6 +84,13 @@ namespace SkyDrop.Core.ViewModels
             {
                 Log.Exception(e);
             }
+        }
+
+        private void ConfirmContactName()
+        {
+            HideKeyboardCommand?.Execute(); //hide keyboard first to avoid issues on Android
+            IsNameInputVisible = false;
+            RefreshBarcodeCommand.Execute();
         }
 
         public void Close()

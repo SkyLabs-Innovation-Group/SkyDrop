@@ -94,6 +94,11 @@ namespace SkyDrop.Core.Utility
             return string.IsNullOrEmpty(text);
         }
 
+        public static bool IsNullOrWhiteSpace(this string text)
+        {
+            return string.IsNullOrWhiteSpace(text);
+        }
+
         public static string PublicKeyToBase64String(this X25519PublicKeyParameters key)
         {
             return Convert.ToBase64String(key.GetEncoded());

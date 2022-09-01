@@ -16,7 +16,7 @@ namespace SkyDrop.iOS.Views.Contacts
 		UIKit.UIImageView BarcodeImage { get; set; }
 
 		[Outlet]
-		UIKit.UILabel ScanAgainButton { get; set; }
+		UIKit.UITextField NameInput { get; set; }
 
 		[Outlet]
 		UIKit.UIView ScannerContainer { get; set; }
@@ -26,6 +26,16 @@ namespace SkyDrop.iOS.Views.Contacts
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (BarcodeImage != null) {
+				BarcodeImage.Dispose ();
+				BarcodeImage = null;
+			}
+
+			if (NameInput != null) {
+				NameInput.Dispose ();
+				NameInput = null;
+			}
+
 			if (ScannerContainer != null) {
 				ScannerContainer.Dispose ();
 				ScannerContainer = null;
@@ -34,16 +44,6 @@ namespace SkyDrop.iOS.Views.Contacts
 			if (ScannerOverlay != null) {
 				ScannerOverlay.Dispose ();
 				ScannerOverlay = null;
-			}
-
-			if (ScanAgainButton != null) {
-				ScanAgainButton.Dispose ();
-				ScanAgainButton = null;
-			}
-
-			if (BarcodeImage != null) {
-				BarcodeImage.Dispose ();
-				BarcodeImage = null;
 			}
 		}
 	}

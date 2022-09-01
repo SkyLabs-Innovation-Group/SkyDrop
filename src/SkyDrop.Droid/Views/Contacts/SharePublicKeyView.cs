@@ -11,6 +11,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using Google.Android.Material.Card;
+using MvvmCross.Commands;
 using SkyDrop.Core.ViewModels;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.Droid.Helper;
@@ -27,15 +28,26 @@ namespace SkyDrop.Droid.Views.Main
         protected override int ActivityLayoutId => Resource.Layout.SharePublicKeyView;
 
         private ImageView barcodeImageView;
+        private ZXingSurfaceView scannerView;
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
+            ViewModel.RefreshBarcodeCommand = new MvxAsyncCommand(ShowBarcode);
+            ViewModel.HideKeyboardCommand = new MvxCommand(this.HideKeyboard);
+
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
 
-            ShowBarcode();
             ShowScanner();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            scannerView.StopScanning();
+            scannerView.Dispose();
         }
 
         /// <summary>
@@ -45,12 +57,15 @@ namespace SkyDrop.Droid.Views.Main
         {
             try
             {
-                //why delay?
-                await Task.Delay(500);
+                //delay so we can get the correct barcodeImageView size
+                await Task.Delay(200);
 
-                var matrix = ViewModel.GenerateBarcode(barcodeImageView.Width, barcodeImageView.Height);
-                var bitmap = await AndroidUtil.BitMatrixToBitmap(matrix);
-                barcodeImageView.SetImageBitmap(bitmap);
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                {
+                    var matrix = ViewModel.GenerateBarcode(barcodeImageView.Width, barcodeImageView.Height);
+                    var bitmap = await AndroidUtil.BitMatrixToBitmap(matrix);
+                    barcodeImageView.SetImageBitmap(bitmap);
+                });
             }
             catch (Exception ex)
             {
@@ -62,7 +77,7 @@ namespace SkyDrop.Droid.Views.Main
         private void ShowScanner()
         {
             var scanningOptions = new MobileBarcodeScanningOptions { CameraResolutionSelector = new CameraResolutionSelectorDelegate(QRScannerHelper.GetSquareScannerResolution) };
-            var scannerView = new ZXingSurfaceView(this, scanningOptions);
+            scannerView = new ZXingSurfaceView(this, scanningOptions);
             scannerView.LayoutParameters = new MaterialCardView.LayoutParams(MaterialCardView.LayoutParams.MatchParent, MaterialCardView.LayoutParams.MatchParent);
 
             var scannerContainer = FindViewById<MaterialCardView>(Resource.Id.ScannerContainer);

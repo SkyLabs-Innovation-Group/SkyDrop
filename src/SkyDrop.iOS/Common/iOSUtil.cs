@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FFImageLoading;
 using FFImageLoading.Cross;
 using MvvmCross;
+using MvvmCross.Platforms.Ios.Views;
 using UIKit;
 using ZXing.Common;
 using ZXing.Mobile;

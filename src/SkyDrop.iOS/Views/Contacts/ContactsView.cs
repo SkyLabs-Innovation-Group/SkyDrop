@@ -26,11 +26,9 @@ namespace SkyDrop.iOS.Views.Certificates
 
 			ContactsTableView.BackgroundColor = Colors.DarkGrey.ToNative();
 
-			var addButton = new UIBarButtonItem(UIBarButtonSystemItem.Add);
-			addButton.Clicked += (s, e) => ViewModel.AddContactCommand.Execute();
-			var shareButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_qr") };
-            shareButton.Clicked += (s, e) => ViewModel.SharePublicKeyCommand.Execute();
-			NavigationItem.RightBarButtonItems = new[]{ addButton, shareButton };
+			var pairButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_qr") };
+            pairButton.Clicked += (s, e) => ViewModel.SharePublicKeyCommand.Execute();
+			NavigationItem.RightBarButtonItems = new[]{ pairButton };
 
 			var source = new MvxSimpleTableViewSource(ContactsTableView, ContactCell.Key);
 			ContactsTableView.Source = source;

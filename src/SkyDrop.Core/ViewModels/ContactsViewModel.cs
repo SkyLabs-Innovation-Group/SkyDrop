@@ -17,7 +17,6 @@ namespace SkyDrop.Core.ViewModels
         public class NavParam { }
 
         public List<IContactItem> Contacts { get; set; }
-        public IMvxCommand AddContactCommand { get; set; }
         public IMvxCommand SharePublicKeyCommand { get; set; }
         public IMvxCommand BackCommand { get; set; }
         public bool IsNoContacts { get; set; }
@@ -57,14 +56,13 @@ namespace SkyDrop.Core.ViewModels
             this.uploadTimerService = uploadTimerService;
             this.encryptionService = encryptionService;
 
-            AddContactCommand = new MvxAsyncCommand(AddContact);
             SharePublicKeyCommand = new MvxCommand(SharePublicKey);
             BackCommand = new MvxCommand(() => navigationService.Close(this));
         }
 
-        public override async Task Initialize()
+        public override void ViewAppeared()
         {
-            await base.Initialize();
+            base.ViewAppeared();
 
             LoadCertificates();
         }
@@ -84,31 +82,6 @@ namespace SkyDrop.Core.ViewModels
 
             RaisePropertyChanged(() => Contacts).Forget();
             RaisePropertyChanged(() => IsNoContacts).Forget();
-        }
-
-        private async Task AddContact()
-        {
-            try
-            {
-                //open the QR code scan view
-                var barcodeData = await barcodeService.ScanBarcode();
-                if (barcodeData == null)
-                {
-                    Log.Trace("barcodeData is null");
-                    return;
-                }
-
-                //solves issue with disappearing name entry dialog on Android
-                await Task.Delay(500);
-
-                var (result, newId) = await encryptionService.AddPublicKey(barcodeData);
-                if (result == EncryptionService.AddContactResult.ContactAdded)
-                    LoadCertificates();
-            }
-            catch(Exception e)
-            {
-                Log.Exception(e);
-            }
         }
 
         public IContactItem GetContactDVM(Contact contact)
@@ -137,7 +110,7 @@ namespace SkyDrop.Core.ViewModels
                     return;
 
                 storageService.DeleteContact(contactDVM.Contact);
-                Contacts = Contacts.Where(c => c != item).ToList();
+                LoadCertificates();
             }
         }
 

@@ -5,6 +5,7 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.ViewModels;
+using SkyDrop.Droid.Helper;
 using System;
 
 namespace SkyDrop.Droid.Views.Main
@@ -26,7 +27,7 @@ namespace SkyDrop.Droid.Views.Main
             portalEditText.Text = SkynetPortal.SelectedPortal.ToString();
             saveButton.Click += async (s, e) =>
             {
-                HideKeyboard();
+                this.HideKeyboard();
                 await ViewModel.ValidateAndTrySetSkynetPortalCommand.ExecuteAsync(portalEditText.Text);
                 portalEditText.Text = SkynetPortal.SelectedPortal.BaseUrl;
             };
@@ -42,25 +43,6 @@ namespace SkyDrop.Droid.Views.Main
 
             verifySslCheckbox = FindViewById<CheckBox>(Resource.Id.verifySslCheckbox);
             verifySslCheckbox.CheckedChange += (s, e) => ViewModel.SetVerifySslCertificates(e.IsChecked);
-        }
-
-        public void HideKeyboard()
-        {
-            try
-            {
-                var inputMethodManager = GetSystemService(InputMethodService) as InputMethodManager;
-                if (inputMethodManager != null)
-                {
-                    var token = CurrentFocus?.WindowToken;
-                    inputMethodManager.HideSoftInputFromWindow(token, HideSoftInputFlags.None);
-
-                    Window.DecorView.ClearFocus();
-                }
-            }
-            catch(Exception ex)
-            {
-                Log.Exception(ex);
-            }
         }
     }
 }

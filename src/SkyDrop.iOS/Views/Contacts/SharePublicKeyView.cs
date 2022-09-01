@@ -19,28 +19,48 @@ namespace SkyDrop.iOS.Views.Contacts
     [MvxChildPresentation]
     public partial class SharePublicKeyView : BaseViewController<SharePublicKeyViewModel>
     {
+        private ZXingScannerView scannerView;
+        private UIBarButtonItem nextButton;
+
         public SharePublicKeyView() : base("SharePublicKeyView", null)
         {
         }
 
-        public override async void ViewDidLoad()
+        public override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
-            ViewModel.ScanAgainCommand = new MvxCommand(ScanAgain);
             ViewModel.RefreshBarcodeCommand = new MvxAsyncCommand(ShowBarcode);
+            ViewModel.HideKeyboardCommand = new MvxCommand(() => View.EndEditing(true));
 
             View.BackgroundColor = Colors.DarkGrey.ToNative();
             ScannerOverlay.BackgroundColor = Colors.Primary.ToNative();
-            ScanAgainButton.BackgroundColor = Colors.GradientGreen.ToNative();
             ShowScanner();
-            await ShowBarcode();
+
+            NameInput.Placeholder = "Contact name";
+            nextButton = new UIBarButtonItem("Next", UIBarButtonItemStyle.Plain, (s, e) =>
+            {
+                ViewModel.ConfirmContactNameCommand.Execute();
+            });
 
             var set = CreateBindingSet();
-            set.Bind(ScanAgainButton).For("Tap").To(vm => vm.ScanAgainCommand);
+            set.Bind(ScannerContainer).For(a => a.Hidden).To(vm => vm.IsNameInputVisible);
+            set.Bind(BarcodeImage).For(a => a.Hidden).To(vm => vm.IsNameInputVisible);
+            set.Bind(NameInput).For("Visible").To(vm => vm.IsNameInputVisible);
+            set.Bind(NameInput).For(c => c.Text).To(vm => vm.ContactName);
+
+            set.Bind(this).For(t => t.NextButtonVisibility).To(vm => vm.IsNextButtonVisible);
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Bind(this).For(t => t.AddContactResult).To(vm => vm.AddContactResult);
             set.Apply();
+        }
+
+        public override void ViewDidUnload()
+        {
+            base.ViewDidUnload();
+
+            scannerView.StopScanning();
+            scannerView.Dispose();
         }
 
         /// <summary>
@@ -67,7 +87,7 @@ namespace SkyDrop.iOS.Views.Contacts
 
         private void ShowScanner()
         {
-            var scannerView = new ZXingScannerView(new CGRect(0, 0, ScannerContainer.Frame.Width, ScannerContainer.Frame.Height))
+            scannerView = new ZXingScannerView(new CGRect(0, 0, ScannerContainer.Frame.Width, ScannerContainer.Frame.Height))
             {
                 AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
                 UseCustomOverlayView = true //hides red line overlay
@@ -97,9 +117,13 @@ namespace SkyDrop.iOS.Views.Contacts
             }
         }
 
-        private void ScanAgain()
+        public bool NextButtonVisibility
         {
-            ViewModel.AddContactResult = AddContactResult.Default; //reset ui
+            get => false;
+            set
+            {
+                NavigationItem.RightBarButtonItem = value ? nextButton : null;
+            }
         }
     }
 }
