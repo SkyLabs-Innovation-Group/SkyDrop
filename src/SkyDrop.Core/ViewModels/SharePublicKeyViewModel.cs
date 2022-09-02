@@ -57,7 +57,7 @@ namespace SkyDrop.Core.ViewModels
             return barcodeService.GenerateBarcode(publicKey, width, height);
         }
 
-        public async Task AddContact(string barcodeData)
+        public void AddContact(string barcodeData)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace SkyDrop.Core.ViewModels
                     return;
 
                 isBusy = true;
-                (AddContactResult, justScannedId) = await encryptionService.AddPublicKey(barcodeData, ContactName);
+                (AddContactResult, justScannedId) = encryptionService.AddPublicKey(barcodeData, ContactName);
                 isBusy = false;
 
                 if (AddContactResult == AddContactResult.ContactAdded || AddContactResult == AddContactResult.DevicesPaired || AddContactResult == AddContactResult.AlreadyExists)

@@ -18,6 +18,16 @@ using static SkyDrop.Core.Services.EncryptionService;
 
 namespace SkyDrop.Core.Services
 {
+    /// <summary>
+    /// A public key QR code contains this data format:
+    /// myId 16 bytes
+    /// justScannedId 16 bytes
+    /// publicKey 32 bytes
+    ///
+    /// An encrypted (.skydrop) file contains this data format:
+    /// senderId 16 bytes
+    /// encryptedData ? bytes
+    /// </summary>
     public class EncryptionService : IEncryptionService
     {
         public enum AddContactResult
@@ -137,7 +147,7 @@ namespace SkyDrop.Core.Services
             });
         }
 
-        public async Task<(AddContactResult result, Guid newContactId)> AddPublicKey(string publicKeyEncoded, string contactName)
+        public (AddContactResult result, Guid newContactId) AddPublicKey(string publicKeyEncoded, string contactName)
         {
             var (publicKey, keyId, justScannedId) = DecodePublicKey(publicKeyEncoded);
             if (publicKey == null)
@@ -291,7 +301,7 @@ namespace SkyDrop.Core.Services
         /// <returns></returns>
         string GetMyPublicKeyWithId(Guid justScannedId);
 
-        Task<(AddContactResult result, Guid newContactId)> AddPublicKey(string publicKeyEncoded, string contactName);
+        (AddContactResult result, Guid newContactId) AddPublicKey(string publicKeyEncoded, string contactName);
 
         Task<string> EncodeFileFor(string filePath, Contact recipientPublicKey);
 
