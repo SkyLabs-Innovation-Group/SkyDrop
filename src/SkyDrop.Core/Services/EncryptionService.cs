@@ -29,17 +29,17 @@ namespace SkyDrop.Core.Services
     /// encryptedData ? bytes
     ///
     /// TODO:
-    /// New encrypted file data format:
-    /// recipients count
+    /// New encrypted (.skydrop) file data format:
+    /// recipientsCount 2 bytes
     /// senderId 16 bytes
     /// recipient1Id 16 bytes
-    /// keyForRecipient1 32 bytes
+    /// keyForRecipient1 32 bytes <- the key is encrypted using the recipient's public key
     /// recipient2Id 16 bytes
     /// keyForRecipient2 32 bytes
     /// recipient3Id 16 bytes
     /// keyForRecipient3 32 bytes
     /// ...
-    /// encryptedData ? bytes
+    /// encryptedData ? bytes <- this is encrypted with the key ^
     /// </summary>
     public class EncryptionService : IEncryptionService
     {
@@ -196,7 +196,7 @@ namespace SkyDrop.Core.Services
 
         private byte[] GetMetaDataForFile()
         {
-            //add sender id so it's clear how to decrypt
+            //add sender id so it's clear which public key to use for decryption
             var senderId = myId.ToByteArray();
             return senderId; //16 bytes
         }
