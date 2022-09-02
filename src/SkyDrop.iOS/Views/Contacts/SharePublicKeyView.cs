@@ -56,9 +56,9 @@ namespace SkyDrop.iOS.Views.Contacts
             set.Apply();
         }
 
-        public override void ViewDidUnload()
+        public override void ViewDidDisappear(bool animated)
         {
-            base.ViewDidUnload();
+            base.ViewDidDisappear(animated);
 
             StopScanning();
         }
