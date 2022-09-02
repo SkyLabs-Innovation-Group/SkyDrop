@@ -27,6 +27,19 @@ namespace SkyDrop.Core.Services
     /// An encrypted (.skydrop) file contains this data format:
     /// senderId 16 bytes
     /// encryptedData ? bytes
+    ///
+    /// TODO:
+    /// New encrypted file data format:
+    /// recipients count
+    /// senderId 16 bytes
+    /// recipient1Id 16 bytes
+    /// keyForRecipient1 32 bytes
+    /// recipient2Id 16 bytes
+    /// keyForRecipient2 32 bytes
+    /// recipient3Id 16 bytes
+    /// keyForRecipient3 32 bytes
+    /// ...
+    /// encryptedData ? bytes
     /// </summary>
     public class EncryptionService : IEncryptionService
     {
