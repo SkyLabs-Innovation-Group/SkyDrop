@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers.Binary;
 using System.IO;
 using System.Linq;
@@ -27,19 +27,14 @@ namespace SkyDrop.Core.Services
     /// publicKey 32 bytes
     ///
     /// An encrypted (.skydrop) file contains this data format:
-    /// senderId 16 bytes
-    /// encryptedData ? bytes
-    ///
-    /// TODO:
-    /// New encrypted (.skydrop) file data format:
     /// recipientsCount 2 bytes
     /// senderId 16 bytes
     /// recipient1Id 16 bytes
-    /// keyForRecipient1 32 bytes <- the key is encrypted using the recipient's public key
+    /// keyForRecipient1 64 bytes <- the key is encrypted using the recipient's public key
     /// recipient2Id 16 bytes
-    /// keyForRecipient2 32 bytes
+    /// keyForRecipient2 64 bytes
     /// recipient3Id 16 bytes
-    /// keyForRecipient3 32 bytes
+    /// keyForRecipient3 64 bytes
     /// ...
     /// encryptedData ? bytes <- this is encrypted with the key ^
     /// </summary>
@@ -99,9 +94,6 @@ namespace SkyDrop.Core.Services
         {
             return Task.Run(() =>
             {
-                //get shared secret
-                //var sharedSecret = GetSharedSecret(myPrivateKey, recipient.PublicKey); //32 bytes
-
                 //generate random encryption key
                 var encryptionKey = GenerateEncryptionKey(); //32 bytes
 
@@ -136,24 +128,7 @@ namespace SkyDrop.Core.Services
                     
                 var fileBytes = File.ReadAllBytes(filePath);
                 var decryptedBytes = GetFilePlainText(fileBytes);
-                /*
-                //separate encryptedData and metaData
-                var (metaData, encryptedData) = ReadMetaDataFromFile(fileBytes);
 
-                var senderId = new Guid(metaData);
-                if (senderId == myId)
-                    throw new Exception("Sent files can only be decrypted by their recipients");
-
-                var sender = GetContactWithId(senderId);
-                if (sender == null)
-                    throw new Exception("SkyFile sender not in contacts list");
-
-                //get shared secret
-                var sharedSecret = GetSharedSecret(myPrivateKey, sender.PublicKey);
-
-                //decrypt the file
-                var decryptedBytes = Decrypt(sharedSecret, encryptedData);
-                */
                 //remove ".skydrop" from the end of the filename
                 var fileName = Path.GetFileName(filePath);
                 fileName = fileName.Substring(0, fileName.Length - 8);
