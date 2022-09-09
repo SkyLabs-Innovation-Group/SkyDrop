@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
+using Org.BouncyCastle.Asn1.Cms;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Agreement;
 using Org.BouncyCastle.Crypto.Engines;
@@ -111,7 +112,7 @@ namespace SkyDrop.Core.Services
                 var encryptedBytes = Encrypt(encryptionKey, fileBytes);
 
                 //add the metadata
-                var metaData = GetMetaDataForFile(recipient, encryptionKey);
+                var metaData = GenerateMetaDataForFile(recipient, encryptionKey);
                 var encryptedFileWithMetaData = Util.Combine(metaData, encryptedBytes);
 
                 //save the file
@@ -134,7 +135,8 @@ namespace SkyDrop.Core.Services
                     throw new Exception("File does not exist");
                     
                 var fileBytes = File.ReadAllBytes(filePath);
-
+                var decryptedBytes = GetFilePlainText(fileBytes);
+                /*
                 //separate encryptedData and metaData
                 var (metaData, encryptedData) = ReadMetaDataFromFile(fileBytes);
 
@@ -151,7 +153,7 @@ namespace SkyDrop.Core.Services
 
                 //decrypt the file
                 var decryptedBytes = Decrypt(sharedSecret, encryptedData);
-
+                */
                 //remove ".skydrop" from the end of the filename
                 var fileName = Path.GetFileName(filePath);
                 fileName = fileName.Substring(0, fileName.Length - 8);
@@ -198,7 +200,7 @@ namespace SkyDrop.Core.Services
             return (addContactResult, newContact.Id);
         }
 
-        private byte[] GetMetaDataForFile(Contact recipient, byte[] encryptionKey)
+        private byte[] GenerateMetaDataForFile(Contact recipient, byte[] encryptionKey)
         {
             short recipientsCountShort = 1; //recipients hardcoded to 1
             var recipientsCount = new byte[2]; // 2 bytes
@@ -216,18 +218,30 @@ namespace SkyDrop.Core.Services
             return Util.Combine(recipientsCount, senderId, recipientId, recipientKey); 
         }
 
-        private (byte[] metaData, byte[] encryptedData) ReadMetaDataFromFile(byte[] file)
+        private byte[] GetFilePlainText(byte[] encryptedFile)
         {
-            var recipientsCountBytes = file.Take(2).ToArray(); //first 2 bytes
-            var recipientsCount = BinaryPrimitives.ReadInt16BigEndian(recipientsCountBytes);
+            var (metaData, encryptedContent) = EncryptedFileMetaData.GetEncryptedFileMetaData(encryptedFile);
 
-            var recipientsCountSizeBytes = 2;
-            var senderIdSizeBytes = 16;
-            var recipientIdSizeBytes = 16;
-            var recipientKeySizeBytes = 64;
-            var metadataSizeBytes = recipientsCountSizeBytes + senderIdSizeBytes + (recipientIdSizeBytes + recipientKeySizeBytes) * recipientsCount;
+            //check if user is listed in file recipients list
+            if (!metaData.RecipientKeys.ContainsKey(myId))
+                throw new Exception("You are not a valid recipient of this encrypted file");
 
-            return (file.Take(metadataSizeBytes).ToArray(), file.Skip(metadataSizeBytes).ToArray());
+            //check if user recognises the sender
+            var sender = GetContactWithId(metaData.SenderId);
+            if (sender == null)
+                throw new Exception("The sender of this file is not recognised");
+
+            //find the right key
+            var myKeyEncrypted = metaData.RecipientKeys[myId];
+
+            //decrypt the key
+            var sharedSecret = GetSharedSecret(myPrivateKey, sender.PublicKey);
+            var keyPlainTextPadded = Decrypt(sharedSecret, myKeyEncrypted); //we only want the first 32 bytes of this 64 byte array
+            var keyPlainText = keyPlainTextPadded.Take(32).ToArray();
+
+            //decrypt the file
+            var filePlainText = Decrypt(keyPlainText, encryptedContent);
+            return filePlainText;
         }
 
         private Contact GetContactWithId(Guid id)

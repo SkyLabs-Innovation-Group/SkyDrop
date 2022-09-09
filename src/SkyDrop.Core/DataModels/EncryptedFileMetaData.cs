@@ -37,7 +37,7 @@ namespace SkyDrop.Core.DataModels
             return (metaData, encryptedContent);
         }
 
-        public static Dictionary<Guid, byte[]> DecodeRecipientsList(byte[] recipientsList, int recipientsCount)
+        private static Dictionary<Guid, byte[]> DecodeRecipientsList(byte[] recipientsList, int recipientsCount)
         {
             var recipientKeys = new Dictionary<Guid, byte[]>();
             int readIndex = 0;
