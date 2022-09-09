@@ -329,7 +329,7 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             finally
             {
-                StopUploadTimer(false);
+                StopUploadTimer(ignoreResult: true);
                 IsUploading = false;
                 IsBarcodeLoading = false;
             }
