@@ -286,7 +286,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (encryptionContact != null)
                 {
                     IsEncrypting = true;
-                    var encryptedPath = await encryptionService.EncodeFileFor(FileToUpload.FullFilePath, encryptionContact);
+                    var encryptedPath = await encryptionService.EncodeFileFor(FileToUpload.FullFilePath, new List<Contact> { encryptionContact });
 
                     //we use a second property for the encrypted path so that we can preserve the original path, in case file needs to be encrypted again (after changing recipients)
                     FileToUpload.EncryptedFilePath = encryptedPath;

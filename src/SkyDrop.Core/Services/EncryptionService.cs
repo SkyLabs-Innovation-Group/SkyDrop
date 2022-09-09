@@ -1,5 +1,6 @@
 using System;
 using System.Buffers.Binary;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -90,7 +91,7 @@ namespace SkyDrop.Core.Services
             return Convert.ToBase64String(publicKeyWithId);
         }
 
-        public Task<string> EncodeFileFor(string filePath, Contact recipient)
+        public Task<string> EncodeFileFor(string filePath, List<Contact> recipients)
         {
             return Task.Run(() =>
             {
@@ -104,7 +105,7 @@ namespace SkyDrop.Core.Services
                 var encryptedBytes = Encrypt(encryptionKey, fileBytes);
 
                 //add the metadata
-                var metaData = GenerateMetaDataForFile(recipient, encryptionKey);
+                var metaData = GenerateMetaDataForFile(recipients, encryptionKey);
                 var encryptedFileWithMetaData = Util.Combine(metaData, encryptedBytes);
 
                 //save the file
@@ -175,7 +176,7 @@ namespace SkyDrop.Core.Services
             return (addContactResult, newContact.Id);
         }
 
-        private byte[] GenerateMetaDataForFile(Contact recipient, byte[] encryptionKey)
+        private byte[] GenerateMetaDataForFile(List<Contact> recipients, byte[] encryptionKey)
         {
             short recipientsCountShort = 1; //recipients hardcoded to 1
             var recipientsCount = new byte[2]; // 2 bytes
@@ -183,14 +184,19 @@ namespace SkyDrop.Core.Services
 
             //add sender id so it's clear which public key to use for decryption
             var senderId = myId.ToByteArray(); //16 bytes
-            var recipientId = recipient.Id.ToByteArray(); //16 bytes
+            var recipientsListBytes = new byte[0];
+            foreach(var recipient in recipients)
+            {
+                var recipientId = recipient.Id.ToByteArray(); //16 bytes
+                var sharedSecret = GetSharedSecret(myPrivateKey, recipient.PublicKey);
 
-            var sharedSecret = GetSharedSecret(myPrivateKey, recipient.PublicKey);
+                //this is the encryption key, encrypted using the recipient's public key
+                var recipientKey = Encrypt(sharedSecret, encryptionKey); //64 bytes
 
-            //this is the encryption key, encrypted using the recipient's public key
-            var recipientKey = Encrypt(sharedSecret, encryptionKey); //64 bytes
+                recipientsListBytes = Util.Combine(recipientsListBytes, recipientId, recipientKey);
+            }
 
-            return Util.Combine(recipientsCount, senderId, recipientId, recipientKey); 
+            return Util.Combine(recipientsCount, senderId, recipientsListBytes); 
         }
 
         private byte[] GetFilePlainText(byte[] encryptedFile)
@@ -337,7 +343,7 @@ namespace SkyDrop.Core.Services
 
         (AddContactResult result, Guid newContactId) AddPublicKey(string publicKeyEncoded, string contactName);
 
-        Task<string> EncodeFileFor(string filePath, Contact recipientPublicKey);
+        Task<string> EncodeFileFor(string filePath, List<Contact> recipients);
 
         Task<string> DecodeFile(string filePath);
     }
