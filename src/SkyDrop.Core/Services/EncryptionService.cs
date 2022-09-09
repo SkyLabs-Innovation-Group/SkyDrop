@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers.Binary;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -98,16 +99,19 @@ namespace SkyDrop.Core.Services
             return Task.Run(() =>
             {
                 //get shared secret
-                var sharedSecret = GetSharedSecret(myPrivateKey, recipient.PublicKey);
+                //var sharedSecret = GetSharedSecret(myPrivateKey, recipient.PublicKey); //32 bytes
+
+                //generate random encryption key
+                var encryptionKey = GenerateEncryptionKey(); //32 bytes
 
                 //load the file
                 var fileBytes = File.ReadAllBytes(filePath);
 
                 //encrypt the file
-                var encryptedBytes = Encrypt(sharedSecret, fileBytes);
+                var encryptedBytes = Encrypt(encryptionKey, fileBytes);
 
                 //add the metadata
-                var metaData = GetMetaDataForFile();
+                var metaData = GetMetaDataForFile(recipient, encryptionKey);
                 var encryptedFileWithMetaData = Util.Combine(metaData, encryptedBytes);
 
                 //save the file
@@ -194,16 +198,36 @@ namespace SkyDrop.Core.Services
             return (addContactResult, newContact.Id);
         }
 
-        private byte[] GetMetaDataForFile()
+        private byte[] GetMetaDataForFile(Contact recipient, byte[] encryptionKey)
         {
+            short recipientsCountShort = 1; //recipients hardcoded to 1
+            var recipientsCount = new byte[2]; // 2 bytes
+            BinaryPrimitives.WriteInt16BigEndian(recipientsCount, recipientsCountShort);
+
             //add sender id so it's clear which public key to use for decryption
-            var senderId = myId.ToByteArray();
-            return senderId; //16 bytes
+            var senderId = myId.ToByteArray(); //16 bytes
+            var recipientId = recipient.Id.ToByteArray(); //16 bytes
+
+            var sharedSecret = GetSharedSecret(myPrivateKey, recipient.PublicKey);
+
+            //this is the encryption key, encrypted using the recipient's public key
+            var recipientKey = Encrypt(sharedSecret, encryptionKey); //64 bytes
+
+            return Util.Combine(recipientsCount, senderId, recipientId, recipientKey); 
         }
 
-        private (byte[] encryptedData, byte[] metaData) ReadMetaDataFromFile(byte[] file)
+        private (byte[] metaData, byte[] encryptedData) ReadMetaDataFromFile(byte[] file)
         {
-            return (file.Take(guidSizeBytes).ToArray(), file.Skip(guidSizeBytes).ToArray());
+            var recipientsCountBytes = file.Take(2).ToArray(); //first 2 bytes
+            var recipientsCount = BinaryPrimitives.ReadInt16BigEndian(recipientsCountBytes);
+
+            var recipientsCountSizeBytes = 2;
+            var senderIdSizeBytes = 16;
+            var recipientIdSizeBytes = 16;
+            var recipientKeySizeBytes = 64;
+            var metadataSizeBytes = recipientsCountSizeBytes + senderIdSizeBytes + (recipientIdSizeBytes + recipientKeySizeBytes) * recipientsCount;
+
+            return (file.Take(metadataSizeBytes).ToArray(), file.Skip(metadataSizeBytes).ToArray());
         }
 
         private Contact GetContactWithId(Guid id)
@@ -240,6 +264,14 @@ namespace SkyDrop.Core.Services
             Console.WriteLine(Hex.ToHexString(sharedSecret));
 
             return sharedSecret;
+        }
+
+        private byte[] GenerateEncryptionKey()
+        {
+            //TODO: check if this is correct usage of SecureRandom, or if we should call GenerateSeed first
+            var key = new byte[32];
+            random.NextBytes(key);
+            return key;
         }
 
         private (X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey) GenerateKeyPair()

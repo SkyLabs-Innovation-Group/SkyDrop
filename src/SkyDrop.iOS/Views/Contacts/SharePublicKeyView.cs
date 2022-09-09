@@ -111,7 +111,7 @@ namespace SkyDrop.iOS.Views.Contacts
             get => AddContactResult.Default;
             set
             {
-                var overlayVisible = value == AddContactResult.ContactAdded || value == AddContactResult.AlreadyExists;
+                var overlayVisible = value == AddContactResult.ContactAdded || value == AddContactResult.AlreadyExists || value == AddContactResult.DevicesPaired;
                 ScannerOverlay.Hidden = !overlayVisible;
                 ScannerContainer.BringSubviewToFront(ScannerOverlay);
             }
