@@ -18,6 +18,7 @@ using Org.BouncyCastle.Utilities.Encoders;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Utility;
 using static SkyDrop.Core.Services.EncryptionService;
+using static SkyDrop.Core.Utility.Util;
 
 namespace SkyDrop.Core.Services
 {
@@ -116,9 +117,9 @@ namespace SkyDrop.Core.Services
             });
         }
 
-        public Task<string> DecodeFile(string filePath)
+        public Task<string> DecodeFile(string filePath, SaveType saveType)
         {
-            return Task.Run(() =>
+            return Task.Run(async () =>
             {
                 if (!filePath.EndsWith(".skydrop"))
                     throw new Exception("File must have .skydrop extension");
@@ -126,7 +127,10 @@ namespace SkyDrop.Core.Services
                 //load the file
                 if (!File.Exists(filePath))
                     throw new Exception("File does not exist");
-                    
+
+                if (saveType == SaveType.Cancel)
+                    throw new Exception("Action cancelled");
+
                 var fileBytes = File.ReadAllBytes(filePath);
                 var decryptedBytes = GetFilePlainText(fileBytes);
 
@@ -135,9 +139,8 @@ namespace SkyDrop.Core.Services
                 fileName = fileName.Substring(0, fileName.Length - 8);
 
                 //save the file
-                var decryptedFilePath = Path.Combine(fileSystemService.DownloadsFolderPath, fileName);
-                File.WriteAllBytes(decryptedFilePath, decryptedBytes);
-
+                using var stream = new MemoryStream(decryptedBytes);
+                var decryptedFilePath = await fileSystemService.SaveToGalleryOrFiles(stream, fileName, saveType);
                 return decryptedFilePath;
             });
         }
@@ -345,7 +348,7 @@ namespace SkyDrop.Core.Services
 
         Task<string> EncodeFileFor(string filePath, List<Contact> recipients);
 
-        Task<string> DecodeFile(string filePath);
+        Task<string> DecodeFile(string filePath, SaveType saveType);
     }
 }
 

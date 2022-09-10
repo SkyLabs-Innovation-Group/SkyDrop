@@ -12,6 +12,7 @@ using Acr.UserDialogs;
 using MvvmCross;
 using SkyDrop.Core.DataModels;
 using Xamarin.Essentials;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace SkyDrop.Core.Utility
 {
@@ -137,6 +138,9 @@ namespace SkyDrop.Core.Utility
         
         public static async Task<SaveType> GetSaveType(string filename)
         {
+            if (filename.EndsWith(".skydrop"))
+                filename = filename.Substring(0, filename.Length - 8); //remove .skydrop suffix
+
             if (!Util.CanDisplayPreview(filename))
             {
                 //not an image
