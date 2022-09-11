@@ -329,7 +329,7 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             finally
             {
-                StopUploadTimer();
+                StopUploadTimer(ignoreResult: true);
                 IsUploading = false;
                 IsBarcodeLoading = false;
             }
@@ -634,9 +634,9 @@ namespace SkyDrop.Core.ViewModels.Main
             uploadTimerService.StartUploadTimer(fileSizeBytes, UpdateUploadProgress);
         }
 
-        private void StopUploadTimer()
+        private void StopUploadTimer(bool ignoreResult = false)
         {
-            uploadTimerService.StopUploadTimer();
+            uploadTimerService.StopUploadTimer(ignoreResult);
         }
 
         private void UpdateUploadProgress()
