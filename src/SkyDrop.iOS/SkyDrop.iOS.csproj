@@ -254,6 +254,8 @@
     <ImageAsset Include="Media.xcassets\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_pair.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_pair.imageset\account-multiple-plus.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_tick.imageset\check.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_tick.imageset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

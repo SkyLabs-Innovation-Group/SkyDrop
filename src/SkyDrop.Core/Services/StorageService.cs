@@ -178,8 +178,9 @@ namespace SkyDrop.Core.Services
 
         public void AddContact(Contact contact)
         {
-            if (ContactExists(contact.Id))
-                throw new Exception("Contact already exists");
+            var (exists, name) = ContactExists(contact.Id);
+            if (exists)
+                throw new Exception($"Contact already saved as {name}");
 
             realm.Write(() =>
             {
@@ -188,9 +189,11 @@ namespace SkyDrop.Core.Services
             });
         }
 
-        public bool ContactExists(Guid id)
+        public (bool exists, string savedName) ContactExists(Guid id)
         {
-            return realm.Find<ContactRealmObject>(id.ToString()) != null;
+            var existingContact = realm.Find<ContactRealmObject>(id.ToString());
+            var exists = existingContact != null;
+            return (exists, existingContact?.Name);
         }
 
         public void DeleteContact(Contact contact)
@@ -329,7 +332,7 @@ namespace SkyDrop.Core.Services
 
         void AddContact(Contact contact);
 
-        bool ContactExists(Guid publicKeyBase64);
+        (bool exists, string savedName) ContactExists(Guid publicKeyBase64);
 
         void DeleteContact(Contact contact);
 

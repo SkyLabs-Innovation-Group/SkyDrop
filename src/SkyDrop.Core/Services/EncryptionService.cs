@@ -160,26 +160,24 @@ namespace SkyDrop.Core.Services
             });
         }
 
-        public (AddContactResult result, Guid newContactId) AddPublicKey(string publicKeyEncoded, string contactName)
+        public (AddContactResult result, Guid newContactId, string existingContactSavedName) AddPublicKey(string publicKeyEncoded, string contactName)
         {
             var (publicKey, keyId, justScannedId) = DecodePublicKey(publicKeyEncoded);
             if (publicKey == null)
             {
                 userDialogs.Alert("Invalid key");
-                return (AddContactResult.InvalidKey, default);
+                return (AddContactResult.InvalidKey, default, null);
             }
 
-            if (storageService.ContactExists(keyId))
-            {
-                userDialogs.Alert("Contact already exists");
-                return (AddContactResult.AlreadyExists, default);
-            }
+            var (contactExists, existingContactSavedName) = storageService.ContactExists(keyId);
+            if (contactExists)
+                return (AddContactResult.AlreadyExists, default, existingContactSavedName);
 
             if (justScannedId != default && justScannedId != myId)
             {
                 //you scanned the QR code with the wrong phone
                 userDialogs.Alert("Unexpected device! Please go back and try to pair again");
-                return (AddContactResult.WrongDevice, default);
+                return (AddContactResult.WrongDevice, default, null);
             }
 
             var newContact = new Contact { Name = contactName.Trim(), PublicKey = publicKey, Id = keyId };
@@ -191,7 +189,7 @@ namespace SkyDrop.Core.Services
 
             userDialogs.Toast(message);
 
-            return (addContactResult, newContact.Id);
+            return (addContactResult, newContact.Id, null);
         }
 
         private byte[] GenerateMetaDataForFile(List<Contact> recipients, byte[] encryptionKey)
@@ -395,7 +393,7 @@ namespace SkyDrop.Core.Services
         /// <returns></returns>
         string GetMyPublicKeyWithId(Guid justScannedId);
 
-        (AddContactResult result, Guid newContactId) AddPublicKey(string publicKeyEncoded, string contactName);
+        (AddContactResult result, Guid newContactId, string existingContactSavedName) AddPublicKey(string publicKeyEncoded, string contactName);
 
         Task<string> EncodeFileFor(string filePath, List<Contact> recipients);
 

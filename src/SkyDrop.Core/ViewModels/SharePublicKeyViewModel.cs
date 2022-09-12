@@ -25,6 +25,8 @@ namespace SkyDrop.Core.ViewModels
         public bool IsNameInputVisible { get; set; } = true;
         public string ContactName { get; set; }
         public bool IsNextButtonVisible => IsNameInputVisible && !ContactName.IsNullOrWhiteSpace();
+        public string HintText => GetHintText(AddContactResult);
+        public string ContactSavedName { get; set; }
 
         private Guid justScannedId = default;
         private bool isBusy;
@@ -76,7 +78,7 @@ namespace SkyDrop.Core.ViewModels
                     return;
 
                 isBusy = true;
-                (AddContactResult, justScannedId) = encryptionService.AddPublicKey(barcodeData, ContactName);
+                (AddContactResult, justScannedId, ContactSavedName) = encryptionService.AddPublicKey(barcodeData, ContactName);
                 isBusy = false;
 
                 if (AddContactResult == AddContactResult.ContactAdded || AddContactResult == AddContactResult.DevicesPaired || AddContactResult == AddContactResult.AlreadyExists)
@@ -96,6 +98,17 @@ namespace SkyDrop.Core.ViewModels
             IsNameInputVisible = false;
             RefreshBarcodeCommand.Execute();
         }
+
+        public string GetHintText(AddContactResult result) => result switch
+        {
+            AddContactResult.DevicesPaired => "Devices paired",
+            AddContactResult.AlreadyExists => $"Contact already saved as {ContactSavedName}",
+            AddContactResult.ContactAdded => "Pairing is complete when both devices show this icon",
+            AddContactResult.InvalidKey => "Invalid key",
+            AddContactResult.WrongDevice => "Wrong device",
+            AddContactResult.Default => "",
+            _ => throw new Exception("Unexpected AddContactResult")
+        };
 
         public void Close()
         {
