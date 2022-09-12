@@ -29,6 +29,7 @@ namespace SkyDrop.Core.Services
     /// publicKey 32 bytes
     ///
     /// An encrypted (.skydrop) file contains this data format:
+    /// headerFormatIdentifier 2 bytes <- the value should be 1 because we only have one format currently
     /// recipientsCount 2 bytes
     /// senderId 16 bytes
     /// recipient1Id 16 bytes
@@ -184,6 +185,10 @@ namespace SkyDrop.Core.Services
             if (recipients.Count > ushort.MaxValue)
                 throw new Exception($"Exceeded max recipients limit of {ushort.MaxValue}");
 
+            ushort headerFormatIdentifierShort = 1; //increment this if we change the header format
+            var headerFormatIdentifier = new byte[2]; // 2 bytes
+            BinaryPrimitives.WriteUInt16BigEndian(headerFormatIdentifier, headerFormatIdentifierShort);
+
             ushort recipientsCountShort = (ushort)recipients.Count;
             var recipientsCount = new byte[2]; // 2 bytes
             BinaryPrimitives.WriteUInt16BigEndian(recipientsCount, recipientsCountShort);
@@ -202,7 +207,7 @@ namespace SkyDrop.Core.Services
                 recipientsListBytes = Util.Combine(recipientsListBytes, recipientId, recipientKey);
             }
 
-            return Util.Combine(recipientsCount, senderId, recipientsListBytes); 
+            return Util.Combine(headerFormatIdentifier, recipientsCount, senderId, recipientsListBytes); 
         }
 
         private byte[] GetFilePlainText(byte[] encryptedFile)
