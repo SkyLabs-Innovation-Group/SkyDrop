@@ -46,7 +46,7 @@ namespace SkyDrop.Core.Services
     /// encryptedData, when decrypted, contains the following data format:
     /// filenameLength [2 bytes]
     /// filename [filenameLength bytes]
-    /// encryptedContent [? bytes]
+    /// content [? bytes]
     /// </summary>
     public class EncryptionService : IEncryptionService
     {
