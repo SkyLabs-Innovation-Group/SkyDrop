@@ -108,7 +108,7 @@ namespace SkyDrop.Core.Services
                 var encryptedFilePath = await fileSystemService.SaveFile(await response.Content.ReadAsStreamAsync(), fileName, false);
 
                 //decrypt
-                var decryptedFilePath = await encryptionService.DecodeFile(encryptedFilePath, saveType);
+                var decryptedFilePath = await encryptionService.DecodeFile(encryptedFilePath);
                 userDialogs.Toast($"Saved {Path.GetFileName(decryptedFilePath)}");
                 return;
             }

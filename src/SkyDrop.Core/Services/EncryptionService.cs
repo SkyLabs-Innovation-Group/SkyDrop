@@ -3,6 +3,8 @@ using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Org.BouncyCastle.Asn1.Cms;
@@ -24,22 +26,27 @@ namespace SkyDrop.Core.Services
 {
     /// <summary>
     /// A public key QR code contains this data format:
-    /// myId 16 bytes
-    /// justScannedId 16 bytes
-    /// publicKey 32 bytes
+    /// myId [16 bytes]
+    /// justScannedId [16 bytes]
+    /// publicKey [32 bytes]
     ///
     /// An encrypted (.skydrop) file contains this data format:
-    /// headerFormatIdentifier 2 bytes <- the value should be 1 because we only have one format currently
-    /// recipientsCount 2 bytes
-    /// senderId 16 bytes
-    /// recipient1Id 16 bytes
-    /// keyForRecipient1 64 bytes <- the key is encrypted using the recipient's public key
-    /// recipient2Id 16 bytes
-    /// keyForRecipient2 64 bytes
-    /// recipient3Id 16 bytes
-    /// keyForRecipient3 64 bytes
+    /// headerFormatIdentifier [2 bytes] <- the value should be 1 because we only have one format currently
+    /// recipientsCount [2 bytes]
+    /// senderId [16 bytes]
+    /// recipient1Id [16 bytes]
+    /// keyForRecipient1 [64 bytes] <- the key is encrypted using the recipient's public key
+    /// recipient2Id [16 bytes]
+    /// keyForRecipient2 [64 bytes]
+    /// recipient3Id [16 bytes]
+    /// keyForRecipient3 [64 bytes]
     /// ...
-    /// encryptedData ? bytes <- this is encrypted with the key ^
+    /// encryptedData [? bytes] <- this is encrypted with the key ^
+    ///
+    /// encryptedData, when decrypted, contains the following data format:
+    /// filenameLength [2 bytes]
+    /// filename [filenameLength bytes]
+    /// encryptedContent [? bytes]
     /// </summary>
     public class EncryptionService : IEncryptionService
     {
@@ -101,46 +108,53 @@ namespace SkyDrop.Core.Services
                 var encryptionKey = GenerateEncryptionKey(); //32 bytes
 
                 //load the file
-                var fileBytes = File.ReadAllBytes(filePath);
+                var contentBytes = File.ReadAllBytes(filePath);
 
-                //encrypt the file
-                var encryptedBytes = Encrypt(encryptionKey, fileBytes);
+                //add the filename to the content
+                var fileNameBytes = GetFileNameAsBytes(filePath);
+                if (fileNameBytes.Length > ushort.MaxValue)
+                    throw new Exception("Filename is too long");
+
+                ushort fileNameLength = (ushort)fileNameBytes.Length;
+                var fileNameLengthBytes = new byte[2];
+                BinaryPrimitives.WriteUInt16BigEndian(fileNameLengthBytes, fileNameLength);
+                contentBytes = Combine(fileNameLengthBytes, fileNameBytes, contentBytes);
+
+                //encrypt the file and filename
+                var encryptedBytes = Encrypt(encryptionKey, contentBytes);
 
                 //add the metadata
                 var metaData = GenerateMetaDataForFile(recipients, encryptionKey);
                 var encryptedFileWithMetaData = Util.Combine(metaData, encryptedBytes);
 
                 //save the file
-                var encryptedFilePath = Path.Combine(fileSystemService.CacheFolderPath, $"{Path.GetFileName(filePath)}.skydrop");
+                var randomFileName = Guid.NewGuid();
+                var encryptedFilePath = Path.Combine(fileSystemService.CacheFolderPath, $"{randomFileName}.skydrop");
                 File.WriteAllBytes(encryptedFilePath, encryptedFileWithMetaData);
 
                 return encryptedFilePath;
             });
         }
 
-        public Task<string> DecodeFile(string filePath, SaveType saveType)
+        public Task<string> DecodeFile(string filePath)
         {
             return Task.Run(async () =>
             {
                 if (!filePath.EndsWith(".skydrop"))
                     throw new Exception("File must have .skydrop extension");
 
-                //load the file
                 if (!File.Exists(filePath))
                     throw new Exception("File does not exist");
 
+                var fileBytes = File.ReadAllBytes(filePath);
+                var (fileName, file) = GetFilePlainText(fileBytes);
+
+                var saveType = await Util.GetSaveType(fileName);
                 if (saveType == SaveType.Cancel)
                     throw new Exception("Action cancelled");
 
-                var fileBytes = File.ReadAllBytes(filePath);
-                var decryptedBytes = GetFilePlainText(fileBytes);
-
-                //remove ".skydrop" from the end of the filename
-                var fileName = Path.GetFileName(filePath);
-                fileName = fileName.Substring(0, fileName.Length - 8);
-
                 //save the file
-                using var stream = new MemoryStream(decryptedBytes);
+                using var stream = new MemoryStream(file);
                 var decryptedFilePath = await fileSystemService.SaveToGalleryOrFiles(stream, fileName, saveType);
                 return decryptedFilePath;
             });
@@ -210,9 +224,9 @@ namespace SkyDrop.Core.Services
             return Util.Combine(headerFormatIdentifier, recipientsCount, senderId, recipientsListBytes); 
         }
 
-        private byte[] GetFilePlainText(byte[] encryptedFile)
+        private (string fileName, byte[] file) GetFilePlainText(byte[] encryptedFile)
         {
-            var (metaData, encryptedContent) = EncryptedFileMetaData.GetEncryptedFileMetaData(encryptedFile);
+            var (metaData, encryptedData) = EncryptedFileMetaData.GetEncryptedFileMetaData(encryptedFile);
 
             //check if user is listed in file recipients list
             if (!metaData.RecipientKeys.ContainsKey(myId))
@@ -232,8 +246,12 @@ namespace SkyDrop.Core.Services
             var keyPlainText = keyPlainTextPadded.Take(32).ToArray();
 
             //decrypt the file
-            var filePlainText = Decrypt(keyPlainText, encryptedContent);
-            return filePlainText;
+            var plainTextData = Decrypt(keyPlainText, encryptedData);
+
+            //extract the filename
+            var (fileName, file) = ExtractFileName(plainTextData);
+
+            return (fileName, file);
         }
 
         private Contact GetContactWithId(Guid id)
@@ -341,6 +359,31 @@ namespace SkyDrop.Core.Services
             }
             return rv;
         }
+
+        private byte[] GetFileNameAsBytes(string filePath)
+        {
+            var name = RemoveNonAsciiChars(Path.GetFileName(filePath));
+            return Encoding.ASCII.GetBytes(name);
+        }
+
+        private string RemoveNonAsciiChars(string name)
+        {
+            return Regex.Replace(name, @"[^\u0000-\u007F]+", string.Empty);
+        }
+
+        private (string fileName, byte[] file) ExtractFileName(byte[] plainTextData)
+        {
+            var fileNameLengthSizeBytes = 2;
+
+            var fileNameLengthBytes = plainTextData.Take(fileNameLengthSizeBytes).ToArray();
+            var fileNameLength = BinaryPrimitives.ReadUInt16BigEndian(fileNameLengthBytes);
+
+            var fileNameBytes = plainTextData.Skip(fileNameLengthSizeBytes).Take(fileNameLength).ToArray();
+            var fileName = Encoding.ASCII.GetString(fileNameBytes);
+
+            var file = plainTextData.Skip(fileNameLengthSizeBytes).Skip(fileNameLength).ToArray();
+            return (fileName, file);
+        }
     }
 
     public interface IEncryptionService
@@ -356,7 +399,7 @@ namespace SkyDrop.Core.Services
 
         Task<string> EncodeFileFor(string filePath, List<Contact> recipients);
 
-        Task<string> DecodeFile(string filePath, SaveType saveType);
+        Task<string> DecodeFile(string filePath);
     }
 }
 

@@ -895,6 +895,18 @@ namespace SkyDrop.Core.ViewModels.Main
                     return;
                 }
 
+                if (FocusedFile.Filename == null)
+                {
+                    //filename head request not yet completed, or failed
+                    //we must have the filename in order to know how we should save the file
+
+                    //retry getting filename
+                    IsDownloadingFile = true;
+                    var filename = await apiService.GetSkyFileFilename(FocusedFile.GetSkylinkUrl());
+                    FocusedFile.Filename = filename;
+                }
+
+                IsDownloadingFile = false;
                 var saveType = await Util.GetSaveType(FocusedFile.Filename);
                 if (saveType == Util.SaveType.Cancel)
                     return;
