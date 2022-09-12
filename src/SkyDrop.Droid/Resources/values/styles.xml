@@ -11,6 +11,7 @@
         <item name="colorControlActivated">@color/lightGrey</item><!--for ProgressBar-->
         <item name="colorControlHighlight">@color/lightGrey</item>
         <item name="windowActionModeOverlay">false</item>
+        <item name="android:navigationBarColor">@color/darkGrey</item>
     </style>
 
     <!-- Default App theme applied if no resource style overrides for specific API level -->
