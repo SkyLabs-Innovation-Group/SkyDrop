@@ -68,6 +68,9 @@ namespace SkyDrop.Core.Utility
             if (filename.ExtensionMatches(new[] { ".mp4", ".m4p", ".m4v", ".mov", ".avi", ".webm", ".mpg", ".mp2", ".mpeg", ".mpe", ".mpv", ".wmv", ".qt", ".mkv" }))
                 return FileCategory.Video;
 
+            if (filename.ExtensionMatches(".skydrop"))
+                return FileCategory.Encrypted;
+
             if (filename.ExtensionMatches(".zip"))
                 return FileCategory.Zip;
 
@@ -81,7 +84,8 @@ namespace SkyDrop.Core.Utility
             Image,
             Audio,
             Video,
-            Zip
+            Zip,
+            Encrypted
         }
 
         public static bool CanDisplayPreview(this string filename)

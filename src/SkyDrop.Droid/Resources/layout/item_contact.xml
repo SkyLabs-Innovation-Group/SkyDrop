@@ -71,8 +71,11 @@
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginRight="8dp"
                     app:MvxBind="Text Name"
                     android:textColor="#fff"
+                    android:lines="1"
+                    android:ellipsize="middle"
                     android:layout_gravity="center_vertical"/>
                 <ImageView
                     android:layout_width="32dp"
