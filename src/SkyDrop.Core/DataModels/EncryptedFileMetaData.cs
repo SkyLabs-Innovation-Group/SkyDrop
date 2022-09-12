@@ -7,7 +7,7 @@ namespace SkyDrop.Core.DataModels
 {
     public class EncryptedFileMetaData
     {
-        public short RecipientsCount;
+        public ushort RecipientsCount;
         public Guid SenderId;
         public Dictionary<Guid, byte[]> RecipientKeys;
 
@@ -19,7 +19,7 @@ namespace SkyDrop.Core.DataModels
         public static (EncryptedFileMetaData metaData, byte[] encryptedContent) GetEncryptedFileMetaData(byte[] encryptedFile)
         {
             var recipientsCountBytes = encryptedFile.Take(recipientsCountSizeBytes).ToArray(); //first 2 bytes
-            var recipientsCount = BinaryPrimitives.ReadInt16BigEndian(recipientsCountBytes);
+            var recipientsCount = BinaryPrimitives.ReadUInt16BigEndian(recipientsCountBytes);
 
             var metadataSizeBytes = recipientsCountSizeBytes + senderIdSizeBytes + (recipientIdSizeBytes + recipientKeySizeBytes) * recipientsCount;
 

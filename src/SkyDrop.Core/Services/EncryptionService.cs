@@ -181,9 +181,12 @@ namespace SkyDrop.Core.Services
 
         private byte[] GenerateMetaDataForFile(List<Contact> recipients, byte[] encryptionKey)
         {
-            short recipientsCountShort = 1; //recipients hardcoded to 1
+            if (recipients.Count > ushort.MaxValue)
+                throw new Exception($"Exceeded max recipients limit of {ushort.MaxValue}");
+
+            ushort recipientsCountShort = (ushort)recipients.Count;
             var recipientsCount = new byte[2]; // 2 bytes
-            BinaryPrimitives.WriteInt16BigEndian(recipientsCount, recipientsCountShort);
+            BinaryPrimitives.WriteUInt16BigEndian(recipientsCount, recipientsCountShort);
 
             //add sender id so it's clear which public key to use for decryption
             var senderId = myId.ToByteArray(); //16 bytes
