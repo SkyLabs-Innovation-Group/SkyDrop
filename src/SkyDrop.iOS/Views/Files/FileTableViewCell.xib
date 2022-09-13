@@ -21,7 +21,7 @@
                         <rect key="frame" x="8" y="8" width="335" height="48"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Filename.jpg" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vsp-4g-DY1">
-                                <rect key="frame" x="48" y="15" width="271" height="18"/>
+                                <rect key="frame" x="48" y="15" width="279" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" white="0.91698008779999995" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -90,7 +90,7 @@
                         <constraints>
                             <constraint firstItem="Vsp-4g-DY1" firstAttribute="centerY" secondItem="vtK-tu-tx1" secondAttribute="centerY" id="Ajf-NH-ZwP"/>
                             <constraint firstItem="cIu-6I-swb" firstAttribute="centerY" secondItem="QYs-bf-LAT" secondAttribute="centerY" id="JJ1-Dv-8RO"/>
-                            <constraint firstAttribute="trailing" secondItem="Vsp-4g-DY1" secondAttribute="trailing" constant="16" id="Phf-9i-yIG"/>
+                            <constraint firstAttribute="trailing" secondItem="Vsp-4g-DY1" secondAttribute="trailing" constant="8" id="Phf-9i-yIG"/>
                             <constraint firstItem="QYs-bf-LAT" firstAttribute="top" secondItem="vtK-tu-tx1" secondAttribute="top" constant="8" id="SLc-Z8-xcG"/>
                             <constraint firstItem="vja-PF-a3I" firstAttribute="centerY" secondItem="cIu-6I-swb" secondAttribute="centerY" id="UMF-Pg-TfD"/>
                             <constraint firstItem="cIu-6I-swb" firstAttribute="centerX" secondItem="QYs-bf-LAT" secondAttribute="centerX" id="cwm-pr-bKw"/>

@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
+using static SkyDrop.Core.Utility.Util;
 
 namespace SkyDrop.Core.Services
 {
@@ -84,7 +85,7 @@ namespace SkyDrop.Core.Services
             return skyFile;
         }
 
-        public async Task DownloadAndSaveSkyfile(string url)
+        public async Task DownloadAndSaveSkyfile(string url, SaveType saveType)
         {
             var permissionResult = await Permissions.RequestAsync<Permissions.StorageWrite>();
             if (permissionResult != PermissionStatus.Granted)
@@ -96,11 +97,10 @@ namespace SkyDrop.Core.Services
             //download
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var response = await httpClient.GetAsync(url);
-            var fileName = GetFilenameFromResponse(response);
+            var filename = GetFilenameFromResponse(response);
 
-            //save
             using var responseStream = await response.Content.ReadAsStreamAsync();
-            var newFileName = await fileSystemService.SaveFile(responseStream, fileName, true);
+            var newFileName = await fileSystemService.SaveToGalleryOrFiles(responseStream, filename, saveType);
 
             userDialogs.Toast($"Saved {newFileName}");
         }
@@ -141,8 +141,30 @@ namespace SkyDrop.Core.Services
             return filename;
         }
 
+        private const int SkynetPortalApiTokenLength = 52;
+
+        private bool HasValidLength(string apiToken) => apiToken.Length == SkynetPortalApiTokenLength;
+
         public async Task<bool> PingPortalForSkylink(string skylink, SkynetPortal skynetPortal)
         {
+            string oldToken = null;
+            if (skynetPortal.HasApiToken() && !HasValidLength(skynetPortal.UserApiToken))
+            {
+                userDialogs.Toast("The API token entered was invalid");
+                Log.Error($"The API token entered was invalid");
+                return FailedPortalCheck(skynetPortal, oldToken);
+            }
+            else if (skynetPortal.HasApiToken())
+            {
+                // Store oldToken while validating the new token using a HEAD request, swap back in FailedPortalCheck()
+                oldToken = httpClientFactory.GetTokenForHttpClient(skynetPortal);
+
+                if (oldToken == skynetPortal.UserApiToken) // if oldToken == newToken, treat as a new token
+                    oldToken = null;
+
+                httpClientFactory.UpdateHttpClientWithNewToken(skynetPortal);
+            }
+
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(skynetPortal);
 
             string requestUrl = $"{skynetPortal}/{skylink}";
@@ -158,7 +180,7 @@ namespace SkyDrop.Core.Services
             {
                 userDialogs.Alert(Strings.SslPrompt);
                 Log.Exception(httpEx);
-                return false;
+                return FailedPortalCheck(skynetPortal, oldToken);
             }
             catch (HttpRequestException e)
             {
@@ -170,7 +192,7 @@ namespace SkyDrop.Core.Services
             {
                 userDialogs.Toast("No response from " + skynetPortal);
                 Log.Error($"Head request to {skynetPortal} returned null");
-                return false;
+                return FailedPortalCheck(skynetPortal, oldToken);
             }
 
             Log.Trace(result.ToString());
@@ -179,7 +201,7 @@ namespace SkyDrop.Core.Services
             {
                 userDialogs.Toast($"{skynetPortal} refused the portal check request");
                 Log.Error($"Head request to {skynetPortal} returned status code {result.StatusCode}");
-                return false;
+                return FailedPortalCheck(skynetPortal, oldToken);
             }
 
             var headers = result.Headers;
@@ -188,11 +210,23 @@ namespace SkyDrop.Core.Services
             {
                 Log.Error("!(skylinkHeader == skylink)");
                 userDialogs.Toast($"{skynetPortal} Skylink Header did not match");
-                return false;
+                return FailedPortalCheck(skynetPortal, oldToken);
             }
 
             Log.Trace("Success querying for file header on portal " + skynetPortal);
             return true;
+        }
+
+        public bool FailedPortalCheck(SkynetPortal portal, string oldToken)
+        {
+            if (string.IsNullOrEmpty(oldToken))
+                return false;
+
+            // Set back to valid old token if new one failed
+            portal.UserApiToken = oldToken;
+            httpClientFactory.UpdateHttpClientWithNewToken(portal);
+
+            return false;
         }
     }
 
@@ -200,7 +234,7 @@ namespace SkyDrop.Core.Services
     {
         Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationTokenSource);
 
-        Task DownloadAndSaveSkyfile(string url);
+        Task DownloadAndSaveSkyfile(string url, SaveType saveType);
 
         Task<Stream> DownloadFile(string url);
 

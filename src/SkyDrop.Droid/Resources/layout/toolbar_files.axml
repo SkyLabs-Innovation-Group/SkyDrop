@@ -37,15 +37,55 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="right"
-            app:MvxBind="Click ToggleLayoutCommand">
+            android:orientation="horizontal"
+            android:layout_gravity="right">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="16dp"
+                android:src="@drawable/ic_select_all"
+                app:MvxBind="Click SelectAllCommand;Visibility Visibility(IsUnzippedFilesMode)"
+                />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingHorizontal="16dp"
                 android:src="@drawable/ic_list"
-                app:MvxBind="LayoutImage LayoutType"
+                app:MvxBind="LayoutImage LayoutType;Click ToggleLayoutCommand;Visibility Visibility(IsLayoutButtonVisible)"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="16dp"
+                android:src="@drawable/ic_folder_add"
+                app:MvxBind="Click AddFolderCommand;Visibility Visibility(IsAddFolderButtonVisible)"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="16dp"
+                android:src="@drawable/ic_bin"
+                app:MvxBind="Click DeleteFileCommand;Visibility Visibility(IsDeleteButtonVisible)"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="16dp"
+                android:src="@drawable/ic_folder_move"
+                app:MvxBind="Click MoveFileCommand;Visibility Visibility(IsMoveButtonVisible)"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="16dp"
+                android:src="@drawable/ic_download"
+                app:MvxBind="Click SaveSelectedUnzippedFilesCommand;Visibility Visibility(IsUnzippedSelectionActive)"
                 />
 
         </LinearLayout>

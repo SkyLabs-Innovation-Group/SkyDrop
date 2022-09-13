@@ -1,12 +1,14 @@
 # [SkyDrop](http://app.skydrop.hns.to/)
 
+* iOS - [Get SkyDrop on App Store](https://apps.apple.com/app/id1568591168#?platform=iphone)
+
 * Android - [Get SkyDrop on Google Play](https://play.google.com/store/apps/details?id=to.hns.skydrop)
 
   * Alternatively, you can use the cryptographically secure app store by redsolver, [SkyDroid](https://skydroid.app/), to install SkyDrop instead! If you have trouble finding the app in SkyDroid, click the + and enter **skydrop**.
 
-* iOS - [Get SkyDrop on App Store](https://apps.apple.com/app/id1568591168#?platform=iphone)
-
 ---
+
+<img src="http://tomdawes.co.uk/skydrop/screenshot.png" width="350" title="SkyDrop iOS screenshot">
 
 We took inspiration from popular file sharing apps like WeTransfer, and Apple’s polished AirDrop app for iOS and Mac, and decided to create SkyDrop: a free and open source alternative with which users can send multiple files, including large files, and share them easily with a simple link or QR code.
 

@@ -40,6 +40,7 @@ namespace SkyDrop.iOS.Views.Drop
         private nfloat tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
         private const string DropUploadNotifRequestId = "drop_upload_notification_id";
         private nfloat screenWidth => UIScreen.MainScreen.Bounds.Width;
+        private UILabel titleLabel;
 
         public DropView() : base("DropView", null)
         {
@@ -80,12 +81,14 @@ namespace SkyDrop.iOS.Views.Drop
                     ForegroundColor = Colors.White.ToNative()
                 };
 
+                MakeTitleTruncateFromMiddle();
+
                 View.BackgroundColor = Colors.DarkGrey.ToNative();
                 BarcodeContainer.BackgroundColor = Colors.MidGrey.ToNative(); //so that preview image fades in from dark color
                 /*
                 var menuButton = new UIBarButtonItem()
                 {
-                    Image = UIImage.FromBundle("ic_menu")
+                    Image = UIImage.FromBundle("ic_cloud")
                 };
                 menuButton.Clicked += (s, e) => ViewModel.OpenSkyDriveCommand?.Execute();
 
@@ -192,7 +195,7 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(SaveFileLabel).For(t => t.Text).To(vm => vm.SaveButtonText);
             set.Bind(DownloadButtonIcon).For(a => a.ImagePath).To(vm => vm.IsFocusedFileAnArchive).WithConversion(new SaveUnzipIconConverter());
 
-            set.Bind(this).For(th => th.Title).To(vm => vm.Title);
+            set.Bind(titleLabel).To(vm => vm.Title);
 
             set.Bind(BarcodeMenu).For("Visible").To(vm => vm.IsBarcodeVisible);
             set.Bind(BarcodeContainer).For("Visible").To(vm => vm.IsBarcodeVisible);
@@ -231,6 +234,23 @@ namespace SkyDrop.iOS.Views.Drop
             //icon behind preview image, to show while preview is loading
             set.Bind(FileTypeIcon).For(FileCategoryIconBinding.Name).To(vm => vm.FocusedFile.Filename);
             set.Apply();
+        }
+
+        private void MakeTitleTruncateFromMiddle()
+        {
+            titleLabel = new UILabel
+            {
+                TextAlignment = UITextAlignment.Center,
+                Font = UIFont.BoldSystemFontOfSize(17),
+                Text = "SkyDrop",
+                TextColor = Colors.LightGrey.ToNative(),
+                LineBreakMode = UILineBreakMode.MiddleTruncation,
+
+                //makes label auto resize after text changes
+                TranslatesAutoresizingMaskIntoConstraints = true
+            };
+
+            NavigationItem.TitleView = titleLabel;
         }
 
         private void UpdateUploadNotificationProgress(double progress)
@@ -341,7 +361,9 @@ namespace SkyDrop.iOS.Views.Drop
             try
             {
                 SetBarcodeCodeUiState(isSlow: true);
-                var matrix = ViewModel.GenerateBarcode(url, (int)BarcodeImage.Frame.Width, (int)BarcodeImage.Frame.Height);
+
+                var screenDensity = (int)UIScreen.MainScreen.Scale;
+                var matrix = ViewModel.GenerateBarcode(url, (int)BarcodeImage.Frame.Width * screenDensity, (int)BarcodeImage.Frame.Height * screenDensity);
                 var image = await iOSUtil.BitMatrixToImage(matrix);
                 BarcodeImage.Image = image;
                 ViewModel.SwipeNavigationEnabled = true;
@@ -362,6 +384,8 @@ namespace SkyDrop.iOS.Views.Drop
             //that is to fix an issue with CheckUserIsSwiping() on barcode menu buttons
             AnimateSlideBarcodeOut();
 
+            ViewModel.Title = "SkyDrop";
+
             ReceiveButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
             SendButton.Alpha = 1;
         }
@@ -372,9 +396,9 @@ namespace SkyDrop.iOS.Views.Drop
         private void SetBarcodeCodeUiState(bool isSlow)
         {
             ViewModel.DropViewUIState = DropViewState.QRCodeState;
-
             ViewModel.IsBarcodeVisible = true;
-            
+            ViewModel.Title = ViewModel.FocusedFile?.Filename;
+
             ViewModel.Log.Trace("Sliding in QR code view");
 
             AnimateSlideBarcodeIn(isSlow);
@@ -394,6 +418,7 @@ namespace SkyDrop.iOS.Views.Drop
             {
                 SendButton.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
                 ReceiveButton.Alpha = 0;
+                HomeMenu.Alpha = 0;
             });
         }
 
@@ -411,6 +436,7 @@ namespace SkyDrop.iOS.Views.Drop
             {
                 ReceiveButton.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
                 SendButton.Alpha = 0;
+                HomeMenu.Alpha = 0;
             });
         }
 
@@ -420,7 +446,6 @@ namespace SkyDrop.iOS.Views.Drop
         private void AnimateSlideBarcodeIn(bool isSlow = false)
         {
             var screenCenterX = screenWidth * 0.5;
-
             var barcodeTranslationX = screenWidth;
 
             BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(screenWidth, 0);
@@ -446,6 +471,7 @@ namespace SkyDrop.iOS.Views.Drop
                 SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
                 SendButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
                 ReceiveButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
+                HomeMenu.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
             });
         }
 
@@ -476,6 +502,9 @@ namespace SkyDrop.iOS.Views.Drop
 
                 ReceiveButton.Alpha = 1;
                 ReceiveButton.Transform = CGAffineTransform.MakeTranslation(0, 0);
+
+                HomeMenu.Alpha = 1;
+                HomeMenu.Transform = CGAffineTransform.MakeTranslation(0, 0);
             }, completion: () =>
             {
                 ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState;
@@ -510,6 +539,7 @@ namespace SkyDrop.iOS.Views.Drop
             UIView.Animate(duration, () =>
             {
                 SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(0, 0);
+                HomeMenu.Transform = CGAffineTransform.MakeTranslation(0, 0);
             });
         }
 
@@ -575,6 +605,7 @@ namespace SkyDrop.iOS.Views.Drop
                 {
                     var translationX = sendReceiveButtonsContainerStartX + deltaX;
                     SendReceiveButtonsContainer.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
+                    HomeMenu.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
                 }
             };
 
