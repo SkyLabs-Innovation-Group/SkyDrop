@@ -40,6 +40,9 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView EncryptButton { get; set; }
 
 		[Outlet]
+		UIKit.UIImageView EncryptIcon { get; set; }
+
+		[Outlet]
 		UIKit.UILabel EncryptionLabel { get; set; }
 
 		[Outlet]
@@ -116,6 +119,11 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (EncryptIcon != null) {
+				EncryptIcon.Dispose ();
+				EncryptIcon = null;
+			}
+
 			if (BarcodeContainer != null) {
 				BarcodeContainer.Dispose ();
 				BarcodeContainer = null;

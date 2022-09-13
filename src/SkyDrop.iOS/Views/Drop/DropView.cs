@@ -29,6 +29,7 @@ using System.IO;
 using AssetsLibrary;
 using SkyDrop.iOS.Views.Files;
 using SkyDrop.Core.Converters;
+using SkyDrop.Core.DataViewModels;
 
 namespace SkyDrop.iOS.Views.Drop
 {
@@ -213,7 +214,19 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(EncryptButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
 
             set.Bind(EncryptionLabel).To(vm => vm.EncryptionText);
+
+            set.Bind(this).For(t => t.EncryptIconType).To(vm => vm.EncryptionText);
             set.Apply();
+        }
+
+        public string EncryptIconType
+        {
+            get => "";
+            set
+            {
+                var icon = value == new AnyoneWithTheLinkItem().Name ? "ic_world" : "ic_key";
+                EncryptIcon.Image = UIImage.FromBundle(icon);
+            }
         }
 
         private void MakeTitleTruncateFromMiddle()

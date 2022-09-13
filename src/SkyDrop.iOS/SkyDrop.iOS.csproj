@@ -258,6 +258,10 @@
     <ImageAsset Include="Media.xcassets\ic_tick.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_file_encrypted.imageset\file-lock.pdf" />
     <ImageAsset Include="Media.xcassets\ic_file_encrypted.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_world.imageset\earth.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_world.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_key.imageset\key.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_key.imageset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
