@@ -20,7 +20,7 @@ namespace SkyDrop.Core.Utility
     {
         public const float NavDotsMinAlpha = 0.2f;
         public const float NavDotsMaxAlpha = 0.8f;
-        
+
         public static string GetFileSizeString(long bytesCount)
         {
             string[] sizes = { "B", "KB", "MB", "GB", "TB" };
@@ -139,7 +139,7 @@ namespace SkyDrop.Core.Utility
             filename = filename.Substring(lastSlashIndex, filename.Length - lastSlashIndex);
             return Regex.Match(filename, @"\..*").Value;
         }
-        
+
         public static async Task<SaveType> GetSaveType(string filename)
         {
             if (!Util.CanDisplayPreview(filename))

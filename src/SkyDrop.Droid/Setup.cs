@@ -51,6 +51,7 @@ namespace SkyDrop.Droid
             registry.RegisterCustomBindingFactory<ImageView>(FileCategoryIconBinding.Name, view => new FileCategoryIconBinding(view));
             registry.RegisterCustomBindingFactory<ImageView>(IconBinding.Name, view => new IconBinding(view));
             registry.RegisterCustomBindingFactory<View>(PairingOverlayBinding.Name, view => new PairingOverlayBinding(view));
+            registry.RegisterCustomBindingFactory<ImageView>(EncryptIconBinding.Name, view => new EncryptIconBinding(view));
         }
 
         protected override void FillValueConverters(IMvxValueConverterRegistry registry)

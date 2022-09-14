@@ -412,20 +412,33 @@
             <!--encryption button-->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_margin="16dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:translationX="-16dp"
                 app:cardCornerRadius="8dp"
                 app:cardBackgroundColor="@color/primaryColor"
                 app:MvxBind="Click OpenContactsMenuCommand;Visibility Visibility(IsStagedFilesVisible)">
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textStyle="bold"
-                    android:text="Anyone with the link"
-                    android:textColor="#eee"
+                    android:layout_marginLeft="24dp"
                     android:padding="8dp"
-                    app:MvxBind="Text EncryptionText"/>
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_world"
+                        app:MvxBind="EncryptIcon EncryptionText"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:layout_gravity="center_vertical"
+                        android:textStyle="bold"
+                        android:text="Anyone with the link"
+                        android:textColor="#eee"
+                        app:MvxBind="Text EncryptionText"/>
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!--cancel button-->

@@ -100,6 +100,7 @@
     <Compile Include="Services\AndroidSaveToGalleryService.cs" />
     <Compile Include="Helper\QRScannerHelper.cs" />
     <Compile Include="Bindings\PairingOverlayBinding.cs" />
+    <Compile Include="Bindings\EncryptIconBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -504,6 +505,14 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\ic_file_encrypted.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_world.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_key.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>

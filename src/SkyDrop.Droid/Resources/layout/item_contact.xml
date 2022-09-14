@@ -31,10 +31,10 @@
                     <ImageView
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:src="@drawable/ic_cloud"
-                        app:MvxBind="FileCategoryIcon Name;Visibility InvertedVisibility(IsSelectionActive)"/>
+                        android:src="@drawable/ic_world"
+                        app:MvxBind="EncryptIcon Name;"/>
 
-                    <!--Selection Indicator-->
+                    <!--Selection Indicator
                     <androidx.cardview.widget.CardView
                         android:layout_width="32dp"
                         android:layout_height="32dp"
@@ -49,23 +49,7 @@
                             app:cardBackgroundColor="#fff"
                             app:MvxBind="Visibility Visibility(IsSelected)"/>
         
-                    </androidx.cardview.widget.CardView>
-
-                    <!--Saving File Indicator-->
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        app:cardCornerRadius="16dp"
-                        app:MvxBind="Visibility Visibility(IsLoading);CardBackgroundColor FillColor">
-                        <!--
-                        <ProgressBar
-                            android:id="@+id/ProgressBar"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center"
-                            android:progressTint="#eee"/>
-                        -->
-                    </androidx.cardview.widget.CardView>
+                    </androidx.cardview.widget.CardView>-->
                 </FrameLayout>
                 <TextView
                     android:layout_width="0px"

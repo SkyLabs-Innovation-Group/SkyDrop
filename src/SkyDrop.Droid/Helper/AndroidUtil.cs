@@ -282,5 +282,11 @@ namespace SkyDrop.Droid.Helper
                 log.Exception(ex);
             }
         }
+
+        public static void SetLocalImage(this ImageView target, string drawableName)
+        {
+            var res = target.Context.Resources.GetIdentifier(drawableName, "drawable", target.Context.PackageName);
+            target.SetImageResource(res);
+        }
     }
 }
