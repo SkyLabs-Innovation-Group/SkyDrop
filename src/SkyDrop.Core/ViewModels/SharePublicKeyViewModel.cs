@@ -43,7 +43,7 @@ namespace SkyDrop.Core.ViewModels
             IEncryptionService encryptionService,
             ILog log) : base(singletonService)
         {
-            Title = "Public Key";
+            Title = "Pair Devices";
 
             this.barcodeService = barcodeService;
             this.encryptionService = encryptionService;
