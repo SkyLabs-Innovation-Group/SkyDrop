@@ -30,6 +30,8 @@ namespace SkyDrop.iOS.Views.Contacts
         {
             base.ViewDidLoad();
 
+            AddBackButton(() => ViewModel.Close());
+
             ViewModel.RefreshBarcodeCommand = new MvxAsyncCommand(ShowBarcode);
             ViewModel.HideKeyboardCommand = new MvxCommand(() => View.EndEditing(true));
             ViewModel.StopScanningCommand = new MvxCommand(StopScanning);

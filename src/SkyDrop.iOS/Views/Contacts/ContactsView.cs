@@ -22,6 +22,8 @@ namespace SkyDrop.iOS.Views.Certificates
 		{
 			base.ViewDidLoad();
 
+			AddBackButton(() => ViewModel.Close());
+
 			PreferredContentSize = new CGSize(300, 300);
 
 			ContactsTableView.BackgroundColor = Colors.DarkGrey.ToNative();
