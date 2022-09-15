@@ -25,6 +25,12 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView CancelButton { get; set; }
 
 		[Outlet]
+		UIKit.UIImageView CancelIcon { get; set; }
+
+		[Outlet]
+		UIKit.UILabel CancelLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIView CopyLinkButton { get; set; }
 
 		[Outlet]
@@ -119,9 +125,14 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (EncryptIcon != null) {
-				EncryptIcon.Dispose ();
-				EncryptIcon = null;
+			if (CancelLabel != null) {
+				CancelLabel.Dispose ();
+				CancelLabel = null;
+			}
+
+			if (CancelIcon != null) {
+				CancelIcon.Dispose ();
+				CancelIcon = null;
 			}
 
 			if (BarcodeContainer != null) {
@@ -167,6 +178,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (EncryptButton != null) {
 				EncryptButton.Dispose ();
 				EncryptButton = null;
+			}
+
+			if (EncryptIcon != null) {
+				EncryptIcon.Dispose ();
+				EncryptIcon = null;
 			}
 
 			if (EncryptionLabel != null) {

@@ -105,8 +105,10 @@ namespace SkyDrop.iOS.Views.Drop
                 NavigationItem.RightBarButtonItem = settingsButton;
                 NavigationItem.RightBarButtonItem.TintColor = UIColor.White;
 
-                CancelButton.BackgroundColor = Colors.GradientOcean.ToNative();
-                CancelButton.Layer.CornerRadius = 32;
+                CancelButton.BackgroundColor = Colors.MidGrey.ToNative();
+                CancelButton.Layer.CornerRadius = 8;
+                CancelIcon.TintColor = Colors.Red.ToNative();
+                CancelLabel.TextColor = Colors.Red.ToNative();
 
                 SendButton.BackgroundColor = Colors.Primary.ToNative();
                 ReceiveButton.BackgroundColor = Colors.GradientOcean.ToNative();
