@@ -102,6 +102,9 @@ namespace SkyDrop.Core.Services
             var response = await httpClient.GetAsync(url);
             
             var fileName = GetFilenameFromResponse(response);
+            if (fileName == null)
+                throw new Exception("Filename cannot be null");
+
             if (fileName.ExtensionMatches(".skydrop"))
             {
                 //save encrypted file

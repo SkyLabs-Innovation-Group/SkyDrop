@@ -23,13 +23,13 @@ namespace SkyDrop.Droid.Bindings
             switch(value)
             {
                 case AddContactResult.Default:
+                case AddContactResult.InvalidKey:
+                case AddContactResult.WrongDevice:
                     Target.Visibility = ViewStates.Gone;
                     break;
                 case AddContactResult.DevicesPaired:
                 case AddContactResult.ContactAdded:
-                case AddContactResult.InvalidKey:
                 case AddContactResult.AlreadyExists:
-                case AddContactResult.WrongDevice:
                     Target.Visibility = ViewStates.Visible;
                     break;
             }

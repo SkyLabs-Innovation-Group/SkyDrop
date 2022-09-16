@@ -10,6 +10,8 @@ namespace SkyDrop.Core.RealmObjects
 		public string PublicKeyBase64 { get; set; }
 
 		public string Id { get; set; }
+
+		public string Name { get; set; }
 	}
 }
 

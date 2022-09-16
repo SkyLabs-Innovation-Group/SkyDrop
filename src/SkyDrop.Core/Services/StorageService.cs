@@ -210,7 +210,7 @@ namespace SkyDrop.Core.Services
             return realm.All<EncryptionKeyPairRealmObject>().FirstOrDefault();
         }
 
-        public void SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id)
+        public void SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id, string deviceName)
         {
             var privateBytes = privateKey.GetEncoded();
             var privateKeyString = Convert.ToBase64String(privateBytes);
@@ -222,7 +222,8 @@ namespace SkyDrop.Core.Services
             {
                 PrivateKeyBase64 = privateKeyString,
                 PublicKeyBase64 = publicKeyString,
-                Id = id.ToString()
+                Id = id.ToString(),
+                Name = deviceName
             };
 
             realm.Write(() =>
@@ -336,7 +337,7 @@ namespace SkyDrop.Core.Services
 
         void DeleteContact(Contact contact);
 
-        void SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id);
+        void SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id, string deviceName);
 
         EncryptionKeyPairRealmObject GetMyEncryptionKeys();
     }

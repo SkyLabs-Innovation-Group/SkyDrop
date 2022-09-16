@@ -65,6 +65,8 @@ namespace SkyDrop.Core.Services
         private X25519PrivateKeyParameters myPrivateKey;
         private X25519PublicKeyParameters myPublicKey;
         private Guid myId;
+        private string myName;
+        private Contact myContact => new Contact { Id = myId, PublicKey = myPublicKey, Name = myName };
         private readonly SecureRandom random = new SecureRandom();
         private const int guidSizeBytes = 16;
 
@@ -104,6 +106,9 @@ namespace SkyDrop.Core.Services
         {
             return Task.Run(() =>
             {
+                //allow sender to decrypt their own files
+                recipients.Add(myContact); 
+
                 //generate random encryption key
                 var encryptionKey = GenerateEncryptionKey(); //32 bytes
 
@@ -114,9 +119,9 @@ namespace SkyDrop.Core.Services
                 var fileNameBytes = GetFileNameAsBytes(filePath);
                 if (fileNameBytes.Length > ushort.MaxValue)
                     throw new Exception("Filename is too long");
-
+                
                 ushort fileNameLength = (ushort)fileNameBytes.Length;
-                var fileNameLengthBytes = new byte[2];
+                var fileNameLengthBytes = new byte[2]; //these two byes indicate the filename length
                 BinaryPrimitives.WriteUInt16BigEndian(fileNameLengthBytes, fileNameLength);
                 contentBytes = Combine(fileNameLengthBytes, fileNameBytes, contentBytes);
 
@@ -231,15 +236,15 @@ namespace SkyDrop.Core.Services
                 throw new Exception("You are not a valid recipient of this encrypted file");
 
             //check if user recognises the sender
-            var sender = GetContactWithId(metaData.SenderId);
-            if (sender == null)
+            var senderPublicKey = GetSenderPublicKey(metaData.SenderId, myContact);
+            if (senderPublicKey == null)
                 throw new Exception("The sender of this file is not recognised");
 
             //find the right key
             var myKeyEncrypted = metaData.RecipientKeys[myId];
 
             //decrypt the key
-            var sharedSecret = GetSharedSecret(myPrivateKey, sender.PublicKey);
+            var sharedSecret = GetSharedSecret(myPrivateKey, senderPublicKey);
             var keyPlainTextPadded = Decrypt(sharedSecret, myKeyEncrypted); //we only want the first 32 bytes of this 64 byte array
             var keyPlainText = keyPlainTextPadded.Take(32).ToArray();
 
@@ -252,10 +257,15 @@ namespace SkyDrop.Core.Services
             return (fileName, file);
         }
 
-        private Contact GetContactWithId(Guid id)
+        private X25519PublicKeyParameters GetSenderPublicKey(Guid id, Contact myContact)
         {
+            //if I sent this file, decrypt using my own public key
+            if (id == myContact.Id)
+                return myContact.PublicKey;
+
+            //if someone else sent this file, decrypt using their public key
             var contacts = storageService.LoadContacts();
-            return contacts.FirstOrDefault(c => c.Id == id);
+            return contacts.FirstOrDefault(c => c.Id == id)?.PublicKey;
         }
 
         private (X25519PublicKeyParameters key, Guid keyId, Guid justScannedId) DecodePublicKey(string publicKeyEncoded)
@@ -313,8 +323,11 @@ namespace SkyDrop.Core.Services
                 random.NextBytes(randomIdBytes);
                 myId = new Guid(randomIdBytes);
 
+                //generate a device name
+                var deviceName = Xamarin.Essentials.DeviceInfo.Name;
+
                 (myPrivateKey, myPublicKey) = GenerateKeyPair();
-                storageService.SaveMyEncryptionKeys(myPrivateKey, myPublicKey, myId);
+                storageService.SaveMyEncryptionKeys(myPrivateKey, myPublicKey, myId, deviceName);
 
                 return;
             }
@@ -322,6 +335,7 @@ namespace SkyDrop.Core.Services
             myPrivateKey = new X25519PrivateKeyParameters(Convert.FromBase64String(keys.PrivateKeyBase64));
             myPublicKey = new X25519PublicKeyParameters(Convert.FromBase64String(keys.PublicKeyBase64));
             myId = new Guid(keys.Id);
+            myName = keys.Name;
         }
 
         private byte[] Encrypt(byte[] key, byte[] plainTextBytes)
