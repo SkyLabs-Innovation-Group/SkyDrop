@@ -45,8 +45,8 @@ namespace SkyDrop.iOS.Views.Contacts
 			get => null;
 			set
 			{
-				//show multiple contacts icon on first cell
-				var icon = value is AnyoneWithTheLinkItem ? "ic_user_multiple" : "ic_user";
+				//show world icon on first cell
+				var icon = value is AnyoneWithTheLinkItem ? "ic_world" : "ic_key";
 				Icon.Image = UIImage.FromBundle(icon);
 
 				//hide delete button for top item

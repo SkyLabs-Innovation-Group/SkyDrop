@@ -334,10 +334,10 @@ namespace SkyDrop.Core.Services
                 myId = new Guid(randomIdBytes);
 
                 //generate a device name
-                var deviceName = Xamarin.Essentials.DeviceInfo.Name;
+                myName = RemoveNonAsciiChars(Xamarin.Essentials.DeviceInfo.Name);
 
                 (myPrivateKey, myPublicKey) = GenerateKeyPair();
-                storageService.SaveMyEncryptionKeys(myPrivateKey, myPublicKey, myId, deviceName);
+                storageService.SaveMyEncryptionKeys(myPrivateKey, myPublicKey, myId, myName);
 
                 return;
             }

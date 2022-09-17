@@ -49,7 +49,7 @@
                     android:layout_height="32dp"
                     android:layout_margin="8dp"
                     android:src="@drawable/ic_bin"
-                    app:MvxBind="Click DeleteCommand"/>
+                    app:MvxBind="Click DeleteCommand;ContactsDeleteVisibility ."/>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
