@@ -16,9 +16,6 @@ namespace SkyDrop.iOS.Views.Contacts
 		UIKit.UIImageView BarcodeImage { get; set; }
 
 		[Outlet]
-		UIKit.UITextField NameInput { get; set; }
-
-		[Outlet]
 		UIKit.UIView ScannerContainer { get; set; }
 
 		[Outlet]
@@ -29,11 +26,6 @@ namespace SkyDrop.iOS.Views.Contacts
 			if (BarcodeImage != null) {
 				BarcodeImage.Dispose ();
 				BarcodeImage = null;
-			}
-
-			if (NameInput != null) {
-				NameInput.Dispose ();
-				NameInput = null;
 			}
 
 			if (ScannerContainer != null) {

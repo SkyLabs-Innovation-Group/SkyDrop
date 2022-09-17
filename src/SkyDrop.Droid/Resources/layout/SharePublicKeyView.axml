@@ -20,8 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal|top"
-            android:padding="16dp"
-            app:MvxBind="Visibility InvertedVisibility(IsNameInputVisible)">
+            android:padding="16dp">
             <!--Scanner-->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/ScannerContainer"
@@ -86,30 +85,5 @@
                     android:layout_gravity="center"/>
             </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="16dp"
-            app:MvxBind="VisibleHidden IsNameInputVisible">
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textColorHint="@color/lightGrey"
-                android:layout_centerVertical="true"
-                android:hint="Contact name"
-                app:MvxBind="Text ContactName"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="16dp"
-                android:background="@color/midGrey"
-                android:textColor="@color/lightGrey"
-                android:text="Next"
-                app:MvxBind="Click ConfirmContactNameCommand;Visibility Visibility(IsNextButtonVisible)"/>
-        </RelativeLayout>
     </FrameLayout>
 </LinearLayout>

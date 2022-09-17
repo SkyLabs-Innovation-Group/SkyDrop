@@ -101,6 +101,7 @@
     <Compile Include="Helper\QRScannerHelper.cs" />
     <Compile Include="Bindings\PairingOverlayBinding.cs" />
     <Compile Include="Bindings\EncryptIconBinding.cs" />
+    <Compile Include="Bindings\ContactsDeleteVisibilityBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">

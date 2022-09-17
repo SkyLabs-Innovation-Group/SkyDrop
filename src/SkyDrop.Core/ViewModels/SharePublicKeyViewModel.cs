@@ -19,12 +19,7 @@ namespace SkyDrop.Core.ViewModels
         public AddContactResult AddContactResult { get; set; }
         public IMvxCommand BackCommand { get; set; }
         public IMvxCommand RefreshBarcodeCommand { get; set; }
-        public IMvxCommand ConfirmContactNameCommand { get; set; }
-        public IMvxCommand HideKeyboardCommand { get; set; }
         public IMvxCommand StopScanningCommand { get; set; }
-        public bool IsNameInputVisible { get; set; } = true;
-        public string ContactName { get; set; }
-        public bool IsNextButtonVisible => IsNameInputVisible && !ContactName.IsNullOrWhiteSpace();
         public string HintText => GetHintText(AddContactResult);
         public string ContactSavedName { get; set; }
 
@@ -50,7 +45,6 @@ namespace SkyDrop.Core.ViewModels
             this.navigationService = navigationService;
 
             BackCommand = new MvxCommand(() => navigationService.Close(this));
-            ConfirmContactNameCommand = new MvxCommand(ConfirmContactName);
         }
 
         public BitMatrix GenerateBarcode(int width, int height)
@@ -78,7 +72,7 @@ namespace SkyDrop.Core.ViewModels
                     return;
 
                 isBusy = true;
-                (AddContactResult, justScannedId, ContactSavedName) = encryptionService.AddPublicKey(barcodeData, ContactName);
+                (AddContactResult, justScannedId, ContactSavedName) = encryptionService.AddPublicKey(barcodeData);
                 isBusy = false;
 
                 if (AddContactResult == AddContactResult.ContactAdded || AddContactResult == AddContactResult.DevicesPaired || AddContactResult == AddContactResult.AlreadyExists)
@@ -90,13 +84,6 @@ namespace SkyDrop.Core.ViewModels
             {
                 Log.Exception(e);
             }
-        }
-
-        private void ConfirmContactName()
-        {
-            HideKeyboardCommand?.Execute(); //hide keyboard first to avoid issues on Android
-            IsNameInputVisible = false;
-            RefreshBarcodeCommand.Execute();
         }
 
         public string GetHintText(AddContactResult result) => result switch

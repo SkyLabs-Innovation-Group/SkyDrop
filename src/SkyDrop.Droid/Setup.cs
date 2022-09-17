@@ -52,6 +52,7 @@ namespace SkyDrop.Droid
             registry.RegisterCustomBindingFactory<ImageView>(IconBinding.Name, view => new IconBinding(view));
             registry.RegisterCustomBindingFactory<View>(PairingOverlayBinding.Name, view => new PairingOverlayBinding(view));
             registry.RegisterCustomBindingFactory<ImageView>(EncryptIconBinding.Name, view => new EncryptIconBinding(view));
+            registry.RegisterCustomBindingFactory<View>(ContactsDeleteVisibilityBinding.Name, view => new ContactsDeleteVisibilityBinding(view));
         }
 
         protected override void FillValueConverters(IMvxValueConverterRegistry registry)

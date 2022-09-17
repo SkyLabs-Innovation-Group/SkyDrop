@@ -35,12 +35,12 @@ namespace SkyDrop.Droid.Views.Main
             base.OnCreate(bundle);
 
             ViewModel.RefreshBarcodeCommand = new MvxAsyncCommand(ShowBarcode);
-            ViewModel.HideKeyboardCommand = new MvxCommand(this.HideKeyboard);
             ViewModel.StopScanningCommand = new MvxCommand(StopScanning);
 
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
 
             ShowScanner();
+            ShowBarcode();
         }
 
         protected override void Dispose(bool disposing)

@@ -26,6 +26,8 @@ namespace SkyDrop.Core.Services
 {
     /// <summary>
     /// A public key QR code contains this data format:
+    /// nameLength [2 bytes]
+    /// name [nameLength bytes]
     /// myId [16 bytes]
     /// justScannedId [16 bytes]
     /// publicKey [32 bytes]
@@ -95,10 +97,14 @@ namespace SkyDrop.Core.Services
 
         public string GetMyPublicKeyWithId(Guid justScannedId)
         {
+            var nameBytes = Encoding.ASCII.GetBytes(myName);
+            ushort nameLength = (ushort)nameBytes.Length;
+            var nameLengthBytes = new byte[2]; //these two byes indicate the name length
+            BinaryPrimitives.WriteUInt16BigEndian(nameLengthBytes, nameLength);
             var myIdBytes = myId.ToByteArray();
             var justScannedIdBytes = justScannedId.ToByteArray();
             var keyBytes = myPublicKey.GetEncoded();
-            var publicKeyWithId = Util.Combine(myIdBytes, justScannedIdBytes, keyBytes);
+            var publicKeyWithId = Util.Combine(nameLengthBytes, nameBytes, myIdBytes, justScannedIdBytes, keyBytes);
             return Convert.ToBase64String(publicKeyWithId);
         }
 
@@ -165,9 +171,9 @@ namespace SkyDrop.Core.Services
             });
         }
 
-        public (AddContactResult result, Guid newContactId, string existingContactSavedName) AddPublicKey(string publicKeyEncoded, string contactName)
+        public (AddContactResult result, Guid newContactId, string existingContactSavedName) AddPublicKey(string publicKeyEncoded)
         {
-            var (publicKey, keyId, justScannedId) = DecodePublicKey(publicKeyEncoded);
+            var (publicKey, keyId, justScannedId, contactName) = DecodePublicKey(publicKeyEncoded);
             if (publicKey == null)
             {
                 userDialogs.Alert("Invalid key");
@@ -268,21 +274,25 @@ namespace SkyDrop.Core.Services
             return contacts.FirstOrDefault(c => c.Id == id)?.PublicKey;
         }
 
-        private (X25519PublicKeyParameters key, Guid keyId, Guid justScannedId) DecodePublicKey(string publicKeyEncoded)
+        private (X25519PublicKeyParameters key, Guid keyId, Guid justScannedId, string name) DecodePublicKey(string publicKeyEncoded)
         {
             try
-            { 
+            {
                 var bytes = Convert.FromBase64String(publicKeyEncoded);
-                var keyId = new Guid(bytes.Take(guidSizeBytes).ToArray());
-                var justScannedId = new Guid(bytes.Skip(guidSizeBytes).Take(guidSizeBytes).ToArray());
-                var keyBytes = bytes.Skip(guidSizeBytes).Skip(guidSizeBytes).ToArray();
+
+                var nameLength = BinaryPrimitives.ReadUInt16BigEndian(bytes.Take(2).ToArray());
+                var name = Encoding.ASCII.GetString(bytes.Skip(2).Take(nameLength).ToArray());
+
+                var keyId = new Guid(bytes.Skip(2).Skip(nameLength).Take(guidSizeBytes).ToArray());
+                var justScannedId = new Guid(bytes.Skip(2).Skip(nameLength).Skip(guidSizeBytes).Take(guidSizeBytes).ToArray());
+                var keyBytes = bytes.Skip(2).Skip(nameLength).Skip(guidSizeBytes).Skip(guidSizeBytes).ToArray();
                 var publicKey = new X25519PublicKeyParameters(keyBytes);
                 var sharedSecret = GetSharedSecret(myPrivateKey, publicKey);
-                return (publicKey, keyId, justScannedId);
+                return (publicKey, keyId, justScannedId, name);
             }
             catch(Exception e)
             {
-                return (null, default, default);
+                return (null, default, default, null);
             }
         }
 
@@ -407,7 +417,7 @@ namespace SkyDrop.Core.Services
         /// <returns></returns>
         string GetMyPublicKeyWithId(Guid justScannedId);
 
-        (AddContactResult result, Guid newContactId, string existingContactSavedName) AddPublicKey(string publicKeyEncoded, string contactName);
+        (AddContactResult result, Guid newContactId, string existingContactSavedName) AddPublicKey(string publicKeyEncoded);
 
         Task<string> EncodeFileFor(string filePath, List<Contact> recipients);
 

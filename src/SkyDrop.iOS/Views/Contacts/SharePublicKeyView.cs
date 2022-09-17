@@ -33,26 +33,14 @@ namespace SkyDrop.iOS.Views.Contacts
             AddBackButton(() => ViewModel.Close());
 
             ViewModel.RefreshBarcodeCommand = new MvxAsyncCommand(ShowBarcode);
-            ViewModel.HideKeyboardCommand = new MvxCommand(() => View.EndEditing(true));
             ViewModel.StopScanningCommand = new MvxCommand(StopScanning);
 
             View.BackgroundColor = Colors.DarkGrey.ToNative();
             ScannerOverlay.BackgroundColor = Colors.Primary.ToNative();
             ShowScanner();
-
-            NameInput.Placeholder = "Contact name";
-            nextButton = new UIBarButtonItem("Next", UIBarButtonItemStyle.Plain, (s, e) =>
-            {
-                ViewModel.ConfirmContactNameCommand.Execute();
-            });
+            ShowBarcode();
 
             var set = CreateBindingSet();
-            set.Bind(ScannerContainer).For(a => a.Hidden).To(vm => vm.IsNameInputVisible);
-            set.Bind(BarcodeImage).For(a => a.Hidden).To(vm => vm.IsNameInputVisible);
-            set.Bind(NameInput).For("Visible").To(vm => vm.IsNameInputVisible);
-            set.Bind(NameInput).For(c => c.Text).To(vm => vm.ContactName);
-
-            set.Bind(this).For(t => t.NextButtonVisibility).To(vm => vm.IsNextButtonVisible);
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Bind(this).For(t => t.AddContactResult).To(vm => vm.AddContactResult);
             set.Apply();
@@ -116,15 +104,6 @@ namespace SkyDrop.iOS.Views.Contacts
                 var overlayVisible = value == AddContactResult.ContactAdded || value == AddContactResult.AlreadyExists || value == AddContactResult.DevicesPaired;
                 ScannerOverlay.Hidden = !overlayVisible;
                 ScannerContainer.BringSubviewToFront(ScannerOverlay);
-            }
-        }
-
-        public bool NextButtonVisibility
-        {
-            get => false;
-            set
-            {
-                NavigationItem.RightBarButtonItem = value ? nextButton : null;
             }
         }
 

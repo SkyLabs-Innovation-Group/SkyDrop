@@ -11,7 +11,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SharePublicKeyView">
             <connections>
                 <outlet property="BarcodeImage" destination="UE5-Ad-uTR" id="BUB-tB-lsf"/>
-                <outlet property="NameInput" destination="VhK-gf-rvI" id="D5H-vm-bN4"/>
                 <outlet property="ScannerContainer" destination="40H-WC-hCN" id="5on-3L-iwv"/>
                 <outlet property="ScannerOverlay" destination="co5-JP-3oc" id="MFk-t2-xIY"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
@@ -88,37 +87,15 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BBw-yw-pli" userLabel="Name Input Container">
-                    <rect key="frame" x="0.0" y="60" width="414" height="70.5"/>
-                    <subviews>
-                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VhK-gf-rvI">
-                            <rect key="frame" x="16" y="16" width="382" height="38.5"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                            <textInputTraits key="textInputTraits"/>
-                        </textField>
-                    </subviews>
-                    <constraints>
-                        <constraint firstItem="VhK-gf-rvI" firstAttribute="centerY" secondItem="BBw-yw-pli" secondAttribute="centerY" id="JLe-or-Ikg"/>
-                        <constraint firstAttribute="bottom" secondItem="VhK-gf-rvI" secondAttribute="bottom" constant="16" id="Z9F-Zj-0m1"/>
-                        <constraint firstAttribute="trailing" secondItem="VhK-gf-rvI" secondAttribute="trailing" constant="16" id="Zqp-JY-HkA"/>
-                        <constraint firstItem="VhK-gf-rvI" firstAttribute="leading" secondItem="BBw-yw-pli" secondAttribute="leading" constant="16" id="cgJ-EJ-z9g"/>
-                        <constraint firstItem="VhK-gf-rvI" firstAttribute="top" secondItem="BBw-yw-pli" secondAttribute="top" constant="16" id="wnc-cP-BnT"/>
-                    </constraints>
-                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="ayI-tS-9Td" firstAttribute="top" secondItem="40H-WC-hCN" secondAttribute="bottom" constant="16" id="3kD-8C-oIg"/>
-                <constraint firstAttribute="trailing" secondItem="BBw-yw-pli" secondAttribute="trailing" id="Ecd-m1-MBy"/>
-                <constraint firstItem="BBw-yw-pli" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="Ejg-RH-3wx"/>
                 <constraint firstItem="ayI-tS-9Td" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="Hqc-dv-gGE"/>
                 <constraint firstAttribute="bottom" secondItem="ayI-tS-9Td" secondAttribute="bottom" constant="16" id="YVv-ua-gUy"/>
                 <constraint firstItem="40H-WC-hCN" firstAttribute="top" secondItem="2" secondAttribute="topMargin" constant="16" id="dLa-nT-Qdh"/>
                 <constraint firstItem="40H-WC-hCN" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="iUP-0F-BZc"/>
                 <constraint firstItem="ayI-tS-9Td" firstAttribute="height" secondItem="40H-WC-hCN" secondAttribute="height" id="jGD-4h-nAq"/>
-                <constraint firstItem="BBw-yw-pli" firstAttribute="top" secondItem="2" secondAttribute="topMargin" constant="16" id="nFy-Xp-VjV"/>
             </constraints>
             <point key="canvasLocation" x="91.304347826086968" y="16.741071428571427"/>
         </view>
