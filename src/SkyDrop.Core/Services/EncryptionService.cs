@@ -334,7 +334,9 @@ namespace SkyDrop.Core.Services
                 myId = new Guid(randomIdBytes);
 
                 //generate a device name
+                var nameMaxLength = 48;
                 myName = RemoveNonAsciiChars(Xamarin.Essentials.DeviceInfo.Name);
+                myName = myName.Substring(0, Math.Min(nameMaxLength, myName.Length));
 
                 (myPrivateKey, myPublicKey) = GenerateKeyPair();
                 storageService.SaveMyEncryptionKeys(myPrivateKey, myPublicKey, myId, myName);
