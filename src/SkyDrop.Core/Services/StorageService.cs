@@ -205,6 +205,19 @@ namespace SkyDrop.Core.Services
             });
         }
 
+        public void UpdateDeviceName(string name)
+        {
+            var keysObj = realm.All<EncryptionKeyPairRealmObject>().FirstOrDefault();
+            if (keysObj == null)
+                throw new Exception("Keys object cannot be null");
+
+            realm.Write(() =>
+            {
+                keysObj.Name = name;
+                realm.Add(keysObj);
+            });
+        }
+
         public EncryptionKeyPairRealmObject GetMyEncryptionKeys()
         {
             return realm.All<EncryptionKeyPairRealmObject>().FirstOrDefault();
@@ -340,5 +353,7 @@ namespace SkyDrop.Core.Services
         void SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id, string deviceName);
 
         EncryptionKeyPairRealmObject GetMyEncryptionKeys();
+
+        void UpdateDeviceName(string name);
     }
 }

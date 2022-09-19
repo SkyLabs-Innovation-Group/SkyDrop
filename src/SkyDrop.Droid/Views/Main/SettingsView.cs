@@ -3,6 +3,7 @@ using Android.OS;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
+using MvvmCross.Commands;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.ViewModels;
 using SkyDrop.Droid.Helper;
@@ -23,6 +24,8 @@ namespace SkyDrop.Droid.Views.Main
         {
             base.OnCreate(savedInstanceState);
             BindViews();
+
+            ViewModel.CloseKeyboardCommand = new MvxCommand(() => this.HideKeyboard());
 
             portalEditText.Text = SkynetPortal.SelectedPortal.ToString();
             saveButton.Click += async (s, e) =>

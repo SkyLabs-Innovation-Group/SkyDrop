@@ -203,6 +203,21 @@ namespace SkyDrop.Core.Services
             return (addContactResult, newContact.Id, null);
         }
 
+        public void UpdateDeviceName(string newDeviceName)
+        {
+            //generate a device name
+            var nameMaxLength = 48;
+            myName = RemoveNonAsciiChars(newDeviceName);
+            myName = myName.Substring(0, Math.Min(nameMaxLength, myName.Length));
+            storageService.UpdateDeviceName(myName);
+            userDialogs.Toast("Name updated");
+        }
+
+        public string GetDeviceName()
+        {
+            return myName;
+        }
+
         private byte[] GenerateMetaDataForFile(List<Contact> recipients, byte[] encryptionKey)
         {
             if (recipients.Count > ushort.MaxValue)
@@ -424,6 +439,10 @@ namespace SkyDrop.Core.Services
         Task<string> EncodeFileFor(string filePath, List<Contact> recipients);
 
         Task<string> DecodeFile(string filePath);
+
+        void UpdateDeviceName(string nameDeviceName);
+
+        string GetDeviceName();
     }
 }
 

@@ -102,6 +102,7 @@
     <Compile Include="Bindings\PairingOverlayBinding.cs" />
     <Compile Include="Bindings\EncryptIconBinding.cs" />
     <Compile Include="Bindings\ContactsDeleteVisibilityBinding.cs" />
+    <Compile Include="Bindings\ButtonClickBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">

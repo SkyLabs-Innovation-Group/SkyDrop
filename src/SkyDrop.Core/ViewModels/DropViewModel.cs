@@ -94,7 +94,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile FocusedFile { get; set; } //most recently sent or received file
-        public string FocusedFileUrl => FocusedFile.GetSkylinkUrl();
+        public string FocusedFileUrl => FocusedFile?.GetSkylinkUrl();
         public SkyFile FileToUpload { get; set; }
 
         private DropViewState _dropViewUIState;
