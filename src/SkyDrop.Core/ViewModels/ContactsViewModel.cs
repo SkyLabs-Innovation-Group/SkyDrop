@@ -14,7 +14,10 @@ namespace SkyDrop.Core.ViewModels
 {
     public class ContactsViewModel : BaseViewModel<NavParam, IContactItem>
     {
-        public class NavParam { }
+        public class NavParam
+        {
+            public bool IsSelecting { get; set; }
+        }
 
         public List<IContactItem> Contacts { get; set; }
         public IMvxCommand SharePublicKeyCommand { get; set; }
@@ -30,6 +33,8 @@ namespace SkyDrop.Core.ViewModels
         private readonly IShareLinkService shareLinkService;
         private readonly IUploadTimerService uploadTimerService;
         private readonly IEncryptionService encryptionService;
+
+        private bool isSelecting;
 
         public ContactsViewModel(ISingletonService singletonService,
             IApiService apiService,
@@ -70,13 +75,16 @@ namespace SkyDrop.Core.ViewModels
         private void LoadCertificates()
         {
             var newContacts = storageService.LoadContacts().Select(GetContactDVM).ToList();
-            var anyoneWithTheLinkItem = new AnyoneWithTheLinkItem();
-            anyoneWithTheLinkItem.TapCommand = new MvxCommand(() => ItemSelected(anyoneWithTheLinkItem));
-
             if (newContacts == null || newContacts.Count == 0)
+            {
                 IsNoContacts = true;
-            else 
+            }
+            else if (isSelecting)
+            {
+                var anyoneWithTheLinkItem = new AnyoneWithTheLinkItem();
+                anyoneWithTheLinkItem.TapCommand = new MvxCommand(() => ItemSelected(anyoneWithTheLinkItem));
                 newContacts.Insert(0, anyoneWithTheLinkItem);
+            }
 
             Contacts = newContacts;
 
@@ -87,8 +95,9 @@ namespace SkyDrop.Core.ViewModels
         public IContactItem GetContactDVM(Contact contact)
         {
             var contactItem = new ContactDVM { Contact = contact };
-            contactItem.TapCommand = new MvxCommand(() => ItemSelected(contactItem));
             contactItem.DeleteCommand = new MvxAsyncCommand(async () => await DeleteContact(contactItem));
+            if (isSelecting)
+                contactItem.TapCommand = new MvxCommand(() => ItemSelected(contactItem));
             return contactItem;
         }
 
@@ -116,7 +125,7 @@ namespace SkyDrop.Core.ViewModels
 
         public override void Prepare(NavParam parameter)
         {
-
+            isSelecting = parameter.IsSelecting;
         }
 
         public void Close()

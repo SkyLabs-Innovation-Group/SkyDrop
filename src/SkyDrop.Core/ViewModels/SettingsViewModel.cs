@@ -147,7 +147,7 @@ namespace SkyDrop.Core.ViewModels
 
         private void NavigateToContacts()
         {
-            navigationService.Navigate<ContactsViewModel>();
+            navigationService.Navigate<ContactsViewModel, ContactsViewModel.NavParam>(new ContactsViewModel.NavParam { IsSelecting = false });
         }
 
         private void SetDeviceName()

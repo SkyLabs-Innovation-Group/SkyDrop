@@ -948,7 +948,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task OpenContactsMenu()
         {
-            var item = await navigationService.Navigate<ContactsViewModel, IContactItem>();
+            var item = await navigationService.Navigate<ContactsViewModel, ContactsViewModel.NavParam, IContactItem>(new ContactsViewModel.NavParam { IsSelecting = true });
             if (item == null)
                 return; //user tapped back button
 
