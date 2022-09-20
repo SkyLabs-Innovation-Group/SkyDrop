@@ -39,7 +39,7 @@ namespace SkyDrop.Core.ViewModels
             this.navigationService = navigationService;
             this.encryptionService = encryptionService;
 
-            Title = "Advanced settings";
+            Title = "Settings";
 
             BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
             NavigateToContactsCommand = new MvxCommand(NavigateToContacts);

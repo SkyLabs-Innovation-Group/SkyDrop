@@ -19,19 +19,35 @@ namespace SkyDrop.iOS.Views.Settings
 		UIKit.UISwitch EnableUploadNotificationsSwitch { get; set; }
 
 		[Outlet]
+		UIKit.UITextView NameTextView { get; set; }
+
+		[Outlet]
 		UIKit.UITextView PortalTextView { get; set; }
 
 		[Outlet]
 		UIKit.UIButton SavePortalButton { get; set; }
 
 		[Outlet]
+		UIKit.UIButton SetNameButton { get; set; }
+
+		[Outlet]
 		UIKit.UILabel SetPortalLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (ContactsButton != null) {
+				ContactsButton.Dispose ();
+				ContactsButton = null;
+			}
+
 			if (EnableUploadNotificationsSwitch != null) {
 				EnableUploadNotificationsSwitch.Dispose ();
 				EnableUploadNotificationsSwitch = null;
+			}
+
+			if (NameTextView != null) {
+				NameTextView.Dispose ();
+				NameTextView = null;
 			}
 
 			if (PortalTextView != null) {
@@ -44,14 +60,14 @@ namespace SkyDrop.iOS.Views.Settings
 				SavePortalButton = null;
 			}
 
+			if (SetNameButton != null) {
+				SetNameButton.Dispose ();
+				SetNameButton = null;
+			}
+
 			if (SetPortalLabel != null) {
 				SetPortalLabel.Dispose ();
 				SetPortalLabel = null;
-			}
-
-			if (ContactsButton != null) {
-				ContactsButton.Dispose ();
-				ContactsButton = null;
 			}
 		}
 	}

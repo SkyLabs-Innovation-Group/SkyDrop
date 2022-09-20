@@ -20,10 +20,10 @@ namespace SkyDrop.iOS.Views
         {
             base.ViewDidLoad();
 
-			Init();
+            Initialize();
 		}
 
-        private void Init()
+        private void Initialize()
         {
 			//setup nav bar
 			NavigationController.NavigationBar.TintColor = UIColor.White;
