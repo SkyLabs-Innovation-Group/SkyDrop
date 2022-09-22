@@ -11,8 +11,10 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SharePublicKeyView">
             <connections>
                 <outlet property="BarcodeImage" destination="UE5-Ad-uTR" id="BUB-tB-lsf"/>
+                <outlet property="HintLabel" destination="O9O-tb-mto" id="0s9-VC-eLb"/>
                 <outlet property="ScannerContainer" destination="40H-WC-hCN" id="5on-3L-iwv"/>
                 <outlet property="ScannerOverlay" destination="co5-JP-3oc" id="MFk-t2-xIY"/>
+                <outlet property="StatusIcon" destination="2oo-T3-pr9" id="NFT-Pp-JdX"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
         </placeholder>
@@ -36,8 +38,8 @@
                                     </constraints>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pairing is complete when both devices show this icon" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O9O-tb-mto">
-                                    <rect key="frame" x="24" y="257" width="354" height="36"/>
-                                    <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
+                                    <rect key="frame" x="24" y="257" width="354" height="16"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                     <color key="textColor" white="0.90000000000000002" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>

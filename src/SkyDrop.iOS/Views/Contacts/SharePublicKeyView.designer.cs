@@ -16,10 +16,16 @@ namespace SkyDrop.iOS.Views.Contacts
 		UIKit.UIImageView BarcodeImage { get; set; }
 
 		[Outlet]
+		UIKit.UILabel HintLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIView ScannerContainer { get; set; }
 
 		[Outlet]
 		UIKit.UIView ScannerOverlay { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView StatusIcon { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -36,6 +42,16 @@ namespace SkyDrop.iOS.Views.Contacts
 			if (ScannerOverlay != null) {
 				ScannerOverlay.Dispose ();
 				ScannerOverlay = null;
+			}
+
+			if (HintLabel != null) {
+				HintLabel.Dispose ();
+				HintLabel = null;
+			}
+
+			if (StatusIcon != null) {
+				StatusIcon.Dispose ();
+				StatusIcon = null;
 			}
 		}
 	}

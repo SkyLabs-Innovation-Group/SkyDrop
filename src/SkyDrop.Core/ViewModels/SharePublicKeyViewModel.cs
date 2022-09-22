@@ -75,9 +75,7 @@ namespace SkyDrop.Core.ViewModels
                 (AddContactResult, justScannedId, ContactSavedName) = encryptionService.AddPublicKey(barcodeData);
                 isBusy = false;
 
-                if (AddContactResult == AddContactResult.ContactAdded || AddContactResult == AddContactResult.DevicesPaired || AddContactResult == AddContactResult.AlreadyExists)
-                    StopScanningCommand.Execute(); //success
-
+                StopScanningCommand.Execute();
                 RefreshBarcodeCommand.Execute();
             }
             catch (Exception e)
@@ -92,7 +90,7 @@ namespace SkyDrop.Core.ViewModels
             AddContactResult.AlreadyExists => $"Contact already saved as {ContactSavedName}",
             AddContactResult.ContactAdded => "Pairing is complete when both devices show this icon",
             AddContactResult.InvalidKey => "Invalid key",
-            AddContactResult.WrongDevice => "Wrong device",
+            AddContactResult.WrongDevice => "Unexpected device! Please go back and try to pair again",
             AddContactResult.Default => "",
             _ => throw new Exception("Unexpected AddContactResult")
         };

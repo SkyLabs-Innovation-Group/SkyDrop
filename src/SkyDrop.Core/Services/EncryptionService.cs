@@ -175,19 +175,15 @@ namespace SkyDrop.Core.Services
         {
             var (publicKey, keyId, justScannedId, contactName) = DecodePublicKey(publicKeyEncoded);
             if (publicKey == null)
-            {
-                userDialogs.Alert("Invalid key");
                 return (AddContactResult.InvalidKey, default, null);
-            }
 
             var (contactExists, existingContactSavedName) = storageService.ContactExists(keyId);
             if (contactExists)
-                return (AddContactResult.AlreadyExists, default, existingContactSavedName);
+                return (AddContactResult.AlreadyExists, keyId, existingContactSavedName);
 
             if (justScannedId != default && justScannedId != myId)
             {
                 //you scanned the QR code with the wrong phone
-                userDialogs.Alert("Unexpected device! Please go back and try to pair again");
                 return (AddContactResult.WrongDevice, default, null);
             }
 

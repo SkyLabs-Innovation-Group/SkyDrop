@@ -43,6 +43,7 @@ namespace SkyDrop.iOS.Views.Contacts
             var set = CreateBindingSet();
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Bind(this).For(t => t.AddContactResult).To(vm => vm.AddContactResult);
+            set.Bind(HintLabel).To(vm => vm.HintText);
             set.Apply();
         }
 
@@ -101,9 +102,14 @@ namespace SkyDrop.iOS.Views.Contacts
             get => AddContactResult.Default;
             set
             {
-                var overlayVisible = value == AddContactResult.ContactAdded || value == AddContactResult.AlreadyExists || value == AddContactResult.DevicesPaired;
+                var isSuccess = value == AddContactResult.ContactAdded || value == AddContactResult.AlreadyExists || value == AddContactResult.DevicesPaired;
+                var isError = value == AddContactResult.InvalidKey || value == AddContactResult.WrongDevice;
+                var overlayVisible = isSuccess || isError;
+                var overlayColor = isError ? Colors.Red : Colors.Primary;
                 ScannerOverlay.Hidden = !overlayVisible;
+                ScannerOverlay.BackgroundColor = overlayColor.ToNative();
                 ScannerContainer.BringSubviewToFront(ScannerOverlay);
+                StatusIcon.Image = isError ? UIImage.FromBundle("ic_error") : UIImage.FromBundle("ic_tick");
             }
         }
 

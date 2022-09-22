@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Org.BouncyCastle.Crypto.Parameters;
 using Realms;
@@ -8,6 +9,7 @@ using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.RealmObjects;
 using SkyDrop.Core.Utility;
+using static System.Net.WebRequestMethods;
 
 namespace SkyDrop.Core.Services
 {
@@ -182,6 +184,14 @@ namespace SkyDrop.Core.Services
             if (exists)
                 throw new Exception($"Contact already saved as {name}");
 
+            //gracefully avoid naming collisions by adding (1), (2), (3) etc. to the end of the contact name
+            int i = 1;
+            while (ContactNameExists(contact.Name))
+            {
+                string formattedContactName = contact.Name + " {0}";
+                contact.Name = string.Format(formattedContactName, "(" + i++ + ")");
+            }
+
             realm.Write(() =>
             {
                 var realmObject = ContactToRealmObject(contact);
@@ -194,6 +204,13 @@ namespace SkyDrop.Core.Services
             var existingContact = realm.Find<ContactRealmObject>(id.ToString());
             var exists = existingContact != null;
             return (exists, existingContact?.Name);
+        }
+
+        private bool ContactNameExists(string contactName)
+        {
+            var existingContact = realm.All<ContactRealmObject>().ToList().FirstOrDefault(c => c.Name == contactName);
+            var exists = existingContact != null;
+            return exists;
         }
 
         public void DeleteContact(Contact contact)
