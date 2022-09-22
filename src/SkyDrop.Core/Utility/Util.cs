@@ -212,8 +212,8 @@ namespace SkyDrop.Core.Utility
             if (filename.Length != 32) //length of a guid without dashes
                 return false;
 
-            //check if 'kh' signature exists
-            return filename[15] == 'k' && filename[16] == 'h';
+            //check if sk signature exists
+            return filename[15] == 's' && filename[16] == 'k';
         }
     }
 }

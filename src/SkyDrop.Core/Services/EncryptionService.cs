@@ -429,9 +429,9 @@ namespace SkyDrop.Core.Services
             //generate name from Guid, without dashes
             var name = new StringBuilder(Guid.NewGuid().ToString("N"));
 
-            //add kh signature to identify skydrop encrypted files
-            name[15] = 'k';
-            name[16] = 'h';
+            //add sk signature to identify skydrop encrypted files
+            name[15] = 's';
+            name[16] = 'k';
             return name.ToString();
         }
     }
