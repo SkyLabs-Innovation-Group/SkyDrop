@@ -68,11 +68,11 @@ namespace SkyDrop.Core.Utility
             if (filename.ExtensionMatches(new[] { ".mp4", ".m4p", ".m4v", ".mov", ".avi", ".webm", ".mpg", ".mp2", ".mpeg", ".mpe", ".mpv", ".wmv", ".qt", ".mkv" }))
                 return FileCategory.Video;
 
-            if (filename.ExtensionMatches(".skydrop"))
-                return FileCategory.Encrypted;
-
             if (filename.ExtensionMatches(".zip"))
                 return FileCategory.Zip;
+
+            if (filename.IsEncryptedFile())
+                return FileCategory.Encrypted;
 
             return FileCategory.None;
         }
@@ -131,7 +131,7 @@ namespace SkyDrop.Core.Utility
         }
 
         /// <summary>
-        /// Enables matching extensions with multiple periods correctly e.g. .jpeg.skydrop
+        /// Enables matching extensions with multiple periods correctly e.g. .jpeg.pdf
         /// </summary>
         public static string GetFullExtension(string filename)
         {
@@ -205,6 +205,15 @@ namespace SkyDrop.Core.Utility
             Cancel, //do nothing
             Photos, //save image to gallery
             Files //save to files
+        }
+
+        public static bool IsEncryptedFile(this string filename)
+        {
+            if (filename.Length != 32) //length of a guid without dashes
+                return false;
+
+            //check if 'kh' signature exists
+            return filename[15] == 'k' && filename[16] == 'h';
         }
     }
 }

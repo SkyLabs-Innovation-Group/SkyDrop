@@ -105,7 +105,7 @@ namespace SkyDrop.Core.Services
             if (fileName == null)
                 throw new Exception("Filename cannot be null");
 
-            if (fileName.ExtensionMatches(".skydrop"))
+            if (fileName.IsEncryptedFile())
             {
                 //save encrypted file
                 var encryptedFilePath = await fileSystemService.SaveFile(await response.Content.ReadAsStreamAsync(), fileName, false);

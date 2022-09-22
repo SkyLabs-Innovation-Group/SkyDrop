@@ -32,7 +32,7 @@ namespace SkyDrop.Core.Services
     /// justScannedId [16 bytes]
     /// publicKey [32 bytes]
     ///
-    /// An encrypted (.skydrop) file contains this data format:
+    /// An encrypted file contains this data format:
     /// headerFormatIdentifier [2 bytes] <- the value should be 1 because we only have one format currently
     /// recipientsCount [2 bytes]
     /// senderId [16 bytes]
@@ -139,8 +139,8 @@ namespace SkyDrop.Core.Services
                 var encryptedFileWithMetaData = Util.Combine(metaData, encryptedBytes);
 
                 //save the file
-                var randomFileName = Guid.NewGuid();
-                var encryptedFilePath = Path.Combine(fileSystemService.CacheFolderPath, $"{randomFileName}.skydrop");
+                var randomFileName = GenerateEncryptedFileName();
+                var encryptedFilePath = Path.Combine(fileSystemService.CacheFolderPath, randomFileName);
                 File.WriteAllBytes(encryptedFilePath, encryptedFileWithMetaData);
 
                 return encryptedFilePath;
@@ -151,8 +151,8 @@ namespace SkyDrop.Core.Services
         {
             return Task.Run(async () =>
             {
-                if (!filePath.EndsWith(".skydrop"))
-                    throw new Exception("File must have .skydrop extension");
+                if (!Path.GetFileName(filePath).IsEncryptedFile())
+                    throw new Exception("File not recognised as an encrypted file");
 
                 if (!File.Exists(filePath))
                     throw new Exception("File does not exist");
@@ -422,6 +422,17 @@ namespace SkyDrop.Core.Services
 
             var file = plainTextData.Skip(fileNameLengthSizeBytes).Skip(fileNameLength).ToArray();
             return (fileName, file);
+        }
+
+        private string GenerateEncryptedFileName()
+        {
+            //generate name from Guid, without dashes
+            var name = new StringBuilder(Guid.NewGuid().ToString("N"));
+
+            //add kh signature to identify skydrop encrypted files
+            name[15] = 'k';
+            name[16] = 'h';
+            return name.ToString();
         }
     }
 
