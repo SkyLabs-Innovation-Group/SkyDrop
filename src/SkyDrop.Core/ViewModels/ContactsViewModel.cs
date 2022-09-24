@@ -8,6 +8,7 @@ using MvvmCross.Navigation;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Services;
+using SkyDrop.Core.Utility;
 using static SkyDrop.Core.ViewModels.ContactsViewModel;
 
 namespace SkyDrop.Core.ViewModels
@@ -22,6 +23,7 @@ namespace SkyDrop.Core.ViewModels
         public List<IContactItem> Contacts { get; set; }
         public IMvxCommand SharePublicKeyCommand { get; set; }
         public IMvxCommand BackCommand { get; set; }
+        public IMvxCommand CloseKeyboardCommand { get; set; }
         public bool IsNoContacts { get; set; }
 
         private readonly IApiService apiService;
@@ -69,10 +71,10 @@ namespace SkyDrop.Core.ViewModels
         {
             base.ViewAppeared();
 
-            LoadCertificates();
+            LoadContacts();
         }
 
-        private void LoadCertificates()
+        private void LoadContacts()
         {
             var newContacts = storageService.LoadContacts().Select(GetContactDVM).ToList();
             if (newContacts == null || newContacts.Count == 0)
@@ -96,6 +98,7 @@ namespace SkyDrop.Core.ViewModels
         {
             var contactItem = new ContactDVM { Contact = contact };
             contactItem.DeleteCommand = new MvxAsyncCommand(async () => await DeleteContact(contactItem));
+            contactItem.RenameCommand = new MvxAsyncCommand(async () => await RenameContact(contactItem));
             if (isSelecting)
                 contactItem.TapCommand = new MvxCommand(() => ItemSelected(contactItem));
             return contactItem;
@@ -119,7 +122,31 @@ namespace SkyDrop.Core.ViewModels
                     return;
 
                 storageService.DeleteContact(contactDVM.Contact);
-                LoadCertificates();
+                LoadContacts();
+            }
+        }
+
+        private async Task RenameContact(IContactItem item)
+        {
+            try
+            {
+                if (item is ContactDVM contactDVM)
+                {
+                    var result = await userDialogs.PromptAsync($"Contact name:", null, null, null, contactDVM.Name);
+                    if (result.Text.IsNullOrEmpty())
+                        return;
+
+                    storageService.RenameContact(contactDVM.Contact, result.Text.Trim());
+                    LoadContacts();
+                }
+            }
+            catch(Exception e)
+            {
+                userDialogs.Toast(e.Message);
+            }
+            finally
+            {
+                CloseKeyboardCommand.Execute();
             }
         }
 

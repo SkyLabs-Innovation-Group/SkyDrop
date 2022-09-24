@@ -8,6 +8,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Views;
+using MvvmCross.Commands;
 using SkyDrop.Core.ViewModels;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.Droid.Helper;
@@ -23,6 +24,8 @@ namespace SkyDrop.Droid.Views.Main
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+
+            ViewModel.CloseKeyboardCommand = new MvxCommand(() => this.HideKeyboard());
         }
     }
 }

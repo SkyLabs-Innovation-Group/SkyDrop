@@ -47,6 +47,13 @@
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/ic_pencil"
+                    app:MvxBind="Click RenameCommand;ContactsDeleteVisibility ."/>
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_margin="8dp"
                     android:src="@drawable/ic_bin"
                     app:MvxBind="Click DeleteCommand;ContactsDeleteVisibility ."/>

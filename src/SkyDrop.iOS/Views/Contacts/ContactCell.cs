@@ -28,6 +28,7 @@ namespace SkyDrop.iOS.Views.Contacts
 				set.Bind(NameLabel).To(vm => vm.Name);
 				set.Bind(ContentView).For("Tap").To(vm => vm.TapCommand);
                 set.Bind(DeleteButton).For("Tap").To(vm => vm.DeleteCommand);
+                set.Bind(RenameButton).For("Tap").To(vm => vm.RenameCommand);
                 set.Bind(this).For(t => t.IconImage).To(vm => vm);
 				set.Apply();
 			});

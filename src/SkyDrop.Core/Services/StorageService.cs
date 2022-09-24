@@ -235,6 +235,17 @@ namespace SkyDrop.Core.Services
             });
         }
 
+        public void RenameContact(Contact contact, string newName)
+        {
+            contact.Name = newName;
+            realm.Write(() =>
+            {
+                var realmObj = realm.Find<ContactRealmObject>(contact.Id.ToString());
+                realmObj.Name = newName;
+                realm.Add(realmObj);
+            });
+        }
+
         public EncryptionKeyPairRealmObject GetMyEncryptionKeys()
         {
             return realm.All<EncryptionKeyPairRealmObject>().FirstOrDefault();
@@ -372,5 +383,7 @@ namespace SkyDrop.Core.Services
         EncryptionKeyPairRealmObject GetMyEncryptionKeys();
 
         void UpdateDeviceName(string name);
+
+        void RenameContact(Contact contact, string newName);
     }
 }

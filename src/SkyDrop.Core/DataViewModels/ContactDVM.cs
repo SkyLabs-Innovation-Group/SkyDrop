@@ -12,6 +12,8 @@ namespace SkyDrop.Core.DataViewModels
 
         public IMvxCommand DeleteCommand { get; set; }
 
+		public IMvxCommand RenameCommand { get; set; }
+
         public string Name => Contact.Name;
 
 		public bool IsSelectionActive { get; set; }

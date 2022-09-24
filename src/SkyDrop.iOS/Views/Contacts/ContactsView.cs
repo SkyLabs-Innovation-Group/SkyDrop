@@ -1,6 +1,7 @@
 ﻿using System;
 using Acr.UserDialogs;
 using CoreGraphics;
+using MvvmCross.Commands;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
@@ -22,7 +23,9 @@ namespace SkyDrop.iOS.Views.Certificates
 		{
 			base.ViewDidLoad();
 
-			AddBackButton(() => ViewModel.Close());
+            ViewModel.CloseKeyboardCommand = new MvxCommand(() => View.EndEditing(true));
+
+            AddBackButton(() => ViewModel.Close());
 
 			PreferredContentSize = new CGSize(300, 300);
 

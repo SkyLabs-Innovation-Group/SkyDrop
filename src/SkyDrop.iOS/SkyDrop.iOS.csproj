@@ -262,6 +262,8 @@
     <ImageAsset Include="Media.xcassets\ic_world.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_key.imageset\key.pdf" />
     <ImageAsset Include="Media.xcassets\ic_key.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_pencil.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_pencil.imageset\pencil.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

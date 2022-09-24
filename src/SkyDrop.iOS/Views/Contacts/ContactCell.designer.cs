@@ -25,6 +25,9 @@ namespace SkyDrop.iOS.Views.Contacts
 		UIKit.UILabel NameLabel { get; set; }
 
 		[Outlet]
+		UIKit.UIImageView RenameButton { get; set; }
+
+		[Outlet]
 		UIKit.UIView SelectedIndicatorInnerView { get; set; }
 
 		[Outlet]
@@ -37,14 +40,19 @@ namespace SkyDrop.iOS.Views.Contacts
 				ContainerView = null;
 			}
 
+			if (DeleteButton != null) {
+				DeleteButton.Dispose ();
+				DeleteButton = null;
+			}
+
 			if (Icon != null) {
 				Icon.Dispose ();
 				Icon = null;
 			}
 
-			if (DeleteButton != null) {
-				DeleteButton.Dispose ();
-				DeleteButton = null;
+			if (RenameButton != null) {
+				RenameButton.Dispose ();
+				RenameButton = null;
 			}
 
 			if (NameLabel != null) {
