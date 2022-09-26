@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -514,9 +515,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private SkyFile MakeZipFile()
         {
-            //TODO: add option to rename zip file in the renaming dialog
-            string archiveName = "skydrop_archive.zip";
-
+            var archiveName = new StringBuilder(Guid.NewGuid().ToString("N")) + ".zip";
             string compressedFilePath = Path.Combine(Path.GetTempPath(), archiveName);
 
             var filesToUpload = StagedFiles.Where(s => !s.IsMoreFilesButton).Select(s => s.SkyFile).ToList();
