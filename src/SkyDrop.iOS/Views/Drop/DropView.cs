@@ -220,6 +220,7 @@ namespace SkyDrop.iOS.Views.Drop
                 LineBreakMode = UILineBreakMode.MiddleTruncation,
 
                 //makes label auto resize after text changes
+                Bounds = new CGRect(0, 0, UIScreen.MainScreen.Bounds.Width, 48),
                 TranslatesAutoresizingMaskIntoConstraints = true
             };
 
