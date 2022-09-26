@@ -26,6 +26,7 @@ namespace SkyDrop.Core.Services
 {
     /// <summary>
     /// A public key QR code contains this data format:
+    /// qrFormatIdentifier [2 bytes] <- the value should be 1 because we only have one format currently
     /// nameLength [2 bytes]
     /// name [nameLength bytes]
     /// myId [16 bytes]
@@ -97,14 +98,20 @@ namespace SkyDrop.Core.Services
 
         public string GetMyPublicKeyWithId(Guid justScannedId)
         {
+            ushort formatId = 1;
+            var formatIdBytes = new byte[2]; //these two byes indicate the name length
+            BinaryPrimitives.WriteUInt16BigEndian(formatIdBytes, formatId);
+
             var nameBytes = Encoding.ASCII.GetBytes(myName);
             ushort nameLength = (ushort)nameBytes.Length;
             var nameLengthBytes = new byte[2]; //these two byes indicate the name length
             BinaryPrimitives.WriteUInt16BigEndian(nameLengthBytes, nameLength);
+
             var myIdBytes = myId.ToByteArray();
             var justScannedIdBytes = justScannedId.ToByteArray();
             var keyBytes = myPublicKey.GetEncoded();
-            var publicKeyWithId = Util.Combine(nameLengthBytes, nameBytes, myIdBytes, justScannedIdBytes, keyBytes);
+
+            var publicKeyWithId = Util.Combine(formatIdBytes, nameLengthBytes, nameBytes, myIdBytes, justScannedIdBytes, keyBytes);
             return Convert.ToBase64String(publicKeyWithId);
         }
 
@@ -304,12 +311,16 @@ namespace SkyDrop.Core.Services
             {
                 var bytes = Convert.FromBase64String(publicKeyEncoded);
 
-                var nameLength = BinaryPrimitives.ReadUInt16BigEndian(bytes.Take(2).ToArray());
-                var name = Encoding.ASCII.GetString(bytes.Skip(2).Take(nameLength).ToArray());
+                var formatIdentifier = BinaryPrimitives.ReadUInt16BigEndian(bytes.Take(2).ToArray());
+                if (formatIdentifier != 1)
+                    throw new Exception("Invalid public key format");
 
-                var keyId = new Guid(bytes.Skip(2).Skip(nameLength).Take(guidSizeBytes).ToArray());
-                var justScannedId = new Guid(bytes.Skip(2).Skip(nameLength).Skip(guidSizeBytes).Take(guidSizeBytes).ToArray());
-                var keyBytes = bytes.Skip(2).Skip(nameLength).Skip(guidSizeBytes).Skip(guidSizeBytes).ToArray();
+                var nameLength = BinaryPrimitives.ReadUInt16BigEndian(bytes.Skip(2).Take(2).ToArray());
+                var name = Encoding.ASCII.GetString(bytes.Skip(2).Skip(2).Take(nameLength).ToArray());
+
+                var keyId = new Guid(bytes.Skip(2).Skip(2).Skip(nameLength).Take(guidSizeBytes).ToArray());
+                var justScannedId = new Guid(bytes.Skip(2).Skip(2).Skip(nameLength).Skip(guidSizeBytes).Take(guidSizeBytes).ToArray());
+                var keyBytes = bytes.Skip(2).Skip(2).Skip(nameLength).Skip(guidSizeBytes).Skip(guidSizeBytes).ToArray();
                 var publicKey = new X25519PublicKeyParameters(keyBytes);
                 var sharedSecret = GetSharedSecret(myPrivateKey, publicKey);
                 return (publicKey, keyId, justScannedId, name);
