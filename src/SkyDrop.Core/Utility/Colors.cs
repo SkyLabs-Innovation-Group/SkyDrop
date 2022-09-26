@@ -18,7 +18,7 @@ namespace SkyDrop.Core.Utility
         public static Color GradientOcean => ColorConverters.FromHex("#00757F");
         public static Color GradientDeepBlue => ColorConverters.FromHex("#165E70");
         public static Color GradientDark => ColorConverters.FromHex("#2F4858");
-        public static Color Red => ColorConverters.FromHex("EE4443");//"F44336");//"#EE4443");E53935
+        public static Color Red => ColorConverters.FromHex("EE4443");
 
         public static Color NewBlue => ColorConverters.FromHex("#004db6");
 

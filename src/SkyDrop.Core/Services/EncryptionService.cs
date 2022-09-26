@@ -139,7 +139,7 @@ namespace SkyDrop.Core.Services
                 var encryptedFileWithMetaData = Util.Combine(metaData, encryptedBytes);
 
                 //save the file
-                var randomFileName = GenerateEncryptedFileName();
+                var randomFileName = GenerateEncryptedFileName(Path.GetFileName(filePath));
                 var encryptedFilePath = Path.Combine(fileSystemService.CacheFolderPath, randomFileName);
                 File.WriteAllBytes(encryptedFilePath, encryptedFileWithMetaData);
 
@@ -167,6 +167,19 @@ namespace SkyDrop.Core.Services
                 //save the file
                 using var stream = new MemoryStream(file);
                 var decryptedFilePath = await fileSystemService.SaveToGalleryOrFiles(stream, fileName, saveType);
+                return decryptedFilePath;
+            });
+        }
+
+        public Task<string> DecodeZipFile(Stream data, string fileName)
+        {
+            return Task.Run(async () =>
+            {
+                var (fileName, file) = GetFilePlainText(data.StreamToBytes());
+
+                //save the decrypted zip file in temp folder
+                using var stream = new MemoryStream(file);
+                var decryptedFilePath = await fileSystemService.SaveFile(stream, fileName, false);
                 return decryptedFilePath;
             });
         }
@@ -420,14 +433,24 @@ namespace SkyDrop.Core.Services
             return (fileName, file);
         }
 
-        private string GenerateEncryptedFileName()
+        private string GenerateEncryptedFileName(string originalFileName)
         {
             //generate name from Guid, without dashes
             var name = new StringBuilder(Guid.NewGuid().ToString("N"));
 
-            //add sk signature to identify skydrop encrypted files
-            name[15] = 's';
-            name[16] = 'k';
+            if (Util.GetFileCategory(originalFileName) == FileCategory.Zip)
+            {
+                //add zi signature to identify skydrop encrypted zip files
+                name[15] = 'z';
+                name[16] = 'i';
+            }
+            else
+            {
+                //add sk signature to identify skydrop encrypted files
+                name[15] = 's';
+                name[16] = 'k';
+            }
+            
             return name.ToString();
         }
     }
@@ -446,6 +469,8 @@ namespace SkyDrop.Core.Services
         Task<string> EncodeFileFor(string filePath, List<Contact> recipients);
 
         Task<string> DecodeFile(string filePath);
+
+        Task<string> DecodeZipFile(Stream data, string filename);
 
         void UpdateDeviceName(string nameDeviceName);
 

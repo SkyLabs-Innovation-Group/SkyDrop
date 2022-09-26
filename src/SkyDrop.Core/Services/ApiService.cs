@@ -123,13 +123,14 @@ namespace SkyDrop.Core.Services
             userDialogs.Toast($"Saved {Path.GetFileName(newFilePath)}");
         }
 
-        public async Task<Stream> DownloadFile(string url)
+        public async Task<(Stream data, string filename)> DownloadFile(string url)
         {
-            //download
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var response = await httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStreamAsync();
+            var data = await response.Content.ReadAsStreamAsync();
+            var fileName = GetFilenameFromResponse(response);
+            return (data, fileName);
         }
 
         public async Task<string> GetSkyFileFilename(string skylink)
@@ -254,7 +255,7 @@ namespace SkyDrop.Core.Services
 
         Task DownloadAndSaveSkyfile(string url, SaveType saveType);
 
-        Task<Stream> DownloadFile(string url);
+        Task<(Stream data, string filename)> DownloadFile(string url);
 
         Task<string> GetSkyFileFilename(string skyfile);
 

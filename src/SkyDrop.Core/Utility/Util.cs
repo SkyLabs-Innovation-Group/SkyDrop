@@ -13,6 +13,7 @@ using MvvmCross;
 using SkyDrop.Core.DataModels;
 using Xamarin.Essentials;
 using System.Runtime.InteropServices.ComTypes;
+using System.IO.Compression;
 
 namespace SkyDrop.Core.Utility
 {
@@ -51,7 +52,7 @@ namespace SkyDrop.Core.Utility
 
         public static FileCategory GetFileCategory(string filename)
         {
-            if (filename == null)
+            if (filename.IsNullOrEmpty())
                 return FileCategory.None;
 
             filename = filename.ToLowerInvariant();
@@ -212,8 +213,31 @@ namespace SkyDrop.Core.Utility
             if (filename.Length != 32) //length of a guid without dashes
                 return false;
 
-            //check if sk signature exists
-            return filename[15] == 's' && filename[16] == 'k';
+            var skSignatureExists = filename[15] == 's' && filename[16] == 'k'; //is encrypted file
+            return skSignatureExists || filename.IsEncryptedZipFile();
+        }
+
+        public static bool IsEncryptedZipFile(this string filename)
+        {
+            if (filename.Length != 32) //length of a guid without dashes
+                return false;
+
+            var ziSignatureExists = filename[15] == 'z' && filename[16] == 'i'; //is encrypted zip file
+            return ziSignatureExists;
+        }
+
+        public static byte[] StreamToBytes(this Stream input)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
         }
     }
 }

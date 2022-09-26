@@ -87,7 +87,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool CanDisplayPreview => FocusedFile?.Filename.CanDisplayPreview() ?? false;
         public bool IsShowBarcodeButtonVisible => CanDisplayPreview && IsPreviewImageVisible;
         public bool IsShowPreviewButtonVisible => CanDisplayPreview && !IsPreviewImageVisible;
-        public bool IsFocusedFileAnArchive => FocusedFile.Filename.ExtensionMatches(".zip");
+        public bool IsFocusedFileAnArchive => FocusedFile.Filename.ExtensionMatches(".zip") || FocusedFile.Filename.IsEncryptedZipFile();
         public string SaveButtonText => IsFocusedFileAnArchive ? "Unzip" : "Save";
         public string EncryptionText => GetVisibilityText();
         public bool IsEncrypting { get; set; }
