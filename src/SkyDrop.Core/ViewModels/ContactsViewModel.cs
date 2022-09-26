@@ -77,11 +77,8 @@ namespace SkyDrop.Core.ViewModels
         private void LoadContacts()
         {
             var newContacts = storageService.LoadContacts().Select(GetContactDVM).ToList();
-            if (newContacts == null || newContacts.Count == 0)
-            {
-                IsNoContacts = true;
-            }
-            else if (isSelecting)
+            IsNoContacts = newContacts == null || newContacts.Count == 0;
+            if (isSelecting && !IsNoContacts)
             {
                 var anyoneWithTheLinkItem = new AnyoneWithTheLinkItem();
                 anyoneWithTheLinkItem.TapCommand = new MvxCommand(() => ItemSelected(anyoneWithTheLinkItem));
