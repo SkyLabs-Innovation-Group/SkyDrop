@@ -43,7 +43,7 @@ namespace SkyDrop.Droid.Views.Main
         private float tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
         private MaterialCardView sendButton, receiveButton;
         private ConstraintLayout barcodeContainer;
-        private LinearLayout barcodeMenu, sendReceiveButtonsContainer;
+        private LinearLayout barcodeMenu, sendReceiveButtonsContainer, homeMenu;
         private ImageView barcodeImageView;
         private View leftDot, rightDot;
 
@@ -84,6 +84,7 @@ namespace SkyDrop.Droid.Views.Main
             barcodeMenu = FindViewById<LinearLayout>(Resource.Id.BarcodeMenu);
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
             sendReceiveButtonsContainer = FindViewById<LinearLayout>(Resource.Id.SendReceiveContainer);
+            homeMenu = FindViewById<LinearLayout>(Resource.Id.HomeMenu);
 
             var stagedFilesRecycler = FindViewById<RecyclerView>(Resource.Id.StagedFilesRecycler);
             stagedFilesRecycler.SetLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false));
@@ -179,6 +180,10 @@ namespace SkyDrop.Droid.Views.Main
                 .Alpha(0)
                 .SetDuration(duration)
                 .Start();
+            homeMenu.Animate()
+                .Alpha(0)
+                .SetDuration(duration)
+                .Start();
         }
 
         /// <summary>
@@ -198,6 +203,10 @@ namespace SkyDrop.Droid.Views.Main
                 .SetDuration(duration)
                 .Start();
             sendButton.Animate()
+                .Alpha(0)
+                .SetDuration(duration)
+                .Start();
+            homeMenu.Animate()
                 .Alpha(0)
                 .SetDuration(duration)
                 .Start();
@@ -256,6 +265,11 @@ namespace SkyDrop.Droid.Views.Main
                 .TranslationX(screenWidth)
                 .SetDuration(duration)
                 .Start();
+            homeMenu.Animate()
+                .TranslationX(0)
+                .Alpha(1)
+                .SetDuration(duration)
+                .Start();
         }
 
         /// <summary>
@@ -286,8 +300,13 @@ namespace SkyDrop.Droid.Views.Main
 
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
             var duration = 250;
+            var translationX = toLeft ? -screenWidth : screenWidth;
             sendReceiveButtonsContainer.Animate()
-                .TranslationX(toLeft ? -screenWidth : screenWidth)
+                .TranslationX(translationX)
+                .SetDuration(duration)
+                .Start();
+            homeMenu.Animate()
+                .TranslationX(translationX)
                 .SetDuration(duration)
                 .Start();
         }
@@ -299,6 +318,10 @@ namespace SkyDrop.Droid.Views.Main
         {
             var duration = 500;
             sendReceiveButtonsContainer.Animate()
+                .TranslationX(0)
+                .SetDuration(duration)
+                .Start();
+            homeMenu.Animate()
                 .TranslationX(0)
                 .SetDuration(duration)
                 .Start();
@@ -366,7 +389,9 @@ namespace SkyDrop.Droid.Views.Main
                     }
                     else
                     {
-                        sendReceiveButtonsContainer.TranslationX = sendReceiveButtonsContainerStartX + deltaX;
+                        var translationX = sendReceiveButtonsContainerStartX + deltaX;
+                        sendReceiveButtonsContainer.TranslationX = translationX;
+                        homeMenu.TranslationX = translationX;
                     }
 
                     break;
