@@ -92,22 +92,6 @@ namespace SkyDrop.Droid.Views.Main
             CreateNavDots();
         }
 
-        public override bool OnCreateOptionsMenu(IMenu menu)
-        {
-            MenuInflater.Inflate(Resource.Menu.DropMenu, menu);
-            return base.OnCreateOptionsMenu(menu);
-        }
-
-        public override bool OnOptionsItemSelected(IMenuItem item)
-        {
-            if (item.ItemId == Resource.Id.menu_drop_settings)
-            {
-                ViewModel.NavigateToSettings().GetAwaiter().GetResult();
-            }
-
-            return base.OnOptionsItemSelected(item);
-        }
-
         /// <summary>
         /// Hide barcode when user presses hardware back button
         /// </summary>
