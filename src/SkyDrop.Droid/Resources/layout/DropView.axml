@@ -291,6 +291,7 @@
                 android:layout_centerInParent="true"
                 android:layout_marginBottom="16dp"
                 android:layout_marginHorizontal="16dp"
+                android:translationY="-64dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.card.MaterialCardView
@@ -422,6 +423,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
+                android:translationY="-64dp"
                 android:layout_below="@id/SendReceiveContainer"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
