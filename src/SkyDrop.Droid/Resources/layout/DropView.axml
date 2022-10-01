@@ -431,7 +431,9 @@
                         android:layout_marginRight="16dp"
                         app:cardElevation="1dp"
                         app:cardCornerRadius="8dp"
-                        app:cardBackgroundColor="@color/primaryColor"
+                        app:cardBackgroundColor="@color/darkGrey"
+                        app:strokeColor="@color/primaryColor"
+                        app:strokeWidth="2dp"
                         app:MvxBind="Click OpenSkyDriveCommand">
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -465,7 +467,9 @@
                         android:layout_marginRight="16dp"
                         app:cardElevation="1dp"
                         app:cardCornerRadius="8dp"
-                        app:cardBackgroundColor="@color/skyGreen">
+                        app:cardBackgroundColor="@color/darkGrey"
+                        app:strokeColor="@color/skyGreen"
+                        app:strokeWidth="2dp">
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -494,7 +498,10 @@
                         android:layout_marginRight="16dp"
                         app:cardElevation="1dp"
                         app:cardCornerRadius="8dp"
-                        app:cardBackgroundColor="@color/skyTurqouise">
+                        app:cardBackgroundColor="@color/darkGrey"
+                        app:strokeColor="@color/skyTurqouise"
+                        app:strokeWidth="2dp"
+                        >
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -515,8 +522,7 @@
                                 android:textStyle="bold"
                                 android:textColor="@color/lightGrey"
                                 android:paddingTop="2dp"
-                                android:paddingBottom="12dp"
-                                app:MvxBind="Text SaveButtonText"/>
+                                android:paddingBottom="12dp"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
                     <com.google.android.material.card.MaterialCardView
@@ -525,7 +531,9 @@
                         android:layout_weight="1"
                         app:cardElevation="1dp"
                         app:cardCornerRadius="8dp"
-                        app:cardBackgroundColor="@color/skyOcean"
+                        app:cardBackgroundColor="@color/darkGrey"
+                        app:strokeColor="@color/skyOcean"
+                        app:strokeWidth="2dp"
                         app:MvxBind="Click NavToSettingsCommand">
                         <LinearLayout
                             android:layout_width="wrap_content"
