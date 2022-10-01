@@ -286,16 +286,18 @@
             <!--send & receive buttons-->
             <LinearLayout
                 android:id="@+id/SendReceiveContainer"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginBottom="16dp"
+                android:layout_marginHorizontal="16dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/SendFileButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginRight="8dp"
                     app:cardBackgroundColor="@color/primaryColor"
                     app:strokeColor="@color/midGrey"
@@ -325,6 +327,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginBottom="8dp"
+                        android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
                         android:padding="8dp"
                         android:clipToPadding="false">
@@ -364,8 +367,9 @@
                 </com.google.android.material.card.MaterialCardView>
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/ReceiveFileButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     app:cardBackgroundColor="@color/skyOcean"
                     android:layout_marginLeft="8dp"
                     app:cardElevation="1dp"
@@ -379,6 +383,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginBottom="8dp"
+                        android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
                         android:padding="8dp"
                         android:clipToPadding="false">
