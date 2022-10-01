@@ -284,7 +284,7 @@
             </LinearLayout>
 
             <!--send & receive buttons-->
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/SendReceiveContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -296,9 +296,11 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/SendFileButton"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_height="0dp"
                     android:layout_marginRight="8dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/ReceiveFileButton"
+                    app:layout_constraintDimensionRatio="1:1"
                     app:cardBackgroundColor="@color/primaryColor"
                     app:strokeColor="@color/midGrey"
                     app:strokeWidth="1dp"
@@ -326,7 +328,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginBottom="8dp"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
                         android:padding="8dp"
@@ -366,10 +367,12 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/ReceiveFileButton"
+                    android:id="@id/ReceiveFileButton"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_height="0dp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/SendFileButton"
+                    app:layout_constraintDimensionRatio="1:1"
                     app:cardBackgroundColor="@color/skyOcean"
                     android:layout_marginLeft="8dp"
                     app:cardElevation="1dp"
@@ -382,7 +385,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginBottom="8dp"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
                         android:padding="8dp"
@@ -412,7 +414,7 @@
                             android:text="RECEIVE FILE"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!--home menu-->
             <LinearLayout
@@ -422,8 +424,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_below="@id/SendReceiveContainer"
                 android:gravity="center_horizontal"
-                android:orientation="vertical"
-                app:MvxBind="Visibility Visibility(IsHomeMenuVisible)">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"

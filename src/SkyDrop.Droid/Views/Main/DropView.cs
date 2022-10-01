@@ -42,8 +42,8 @@ namespace SkyDrop.Droid.Views.Main
         private bool isPressed;
         private float tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
         private MaterialCardView sendButton, receiveButton;
-        private ConstraintLayout barcodeContainer;
-        private LinearLayout barcodeMenu, sendReceiveButtonsContainer, homeMenu;
+        private ConstraintLayout barcodeContainer, sendReceiveButtonsContainer;
+        private LinearLayout barcodeMenu, homeMenu;
         private ImageView barcodeImageView;
         private View leftDot, rightDot;
 
@@ -83,7 +83,7 @@ namespace SkyDrop.Droid.Views.Main
             barcodeContainer = FindViewById<ConstraintLayout>(Resource.Id.BarcodeContainer);
             barcodeMenu = FindViewById<LinearLayout>(Resource.Id.BarcodeMenu);
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
-            sendReceiveButtonsContainer = FindViewById<LinearLayout>(Resource.Id.SendReceiveContainer);
+            sendReceiveButtonsContainer = FindViewById<ConstraintLayout>(Resource.Id.SendReceiveContainer);
             homeMenu = FindViewById<LinearLayout>(Resource.Id.HomeMenu);
 
             var stagedFilesRecycler = FindViewById<RecyclerView>(Resource.Id.StagedFilesRecycler);
