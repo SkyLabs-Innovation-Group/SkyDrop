@@ -53,7 +53,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand<FileUploadResult> UploadFinishedNotificationCommand { get; set; }
         public IMvxCommand<double> UpdateNotificationProgressCommand { get; set; }
         public IMvxCommand IosSelectFileCommand { get; set; }
-        public IMvxCommand MenuCommand { get; set; }
+        public IMvxCommand OpenSkyDriveCommand { get; set; }
         public IMvxCommand ShowBarcodeCommand { get; set; }
         public IMvxCommand ShowPreviewImageCommand { get; set; }
 
@@ -168,7 +168,7 @@ namespace SkyDrop.Core.ViewModels.Main
             CancelUploadCommand = new MvxCommand(CancelUpload);
             ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
-            MenuCommand = new MvxAsyncCommand(NavigateToFiles);
+            OpenSkyDriveCommand = new MvxAsyncCommand(NavigateToFiles);
             DownloadFileCommand = new MvxAsyncCommand(SaveOrUnzipFocusedFile);
             ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
             ShowPreviewImageCommand = new MvxCommand(() => IsPreviewImageVisible = true);
@@ -715,7 +715,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private Task NavToSettings()
         {
-            return navigationService.Navigate<MenuViewModel>();
+            return navigationService.Navigate<SettingsViewModel>();
         }
 
         private async Task ShareLink()
