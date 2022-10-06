@@ -113,13 +113,21 @@ namespace SkyDrop.Core.ViewModels
 
         private async Task DeleteContact(IContactItem item)
         {
-            if (item is ContactDVM contactDVM)
+            try
             {
-                if (!await userDialogs.ConfirmAsync($"Delete contact {contactDVM.Name}?"))
-                    return;
+                if (item is ContactDVM contactDVM)
+                {
+                    if (!await userDialogs.ConfirmAsync($"Delete contact {contactDVM.Name}?"))
+                        return;
 
-                storageService.DeleteContact(contactDVM.Contact);
-                LoadContacts();
+                    storageService.DeleteContact(contactDVM.Contact);
+                    LoadContacts();
+                }
+            }
+            catch(Exception e)
+            {
+                Log.Exception(e);
+                userDialogs.Toast("Error: Failed to delete contact");
             }
         }
 
