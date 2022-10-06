@@ -313,32 +313,62 @@ namespace SkyDrop.Core.Services
 
         private SkyFileRealmObject SkyFileToRealmObject(SkyFile skyFile)
         {
-            return new SkyFileRealmObject { Filename = skyFile.Filename, Skylink = skyFile.Skylink, WasSent = skyFile.WasSent };
+            return new SkyFileRealmObject
+            {
+                Filename = skyFile.Filename,
+                Skylink = skyFile.Skylink,
+                WasSent = skyFile.WasSent
+            };
         }
 
         private SkyFile SkyFileFromRealmObject(SkyFileRealmObject realmObject)
         {
-            return new SkyFile { Filename = realmObject.Filename, Skylink = realmObject.Skylink, WasSent = realmObject.WasSent };
+            return new SkyFile
+            {
+                Filename = realmObject.Filename,
+                Skylink = realmObject.Skylink,
+                WasSent = realmObject.WasSent
+            };
         }
 
         private ContactRealmObject ContactToRealmObject(Contact contact)
         {
-            return new ContactRealmObject { Id = contact.Id.ToString(), Name = contact.Name, PublicKeyBase64 = Util.PublicKeyToBase64String(contact.PublicKey) };
+            return new ContactRealmObject
+            {
+                Id = contact.Id.ToString(),
+                Name = contact.Name,
+                PublicKeyBase64 = Util.PublicKeyToBase64String(contact.PublicKey)
+            };
         }
 
         private List<Contact> ContactsFromRealmObjects(params ContactRealmObject[] contactRealmObjects)
         {
-            return contactRealmObjects.Select(c => new Contact { Id = new Guid(c.Id), Name = c.Name, PublicKey = Util.Base64StringToPublicKey(c.PublicKeyBase64) }).ToList();
+            return contactRealmObjects.Select(c => new Contact
+            {
+                Id = new Guid(c.Id),
+                Name = c.Name,
+                PublicKey = Util.Base64StringToPublicKey(c.PublicKeyBase64)
+            }).ToList();
         }
         
         private Folder FolderFromRealmObject(FolderRealmObject realmObject)
         {
-            return new Folder { Id = new Guid(realmObject.Id), Name = realmObject.Name, SkyLinks = realmObject.SkyLinks.IsNullOrEmpty() ? new List<string>() : realmObject.SkyLinks.Split(',').ToList()  };
+            return new Folder
+            {
+                Id = new Guid(realmObject.Id),
+                Name = realmObject.Name,
+                SkyLinks = realmObject.SkyLinks.IsNullOrEmpty() ? new List<string>() : realmObject.SkyLinks.Split(',').ToList()
+            };
         }
 
         private FolderRealmObject FolderToRealmObject(Folder folder)
         {
-            return new FolderRealmObject { Id = folder.Id.ToString(), Name = folder.Name, SkyLinks = string.Join(",", folder.SkyLinks) };
+            return new FolderRealmObject
+            {
+                Id = folder.Id.ToString(),
+                Name = folder.Name,
+                SkyLinks = string.Join(",", folder.SkyLinks)
+            };
         }
     }
 
