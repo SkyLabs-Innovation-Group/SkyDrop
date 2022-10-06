@@ -44,6 +44,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand CopyLinkCommand { get; set; }
         public IMvxCommand ResetUIStateCommand { get; set; }
         public IMvxCommand NavToSettingsCommand { get; set; }
+        public IMvxCommand NavToContactsCommand { get; set; }
         public IMvxCommand ShareLinkCommand { get; set; }
         public IMvxCommand OpenFileInBrowserCommand { get; set; }
         public IMvxCommand DownloadFileCommand { get; set; }
@@ -174,6 +175,8 @@ namespace SkyDrop.Core.ViewModels.Main
             ReceiveCommand = new MvxAsyncCommand(async () => await ReceiveFile());
             CopyLinkCommand = new MvxAsyncCommand(async () => await CopySkyLinkToClipboard());
             NavToSettingsCommand = new MvxAsyncCommand(async () => await NavToSettings());
+            OpenContactsMenuCommand = new MvxAsyncCommand(() => OpenContactsMenu(true));
+            NavToContactsCommand = new MvxAsyncCommand(() => OpenContactsMenu(false));
             ShareLinkCommand = new MvxAsyncCommand(async () => await ShareLink());
             CancelUploadCommand = new MvxCommand(CancelUpload);
             ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
@@ -182,7 +185,6 @@ namespace SkyDrop.Core.ViewModels.Main
             DownloadFileCommand = new MvxAsyncCommand(SaveOrUnzipFocusedFile);
             ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
             ShowPreviewImageCommand = new MvxCommand(() => IsPreviewImageVisible = true);
-            OpenContactsMenuCommand = new MvxAsyncCommand(OpenContactsMenu);
         }
 
         public override async Task Initialize()
@@ -945,9 +947,9 @@ namespace SkyDrop.Core.ViewModels.Main
             RaisePropertyChanged(() => SaveButtonText).Forget();
         }
 
-        private async Task OpenContactsMenu()
+        private async Task OpenContactsMenu(bool isSelecting)
         {
-            var item = await navigationService.Navigate<ContactsViewModel, ContactsViewModel.NavParam, IContactItem>(new ContactsViewModel.NavParam { IsSelecting = true });
+            var item = await navigationService.Navigate<ContactsViewModel, ContactsViewModel.NavParam, IContactItem>(new ContactsViewModel.NavParam { IsSelecting = isSelecting });
             if (item == null)
                 return; //user tapped back button
 

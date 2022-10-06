@@ -85,15 +85,7 @@ namespace SkyDrop.Core.Services
             this.storageService = storageService;
             this.fileSystemService = fileSystemService;
 
-            try
-            {
-                GetKeys();
-            }
-            catch(Exception e)
-            {
-                var message = e.Message;
-                userDialogs.Toast(message);
-            }
+            GetKeys().Forget();
         }
 
         public string GetMyPublicKeyWithId(Guid justScannedId)
@@ -358,31 +350,39 @@ namespace SkyDrop.Core.Services
             return (pair.Private as X25519PrivateKeyParameters, pair.Public as X25519PublicKeyParameters);
         }
 
-        private void GetKeys()
+        private async Task GetKeys()
         {
-            var keys = storageService.GetMyEncryptionKeys();
-            if (keys == null)
+            try
             {
-                //generate a random ID
-                var randomIdBytes = new byte[16];
-                random.NextBytes(randomIdBytes);
-                myId = new Guid(randomIdBytes);
+                var keys = await storageService.GetMyEncryptionKeys();
+                if (keys == null)
+                {
+                    //generate a random ID
+                    var randomIdBytes = new byte[16];
+                    random.NextBytes(randomIdBytes);
+                    myId = new Guid(randomIdBytes);
 
-                //generate a device name
-                var nameMaxLength = 48;
-                myName = RemoveNonAsciiChars(Xamarin.Essentials.DeviceInfo.Name);
-                myName = myName.Substring(0, Math.Min(nameMaxLength, myName.Length));
+                    //generate a device name
+                    var nameMaxLength = 48;
+                    myName = RemoveNonAsciiChars(Xamarin.Essentials.DeviceInfo.Name);
+                    myName = myName.Substring(0, Math.Min(nameMaxLength, myName.Length));
 
-                (myPrivateKey, myPublicKey) = GenerateKeyPair();
-                storageService.SaveMyEncryptionKeys(myPrivateKey, myPublicKey, myId, myName);
+                    (myPrivateKey, myPublicKey) = GenerateKeyPair();
+                    await storageService.SaveMyEncryptionKeys(myPrivateKey, myPublicKey, myId, myName);
 
-                return;
+                    return;
+                }
+
+                myPrivateKey = new X25519PrivateKeyParameters(Convert.FromBase64String(keys.PrivateKeyBase64));
+                myPublicKey = new X25519PublicKeyParameters(Convert.FromBase64String(keys.PublicKeyBase64));
+                myId = new Guid(keys.Id);
+                myName = keys.Name;
             }
-
-            myPrivateKey = new X25519PrivateKeyParameters(Convert.FromBase64String(keys.PrivateKeyBase64));
-            myPublicKey = new X25519PublicKeyParameters(Convert.FromBase64String(keys.PublicKeyBase64));
-            myId = new Guid(keys.Id);
-            myName = keys.Name;
+            catch (Exception e)
+            {
+                var message = e.Message;
+                userDialogs.Toast(message);
+            }
         }
 
         private byte[] Encrypt(byte[] key, byte[] plainTextBytes)

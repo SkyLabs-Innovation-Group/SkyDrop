@@ -1,9 +1,9 @@
 ﻿using System;
 using Realms;
 
-namespace SkyDrop.Core.RealmObjects
+namespace SkyDrop.Core.DataModels
 {
-	public class EncryptionKeyPairRealmObject : RealmObject
+	public class EncryptionKeys
 	{
 		public string PrivateKeyBase64 { get; set; }
 

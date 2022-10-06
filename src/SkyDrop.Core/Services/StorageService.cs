@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Org.BouncyCastle.Crypto.Parameters;
 using Realms;
 using Realms.Exceptions;
@@ -15,6 +16,10 @@ namespace SkyDrop.Core.Services
 {
     public class StorageService : IStorageService
     {
+        private const string privateKeyStorageKey = "private_key";
+        private const string publicKeyStorageKey = "public_key";
+        private const string idStorageKey = "device_id";
+        private const string nameStorageKey = "device_name";
         private readonly ILog log;
         private Realm realm => GetRealm();
 
@@ -222,17 +227,9 @@ namespace SkyDrop.Core.Services
             });
         }
 
-        public void UpdateDeviceName(string name)
+        public async Task UpdateDeviceName(string name)
         {
-            var keysObj = realm.All<EncryptionKeyPairRealmObject>().FirstOrDefault();
-            if (keysObj == null)
-                throw new Exception("Keys object cannot be null");
-
-            realm.Write(() =>
-            {
-                keysObj.Name = name;
-                realm.Add(keysObj);
-            });
+            await Xamarin.Essentials.SecureStorage.SetAsync(nameStorageKey, name);
         }
 
         public void RenameContact(Contact contact, string newName)
@@ -246,12 +243,22 @@ namespace SkyDrop.Core.Services
             });
         }
 
-        public EncryptionKeyPairRealmObject GetMyEncryptionKeys()
+        public async Task<EncryptionKeys> GetMyEncryptionKeys()
         {
-            return realm.All<EncryptionKeyPairRealmObject>().FirstOrDefault();
+            var id = await Xamarin.Essentials.SecureStorage.GetAsync(idStorageKey);
+            if (id == null)
+                return null;
+
+            return new EncryptionKeys
+            {
+                Id = id,
+                PublicKeyBase64 = await Xamarin.Essentials.SecureStorage.GetAsync(publicKeyStorageKey),
+                PrivateKeyBase64 = await Xamarin.Essentials.SecureStorage.GetAsync(privateKeyStorageKey),
+                Name = await Xamarin.Essentials.SecureStorage.GetAsync(nameStorageKey)
+            };
         }
 
-        public void SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id, string deviceName)
+        public async Task SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id, string deviceName)
         {
             var privateBytes = privateKey.GetEncoded();
             var privateKeyString = Convert.ToBase64String(privateBytes);
@@ -259,19 +266,10 @@ namespace SkyDrop.Core.Services
             var publicBytes = publicKey.GetEncoded();
             var publicKeyString = Convert.ToBase64String(publicBytes);
 
-            var keys = new EncryptionKeyPairRealmObject()
-            {
-                PrivateKeyBase64 = privateKeyString,
-                PublicKeyBase64 = publicKeyString,
-                Id = id.ToString(),
-                Name = deviceName
-            };
-
-            realm.Write(() =>
-            {
-                realm.RemoveAll<EncryptionKeyPairRealmObject>();
-                realm.Add(keys);
-            });
+            await Xamarin.Essentials.SecureStorage.SetAsync(publicKeyStorageKey, publicKeyString);
+            await Xamarin.Essentials.SecureStorage.SetAsync(privateKeyStorageKey, privateKeyString);
+            await Xamarin.Essentials.SecureStorage.SetAsync(idStorageKey, id.ToString());
+            await Xamarin.Essentials.SecureStorage.SetAsync(nameStorageKey, deviceName);
         }
 
         public void ClearAllData()
@@ -378,11 +376,11 @@ namespace SkyDrop.Core.Services
 
         void DeleteContact(Contact contact);
 
-        void SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id, string deviceName);
+        Task SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id, string deviceName);
 
-        EncryptionKeyPairRealmObject GetMyEncryptionKeys();
+        Task<EncryptionKeys> GetMyEncryptionKeys();
 
-        void UpdateDeviceName(string name);
+        Task UpdateDeviceName(string name);
 
         void RenameContact(Contact contact, string newName);
     }

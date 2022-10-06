@@ -511,6 +511,7 @@
                         app:cardBackgroundColor="@color/darkGrey"
                         app:strokeColor="@color/skyTurqouise"
                         app:strokeWidth="2dp"
+                        app:MvxBind="Click NavToContactsCommand"
                         >
                         <LinearLayout
                             android:layout_width="wrap_content"

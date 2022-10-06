@@ -50,9 +50,11 @@ namespace SkyDrop.iOS.Views.Contacts
 				var icon = value is AnyoneWithTheLinkItem ? "ic_world" : "ic_key";
 				Icon.Image = UIImage.FromBundle(icon);
 
-				//hide delete button for top item
-				DeleteButton.Hidden = value is AnyoneWithTheLinkItem;
-			}
-		}
+				//hide buttons for top item
+				bool hideButtons = value is AnyoneWithTheLinkItem;
+				DeleteButton.Hidden = hideButtons;
+                RenameButton.Hidden = hideButtons;
+            }
+        }
 	}
 }
