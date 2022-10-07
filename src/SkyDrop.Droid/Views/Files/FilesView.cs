@@ -38,5 +38,10 @@ namespace SkyDrop.Droid.Views.Main
             set.Bind(FileExplorerView).For(t => t.LayoutType).To(vm => vm.LayoutType);
             set.Apply();
         }
+
+        public override void OnBackPressed()
+        {
+            ViewModel.BackCommand?.Execute();
+        }
     }
 }
