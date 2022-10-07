@@ -27,6 +27,7 @@ using AndroidX.Core.Content;
 using AndroidX.Core.App;
 using Java.IO;
 using Plugin.CurrentActivity;
+using Java.Lang;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -41,7 +42,7 @@ namespace SkyDrop.Droid.Views.Main
         private const int swipeMarginX = 100;
         private bool isPressed;
         private float tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
-        private MaterialCardView sendButton, receiveButton;
+        private MaterialCardView sendButton, receiveButton, homeMenuMini;
         private ConstraintLayout barcodeContainer, sendReceiveButtonsContainer;
         private LinearLayout barcodeMenu, homeMenu;
         private ImageView barcodeImageView;
@@ -85,9 +86,12 @@ namespace SkyDrop.Droid.Views.Main
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
             sendReceiveButtonsContainer = FindViewById<ConstraintLayout>(Resource.Id.SendReceiveContainer);
             homeMenu = FindViewById<LinearLayout>(Resource.Id.HomeMenu);
+            homeMenuMini = FindViewById<MaterialCardView>(Resource.Id.HomeMenuMini);
 
             var stagedFilesRecycler = FindViewById<RecyclerView>(Resource.Id.StagedFilesRecycler);
             stagedFilesRecycler.SetLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false));
+
+            ResizeMiniMenu();
 
             CreateNavDots();
         }
@@ -167,6 +171,7 @@ namespace SkyDrop.Droid.Views.Main
             homeMenu.Animate()
                 .Alpha(0)
                 .SetDuration(duration)
+                .WithEndAction(new Runnable(() => homeMenu.Visibility = ViewStates.Gone))
                 .Start();
         }
 
@@ -193,6 +198,7 @@ namespace SkyDrop.Droid.Views.Main
             homeMenu.Animate()
                 .Alpha(0)
                 .SetDuration(duration)
+                .WithEndAction(new Runnable(() => homeMenu.Visibility = ViewStates.Gone))
                 .Start();
         }
 
@@ -253,6 +259,7 @@ namespace SkyDrop.Droid.Views.Main
                 .TranslationX(0)
                 .Alpha(1)
                 .SetDuration(duration)
+                .WithEndAction(new Runnable(() => homeMenu.Visibility = ViewStates.Visible))
                 .Start();
         }
 
@@ -396,6 +403,19 @@ namespace SkyDrop.Droid.Views.Main
             var userIsSwipingResult = !interfaceIsCentered;
             ViewModel.Log.Trace($"UserIsSwipingResult: {userIsSwipingResult}");
             ViewModel.UserIsSwipingResult = userIsSwipingResult;
+        }
+
+        /// <summary>
+        /// Resize mini menu to match width of send button
+        /// </summary>
+        private void ResizeMiniMenu()
+        {
+            homeMenuMini.Post(() =>
+            {
+                var layoutParams = homeMenuMini.LayoutParameters;
+                layoutParams.Width = sendButton.Width;
+                homeMenuMini.LayoutParameters = layoutParams;
+            });
         }
 
         /// <summary>

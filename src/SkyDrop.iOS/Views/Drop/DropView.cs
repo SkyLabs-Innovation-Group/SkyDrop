@@ -154,10 +154,10 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(ReceiveButton).For("Tap").To(vm => vm.ReceiveCommand);
 
             //home menu
-            set.Bind(SkyDriveButton).For("Tap").To(vm => vm.OpenSkyDriveCommand);
+            set.Bind(SkyDriveButton).For("Tap").To(vm => vm.MiniMenuSkyDriveCommand);
             //set.Bind(PortalsButton).For("Tap").To(vm => vm.NavigateToPortalsCommand);
             set.Bind(ContactsButton).For("Tap").To(vm => vm.NavToContactsCommand);
-            set.Bind(SettingsButton).For("Tap").To(vm => vm.NavToSettingsCommand);
+            set.Bind(SettingsButton).For("Tap").To(vm => vm.MenuSettingsCommand);
 
             //QR menu
             set.Bind(CopyLinkButton).For("Tap").To(vm => vm.CopyLinkCommand);
@@ -209,7 +209,7 @@ namespace SkyDrop.iOS.Views.Drop
             //icon behind preview image, to show while preview is loading
             set.Bind(FileTypeIcon).For(FileCategoryIconBinding.Name).To(vm => vm.FocusedFile.Filename);
 
-            set.Bind(EncryptButton).For("Tap").To(vm => vm.OpenContactsMenuCommand);
+            set.Bind(EncryptButton).For("Tap").To(vm => vm.ChooseRecipientCommand);
             set.Bind(EncryptButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
 
             set.Bind(EncryptionLabel).To(vm => vm.EncryptionText);
