@@ -192,11 +192,17 @@ namespace SkyDrop.Droid.Views.Main
                 .Start();
             homeMenu.Animate()
                 .Alpha(0)
-                .SetDuration(duration)
+                .SetDuration(duration / 3)
                 .WithEndAction(new Runnable(() => homeMenu.Visibility = ViewStates.Gone))
                 .Start();
+            homeMenuMini.Alpha = 0;
+            homeMenuMini.Animate()
+                .Alpha(1)
+                .SetStartDelay(duration * 2 / 3)
+                .SetDuration(duration / 3)
+                .Start();
 
-            homeMenuAnimator.AnimateShrink();
+            homeMenuAnimator.AnimateShrink(duration / 3, duration / 3);
         }
 
         /// <summary>

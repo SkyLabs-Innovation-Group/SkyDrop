@@ -4,6 +4,7 @@ using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
+using Android.Views.Animations;
 using Android.Widget;
 using AndroidX.ConstraintLayout.Solver.Widgets;
 using AndroidX.ConstraintLayout.Widget;
@@ -39,7 +40,7 @@ namespace SkyDrop.Droid.Helper
             this.iconSize = AndroidUtil.DpToPx(32);
         }
 
-        public async Task AnimateShrink()
+        public async Task AnimateShrink(int delay, int duration)
         {
             var skyDriveIcon = new ImageView(context);
             var portalsIcon = new ImageView(context);
@@ -51,20 +52,22 @@ namespace SkyDrop.Droid.Helper
             contactsIcon.SetImageResource(Resource.Drawable.ic_key);
             settingsIcon.SetImageResource(Resource.Drawable.ic_cog);
 
+            await Task.Delay(delay);
+
             AddIconsToWindow(skyDriveIcon, portalsIcon, contactsIcon, settingsIcon);
 
             //wait for views to layout
-            await Task.Delay(100);
+            await Task.Delay(10);
 
             var (miniMenuIconSkyDriveX, miniMenuIconSkyDriveY) = GetViewLocation(miniMenuIconSkyDrive);
             var (miniMenuIconPortalsX, miniMenuIconPortalsY) = GetViewLocation(miniMenuIconPortals);
             var (miniMenuIconContactsX, miniMenuIconContactsY) = GetViewLocation(miniMenuIconContacts);
             var (miniMenuIconSettingsX, miniMenuIconSettingsY) = GetViewLocation(miniMenuIconSettings);
 
-            AnimateMoveToLocation(skyDriveIcon, miniMenuIconSkyDriveX, miniMenuIconSkyDriveY);
-            AnimateMoveToLocation(portalsIcon, miniMenuIconPortalsX, miniMenuIconPortalsY);
-            AnimateMoveToLocation(contactsIcon, miniMenuIconContactsX, miniMenuIconContactsY);
-            AnimateMoveToLocation(settingsIcon, miniMenuIconSettingsX, miniMenuIconSettingsY);
+            AnimateMoveToLocation(skyDriveIcon, miniMenuIconSkyDriveX, miniMenuIconSkyDriveY, duration);
+            AnimateMoveToLocation(portalsIcon, miniMenuIconPortalsX, miniMenuIconPortalsY, duration);
+            AnimateMoveToLocation(contactsIcon, miniMenuIconContactsX, miniMenuIconContactsY, duration);
+            AnimateMoveToLocation(settingsIcon, miniMenuIconSettingsX, miniMenuIconSettingsY, duration);
         }
 
         public void AnimateExpand()
@@ -98,17 +101,26 @@ namespace SkyDrop.Droid.Helper
             var x = loc[0] - containerLoc[0];
             var y = loc[1] - containerLoc[1];
 
+            //measure from the center of the view
+            x += view.Width / 2;
+            y += view.Height / 2;
+
             return (x, y);
         }
 
-        private void AnimateMoveToLocation(View view, int x, int y)
+        private void AnimateMoveToLocation(View view, int x, int y, int duration)
         {
             var (currentX, currentY) = GetViewLocation(view);
             view.Animate()
                 .TranslationX(x - currentX)
                 .TranslationY(y - currentY)
-                .SetDuration(1000)
-                .WithEndAction(new Runnable(() => view.Remove()))
+                .SetDuration(duration)
+                .SetInterpolator(new AccelerateDecelerateInterpolator())
+                .WithEndAction(new Runnable(async () =>
+                {
+                    await Task.Delay(500);
+                    view.Remove();
+                }))
                 .Start();
         }
     }
