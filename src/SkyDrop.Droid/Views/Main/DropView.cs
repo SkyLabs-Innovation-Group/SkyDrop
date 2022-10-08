@@ -28,6 +28,7 @@ using AndroidX.Core.App;
 using Java.IO;
 using Plugin.CurrentActivity;
 using Java.Lang;
+using System.Runtime.Remoting.Contexts;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -47,6 +48,8 @@ namespace SkyDrop.Droid.Views.Main
         private LinearLayout barcodeMenu, homeMenu;
         private ImageView barcodeImageView;
         private View leftDot, rightDot;
+        private HomeMenuAnimator homeMenuAnimator;
+        private FrameLayout animationContainer;
 
         /// <summary>
         /// Initialize view
@@ -79,6 +82,7 @@ namespace SkyDrop.Droid.Views.Main
             fileSystemService.DownloadsFolderPath = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Android.OS.Environment.DirectoryDownloads);
             fileSystemService.CacheFolderPath = System.IO.Path.GetTempPath();
 
+            animationContainer = FindViewById<FrameLayout>(Resource.Id.AnimationContainer);
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
             receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);
             barcodeContainer = FindViewById<ConstraintLayout>(Resource.Id.BarcodeContainer);
@@ -88,12 +92,30 @@ namespace SkyDrop.Droid.Views.Main
             homeMenu = FindViewById<LinearLayout>(Resource.Id.HomeMenu);
             homeMenuMini = FindViewById<MaterialCardView>(Resource.Id.HomeMenuMini);
 
+            animationContainer.TranslationZ = 100;
+
             var stagedFilesRecycler = FindViewById<RecyclerView>(Resource.Id.StagedFilesRecycler);
             stagedFilesRecycler.SetLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false));
 
             ResizeMiniMenu();
 
             CreateNavDots();
+
+            SetUpMenuAnimator();
+        }
+
+        private void SetUpMenuAnimator()
+        {
+            var skyDriveIcon = FindViewById<ImageView>(Resource.Id.HomeMenuIconSkyDrive);
+            var portalsIcon = FindViewById<ImageView>(Resource.Id.HomeMenuIconPortals);
+            var contactsIcon = FindViewById<ImageView>(Resource.Id.HomeMenuIconContacts);
+            var settingsIcon = FindViewById<ImageView>(Resource.Id.HomeMenuIconSettings);
+            var skyDriveMiniIcon = FindViewById<ImageView>(Resource.Id.MiniMenuIconSkyDrive);
+            var portalsMiniIcon = FindViewById<ImageView>(Resource.Id.MiniMenuIconPortals);
+            var contactsMiniIcon = FindViewById<ImageView>(Resource.Id.MiniMenuIconContacts);
+            var settingsMiniIcon = FindViewById<ImageView>(Resource.Id.MiniMenuIconSettings);
+            homeMenuAnimator = new HomeMenuAnimator(skyDriveIcon, portalsIcon, contactsIcon, settingsIcon,
+                skyDriveMiniIcon, portalsMiniIcon, contactsMiniIcon, settingsMiniIcon, BaseContext, animationContainer);
         }
 
         /// <summary>
@@ -173,6 +195,8 @@ namespace SkyDrop.Droid.Views.Main
                 .SetDuration(duration)
                 .WithEndAction(new Runnable(() => homeMenu.Visibility = ViewStates.Gone))
                 .Start();
+
+            homeMenuAnimator.AnimateShrink();
         }
 
         /// <summary>

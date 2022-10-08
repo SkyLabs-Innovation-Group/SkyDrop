@@ -452,6 +452,7 @@
                             android:gravity="center"
                             android:orientation="vertical">
                             <ImageView
+                                android:id="@+id/HomeMenuIconSkyDrive"
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
                                 android:layout_marginTop="8dp"
@@ -487,6 +488,7 @@
                             android:layout_marginTop="4dp"
                             android:orientation="vertical">
                             <ImageView
+                                android:id="@+id/HomeMenuIconPortals"
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
                                 android:layout_marginTop="8dp"
@@ -522,6 +524,7 @@
                             android:gravity="center"
                             android:orientation="vertical">
                             <ImageView
+                                android:id="@+id/HomeMenuIconContacts"
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
                                 android:layout_marginTop="8dp"
@@ -559,7 +562,8 @@
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
                                 android:src="@drawable/ic_cog"
-                                android:layout_marginTop="8dp" />
+                                android:layout_marginTop="8dp"
+                                android:id="@+id/HomeMenuIconSettings"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -596,7 +600,7 @@
                 app:cardElevation="1dp"
                 app:cardCornerRadius="8dp"
                 app:cardBackgroundColor="@color/midGrey"
-                
+                android:translationZ="2dp"
                 app:MvxBind="Visibility Visibility(IsStagedFilesVisible)">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -607,6 +611,7 @@
                     android:gravity="center"
                     android:orientation="horizontal">
                     <ImageView
+                        android:id="@+id/MiniMenuIconSkyDrive"
                         android:layout_width="0dp"
                         android:layout_height="32dp"
                         android:layout_weight="1"
@@ -614,6 +619,7 @@
                         android:src="@drawable/ic_cloud"
                         app:MvxBind="Click MenuSkyDriveCommand"/>
                     <ImageView
+                        android:id="@+id/MiniMenuIconPortals"
                         android:layout_width="0dp"
                         android:layout_height="32dp"
                         android:layout_weight="1"
@@ -621,6 +627,7 @@
                         android:src="@drawable/ic_portal"
                         app:MvxBind="Click MenuPortalsCommand"/>
                     <ImageView
+                        android:id="@+id/MiniMenuIconContacts"
                         android:layout_width="0dp"
                         android:layout_height="32dp"
                         android:layout_weight="1"
@@ -628,6 +635,7 @@
                         android:src="@drawable/ic_key"
                         app:MvxBind="Click MenuContactsCommand"/>
                     <ImageView
+                        android:id="@+id/MiniMenuIconSettings"
                         android:layout_width="0dp"
                         android:layout_height="32dp"
                         android:layout_weight="1"
@@ -708,6 +716,11 @@
                 android:layout_alignParentBottom="true"
                 app:MvxItemTemplate="@layout/item_file_staged_square"
                 app:MvxBind="ItemsSource StagedFiles;ItemClick ShowStagedFileMenuCommand;Visibility Visibility(IsStagedFilesVisible)"/>
+
+            <FrameLayout
+                android:id="@+id/AnimationContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
             <LinearLayout
                 android:id="@+id/NavDotsLayout"
