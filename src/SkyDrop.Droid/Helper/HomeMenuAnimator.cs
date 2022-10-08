@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
@@ -6,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using AndroidX.ConstraintLayout.Solver.Widgets;
 using AndroidX.ConstraintLayout.Widget;
+using Java.Lang;
 
 namespace SkyDrop.Droid.Helper
 {
@@ -37,7 +39,7 @@ namespace SkyDrop.Droid.Helper
             this.iconSize = AndroidUtil.DpToPx(32);
         }
 
-        public void AnimateShrink()
+        public async Task AnimateShrink()
         {
             var skyDriveIcon = new ImageView(context);
             var portalsIcon = new ImageView(context);
@@ -50,6 +52,19 @@ namespace SkyDrop.Droid.Helper
             settingsIcon.SetImageResource(Resource.Drawable.ic_cog);
 
             AddIconsToWindow(skyDriveIcon, portalsIcon, contactsIcon, settingsIcon);
+
+            //wait for views to layout
+            await Task.Delay(100);
+
+            var (miniMenuIconSkyDriveX, miniMenuIconSkyDriveY) = GetViewLocation(miniMenuIconSkyDrive);
+            var (miniMenuIconPortalsX, miniMenuIconPortalsY) = GetViewLocation(miniMenuIconPortals);
+            var (miniMenuIconContactsX, miniMenuIconContactsY) = GetViewLocation(miniMenuIconContacts);
+            var (miniMenuIconSettingsX, miniMenuIconSettingsY) = GetViewLocation(miniMenuIconSettings);
+
+            AnimateMoveToLocation(skyDriveIcon, miniMenuIconSkyDriveX, miniMenuIconSkyDriveY);
+            AnimateMoveToLocation(portalsIcon, miniMenuIconPortalsX, miniMenuIconPortalsY);
+            AnimateMoveToLocation(contactsIcon, miniMenuIconContactsX, miniMenuIconContactsY);
+            AnimateMoveToLocation(settingsIcon, miniMenuIconSettingsX, miniMenuIconSettingsY);
         }
 
         public void AnimateExpand()
@@ -84,6 +99,17 @@ namespace SkyDrop.Droid.Helper
             var y = loc[1] - containerLoc[1];
 
             return (x, y);
+        }
+
+        private void AnimateMoveToLocation(View view, int x, int y)
+        {
+            var (currentX, currentY) = GetViewLocation(view);
+            view.Animate()
+                .TranslationX(x - currentX)
+                .TranslationY(y - currentY)
+                .SetDuration(1000)
+                .WithEndAction(new Runnable(() => view.Remove()))
+                .Start();
         }
     }
 }
