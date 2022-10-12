@@ -154,9 +154,9 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(ReceiveButton).For("Tap").To(vm => vm.ReceiveCommand);
 
             //home menu
-            set.Bind(SkyDriveButton).For("Tap").To(vm => vm.MiniMenuSkyDriveCommand);
-            //set.Bind(PortalsButton).For("Tap").To(vm => vm.NavigateToPortalsCommand);
-            set.Bind(ContactsButton).For("Tap").To(vm => vm.NavToContactsCommand);
+            set.Bind(SkyDriveButton).For("Tap").To(vm => vm.MenuSkyDriveCommand);
+            set.Bind(PortalsButton).For("Tap").To(vm => vm.MenuPortalsCommand);
+            set.Bind(ContactsButton).For("Tap").To(vm => vm.MenuContactsCommand);
             set.Bind(SettingsButton).For("Tap").To(vm => vm.MenuSettingsCommand);
 
             //QR menu

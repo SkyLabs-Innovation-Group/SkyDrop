@@ -78,10 +78,6 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>(result => AndroidUtil.ShowUploadFinishedNotification(this, result));
             ViewModel.UpdateNotificationProgressCommand = new MvxCommand<double>(progress => AndroidUtil.UpdateNotificationProgress(this, progress));
 
-            var fileSystemService = Mvx.IoCProvider.Resolve<IFileSystemService>();
-            fileSystemService.DownloadsFolderPath = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Android.OS.Environment.DirectoryDownloads);
-            fileSystemService.CacheFolderPath = System.IO.Path.GetTempPath();
-
             animationContainer = FindViewById<FrameLayout>(Resource.Id.AnimationContainer);
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
             receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);
@@ -96,8 +92,6 @@ namespace SkyDrop.Droid.Views.Main
 
             var stagedFilesRecycler = FindViewById<RecyclerView>(Resource.Id.StagedFilesRecycler);
             stagedFilesRecycler.SetLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false));
-
-            ResizeMiniMenu();
 
             CreateNavDots();
 
@@ -433,19 +427,6 @@ namespace SkyDrop.Droid.Views.Main
             var userIsSwipingResult = !interfaceIsCentered;
             ViewModel.Log.Trace($"UserIsSwipingResult: {userIsSwipingResult}");
             ViewModel.UserIsSwipingResult = userIsSwipingResult;
-        }
-
-        /// <summary>
-        /// Resize mini menu to match width of send button
-        /// </summary>
-        private void ResizeMiniMenu()
-        {
-            homeMenuMini.Post(() =>
-            {
-                var layoutParams = homeMenuMini.LayoutParameters;
-                layoutParams.Width = sendButton.Width;
-                homeMenuMini.LayoutParameters = layoutParams;
-            });
         }
 
         /// <summary>
