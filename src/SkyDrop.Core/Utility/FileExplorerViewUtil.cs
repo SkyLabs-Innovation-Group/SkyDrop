@@ -9,34 +9,23 @@ namespace SkyDrop.Core.Utility
 {
 	public static class FileExplorerViewUtil
 	{
-        public static void ActivateSelectionMode(MvxObservableCollection<SkyFileDVM> skyFiles, SkyFile selectedFile)
+        public static void ActivateSelectionMode<T>(MvxObservableCollection<T> items, T selectedItem, Action selectionStartedAction) where T : ISelectableItem
         {
             //select the skyfile that was long pressed
-            SkyFileDVM selectedFileDVM;
-            if(selectedFile.Skylink.IsNullOrEmpty())
-                selectedFileDVM = skyFiles.FirstOrDefault(s => s.SkyFile.FullFilePath == selectedFile.FullFilePath); //unzipped file
-            else
-                selectedFileDVM = skyFiles.FirstOrDefault(s => s.SkyFile.Skylink == selectedFile.Skylink); //skyfile
-
-            selectedFileDVM.IsSelected = true;
+            selectedItem.IsSelected = true;
 
             //show empty selection circles for all other skyfiles
-            foreach (var skyfile in skyFiles)
+            foreach (var skyfile in items)
             {
                 skyfile.IsSelectionActive = true;
             }
+
+            selectionStartedAction?.Invoke();
         }
 
-        public static void ToggleFileSelected(SkyFile selectedFile, IEnumerable<SkyFileDVM> skyFiles)
+        public static void ToggleItemSelected<T>(T selectedFile, IEnumerable<T> skyFiles, Action selectionEndedAction) where T : ISelectableItem
         {
-            //select the skyfile that was long pressed
-            SkyFileDVM selectedFileDVM;
-            if (selectedFile.Skylink.IsNullOrEmpty())
-                selectedFileDVM = skyFiles.FirstOrDefault(s => s.SkyFile.FullFilePath == selectedFile.FullFilePath); //unzipped file
-            else
-                selectedFileDVM = skyFiles.FirstOrDefault(s => s.SkyFile.Skylink == selectedFile.Skylink); //skyfile
-
-            selectedFileDVM.IsSelected = !selectedFileDVM.IsSelected;
+            selectedFile.IsSelected = !selectedFile.IsSelected;
 
             //if no files are selected, exit selection mode
             if (!skyFiles.Any(a => a.IsSelected))
@@ -45,6 +34,8 @@ namespace SkyDrop.Core.Utility
                 {
                     skyFile.IsSelectionActive = false;
                 }
+
+                selectionEndedAction?.Invoke();
             }
         }
     }

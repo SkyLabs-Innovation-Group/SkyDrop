@@ -1,5 +1,6 @@
 ﻿using System;
 using Acr.UserDialogs;
+using MvvmCross.Commands;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
 using SkyDrop.Core.DataModels;
@@ -9,7 +10,7 @@ using UIKit;
 
 namespace SkyDrop.iOS.Views.Settings
 {
-    partial class SettingsView : MvxViewController<SettingsViewModel>
+    partial class SettingsView : BaseViewController<SettingsViewModel>
     {
         public SettingsView() : base("SettingsView", null)
         {
@@ -19,38 +20,36 @@ namespace SkyDrop.iOS.Views.Settings
         {
             base.ViewDidLoad();
 
+            AddBackButton(() => ViewModel.Close());
+
+            ViewModel.CloseKeyboardCommand = new MvxCommand(() => View.EndEditing(true));
+
             var set = CreateBindingSet();
             set.Bind(SetPortalLabel).For(v => v.Text).To(vm => vm.SkynetPortalLabelText);
-            set.Bind(PortalPreferencesButton).To(vm => vm.NavigateToPortalPreferencesCommand);
+            set.Bind(NameTextView).For(v => v.Text).To(vm => vm.DeviceName);
+            set.Bind(SetNameButton).To(vm => vm.SetDeviceNameCommand);
+            set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Apply();
 
-            NavigationController.NavigationBar.TintColor = UIColor.White;
+            StyleTextInput(PortalTextView);
+            StyleTextInput(NameTextView);
 
-            View.BackgroundColor = Colors.DarkGrey.ToNative();
+            StyleButton(SavePortalButton);
+            StyleButton(SetNameButton);
+            StyleButton(ContactsButton);
 
             PortalTextView.Text = SkynetPortal.SelectedPortal.ToString();
-            PortalTextView.BackgroundColor = Colors.MidGrey.ToNative();
-            PortalTextView.TextColor = UIColor.White;
-            PortalTextView.Layer.CornerRadius = 8;
-
-            PortalPreferencesButton.Layer.CornerRadius = 8;
-            PortalPreferencesButton.BackgroundColor = UIColor.White;
-
-            SavePortalButton.Layer.CornerRadius = 8;
-            SavePortalButton.BackgroundColor = UIColor.White;
             SavePortalButton.TouchUpInside += async (s, e) =>
             {
                 UIApplication.SharedApplication.KeyWindow.EndEditing(true);
-                var formattedPortalUrl = await ViewModel.ValidateAndTrySetSkynetPortal(PortalTextView.Text);
-                PortalTextView.Text = formattedPortalUrl;
+                await ViewModel.ValidateAndTrySetSkynetPortalCommand.ExecuteAsync(PortalTextView.Text);
+                PortalTextView.Text = SkynetPortal.SelectedPortal.BaseUrl;
             };
+
+            ContactsButton.TouchUpInside += (s, e) => ViewModel.NavigateToContactsCommand.Execute();
 
             EnableUploadNotificationsSwitch.On = ViewModel.UploadNotificationsEnabled;
             EnableUploadNotificationsSwitch.ValueChanged += EnableUploadNotificationsSwitch_ValueChanged;
-
-            PortalTextView.Changed += (s, e) => AdjustTextBoxContentSize(PortalTextView);
-
-            AdjustTextBoxContentSize(PortalTextView);
         }
 
         /// <summary>
@@ -66,6 +65,21 @@ namespace SkyDrop.iOS.Views.Settings
         private void EnableUploadNotificationsSwitch_ValueChanged(object sender, EventArgs e)
         {
             ViewModel.SetUploadNotificationEnabled((sender as UISwitch).On);
+        }
+
+        private void StyleTextInput(UITextView textView)
+        {
+            textView.BackgroundColor = Colors.MidGrey.ToNative();
+            textView.TextColor = UIColor.White;
+            textView.Layer.CornerRadius = 8;
+            textView.Changed += (s, e) => AdjustTextBoxContentSize(PortalTextView);
+            AdjustTextBoxContentSize(textView);
+        }
+
+        private void StyleButton(UIButton button)
+        {
+            button.Layer.CornerRadius = 8;
+            button.BackgroundColor = UIColor.White;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -20,6 +21,8 @@ using SkyDrop.Core.Services;
 using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
 using ZXing.Common;
+using static SkyDrop.Core.ViewModels.Main.FilesViewModel;
+using Contact = SkyDrop.Core.DataModels.Contact;
 
 namespace SkyDrop.Core.ViewModels.Main
 {
@@ -33,12 +36,15 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IBarcodeService barcodeService;
         private readonly IShareLinkService shareLinkService;
         private readonly IUploadTimerService uploadTimerService;
+        private readonly IEncryptionService encryptionService;
+        private readonly IFFImageService ffImageService;
 
         public IMvxCommand SendCommand { get; set; }
         public IMvxCommand ReceiveCommand { get; set; }
         public IMvxCommand CopyLinkCommand { get; set; }
         public IMvxCommand ResetUIStateCommand { get; set; }
         public IMvxCommand NavToSettingsCommand { get; set; }
+        public IMvxCommand NavToContactsCommand { get; set; }
         public IMvxCommand ShareLinkCommand { get; set; }
         public IMvxCommand OpenFileInBrowserCommand { get; set; }
         public IMvxCommand DownloadFileCommand { get; set; }
@@ -52,9 +58,10 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand<FileUploadResult> UploadFinishedNotificationCommand { get; set; }
         public IMvxCommand<double> UpdateNotificationProgressCommand { get; set; }
         public IMvxCommand IosSelectFileCommand { get; set; }
-        public IMvxCommand MenuCommand { get; set; }
+        public IMvxCommand OpenSkyDriveCommand { get; set; }
         public IMvxCommand ShowBarcodeCommand { get; set; }
         public IMvxCommand ShowPreviewImageCommand { get; set; }
+        public IMvxCommand OpenContactsMenuCommand { get; set; }
 
         public bool IsUploading { get; set; }
         public bool IsStagingFiles { get; set; }
@@ -72,8 +79,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool SwipeNavigationEnabled { get; set; } //determines whether user can swipe to the QR code screen
         public bool UserIsSwipingResult { get; set; }
         public bool NavDotsVisible => DropViewUIState != DropViewState.ConfirmFilesState && SwipeNavigationEnabled;
-        public string SendButtonLabel => IsUploading ? StagedFiles?.Count > 2 ? "SENDING FILES" :
-            "SENDING FILE" :
+        public string SendButtonLabel => IsEncrypting ? "ENCRYPTING" :
+            IsUploading ? StagedFiles?.Count > 2 ? "SENDING FILES" : "SENDING FILE" :
             DropViewUIState == DropViewState.ConfirmFilesState && StagedFiles?.Count > 2 ? "SEND FILES" : "SEND FILE";
         public string ReceiveButtonLabel { get; set; } = receiveFileText;
         public bool IsReceivingFile { get; set; }
@@ -82,12 +89,14 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool CanDisplayPreview => FocusedFile?.Filename.CanDisplayPreview() ?? false;
         public bool IsShowBarcodeButtonVisible => CanDisplayPreview && IsPreviewImageVisible;
         public bool IsShowPreviewButtonVisible => CanDisplayPreview && !IsPreviewImageVisible;
-        public bool IsFocusedFileAnArchive => FocusedFile.Filename.ExtensionMatches(".zip");
+        public bool IsFocusedFileAnArchive => FocusedFile.Filename.ExtensionMatches(".zip") || FocusedFile.Filename.IsEncryptedZipFile();
         public string SaveButtonText => IsFocusedFileAnArchive ? "Unzip" : "Save";
+        public string EncryptionText => GetVisibilityText();
+        public bool IsEncrypting { get; set; }
 
         public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile FocusedFile { get; set; } //most recently sent or received file
-        public string FocusedFileUrl => FocusedFile.GetSkylinkUrl();
+        public string FocusedFileUrl => FocusedFile?.GetSkylinkUrl();
         public SkyFile FileToUpload { get; set; }
 
         private DropViewState _dropViewUIState;
@@ -120,9 +129,11 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private const string receiveFileText = "RECEIVE FILE";
         private const string receivingFileText = "RECEIVING FILE...";
+        private const string noInternetPrompt = "Please check your internet connection";
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
         private TaskCompletionSource<SkyFile> iosMultipleImageSelectTask;
+        private Contact encryptionContact;
 
         private Func<string, Task> _generateBarcodeAsyncFunc;
         public Func<string, Task> GenerateBarcodeAsyncFunc
@@ -142,7 +153,9 @@ namespace SkyDrop.Core.ViewModels.Main
             IUserDialogs userDialogs,
             IMvxNavigationService navigationService,
             IFileSystemService fileSystemService,
-            ILog log) : base(singletonService)
+            IEncryptionService encryptionService,
+            ILog log,
+            IFFImageService fFImageService) : base(singletonService)
         {
             Log = log;
             Title = "SkyDrop";
@@ -155,16 +168,20 @@ namespace SkyDrop.Core.ViewModels.Main
             this.barcodeService = barcodeService;
             this.shareLinkService = shareLinkService;
             this.uploadTimerService = uploadTimerService;
+            this.encryptionService = encryptionService;
+            this.ffImageService = fFImageService;
 
             SendCommand = new MvxAsyncCommand(async () => await SendButtonTapped());
             ReceiveCommand = new MvxAsyncCommand(async () => await ReceiveFile());
             CopyLinkCommand = new MvxAsyncCommand(async () => await CopySkyLinkToClipboard());
             NavToSettingsCommand = new MvxAsyncCommand(async () => await NavToSettings());
+            OpenContactsMenuCommand = new MvxAsyncCommand(() => OpenContactsMenu(true));
+            NavToContactsCommand = new MvxAsyncCommand(() => OpenContactsMenu(false));
             ShareLinkCommand = new MvxAsyncCommand(async () => await ShareLink());
             CancelUploadCommand = new MvxCommand(CancelUpload);
             ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
-            MenuCommand = new MvxAsyncCommand(NavigateToFiles);
+            OpenSkyDriveCommand = new MvxAsyncCommand(NavigateToFiles);
             DownloadFileCommand = new MvxAsyncCommand(SaveOrUnzipFocusedFile);
             ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
             ShowPreviewImageCommand = new MvxCommand(() => IsPreviewImageVisible = true);
@@ -173,6 +190,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public override async Task Initialize()
         {
             DropViewUIState = DropViewState.SendReceiveButtonState;
+
             await base.Initialize();
         }
 
@@ -268,6 +286,18 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (UploadNotificationsEnabled)
                     UploadStartedNotificationCommand?.Execute();
 
+                if (encryptionContact != null)
+                {
+                    IsEncrypting = true;
+                    var encryptedPath = await encryptionService.EncodeFileFor(FileToUpload.FullFilePath, new List<Contact> { encryptionContact });
+
+                    //we use a second property for the encrypted path so that we can preserve the original path, in case file needs to be encrypted again (after changing recipients)
+                    FileToUpload.EncryptedFilePath = encryptedPath;
+                    FileToUpload.EncryptedFilename = Path.GetFileName(encryptedPath);
+
+                    IsEncrypting = false;
+                }
+
                 StartUploadTimer(FileToUpload.FileSizeBytes);
                 FocusedFile = await UploadFile();
                 StopUploadTimer();
@@ -283,6 +313,9 @@ namespace SkyDrop.Core.ViewModels.Main
                 storageService.SaveSkyFiles(FocusedFile);
 
                 RaiseFocusedFileChanged();
+
+                //show filename
+                Title = FocusedFile.Filename;
 
                 //clear cache
                 fileSystemService.ClearCache();
@@ -315,21 +348,29 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 HandleUploadError(httpEx, Strings.SslPrompt, FileUploadResult.Fail);
             }
+            catch (System.UnauthorizedAccessException authEx)
+            {
+                HandleUploadError(authEx, "Access denied when reading selected files", FileUploadResult.Fail);
+            }
             catch (Exception ex) // General error
             {
-                HandleUploadError(ex, "Could not upload file", FileUploadResult.Fail);
+                HandleUploadError(ex, "Upload failed", FileUploadResult.Fail);
             }
             finally
             {
-                StopUploadTimer();
+                StopUploadTimer(ignoreResult: true);
                 IsUploading = false;
                 IsBarcodeLoading = false;
+                IsEncrypting = false;
             }
         }
 
         private void HandleUploadError(Exception ex, string prompt, FileUploadResult result)
         {
-            if(result == FileUploadResult.Fail)
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+                prompt = noInternetPrompt;
+
+            if (result == FileUploadResult.Fail)
             {
                 userDialogs.Alert(prompt);
                 Log.Exception(ex);
@@ -349,6 +390,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task ReceiveFile()
         {
+            string barcodeData = null;
             try
             {
                 //don't allow user to scan barcode while a file is uploading
@@ -367,7 +409,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 IsReceivingFile = true;
 
                 //open the QR code scan view
-                var barcodeData = await barcodeService.ScanBarcode();
+                barcodeData = await barcodeService.ScanBarcode();
                 if (barcodeData == null)
                 {
                     Log.Trace("barcodeData is null");
@@ -394,6 +436,9 @@ namespace SkyDrop.Core.ViewModels.Main
                 FocusedFile.Filename = filename;
                 storageService.SaveSkyFiles(FocusedFile);
 
+                //show filename
+                Title = FocusedFile.Filename;
+
                 RaiseFocusedFileChanged();
 
                 //can only do this after getting filename from Skynet
@@ -404,13 +449,15 @@ namespace SkyDrop.Core.ViewModels.Main
                 Log.Exception(e);
 
                 //avoid crashing android by NOT showing a toast before the scanner activity has closed
-                var error = "Invalid QR code";
+                var error = "Not a link, QR code content was copied to clipboard";
                 if (DeviceInfo.Platform == DevicePlatform.iOS)
                     userDialogs.Toast(error);
                 else
                     errorMessage = error;
 
                 ResetUIStateCommand.Execute();
+
+                await Clipboard.SetTextAsync(barcodeData);
             }
             finally
             {
@@ -470,9 +517,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private SkyFile MakeZipFile()
         {
-            //TODO: add option to rename zip file in the renaming dialog
-            string archiveName = "skydrop_archive.zip";
-
+            var archiveName = new StringBuilder(Guid.NewGuid().ToString("N")) + ".zip";
             string compressedFilePath = Path.Combine(Path.GetTempPath(), archiveName);
 
             var filesToUpload = StagedFiles.Where(s => !s.IsMoreFilesButton).Select(s => s.SkyFile).ToList();
@@ -492,9 +537,10 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task<List<SkyFile>> SelectFiles()
         {
-            var file = "Select Files";
-            var image = "Select Image";
-            var video = "Select Video";
+            bool isIos = DeviceInfo.Platform == DevicePlatform.iOS;
+            var file = isIos ? "Select Files" : "Select Multiple Files";
+            var image = isIos ? "Select Images" : "Select Image File";
+            var video = isIos ? "Select Video" : "Select Video File";
             var cancel = "cancel";
             var fileType = await userDialogs.ActionSheetAsync("", cancel, null, null, file, image, video);
             if (fileType == cancel)
@@ -616,9 +662,9 @@ namespace SkyDrop.Core.ViewModels.Main
             uploadTimerService.StartUploadTimer(fileSizeBytes, UpdateUploadProgress);
         }
 
-        private void StopUploadTimer()
+        private void StopUploadTimer(bool ignoreResult = false)
         {
-            uploadTimerService.StopUploadTimer();
+            uploadTimerService.StopUploadTimer(ignoreResult);
         }
 
         private void UpdateUploadProgress()
@@ -697,7 +743,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private Task NavToSettings()
         {
-            return navigationService.Navigate<MenuViewModel>();
+            return navigationService.Navigate<SettingsViewModel>();
         }
 
         private async Task ShareLink()
@@ -788,9 +834,7 @@ namespace SkyDrop.Core.ViewModels.Main
             if (UserIsSwiping())
                 return;
 
-            var fileToOpen = FocusedFile ?? FocusedFile;
-
-            string skylinkUrl = fileToOpen.GetSkylinkUrl();
+            string skylinkUrl = FocusedFile.GetSkylinkUrl();
             Log.Trace("Opening Skylink " + skylinkUrl);
             await Browser.OpenAsync(skylinkUrl, new BrowserLaunchOptions
             {
@@ -829,6 +873,9 @@ namespace SkyDrop.Core.ViewModels.Main
             SwipeNavigationEnabled = true;
             FocusedFile = selectedFile;
 
+            //show filename
+            Title = FocusedFile.Filename;
+
             RaiseFocusedFileChanged();
 
             UpdatePreviewImage();
@@ -849,13 +896,28 @@ namespace SkyDrop.Core.ViewModels.Main
                     return;
                 }
 
-                //save
+                if (FocusedFile.Filename == null)
+                {
+                    //filename head request not yet completed, or failed
+                    //we must have the filename in order to know how we should save the file
+
+                    //retry getting filename
+                    IsDownloadingFile = true;
+                    var filename = await apiService.GetSkyFileFilename(FocusedFile.GetSkylinkUrl());
+                    FocusedFile.Filename = filename;
+                }
+
+                IsDownloadingFile = false;
+                var saveType = await Util.GetSaveType(FocusedFile.Filename);
+                if (saveType == Util.SaveType.Cancel)
+                    return;
+
                 IsDownloadingFile = true;
-                await apiService.DownloadAndSaveSkyfile(FocusedFileUrl);
+                await apiService.DownloadAndSaveSkyfile(FocusedFileUrl, saveType);
             }
             catch(Exception e)
             {
-                userDialogs.Toast("Failed to save file");
+                userDialogs.Toast(e.Message);
             }
             finally
             {
@@ -883,6 +945,25 @@ namespace SkyDrop.Core.ViewModels.Main
             RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
             RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
             RaisePropertyChanged(() => SaveButtonText).Forget();
+        }
+
+        private async Task OpenContactsMenu(bool isSelecting)
+        {
+            var item = await navigationService.Navigate<ContactsViewModel, ContactsViewModel.NavParam, IContactItem>(new ContactsViewModel.NavParam { IsSelecting = isSelecting });
+            if (item == null)
+                return; //user tapped back button
+
+            //set encryptionContact to null if item is AnyoneWithTheLinkItem
+            encryptionContact = item is ContactDVM contactDvm ? contactDvm.Contact : null;
+            RaisePropertyChanged(() => EncryptionText).Forget();
+        }
+
+        public string GetVisibilityText()
+        {
+            if (encryptionContact == null)
+                return "Anyone with the link";
+
+            return encryptionContact.Name;
         }
     }
 }

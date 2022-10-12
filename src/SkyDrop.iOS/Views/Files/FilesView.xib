@@ -14,6 +14,7 @@
                 <outlet property="ActivityIndicatorContainer" destination="5oH-N5-wcr" id="TJm-gk-zd6"/>
                 <outlet property="ErrorIcon" destination="yip-kG-nNl" id="cIU-Iq-nJA"/>
                 <outlet property="FileExplorerHolder" destination="zf1-Qw-94o" id="wgn-17-XpC"/>
+                <outlet property="FoldersTableView" destination="BPg-mO-lF1" id="OrM-1Z-al5"/>
                 <outlet property="LoadingLabel" destination="e8w-Et-Jcp" id="GHf-8m-DFZ"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
@@ -23,10 +24,15 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zf1-Qw-94o">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zf1-Qw-94o" userLabel="File Explorer Holder">
                     <rect key="frame" x="0.0" y="44" width="414" height="852"/>
                     <color key="backgroundColor" systemColor="systemIndigoColor"/>
                 </view>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="BPg-mO-lF1" userLabel="Folders Table View">
+                    <rect key="frame" x="0.0" y="44" width="414" height="852"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5oH-N5-wcr">
                     <rect key="frame" x="0.0" y="400" width="414" height="96"/>
                     <subviews>
@@ -70,12 +76,19 @@
                 <constraint firstAttribute="bottom" secondItem="zf1-Qw-94o" secondAttribute="bottom" id="StI-GI-QcV"/>
                 <constraint firstItem="5oH-N5-wcr" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="X6U-KL-GHz"/>
                 <constraint firstItem="zf1-Qw-94o" firstAttribute="top" secondItem="2" secondAttribute="topMargin" id="YyO-ih-Q6g"/>
+                <constraint firstItem="BPg-mO-lF1" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="hWn-ql-qwz"/>
+                <constraint firstItem="BPg-mO-lF1" firstAttribute="top" secondItem="2" secondAttribute="topMargin" id="onr-7N-mPI"/>
+                <constraint firstAttribute="trailing" secondItem="BPg-mO-lF1" secondAttribute="trailing" id="wNd-bp-dMo"/>
+                <constraint firstAttribute="bottom" secondItem="BPg-mO-lF1" secondAttribute="bottom" id="xpa-7g-6ec"/>
             </constraints>
             <point key="canvasLocation" x="95.652173913043484" y="1.3392857142857142"/>
         </view>
     </objects>
     <resources>
         <image name="ic_error" width="18" height="18"/>
+        <systemColor name="systemBackgroundColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemIndigoColor">
             <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

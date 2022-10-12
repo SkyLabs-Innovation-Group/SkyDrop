@@ -13,10 +13,13 @@ namespace SkyDrop.iOS.Views.Settings
 	partial class SettingsView
 	{
 		[Outlet]
+		UIKit.UIButton ContactsButton { get; set; }
+
+		[Outlet]
 		UIKit.UISwitch EnableUploadNotificationsSwitch { get; set; }
 
 		[Outlet]
-		UIKit.UIButton PortalPreferencesButton { get; set; }
+		UIKit.UITextView NameTextView { get; set; }
 
 		[Outlet]
 		UIKit.UITextView PortalTextView { get; set; }
@@ -25,13 +28,26 @@ namespace SkyDrop.iOS.Views.Settings
 		UIKit.UIButton SavePortalButton { get; set; }
 
 		[Outlet]
+		UIKit.UIButton SetNameButton { get; set; }
+
+		[Outlet]
 		UIKit.UILabel SetPortalLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (ContactsButton != null) {
+				ContactsButton.Dispose ();
+				ContactsButton = null;
+			}
+
 			if (EnableUploadNotificationsSwitch != null) {
 				EnableUploadNotificationsSwitch.Dispose ();
 				EnableUploadNotificationsSwitch = null;
+			}
+
+			if (NameTextView != null) {
+				NameTextView.Dispose ();
+				NameTextView = null;
 			}
 
 			if (PortalTextView != null) {
@@ -44,9 +60,9 @@ namespace SkyDrop.iOS.Views.Settings
 				SavePortalButton = null;
 			}
 
-			if (PortalPreferencesButton != null) {
-				PortalPreferencesButton.Dispose ();
-				PortalPreferencesButton = null;
+			if (SetNameButton != null) {
+				SetNameButton.Dispose ();
+				SetNameButton = null;
 			}
 
 			if (SetPortalLabel != null) {

@@ -6,6 +6,8 @@ namespace SkyDrop.Core
 
         public static string SelectedSkynetPortal = "SelectedSkynetPortal";
 
+        public static string PrefixPortalApiToken = "PortalApiToken_";
+
         public static string RequireSecureConnection = "RequireSecureConnection";
     }
 }

@@ -25,6 +25,15 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView CancelButton { get; set; }
 
 		[Outlet]
+		UIKit.UIImageView CancelIcon { get; set; }
+
+		[Outlet]
+		UIKit.UILabel CancelLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIView ContactsButton { get; set; }
+
+		[Outlet]
 		UIKit.UIView CopyLinkButton { get; set; }
 
 		[Outlet]
@@ -37,6 +46,15 @@ namespace SkyDrop.iOS.Views.Drop
 		FFImageLoading.Cross.MvxCachedImageView DownloadButtonIcon { get; set; }
 
 		[Outlet]
+		UIKit.UIView EncryptButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView EncryptIcon { get; set; }
+
+		[Outlet]
+		UIKit.UILabel EncryptionLabel { get; set; }
+
+		[Outlet]
 		UIKit.UICollectionView FilePreviewCollectionView { get; set; }
 
 		[Outlet]
@@ -46,10 +64,16 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIImageView FileTypeIcon { get; set; }
 
 		[Outlet]
+		UIKit.UIView HomeMenu { get; set; }
+
+		[Outlet]
 		UIKit.UIImageView LeftNavDot { get; set; }
 
 		[Outlet]
 		UIKit.UIView OpenButton { get; set; }
+
+		[Outlet]
+		UIKit.UIView PortalsButton { get; set; }
 
 		[Outlet]
 		FFImageLoading.Cross.MvxCachedImageView PreviewImage { get; set; }
@@ -91,6 +115,9 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView SendReceiveButtonsContainer { get; set; }
 
 		[Outlet]
+		UIKit.UIView SettingsButton { get; set; }
+
+		[Outlet]
 		UIKit.UIView ShareButton { get; set; }
 
 		[Outlet]
@@ -103,6 +130,9 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIImageView ShowPreviewIcon { get; set; }
 
 		[Outlet]
+		UIKit.UIView SkyDriveButton { get; set; }
+
+		[Outlet]
 		UIKit.UILabel UrlLabel { get; set; }
 
 		[Outlet]
@@ -110,6 +140,16 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (CancelLabel != null) {
+				CancelLabel.Dispose ();
+				CancelLabel = null;
+			}
+
+			if (CancelIcon != null) {
+				CancelIcon.Dispose ();
+				CancelIcon = null;
+			}
+
 			if (BarcodeContainer != null) {
 				BarcodeContainer.Dispose ();
 				BarcodeContainer = null;
@@ -125,6 +165,11 @@ namespace SkyDrop.iOS.Views.Drop
 				BarcodeMenu = null;
 			}
 
+			if (HomeMenu != null) {
+				HomeMenu.Dispose ();
+				HomeMenu = null;
+			}
+
 			if (CancelButton != null) {
 				CancelButton.Dispose ();
 				CancelButton = null;
@@ -133,6 +178,26 @@ namespace SkyDrop.iOS.Views.Drop
 			if (CopyLinkButton != null) {
 				CopyLinkButton.Dispose ();
 				CopyLinkButton = null;
+			}
+
+			if (SkyDriveButton != null) {
+				SkyDriveButton.Dispose ();
+				SkyDriveButton = null;
+			}
+
+			if (PortalsButton != null) {
+				PortalsButton.Dispose ();
+				PortalsButton = null;
+			}
+
+			if (ContactsButton != null) {
+				ContactsButton.Dispose ();
+				ContactsButton = null;
+			}
+
+			if (SettingsButton != null) {
+				SettingsButton.Dispose ();
+				SettingsButton = null;
 			}
 
 			if (DownloadButton != null) {
@@ -148,6 +213,21 @@ namespace SkyDrop.iOS.Views.Drop
 			if (DownloadButtonIcon != null) {
 				DownloadButtonIcon.Dispose ();
 				DownloadButtonIcon = null;
+			}
+
+			if (EncryptButton != null) {
+				EncryptButton.Dispose ();
+				EncryptButton = null;
+			}
+
+			if (EncryptIcon != null) {
+				EncryptIcon.Dispose ();
+				EncryptIcon = null;
+			}
+
+			if (EncryptionLabel != null) {
+				EncryptionLabel.Dispose ();
+				EncryptionLabel = null;
 			}
 
 			if (FilePreviewCollectionView != null) {

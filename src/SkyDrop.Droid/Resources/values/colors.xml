@@ -10,6 +10,7 @@
 	<color name="skyOcean">#00757F</color>
 	<color name="skyDeepBlue">#165E70</color>
 	<color name="skyDarkBlue">#2F4858</color>
+	<color name="skyRed">#EE4443</color>
 	<!-- Collective color scheme -->
 	<color name="skyLightBlue">#00BBFF</color>
 	<color name="midGrey">#303a40</color>

@@ -9,6 +9,7 @@ using Acr.UserDialogs;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
+using static SkyDrop.Core.Utility.Util;
 
 namespace SkyDrop.Core.Services
 {
@@ -19,11 +20,13 @@ namespace SkyDrop.Core.Services
         public ILog Log { get; }
 
         private readonly IUserDialogs userDialogs;
+        private readonly ISaveToGalleryService saveToGalleryService;
 
-        public FileSystemService(ILog log, IUserDialogs userDialogs)
+        public FileSystemService(ILog log, IUserDialogs userDialogs, ISaveToGalleryService saveToGalleryService)
         {
             this.Log = log;
             this.userDialogs = userDialogs;
+            this.saveToGalleryService = saveToGalleryService;
         }
 
         public async Task<IEnumerable<FileResult>> PickFilesAsync(SkyFilePickerType fileType)
@@ -86,11 +89,15 @@ namespace SkyDrop.Core.Services
                 if (File.Exists(destinationZipFullPath))
                     File.Delete(destinationZipFullPath);
 
+                var filenames = new List<string>();
                 using (ZipArchive zip = ZipFile.Open(destinationZipFullPath, ZipArchiveMode.Create))
                 {
                     foreach (var file in filesToZip)
                     {
-                        zip.CreateEntryFromFile(file.FullFilePath, file.Filename, CompressionLevel.Optimal);
+                        //ensure filenames are unique to avoid extraction errors
+                        var filename = GetNextZipFilename(file.Filename, filenames);
+                        filenames.Add(filename);
+                        zip.CreateEntryFromFile(file.FullFilePath, filename, CompressionLevel.Optimal);
                     }               
                 }
 
@@ -101,6 +108,19 @@ namespace SkyDrop.Core.Services
                 Log.Exception(e);
                 return false;
             }
+        }
+
+        private string GetNextZipFilename(string filename, List<string> filenames)
+        {
+            int i = 1;
+            string extension = Util.GetFullExtension(filename);
+            string file = Path.GetFileName(filename);
+            string fileWithoutExtension = file.Substring(0, file.Length - extension.Length) + " {0}";
+
+            while (filenames.Contains(filename))
+                filename = string.Format(fileWithoutExtension, "(" + i++ + ")") + extension;
+
+            return filename;
         }
 
         public List<SkyFile> UnzipArchive(Stream data)
@@ -135,18 +155,38 @@ namespace SkyDrop.Core.Services
             using var fileStream = File.OpenWrite(filePath);
             await data.CopyToAsync(fileStream);
             data.Dispose();
-            return Path.GetFileName(filePath);
+            return filePath;
+        }
+
+        public async Task<string> SaveToGalleryOrFiles(Stream data, string filename, SaveType saveType)
+        {
+            string newFileName = "";
+            if (saveType == SaveType.Photos)
+            {
+                //save to photos gallery
+                var newPath = await saveToGalleryService.SaveToGallery(data, filename);
+                newFileName = Path.GetFileName(newPath);
+            }
+            else
+            {
+                //save to downloads folder
+                var newPath = await SaveFile(data, filename, true);
+                newFileName = Path.GetFileName(newPath);
+            }
+
+            return newFileName;
         }
 
         private string GetNextFilename(string filename)
         {
             int i = 1;
             string dir = Path.GetDirectoryName(filename);
-            string file = Path.GetFileNameWithoutExtension(filename) + " {0}";
-            string extension = Path.GetExtension(filename);
+            string extension = Util.GetFullExtension(filename);
+            string file = Path.GetFileName(filename);
+            string fileWithoutExtension = file.Substring(0, file.Length - extension.Length) + " {0}";
 
             while (System.IO.File.Exists(filename))
-                filename = Path.Combine(dir, string.Format(file, "(" + i++ + ")") + extension);
+                filename = Path.Combine(dir, string.Format(fileWithoutExtension, "(" + i++ + ")") + extension);
 
             return filename;
         }
@@ -192,5 +232,7 @@ namespace SkyDrop.Core.Services
         void ClearCache();
 
         Task<string> SaveFile(Stream data, string fileName, bool isPersistent);
+
+        Task<string> SaveToGalleryOrFiles(Stream data, string filename, SaveType saveType);
     }
 }

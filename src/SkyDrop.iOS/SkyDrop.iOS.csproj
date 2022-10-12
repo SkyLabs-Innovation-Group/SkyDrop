@@ -197,22 +197,73 @@
     <ImageAsset Include="Media.xcassets\ic_error.imageset\alert-circle.pdf" />
     <ImageAsset Include="Media.xcassets\ic_image.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_image.imageset\image.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_folder.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_folder.imageset\folder.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_plus.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_plus.imageset\plus.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\folder-plus.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_back.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_back.imageset\back_button.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_bin.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_bin.imageset\bin.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\folder-arrow-right.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_select_all.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_select_all.imageset\select-all.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_user.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_user.imageset\user.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_user_multiple.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_user_multiple.imageset\user-multiple.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_skydrop.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_skydrop.imageset\skydrop-logo.pdf" />
     <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
     <Compile Include="Common\ImageSelectionHelper.cs" />
     <Compile Include="Bindings\LongPressBinding.cs" />
     <Compile Include="Bindings\FileCategoryIconBinding.cs" />
-    <InterfaceDefinition Include="Views\PortalPreferences\PortalPreferencesView.xib" />
-    <Compile Include="Views\PortalPreferences\PortalPreferencesView.cs" />
-    <Compile Include="Views\PortalPreferences\PortalPreferencesView.designer.cs">
-      <DependentUpon>PortalPreferencesView.cs</DependentUpon>
-    </Compile>
     <InterfaceDefinition Include="Views\Files\FileExplorerView.xib" />
     <Compile Include="Views\Files\FileExplorerView.cs" />
     <Compile Include="Views\Files\FileExplorerView.designer.cs">
         <DependentUpon>FileExplorerView.cs</DependentUpon>
     </Compile>
+    <InterfaceDefinition Include="Views\Contacts\ContactsView.xib" />
+    <Compile Include="Views\Contacts\ContactsView.cs" />
+    <Compile Include="Views\Contacts\ContactsView.designer.cs">
+      <DependentUpon>ContactsView.cs</DependentUpon>
+    </Compile>
+    <InterfaceDefinition Include="Views\Contacts\SharePublicKeyView.xib" />
+    <Compile Include="Views\Contacts\SharePublicKeyView.cs" />
+    <Compile Include="Views\Contacts\SharePublicKeyView.designer.cs">
+      <DependentUpon>SharePublicKeyView.cs</DependentUpon>
+    </Compile>
+    <InterfaceDefinition Include="Views\Contacts\ContactCell.xib" />
+    <Compile Include="Views\Contacts\ContactCell.cs" />
+    <Compile Include="Views\Contacts\ContactCell.designer.cs">
+      <DependentUpon>ContactCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BaseViewController.cs" />
+    <InterfaceDefinition Include="Views\Files\FolderCell.xib" />
+    <Compile Include="Views\Files\FolderCell.cs" />
+    <Compile Include="Views\Files\FolderCell.designer.cs">
+      <DependentUpon>FolderCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BaseViewController.cs" />
+    <Compile Include="Services\iOSSaveToGalleryService.cs" />
+    <ImageAsset Include="Media.xcassets\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_pair.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_pair.imageset\account-multiple-plus.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_tick.imageset\check.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_tick.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_file_encrypted.imageset\file-lock.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_file_encrypted.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_world.imageset\earth.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_world.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_key.imageset\key.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_key.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_pencil.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\ic_pencil.imageset\pencil.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -255,7 +306,7 @@
     <Folder Include="Views\Settings\" />
     <Folder Include="Views\Files\" />
     <Folder Include="Media.xcassets\" />
-    <Folder Include="Views\PortalPreferences\" />
+    <Folder Include="Views\Contacts\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

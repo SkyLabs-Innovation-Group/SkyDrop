@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContactsView">
+            <connections>
+                <outlet property="ContactsTableView" destination="QNr-W9-bsi" id="UuH-WF-WD5"/>
+                <outlet property="ErrorView" destination="Wdj-V2-aA2" id="GBu-rB-Soh"/>
+                <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="2">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="QNr-W9-bsi">
+                    <rect key="frame" x="0.0" y="44" width="414" height="852"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wdj-V2-aA2">
+                    <rect key="frame" x="0.0" y="400" width="414" height="96"/>
+                    <subviews>
+                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="mGf-1R-2Rp">
+                            <rect key="frame" x="188.5" y="0.0" width="37" height="37"/>
+                            <color key="color" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </activityIndicatorView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No contacts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yBq-Pf-Y96">
+                            <rect key="frame" x="158" y="61" width="98.5" height="21"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                            <color key="textColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_error" translatesAutoresizingMaskIntoConstraints="NO" id="ZYS-P3-kAO">
+                            <rect key="frame" x="187" y="-1.5" width="40" height="40"/>
+                            <color key="tintColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="40" id="4sd-kZ-6Uv"/>
+                                <constraint firstAttribute="height" constant="40" id="Xti-Jb-JE1"/>
+                            </constraints>
+                        </imageView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="mGf-1R-2Rp" firstAttribute="centerX" secondItem="Wdj-V2-aA2" secondAttribute="centerX" id="2fV-Rs-NcY"/>
+                        <constraint firstItem="mGf-1R-2Rp" firstAttribute="centerX" secondItem="ZYS-P3-kAO" secondAttribute="centerX" id="DBh-Uc-aat"/>
+                        <constraint firstItem="mGf-1R-2Rp" firstAttribute="centerY" secondItem="ZYS-P3-kAO" secondAttribute="centerY" id="QP6-DC-rFk"/>
+                        <constraint firstAttribute="height" constant="96" id="TIG-03-ikv"/>
+                        <constraint firstItem="yBq-Pf-Y96" firstAttribute="centerX" secondItem="Wdj-V2-aA2" secondAttribute="centerX" id="dZ8-vk-mxX"/>
+                        <constraint firstItem="mGf-1R-2Rp" firstAttribute="top" secondItem="Wdj-V2-aA2" secondAttribute="top" id="iDE-iU-XSc"/>
+                        <constraint firstItem="yBq-Pf-Y96" firstAttribute="top" secondItem="mGf-1R-2Rp" secondAttribute="bottom" constant="24" id="ilK-1Q-wIp"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="QNr-W9-bsi" firstAttribute="top" secondItem="2" secondAttribute="topMargin" id="2uF-bX-v1e"/>
+                <constraint firstAttribute="trailing" secondItem="QNr-W9-bsi" secondAttribute="trailing" id="62P-A6-wlg"/>
+                <constraint firstAttribute="bottom" secondItem="QNr-W9-bsi" secondAttribute="bottom" id="DKQ-8T-sfJ"/>
+                <constraint firstItem="QNr-W9-bsi" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="MSD-S1-vKy"/>
+                <constraint firstItem="Wdj-V2-aA2" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="fZZ-hP-g3f"/>
+                <constraint firstAttribute="trailing" secondItem="Wdj-V2-aA2" secondAttribute="trailing" id="uwM-1B-a2a"/>
+                <constraint firstItem="Wdj-V2-aA2" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" id="xlg-hP-KpR"/>
+            </constraints>
+            <point key="canvasLocation" x="92" y="17"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="ic_error" width="18" height="18"/>
+        <systemColor name="systemBackgroundColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

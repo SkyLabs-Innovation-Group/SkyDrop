@@ -42,8 +42,8 @@ namespace SkyDrop.Droid.Views.Main
         private bool isPressed;
         private float tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
         private MaterialCardView sendButton, receiveButton;
-        private ConstraintLayout barcodeContainer;
-        private LinearLayout barcodeMenu, sendReceiveButtonsContainer;
+        private ConstraintLayout barcodeContainer, sendReceiveButtonsContainer;
+        private LinearLayout barcodeMenu, homeMenu;
         private ImageView barcodeImageView;
         private View leftDot, rightDot;
 
@@ -83,28 +83,13 @@ namespace SkyDrop.Droid.Views.Main
             barcodeContainer = FindViewById<ConstraintLayout>(Resource.Id.BarcodeContainer);
             barcodeMenu = FindViewById<LinearLayout>(Resource.Id.BarcodeMenu);
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
-            sendReceiveButtonsContainer = FindViewById<LinearLayout>(Resource.Id.SendReceiveContainer);
+            sendReceiveButtonsContainer = FindViewById<ConstraintLayout>(Resource.Id.SendReceiveContainer);
+            homeMenu = FindViewById<LinearLayout>(Resource.Id.HomeMenu);
 
             var stagedFilesRecycler = FindViewById<RecyclerView>(Resource.Id.StagedFilesRecycler);
             stagedFilesRecycler.SetLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false));
 
             CreateNavDots();
-        }
-
-        public override bool OnCreateOptionsMenu(IMenu menu)
-        {
-            MenuInflater.Inflate(Resource.Menu.DropMenu, menu);
-            return base.OnCreateOptionsMenu(menu);
-        }
-
-        public override bool OnOptionsItemSelected(IMenuItem item)
-        {
-            if (item.ItemId == Resource.Id.menu_drop_settings)
-            {
-                ViewModel.NavigateToSettings().GetAwaiter().GetResult();
-            }
-
-            return base.OnOptionsItemSelected(item);
         }
 
         /// <summary>
@@ -142,6 +127,8 @@ namespace SkyDrop.Droid.Views.Main
             //DropViewUIState gets changed at the end of the animation 
             //that is to fix an issue with CheckUserIsSwiping() on barcode menu buttons
             AnimateSlideBarcodeOut();
+
+            ViewModel.Title = "SkyDrop";
         }
 
         /// <summary>
@@ -150,7 +137,7 @@ namespace SkyDrop.Droid.Views.Main
         private void SetBarcodeCodeUiState(bool isSlow = false)
         {
             ViewModel.DropViewUIState = DropViewState.QRCodeState;
-
+            ViewModel.Title = ViewModel.FocusedFile?.Filename;
             ViewModel.IsBarcodeVisible = true;
 
             AnimateSlideBarcodeIn(fromLeft: false, isSlow);
@@ -177,6 +164,10 @@ namespace SkyDrop.Droid.Views.Main
                 .Alpha(0)
                 .SetDuration(duration)
                 .Start();
+            homeMenu.Animate()
+                .Alpha(0)
+                .SetDuration(duration)
+                .Start();
         }
 
         /// <summary>
@@ -196,6 +187,10 @@ namespace SkyDrop.Droid.Views.Main
                 .SetDuration(duration)
                 .Start();
             sendButton.Animate()
+                .Alpha(0)
+                .SetDuration(duration)
+                .Start();
+            homeMenu.Animate()
                 .Alpha(0)
                 .SetDuration(duration)
                 .Start();
@@ -254,6 +249,11 @@ namespace SkyDrop.Droid.Views.Main
                 .TranslationX(screenWidth)
                 .SetDuration(duration)
                 .Start();
+            homeMenu.Animate()
+                .TranslationX(0)
+                .Alpha(1)
+                .SetDuration(duration)
+                .Start();
         }
 
         /// <summary>
@@ -284,8 +284,13 @@ namespace SkyDrop.Droid.Views.Main
 
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
             var duration = 250;
+            var translationX = toLeft ? -screenWidth : screenWidth;
             sendReceiveButtonsContainer.Animate()
-                .TranslationX(toLeft ? -screenWidth : screenWidth)
+                .TranslationX(translationX)
+                .SetDuration(duration)
+                .Start();
+            homeMenu.Animate()
+                .TranslationX(translationX)
                 .SetDuration(duration)
                 .Start();
         }
@@ -297,6 +302,10 @@ namespace SkyDrop.Droid.Views.Main
         {
             var duration = 500;
             sendReceiveButtonsContainer.Animate()
+                .TranslationX(0)
+                .SetDuration(duration)
+                .Start();
+            homeMenu.Animate()
                 .TranslationX(0)
                 .SetDuration(duration)
                 .Start();
@@ -364,7 +373,9 @@ namespace SkyDrop.Droid.Views.Main
                     }
                     else
                     {
-                        sendReceiveButtonsContainer.TranslationX = sendReceiveButtonsContainerStartX + deltaX;
+                        var translationX = sendReceiveButtonsContainerStartX + deltaX;
+                        sendReceiveButtonsContainer.TranslationX = translationX;
+                        homeMenu.TranslationX = translationX;
                     }
 
                     break;

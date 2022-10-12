@@ -25,13 +25,26 @@ namespace SkyDrop.iOS.Views.Files
 		UIKit.UIView FileExplorerHolder { get; set; }
 
 		[Outlet]
+		UIKit.UITableView FoldersTableView { get; set; }
+
+		[Outlet]
 		UIKit.UILabel LoadingLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (ActivityIndicator != null) {
+				ActivityIndicator.Dispose ();
+				ActivityIndicator = null;
+			}
+
 			if (ActivityIndicatorContainer != null) {
 				ActivityIndicatorContainer.Dispose ();
 				ActivityIndicatorContainer = null;
+			}
+
+			if (ErrorIcon != null) {
+				ErrorIcon.Dispose ();
+				ErrorIcon = null;
 			}
 
 			if (FileExplorerHolder != null) {
@@ -44,14 +57,9 @@ namespace SkyDrop.iOS.Views.Files
 				LoadingLabel = null;
 			}
 
-			if (ActivityIndicator != null) {
-				ActivityIndicator.Dispose ();
-				ActivityIndicator = null;
-			}
-
-			if (ErrorIcon != null) {
-				ErrorIcon.Dispose ();
-				ErrorIcon = null;
+			if (FoldersTableView != null) {
+				FoldersTableView.Dispose ();
+				FoldersTableView = null;
 			}
 		}
 	}

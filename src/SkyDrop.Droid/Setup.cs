@@ -50,6 +50,10 @@ namespace SkyDrop.Droid
             registry.RegisterCustomBindingFactory<View>(BackgroundColorBinding.Name, view => new BackgroundColorBinding(view));
             registry.RegisterCustomBindingFactory<ImageView>(FileCategoryIconBinding.Name, view => new FileCategoryIconBinding(view));
             registry.RegisterCustomBindingFactory<ImageView>(IconBinding.Name, view => new IconBinding(view));
+            registry.RegisterCustomBindingFactory<View>(PairingOverlayBinding.Name, view => new PairingOverlayBinding(view));
+            registry.RegisterCustomBindingFactory<ImageView>(EncryptIconBinding.Name, view => new EncryptIconBinding(view));
+            registry.RegisterCustomBindingFactory<View>(ContactsDeleteVisibilityBinding.Name, view => new ContactsDeleteVisibilityBinding(view));
+            registry.RegisterCustomBindingFactory<Button>(ButtonClickBinding.Name, view => new ButtonClickBinding(view));
         }
 
         protected override void FillValueConverters(IMvxValueConverterRegistry registry)
@@ -97,25 +101,7 @@ namespace SkyDrop.Droid
             
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger(logProvider));
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISkyDropHttpClientFactory>(() => new AndroidHttpClientFactory());
-
-            var httpClientFactory = Mvx.IoCProvider.Resolve<ISkyDropHttpClientFactory>();
-
-            ImageService.Instance.Initialize(new Configuration()
-            {
-                ClearMemoryCacheOnOutOfMemory = true,
-                DownsampleInterpolationMode = InterpolationMode.Low,
-                
-                // Logging attributes 
-                Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>(),
-                // VerboseLogging = true,
-                // VerboseLoadingCancelledLogging = true,
-                // VerbosePerformanceLogging = true,
-                // VerboseMemoryCacheLogging = true,
-
-                HttpClient = httpClientFactory.GetSkyDropHttpClientInstance()
-            });
-
-            ImageService.Instance.Config.Logger = (IMiniLogger) Mvx.IoCProvider.Resolve<ILog>();
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISaveToGalleryService>(() => new AndroidSaveToGalleryService());
 
             return logProvider;
         }

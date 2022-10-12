@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
+using static SkyDrop.Core.Utility.Util;
 
 namespace SkyDrop.Core.Services
 {
@@ -20,28 +21,31 @@ namespace SkyDrop.Core.Services
     {
         public ILog Log { get; }
 
-        private IFileSystemService fileSystemService;
-        private ISkyDropHttpClientFactory httpClientFactory;
-        private ISingletonService singletonService;
-        private IUserDialogs userDialogs;
+        private readonly IFileSystemService fileSystemService;
+        private readonly ISkyDropHttpClientFactory httpClientFactory;
+        private readonly ISingletonService singletonService;
+        private readonly IUserDialogs userDialogs;
+        private readonly IEncryptionService encryptionService;
 
         public ApiService(ILog log,
             ISkyDropHttpClientFactory skyDropHttpClientFactory,
             ISingletonService singletonService,
             IUserDialogs userDialogs,
-            IFileSystemService fileSystemService)
+            IFileSystemService fileSystemService,
+            IEncryptionService encryptionService)
         {
             Log = log;
             httpClientFactory = skyDropHttpClientFactory;
             this.singletonService = singletonService;
             this.userDialogs = userDialogs;
             this.fileSystemService = fileSystemService;
+            this.encryptionService = encryptionService;
         }
         
         public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationTokenSource)
         {
             var fileSizeBytes = skyfile.FileSizeBytes;
-            var filename = skyfile.Filename;
+            var filename = skyfile.EncryptedFilename ?? skyfile.Filename;
 
             var url = $"{SkynetPortal.SelectedPortal}/skynet/skyfile";
 
@@ -84,7 +88,7 @@ namespace SkyDrop.Core.Services
             return skyFile;
         }
 
-        public async Task DownloadAndSaveSkyfile(string url)
+        public async Task DownloadAndSaveSkyfile(string url, SaveType saveType)
         {
             var permissionResult = await Permissions.RequestAsync<Permissions.StorageWrite>();
             if (permissionResult != PermissionStatus.Granted)
@@ -96,22 +100,37 @@ namespace SkyDrop.Core.Services
             //download
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var response = await httpClient.GetAsync(url);
+            
             var fileName = GetFilenameFromResponse(response);
+            if (fileName == null)
+                throw new Exception("Filename cannot be null");
 
-            //save
+            if (fileName.IsEncryptedFile())
+            {
+                //save encrypted file
+                var encryptedFilePath = await fileSystemService.SaveFile(await response.Content.ReadAsStreamAsync(), fileName, false);
+
+                //decrypt
+                var decryptedFilePath = await encryptionService.DecodeFile(encryptedFilePath);
+                userDialogs.Toast($"Saved {Path.GetFileName(decryptedFilePath)}");
+                return;
+            }
+
+            //save directly
             using var responseStream = await response.Content.ReadAsStreamAsync();
-            var newFileName = await fileSystemService.SaveFile(responseStream, fileName, true);
+            var newFilePath = await fileSystemService.SaveToGalleryOrFiles(responseStream, fileName, saveType);
 
-            userDialogs.Toast($"Saved {newFileName}");
+            userDialogs.Toast($"Saved {Path.GetFileName(newFilePath)}");
         }
 
-        public async Task<Stream> DownloadFile(string url)
+        public async Task<(Stream data, string filename)> DownloadFile(string url)
         {
-            //download
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var response = await httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStreamAsync();
+            var data = await response.Content.ReadAsStreamAsync();
+            var fileName = GetFilenameFromResponse(response);
+            return (data, fileName);
         }
 
         public async Task<string> GetSkyFileFilename(string skylink)
@@ -141,8 +160,30 @@ namespace SkyDrop.Core.Services
             return filename;
         }
 
+        private const int SkynetPortalApiTokenLength = 52;
+
+        private bool HasValidLength(string apiToken) => apiToken.Length == SkynetPortalApiTokenLength;
+
         public async Task<bool> PingPortalForSkylink(string skylink, SkynetPortal skynetPortal)
         {
+            string oldToken = null;
+            if (skynetPortal.HasApiToken() && !HasValidLength(skynetPortal.UserApiToken))
+            {
+                userDialogs.Toast("The API token entered was invalid");
+                Log.Error($"The API token entered was invalid");
+                return FailedPortalCheck(skynetPortal, oldToken);
+            }
+            else if (skynetPortal.HasApiToken())
+            {
+                // Store oldToken while validating the new token using a HEAD request, swap back in FailedPortalCheck()
+                oldToken = httpClientFactory.GetTokenForHttpClient(skynetPortal);
+
+                if (oldToken == skynetPortal.UserApiToken) // if oldToken == newToken, treat as a new token
+                    oldToken = null;
+
+                httpClientFactory.UpdateHttpClientWithNewToken(skynetPortal);
+            }
+
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(skynetPortal);
 
             string requestUrl = $"{skynetPortal}/{skylink}";
@@ -158,7 +199,7 @@ namespace SkyDrop.Core.Services
             {
                 userDialogs.Alert(Strings.SslPrompt);
                 Log.Exception(httpEx);
-                return false;
+                return FailedPortalCheck(skynetPortal, oldToken);
             }
             catch (HttpRequestException e)
             {
@@ -170,7 +211,7 @@ namespace SkyDrop.Core.Services
             {
                 userDialogs.Toast("No response from " + skynetPortal);
                 Log.Error($"Head request to {skynetPortal} returned null");
-                return false;
+                return FailedPortalCheck(skynetPortal, oldToken);
             }
 
             Log.Trace(result.ToString());
@@ -179,7 +220,7 @@ namespace SkyDrop.Core.Services
             {
                 userDialogs.Toast($"{skynetPortal} refused the portal check request");
                 Log.Error($"Head request to {skynetPortal} returned status code {result.StatusCode}");
-                return false;
+                return FailedPortalCheck(skynetPortal, oldToken);
             }
 
             var headers = result.Headers;
@@ -188,11 +229,23 @@ namespace SkyDrop.Core.Services
             {
                 Log.Error("!(skylinkHeader == skylink)");
                 userDialogs.Toast($"{skynetPortal} Skylink Header did not match");
-                return false;
+                return FailedPortalCheck(skynetPortal, oldToken);
             }
 
             Log.Trace("Success querying for file header on portal " + skynetPortal);
             return true;
+        }
+
+        public bool FailedPortalCheck(SkynetPortal portal, string oldToken)
+        {
+            if (string.IsNullOrEmpty(oldToken))
+                return false;
+
+            // Set back to valid old token if new one failed
+            portal.UserApiToken = oldToken;
+            httpClientFactory.UpdateHttpClientWithNewToken(portal);
+
+            return false;
         }
     }
 
@@ -200,9 +253,9 @@ namespace SkyDrop.Core.Services
     {
         Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationTokenSource);
 
-        Task DownloadAndSaveSkyfile(string url);
+        Task DownloadAndSaveSkyfile(string url, SaveType saveType);
 
-        Task<Stream> DownloadFile(string url);
+        Task<(Stream data, string filename)> DownloadFile(string url);
 
         Task<string> GetSkyFileFilename(string skyfile);
 
