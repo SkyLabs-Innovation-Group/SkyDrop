@@ -2,38 +2,26 @@ using System;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using CoreGraphics;
-using SkyDrop.iOS.Bindings;
-using Foundation;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using MvvmCross.Platforms.Ios.Views;
+using SkyDrop.Core.Converters;
+using SkyDrop.Core.DataViewModels;
+using SkyDrop.Core.Services;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
+using SkyDrop.iOS.Bindings;
 using SkyDrop.iOS.Common;
 using UIKit;
-using ZXing.Mobile;
-using ZXing.Rendering;
-using static SkyDrop.Core.ViewModels.Main.DropViewModel;
-using static SkyDrop.Core.Utility.Util;
 using UserNotifications;
-using System.IO;
-using MvvmCross;
-using SkyDrop.Core.Services;
-using System.Linq;
-using GMImagePicker;
-using Photos;
-using System.Collections.Generic;
-using FFImageLoading.Extensions;
-using System.IO;
-using AssetsLibrary;
-using SkyDrop.iOS.Views.Files;
-using SkyDrop.Core.Converters;
+using static SkyDrop.Core.Utility.Util;
+using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 
 namespace SkyDrop.iOS.Views.Drop
 {
     [MvxRootPresentation(WrapInNavigationController = true)]
-    public partial class DropView : MvxViewController<DropViewModel>
+    public partial class DropView : BaseViewController<DropViewModel>
     {
         private const int swipeMarginX = 20;
         private bool isPressed;
@@ -85,27 +73,12 @@ namespace SkyDrop.iOS.Views.Drop
 
                 View.BackgroundColor = Colors.DarkGrey.ToNative();
                 BarcodeContainer.BackgroundColor = Colors.MidGrey.ToNative(); //so that preview image fades in from dark color
-                /*
-                var menuButton = new UIBarButtonItem()
-                {
-                    Image = UIImage.FromBundle("ic_cloud")
-                };
-                menuButton.Clicked += (s, e) => ViewModel.OpenSkyDriveCommand?.Execute();
 
-                NavigationItem.LeftBarButtonItem = menuButton;
-                NavigationItem.LeftBarButtonItem.TintColor = UIColor.White;
+                CancelButton.BackgroundColor = Colors.MidGrey.ToNative();
+                CancelButton.Layer.CornerRadius = 8;
+                CancelIcon.TintColor = Colors.Red.ToNative();
+                CancelLabel.TextColor = Colors.Red.ToNative();
 
-                var settingsButton = new UIBarButtonItem()
-                {
-                    Image = UIImage.FromBundle("ic_settings")
-                };
-                settingsButton.Clicked += (s, e) => ViewModel.NavigateToSettings();
-
-                NavigationItem.RightBarButtonItem = settingsButton;
-                NavigationItem.RightBarButtonItem.TintColor = UIColor.White;
-                */
-                CancelButton.BackgroundColor = Colors.GradientOcean.ToNative();
-                CancelButton.Layer.CornerRadius = 32;
 
                 SendButton.BackgroundColor = Colors.Primary.ToNative();
                 ReceiveButton.BackgroundColor = Colors.GradientOcean.ToNative();
@@ -156,6 +129,8 @@ namespace SkyDrop.iOS.Views.Drop
 
                 FileTypeIcon.TintColor = Colors.LightGrey.ToNative();
 
+                EncryptButton.BackgroundColor = Colors.Primary.ToNative();
+
                 BindViews();
             }
             catch(Exception e)
@@ -181,7 +156,7 @@ namespace SkyDrop.iOS.Views.Drop
             //home menu
             set.Bind(SkyDriveButton).For("Tap").To(vm => vm.OpenSkyDriveCommand);
             //set.Bind(PortalsButton).For("Tap").To(vm => vm.NavigateToPortalsCommand);
-            //set.Bind(ContactsButton).For("Tap").To(vm => vm.NavigateToContactsCommand);
+            set.Bind(ContactsButton).For("Tap").To(vm => vm.NavToContactsCommand);
             set.Bind(SettingsButton).For("Tap").To(vm => vm.NavToSettingsCommand);
 
             //QR menu
@@ -233,7 +208,24 @@ namespace SkyDrop.iOS.Views.Drop
 
             //icon behind preview image, to show while preview is loading
             set.Bind(FileTypeIcon).For(FileCategoryIconBinding.Name).To(vm => vm.FocusedFile.Filename);
+
+            set.Bind(EncryptButton).For("Tap").To(vm => vm.OpenContactsMenuCommand);
+            set.Bind(EncryptButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
+
+            set.Bind(EncryptionLabel).To(vm => vm.EncryptionText);
+
+            set.Bind(this).For(t => t.EncryptIconType).To(vm => vm.EncryptionText);
             set.Apply();
+        }
+
+        public string EncryptIconType
+        {
+            get => "";
+            set
+            {
+                var icon = value == new AnyoneWithTheLinkItem().Name ? "ic_world" : "ic_key";
+                EncryptIcon.Image = UIImage.FromBundle(icon);
+            }
         }
 
         private void MakeTitleTruncateFromMiddle()

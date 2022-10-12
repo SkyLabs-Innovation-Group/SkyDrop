@@ -2,11 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Generators;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Utilities.IO.Pem;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using MvvmCross;
 using SkyDrop.Core.DataModels;
 using Xamarin.Essentials;
+using System.Runtime.InteropServices.ComTypes;
+using System.IO.Compression;
 
 namespace SkyDrop.Core.Utility
 {
@@ -14,7 +21,7 @@ namespace SkyDrop.Core.Utility
     {
         public const float NavDotsMinAlpha = 0.2f;
         public const float NavDotsMaxAlpha = 0.8f;
-        
+
         public static string GetFileSizeString(long bytesCount)
         {
             string[] sizes = { "B", "KB", "MB", "GB", "TB" };
@@ -45,7 +52,7 @@ namespace SkyDrop.Core.Utility
 
         public static FileCategory GetFileCategory(string filename)
         {
-            if (filename == null)
+            if (filename.IsNullOrEmpty())
                 return FileCategory.None;
 
             filename = filename.ToLowerInvariant();
@@ -65,6 +72,9 @@ namespace SkyDrop.Core.Utility
             if (filename.ExtensionMatches(".zip"))
                 return FileCategory.Zip;
 
+            if (filename.IsEncryptedFile())
+                return FileCategory.Encrypted;
+
             return FileCategory.None;
         }
 
@@ -75,7 +85,8 @@ namespace SkyDrop.Core.Utility
             Image,
             Audio,
             Video,
-            Zip
+            Zip,
+            Encrypted
         }
 
         public static bool CanDisplayPreview(this string filename)
@@ -87,6 +98,47 @@ namespace SkyDrop.Core.Utility
         public static bool IsNullOrEmpty(this string text)
         {
             return string.IsNullOrEmpty(text);
+        }
+
+        public static bool IsNullOrWhiteSpace(this string text)
+        {
+            return string.IsNullOrWhiteSpace(text);
+        }
+
+        public static string PublicKeyToBase64String(this X25519PublicKeyParameters key)
+        {
+            return Convert.ToBase64String(key.GetEncoded());
+        }
+
+        public static X25519PublicKeyParameters Base64StringToPublicKey(this string key)
+        {
+            var bytes = Convert.FromBase64String(key);
+            return new X25519PublicKeyParameters(bytes);
+        }
+
+        /// <summary>
+        /// Concatenate byte arrays
+        /// </summary>
+        public static byte[] Combine(params byte[][] arrays)
+        {
+            byte[] rv = new byte[arrays.Sum(a => a.Length)];
+            int offset = 0;
+            foreach (byte[] array in arrays)
+            {
+                System.Buffer.BlockCopy(array, 0, rv, offset, array.Length);
+                offset += array.Length;
+            }
+            return rv;
+        }
+
+        /// <summary>
+        /// Enables matching extensions with multiple periods correctly e.g. .jpeg.pdf
+        /// </summary>
+        public static string GetFullExtension(string filename)
+        {
+            int lastSlashIndex = filename.LastIndexOf("/") + 1;
+            filename = filename.Substring(lastSlashIndex, filename.Length - lastSlashIndex);
+            return Regex.Match(filename, @"\..*").Value;
         }
 
         public static async Task<SaveType> GetSaveType(string filename)
@@ -154,6 +206,38 @@ namespace SkyDrop.Core.Utility
             Cancel, //do nothing
             Photos, //save image to gallery
             Files //save to files
+        }
+
+        public static bool IsEncryptedFile(this string filename)
+        {
+            if (filename.Length != 32) //length of a guid without dashes
+                return false;
+
+            var skSignatureExists = filename[15] == 's' && filename[16] == 'k'; //is encrypted file
+            return skSignatureExists || filename.IsEncryptedZipFile();
+        }
+
+        public static bool IsEncryptedZipFile(this string filename)
+        {
+            if (filename.Length != 32) //length of a guid without dashes
+                return false;
+
+            var ziSignatureExists = filename[15] == 'z' && filename[16] == 'i'; //is encrypted zip file
+            return ziSignatureExists;
+        }
+
+        public static byte[] StreamToBytes(this Stream input)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
         }
     }
 }

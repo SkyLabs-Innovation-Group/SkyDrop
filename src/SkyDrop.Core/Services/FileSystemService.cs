@@ -89,11 +89,15 @@ namespace SkyDrop.Core.Services
                 if (File.Exists(destinationZipFullPath))
                     File.Delete(destinationZipFullPath);
 
+                var filenames = new List<string>();
                 using (ZipArchive zip = ZipFile.Open(destinationZipFullPath, ZipArchiveMode.Create))
                 {
                     foreach (var file in filesToZip)
                     {
-                        zip.CreateEntryFromFile(file.FullFilePath, file.Filename, CompressionLevel.Optimal);
+                        //ensure filenames are unique to avoid extraction errors
+                        var filename = GetNextZipFilename(file.Filename, filenames);
+                        filenames.Add(filename);
+                        zip.CreateEntryFromFile(file.FullFilePath, filename, CompressionLevel.Optimal);
                     }               
                 }
 
@@ -104,6 +108,19 @@ namespace SkyDrop.Core.Services
                 Log.Exception(e);
                 return false;
             }
+        }
+
+        private string GetNextZipFilename(string filename, List<string> filenames)
+        {
+            int i = 1;
+            string extension = Util.GetFullExtension(filename);
+            string file = Path.GetFileName(filename);
+            string fileWithoutExtension = file.Substring(0, file.Length - extension.Length) + " {0}";
+
+            while (filenames.Contains(filename))
+                filename = string.Format(fileWithoutExtension, "(" + i++ + ")") + extension;
+
+            return filename;
         }
 
         public List<SkyFile> UnzipArchive(Stream data)
@@ -164,11 +181,12 @@ namespace SkyDrop.Core.Services
         {
             int i = 1;
             string dir = Path.GetDirectoryName(filename);
-            string file = Path.GetFileNameWithoutExtension(filename) + " {0}";
-            string extension = Path.GetExtension(filename);
+            string extension = Util.GetFullExtension(filename);
+            string file = Path.GetFileName(filename);
+            string fileWithoutExtension = file.Substring(0, file.Length - extension.Length) + " {0}";
 
             while (System.IO.File.Exists(filename))
-                filename = Path.Combine(dir, string.Format(file, "(" + i++ + ")") + extension);
+                filename = Path.Combine(dir, string.Format(fileWithoutExtension, "(" + i++ + ")") + extension);
 
             return filename;
         }

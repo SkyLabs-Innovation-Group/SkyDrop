@@ -21,28 +21,31 @@ namespace SkyDrop.Core.Services
     {
         public ILog Log { get; }
 
-        private IFileSystemService fileSystemService;
-        private ISkyDropHttpClientFactory httpClientFactory;
-        private ISingletonService singletonService;
-        private IUserDialogs userDialogs;
+        private readonly IFileSystemService fileSystemService;
+        private readonly ISkyDropHttpClientFactory httpClientFactory;
+        private readonly ISingletonService singletonService;
+        private readonly IUserDialogs userDialogs;
+        private readonly IEncryptionService encryptionService;
 
         public ApiService(ILog log,
             ISkyDropHttpClientFactory skyDropHttpClientFactory,
             ISingletonService singletonService,
             IUserDialogs userDialogs,
-            IFileSystemService fileSystemService)
+            IFileSystemService fileSystemService,
+            IEncryptionService encryptionService)
         {
             Log = log;
             httpClientFactory = skyDropHttpClientFactory;
             this.singletonService = singletonService;
             this.userDialogs = userDialogs;
             this.fileSystemService = fileSystemService;
+            this.encryptionService = encryptionService;
         }
         
         public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationTokenSource)
         {
             var fileSizeBytes = skyfile.FileSizeBytes;
-            var filename = skyfile.Filename;
+            var filename = skyfile.EncryptedFilename ?? skyfile.Filename;
 
             var url = $"{SkynetPortal.SelectedPortal}/skynet/skyfile";
 
@@ -97,21 +100,37 @@ namespace SkyDrop.Core.Services
             //download
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var response = await httpClient.GetAsync(url);
-            var filename = GetFilenameFromResponse(response);
+            
+            var fileName = GetFilenameFromResponse(response);
+            if (fileName == null)
+                throw new Exception("Filename cannot be null");
 
+            if (fileName.IsEncryptedFile())
+            {
+                //save encrypted file
+                var encryptedFilePath = await fileSystemService.SaveFile(await response.Content.ReadAsStreamAsync(), fileName, false);
+
+                //decrypt
+                var decryptedFilePath = await encryptionService.DecodeFile(encryptedFilePath);
+                userDialogs.Toast($"Saved {Path.GetFileName(decryptedFilePath)}");
+                return;
+            }
+
+            //save directly
             using var responseStream = await response.Content.ReadAsStreamAsync();
-            var newFileName = await fileSystemService.SaveToGalleryOrFiles(responseStream, filename, saveType);
+            var newFilePath = await fileSystemService.SaveToGalleryOrFiles(responseStream, fileName, saveType);
 
-            userDialogs.Toast($"Saved {newFileName}");
+            userDialogs.Toast($"Saved {Path.GetFileName(newFilePath)}");
         }
 
-        public async Task<Stream> DownloadFile(string url)
+        public async Task<(Stream data, string filename)> DownloadFile(string url)
         {
-            //download
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var response = await httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStreamAsync();
+            var data = await response.Content.ReadAsStreamAsync();
+            var fileName = GetFilenameFromResponse(response);
+            return (data, fileName);
         }
 
         public async Task<string> GetSkyFileFilename(string skylink)
@@ -236,7 +255,7 @@ namespace SkyDrop.Core.Services
 
         Task DownloadAndSaveSkyfile(string url, SaveType saveType);
 
-        Task<Stream> DownloadFile(string url);
+        Task<(Stream data, string filename)> DownloadFile(string url);
 
         Task<string> GetSkyFileFilename(string skyfile);
 

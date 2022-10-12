@@ -511,6 +511,7 @@
                         app:cardBackgroundColor="@color/darkGrey"
                         app:strokeColor="@color/skyTurqouise"
                         app:strokeWidth="2dp"
+                        app:MvxBind="Click NavToContactsCommand"
                         >
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -581,20 +582,67 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <!--encryption button-->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:translationX="-16dp"
+                app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="@color/primaryColor"
+                app:MvxBind="Click OpenContactsMenuCommand;Visibility Visibility(IsStagedFilesVisible)">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:padding="8dp"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_world"
+                        app:MvxBind="EncryptIcon EncryptionText"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:layout_gravity="center_vertical"
+                        android:textStyle="bold"
+                        android:text="Anyone with the link"
+                        android:textColor="#eee"
+                        app:MvxBind="Text EncryptionText"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <!--cancel button-->
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_margin="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:translationX="16dp"
                 android:layout_alignParentRight="true"
-                app:cardCornerRadius="32dp"
-                app:cardBackgroundColor="@color/skyOcean"
+                app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="@color/midGrey"
                 app:MvxBind="Click CancelUploadCommand;Visibility Visibility(IsStagedFilesVisible)">
-                <ImageView
-                    android:src="@drawable/ic_cancel"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="8dp"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="24dp"
+                    android:padding="8dp"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_cancel"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:layout_gravity="center_vertical"
+                        android:textStyle="bold"
+                        android:text="Cancel"
+                        android:textColor="@color/skyRed"/>
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!--files preview-->

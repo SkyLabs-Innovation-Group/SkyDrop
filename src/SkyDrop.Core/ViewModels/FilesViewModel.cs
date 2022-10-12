@@ -64,6 +64,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IUserDialogs userDialogs;
         private readonly IMvxNavigationService navigationService;
         private readonly ILog log;
+        private readonly IEncryptionService encryptionService;
 
         private Action updateSelectionStateAction;
         private TaskCompletionSource<IFolderItem> moveFilesCompletionSource;
@@ -74,6 +75,7 @@ namespace SkyDrop.Core.ViewModels.Main
                              IFileSystemService fileSystemService,
                              IUserDialogs userDialogs,
                              IMvxNavigationService navigationService,
+                             IEncryptionService encryptionService,
                              ILog log) : base(singletonService)
         {
             Title = "SkyDrive";
@@ -83,6 +85,7 @@ namespace SkyDrop.Core.ViewModels.Main
             this.fileSystemService = fileSystemService;
             this.userDialogs = userDialogs;
             this.navigationService = navigationService;
+            this.encryptionService = encryptionService;
             this.log = log;
 
             ToggleLayoutCommand = new MvxCommand(() => LayoutType = LayoutType == FileLayoutType.List ? FileLayoutType.Grid : FileLayoutType.List);
@@ -138,19 +141,36 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task<List<SkyFileDVM>> DownloadAndUnzipArchive()
         {
-            var didDownload = false;
+            const string downloadingText = "Downloading...";
+            const string decryptingText = "Decrypting...";
+            const string unzippingText = "Unzipping...";
+
             try
             {
                 IsLoading = true;
-                LoadingLabelText = "Downloading...";
+                LoadingLabelText = downloadingText;
 
                 List<SkyFile> files;
-                using (var stream = await apiService.DownloadFile(ArchiveUrl))
+                var (stream, filename) = await apiService.DownloadFile(ArchiveUrl);
+                using (stream)
                 {
-                    didDownload = true;
-                    LoadingLabelText = "Unzipping...";
+                    Stream decryptedStream;
+                    if (filename.IsEncryptedZipFile())
+                    {
+                        LoadingLabelText = decryptingText;
+                        await Task.Delay(500);
+                        var decryptedPath = await encryptionService.DecodeZipFile(stream, filename);
+                        decryptedStream = File.OpenRead(decryptedPath);
+                    }
+                    else
+                    {
+                        //no need to decrypt
+                        decryptedStream = stream;
+                    }
+
+                    LoadingLabelText = unzippingText;
                     await Task.Delay(500);
-                    files = fileSystemService.UnzipArchive(stream);
+                    files = fileSystemService.UnzipArchive(decryptedStream);
                 }
                 
                 return GetUnzippedFileDVMs(files);
@@ -158,7 +178,7 @@ namespace SkyDrop.Core.ViewModels.Main
             catch(Exception e)
             {
                 IsError = true;
-                var actionName = didDownload ? "unzip" : "download";
+                var actionName = LoadingLabelText == downloadingText ? "download" : LoadingLabelText == decryptingText ? "decrypt" : "unzip";
                 LoadingLabelText = $"Failed to {actionName} file";
                 log.Exception(e);
                 return null;

@@ -25,6 +25,12 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView CancelButton { get; set; }
 
 		[Outlet]
+		UIKit.UIImageView CancelIcon { get; set; }
+
+		[Outlet]
+		UIKit.UILabel CancelLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIView ContactsButton { get; set; }
 
 		[Outlet]
@@ -38,6 +44,15 @@ namespace SkyDrop.iOS.Views.Drop
 
 		[Outlet]
 		FFImageLoading.Cross.MvxCachedImageView DownloadButtonIcon { get; set; }
+
+		[Outlet]
+		UIKit.UIView EncryptButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView EncryptIcon { get; set; }
+
+		[Outlet]
+		UIKit.UILabel EncryptionLabel { get; set; }
 
 		[Outlet]
 		UIKit.UICollectionView FilePreviewCollectionView { get; set; }
@@ -125,6 +140,16 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (CancelLabel != null) {
+				CancelLabel.Dispose ();
+				CancelLabel = null;
+			}
+
+			if (CancelIcon != null) {
+				CancelIcon.Dispose ();
+				CancelIcon = null;
+			}
+
 			if (BarcodeContainer != null) {
 				BarcodeContainer.Dispose ();
 				BarcodeContainer = null;
@@ -188,6 +213,21 @@ namespace SkyDrop.iOS.Views.Drop
 			if (DownloadButtonIcon != null) {
 				DownloadButtonIcon.Dispose ();
 				DownloadButtonIcon = null;
+			}
+
+			if (EncryptButton != null) {
+				EncryptButton.Dispose ();
+				EncryptButton = null;
+			}
+
+			if (EncryptIcon != null) {
+				EncryptIcon.Dispose ();
+				EncryptIcon = null;
+			}
+
+			if (EncryptionLabel != null) {
+				EncryptionLabel.Dispose ();
+				EncryptionLabel = null;
 			}
 
 			if (FilePreviewCollectionView != null) {
