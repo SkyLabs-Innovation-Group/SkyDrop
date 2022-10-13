@@ -107,7 +107,7 @@ namespace SkyDrop.Core.Services
             return Convert.ToBase64String(publicKeyWithId);
         }
 
-        public Task<string> EncodeFileFor(string filePath, List<Contact> recipients, bool isSkyDropArchive)
+        public Task<string> EncodeFileFor(string filePath, List<Contact> recipients)
         {
             return Task.Run(() =>
             {
@@ -138,7 +138,7 @@ namespace SkyDrop.Core.Services
                 var encryptedFileWithMetaData = Util.Combine(metaData, encryptedBytes);
 
                 //save the file
-                var randomFileName = GenerateEncryptedFileName(isSkyDropArchive);
+                var randomFileName = GenerateEncryptedFileName(Path.GetFileName(filePath));
                 var encryptedFilePath = Path.Combine(fileSystemService.CacheFolderPath, randomFileName);
                 File.WriteAllBytes(encryptedFilePath, encryptedFileWithMetaData);
 
@@ -444,19 +444,16 @@ namespace SkyDrop.Core.Services
             return (fileName, file);
         }
 
-        private string GenerateEncryptedFileName(bool isSkyDropArchive)
+        private string GenerateEncryptedFileName(string originalFileName)
         {
             //generate name from Guid, without dashes
             var name = new StringBuilder(Guid.NewGuid().ToString("N"));
 
-            if (isSkyDropArchive)
+            if (Util.GetFileCategory(originalFileName) == FileCategory.Zip)
             {
                 //add zi signature to identify skydrop encrypted zip files
                 name[15] = 'z';
                 name[16] = 'i';
-
-                //note this signature is only used for archives made with skydrop
-                //because we currently only support unzipping flat zip archives that do not contain directories
             }
             else
             {
@@ -480,7 +477,7 @@ namespace SkyDrop.Core.Services
 
         (AddContactResult result, Guid newContactId, string existingContactSavedName) AddPublicKey(string publicKeyEncoded);
 
-        Task<string> EncodeFileFor(string filePath, List<Contact> recipients, bool isSkyDropArchive);
+        Task<string> EncodeFileFor(string filePath, List<Contact> recipients);
 
         Task<string> DecodeFile(string filePath);
 
