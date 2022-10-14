@@ -152,8 +152,16 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(filePreviewSource).For(s => s.ItemsSource).To(vm => vm.StagedFiles);
             set.Bind(FilePreviewCollectionView).For("Visible").To(vm => vm.IsStagedFilesVisible);
 
+            //send & receive buttons
             set.Bind(SendButton).For("Tap").To(vm => vm.SendCommand);
             set.Bind(ReceiveButton).For("Tap").To(vm => vm.ReceiveCommand);
+            set.Bind(SendActivityIndicator).For("Visible").To(vm => vm.IsUploading);
+            set.Bind(ReceiveActivityIndicator).For("Visible").To(vm => vm.IsReceivingFile);
+            set.Bind(SendIcon).For(v => v.Hidden).To(vm => vm.IsUploading);
+            set.Bind(ReceiveIcon).For(v => v.Hidden).To(vm => vm.IsReceivingFile);
+            set.Bind(SendLabel).To(vm => vm.SendButtonLabel);
+            set.Bind(ReceiveLabel).To(vm => vm.ReceiveButtonLabel);
+            set.Bind(FileSizeLabel).To(vm => vm.FileSize);
 
             //home menu
             set.Bind(SkyDriveButton).For("Tap").To(vm => vm.MenuSkyDriveCommand);
@@ -163,32 +171,23 @@ namespace SkyDrop.iOS.Views.Drop
 
             //mini menu
             set.Bind(MiniMenuContainer).For("Visible").To(vm => vm.IsStagedFilesVisible);
+            set.Bind(MiniMenuSkyDriveButton).For("Tap").To(vm => vm.MenuSkyDriveCommand);
+            set.Bind(MiniMenuPortalsButton).For("Tap").To(vm => vm.MenuPortalsCommand);
+            set.Bind(MiniMenuContactsButton).For("Tap").To(vm => vm.MenuContactsCommand);
+            set.Bind(MiniMenuSettingsButton).For("Tap").To(vm => vm.MenuSettingsCommand);
 
             //QR menu
             set.Bind(CopyLinkButton).For("Tap").To(vm => vm.CopyLinkCommand);
             set.Bind(OpenButton).For("Tap").To(vm => vm.OpenFileInBrowserCommand);
             set.Bind(ShareButton).For("Tap").To(vm => vm.ShareLinkCommand);
             set.Bind(DownloadButton).For("Tap").To(vm => vm.DownloadFileCommand);
-
             set.Bind(DownloadButtonActivityIndicator).For("Visible").To(vm => vm.IsDownloadingFile);
             set.Bind(DownloadButtonIcon).For(t => t.Hidden).To(vm => vm.IsDownloadingFile);
             set.Bind(SaveFileLabel).For(t => t.Text).To(vm => vm.SaveButtonText);
             set.Bind(DownloadButtonIcon).For(a => a.ImagePath).To(vm => vm.IsFocusedFileAnArchive).WithConversion(new SaveUnzipIconConverter());
-
-            set.Bind(titleLabel).To(vm => vm.Title);
-
             set.Bind(BarcodeMenu).For("Visible").To(vm => vm.IsBarcodeVisible);
+
             set.Bind(BarcodeContainer).For("Visible").To(vm => vm.IsBarcodeVisible);
-
-            set.Bind(SendActivityIndicator).For("Visible").To(vm => vm.IsUploading);
-            set.Bind(ReceiveActivityIndicator).For("Visible").To(vm => vm.IsReceivingFile);
-            set.Bind(SendIcon).For(v => v.Hidden).To(vm => vm.IsUploading);
-            set.Bind(ReceiveIcon).For(v => v.Hidden).To(vm => vm.IsReceivingFile);
-
-            set.Bind(SendLabel).To(vm => vm.SendButtonLabel);
-            set.Bind(ReceiveLabel).To(vm => vm.ReceiveButtonLabel);
-
-            set.Bind(FileSizeLabel).To(vm => vm.FileSize);
 
             set.Bind(ProgressFillArea).For("Visible").To(vm => vm.IsUploading);
             set.Bind(ProgressFillArea).For(ProgressFillHeightBinding.Name).To(vm => vm.UploadProgress);
@@ -214,13 +213,15 @@ namespace SkyDrop.iOS.Views.Drop
             //icon behind preview image, to show while preview is loading
             set.Bind(FileTypeIcon).For(FileCategoryIconBinding.Name).To(vm => vm.FocusedFile.Filename);
 
+            //encryption button
             set.Bind(EncryptButton).For("Tap").To(vm => vm.ChooseRecipientCommand);
             set.Bind(EncryptButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
             set.Bind(EncryptButton).For("BackgroundColor").To(vm => vm.EncryptionButtonColor).WithConversion(new NativeColorConverter());
-
             set.Bind(EncryptionLabel).To(vm => vm.EncryptionText);
-
             set.Bind(this).For(t => t.EncryptIconType).To(vm => vm.EncryptionText);
+
+            set.Bind(titleLabel).To(vm => vm.Title);
+
             set.Apply();
         }
 

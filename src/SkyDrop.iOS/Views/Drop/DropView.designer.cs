@@ -70,7 +70,19 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIImageView LeftNavDot { get; set; }
 
 		[Outlet]
+		UIKit.UIView MiniMenuContactsButton { get; set; }
+
+		[Outlet]
 		UIKit.UIView MiniMenuContainer { get; set; }
+
+		[Outlet]
+		UIKit.UIView MiniMenuPortalsButton { get; set; }
+
+		[Outlet]
+		UIKit.UIView MiniMenuSettingsButton { get; set; }
+
+		[Outlet]
+		UIKit.UIView MiniMenuSkyDriveButton { get; set; }
 
 		[Outlet]
 		UIKit.UIView OpenButton { get; set; }
@@ -143,6 +155,26 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (MiniMenuSkyDriveButton != null) {
+				MiniMenuSkyDriveButton.Dispose ();
+				MiniMenuSkyDriveButton = null;
+			}
+
+			if (MiniMenuPortalsButton != null) {
+				MiniMenuPortalsButton.Dispose ();
+				MiniMenuPortalsButton = null;
+			}
+
+			if (MiniMenuContactsButton != null) {
+				MiniMenuContactsButton.Dispose ();
+				MiniMenuContactsButton = null;
+			}
+
+			if (MiniMenuSettingsButton != null) {
+				MiniMenuSettingsButton.Dispose ();
+				MiniMenuSettingsButton = null;
+			}
+
 			if (MiniMenuContainer != null) {
 				MiniMenuContainer.Dispose ();
 				MiniMenuContainer = null;
