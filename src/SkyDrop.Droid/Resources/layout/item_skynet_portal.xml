@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:orientation="horizontal"
+    android:paddingTop="16dp"
+    android:paddingHorizontal="16dp"
+    android:clipToPadding="false"
+    android:background="@color/skyDarkBlue"
+    app:MvxBind="Click TapCommand;LongClick LongPressCommand">
+    <ImageView
+        android:layout_width="54dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@drawable/ic_skynet_logo"
+        android:tint="@color/skyGreen"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:layout_weight="5"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/portalTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:text="Siasky.Net"
+            android:textColor="@android:color/white"
+            app:MvxBind="Text Name;"/>
+        <TextView
+            android:id="@+id/portalUrl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:textSize="12sp"
+            tools:text="https://siasky.net"
+            android:clickable="false"
+            android:textColor="@android:color/white"
+            app:MvxBind="Text BaseUrl;"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/chevron"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:src="@drawable/ic_cog"
+        app:MvxBind="Click ReorderDragCommand;">
+    </ImageView>
+
+</LinearLayout>
