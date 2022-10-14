@@ -145,13 +145,6 @@ namespace SkyDrop.iOS.Views.Drop
         {
             var set = CreateBindingSet();
 
-            //setup file preview collection view
-            var filePreviewSource = new MvxCollectionViewSource(FilePreviewCollectionView, FilePreviewCollectionViewCell.Key);
-            FilePreviewCollectionView.DataSource = filePreviewSource;
-            FilePreviewCollectionView.RegisterNibForCell(FilePreviewCollectionViewCell.Nib, FilePreviewCollectionViewCell.Key);
-            set.Bind(filePreviewSource).For(s => s.ItemsSource).To(vm => vm.StagedFiles);
-            set.Bind(FilePreviewCollectionView).For("Visible").To(vm => vm.IsStagedFilesVisible);
-
             //send & receive buttons
             set.Bind(SendButton).For("Tap").To(vm => vm.SendCommand);
             set.Bind(ReceiveButton).For("Tap").To(vm => vm.ReceiveCommand);
@@ -162,6 +155,8 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(SendLabel).To(vm => vm.SendButtonLabel);
             set.Bind(ReceiveLabel).To(vm => vm.ReceiveButtonLabel);
             set.Bind(FileSizeLabel).To(vm => vm.FileSize);
+            set.Bind(ProgressFillArea).For("Visible").To(vm => vm.IsUploading);
+            set.Bind(ProgressFillArea).For(ProgressFillHeightBinding.Name).To(vm => vm.UploadProgress);
 
             //home menu
             set.Bind(SkyDriveButton).For("Tap").To(vm => vm.MenuSkyDriveCommand);
@@ -187,21 +182,14 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(DownloadButtonIcon).For(a => a.ImagePath).To(vm => vm.IsFocusedFileAnArchive).WithConversion(new SaveUnzipIconConverter());
             set.Bind(BarcodeMenu).For("Visible").To(vm => vm.IsBarcodeVisible);
 
+            //barcode view
             set.Bind(BarcodeContainer).For("Visible").To(vm => vm.IsBarcodeVisible);
-
-            set.Bind(ProgressFillArea).For("Visible").To(vm => vm.IsUploading);
-            set.Bind(ProgressFillArea).For(ProgressFillHeightBinding.Name).To(vm => vm.UploadProgress);
-
-            set.Bind(CancelButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
-            set.Bind(CancelButton).For("Tap").To(vm => vm.CancelUploadCommand);
-
-            set.Bind(LeftNavDot).For("Visible").To(vm => vm.NavDotsVisible);
-            set.Bind(RightNavDot).For("Visible").To(vm => vm.NavDotsVisible);
-
-            set.Bind(UrlLabel).To(vm => vm.FocusedFileUrl);
-
             set.Bind(PreviewImage).For("Visible").To(vm => vm.IsPreviewImageVisible);
             set.Bind(BarcodeImage).For(b => b.Hidden).To(vm => vm.IsPreviewImageVisible);
+            set.Bind(UrlLabel).To(vm => vm.FocusedFileUrl);
+
+            //icon behind preview image, to show while preview is loading
+            set.Bind(FileTypeIcon).For(FileCategoryIconBinding.Name).To(vm => vm.FocusedFile.Filename);
 
             //for barcode / preview toggle
             set.Bind(ShowBarcodeButton).For("Visible").To(vm => vm.IsShowBarcodeButtonVisible);
@@ -210,15 +198,25 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(ShowPreviewButton).For("Tap").To(vm => vm.ShowPreviewImageCommand);
             set.Bind(PreviewImage).For(i => i.ImagePath).To(vm => vm.PreviewImageUrl);
 
-            //icon behind preview image, to show while preview is loading
-            set.Bind(FileTypeIcon).For(FileCategoryIconBinding.Name).To(vm => vm.FocusedFile.Filename);
-
             //encryption button
             set.Bind(EncryptButton).For("Tap").To(vm => vm.ChooseRecipientCommand);
             set.Bind(EncryptButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
             set.Bind(EncryptButton).For("BackgroundColor").To(vm => vm.EncryptionButtonColor).WithConversion(new NativeColorConverter());
             set.Bind(EncryptionLabel).To(vm => vm.EncryptionText);
             set.Bind(this).For(t => t.EncryptIconType).To(vm => vm.EncryptionText);
+
+            set.Bind(CancelButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
+            set.Bind(CancelButton).For("Tap").To(vm => vm.CancelUploadCommand);
+
+            //setup file preview collection view
+            var filePreviewSource = new MvxCollectionViewSource(FilePreviewCollectionView, FilePreviewCollectionViewCell.Key);
+            FilePreviewCollectionView.DataSource = filePreviewSource;
+            FilePreviewCollectionView.RegisterNibForCell(FilePreviewCollectionViewCell.Nib, FilePreviewCollectionViewCell.Key);
+            set.Bind(filePreviewSource).For(s => s.ItemsSource).To(vm => vm.StagedFiles);
+            set.Bind(FilePreviewCollectionView).For("Visible").To(vm => vm.IsStagedFilesVisible);
+
+            set.Bind(LeftNavDot).For("Visible").To(vm => vm.NavDotsVisible);
+            set.Bind(RightNavDot).For("Visible").To(vm => vm.NavDotsVisible);
 
             set.Bind(titleLabel).To(vm => vm.Title);
 
