@@ -15,12 +15,21 @@ namespace SkyDrop.Core.Services
 {
     public class FileSystemService : IFileSystemService
     {
+        public string CacheFolderPath
+        {
+            get => cacheFolderPath;
+            set
+            {
+                cacheFolderPath = value;
+                ClearCache();
+            }
+        }
         public string DownloadsFolderPath { get; set; }
-        public string CacheFolderPath { get; set; }
         public ILog Log { get; }
 
         private readonly IUserDialogs userDialogs;
         private readonly ISaveToGalleryService saveToGalleryService;
+        private string cacheFolderPath;
 
         public FileSystemService(ILog log, IUserDialogs userDialogs, ISaveToGalleryService saveToGalleryService)
         {
