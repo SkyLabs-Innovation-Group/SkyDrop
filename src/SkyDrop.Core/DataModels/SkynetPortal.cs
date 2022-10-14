@@ -11,9 +11,6 @@ namespace SkyDrop.Core.DataModels
 {
     public class SkynetPortal
     {
-        public const string SiaskyPortalUrl = "https://siasky.net";
-        public static SkynetPortal SiaskyPortal = new SkynetPortal(SiaskyPortalUrl);
-
         private static SkynetPortal _selectedPortalInstance;
         public static SkynetPortal SelectedPortal { get => _selectedPortalInstance ?? GetSelectedSkynetPortal(); set => _selectedPortalInstance = SetSelectedSkynetPortal(value); }
 
@@ -25,7 +22,7 @@ namespace SkyDrop.Core.DataModels
             string portalUrl = Preferences.Get(PreferenceKey.SelectedSkynetPortal, "");
 
             if (string.IsNullOrEmpty(portalUrl))
-                return SiaskyPortal;
+                return DefaultWeb3Portal;
             else
             {
                 var portal = new SkynetPortal(portalUrl);
@@ -44,7 +41,7 @@ namespace SkyDrop.Core.DataModels
         private static SkynetPortal SetSelectedSkynetPortal(SkynetPortal portal)
         {
             if (string.IsNullOrEmpty(portal.ToString()))
-                return SiaskyPortal;
+                return DefaultWeb3Portal;
 
             Preferences.Remove(PreferenceKey.SelectedSkynetPortal);
             Preferences.Set(PreferenceKey.SelectedSkynetPortal, portal.ToString());
@@ -64,16 +61,14 @@ namespace SkyDrop.Core.DataModels
             return portal;
         }
 
-        public const string SiaskyPortalUrl = "https://web3portal.com";
+        private const string Web3Portal = "https://web3portal.com";
 
-        public const string SkyportalXyzUrl = "https://skyportal.xyz";
         public string GetApiTokenPrefKey()
         {
             return $"{PreferenceKey.PrefixPortalApiToken}{BaseUrl}";
         }
-
         
-        public static SkynetPortal SiaskyPortal = new SkynetPortal(SiaskyPortalUrl);
+        public static SkynetPortal DefaultWeb3Portal = new SkynetPortal(Web3Portal);
         
         public SkynetPortal(string baseUrl)
         {

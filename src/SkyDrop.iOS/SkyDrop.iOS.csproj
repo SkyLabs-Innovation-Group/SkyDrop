@@ -264,6 +264,11 @@
     <ImageAsset Include="Media.xcassets\ic_key.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_pencil.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_pencil.imageset\pencil.pdf" />
+    <InterfaceDefinition Include="Views\PortalPreferences\PortalPreferencesViewController.xib" />
+    <Compile Include="Views\PortalPreferences\PortalPreferencesViewController.cs" />
+    <Compile Include="Views\PortalPreferences\PortalPreferencesViewController.designer.cs">
+      <DependentUpon>PortalPreferencesViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -307,6 +312,7 @@
     <Folder Include="Views\Files\" />
     <Folder Include="Media.xcassets\" />
     <Folder Include="Views\Contacts\" />
+    <Folder Include="Views\PortalPreferences\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

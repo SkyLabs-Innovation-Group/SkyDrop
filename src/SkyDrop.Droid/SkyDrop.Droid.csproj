@@ -109,6 +109,7 @@
     <Compile Include="Views\PortalPreferences\PortalViewHolder.cs" />
     <Compile Include="Helper\BaseOnDragListener.cs" />
     <Compile Include="Views\PortalPreferences\PortalPreferencesListAdapter.cs" />
+    <Compile Include="Views\PortalPreferences\PortalPreferencesView.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -531,6 +532,10 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\ic_skynet_logo.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\PortalPreferencesView.axml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
