@@ -479,7 +479,7 @@
                         app:cardBackgroundColor="@color/darkGrey"
                         app:strokeColor="@color/skyGreen"
                         app:strokeWidth="2dp"
-                        app:MvxBind="Click MenuPortalsCommand">
+                        app:MvxBind="Click OpenPortalPreferencesCommand">
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
