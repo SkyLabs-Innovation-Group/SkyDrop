@@ -137,14 +137,4 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <Button
-        android:layout_width="112dp"
-        android:layout_height="40dp"
-        android:layout_gravity="left"
-        android:text="Contacts"
-        android:background="#555"
-        android:textColor="#fff"
-        app:MvxBind="Click NavigateToContactsCommand"
-        />
-    
 </LinearLayout>

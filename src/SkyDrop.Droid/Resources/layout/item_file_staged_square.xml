@@ -9,7 +9,7 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_margin="16dp"
-        app:cardBackgroundColor="@color/skyTurqouise"
+        app:cardBackgroundColor="@color/skyGreen"
         app:cardCornerRadius="8dp">
         <TextView
             android:id="@+id/ButtonLabel"

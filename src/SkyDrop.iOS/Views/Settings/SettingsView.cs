@@ -36,7 +36,6 @@ namespace SkyDrop.iOS.Views.Settings
 
             StyleButton(SavePortalButton);
             StyleButton(SetNameButton);
-            StyleButton(ContactsButton);
 
             PortalTextView.Text = SkynetPortal.SelectedPortal.ToString();
             SavePortalButton.TouchUpInside += async (s, e) =>
@@ -45,8 +44,6 @@ namespace SkyDrop.iOS.Views.Settings
                 await ViewModel.ValidateAndTrySetSkynetPortalCommand.ExecuteAsync(PortalTextView.Text);
                 PortalTextView.Text = SkynetPortal.SelectedPortal.BaseUrl;
             };
-
-            ContactsButton.TouchUpInside += (s, e) => ViewModel.NavigateToContactsCommand.Execute();
 
             EnableUploadNotificationsSwitch.On = ViewModel.UploadNotificationsEnabled;
             EnableUploadNotificationsSwitch.ValueChanged += EnableUploadNotificationsSwitch_ValueChanged;

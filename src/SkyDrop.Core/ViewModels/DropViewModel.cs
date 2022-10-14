@@ -43,8 +43,6 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand ReceiveCommand { get; set; }
         public IMvxCommand CopyLinkCommand { get; set; }
         public IMvxCommand ResetUIStateCommand { get; set; }
-        public IMvxCommand NavToSettingsCommand { get; set; }
-        public IMvxCommand NavToContactsCommand { get; set; }
         public IMvxCommand ShareLinkCommand { get; set; }
         public IMvxCommand OpenFileInBrowserCommand { get; set; }
         public IMvxCommand DownloadFileCommand { get; set; }
@@ -58,10 +56,13 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand<FileUploadResult> UploadFinishedNotificationCommand { get; set; }
         public IMvxCommand<double> UpdateNotificationProgressCommand { get; set; }
         public IMvxCommand IosSelectFileCommand { get; set; }
-        public IMvxCommand OpenSkyDriveCommand { get; set; }
         public IMvxCommand ShowBarcodeCommand { get; set; }
         public IMvxCommand ShowPreviewImageCommand { get; set; }
-        public IMvxCommand OpenContactsMenuCommand { get; set; }
+        public IMvxCommand ChooseRecipientCommand { get; set; }
+        public IMvxCommand MenuSkyDriveCommand { get; set; }
+        public IMvxCommand MenuPortalsCommand { get; set; }
+        public IMvxCommand MenuContactsCommand { get; set; }
+        public IMvxCommand MenuSettingsCommand { get; set; }
 
         public bool IsUploading { get; set; }
         public bool IsStagingFiles { get; set; }
@@ -127,6 +128,14 @@ namespace SkyDrop.Core.ViewModels.Main
             Cancelled = 3
         }
 
+        public enum HomeMenuItem
+        {
+            SkyDrive = 1,
+            Portals = 2,
+            Contacts = 3,
+            Settings = 4
+        }
+
         private const string receiveFileText = "RECEIVE FILE";
         private const string receivingFileText = "RECEIVING FILE...";
         private const string noInternetPrompt = "Please check your internet connection";
@@ -171,17 +180,23 @@ namespace SkyDrop.Core.ViewModels.Main
             this.encryptionService = encryptionService;
             this.ffImageService = fFImageService;
 
+            //home state
             SendCommand = new MvxAsyncCommand(async () => await SendButtonTapped());
             ReceiveCommand = new MvxAsyncCommand(async () => await ReceiveFile());
-            CopyLinkCommand = new MvxAsyncCommand(async () => await CopySkyLinkToClipboard());
-            NavToSettingsCommand = new MvxAsyncCommand(async () => await NavToSettings());
-            OpenContactsMenuCommand = new MvxAsyncCommand(() => OpenContactsMenu(true));
-            NavToContactsCommand = new MvxAsyncCommand(() => OpenContactsMenu(false));
-            ShareLinkCommand = new MvxAsyncCommand(async () => await ShareLink());
+            MenuSkyDriveCommand = new MvxAsyncCommand(() => HomeMenuTapped(HomeMenuItem.SkyDrive));
+            MenuPortalsCommand = new MvxAsyncCommand(() => HomeMenuTapped(HomeMenuItem.Portals));
+            MenuContactsCommand = new MvxAsyncCommand(() => HomeMenuTapped(HomeMenuItem.Contacts));
+            MenuSettingsCommand = new MvxAsyncCommand(() => HomeMenuTapped(HomeMenuItem.Settings));
+
+            //confirm upload state
             CancelUploadCommand = new MvxCommand(CancelUpload);
+            ChooseRecipientCommand = new MvxAsyncCommand(() => OpenContactsMenu(true));
             ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
+
+            //QR code state
+            CopyLinkCommand = new MvxAsyncCommand(async () => await CopySkyLinkToClipboard());
+            ShareLinkCommand = new MvxAsyncCommand(async () => await ShareLink());
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
-            OpenSkyDriveCommand = new MvxAsyncCommand(NavigateToFiles);
             DownloadFileCommand = new MvxAsyncCommand(SaveOrUnzipFocusedFile);
             ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
             ShowPreviewImageCommand = new MvxCommand(() => IsPreviewImageVisible = true);
@@ -742,7 +757,7 @@ namespace SkyDrop.Core.ViewModels.Main
             }
         }
 
-        private Task NavToSettings()
+        private Task OpenSettings()
         {
             return navigationService.Navigate<SettingsViewModel>();
         }
@@ -862,7 +877,7 @@ namespace SkyDrop.Core.ViewModels.Main
             return navigationService.Navigate<SettingsViewModel>();
         }
 
-        public async Task NavigateToFiles()
+        public async Task OpenSkyDrive()
         {
             if (IsUploading)
                 return;
@@ -946,6 +961,24 @@ namespace SkyDrop.Core.ViewModels.Main
             RaisePropertyChanged(() => IsShowPreviewButtonVisible).Forget();
             RaisePropertyChanged(() => IsFocusedFileAnArchive).Forget();
             RaisePropertyChanged(() => SaveButtonText).Forget();
+        }
+
+        private async Task HomeMenuTapped(HomeMenuItem menuItem)
+        {
+            switch(menuItem)
+            {
+                case HomeMenuItem.SkyDrive:
+                    await OpenSkyDrive();
+                    break;
+                case HomeMenuItem.Portals:
+                    break;
+                case HomeMenuItem.Contacts:
+                    await OpenContactsMenu(false);
+                    break;
+                case HomeMenuItem.Settings:
+                    await OpenSettings();
+                    break;
+            }
         }
 
         private async Task OpenContactsMenu(bool isSelecting)
