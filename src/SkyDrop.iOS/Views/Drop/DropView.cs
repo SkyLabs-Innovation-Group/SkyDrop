@@ -13,6 +13,7 @@ using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.iOS.Bindings;
 using SkyDrop.iOS.Common;
+using SkyDrop.iOS.Converters;
 using UIKit;
 using UserNotifications;
 using static SkyDrop.Core.Utility.Util;
@@ -215,6 +216,7 @@ namespace SkyDrop.iOS.Views.Drop
 
             set.Bind(EncryptButton).For("Tap").To(vm => vm.ChooseRecipientCommand);
             set.Bind(EncryptButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
+            set.Bind(EncryptButton).For("BackgroundColor").To(vm => vm.EncryptionButtonColor).WithConversion(new NativeColorConverter());
 
             set.Bind(EncryptionLabel).To(vm => vm.EncryptionText);
 
