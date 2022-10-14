@@ -79,7 +79,6 @@ namespace SkyDrop.iOS.Views.Drop
                 CancelIcon.TintColor = Colors.Red.ToNative();
                 CancelLabel.TextColor = Colors.Red.ToNative();
 
-
                 SendButton.BackgroundColor = Colors.Primary.ToNative();
                 ReceiveButton.BackgroundColor = Colors.GradientOcean.ToNative();
                 SendButton.Layer.CornerRadius = 8;
@@ -112,6 +111,8 @@ namespace SkyDrop.iOS.Views.Drop
                 PortalsButton.Layer.CornerRadius = 8;
                 ContactsButton.Layer.CornerRadius = 8;
                 SettingsButton.Layer.CornerRadius = 8;
+
+                MiniMenuContainer.BackgroundColor = Colors.MidGrey.ToNative();
 
                 ProgressFillArea.BackgroundColor = Colors.GradientTurqouise.ToNative();
                 ProgressFillArea.Layer.CornerRadius = 8;
@@ -158,6 +159,9 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(PortalsButton).For("Tap").To(vm => vm.MenuPortalsCommand);
             set.Bind(ContactsButton).For("Tap").To(vm => vm.MenuContactsCommand);
             set.Bind(SettingsButton).For("Tap").To(vm => vm.MenuSettingsCommand);
+
+            //mini menu
+            set.Bind(MiniMenuContainer).For("Visible").To(vm => vm.IsStagedFilesVisible);
 
             //QR menu
             set.Bind(CopyLinkButton).For("Tap").To(vm => vm.CopyLinkCommand);
@@ -407,11 +411,13 @@ namespace SkyDrop.iOS.Views.Drop
             var sendButtonCenterX = SendButton.ConvertPointToView(new CGPoint(SendButton.Bounds.Width * 0.5, SendButton.Bounds.Height), null).X;
             var translationX = screenCenterX - sendButtonCenterX;
 
+            MiniMenuContainer.Alpha = 0;
             UIView.Animate(1, () =>
             {
                 SendButton.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
                 ReceiveButton.Alpha = 0;
                 HomeMenu.Alpha = 0;
+                MiniMenuContainer.Alpha = 1;
             });
         }
 

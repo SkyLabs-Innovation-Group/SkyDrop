@@ -9,7 +9,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsView">
             <connections>
-                <outlet property="ContactsButton" destination="etf-lG-ucL" id="0KW-2x-cuB"/>
                 <outlet property="EnableUploadNotificationsSwitch" destination="hpJ-eu-1Ju" id="DPk-rK-Pj8"/>
                 <outlet property="NameTextView" destination="Oax-Dt-UKc" id="rsa-YW-XLL"/>
                 <outlet property="PortalTextView" destination="6GC-oA-PHg" id="jFy-rc-kGF"/>
@@ -87,17 +86,6 @@
                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hpJ-eu-1Ju">
                     <rect key="frame" x="349" y="260" width="51" height="31"/>
                 </switch>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="etf-lG-ucL">
-                    <rect key="frame" x="302" y="497.5" width="96" height="27"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="96" id="ItS-zg-moN"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                    <state key="normal" title="CONTACTS">
-                        <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </state>
-                </button>
             </subviews>
             <color key="backgroundColor" red="0.14901961389999999" green="0.1725490093" blue="0.18823529780000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
@@ -106,7 +94,6 @@
                 <constraint firstItem="pZA-MF-C9R" firstAttribute="leading" secondItem="aX5-Kq-34w" secondAttribute="leading" constant="16" id="2ya-aZ-NmE"/>
                 <constraint firstItem="hpJ-eu-1Ju" firstAttribute="centerY" secondItem="pZA-MF-C9R" secondAttribute="centerY" id="4bF-Jh-qaY"/>
                 <constraint firstItem="J2S-Mi-hf3" firstAttribute="leading" secondItem="aX5-Kq-34w" secondAttribute="leading" constant="16" id="AgE-AE-NFB"/>
-                <constraint firstAttribute="trailing" secondItem="etf-lG-ucL" secondAttribute="trailing" constant="16" id="FWK-LC-cJa"/>
                 <constraint firstItem="J2S-Mi-hf3" firstAttribute="top" secondItem="hpJ-eu-1Ju" secondAttribute="bottom" constant="21" id="G0f-x5-YRx"/>
                 <constraint firstAttribute="trailing" secondItem="cVG-P6-CxS" secondAttribute="trailing" constant="16" id="IxD-kH-hW7"/>
                 <constraint firstItem="6GC-oA-PHg" firstAttribute="leading" secondItem="aX5-Kq-34w" secondAttribute="leading" constant="16" id="Jdg-FF-SDR"/>
@@ -117,7 +104,6 @@
                 <constraint firstAttribute="trailing" secondItem="Oax-Dt-UKc" secondAttribute="trailing" constant="16" id="jU1-WJ-II9"/>
                 <constraint firstAttribute="trailing" secondItem="J2S-Mi-hf3" secondAttribute="trailing" constant="42" id="mOn-Ad-mCY"/>
                 <constraint firstAttribute="trailing" secondItem="hpJ-eu-1Ju" secondAttribute="trailing" constant="16" id="ndV-5J-fE8"/>
-                <constraint firstItem="etf-lG-ucL" firstAttribute="top" secondItem="cVG-P6-CxS" secondAttribute="bottom" constant="64" id="rWA-va-S4p"/>
                 <constraint firstAttribute="trailing" secondItem="y7a-AC-dHr" secondAttribute="trailing" constant="16" id="rcX-nA-fxb"/>
                 <constraint firstItem="Oax-Dt-UKc" firstAttribute="leading" secondItem="aX5-Kq-34w" secondAttribute="leading" constant="16" id="uK3-yt-jch"/>
                 <constraint firstItem="hpJ-eu-1Ju" firstAttribute="leading" relation="lessThanOrEqual" secondItem="pZA-MF-C9R" secondAttribute="trailing" constant="103" id="wb2-ex-HUB"/>

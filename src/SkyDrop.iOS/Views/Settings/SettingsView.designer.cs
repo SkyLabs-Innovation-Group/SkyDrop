@@ -13,9 +13,6 @@ namespace SkyDrop.iOS.Views.Settings
 	partial class SettingsView
 	{
 		[Outlet]
-		UIKit.UIButton ContactsButton { get; set; }
-
-		[Outlet]
 		UIKit.UISwitch EnableUploadNotificationsSwitch { get; set; }
 
 		[Outlet]
@@ -35,11 +32,6 @@ namespace SkyDrop.iOS.Views.Settings
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (ContactsButton != null) {
-				ContactsButton.Dispose ();
-				ContactsButton = null;
-			}
-
 			if (EnableUploadNotificationsSwitch != null) {
 				EnableUploadNotificationsSwitch.Dispose ();
 				EnableUploadNotificationsSwitch = null;
