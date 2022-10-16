@@ -27,7 +27,7 @@ namespace SkyDrop.Core.ViewModels
             new SkynetPortalDVM("https://skynetpro.net", "SkynetPro.net"),
             new SkynetPortalDVM("https://skynetfree.net", "SkynetFree.net"),
             new SkynetPortalDVM("https://siasky.dev", "Siasky.Dev"),
-        });
+        }); // TODO Setup from shared storage
 
         public PortalPreferencesViewModel(ISingletonService singletonService,
                                  IApiService apiService,
@@ -55,8 +55,6 @@ namespace SkyDrop.Core.ViewModels
 
         public void ReorderPortals(int position, int newPosition)
         {
-            Log.Trace($"[Drag] ReorderPortals(position: {position}, newPosition: {newPosition})");
-
             if (position == newPosition)
                 return;
 
@@ -72,6 +70,8 @@ namespace SkyDrop.Core.ViewModels
             }
 
             UserPortals.SwitchTo(copy);
+
+           // TODO save to shared storage
         }
     }
 }
