@@ -24,8 +24,8 @@ namespace SkyDrop.Droid.Views.PortalPreferences
         public void Bind(PortalPreferencesListAdapter adapter)
         {
             listAdapter = adapter;
-            upvoteIcon = ItemView.FindViewById<ImageView>(Resource.Id.ic_upvote);
-            downvoteIcon = ItemView.FindViewById<ImageView>(Resource.Id.ic_downvote);
+            upvoteIcon = ItemView.FindViewById<ImageView>(Resource.Id.upvoteButton);
+            downvoteIcon = ItemView.FindViewById<ImageView>(Resource.Id.downvoteButton);
             upvoteIcon.Click += UpvoteIcon_Click;
             downvoteIcon.Click += DownvoteIcon_Click;
         }
