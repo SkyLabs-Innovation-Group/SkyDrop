@@ -27,6 +27,9 @@ using AndroidX.Core.Content;
 using AndroidX.Core.App;
 using Java.IO;
 using Plugin.CurrentActivity;
+using Java.Lang;
+using System.Runtime.Remoting.Contexts;
+using Environment = System.Environment;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -55,6 +58,10 @@ namespace SkyDrop.Droid.Views.Main
             base.OnCreate(bundle);
 
             CrossCurrentActivity.Current.Init(this, bundle);
+
+            var fileSystemService = Mvx.IoCProvider.Resolve<IFileSystemService>();
+            fileSystemService.DownloadsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            fileSystemService.CacheFolderPath = System.IO.Path.GetTempPath();
 
             var toolbar = FindViewById<AndroidX.AppCompat.Widget.Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
