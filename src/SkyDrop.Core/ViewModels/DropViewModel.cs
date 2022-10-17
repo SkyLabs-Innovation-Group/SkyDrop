@@ -272,8 +272,7 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 IsUploading = true;
 
-                var isSkyDropArchive = StagedFiles.Count() > 2; //file and add more files button
-                if (isSkyDropArchive) 
+                if (StagedFiles.Count() > 2) //file and add more files button
                     FileToUpload = MakeZipFile();
                 else
                     FileToUpload = StagedFiles.First().SkyFile;
@@ -290,7 +289,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (encryptionContact != null)
                 {
                     IsEncrypting = true;
-                    var encryptedPath = await encryptionService.EncodeFileFor(FileToUpload.FullFilePath, new List<Contact> { encryptionContact }, isSkyDropArchive);
+                    var encryptedPath = await encryptionService.EncodeFileFor(FileToUpload.FullFilePath, new List<Contact> { encryptionContact });
 
                     //we use a second property for the encrypted path so that we can preserve the original path, in case file needs to be encrypted again (after changing recipients)
                     FileToUpload.EncryptedFilePath = encryptedPath;
