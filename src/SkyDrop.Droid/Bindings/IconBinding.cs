@@ -24,7 +24,7 @@ namespace SkyDrop.Droid.Bindings
 
         protected override void SetValue(string value)
         {
-            var identifier = value.Substring(4); //remove "res:" prefix
+            var identifier = value?.Substring(4); //remove "res:" prefix
             Target.SetLocalImage(identifier);
         }
     }

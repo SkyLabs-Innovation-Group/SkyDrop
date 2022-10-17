@@ -219,7 +219,7 @@ namespace SkyDrop.Core.Utility
 
         public static bool IsEncryptedZipFile(this string filename)
         {
-            if (filename.Length != 32) //length of a guid without dashes
+            if (filename?.Length != 32) //length of a guid without dashes
                 return false;
 
             var ziSignatureExists = filename[15] == 'z' && filename[16] == 'i'; //is encrypted zip file
