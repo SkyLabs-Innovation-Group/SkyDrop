@@ -30,6 +30,7 @@ namespace SkyDrop.iOS.Views.Drop
         private const string DropUploadNotifRequestId = "drop_upload_notification_id";
         private nfloat screenWidth => UIScreen.MainScreen.Bounds.Width;
         private UILabel titleLabel;
+        private HomeMenuAnimator homeMenuAnimator;
 
         public DropView() : base("DropView", null)
         {
@@ -132,6 +133,12 @@ namespace SkyDrop.iOS.Views.Drop
                 FileTypeIcon.TintColor = Colors.LightGrey.ToNative();
 
                 EncryptButton.BackgroundColor = Colors.Primary.ToNative();
+
+                var animationContainer = new UIView(View.Frame) { UserInteractionEnabled = false };
+                View.AddSubview(animationContainer);
+                homeMenuAnimator = new HomeMenuAnimator(SkyDriveButton, PortalsButton, ContactsButton, SettingsButton,
+                    MiniMenuSkyDriveButton, MiniMenuPortalsButton, MiniMenuContactsButton, MiniMenuSettingsButton,
+                    animationContainer);
 
                 BindViews();
             }
@@ -413,6 +420,7 @@ namespace SkyDrop.iOS.Views.Drop
             var translationX = screenCenterX - sendButtonCenterX;
 
             MiniMenuContainer.Alpha = 0;
+            var duration = 1;
             UIView.Animate(1, () =>
             {
                 SendButton.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
@@ -420,6 +428,8 @@ namespace SkyDrop.iOS.Views.Drop
                 HomeMenu.Alpha = 0;
                 MiniMenuContainer.Alpha = 1;
             });
+
+            homeMenuAnimator.AnimateShrink(duration / 3f, duration / 3f);
         }
 
         /// <summary>

@@ -264,6 +264,7 @@
     <ImageAsset Include="Media.xcassets\ic_key.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_pencil.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_pencil.imageset\pencil.pdf" />
+    <Compile Include="Common\HomeMenuAnimator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
