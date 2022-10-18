@@ -430,15 +430,23 @@ namespace SkyDrop.iOS.Views.Drop
             var sendButtonCenterX = SendButton.ConvertPointToView(new CGPoint(SendButton.Bounds.Width * 0.5, SendButton.Bounds.Height), null).X;
             var translationX = screenCenterX - sendButtonCenterX;
 
-            MiniMenuContainer.Alpha = 0;
             var duration = 1;
-            UIView.Animate(1, () =>
+            UIView.Animate(duration, () =>
             {
                 SendButton.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
                 ReceiveButton.Alpha = 0;
-                HomeMenu.Alpha = 0;
-                MiniMenuContainer.Alpha = 1;
             });
+
+            UIView.Animate(duration / 3f, () =>
+            {
+                HomeMenu.Alpha = 0;
+            });
+
+            MiniMenuContainer.Alpha = 0;
+            UIView.Animate(duration / 3f, duration * 2 / 3, UIViewAnimationOptions.CurveLinear, () =>
+            {
+                MiniMenuContainer.Alpha = 1;
+            }, null);
 
             homeMenuAnimator.AnimateShrink(duration / 3f, duration / 3f);
         }

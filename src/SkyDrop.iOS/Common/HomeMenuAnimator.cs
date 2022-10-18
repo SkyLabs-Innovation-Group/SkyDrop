@@ -39,9 +39,9 @@ namespace SkyDrop.iOS.Common
             var contactsIcon = new UIImageView(UIImage.FromBundle("ic_key")) { TintColor = miniMenuButtonContacts.TintColor };
             var settingsIcon = new UIImageView(UIImage.FromBundle("ic_settings")) { TintColor = miniMenuButtonSettings.TintColor };
 
-            await Task.Delay((int)delay);
-
             AddIconsToWindow(skyDriveIcon, portalsIcon, contactsIcon, settingsIcon);
+
+            await Task.Delay((int)(delay * 1000));
 
             //wait for views to layout
             await Task.Delay(10);
@@ -90,7 +90,7 @@ namespace SkyDrop.iOS.Common
             var x = location.X;
             var y = location.Y;
             var (currentX, currentY) = GetViewLocation(view);
-            var animator = new UIViewPropertyAnimator(2f, UIViewAnimationCurve.EaseInOut, () =>
+            var animator = new UIViewPropertyAnimator(duration, UIViewAnimationCurve.EaseInOut, () =>
             {
                 view.Transform = CGAffineTransform.MakeTranslation(x - currentX, y - currentY);
             });
