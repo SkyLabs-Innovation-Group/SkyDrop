@@ -152,8 +152,8 @@ namespace SkyDrop.iOS.Views.Drop
             //initialize animation container
             var animationContainer = new UIView { UserInteractionEnabled = false };
             View.LayoutInsideWithFrame(animationContainer);
-            homeMenuAnimator = new HomeMenuAnimator(SkyDriveButton, PortalsButton, ContactsButton, SettingsButton,
-                MiniMenuSkyDriveButton, MiniMenuPortalsButton, MiniMenuContactsButton, MiniMenuSettingsButton,
+            homeMenuAnimator = new HomeMenuAnimator(HomeMenuSkyDriveIcon, HomeMenuPortalsIcon, HomeMenuContactsIcon, HomeMenuSettingsIcon,
+                MiniMenuSkyDriveIcon, MiniMenuPortalsIcon, MiniMenuContactsIcon, MiniMenuSettingsIcon,
                 animationContainer);
 
             didInit = true;

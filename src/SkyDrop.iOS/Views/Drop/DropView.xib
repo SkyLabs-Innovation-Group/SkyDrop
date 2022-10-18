@@ -28,12 +28,20 @@
                 <outlet property="FileSizeLabel" destination="qif-P7-gfN" id="S6w-Pg-oEg"/>
                 <outlet property="FileTypeIcon" destination="2xc-82-PNR" id="dRv-Ag-oyT"/>
                 <outlet property="HomeMenu" destination="J8B-cu-bR2" id="OfL-a9-wmW"/>
+                <outlet property="HomeMenuContactsIcon" destination="LHh-Ex-RE5" id="kAY-7Y-OB6"/>
+                <outlet property="HomeMenuPortalsIcon" destination="OTk-wv-B99" id="pyi-xd-0VY"/>
+                <outlet property="HomeMenuSettingsIcon" destination="D64-jp-uLG" id="Shh-6R-vhz"/>
+                <outlet property="HomeMenuSkyDriveIcon" destination="OMj-co-XWT" id="jDb-pZ-TuN"/>
                 <outlet property="LeftNavDot" destination="WPb-AT-AvM" id="upV-fs-Bzv"/>
                 <outlet property="MiniMenuContactsButton" destination="MtM-c0-rYD" id="j2s-ie-8vD"/>
+                <outlet property="MiniMenuContactsIcon" destination="jV6-pU-KOa" id="S5c-T1-7Mg"/>
                 <outlet property="MiniMenuContainer" destination="v8R-l1-wWF" id="9Xr-rF-aL1"/>
                 <outlet property="MiniMenuPortalsButton" destination="fex-UT-f8k" id="zhW-4M-5iQ"/>
+                <outlet property="MiniMenuPortalsIcon" destination="hc7-5c-nWM" id="BZR-zp-Wfd"/>
                 <outlet property="MiniMenuSettingsButton" destination="gaR-9W-IC2" id="4Pb-SO-qI0"/>
+                <outlet property="MiniMenuSettingsIcon" destination="5iz-Qt-HvE" id="rcd-EC-zE0"/>
                 <outlet property="MiniMenuSkyDriveButton" destination="YAu-Vc-9QS" id="ebA-yS-gDD"/>
+                <outlet property="MiniMenuSkyDriveIcon" destination="CI8-ex-HQm" id="4OG-Lc-o7K"/>
                 <outlet property="OpenButton" destination="rhP-Ru-BgC" id="SIp-o7-VRB"/>
                 <outlet property="PortalsButton" destination="tAt-Ie-jBn" id="SUv-JN-WGq"/>
                 <outlet property="PreviewImage" destination="hFD-sB-3NN" id="8Hh-3q-Tiy"/>
@@ -192,8 +200,8 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fex-UT-f8k" userLabel="Mini Portals Button">
                             <rect key="frame" x="64" y="0.0" width="64" height="64"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera.aperture" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="hc7-5c-nWM">
-                                    <rect key="frame" x="14" y="14.5" width="36" height="35"/>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_portals" translatesAutoresizingMaskIntoConstraints="NO" id="hc7-5c-nWM">
+                                    <rect key="frame" x="14" y="14" width="36" height="36"/>
                                     <color key="tintColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="36" id="UrA-Mz-G9k"/>
@@ -689,7 +697,7 @@
                                     <color key="textColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_key" translatesAutoresizingMaskIntoConstraints="NO" id="LHh-Ex-RE5" customClass="MvxCachedImageView">
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_key" translatesAutoresizingMaskIntoConstraints="NO" id="LHh-Ex-RE5">
                                     <rect key="frame" x="24" y="7.5" width="35.5" height="48"/>
                                     <color key="tintColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
@@ -798,7 +806,6 @@
         </view>
     </objects>
     <resources>
-        <image name="camera.aperture" catalog="system" width="128" height="121"/>
         <image name="circle.fill" catalog="system" width="128" height="121"/>
         <image name="filemenu.and.cursorarrow" catalog="system" width="128" height="96"/>
         <image name="ic_cancel" width="18" height="18"/>

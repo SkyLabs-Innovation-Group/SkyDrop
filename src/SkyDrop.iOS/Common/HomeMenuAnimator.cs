@@ -8,13 +8,13 @@ namespace SkyDrop.iOS.Common
 {
     public class HomeMenuAnimator
     {
-        private UIView homeMenuButtonSkyDrive, homeMenuButtonPortals, homeMenuButtonContacts, homeMenuButtonSettings;
-        private UIView miniMenuButtonSkyDrive, miniMenuButtonPortals, miniMenuButtonContacts, miniMenuButtonSettings;
+        private UIImageView homeMenuButtonSkyDrive, homeMenuButtonPortals, homeMenuButtonContacts, homeMenuButtonSettings;
+        private UIImageView miniMenuButtonSkyDrive, miniMenuButtonPortals, miniMenuButtonContacts, miniMenuButtonSettings;
         private UIView animationContainer;
         private readonly int iconSize;
 
-        public HomeMenuAnimator(UIView homeMenuButtonSkyDrive, UIView homeMenuButtonPortals, UIView homeMenuButtonContacts, UIView homeMenuButtonSettings,
-                                UIView miniMenuButtonSkyDrive, UIView miniMenuButtonPortals, UIView miniMenuButtonContacts, UIView miniMenuButtonSettings,
+        public HomeMenuAnimator(UIImageView homeMenuButtonSkyDrive, UIImageView homeMenuButtonPortals, UIImageView homeMenuButtonContacts, UIImageView homeMenuButtonSettings,
+                                UIImageView miniMenuButtonSkyDrive, UIImageView miniMenuButtonPortals, UIImageView miniMenuButtonContacts, UIImageView miniMenuButtonSettings,
                                 UIView animationContainer)
         {
             this.homeMenuButtonSkyDrive = homeMenuButtonSkyDrive;
@@ -29,17 +29,15 @@ namespace SkyDrop.iOS.Common
 
             this.animationContainer = animationContainer;
 
-            this.animationContainer.BackgroundColor = UIColor.Magenta.ColorWithAlpha(0.2f);
-
             this.iconSize = 36;
         }
 
         public async Task AnimateShrink(float delay, float duration)
         {
-            var skyDriveIcon = new UIImageView(UIImage.FromBundle("ic_cloud")) { BackgroundColor = UIColor.Black };
-            var portalsIcon = new UIImageView(UIImage.FromBundle("ic_portal")) { BackgroundColor = UIColor.Black };
-            var contactsIcon = new UIImageView(UIImage.FromBundle("ic_key")) { BackgroundColor = UIColor.Black };
-            var settingsIcon = new UIImageView(UIImage.FromBundle("ic_settings")) { BackgroundColor = UIColor.Black };
+            var skyDriveIcon = new UIImageView(UIImage.FromBundle("ic_cloud")) { TintColor = miniMenuButtonSkyDrive.TintColor };
+            var portalsIcon = new UIImageView(UIImage.FromBundle("ic_portals")) { TintColor = miniMenuButtonPortals.TintColor };
+            var contactsIcon = new UIImageView(UIImage.FromBundle("ic_key")) { TintColor = miniMenuButtonContacts.TintColor };
+            var settingsIcon = new UIImageView(UIImage.FromBundle("ic_settings")) { TintColor = miniMenuButtonSettings.TintColor };
 
             await Task.Delay((int)delay);
 
@@ -92,9 +90,6 @@ namespace SkyDrop.iOS.Common
             var x = location.X;
             var y = location.Y;
             var (currentX, currentY) = GetViewLocation(view);
-
-            return;
-
             var animator = new UIViewPropertyAnimator(2f, UIViewAnimationCurve.EaseInOut, () =>
             {
                 view.Transform = CGAffineTransform.MakeTranslation(x - currentX, y - currentY);
