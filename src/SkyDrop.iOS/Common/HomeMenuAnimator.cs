@@ -29,15 +29,17 @@ namespace SkyDrop.iOS.Common
 
             this.animationContainer = animationContainer;
 
+            this.animationContainer.BackgroundColor = UIColor.Magenta.ColorWithAlpha(0.2f);
+
             this.iconSize = 36;
         }
 
         public async Task AnimateShrink(float delay, float duration)
         {
-            var skyDriveIcon = new UIImageView(UIImage.FromBundle("ic_cloud"));
-            var portalsIcon = new UIImageView(UIImage.FromBundle("ic_portal"));
-            var contactsIcon = new UIImageView(UIImage.FromBundle("ic_key"));
-            var settingsIcon = new UIImageView(UIImage.FromBundle("ic_cog"));
+            var skyDriveIcon = new UIImageView(UIImage.FromBundle("ic_cloud")) { BackgroundColor = UIColor.Black };
+            var portalsIcon = new UIImageView(UIImage.FromBundle("ic_portal")) { BackgroundColor = UIColor.Black };
+            var contactsIcon = new UIImageView(UIImage.FromBundle("ic_key")) { BackgroundColor = UIColor.Black };
+            var settingsIcon = new UIImageView(UIImage.FromBundle("ic_settings")) { BackgroundColor = UIColor.Black };
 
             await Task.Delay((int)delay);
 
@@ -59,10 +61,10 @@ namespace SkyDrop.iOS.Common
 
         private void AddIconsToWindow(UIImageView skyDriveIcon, UIImageView portalsIcon, UIImageView contactsIcon, UIImageView settingsIcon)
         {
-            var skyDriveLocation = GetViewLocation(homeMenuButtonSkyDrive, false);
-            var portalsLocation = GetViewLocation(homeMenuButtonPortals, false);
-            var contactsLocation = GetViewLocation(homeMenuButtonContacts, false);
-            var settingsLocation = GetViewLocation(homeMenuButtonSettings, false);
+            var skyDriveLocation = GetViewLocation(homeMenuButtonSkyDrive);
+            var portalsLocation = GetViewLocation(homeMenuButtonPortals);
+            var contactsLocation = GetViewLocation(homeMenuButtonContacts);
+            var settingsLocation = GetViewLocation(homeMenuButtonSettings);
 
             animationContainer.AddSubview(skyDriveIcon);
             animationContainer.AddSubview(portalsIcon);
@@ -75,17 +77,10 @@ namespace SkyDrop.iOS.Common
             settingsIcon.Frame = GetFrameForLocation(settingsLocation);
         }
 
-        private CGPoint GetViewLocation(UIView view, bool scale = true)
+        private CGPoint GetViewLocation(UIView view)
         {
-            var screenDensity = UIScreen.MainScreen.Scale;
-            var point = view.ConvertPointToView(view.Frame.Location, animationContainer);
-
-            if (scale)
-            {
-                point.X /= screenDensity;
-                point.Y /= screenDensity;
-            }
-
+            var point = view.Superview.ConvertPointToView(view.Frame.Location, null);
+            
             //measure from the center of the view
             point.X += view.Frame.Width / 2;
             point.Y += view.Frame.Height / 2;
@@ -97,6 +92,9 @@ namespace SkyDrop.iOS.Common
             var x = location.X;
             var y = location.Y;
             var (currentX, currentY) = GetViewLocation(view);
+
+            return;
+
             var animator = new UIViewPropertyAnimator(2f, UIViewAnimationCurve.EaseInOut, () =>
             {
                 view.Transform = CGAffineTransform.MakeTranslation(x - currentX, y - currentY);
@@ -115,7 +113,7 @@ namespace SkyDrop.iOS.Common
 
         private CGRect GetFrameForLocation(CGPoint location)
         {
-            return new CGRect(location, new CGSize(iconSize, iconSize));
+            return new CGRect(location.X - iconSize / 2, location.Y - iconSize / 2, iconSize, iconSize);
         }
     }
 }

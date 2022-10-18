@@ -25,7 +25,7 @@ namespace SkyDrop.iOS.Views.Drop
     public partial class DropView : BaseViewController<DropViewModel>
     {
         private const int swipeMarginX = 20;
-        private bool isPressed;
+        private bool isPressed, didInit;
         private nfloat tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
         private const string DropUploadNotifRequestId = "drop_upload_notification_id";
         private nfloat screenWidth => UIScreen.MainScreen.Bounds.Width;
@@ -134,18 +134,29 @@ namespace SkyDrop.iOS.Views.Drop
 
                 EncryptButton.BackgroundColor = Colors.Primary.ToNative();
 
-                var animationContainer = new UIView(View.Frame) { UserInteractionEnabled = false };
-                View.AddSubview(animationContainer);
-                homeMenuAnimator = new HomeMenuAnimator(SkyDriveButton, PortalsButton, ContactsButton, SettingsButton,
-                    MiniMenuSkyDriveButton, MiniMenuPortalsButton, MiniMenuContactsButton, MiniMenuSettingsButton,
-                    animationContainer);
-
                 BindViews();
             }
             catch(Exception e)
             {
                 ViewModel.Log.Exception(e);
             }
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            if (didInit)
+                return;
+
+            //initialize animation container
+            var animationContainer = new UIView { UserInteractionEnabled = false };
+            View.LayoutInsideWithFrame(animationContainer);
+            homeMenuAnimator = new HomeMenuAnimator(SkyDriveButton, PortalsButton, ContactsButton, SettingsButton,
+                MiniMenuSkyDriveButton, MiniMenuPortalsButton, MiniMenuContactsButton, MiniMenuSettingsButton,
+                animationContainer);
+
+            didInit = true;
         }
 
         private void BindViews()

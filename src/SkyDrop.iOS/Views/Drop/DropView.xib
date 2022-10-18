@@ -661,8 +661,8 @@
                                     <color key="textColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera.aperture" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="OTk-wv-B99">
-                                    <rect key="frame" x="24" y="8" width="35.5" height="47"/>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_portals" translatesAutoresizingMaskIntoConstraints="NO" id="OTk-wv-B99">
+                                    <rect key="frame" x="24" y="7.5" width="35.5" height="48"/>
                                     <color key="tintColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="48" id="X8d-ul-P14"/>
@@ -798,20 +798,21 @@
         </view>
     </objects>
     <resources>
-        <image name="camera.aperture" catalog="system" width="32" height="32"/>
-        <image name="circle.fill" catalog="system" width="32" height="32"/>
-        <image name="filemenu.and.cursorarrow" catalog="system" width="32" height="32"/>
+        <image name="camera.aperture" catalog="system" width="128" height="121"/>
+        <image name="circle.fill" catalog="system" width="128" height="121"/>
+        <image name="filemenu.and.cursorarrow" catalog="system" width="128" height="96"/>
         <image name="ic_cancel" width="18" height="18"/>
         <image name="ic_cloud" width="18" height="18"/>
         <image name="ic_download" width="18" height="18"/>
         <image name="ic_image" width="18" height="18"/>
         <image name="ic_key" width="18" height="18"/>
+        <image name="ic_portals" width="18" height="18"/>
         <image name="ic_qr" width="18" height="18"/>
         <image name="ic_settings" width="18" height="18"/>
         <image name="ic_share" width="18" height="18"/>
         <image name="ic_upload" width="18" height="18"/>
         <image name="ic_world" width="18" height="18"/>
-        <image name="link" catalog="system" width="32" height="32"/>
+        <image name="link" catalog="system" width="128" height="122"/>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
