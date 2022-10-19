@@ -65,6 +65,7 @@ namespace SkyDrop.iOS.Views.Files
             set.Bind(ActivityIndicator).For(a => a.Hidden).To(vm => vm.IsError);
             set.Bind(ErrorIcon).For("Visible").To(vm => vm.IsError);
             set.Bind(LoadingLabel).To(vm => vm.LoadingLabelText);
+            set.Bind(ErrorDetailsLabel).To(vm => vm.ErrorDetailText);
             set.Bind(this).For(t => t.ShowHideFolders).To(vm => vm.IsFoldersVisible);
             set.Bind(this).For(t => t.ShowHideFileOptionsButtons).To(vm => vm.IsSelectionActive);
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);

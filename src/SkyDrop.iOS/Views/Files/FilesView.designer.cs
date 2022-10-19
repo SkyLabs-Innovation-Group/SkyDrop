@@ -19,6 +19,9 @@ namespace SkyDrop.iOS.Views.Files
 		UIKit.UIView ActivityIndicatorContainer { get; set; }
 
 		[Outlet]
+		UIKit.UILabel ErrorDetailsLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIImageView ErrorIcon { get; set; }
 
 		[Outlet]
@@ -52,14 +55,19 @@ namespace SkyDrop.iOS.Views.Files
 				FileExplorerHolder = null;
 			}
 
+			if (FoldersTableView != null) {
+				FoldersTableView.Dispose ();
+				FoldersTableView = null;
+			}
+
 			if (LoadingLabel != null) {
 				LoadingLabel.Dispose ();
 				LoadingLabel = null;
 			}
 
-			if (FoldersTableView != null) {
-				FoldersTableView.Dispose ();
-				FoldersTableView = null;
+			if (ErrorDetailsLabel != null) {
+				ErrorDetailsLabel.Dispose ();
+				ErrorDetailsLabel = null;
 			}
 		}
 	}

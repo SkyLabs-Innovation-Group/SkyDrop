@@ -47,6 +47,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsLoading { get; set; }
         public bool IsLoadingLabelVisible => IsLoading || IsError;
         public string LoadingLabelText { get; set; }
+        public string ErrorDetailText { get; set; }
         public bool IsFoldersVisible { get; set; } = true;
         public bool IsSelectionActive => GetIsSelectionActive();
         public bool IsMovingFile { get; set; }
@@ -180,6 +181,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 IsError = true;
                 var actionName = LoadingLabelText == downloadingText ? "download" : LoadingLabelText == decryptingText ? "decrypt" : "unzip";
                 LoadingLabelText = $"Failed to {actionName} file";
+                ErrorDetailText = e.Message;
                 log.Exception(e);
                 return null;
             }

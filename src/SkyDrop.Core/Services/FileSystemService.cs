@@ -150,7 +150,8 @@ namespace SkyDrop.Core.Services
             zipFile.ExtractToDirectory(unzipFolder);
 
             di = new DirectoryInfo(unzipFolder);
-            return di.GetFiles().Select(f => new SkyFile { Filename = f.Name, FullFilePath = f.FullName }).ToList();
+            var files = di.GetFiles().Select(f => new SkyFile { Filename = f.Name, FullFilePath = f.FullName }).ToList();
+            return files;
         }
 
         public async Task<string> SaveFile(Stream data, string fileName, bool isPersistent)
