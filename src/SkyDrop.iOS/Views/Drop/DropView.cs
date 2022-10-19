@@ -443,7 +443,7 @@ namespace SkyDrop.iOS.Views.Drop
             });
 
             MiniMenuContainer.Alpha = 0;
-            UIView.Animate(duration / 3f, duration * 2 / 3, UIViewAnimationOptions.CurveLinear, () =>
+            UIView.Animate(duration / 3f, duration * 2f / 3f, UIViewAnimationOptions.CurveLinear, () =>
             {
                 MiniMenuContainer.Alpha = 1;
             }, null);
@@ -534,6 +534,8 @@ namespace SkyDrop.iOS.Views.Drop
 
                 HomeMenu.Alpha = 1;
                 HomeMenu.Transform = CGAffineTransform.MakeTranslation(0, 0);
+
+                MiniMenuContainer.Alpha = 0;
             }, completion: () =>
             {
                 ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState;

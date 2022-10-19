@@ -11,7 +11,9 @@ namespace SkyDrop.iOS.Common
         private UIImageView homeMenuButtonSkyDrive, homeMenuButtonPortals, homeMenuButtonContacts, homeMenuButtonSettings;
         private UIImageView miniMenuButtonSkyDrive, miniMenuButtonPortals, miniMenuButtonContacts, miniMenuButtonSettings;
         private UIView animationContainer;
-        private readonly int iconSize;
+
+        private readonly nfloat homeMenuIconSize;
+        private readonly nfloat miniMenuIconSize;
 
         public HomeMenuAnimator(UIImageView homeMenuButtonSkyDrive, UIImageView homeMenuButtonPortals, UIImageView homeMenuButtonContacts, UIImageView homeMenuButtonSettings,
                                 UIImageView miniMenuButtonSkyDrive, UIImageView miniMenuButtonPortals, UIImageView miniMenuButtonContacts, UIImageView miniMenuButtonSettings,
@@ -29,7 +31,8 @@ namespace SkyDrop.iOS.Common
 
             this.animationContainer = animationContainer;
 
-            this.iconSize = 36;
+            this.homeMenuIconSize = homeMenuButtonSkyDrive.Frame.Width;
+            this.miniMenuIconSize = miniMenuButtonSkyDrive.Frame.Width;
         }
 
         public async Task AnimateShrink(float delay, float duration)
@@ -42,9 +45,6 @@ namespace SkyDrop.iOS.Common
             AddIconsToWindow(skyDriveIcon, portalsIcon, contactsIcon, settingsIcon);
 
             await Task.Delay((int)(delay * 1000));
-
-            //wait for views to layout
-            await Task.Delay(10);
 
             var miniMenuButtonSkyDrivePosition = GetViewLocation(miniMenuButtonSkyDrive);
             var miniMenuButtonPortalsPosition = GetViewLocation(miniMenuButtonPortals);
@@ -93,6 +93,7 @@ namespace SkyDrop.iOS.Common
             var animator = new UIViewPropertyAnimator(duration, UIViewAnimationCurve.EaseInOut, () =>
             {
                 view.Transform = CGAffineTransform.MakeTranslation(x - currentX, y - currentY);
+                ResizeFrame(view);
             });
             animator.AddCompletion(async p =>
             {
@@ -108,7 +109,14 @@ namespace SkyDrop.iOS.Common
 
         private CGRect GetFrameForLocation(CGPoint location)
         {
-            return new CGRect(location.X - iconSize / 2, location.Y - iconSize / 2, iconSize, iconSize);
+            return new CGRect(location.X - homeMenuIconSize / 2, location.Y - homeMenuIconSize / 2, homeMenuIconSize, homeMenuIconSize);
+        }
+
+        private void ResizeFrame(UIView view)
+        {
+            //compensate for position offset caused by frame size changing
+            var dif = (miniMenuIconSize - homeMenuIconSize) * 0.5;
+            view.Frame = new CGRect(view.Frame.X - dif, view.Frame.Y - dif, miniMenuIconSize, miniMenuIconSize);
         }
     }
 }
