@@ -150,8 +150,30 @@ namespace SkyDrop.Core.Services
             zipFile.ExtractToDirectory(unzipFolder);
 
             di = new DirectoryInfo(unzipFolder);
+            if (di.GetDirectories().Count() > 0)
+                throw new Exception("SkyDrop doesn't support viewing archives which contain folders");
+
             var files = di.GetFiles().Select(f => new SkyFile { Filename = f.Name, FullFilePath = f.FullName }).ToList();
+            if (files.Count == 0)
+                throw new Exception("The archive appears to be empty");
+
             return files;
+        }
+
+        public void ExtractArchiveToDevice(Stream data, string archiveName)
+        {
+            var folderName = Path.GetFileNameWithoutExtension(archiveName);
+            var unzipFolder = Path.Combine(DownloadsFolderPath, $"{folderName}/");
+            if (Directory.Exists(unzipFolder))
+                throw new Exception($"Directory {unzipFolder} already exists");
+
+            Directory.CreateDirectory(unzipFolder);
+
+            //extract
+            var zipFile = new ZipArchive(data);
+            zipFile.ExtractToDirectory(unzipFolder);
+
+            userDialogs.Toast($"Extracted archive to /{folderName}");
         }
 
         public async Task<string> SaveFile(Stream data, string fileName, bool isPersistent)
@@ -238,6 +260,8 @@ namespace SkyDrop.Core.Services
         bool CreateZipArchive(IEnumerable<SkyFile> filesToZip, string destinationZipFullPath);
 
         List<SkyFile> UnzipArchive(Stream data);
+
+        void ExtractArchiveToDevice(Stream data, string archiveName);
 
         void ClearCache();
 

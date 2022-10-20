@@ -25,6 +25,9 @@ namespace SkyDrop.iOS.Views.Files
 		UIKit.UIImageView ErrorIcon { get; set; }
 
 		[Outlet]
+		UIKit.UIView ExtractArchiveButton { get; set; }
+
+		[Outlet]
 		UIKit.UIView FileExplorerHolder { get; set; }
 
 		[Outlet]
@@ -32,6 +35,9 @@ namespace SkyDrop.iOS.Views.Files
 
 		[Outlet]
 		UIKit.UILabel LoadingLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIView SaveArchiveButton { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
@@ -43,6 +49,21 @@ namespace SkyDrop.iOS.Views.Files
 			if (ActivityIndicatorContainer != null) {
 				ActivityIndicatorContainer.Dispose ();
 				ActivityIndicatorContainer = null;
+			}
+
+			if (SaveArchiveButton != null) {
+				SaveArchiveButton.Dispose ();
+				SaveArchiveButton = null;
+			}
+
+			if (ExtractArchiveButton != null) {
+				ExtractArchiveButton.Dispose ();
+				ExtractArchiveButton = null;
+			}
+
+			if (ErrorDetailsLabel != null) {
+				ErrorDetailsLabel.Dispose ();
+				ErrorDetailsLabel = null;
 			}
 
 			if (ErrorIcon != null) {
@@ -63,11 +84,6 @@ namespace SkyDrop.iOS.Views.Files
 			if (LoadingLabel != null) {
 				LoadingLabel.Dispose ();
 				LoadingLabel = null;
-			}
-
-			if (ErrorDetailsLabel != null) {
-				ErrorDetailsLabel.Dispose ();
-				ErrorDetailsLabel = null;
 			}
 		}
 	}

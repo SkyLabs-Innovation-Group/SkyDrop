@@ -685,9 +685,9 @@
         </view>
     </objects>
     <resources>
-        <image name="camera.aperture" catalog="system" width="32" height="32"/>
-        <image name="circle.fill" catalog="system" width="32" height="32"/>
-        <image name="filemenu.and.cursorarrow" catalog="system" width="32" height="32"/>
+        <image name="camera.aperture" catalog="system" width="128" height="121"/>
+        <image name="circle.fill" catalog="system" width="128" height="121"/>
+        <image name="filemenu.and.cursorarrow" catalog="system" width="128" height="96"/>
         <image name="ic_cancel" width="18" height="18"/>
         <image name="ic_cloud" width="18" height="18"/>
         <image name="ic_download" width="18" height="18"/>
@@ -697,8 +697,8 @@
         <image name="ic_share" width="18" height="18"/>
         <image name="ic_upload" width="18" height="18"/>
         <image name="ic_world" width="18" height="18"/>
-        <image name="link" catalog="system" width="32" height="32"/>
-        <image name="person" catalog="system" width="32" height="32"/>
+        <image name="link" catalog="system" width="128" height="122"/>
+        <image name="person" catalog="system" width="128" height="117"/>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

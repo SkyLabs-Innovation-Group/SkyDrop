@@ -49,6 +49,11 @@ namespace SkyDrop.iOS.Views.Files
 
             AddBackButton(() => ViewModel.BackCommand.Execute());
 
+            SaveArchiveButton.BackgroundColor = Colors.GradientTurqouise.ToNative();
+            ExtractArchiveButton.BackgroundColor = Colors.GradientGreen.ToNative();
+            SaveArchiveButton.Layer.CornerRadius = 8f;
+            ExtractArchiveButton.Layer.CornerRadius = 8f;
+
             var folderSource = new MvxSimpleTableViewSource(FoldersTableView, FolderCell.Key);
             FoldersTableView.Source = folderSource;
             FoldersTableView.RegisterNibForCellReuse(FolderCell.Nib, FolderCell.Key);
@@ -64,6 +69,10 @@ namespace SkyDrop.iOS.Views.Files
             set.Bind(ActivityIndicatorContainer).For("Visible").To(vm => vm.IsLoadingLabelVisible);
             set.Bind(ActivityIndicator).For(a => a.Hidden).To(vm => vm.IsError);
             set.Bind(ErrorIcon).For("Visible").To(vm => vm.IsError);
+            set.Bind(SaveArchiveButton).For("Visible").To(vm => vm.IsUnzipError);
+            set.Bind(ExtractArchiveButton).For("Visible").To(vm => vm.IsUnzipError);
+            set.Bind(SaveArchiveButton).For("Tap").To(vm => vm.SaveArchiveCommand);
+            set.Bind(ExtractArchiveButton).For("Tap").To(vm => vm.ExtractArchiveCommand);
             set.Bind(LoadingLabel).To(vm => vm.LoadingLabelText);
             set.Bind(ErrorDetailsLabel).To(vm => vm.ErrorDetailText);
             set.Bind(this).For(t => t.ShowHideFolders).To(vm => vm.IsFoldersVisible);
