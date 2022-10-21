@@ -16,7 +16,6 @@ namespace SkyDrop.Core.ViewModels
         public string DeviceName { get; set; }
 
         public IMvxCommand BackCommand { get; set; }
-        public IMvxCommand NavigateToContactsCommand { get; set; }
         public IMvxAsyncCommand<string> ValidateAndTrySetSkynetPortalCommand { get; set; }
         public IMvxCommand SetDeviceNameCommand { get; set; }
         public IMvxCommand CloseKeyboardCommand { get; set; }
@@ -42,7 +41,6 @@ namespace SkyDrop.Core.ViewModels
             Title = "Settings";
 
             BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
-            NavigateToContactsCommand = new MvxCommand(NavigateToContacts);
             ValidateAndTrySetSkynetPortalCommand = new MvxAsyncCommand<string>(async url => await ValidateAndTrySetSkynetPortal(url));
             SetDeviceNameCommand = new MvxCommand(SetDeviceName);
 
@@ -143,11 +141,6 @@ namespace SkyDrop.Core.ViewModels
         public void Close()
         {
             navigationService.Close(this);
-        }
-
-        private void NavigateToContacts()
-        {
-            navigationService.Navigate<ContactsViewModel, ContactsViewModel.NavParam>(new ContactsViewModel.NavParam { IsSelecting = false });
         }
 
         private void SetDeviceName()

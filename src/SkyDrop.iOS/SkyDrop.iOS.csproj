@@ -264,6 +264,9 @@
     <ImageAsset Include="Media.xcassets\ic_key.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_pencil.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_pencil.imageset\pencil.pdf" />
+    <Compile Include="Common\HomeMenuAnimator.cs" />
+    <ImageAsset Include="Media.xcassets\ic_portals.imageset\camera-iris.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_portals.imageset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

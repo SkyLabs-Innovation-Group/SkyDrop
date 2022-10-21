@@ -288,5 +288,10 @@ namespace SkyDrop.Droid.Helper
             var res = target.Context.Resources.GetIdentifier(drawableName, "drawable", target.Context.PackageName);
             target.SetImageResource(res);
         }
+
+        public static void Remove(this View view)
+        {
+            (view.Parent as ViewGroup).RemoveView(view);
+        }
     }
 }
