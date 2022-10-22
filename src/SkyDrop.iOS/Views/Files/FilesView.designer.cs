@@ -28,6 +28,12 @@ namespace SkyDrop.iOS.Views.Files
 		UIKit.UIView ExtractArchiveButton { get; set; }
 
 		[Outlet]
+		UIKit.UIImageView ExtractArchiveIcon { get; set; }
+
+		[Outlet]
+		UIKit.UIActivityIndicatorView ExtractArchiveSpinner { get; set; }
+
+		[Outlet]
 		UIKit.UIView FileExplorerHolder { get; set; }
 
 		[Outlet]
@@ -38,9 +44,35 @@ namespace SkyDrop.iOS.Views.Files
 
 		[Outlet]
 		UIKit.UIView SaveArchiveButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView SaveArchiveIcon { get; set; }
+
+		[Outlet]
+		UIKit.UIActivityIndicatorView SaveArchiveSpinner { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (SaveArchiveIcon != null) {
+				SaveArchiveIcon.Dispose ();
+				SaveArchiveIcon = null;
+			}
+
+			if (ExtractArchiveIcon != null) {
+				ExtractArchiveIcon.Dispose ();
+				ExtractArchiveIcon = null;
+			}
+
+			if (SaveArchiveSpinner != null) {
+				SaveArchiveSpinner.Dispose ();
+				SaveArchiveSpinner = null;
+			}
+
+			if (ExtractArchiveSpinner != null) {
+				ExtractArchiveSpinner.Dispose ();
+				ExtractArchiveSpinner = null;
+			}
+
 			if (ActivityIndicator != null) {
 				ActivityIndicator.Dispose ();
 				ActivityIndicator = null;
@@ -51,16 +83,6 @@ namespace SkyDrop.iOS.Views.Files
 				ActivityIndicatorContainer = null;
 			}
 
-			if (SaveArchiveButton != null) {
-				SaveArchiveButton.Dispose ();
-				SaveArchiveButton = null;
-			}
-
-			if (ExtractArchiveButton != null) {
-				ExtractArchiveButton.Dispose ();
-				ExtractArchiveButton = null;
-			}
-
 			if (ErrorDetailsLabel != null) {
 				ErrorDetailsLabel.Dispose ();
 				ErrorDetailsLabel = null;
@@ -69,6 +91,11 @@ namespace SkyDrop.iOS.Views.Files
 			if (ErrorIcon != null) {
 				ErrorIcon.Dispose ();
 				ErrorIcon = null;
+			}
+
+			if (ExtractArchiveButton != null) {
+				ExtractArchiveButton.Dispose ();
+				ExtractArchiveButton = null;
 			}
 
 			if (FileExplorerHolder != null) {
@@ -84,6 +111,11 @@ namespace SkyDrop.iOS.Views.Files
 			if (LoadingLabel != null) {
 				LoadingLabel.Dispose ();
 				LoadingLabel = null;
+			}
+
+			if (SaveArchiveButton != null) {
+				SaveArchiveButton.Dispose ();
+				SaveArchiveButton = null;
 			}
 		}
 	}

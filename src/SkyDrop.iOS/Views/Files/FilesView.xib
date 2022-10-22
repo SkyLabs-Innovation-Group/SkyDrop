@@ -15,10 +15,16 @@
                 <outlet property="ErrorDetailsLabel" destination="6jw-SL-yzW" id="Irc-fQ-EH8"/>
                 <outlet property="ErrorIcon" destination="yip-kG-nNl" id="cIU-Iq-nJA"/>
                 <outlet property="ExtractArchiveButton" destination="n0A-qq-3Lm" id="w8G-oa-1qG"/>
+                <outlet property="ExtractArchiveIcon" destination="sEY-j6-bhL" id="gBf-fY-ClI"/>
+                <outlet property="ExtractArchiveLabel" destination="UqA-BK-PSU" id="2r5-zg-t1n"/>
+                <outlet property="ExtractArchiveSpinner" destination="4Yo-tj-Ng5" id="j3e-19-g6L"/>
                 <outlet property="FileExplorerHolder" destination="zf1-Qw-94o" id="wgn-17-XpC"/>
                 <outlet property="FoldersTableView" destination="BPg-mO-lF1" id="OrM-1Z-al5"/>
                 <outlet property="LoadingLabel" destination="e8w-Et-Jcp" id="GHf-8m-DFZ"/>
                 <outlet property="SaveArchiveButton" destination="FVn-yB-9yR" id="gKG-Xy-aTT"/>
+                <outlet property="SaveArchiveIcon" destination="yCm-DP-gMv" id="8SL-ks-u8R"/>
+                <outlet property="SaveArchiveLabel" destination="L2f-Wb-vCD" id="Kgh-1l-9Dc"/>
+                <outlet property="SaveArchiveSpinner" destination="ilA-8r-gmw" id="Ng4-Ks-GHU"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
         </placeholder>
@@ -125,11 +131,17 @@
                                         <constraint firstAttribute="height" constant="48" id="TSy-2s-RYr"/>
                                     </constraints>
                                 </imageView>
+                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="ilA-8r-gmw">
+                                    <rect key="frame" x="32" y="22" width="20" height="20"/>
+                                    <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </activityIndicatorView>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemYellowColor"/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="FVn-yB-9yR" secondAttribute="height" multiplier="1:1" id="0lY-lV-qYB"/>
                                 <constraint firstItem="yCm-DP-gMv" firstAttribute="leading" secondItem="FVn-yB-9yR" secondAttribute="leading" constant="24" id="Hum-Ij-LuI"/>
+                                <constraint firstItem="ilA-8r-gmw" firstAttribute="centerX" secondItem="yCm-DP-gMv" secondAttribute="centerX" id="LHb-Kv-qde"/>
+                                <constraint firstItem="ilA-8r-gmw" firstAttribute="centerY" secondItem="yCm-DP-gMv" secondAttribute="centerY" id="Mfu-ce-HW4"/>
                                 <constraint firstAttribute="trailing" secondItem="L2f-Wb-vCD" secondAttribute="trailing" id="Q7d-AG-k3g"/>
                                 <constraint firstAttribute="trailing" secondItem="yCm-DP-gMv" secondAttribute="trailing" constant="24" id="aji-7J-bgn"/>
                                 <constraint firstItem="L2f-Wb-vCD" firstAttribute="top" secondItem="yCm-DP-gMv" secondAttribute="bottom" constant="2" id="i49-sm-r21"/>

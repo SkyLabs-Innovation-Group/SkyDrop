@@ -165,7 +165,7 @@ namespace SkyDrop.Core.Services
             var folderName = Path.GetFileNameWithoutExtension(archiveName);
             var unzipFolder = Path.Combine(DownloadsFolderPath, $"{folderName}/");
             if (Directory.Exists(unzipFolder))
-                throw new Exception($"Directory {unzipFolder} already exists");
+                throw new Exception($"Directory already exists {unzipFolder}");
 
             Directory.CreateDirectory(unzipFolder);
 

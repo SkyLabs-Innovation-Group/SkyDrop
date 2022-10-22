@@ -73,6 +73,10 @@ namespace SkyDrop.iOS.Views.Files
             set.Bind(ExtractArchiveButton).For("Visible").To(vm => vm.IsUnzipError);
             set.Bind(SaveArchiveButton).For("Tap").To(vm => vm.SaveArchiveCommand);
             set.Bind(ExtractArchiveButton).For("Tap").To(vm => vm.ExtractArchiveCommand);
+            set.Bind(SaveArchiveSpinner).For("Visible").To(vm => vm.IsSavingArchive);
+            set.Bind(ExtractArchiveSpinner).For("Visible").To(vm => vm.IsExtractingArchive);
+            set.Bind(SaveArchiveIcon).For(v => v.Hidden).To(vm => vm.IsSavingArchive);
+            set.Bind(ExtractArchiveIcon).For(v => v.Hidden).To(vm => vm.IsExtractingArchive);
             set.Bind(LoadingLabel).To(vm => vm.LoadingLabelText);
             set.Bind(ErrorDetailsLabel).To(vm => vm.ErrorDetailText);
             set.Bind(this).For(t => t.ShowHideFolders).To(vm => vm.IsFoldersVisible);
