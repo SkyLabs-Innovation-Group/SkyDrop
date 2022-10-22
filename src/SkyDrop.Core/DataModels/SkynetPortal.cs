@@ -61,7 +61,7 @@ namespace SkyDrop.Core.DataModels
             return portal;
         }
 
-        public const string SiaskyPortalUrl = "https://siasky.net";
+        public const string SiaskyPortalUrl = "https://web3portal.com";
 
         public const string SkyportalXyzUrl = "https://skyportal.xyz";
         public string GetApiTokenPrefKey()

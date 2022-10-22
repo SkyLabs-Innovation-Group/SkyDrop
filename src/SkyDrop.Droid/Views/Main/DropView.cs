@@ -44,11 +44,13 @@ namespace SkyDrop.Droid.Views.Main
         private const int swipeMarginX = 100;
         private bool isPressed;
         private float tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
-        private MaterialCardView sendButton, receiveButton;
+        private MaterialCardView sendButton, receiveButton, homeMenuMini;
         private ConstraintLayout barcodeContainer, sendReceiveButtonsContainer;
         private LinearLayout barcodeMenu, homeMenu;
         private ImageView barcodeImageView;
         private View leftDot, rightDot;
+        private HomeMenuAnimator homeMenuAnimator;
+        private FrameLayout animationContainer;
 
         /// <summary>
         /// Initialize view
@@ -81,10 +83,7 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>(result => AndroidUtil.ShowUploadFinishedNotification(this, result));
             ViewModel.UpdateNotificationProgressCommand = new MvxCommand<double>(progress => AndroidUtil.UpdateNotificationProgress(this, progress));
 
-            var fileSystemService = Mvx.IoCProvider.Resolve<IFileSystemService>();
-            fileSystemService.DownloadsFolderPath = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Android.OS.Environment.DirectoryDownloads);
-            fileSystemService.CacheFolderPath = System.IO.Path.GetTempPath();
-
+            animationContainer = FindViewById<FrameLayout>(Resource.Id.AnimationContainer);
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
             receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);
             barcodeContainer = FindViewById<ConstraintLayout>(Resource.Id.BarcodeContainer);
@@ -92,11 +91,30 @@ namespace SkyDrop.Droid.Views.Main
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
             sendReceiveButtonsContainer = FindViewById<ConstraintLayout>(Resource.Id.SendReceiveContainer);
             homeMenu = FindViewById<LinearLayout>(Resource.Id.HomeMenu);
+            homeMenuMini = FindViewById<MaterialCardView>(Resource.Id.HomeMenuMini);
+
+            animationContainer.TranslationZ = 100;
 
             var stagedFilesRecycler = FindViewById<RecyclerView>(Resource.Id.StagedFilesRecycler);
             stagedFilesRecycler.SetLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false));
 
             CreateNavDots();
+
+            SetUpMenuAnimator();
+        }
+
+        private void SetUpMenuAnimator()
+        {
+            var skyDriveIcon = FindViewById<ImageView>(Resource.Id.HomeMenuIconSkyDrive);
+            var portalsIcon = FindViewById<ImageView>(Resource.Id.HomeMenuIconPortals);
+            var contactsIcon = FindViewById<ImageView>(Resource.Id.HomeMenuIconContacts);
+            var settingsIcon = FindViewById<ImageView>(Resource.Id.HomeMenuIconSettings);
+            var skyDriveMiniIcon = FindViewById<ImageView>(Resource.Id.MiniMenuIconSkyDrive);
+            var portalsMiniIcon = FindViewById<ImageView>(Resource.Id.MiniMenuIconPortals);
+            var contactsMiniIcon = FindViewById<ImageView>(Resource.Id.MiniMenuIconContacts);
+            var settingsMiniIcon = FindViewById<ImageView>(Resource.Id.MiniMenuIconSettings);
+            homeMenuAnimator = new HomeMenuAnimator(skyDriveIcon, portalsIcon, contactsIcon, settingsIcon,
+                skyDriveMiniIcon, portalsMiniIcon, contactsMiniIcon, settingsMiniIcon, BaseContext, animationContainer);
         }
 
         /// <summary>
@@ -173,8 +191,17 @@ namespace SkyDrop.Droid.Views.Main
                 .Start();
             homeMenu.Animate()
                 .Alpha(0)
-                .SetDuration(duration)
+                .SetDuration(duration / 3)
+                .WithEndAction(new Runnable(() => homeMenu.Visibility = ViewStates.Gone))
                 .Start();
+            homeMenuMini.Alpha = 0;
+            homeMenuMini.Animate()
+                .Alpha(1)
+                .SetStartDelay(duration * 2 / 3)
+                .SetDuration(duration / 3)
+                .Start();
+
+            homeMenuAnimator.AnimateShrink(duration / 3, duration / 3);
         }
 
         /// <summary>
@@ -200,6 +227,7 @@ namespace SkyDrop.Droid.Views.Main
             homeMenu.Animate()
                 .Alpha(0)
                 .SetDuration(duration)
+                .WithEndAction(new Runnable(() => homeMenu.Visibility = ViewStates.Gone))
                 .Start();
         }
 
@@ -260,6 +288,7 @@ namespace SkyDrop.Droid.Views.Main
                 .TranslationX(0)
                 .Alpha(1)
                 .SetDuration(duration)
+                .WithEndAction(new Runnable(() => homeMenu.Visibility = ViewStates.Visible))
                 .Start();
         }
 
