@@ -56,7 +56,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsMovingFile { get; set; }
         public bool IsDeleteButtonVisible => IsSelectionActive && !IsUnzippedFilesMode;
         public bool IsMoveButtonVisible => IsSelectionActive && !IsFoldersVisible && !IsUnzippedFilesMode;
-        public bool IsLayoutButtonVisible => !IsSelectionActive && !IsFoldersVisible;
+        public bool IsLayoutButtonVisible => !IsSelectionActive && !IsFoldersVisible && !IsLoading && !IsError;
+        public bool IsSelectAllButtonVisible => IsUnzippedFilesMode && !IsLoading && !IsError;
         public bool IsAddFolderButtonVisible => !IsSelectionActive && IsFoldersVisible;
         public bool IsUnzippedSelectionActive => IsSelectionActive && IsUnzippedFilesMode;
         public bool IsSavingArchive { get; set; }

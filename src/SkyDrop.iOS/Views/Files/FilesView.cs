@@ -81,6 +81,7 @@ namespace SkyDrop.iOS.Views.Files
             set.Bind(ErrorDetailsLabel).To(vm => vm.ErrorDetailText);
             set.Bind(this).For(t => t.ShowHideFolders).To(vm => vm.IsFoldersVisible);
             set.Bind(this).For(t => t.ShowHideFileOptionsButtons).To(vm => vm.IsSelectionActive);
+            set.Bind(this).For(t => t.HideOptionsMenuWhenLoading).To(vm => vm.IsLoading);
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Apply();
         }
@@ -99,26 +100,46 @@ namespace SkyDrop.iOS.Views.Files
             get => false;
             set
             {
-                if (value)
-                {
-                    //user is selecting something
+                UpdateNavBarButtons(value);
+            }
+        }
 
-                    if (ViewModel.IsFoldersVisible)
-                        NavigationItem.RightBarButtonItems = new[] { deleteButton }; //show folder options buttons
-                    else if (ViewModel.IsUnzippedFilesMode)
-                        NavigationItem.RightBarButtonItems = new[] { saveUnzippedFilesButton, selectAllButton }; //show unzipped file options buttons
-                    else
-                        NavigationItem.RightBarButtonItems = new[] { moveButton, deleteButton }; //show file options buttons
-                }
+        public bool HideOptionsMenuWhenLoading
+        {
+            get => false;
+            set
+            {
+                UpdateNavBarButtons(false);
+            }
+        }
+
+        private void UpdateNavBarButtons(bool isSelecting)
+        {
+            if (ViewModel.IsLoading || ViewModel.IsError)
+            {
+                NavigationItem.RightBarButtonItems = new UIBarButtonItem[0];
+                return;
+            }
+
+            if (isSelecting)
+            {
+                //user is selecting something
+
+                if (ViewModel.IsFoldersVisible)
+                    NavigationItem.RightBarButtonItems = new[] { deleteButton }; //show folder options buttons
+                else if (ViewModel.IsUnzippedFilesMode)
+                    NavigationItem.RightBarButtonItems = new[] { saveUnzippedFilesButton, selectAllButton }; //show unzipped file options buttons
                 else
-                {
-                    //no selection
+                    NavigationItem.RightBarButtonItems = new[] { moveButton, deleteButton }; //show file options buttons
+            }
+            else
+            {
+                //no selection
 
-                    if (ViewModel.IsUnzippedFilesMode)
-                        NavigationItem.RightBarButtonItems = new[] { layoutToggleButton, selectAllButton };
-                    else
-                        NavigationItem.RightBarButtonItems = new[] { layoutToggleButton }; //show add folder / layout toggle button
-                }
+                if (ViewModel.IsUnzippedFilesMode)
+                    NavigationItem.RightBarButtonItems = new[] { layoutToggleButton, selectAllButton };
+                else
+                    NavigationItem.RightBarButtonItems = new[] { layoutToggleButton }; //show add folder / layout toggle button
             }
         }
 
