@@ -14,16 +14,14 @@
                 <outlet property="ActivityIndicatorContainer" destination="5oH-N5-wcr" id="TJm-gk-zd6"/>
                 <outlet property="ErrorDetailsLabel" destination="6jw-SL-yzW" id="Irc-fQ-EH8"/>
                 <outlet property="ErrorIcon" destination="yip-kG-nNl" id="cIU-Iq-nJA"/>
-                <outlet property="ExtractArchiveButton" destination="n0A-qq-3Lm" id="w8G-oa-1qG"/>
+                <outlet property="ExtractArchiveButton" destination="n0A-qq-3Lm" id="J79-Ey-ZTh"/>
                 <outlet property="ExtractArchiveIcon" destination="sEY-j6-bhL" id="gBf-fY-ClI"/>
-                <outlet property="ExtractArchiveLabel" destination="UqA-BK-PSU" id="2r5-zg-t1n"/>
                 <outlet property="ExtractArchiveSpinner" destination="4Yo-tj-Ng5" id="j3e-19-g6L"/>
                 <outlet property="FileExplorerHolder" destination="zf1-Qw-94o" id="wgn-17-XpC"/>
                 <outlet property="FoldersTableView" destination="BPg-mO-lF1" id="OrM-1Z-al5"/>
                 <outlet property="LoadingLabel" destination="e8w-Et-Jcp" id="GHf-8m-DFZ"/>
                 <outlet property="SaveArchiveButton" destination="FVn-yB-9yR" id="gKG-Xy-aTT"/>
                 <outlet property="SaveArchiveIcon" destination="yCm-DP-gMv" id="8SL-ks-u8R"/>
-                <outlet property="SaveArchiveLabel" destination="L2f-Wb-vCD" id="Kgh-1l-9Dc"/>
                 <outlet property="SaveArchiveSpinner" destination="ilA-8r-gmw" id="Ng4-Ks-GHU"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
