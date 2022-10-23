@@ -4,7 +4,7 @@ namespace SkyDrop.Core
     {
         public static string UploadNotificationsEnabled = "UploadNotificationsEnabled";
 
-        public static string SelectedSkynetPortal = "SelectedSkynetPortal";
+        public static string SelectedSkynetPortal = "SelectedSkynetPortalNew";
 
         public static string PrefixPortalApiToken = "PortalApiToken_";
 

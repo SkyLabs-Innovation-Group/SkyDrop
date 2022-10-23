@@ -17,7 +17,7 @@ namespace SkyDrop.Core.Components
         /// <summary>
         /// This is the default paramaterless implementation for GetSkyDropHttpClientInstance(), it returns the Siasky.net portal.
         /// </summary>
-        public HttpClient GetSkyDropHttpClientInstance() => GetSkyDropHttpClientInstance(SkynetPortal.SiaskyPortal);
+        public HttpClient GetSkyDropHttpClientInstance() => GetSkyDropHttpClientInstance(SkynetPortal.DefaultWeb3Portal);
 
         /// <summary>
         /// This method returns a HttpClient connected to $portal.BaseUrl.
