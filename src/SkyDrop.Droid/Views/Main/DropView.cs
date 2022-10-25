@@ -27,6 +27,9 @@ using AndroidX.Core.Content;
 using AndroidX.Core.App;
 using Java.IO;
 using Plugin.CurrentActivity;
+using Java.Lang;
+using System.Runtime.Remoting.Contexts;
+using Environment = System.Environment;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -41,11 +44,13 @@ namespace SkyDrop.Droid.Views.Main
         private const int swipeMarginX = 100;
         private bool isPressed;
         private float tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
-        private MaterialCardView sendButton, receiveButton;
-        private ConstraintLayout barcodeContainer;
-        private LinearLayout barcodeMenu, sendReceiveButtonsContainer;
+        private MaterialCardView sendButton, receiveButton, homeMenuMini;
+        private ConstraintLayout barcodeContainer, sendReceiveButtonsContainer;
+        private LinearLayout barcodeMenu, homeMenu;
         private ImageView barcodeImageView;
         private View leftDot, rightDot;
+        private HomeMenuAnimator homeMenuAnimator;
+        private FrameLayout animationContainer;
 
         /// <summary>
         /// Initialize view
@@ -55,6 +60,10 @@ namespace SkyDrop.Droid.Views.Main
             base.OnCreate(bundle);
 
             CrossCurrentActivity.Current.Init(this, bundle);
+
+            var fileSystemService = Mvx.IoCProvider.Resolve<IFileSystemService>();
+            fileSystemService.DownloadsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            fileSystemService.CacheFolderPath = System.IO.Path.GetTempPath();
 
             var toolbar = FindViewById<AndroidX.AppCompat.Widget.Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
@@ -74,37 +83,38 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>(result => AndroidUtil.ShowUploadFinishedNotification(this, result));
             ViewModel.UpdateNotificationProgressCommand = new MvxCommand<double>(progress => AndroidUtil.UpdateNotificationProgress(this, progress));
 
-            var fileSystemService = Mvx.IoCProvider.Resolve<IFileSystemService>();
-            fileSystemService.DownloadsFolderPath = Path.Combine(Android.OS.Environment.ExternalStorageDirectory.AbsolutePath, Android.OS.Environment.DirectoryDownloads);
-            fileSystemService.CacheFolderPath = System.IO.Path.GetTempPath();
-
+            animationContainer = FindViewById<FrameLayout>(Resource.Id.AnimationContainer);
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
             receiveButton = FindViewById<MaterialCardView>(Resource.Id.ReceiveFileButton);
             barcodeContainer = FindViewById<ConstraintLayout>(Resource.Id.BarcodeContainer);
             barcodeMenu = FindViewById<LinearLayout>(Resource.Id.BarcodeMenu);
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImage);
-            sendReceiveButtonsContainer = FindViewById<LinearLayout>(Resource.Id.SendReceiveContainer);
+            sendReceiveButtonsContainer = FindViewById<ConstraintLayout>(Resource.Id.SendReceiveContainer);
+            homeMenu = FindViewById<LinearLayout>(Resource.Id.HomeMenu);
+            homeMenuMini = FindViewById<MaterialCardView>(Resource.Id.HomeMenuMini);
+
+            animationContainer.TranslationZ = 100;
 
             var stagedFilesRecycler = FindViewById<RecyclerView>(Resource.Id.StagedFilesRecycler);
             stagedFilesRecycler.SetLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.Horizontal, false));
 
             CreateNavDots();
+
+            SetUpMenuAnimator();
         }
 
-        public override bool OnCreateOptionsMenu(IMenu menu)
+        private void SetUpMenuAnimator()
         {
-            MenuInflater.Inflate(Resource.Menu.DropMenu, menu);
-            return base.OnCreateOptionsMenu(menu);
-        }
-
-        public override bool OnOptionsItemSelected(IMenuItem item)
-        {
-            if (item.ItemId == Resource.Id.menu_drop_settings)
-            {
-                ViewModel.NavigateToSettings().GetAwaiter().GetResult();
-            }
-
-            return base.OnOptionsItemSelected(item);
+            var skyDriveIcon = FindViewById<ImageView>(Resource.Id.HomeMenuIconSkyDrive);
+            var portalsIcon = FindViewById<ImageView>(Resource.Id.HomeMenuIconPortals);
+            var contactsIcon = FindViewById<ImageView>(Resource.Id.HomeMenuIconContacts);
+            var settingsIcon = FindViewById<ImageView>(Resource.Id.HomeMenuIconSettings);
+            var skyDriveMiniIcon = FindViewById<ImageView>(Resource.Id.MiniMenuIconSkyDrive);
+            var portalsMiniIcon = FindViewById<ImageView>(Resource.Id.MiniMenuIconPortals);
+            var contactsMiniIcon = FindViewById<ImageView>(Resource.Id.MiniMenuIconContacts);
+            var settingsMiniIcon = FindViewById<ImageView>(Resource.Id.MiniMenuIconSettings);
+            homeMenuAnimator = new HomeMenuAnimator(skyDriveIcon, portalsIcon, contactsIcon, settingsIcon,
+                skyDriveMiniIcon, portalsMiniIcon, contactsMiniIcon, settingsMiniIcon, BaseContext, animationContainer);
         }
 
         /// <summary>
@@ -179,6 +189,19 @@ namespace SkyDrop.Droid.Views.Main
                 .Alpha(0)
                 .SetDuration(duration)
                 .Start();
+            homeMenu.Animate()
+                .Alpha(0)
+                .SetDuration(duration / 3)
+                .WithEndAction(new Runnable(() => homeMenu.Visibility = ViewStates.Gone))
+                .Start();
+            homeMenuMini.Alpha = 0;
+            homeMenuMini.Animate()
+                .Alpha(1)
+                .SetStartDelay(duration * 2 / 3)
+                .SetDuration(duration / 3)
+                .Start();
+
+            homeMenuAnimator.AnimateShrink(duration / 3, duration / 3);
         }
 
         /// <summary>
@@ -200,6 +223,11 @@ namespace SkyDrop.Droid.Views.Main
             sendButton.Animate()
                 .Alpha(0)
                 .SetDuration(duration)
+                .Start();
+            homeMenu.Animate()
+                .Alpha(0)
+                .SetDuration(duration)
+                .WithEndAction(new Runnable(() => homeMenu.Visibility = ViewStates.Gone))
                 .Start();
         }
 
@@ -256,6 +284,12 @@ namespace SkyDrop.Droid.Views.Main
                 .TranslationX(screenWidth)
                 .SetDuration(duration)
                 .Start();
+            homeMenu.Animate()
+                .TranslationX(0)
+                .Alpha(1)
+                .SetDuration(duration)
+                .WithEndAction(new Runnable(() => homeMenu.Visibility = ViewStates.Visible))
+                .Start();
         }
 
         /// <summary>
@@ -286,8 +320,13 @@ namespace SkyDrop.Droid.Views.Main
 
             var screenWidth = Resources.DisplayMetrics.WidthPixels;
             var duration = 250;
+            var translationX = toLeft ? -screenWidth : screenWidth;
             sendReceiveButtonsContainer.Animate()
-                .TranslationX(toLeft ? -screenWidth : screenWidth)
+                .TranslationX(translationX)
+                .SetDuration(duration)
+                .Start();
+            homeMenu.Animate()
+                .TranslationX(translationX)
                 .SetDuration(duration)
                 .Start();
         }
@@ -299,6 +338,10 @@ namespace SkyDrop.Droid.Views.Main
         {
             var duration = 500;
             sendReceiveButtonsContainer.Animate()
+                .TranslationX(0)
+                .SetDuration(duration)
+                .Start();
+            homeMenu.Animate()
                 .TranslationX(0)
                 .SetDuration(duration)
                 .Start();
@@ -366,7 +409,9 @@ namespace SkyDrop.Droid.Views.Main
                     }
                     else
                     {
-                        sendReceiveButtonsContainer.TranslationX = sendReceiveButtonsContainerStartX + deltaX;
+                        var translationX = sendReceiveButtonsContainerStartX + deltaX;
+                        sendReceiveButtonsContainer.TranslationX = translationX;
+                        homeMenu.TranslationX = translationX;
                     }
 
                     break;

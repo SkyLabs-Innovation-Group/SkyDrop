@@ -78,11 +78,11 @@ namespace SkyDrop.Core.Services
             timerUpdateCallback();
         }
 
-        public void StopUploadTimer()
+        public void StopUploadTimer(bool ignoreResult)
         {
             if (stopwatch == null) return;
 
-            if (stopwatch.IsRunning)
+            if (stopwatch.IsRunning && !ignoreResult)
             {
                 //save the upload time and file size to calculate average upload speed
                 AddReading(stopwatch.Elapsed, fileSizeBytes);
@@ -110,7 +110,7 @@ namespace SkyDrop.Core.Services
 
         void StartUploadTimer(long fileSizeBytes, Action timerUpdateCallback);
 
-        void StopUploadTimer();
+        void StopUploadTimer(bool ignoreResult);
 
         (double UploadProgress, string UploadTime) GetUploadProgress();
     }

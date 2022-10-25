@@ -29,7 +29,6 @@ namespace SkyDrop.Core
 
         protected override async Task NavigateToFirstViewModel(object hint = null)
         {
-            fileSystemService.ClearCache();
             await ffImageService.Initialise();
 
             await navigationService.Navigate<DropViewModel>();

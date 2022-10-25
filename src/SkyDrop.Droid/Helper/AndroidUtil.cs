@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
+using Android.InputMethodServices;
 using Android.OS;
-using Android.Util;
+using Android.Views;
+using Android.Views.InputMethods;
 using Android.Widget;
 using AndroidX.Core.App;
 using FFImageLoading;
@@ -13,6 +15,7 @@ using MvvmCross;
 using Plugin.CurrentActivity;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Droid.Views.Main;
+using Xamarin.Essentials;
 using ZXing.Common;
 using ZXing.Mobile;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
@@ -258,6 +261,37 @@ namespace SkyDrop.Droid.Helper
                     log.Error("Error setting SkyFile preview", ex);
                 }
             });
+        }
+
+        public static void HideKeyboard(this Activity activity)
+        {
+            try
+            {
+                var isMainThread = MainThread.IsMainThread;
+                var inputMethodManager = activity.GetSystemService(Activity.InputMethodService) as InputMethodManager;
+                if (inputMethodManager != null)
+                {
+                    var token = activity.CurrentFocus?.WindowToken;
+                    inputMethodManager.HideSoftInputFromWindow(token, HideSoftInputFlags.None);
+
+                    activity.Window.DecorView.ClearFocus();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Exception(ex);
+            }
+        }
+
+        public static void SetLocalImage(this ImageView target, string drawableName)
+        {
+            var res = target.Context.Resources.GetIdentifier(drawableName, "drawable", target.Context.PackageName);
+            target.SetImageResource(res);
+        }
+
+        public static void Remove(this View view)
+        {
+            (view.Parent as ViewGroup).RemoveView(view);
         }
     }
 }

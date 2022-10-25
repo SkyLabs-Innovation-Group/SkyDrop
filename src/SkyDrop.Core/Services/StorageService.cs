@@ -1,17 +1,25 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using Org.BouncyCastle.Crypto.Parameters;
 using Realms;
 using Realms.Exceptions;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.RealmObjects;
 using SkyDrop.Core.Utility;
+using static System.Net.WebRequestMethods;
 
 namespace SkyDrop.Core.Services
 {
     public class StorageService : IStorageService
     {
+        private const string privateKeyStorageKey = "private_key";
+        private const string publicKeyStorageKey = "public_key";
+        private const string idStorageKey = "device_id";
+        private const string nameStorageKey = "device_name";
         private readonly ILog log;
         private Realm realm => GetRealm();
 
@@ -161,6 +169,109 @@ namespace SkyDrop.Core.Services
             });
         }
 
+        public List<Contact> LoadContacts()
+        {
+            try
+            {
+                var realmObjects = realm.All<ContactRealmObject>().ToArray();
+                return ContactsFromRealmObjects(realmObjects);
+            }
+            catch (InvalidOperationException)
+            {
+                log.Trace("No contacts found");
+                return null;
+            }
+        }
+
+        public void AddContact(Contact contact)
+        {
+            var (exists, name) = ContactExists(contact.Id);
+            if (exists)
+                throw new Exception($"Contact already saved as {name}");
+
+            //gracefully avoid naming collisions by adding (1), (2), (3) etc. to the end of the contact name
+            int i = 1;
+            while (ContactNameExists(contact.Name))
+            {
+                string formattedContactName = contact.Name + " {0}";
+                contact.Name = string.Format(formattedContactName, "(" + i++ + ")");
+            }
+
+            realm.Write(() =>
+            {
+                var realmObject = ContactToRealmObject(contact);
+                realm.Add(realmObject);
+            });
+        }
+
+        public (bool exists, string savedName) ContactExists(Guid id)
+        {
+            var existingContact = realm.Find<ContactRealmObject>(id.ToString());
+            var exists = existingContact != null;
+            return (exists, existingContact?.Name);
+        }
+
+        private bool ContactNameExists(string contactName)
+        {
+            var existingContact = realm.All<ContactRealmObject>().ToList().FirstOrDefault(c => c.Name == contactName);
+            var exists = existingContact != null;
+            return exists;
+        }
+
+        public void DeleteContact(Contact contact)
+        {
+            realm.Write(() =>
+            {
+                var realmObject = realm.Find<ContactRealmObject>(contact.Id.ToString());
+                realm.Remove(realmObject);
+            });
+        }
+
+        public async Task UpdateDeviceName(string name)
+        {
+            await Xamarin.Essentials.SecureStorage.SetAsync(nameStorageKey, name);
+        }
+
+        public void RenameContact(Contact contact, string newName)
+        {
+            contact.Name = newName;
+            realm.Write(() =>
+            {
+                var realmObj = realm.Find<ContactRealmObject>(contact.Id.ToString());
+                realmObj.Name = newName;
+                realm.Add(realmObj);
+            });
+        }
+
+        public async Task<EncryptionKeys> GetMyEncryptionKeys()
+        {
+            var id = await Xamarin.Essentials.SecureStorage.GetAsync(idStorageKey);
+            if (id == null)
+                return null;
+
+            return new EncryptionKeys
+            {
+                Id = id,
+                PublicKeyBase64 = await Xamarin.Essentials.SecureStorage.GetAsync(publicKeyStorageKey),
+                PrivateKeyBase64 = await Xamarin.Essentials.SecureStorage.GetAsync(privateKeyStorageKey),
+                Name = await Xamarin.Essentials.SecureStorage.GetAsync(nameStorageKey)
+            };
+        }
+
+        public async Task SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id, string deviceName)
+        {
+            var privateBytes = privateKey.GetEncoded();
+            var privateKeyString = Convert.ToBase64String(privateBytes);
+
+            var publicBytes = publicKey.GetEncoded();
+            var publicKeyString = Convert.ToBase64String(publicBytes);
+
+            await Xamarin.Essentials.SecureStorage.SetAsync(publicKeyStorageKey, publicKeyString);
+            await Xamarin.Essentials.SecureStorage.SetAsync(privateKeyStorageKey, privateKeyString);
+            await Xamarin.Essentials.SecureStorage.SetAsync(idStorageKey, id.ToString());
+            await Xamarin.Essentials.SecureStorage.SetAsync(nameStorageKey, deviceName);
+        }
+
         public void ClearAllData()
         {
             realm.Write(() =>
@@ -202,22 +313,62 @@ namespace SkyDrop.Core.Services
 
         private SkyFileRealmObject SkyFileToRealmObject(SkyFile skyFile)
         {
-            return new SkyFileRealmObject { Filename = skyFile.Filename, Skylink = skyFile.Skylink, WasSent = skyFile.WasSent };
+            return new SkyFileRealmObject
+            {
+                Filename = skyFile.Filename,
+                Skylink = skyFile.Skylink,
+                WasSent = skyFile.WasSent
+            };
         }
 
         private SkyFile SkyFileFromRealmObject(SkyFileRealmObject realmObject)
         {
-            return new SkyFile { Filename = realmObject.Filename, Skylink = realmObject.Skylink, WasSent = realmObject.WasSent };
+            return new SkyFile
+            {
+                Filename = realmObject.Filename,
+                Skylink = realmObject.Skylink,
+                WasSent = realmObject.WasSent
+            };
         }
 
+        private ContactRealmObject ContactToRealmObject(Contact contact)
+        {
+            return new ContactRealmObject
+            {
+                Id = contact.Id.ToString(),
+                Name = contact.Name,
+                PublicKeyBase64 = Util.PublicKeyToBase64String(contact.PublicKey)
+            };
+        }
+
+        private List<Contact> ContactsFromRealmObjects(params ContactRealmObject[] contactRealmObjects)
+        {
+            return contactRealmObjects.Select(c => new Contact
+            {
+                Id = new Guid(c.Id),
+                Name = c.Name,
+                PublicKey = Util.Base64StringToPublicKey(c.PublicKeyBase64)
+            }).ToList();
+        }
+        
         private Folder FolderFromRealmObject(FolderRealmObject realmObject)
         {
-            return new Folder { Id = new Guid(realmObject.Id), Name = realmObject.Name, SkyLinks = realmObject.SkyLinks.IsNullOrEmpty() ? new List<string>() : realmObject.SkyLinks.Split(',').ToList()  };
+            return new Folder
+            {
+                Id = new Guid(realmObject.Id),
+                Name = realmObject.Name,
+                SkyLinks = realmObject.SkyLinks.IsNullOrEmpty() ? new List<string>() : realmObject.SkyLinks.Split(',').ToList()
+            };
         }
 
         private FolderRealmObject FolderToRealmObject(Folder folder)
         {
-            return new FolderRealmObject { Id = folder.Id.ToString(), Name = folder.Name, SkyLinks = string.Join(",", folder.SkyLinks) };
+            return new FolderRealmObject
+            {
+                Id = folder.Id.ToString(),
+                Name = folder.Name,
+                SkyLinks = string.Join(",", folder.SkyLinks)
+            };
         }
     }
 
@@ -246,5 +397,21 @@ namespace SkyDrop.Core.Services
         void SetAverageUploadRate(UploadAverage uploadAverage);
 
         void ClearAllData();
+
+        List<Contact> LoadContacts();
+
+        void AddContact(Contact contact);
+
+        (bool exists, string savedName) ContactExists(Guid publicKeyBase64);
+
+        void DeleteContact(Contact contact);
+
+        Task SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id, string deviceName);
+
+        Task<EncryptionKeys> GetMyEncryptionKeys();
+
+        Task UpdateDeviceName(string name);
+
+        void RenameContact(Contact contact, string newName);
     }
 }

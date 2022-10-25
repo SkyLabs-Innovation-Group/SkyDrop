@@ -15,12 +15,21 @@ namespace SkyDrop.Core.Services
 {
     public class FileSystemService : IFileSystemService
     {
+        public string CacheFolderPath
+        {
+            get => cacheFolderPath;
+            set
+            {
+                cacheFolderPath = value;
+                ClearCache();
+            }
+        }
         public string DownloadsFolderPath { get; set; }
-        public string CacheFolderPath { get; set; }
         public ILog Log { get; }
 
         private readonly IUserDialogs userDialogs;
         private readonly ISaveToGalleryService saveToGalleryService;
+        private string cacheFolderPath;
 
         public FileSystemService(ILog log, IUserDialogs userDialogs, ISaveToGalleryService saveToGalleryService)
         {
@@ -89,11 +98,15 @@ namespace SkyDrop.Core.Services
                 if (File.Exists(destinationZipFullPath))
                     File.Delete(destinationZipFullPath);
 
+                var filenames = new List<string>();
                 using (ZipArchive zip = ZipFile.Open(destinationZipFullPath, ZipArchiveMode.Create))
                 {
                     foreach (var file in filesToZip)
                     {
-                        zip.CreateEntryFromFile(file.FullFilePath, file.Filename, CompressionLevel.Optimal);
+                        //ensure filenames are unique to avoid extraction errors
+                        var filename = GetNextZipFilename(file.Filename, filenames);
+                        filenames.Add(filename);
+                        zip.CreateEntryFromFile(file.FullFilePath, filename, CompressionLevel.Optimal);
                     }               
                 }
 
@@ -104,6 +117,19 @@ namespace SkyDrop.Core.Services
                 Log.Exception(e);
                 return false;
             }
+        }
+
+        private string GetNextZipFilename(string filename, List<string> filenames)
+        {
+            int i = 1;
+            string extension = Util.GetFullExtension(filename);
+            string file = Path.GetFileName(filename);
+            string fileWithoutExtension = file.Substring(0, file.Length - extension.Length) + " {0}";
+
+            while (filenames.Contains(filename))
+                filename = string.Format(fileWithoutExtension, "(" + i++ + ")") + extension;
+
+            return filename;
         }
 
         public List<SkyFile> UnzipArchive(Stream data)
@@ -124,7 +150,30 @@ namespace SkyDrop.Core.Services
             zipFile.ExtractToDirectory(unzipFolder);
 
             di = new DirectoryInfo(unzipFolder);
-            return di.GetFiles().Select(f => new SkyFile { Filename = f.Name, FullFilePath = f.FullName }).ToList();
+            if (di.GetDirectories().Count() > 0)
+                throw new Exception("SkyDrop doesn't support viewing archives which contain folders");
+
+            var files = di.GetFiles().Select(f => new SkyFile { Filename = f.Name, FullFilePath = f.FullName }).ToList();
+            if (files.Count == 0)
+                throw new Exception("The archive appears to be empty");
+
+            return files;
+        }
+
+        public void ExtractArchiveToDevice(Stream data, string archiveName)
+        {
+            var folderName = Path.GetFileNameWithoutExtension(archiveName);
+            var unzipFolder = Path.Combine(DownloadsFolderPath, $"{folderName}/");
+            if (Directory.Exists(unzipFolder))
+                throw new Exception($"Directory already exists {unzipFolder}");
+
+            Directory.CreateDirectory(unzipFolder);
+
+            //extract
+            var zipFile = new ZipArchive(data);
+            zipFile.ExtractToDirectory(unzipFolder);
+
+            userDialogs.Toast($"Extracted archive to /{folderName}");
         }
 
         public async Task<string> SaveFile(Stream data, string fileName, bool isPersistent)
@@ -164,11 +213,12 @@ namespace SkyDrop.Core.Services
         {
             int i = 1;
             string dir = Path.GetDirectoryName(filename);
-            string file = Path.GetFileNameWithoutExtension(filename) + " {0}";
-            string extension = Path.GetExtension(filename);
+            string extension = Util.GetFullExtension(filename);
+            string file = Path.GetFileName(filename);
+            string fileWithoutExtension = file.Substring(0, file.Length - extension.Length) + " {0}";
 
             while (System.IO.File.Exists(filename))
-                filename = Path.Combine(dir, string.Format(file, "(" + i++ + ")") + extension);
+                filename = Path.Combine(dir, string.Format(fileWithoutExtension, "(" + i++ + ")") + extension);
 
             return filename;
         }
@@ -210,6 +260,8 @@ namespace SkyDrop.Core.Services
         bool CreateZipArchive(IEnumerable<SkyFile> filesToZip, string destinationZipFullPath);
 
         List<SkyFile> UnzipArchive(Stream data);
+
+        void ExtractArchiveToDevice(Stream data, string archiveName);
 
         void ClearCache();
 

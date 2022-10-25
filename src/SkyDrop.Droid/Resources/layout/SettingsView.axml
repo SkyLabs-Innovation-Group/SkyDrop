@@ -12,6 +12,57 @@
         android:id="@+id/layout_toolbar"
         layout="@layout/toolbar_settings" />
 
+    <!-- Device name -->
+
+    <TextView
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:text="Device name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="#555"
+        app:cardCornerRadius="8dp">
+
+        <EditText
+            android:id="@+id/deviceNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="8dp"
+            android:textColor="#fff"
+            android:background="#555"
+            android:inputType="textUri"
+            app:MvxBind="Text DeviceName"
+            />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_gravity="right"
+        app:cardBackgroundColor="#555"
+        app:cardCornerRadius="8dp">
+
+        <Button
+            android:layout_width="112dp"
+            android:layout_height="40dp"
+            android:text="Set name"
+            android:background="#555"
+            android:textColor="#fff"
+            app:MvxBind="Click SetDeviceNameCommand"
+            />
+
+    </com.google.android.material.card.MaterialCardView>
+
     <!-- Checkbox toggles -->
     
     <CheckBox
@@ -85,5 +136,5 @@
             />
 
     </com.google.android.material.card.MaterialCardView>
-    
+
 </LinearLayout>

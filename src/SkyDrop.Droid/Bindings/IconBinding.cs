@@ -4,6 +4,7 @@ using Android.Views;
 using Android.Widget;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
+using SkyDrop.Droid.Helper;
 
 namespace SkyDrop.Droid.Bindings
 {
@@ -23,9 +24,8 @@ namespace SkyDrop.Droid.Bindings
 
         protected override void SetValue(string value)
         {
-            var identifier = value.Substring(4); //remove "res:" prefix
-            var res = Target.Context.Resources.GetIdentifier(identifier, "drawable", Target.Context.PackageName);
-            Target.SetImageResource(res);
+            var identifier = value?.Substring(4); //remove "res:" prefix
+            Target.SetLocalImage(identifier);
         }
     }
 }

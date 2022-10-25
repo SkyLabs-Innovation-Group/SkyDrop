@@ -93,8 +93,17 @@
     <Compile Include="Bindings\FileCategoryIconBinding.cs" />
     <Compile Include="Views\Files\FileExplorerView.cs" />
     <Compile Include="Bindings\IconBinding.cs" />
+    <Compile Include="Views\Contacts\ContactsView.cs" />
+    <Compile Include="Views\Files\FilesView.cs" />
+    <Compile Include="Views\Contacts\SharePublicKeyView.cs" />
     <Compile Include="Views\Files\FilesView.cs" />
     <Compile Include="Services\AndroidSaveToGalleryService.cs" />
+    <Compile Include="Helper\QRScannerHelper.cs" />
+    <Compile Include="Bindings\PairingOverlayBinding.cs" />
+    <Compile Include="Bindings\EncryptIconBinding.cs" />
+    <Compile Include="Bindings\ContactsDeleteVisibilityBinding.cs" />
+    <Compile Include="Bindings\ButtonClickBinding.cs" />
+    <Compile Include="Helper\HomeMenuAnimator.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -224,12 +233,6 @@
       </Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\launch_skydrop_background.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\menu\DropMenu.xml">
       <SubType>
       </SubType>
       <Generator>
@@ -389,7 +392,7 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\item_file_list.xml">
+    <AndroidResource Include="Resources\layout\item_contact.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
@@ -446,6 +449,22 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\ContactsView.axml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\item_file_list.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\toolbar_contacts.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\SharePublicKeyView.axml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\item_folder.xml">
       <SubType></SubType>
       <Generator></Generator>
@@ -471,6 +490,34 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\ic_select_all.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_check.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_pair.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_file_encrypted.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_world.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_portal.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_key.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_pencil.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
@@ -506,6 +553,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Files\" />
+    <Folder Include="Views\Contacts\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

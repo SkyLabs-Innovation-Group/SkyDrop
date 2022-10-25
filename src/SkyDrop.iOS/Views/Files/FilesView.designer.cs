@@ -19,7 +19,19 @@ namespace SkyDrop.iOS.Views.Files
 		UIKit.UIView ActivityIndicatorContainer { get; set; }
 
 		[Outlet]
+		UIKit.UILabel ErrorDetailsLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIImageView ErrorIcon { get; set; }
+
+		[Outlet]
+		UIKit.UIView ExtractArchiveButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView ExtractArchiveIcon { get; set; }
+
+		[Outlet]
+		UIKit.UIActivityIndicatorView ExtractArchiveSpinner { get; set; }
 
 		[Outlet]
 		UIKit.UIView FileExplorerHolder { get; set; }
@@ -29,9 +41,38 @@ namespace SkyDrop.iOS.Views.Files
 
 		[Outlet]
 		UIKit.UILabel LoadingLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIView SaveArchiveButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView SaveArchiveIcon { get; set; }
+
+		[Outlet]
+		UIKit.UIActivityIndicatorView SaveArchiveSpinner { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (SaveArchiveIcon != null) {
+				SaveArchiveIcon.Dispose ();
+				SaveArchiveIcon = null;
+			}
+
+			if (ExtractArchiveIcon != null) {
+				ExtractArchiveIcon.Dispose ();
+				ExtractArchiveIcon = null;
+			}
+
+			if (SaveArchiveSpinner != null) {
+				SaveArchiveSpinner.Dispose ();
+				SaveArchiveSpinner = null;
+			}
+
+			if (ExtractArchiveSpinner != null) {
+				ExtractArchiveSpinner.Dispose ();
+				ExtractArchiveSpinner = null;
+			}
+
 			if (ActivityIndicator != null) {
 				ActivityIndicator.Dispose ();
 				ActivityIndicator = null;
@@ -42,9 +83,19 @@ namespace SkyDrop.iOS.Views.Files
 				ActivityIndicatorContainer = null;
 			}
 
+			if (ErrorDetailsLabel != null) {
+				ErrorDetailsLabel.Dispose ();
+				ErrorDetailsLabel = null;
+			}
+
 			if (ErrorIcon != null) {
 				ErrorIcon.Dispose ();
 				ErrorIcon = null;
+			}
+
+			if (ExtractArchiveButton != null) {
+				ExtractArchiveButton.Dispose ();
+				ExtractArchiveButton = null;
 			}
 
 			if (FileExplorerHolder != null) {
@@ -52,14 +103,19 @@ namespace SkyDrop.iOS.Views.Files
 				FileExplorerHolder = null;
 			}
 
+			if (FoldersTableView != null) {
+				FoldersTableView.Dispose ();
+				FoldersTableView = null;
+			}
+
 			if (LoadingLabel != null) {
 				LoadingLabel.Dispose ();
 				LoadingLabel = null;
 			}
 
-			if (FoldersTableView != null) {
-				FoldersTableView.Dispose ();
-				FoldersTableView = null;
+			if (SaveArchiveButton != null) {
+				SaveArchiveButton.Dispose ();
+				SaveArchiveButton = null;
 			}
 		}
 	}

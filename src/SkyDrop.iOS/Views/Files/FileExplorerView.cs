@@ -61,6 +61,7 @@ namespace SkyDrop.iOS.Views.Files
             FilesCollectionView.BackgroundColor = Colors.DarkGrey.ToNative();
             FilesTableView.BackgroundColor = Colors.DarkGrey.ToNative();
             FilesTableView.AllowsSelection = false;
+            FilesTableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 
             collectionViewSource = new MvxCollectionViewSource(FilesCollectionView, FileCollectionViewCell.Key);
             FilesCollectionView.RegisterNibForCell(FileCollectionViewCell.Nib, FileCollectionViewCell.Key);

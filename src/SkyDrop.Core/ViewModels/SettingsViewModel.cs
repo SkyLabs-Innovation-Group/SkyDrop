@@ -13,9 +13,12 @@ namespace SkyDrop.Core.ViewModels
         public bool UploadNotificationsEnabled { get; set; } = true;
         public bool VerifySslCertificates { get; set; } = true;
         public string SkynetPortalLabelText { get; set; } = "Enter a skynet portal to use in the app (default is siasky.net):";
+        public string DeviceName { get; set; }
 
         public IMvxCommand BackCommand { get; set; }
         public IMvxAsyncCommand<string> ValidateAndTrySetSkynetPortalCommand { get; set; }
+        public IMvxCommand SetDeviceNameCommand { get; set; }
+        public IMvxCommand CloseKeyboardCommand { get; set; }
 
         /// <summary>
         /// Currently, the best way to verify a Skynet portal that I can think of would be to query for a sky file's metadata.
@@ -24,18 +27,24 @@ namespace SkyDrop.Core.ViewModels
 
         private readonly ISkyDropHttpClientFactory httpClientFactory;
         private readonly IMvxNavigationService navigationService;
+        private readonly IEncryptionService encryptionService;
 
         public SettingsViewModel(ISingletonService singletonService,
                                  ISkyDropHttpClientFactory skyDropHttpClientFactory,
-                                 IMvxNavigationService navigationService) : base(singletonService)
+                                 IMvxNavigationService navigationService,
+                                 IEncryptionService encryptionService) : base(singletonService)
         {
             this.httpClientFactory = skyDropHttpClientFactory;
             this.navigationService = navigationService;
+            this.encryptionService = encryptionService;
 
-            Title = "Advanced settings";
+            Title = "Settings";
 
             BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
             ValidateAndTrySetSkynetPortalCommand = new MvxAsyncCommand<string>(async url => await ValidateAndTrySetSkynetPortal(url));
+            SetDeviceNameCommand = new MvxCommand(SetDeviceName);
+
+            DeviceName = encryptionService.GetDeviceName();
         }
 
         public override void ViewCreated()
@@ -143,6 +152,22 @@ namespace SkyDrop.Core.ViewModels
         public void Close()
         {
             navigationService.Close(this);
+        }
+
+        private void SetDeviceName()
+        {
+            try
+            {
+                encryptionService.UpdateDeviceName(DeviceName);
+            }
+            catch(Exception e)
+            {
+                Log.Exception(e);
+            }
+            finally
+            {
+                CloseKeyboardCommand.Execute();
+            }
         }
     }
 }
