@@ -38,16 +38,13 @@ namespace SkyDrop.Core.ViewModels
             ValidateAndTrySetSkynetPortalCommand = new MvxAsyncCommand<string>(async url => await ValidateAndTrySetSkynetPortal(url));
         }
 
-        public void Toast(string message)
-        {
-            singletonService.UserDialogs.Toast(message);
-        }
-
         public override void ViewCreated()
         {
             UploadNotificationsEnabled = Preferences.Get(PreferenceKey.UploadNotificationsEnabled, true);
             VerifySslCertificates = Preferences.Get(PreferenceKey.RequireSecureConnection, true);
             base.ViewCreated();
+
+            ShowWeb3PortalMessage();
         }
 
         private async Task ValidateAndTrySetSkynetPortal(string portalUrl)
@@ -118,6 +115,15 @@ namespace SkyDrop.Core.ViewModels
             httpClientFactory.ClearCachedClients();
         }
 
+        private void ShowWeb3PortalMessage()
+        {
+            if (Preferences.ContainsKey(PreferenceKey.DidShowWeb3PortalMessage))
+                return; //already shown
+
+            singletonService.UserDialogs.Alert("Selected portal has been set to web3portal.com because siasky.net and other portals are shutting down");
+            Preferences.Set(PreferenceKey.DidShowWeb3PortalMessage, true);
+        }
+
         private string FormatPortalUrl(string portalUrl)
         {
             if (!portalUrl.StartsWith("http"))
@@ -127,6 +133,11 @@ namespace SkyDrop.Core.ViewModels
                 portalUrl = $"https://{portalUrl.Substring(7)}";
 
             return portalUrl.TrimEnd('/');
+        }
+
+        public void Toast(string message)
+        {
+            singletonService.UserDialogs.Toast(message);
         }
 
         public void Close()
