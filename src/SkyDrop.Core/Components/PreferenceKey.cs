@@ -11,5 +11,7 @@ namespace SkyDrop.Core
         public static string PrefixPortalApiToken = "PortalApiToken_";
 
         public static string RequireSecureConnection = "RequireSecureConnection";
+
+        public static string OnboardingComplete = "OnboardingComplete";
     }
 }

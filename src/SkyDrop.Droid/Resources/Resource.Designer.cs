@@ -19100,85 +19100,88 @@ namespace SkyDrop.Droid
 			public const int toolbar_drop_view = 2131231069;
 			
 			// aapt resource value: 0x7F08015E
-			public const int top = 2131231070;
+			public const int toolbar_onboarding = 2131231070;
 			
 			// aapt resource value: 0x7F08015F
-			public const int topPanel = 2131231071;
+			public const int top = 2131231071;
 			
 			// aapt resource value: 0x7F080160
-			public const int touch_outside = 2131231072;
+			public const int topPanel = 2131231072;
 			
 			// aapt resource value: 0x7F080161
-			public const int transitionToEnd = 2131231073;
+			public const int touch_outside = 2131231073;
 			
 			// aapt resource value: 0x7F080162
-			public const int transitionToStart = 2131231074;
+			public const int transitionToEnd = 2131231074;
 			
 			// aapt resource value: 0x7F080163
-			public const int transition_current_scene = 2131231075;
+			public const int transitionToStart = 2131231075;
 			
 			// aapt resource value: 0x7F080164
-			public const int transition_layout_save = 2131231076;
+			public const int transition_current_scene = 2131231076;
 			
 			// aapt resource value: 0x7F080165
-			public const int transition_position = 2131231077;
+			public const int transition_layout_save = 2131231077;
 			
 			// aapt resource value: 0x7F080166
-			public const int transition_scene_layoutid_cache = 2131231078;
+			public const int transition_position = 2131231078;
 			
 			// aapt resource value: 0x7F080167
-			public const int transition_transform = 2131231079;
+			public const int transition_scene_layoutid_cache = 2131231079;
 			
 			// aapt resource value: 0x7F080168
-			public const int triangle = 2131231080;
+			public const int transition_transform = 2131231080;
 			
 			// aapt resource value: 0x7F080169
-			public const int txt_message = 2131231081;
+			public const int triangle = 2131231081;
 			
 			// aapt resource value: 0x7F08016A
-			public const int txt_welcome = 2131231082;
+			public const int txt_message = 2131231082;
 			
 			// aapt resource value: 0x7F08016B
-			public const int @unchecked = 2131231083;
+			public const int txt_welcome = 2131231083;
 			
 			// aapt resource value: 0x7F08016C
-			public const int uniform = 2131231084;
+			public const int @unchecked = 2131231084;
 			
 			// aapt resource value: 0x7F08016D
-			public const int unlabeled = 2131231085;
+			public const int uniform = 2131231085;
 			
 			// aapt resource value: 0x7F08016E
-			public const int up = 2131231086;
+			public const int unlabeled = 2131231086;
 			
 			// aapt resource value: 0x7F08016F
-			public const int uploadNotificationCheckbox = 2131231087;
+			public const int up = 2131231087;
 			
 			// aapt resource value: 0x7F080170
-			public const int useLogo = 2131231088;
+			public const int uploadNotificationCheckbox = 2131231088;
 			
 			// aapt resource value: 0x7F080171
-			public const int verifySslCheckbox = 2131231089;
+			public const int useLogo = 2131231089;
 			
 			// aapt resource value: 0x7F080172
-			public const int view_offset_helper = 2131231090;
+			public const int verifySslCheckbox = 2131231090;
 			
 			// aapt resource value: 0x7F080173
-			public const int view_tree_saved_state_registry_owner = 2131231091;
+			public const int view_offset_helper = 2131231091;
 			
 			// aapt resource value: 0x7F080174
-			public const int visible = 2131231092;
+			public const int view_tree_saved_state_registry_owner = 2131231092;
 			
 			// aapt resource value: 0x7F080175
-			public const int visible_removing_fragment_view_tag = 2131231093;
+			public const int visible = 2131231093;
 			
 			// aapt resource value: 0x7F080176
-			public const int withText = 2131231094;
+			public const int visible_removing_fragment_view_tag = 2131231094;
 			
 			// aapt resource value: 0x7F080177
-			public const int wrap = 2131231095;
+			public const int withText = 2131231095;
 			
 			// aapt resource value: 0x7F080178
-			public const int wrap_content = 2131231096;
+			public const int wrap = 2131231096;
+			
+			// aapt resource value: 0x7F080179
+			public const int wrap_content = 2131231097;
 			
 			static Id()
 			{
@@ -19529,88 +19532,94 @@ namespace SkyDrop.Droid
 			public const int notification_template_part_time = 2131427404;
 			
 			// aapt resource value: 0x7F0B004D
-			public const int preference = 2131427405;
+			public const int OnboardingView = 2131427405;
 			
 			// aapt resource value: 0x7F0B004E
-			public const int preference_category = 2131427406;
+			public const int preference = 2131427406;
 			
 			// aapt resource value: 0x7F0B004F
-			public const int preference_category_material = 2131427407;
+			public const int preference_category = 2131427407;
 			
 			// aapt resource value: 0x7F0B0050
-			public const int preference_dialog_edittext = 2131427408;
+			public const int preference_category_material = 2131427408;
 			
 			// aapt resource value: 0x7F0B0051
-			public const int preference_dropdown = 2131427409;
+			public const int preference_dialog_edittext = 2131427409;
 			
 			// aapt resource value: 0x7F0B0052
-			public const int preference_dropdown_material = 2131427410;
+			public const int preference_dropdown = 2131427410;
 			
 			// aapt resource value: 0x7F0B0053
-			public const int preference_information = 2131427411;
+			public const int preference_dropdown_material = 2131427411;
 			
 			// aapt resource value: 0x7F0B0054
-			public const int preference_information_material = 2131427412;
+			public const int preference_information = 2131427412;
 			
 			// aapt resource value: 0x7F0B0055
-			public const int preference_list_fragment = 2131427413;
+			public const int preference_information_material = 2131427413;
 			
 			// aapt resource value: 0x7F0B0056
-			public const int preference_material = 2131427414;
+			public const int preference_list_fragment = 2131427414;
 			
 			// aapt resource value: 0x7F0B0057
-			public const int preference_recyclerview = 2131427415;
+			public const int preference_material = 2131427415;
 			
 			// aapt resource value: 0x7F0B0058
-			public const int preference_widget_checkbox = 2131427416;
+			public const int preference_recyclerview = 2131427416;
 			
 			// aapt resource value: 0x7F0B0059
-			public const int preference_widget_seekbar = 2131427417;
+			public const int preference_widget_checkbox = 2131427417;
 			
 			// aapt resource value: 0x7F0B005A
-			public const int preference_widget_seekbar_material = 2131427418;
+			public const int preference_widget_seekbar = 2131427418;
 			
 			// aapt resource value: 0x7F0B005B
-			public const int preference_widget_switch = 2131427419;
+			public const int preference_widget_seekbar_material = 2131427419;
 			
 			// aapt resource value: 0x7F0B005C
-			public const int preference_widget_switch_compat = 2131427420;
+			public const int preference_widget_switch = 2131427420;
 			
 			// aapt resource value: 0x7F0B005D
-			public const int select_dialog_item_material = 2131427421;
+			public const int preference_widget_switch_compat = 2131427421;
 			
 			// aapt resource value: 0x7F0B005E
-			public const int select_dialog_multichoice_material = 2131427422;
+			public const int select_dialog_item_material = 2131427422;
 			
 			// aapt resource value: 0x7F0B005F
-			public const int select_dialog_singlechoice_material = 2131427423;
+			public const int select_dialog_multichoice_material = 2131427423;
 			
 			// aapt resource value: 0x7F0B0060
-			public const int SettingsView = 2131427424;
+			public const int select_dialog_singlechoice_material = 2131427424;
 			
 			// aapt resource value: 0x7F0B0061
-			public const int SharePublicKeyView = 2131427425;
+			public const int SettingsView = 2131427425;
 			
 			// aapt resource value: 0x7F0B0062
-			public const int support_simple_spinner_dropdown_item = 2131427426;
+			public const int SharePublicKeyView = 2131427426;
 			
 			// aapt resource value: 0x7F0B0063
-			public const int toolbar_contacts = 2131427427;
+			public const int support_simple_spinner_dropdown_item = 2131427427;
 			
 			// aapt resource value: 0x7F0B0064
-			public const int toolbar_drop_view = 2131427428;
+			public const int toolbar_contacts = 2131427428;
 			
 			// aapt resource value: 0x7F0B0065
-			public const int toolbar_files = 2131427429;
+			public const int toolbar_drop_view = 2131427429;
 			
 			// aapt resource value: 0x7F0B0066
-			public const int toolbar_settings = 2131427430;
+			public const int toolbar_files = 2131427430;
 			
 			// aapt resource value: 0x7F0B0067
-			public const int zxingscanneractivitylayout = 2131427431;
+			public const int toolbar_onboarding = 2131427431;
 			
 			// aapt resource value: 0x7F0B0068
-			public const int zxingscannerfragmentlayout = 2131427432;
+			public const int toolbar_settings = 2131427432;
+			
+			// aapt resource value: 0x7F0B0069
+			public const int zxingscanneractivitylayout = 2131427433;
+			
+			// aapt resource value: 0x7F0B006A
+			public const int zxingscannerfragmentlayout = 2131427434;
 			
 			static Layout()
 			{

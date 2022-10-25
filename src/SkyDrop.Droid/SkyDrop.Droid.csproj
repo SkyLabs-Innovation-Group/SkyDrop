@@ -104,6 +104,7 @@
     <Compile Include="Bindings\ContactsDeleteVisibilityBinding.cs" />
     <Compile Include="Bindings\ButtonClickBinding.cs" />
     <Compile Include="Helper\HomeMenuAnimator.cs" />
+    <Compile Include="Views\Onboarding\OnboardingView.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -521,6 +522,14 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\OnboardingView.axml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\toolbar_onboarding.axml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\strings.xml" />
@@ -554,6 +563,7 @@
   <ItemGroup>
     <Folder Include="Views\Files\" />
     <Folder Include="Views\Contacts\" />
+    <Folder Include="Views\Onboarding\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
