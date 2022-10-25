@@ -72,11 +72,5 @@ namespace SkyDrop.iOS.Views.Settings
             textView.Changed += (s, e) => AdjustTextBoxContentSize(PortalTextView);
             AdjustTextBoxContentSize(textView);
         }
-
-        private void StyleButton(UIButton button)
-        {
-            button.Layer.CornerRadius = 8;
-            button.BackgroundColor = UIColor.White;
-        }
     }
 }

@@ -267,6 +267,11 @@
     <Compile Include="Common\HomeMenuAnimator.cs" />
     <ImageAsset Include="Media.xcassets\ic_portals.imageset\camera-iris.pdf" />
     <ImageAsset Include="Media.xcassets\ic_portals.imageset\Contents.json" />
+    <InterfaceDefinition Include="Views\Onboarding\OnboardingView.xib" />
+    <Compile Include="Views\Onboarding\OnboardingView.cs" />
+    <Compile Include="Views\Onboarding\OnboardingView.designer.cs">
+      <DependentUpon>OnboardingView.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -310,6 +315,7 @@
     <Folder Include="Views\Files\" />
     <Folder Include="Media.xcassets\" />
     <Folder Include="Views\Contacts\" />
+    <Folder Include="Views\Onboarding\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
