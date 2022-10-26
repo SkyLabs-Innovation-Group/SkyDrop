@@ -215,7 +215,7 @@ namespace SkyDrop.Core.ViewModels.Main
             UploadNotificationsEnabled = Preferences.Get(PreferenceKey.UploadNotificationsEnabled, true);
         }
     
-        public override async void ViewAppeared()
+        public override void ViewAppeared()
         {
             Log.Trace($"{nameof(DropViewModel)} ViewAppeared()");
 
@@ -234,9 +234,7 @@ namespace SkyDrop.Core.ViewModels.Main
             if (!Preferences.Get(PreferenceKey.OnboardingComplete, false))
             {
                 //show onboarding
-                await navigationService.Navigate<OnboardingViewModel>();
-
-                Preferences.Set(PreferenceKey.OnboardingComplete, true);
+                navigationService.Navigate<OnboardingViewModel>();
             }
         }
 

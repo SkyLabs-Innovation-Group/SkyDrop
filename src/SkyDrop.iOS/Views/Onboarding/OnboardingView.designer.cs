@@ -13,7 +13,7 @@ namespace SkyDrop.iOS.Views.Onboarding
 	partial class OnboardingView
 	{
 		[Outlet]
-		UIKit.UIButton GotItButton { get; set; }
+		UIKit.UIView GotItButton { get; set; }
 
 		[Outlet]
 		UIKit.UITextView MainTextView { get; set; }

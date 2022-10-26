@@ -20,11 +20,11 @@ namespace SkyDrop.iOS.Views.Onboarding
 
             MainTextView.TextColor = Colors.LightGrey.ToNative();
 
-            StyleButton(GotItButton);
+            GotItButton.BackgroundColor = Colors.Primary.ToNative();
 
             var set = this.CreateBindingSet();
             set.Bind(MainTextView).To(vm => vm.OnboardingText);
-            set.Bind(GotItButton).To(vm => vm.BackCommand);
+            set.Bind(GotItButton).For("Tap").To(vm => vm.BackCommand);
             set.Bind(this).For(v => v.Title).To(vm => vm.Title);
             set.Apply();
         }

@@ -9,7 +9,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OnboardingView">
             <connections>
-                <outlet property="GotItButton" destination="9Nb-sL-pBz" id="Mij-ye-PiT"/>
+                <outlet property="GotItButton" destination="ZPm-4Y-Rrn" id="Jg7-ab-LdH"/>
                 <outlet property="MainTextView" destination="6cq-m6-cSe" id="NHT-V6-DMN"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
@@ -19,34 +19,41 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="6cq-m6-cSe">
-                    <rect key="frame" x="11" y="60" width="392" height="743"/>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6cq-m6-cSe">
+                    <rect key="frame" x="11" y="60" width="392" height="751"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Nb-sL-pBz">
-                    <rect key="frame" x="302" y="819" width="96" height="27"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZPm-4Y-Rrn">
+                    <rect key="frame" x="0.0" y="811" width="414" height="85"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Got It" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tn7-FF-rIB">
+                            <rect key="frame" x="184.5" y="32" width="45" height="21"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="1" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="96" id="afL-dG-zpA"/>
+                        <constraint firstAttribute="bottom" secondItem="Tn7-FF-rIB" secondAttribute="bottom" constant="32" id="2UN-Fn-Mch"/>
+                        <constraint firstItem="Tn7-FF-rIB" firstAttribute="centerX" secondItem="ZPm-4Y-Rrn" secondAttribute="centerX" id="bP1-bM-ghw"/>
+                        <constraint firstItem="Tn7-FF-rIB" firstAttribute="top" secondItem="ZPm-4Y-Rrn" secondAttribute="top" constant="32" id="hau-a0-Usf"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                    <state key="normal" title="GOT IT">
-                        <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </state>
-                </button>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="bottomMargin" secondItem="9Nb-sL-pBz" secondAttribute="bottom" constant="16" id="1lf-Wu-MEC"/>
-                <constraint firstAttribute="trailing" secondItem="6cq-m6-cSe" secondAttribute="trailing" constant="11" id="7BU-tS-f0Q"/>
-                <constraint firstItem="9Nb-sL-pBz" firstAttribute="top" secondItem="6cq-m6-cSe" secondAttribute="bottom" constant="16" id="BSI-b2-zsC"/>
-                <constraint firstAttribute="trailing" secondItem="9Nb-sL-pBz" secondAttribute="trailing" constant="16" id="HRS-mG-g4A"/>
-                <constraint firstItem="6cq-m6-cSe" firstAttribute="top" secondItem="2" secondAttribute="topMargin" constant="16" id="Nas-RE-6k0"/>
-                <constraint firstItem="6cq-m6-cSe" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="11" id="e8S-rJ-Zhz"/>
+                <constraint firstItem="6cq-m6-cSe" firstAttribute="top" secondItem="2" secondAttribute="topMargin" constant="16" id="0vY-8n-2K8"/>
+                <constraint firstAttribute="trailing" secondItem="ZPm-4Y-Rrn" secondAttribute="trailing" id="7GV-t3-d3O"/>
+                <constraint firstAttribute="trailing" secondItem="6cq-m6-cSe" secondAttribute="trailing" constant="11" id="Hud-t4-lLE"/>
+                <constraint firstItem="ZPm-4Y-Rrn" firstAttribute="top" secondItem="6cq-m6-cSe" secondAttribute="bottom" id="LIu-aL-gAA"/>
+                <constraint firstItem="ZPm-4Y-Rrn" firstAttribute="leading" secondItem="2" secondAttribute="leading" id="On6-tT-c6V"/>
+                <constraint firstAttribute="bottom" secondItem="ZPm-4Y-Rrn" secondAttribute="bottom" id="z9q-es-X3z"/>
+                <constraint firstItem="6cq-m6-cSe" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="11" id="zFY-Im-vzE"/>
             </constraints>
             <point key="canvasLocation" x="81.159420289855078" y="-21.428571428571427"/>
         </view>
