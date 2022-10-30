@@ -8,11 +8,11 @@ namespace SkyDrop.Droid.Views.PortalPreferences
 {
     public class PortalPreferencesListAdapter : MvxRecyclerAdapter
     {
-        private readonly PortalPreferencesListView view;
+        public readonly PortalPreferencesListView View;
 
         public PortalPreferencesListAdapter(PortalPreferencesListView view, IMvxAndroidBindingContext bindingContext) : base(bindingContext)
         {
-            this.view = view;
+            this.View = view;
         }
         
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
@@ -20,7 +20,7 @@ namespace SkyDrop.Droid.Views.PortalPreferences
             base.OnBindViewHolder(holder, position);
 
             var portalViewHolder = holder as PortalViewHolder;
-            portalViewHolder.Bind(this);
+            portalViewHolder.Bind(this, position);
         }
         
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
@@ -29,7 +29,7 @@ namespace SkyDrop.Droid.Views.PortalPreferences
             return new PortalViewHolder(InflateViewForHolder(parent, viewType, itemBindingContext), itemBindingContext);
         }
         
-        internal void ReorderPortals(int position, int newPosition) => view.ReorderPortals(position, newPosition);
+        internal void ReorderPortals(int position, int newPosition) => View.ReorderPortals(position, newPosition);
     }
 }
 

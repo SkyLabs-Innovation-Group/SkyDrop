@@ -16,27 +16,32 @@ namespace SkyDrop.Droid.Views.PortalPreferences
         private ImageView upvoteIcon;
         private ImageView downvoteIcon;
         private ImageView reorderIcon;
+        private int position;
 
         public PortalViewHolder(View itemView, IMvxAndroidBindingContext context) : base(itemView, context)
         {
-        }
-
-        public void Bind(PortalPreferencesListAdapter adapter)
-        {
-            listAdapter = adapter;
             upvoteIcon = ItemView.FindViewById<ImageView>(Resource.Id.upvoteButton);
             downvoteIcon = ItemView.FindViewById<ImageView>(Resource.Id.downvoteButton);
             upvoteIcon.Click += UpvoteIcon_Click;
             downvoteIcon.Click += DownvoteIcon_Click;
         }
 
+        public void Bind(PortalPreferencesListAdapter adapter, int position)
+        {
+            listAdapter = adapter;
+            this.position = position;
+        }
+
         private void UpvoteIcon_Click(object sender, EventArgs e)
         {
-
+            var vm = listAdapter.View.View.ViewModel;
+            vm.ReorderPortals(position, position - 1);
         }
 
         private void DownvoteIcon_Click(object sender, EventArgs e)
         {
+            var vm = listAdapter.View.View.ViewModel;
+            vm.ReorderPortals(position, position + 1);
         }
     }
 }

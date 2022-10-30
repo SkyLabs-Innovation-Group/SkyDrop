@@ -12,7 +12,7 @@ namespace SkyDrop.Droid.Views.PortalPreferences
 {
     public class PortalPreferencesListView : MvxRecyclerView
     {
-        private PortalPreferencesView view;
+        public PortalPreferencesView View;
         private PortalPreferencesListAdapter portalPrefsAdapter;
 
         public PortalPreferencesListView(Android.Content.Context context, IAttributeSet attrs) : base(context, attrs) { }
@@ -24,10 +24,10 @@ namespace SkyDrop.Droid.Views.PortalPreferences
         {
             portalPrefsAdapter = new PortalPreferencesListAdapter(this, bindingContext);
             Adapter = portalPrefsAdapter;
-            this.view = view;
+            this.View = view;
         }
 
-        internal void ReorderPortals(int position, int newPosition) => view.ReorderPortals(position, newPosition);
+        internal void ReorderPortals(int position, int newPosition) => View.ReorderPortals(position, newPosition);
     }
 }
 
