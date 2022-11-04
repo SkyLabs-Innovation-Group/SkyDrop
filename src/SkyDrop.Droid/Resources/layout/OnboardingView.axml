@@ -20,6 +20,7 @@
         android:textColor="@color/lightGrey"
         android:textSize="16sp"
         android:text="The text will go here"
+        android:scrollbars="vertical"
         app:MvxBind="Text OnboardingText"/>
     <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"

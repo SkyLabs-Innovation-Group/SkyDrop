@@ -19,6 +19,9 @@ namespace SkyDrop.iOS.Views.Settings
 		UIKit.UITextView NameTextView { get; set; }
 
 		[Outlet]
+		UIKit.UIButton OnboardingButton { get; set; }
+
+		[Outlet]
 		UIKit.UITextView PortalTextView { get; set; }
 
 		[Outlet]
@@ -32,6 +35,11 @@ namespace SkyDrop.iOS.Views.Settings
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (OnboardingButton != null) {
+				OnboardingButton.Dispose ();
+				OnboardingButton = null;
+			}
+
 			if (EnableUploadNotificationsSwitch != null) {
 				EnableUploadNotificationsSwitch.Dispose ();
 				EnableUploadNotificationsSwitch = null;

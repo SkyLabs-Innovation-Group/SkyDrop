@@ -30,7 +30,7 @@ namespace SkyDrop.Core.ViewModels
         {
             await base.Initialize();
 
-            OnboardingText = "New in SkyDrop V2\n\nSkyDrive\n- Recently sent and received files are saved in the SkyDrive for easy access\n- Create your own folders to organise your files\n\nPortals\n- Choose your preferred Skynet portals and rank them in order of preference\n- Uploads will first be attempted on your first choice portal, if the upload fails then the upload will be retried using the next portal in the list\n\nEnd-to-end encryption\n- Send encrypted files to your contacts for additional data security\n- To add a new contact, pair with the contact's device by scanning their public key QR code\n- Encrypted files can only be decrypted by the specified recipient device";
+            OnboardingText = "New in SkyDrop V2\n\nSkyDrive\n- Recently sent and received files are saved in the SkyDrive for easy access\n- Create your own folders to organise your files\n- This is experimental tech so please keep backups of your files elsewhere\n\nPortals\n- Choose your preferred Skynet portals and rank them in order of preference\n- Uploads will first be attempted on your first choice portal, if the upload fails then the upload will be retried using the next portal in the list\n\nEnd-to-end encryption\n- Send encrypted files to your contacts for additional data security\n- To add a new contact, pair with the contact's device by scanning their public key QR code\n- Encrypted files can only be decrypted by the specified recipient device";
         }
 
         private void Dismiss()

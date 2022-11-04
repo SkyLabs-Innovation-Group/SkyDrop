@@ -28,6 +28,7 @@ namespace SkyDrop.iOS.Views.Settings
             set.Bind(SetPortalLabel).For(v => v.Text).To(vm => vm.SkynetPortalLabelText);
             set.Bind(NameTextView).For(v => v.Text).To(vm => vm.DeviceName);
             set.Bind(SetNameButton).To(vm => vm.SetDeviceNameCommand);
+            set.Bind(OnboardingButton).To(vm => vm.ViewOnboardingCommand);
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Apply();
 
@@ -36,6 +37,7 @@ namespace SkyDrop.iOS.Views.Settings
 
             StyleButton(SavePortalButton);
             StyleButton(SetNameButton);
+            StyleButton(OnboardingButton);
 
             PortalTextView.Text = SkynetPortal.SelectedPortal.ToString();
             SavePortalButton.TouchUpInside += async (s, e) =>
