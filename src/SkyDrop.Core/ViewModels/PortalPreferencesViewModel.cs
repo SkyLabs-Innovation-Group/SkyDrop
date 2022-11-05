@@ -18,20 +18,14 @@ namespace SkyDrop.Core.ViewModels
 
         public IMvxCommand BackCommand { get; set; }
 
-        public MvxObservableCollection<SkynetPortalDVM> UserPortals { get; } = new MvxObservableCollection<SkynetPortalDVM>();
+    private readonly IPortalService portalService;
 
-        public MvxObservableCollection<SkynetPortalDVM> PresetPortals => new MvxObservableCollection<SkynetPortalDVM>(
-            new List<SkynetPortalDVM>()
-        {
-            new SkynetPortalDVM("https://siasky.net", "Siasky.net"),
-            new SkynetPortalDVM("https://skynetpro.net", "SkynetPro.net"),
-            new SkynetPortalDVM("https://skynetfree.net", "SkynetFree.net"),
-            new SkynetPortalDVM("https://siasky.dev", "Siasky.Dev"),
-        }); // TODO Setup from shared storage
+    public MvxObservableCollection<SkynetPortalDVM> UserPortals { get; } = new MvxObservableCollection<SkynetPortalDVM>();
 
         public PortalPreferencesViewModel(ISingletonService singletonService,
-                                 IApiService apiService,
-                                 IMvxNavigationService navigationService) : base(singletonService)
+                                          IApiService apiService,
+                                          IMvxNavigationService navigationService,
+                                          IPortalService portalService) : base(singletonService)
         {
             this.apiService = apiService;
             this.navigationService = navigationService;
@@ -39,18 +33,19 @@ namespace SkyDrop.Core.ViewModels
             Title = "Portal Preferences";
             UserPortals = new MvxObservableCollection<SkynetPortalDVM>();
             BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
+            this.portalService = portalService;
         }
 
-        public override Task Initialize()
+        public async override Task Initialize()
         {
-            LoadUserPortals();
-
-            return Task.CompletedTask;
+             LoadUserPortals();
         }
 
         public void LoadUserPortals()
         {
-            UserPortals.SwitchTo(PresetPortals);
+            var savedPortals = portalService.GetSavedPortals();
+            var savedPortalsDvms = portalService.ConvertSkynetPortalsToDVMs(savedPortals);
+            UserPortals.SwitchTo(savedPortalsDvms);
         }
 
         public void ReorderPortals(int position, int newPosition)

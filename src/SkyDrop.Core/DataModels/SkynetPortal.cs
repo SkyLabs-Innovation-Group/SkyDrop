@@ -46,6 +46,9 @@ namespace SkyDrop.Core.DataModels
             Preferences.Remove(PreferenceKey.SelectedSkynetPortal);
             Preferences.Set(PreferenceKey.SelectedSkynetPortal, portal.ToString());
 
+            var portalService = Mvx.IoCProvider.Resolve<IPortalService>();
+            portalService.SavePortal(portal);
+
             if (portal.HasApiToken())
             {
                 string key = portal.GetApiTokenPrefKey();
