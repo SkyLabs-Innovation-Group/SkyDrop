@@ -15,20 +15,23 @@ namespace SkyDrop.Core.ViewModels
 	{
         private readonly IApiService apiService;
         private readonly IMvxNavigationService navigationService;
+        private readonly IStorageService storageService;
 
         public IMvxCommand BackCommand { get; set; }
 
-    private readonly IPortalService portalService;
+        private readonly IPortalService portalService;
 
-    public MvxObservableCollection<SkynetPortalDVM> UserPortals { get; } = new MvxObservableCollection<SkynetPortalDVM>();
+        public MvxObservableCollection<SkynetPortalDVM> UserPortals { get; } = new MvxObservableCollection<SkynetPortalDVM>();
 
         public PortalPreferencesViewModel(ISingletonService singletonService,
                                           IApiService apiService,
                                           IMvxNavigationService navigationService,
-                                          IPortalService portalService) : base(singletonService)
+                                          IPortalService portalService,
+                                          IStorageService storageService) : base(singletonService)
         {
             this.apiService = apiService;
             this.navigationService = navigationService;
+            this.storageService = storageService;
 
             Title = "Portal Preferences";
             UserPortals = new MvxObservableCollection<SkynetPortalDVM>();
@@ -43,7 +46,13 @@ namespace SkyDrop.Core.ViewModels
 
         public void LoadUserPortals()
         {
-            var savedPortals = portalService.GetSavedPortals();
+            var savedPortals = storageService.LoadSkynetPortals();
+
+            if (savedPortals == null)
+            {
+                storageService.SaveSkynetPortal(SkynetPortal.DefaultWeb3Portal);
+            }
+
             var savedPortalsDvms = portalService.ConvertSkynetPortalsToDVMs(savedPortals);
             UserPortals.SwitchTo(savedPortalsDvms);
         }
@@ -61,12 +70,10 @@ namespace SkyDrop.Core.ViewModels
 
             foreach (var portal in copy)
             {
-                Log.Trace(portal.Name);
+              storageService.EditSkynetPortal(portal.RealmId);
             }
 
             UserPortals.SwitchTo(copy);
-
-           // TODO save to shared storage
         }
     }
 }

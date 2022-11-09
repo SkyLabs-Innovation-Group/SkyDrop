@@ -272,7 +272,9 @@ namespace SkyDrop.Core.Services
             await Xamarin.Essentials.SecureStorage.SetAsync(nameStorageKey, deviceName);
         }
 
-        public void ClearAllData()
+        
+
+    public void ClearAllData()
         {
             realm.Write(() =>
             {
@@ -370,7 +372,34 @@ namespace SkyDrop.Core.Services
                 SkyLinks = string.Join(",", folder.SkyLinks)
             };
         }
-    }
+
+        public void SaveSkynetPortal(SkynetPortal portal)
+        {
+          realm.Write(() =>
+          {
+            realm.Add(portal);
+          });
+        }
+
+        public void EditSkynetPortal(SkynetPortal portal)
+        {
+          realm.Write(() =>
+          {
+            var storedPortal = realm.Find<SkynetPortal>(portal.Id.ToString());
+
+            storedPortal.Name = portal.Name;
+            storedPortal.BaseUrl = portal.BaseUrl;
+            storedPortal.PortalPreferencePosition = portal.PortalPreferencePosition;
+            storedPortal.UserApiToken = portal.UserApiToken;
+
+            realm.Add(storedPortal);
+          });
+        }
+
+      public void EditSkynetPortal(string id) => EditSkynetPortal(realm.Find<SkynetPortal>(id));
+
+      public List<SkynetPortal> LoadSkynetPortals() => realm.All<SkynetPortal>().ToList();
+  }
 
     public interface IStorageService
     {
@@ -413,5 +442,13 @@ namespace SkyDrop.Core.Services
         Task UpdateDeviceName(string name);
 
         void RenameContact(Contact contact, string newName);
-    }
+
+        void SaveSkynetPortal(SkynetPortal portal);
+
+        void EditSkynetPortal(SkynetPortal portal);
+
+        List<SkynetPortal> LoadSkynetPortals();
+
+        void EditSkynetPortal(string id);
+  }
 }

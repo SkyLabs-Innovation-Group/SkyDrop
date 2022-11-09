@@ -9,8 +9,10 @@ using Xamarin.Essentials;
 
 namespace SkyDrop.Core.DataModels
 {
-    public class SkynetPortal
+    public class SkynetPortal : RealmObject
     {
+        public SkynetPortal() { }
+
         private static SkynetPortal _selectedPortalInstance;
         public static SkynetPortal SelectedPortal { get => _selectedPortalInstance ?? GetSelectedSkynetPortal(); set => _selectedPortalInstance = SetSelectedSkynetPortal(value); }
 
@@ -46,8 +48,8 @@ namespace SkyDrop.Core.DataModels
             Preferences.Remove(PreferenceKey.SelectedSkynetPortal);
             Preferences.Set(PreferenceKey.SelectedSkynetPortal, portal.ToString());
 
-            var portalService = Mvx.IoCProvider.Resolve<IPortalService>();
-            portalService.SavePortal(portal);
+            var storageService = Mvx.IoCProvider.Resolve<IStorageService>();
+            storageService.SaveSkynetPortal(portal);
 
             if (portal.HasApiToken())
             {
@@ -85,6 +87,11 @@ namespace SkyDrop.Core.DataModels
             this.InitialBaseUrl = baseUrl;
             this.Name = name;
         }
+
+        [PrimaryKey]
+        public string Id { get; set; }
+
+        public int PortalPreferencePosition { get; set; }
 
         public string Name { get; set; }
         

@@ -10,8 +10,8 @@ using SkyDrop.Droid.Helper;
 
 namespace SkyDrop.Droid.Views.PortalPreferences
 {
-  public class PortalViewHolder : MvxRecyclerViewHolder
-  {
+    public class PortalViewHolder : MvxRecyclerViewHolder
+    {
         private PortalPreferencesListAdapter listAdapter;
         private ImageView upvoteIcon;
         private ImageView downvoteIcon;
@@ -24,6 +24,12 @@ namespace SkyDrop.Droid.Views.PortalPreferences
             downvoteIcon = ItemView.FindViewById<ImageView>(Resource.Id.downvoteButton);
             upvoteIcon.Click += UpvoteIcon_Click;
             downvoteIcon.Click += DownvoteIcon_Click;
+            itemView.Click += ItemView_Click;
+        }
+
+        private void ItemView_Click(object sender, EventArgs e)
+        {
+            listAdapter.EditPortal(position);
         }
 
         public void Bind(PortalPreferencesListAdapter adapter, int position)

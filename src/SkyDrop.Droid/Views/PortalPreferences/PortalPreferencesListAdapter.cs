@@ -28,7 +28,12 @@ namespace SkyDrop.Droid.Views.PortalPreferences
             var itemBindingContext = new MvxAndroidBindingContext(parent.Context, BindingContext.LayoutInflaterHolder, (object)null);
             return new PortalViewHolder(InflateViewForHolder(parent, viewType, itemBindingContext), itemBindingContext);
         }
-        
+
+        internal void EditPortal(int position)
+        {
+            View.EditPortal(position);
+        }
+
         internal void ReorderPortals(int position, int newPosition) => View.ReorderPortals(position, newPosition);
     }
 }
