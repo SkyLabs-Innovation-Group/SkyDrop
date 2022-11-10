@@ -14,10 +14,12 @@ using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.iOS.Bindings;
 using SkyDrop.iOS.Common;
 using SkyDrop.iOS.Converters;
+using SkyDrop.iOS.Styles;
 using UIKit;
 using UserNotifications;
 using static SkyDrop.Core.Utility.Util;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
+using static SkyDrop.iOS.Styles.StyleExtensions;
 
 namespace SkyDrop.iOS.Views.Drop
 {
@@ -97,22 +99,14 @@ namespace SkyDrop.iOS.Views.Drop
                 DownloadButton.Layer.CornerRadius = 8;
 
                 //home menu
-                SkyDriveButton.BackgroundColor = Colors.DarkGrey.ToNative();
-                PortalsButton.BackgroundColor = Colors.DarkGrey.ToNative();
-                ContactsButton.BackgroundColor = Colors.DarkGrey.ToNative();
-                SettingsButton.BackgroundColor = Colors.DarkGrey.ToNative();
-                SkyDriveButton.Layer.BorderColor = Colors.GradientOcean.ToNative().CGColor;
-                PortalsButton.Layer.BorderColor = Colors.GradientTurqouise.ToNative().CGColor;
-                ContactsButton.Layer.BorderColor = Colors.GradientGreen.ToNative().CGColor;
-                SettingsButton.Layer.BorderColor = Colors.Primary.ToNative().CGColor;
-                SkyDriveButton.Layer.BorderWidth = 2;
-                PortalsButton.Layer.BorderWidth = 2;
-                ContactsButton.Layer.BorderWidth = 2;
-                SettingsButton.Layer.BorderWidth = 2;
-                SkyDriveButton.Layer.CornerRadius = 8;
-                PortalsButton.Layer.CornerRadius = 8;
-                ContactsButton.Layer.CornerRadius = 8;
-                SettingsButton.Layer.CornerRadius = 8;
+                SkyDriveButton.StyleButton(Colors.DarkGrey);
+                PortalsButton.StyleButton(Colors.DarkGrey);
+                ContactsButton.StyleButton(Colors.DarkGrey);
+                SettingsButton.StyleButton(Colors.DarkGrey);
+                SkyDriveButton.StyleButton(Colors.GradientOcean, true);
+                PortalsButton.StyleButton(Colors.GradientTurqouise, true);
+                ContactsButton.StyleButton(Colors.GradientGreen, true);
+                SettingsButton.StyleButton(Colors.Primary, true);
 
                 MiniMenuContainer.BackgroundColor = Colors.MidGrey.ToNative();
 

@@ -17,17 +17,25 @@ namespace SkyDrop.iOS.Views.Onboarding
 
 		[Outlet]
 		UIKit.UITextView MainTextView { get; set; }
+
+		[Outlet]
+		UIKit.UILabel TitleLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (MainTextView != null) {
-				MainTextView.Dispose ();
-				MainTextView = null;
+			if (TitleLabel != null) {
+				TitleLabel.Dispose ();
+				TitleLabel = null;
 			}
 
 			if (GotItButton != null) {
 				GotItButton.Dispose ();
 				GotItButton = null;
+			}
+
+			if (MainTextView != null) {
+				MainTextView.Dispose ();
+				MainTextView = null;
 			}
 		}
 	}

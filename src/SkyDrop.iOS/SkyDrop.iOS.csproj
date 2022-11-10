@@ -272,6 +272,9 @@
     <Compile Include="Views\Onboarding\OnboardingView.designer.cs">
       <DependentUpon>OnboardingView.cs</DependentUpon>
     </Compile>
+    <ImageAsset Include="Media.xcassets\ic_next.imageset\next-button.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_next.imageset\Contents.json" />
+    <Compile Include="Styles\StyleExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

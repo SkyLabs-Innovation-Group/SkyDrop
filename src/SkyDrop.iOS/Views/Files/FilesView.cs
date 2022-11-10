@@ -7,6 +7,7 @@ using MvvmCross.Platforms.Ios.Views;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.iOS.Common;
+using SkyDrop.iOS.Styles;
 using UIKit;
 using static SkyDrop.iOS.Common.iOSUtil;
 
@@ -49,10 +50,8 @@ namespace SkyDrop.iOS.Views.Files
 
             AddBackButton(() => ViewModel.BackCommand.Execute());
 
-            SaveArchiveButton.BackgroundColor = Colors.GradientTurqouise.ToNative();
-            ExtractArchiveButton.BackgroundColor = Colors.GradientGreen.ToNative();
-            SaveArchiveButton.Layer.CornerRadius = 8f;
-            ExtractArchiveButton.Layer.CornerRadius = 8f;
+            SaveArchiveButton.StyleButton(Colors.GradientTurqouise);
+            ExtractArchiveButton.StyleButton(Colors.GradientGreen);
 
             var folderSource = new MvxSimpleTableViewSource(FoldersTableView, FolderCell.Key);
             FoldersTableView.Source = folderSource;

@@ -3,6 +3,7 @@ using Acr.UserDialogs;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels;
+using SkyDrop.iOS.Styles;
 using UIKit;
 
 namespace SkyDrop.iOS.Views.Onboarding
@@ -18,9 +19,10 @@ namespace SkyDrop.iOS.Views.Onboarding
         {
             base.ViewDidLoad();
 
+            TitleLabel.TextColor = Colors.LightGrey.ToNative();
             MainTextView.TextColor = Colors.LightGrey.ToNative();
 
-            GotItButton.BackgroundColor = Colors.Primary.ToNative();
+            GotItButton.StyleButton(Colors.Primary);
 
             var set = this.CreateBindingSet();
             set.Bind(MainTextView).To(vm => vm.OnboardingText);
