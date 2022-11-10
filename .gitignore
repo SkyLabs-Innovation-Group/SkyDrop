@@ -386,3 +386,5 @@ MigrationBackup/
 logdump/
 
 .DS_Store
+
+src/SkyDrop.Droid/Resources/Resource.Designer.cs
