@@ -67,10 +67,46 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView HomeMenu { get; set; }
 
 		[Outlet]
+		UIKit.UIImageView HomeMenuContactsIcon { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView HomeMenuPortalsIcon { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView HomeMenuSettingsIcon { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView HomeMenuSkyDriveIcon { get; set; }
+
+		[Outlet]
 		UIKit.UIImageView LeftNavDot { get; set; }
 
 		[Outlet]
+		UIKit.UIView MiniMenuContactsButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView MiniMenuContactsIcon { get; set; }
+
+		[Outlet]
 		UIKit.UIView MiniMenuContainer { get; set; }
+
+		[Outlet]
+		UIKit.UIView MiniMenuPortalsButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView MiniMenuPortalsIcon { get; set; }
+
+		[Outlet]
+		UIKit.UIView MiniMenuSettingsButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView MiniMenuSettingsIcon { get; set; }
+
+		[Outlet]
+		UIKit.UIView MiniMenuSkyDriveButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView MiniMenuSkyDriveIcon { get; set; }
 
 		[Outlet]
 		UIKit.UIView OpenButton { get; set; }
@@ -143,11 +179,6 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (MiniMenuContainer != null) {
-				MiniMenuContainer.Dispose ();
-				MiniMenuContainer = null;
-			}
-
 			if (BarcodeContainer != null) {
 				BarcodeContainer.Dispose ();
 				BarcodeContainer = null;
@@ -241,6 +272,71 @@ namespace SkyDrop.iOS.Views.Drop
 			if (LeftNavDot != null) {
 				LeftNavDot.Dispose ();
 				LeftNavDot = null;
+			}
+
+			if (MiniMenuContactsButton != null) {
+				MiniMenuContactsButton.Dispose ();
+				MiniMenuContactsButton = null;
+			}
+
+			if (MiniMenuContainer != null) {
+				MiniMenuContainer.Dispose ();
+				MiniMenuContainer = null;
+			}
+
+			if (MiniMenuPortalsButton != null) {
+				MiniMenuPortalsButton.Dispose ();
+				MiniMenuPortalsButton = null;
+			}
+
+			if (MiniMenuSettingsButton != null) {
+				MiniMenuSettingsButton.Dispose ();
+				MiniMenuSettingsButton = null;
+			}
+
+			if (MiniMenuSkyDriveButton != null) {
+				MiniMenuSkyDriveButton.Dispose ();
+				MiniMenuSkyDriveButton = null;
+			}
+
+			if (MiniMenuContactsIcon != null) {
+				MiniMenuContactsIcon.Dispose ();
+				MiniMenuContactsIcon = null;
+			}
+
+			if (MiniMenuPortalsIcon != null) {
+				MiniMenuPortalsIcon.Dispose ();
+				MiniMenuPortalsIcon = null;
+			}
+
+			if (MiniMenuSettingsIcon != null) {
+				MiniMenuSettingsIcon.Dispose ();
+				MiniMenuSettingsIcon = null;
+			}
+
+			if (MiniMenuSkyDriveIcon != null) {
+				MiniMenuSkyDriveIcon.Dispose ();
+				MiniMenuSkyDriveIcon = null;
+			}
+
+			if (HomeMenuContactsIcon != null) {
+				HomeMenuContactsIcon.Dispose ();
+				HomeMenuContactsIcon = null;
+			}
+
+			if (HomeMenuPortalsIcon != null) {
+				HomeMenuPortalsIcon.Dispose ();
+				HomeMenuPortalsIcon = null;
+			}
+
+			if (HomeMenuSettingsIcon != null) {
+				HomeMenuSettingsIcon.Dispose ();
+				HomeMenuSettingsIcon = null;
+			}
+
+			if (HomeMenuSkyDriveIcon != null) {
+				HomeMenuSkyDriveIcon.Dispose ();
+				HomeMenuSkyDriveIcon = null;
 			}
 
 			if (OpenButton != null) {

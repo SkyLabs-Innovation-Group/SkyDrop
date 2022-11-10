@@ -41,20 +41,27 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand DeleteFileCommand { get; set; }
         public IMvxCommand SelectAllCommand { get; set; }
         public IMvxCommand SaveSelectedUnzippedFilesCommand { get; set; }
+        public IMvxCommand SaveArchiveCommand { get; set; }
+        public IMvxCommand ExtractArchiveCommand { get; set; }
         public bool IsUnzippedFilesMode { get; set; }
         public string ArchiveUrl { get; set; }
         public bool IsError { get; set; }
+        public bool IsUnzipError { get; set; }
         public bool IsLoading { get; set; }
         public bool IsLoadingLabelVisible => IsLoading || IsError;
         public string LoadingLabelText { get; set; }
+        public string ErrorDetailText { get; set; }
         public bool IsFoldersVisible { get; set; } = true;
         public bool IsSelectionActive => GetIsSelectionActive();
         public bool IsMovingFile { get; set; }
         public bool IsDeleteButtonVisible => IsSelectionActive && !IsUnzippedFilesMode;
         public bool IsMoveButtonVisible => IsSelectionActive && !IsFoldersVisible && !IsUnzippedFilesMode;
-        public bool IsLayoutButtonVisible => !IsSelectionActive && !IsFoldersVisible;
+        public bool IsLayoutButtonVisible => !IsSelectionActive && !IsFoldersVisible && !IsLoading && !IsError;
+        public bool IsSelectAllButtonVisible => IsUnzippedFilesMode && !IsLoading && !IsError;
         public bool IsAddFolderButtonVisible => !IsSelectionActive && IsFoldersVisible;
         public bool IsUnzippedSelectionActive => IsSelectionActive && IsUnzippedFilesMode;
+        public bool IsSavingArchive { get; set; }
+        public bool IsExtractingArchive { get; set; }
         public List<SkyFileDVM> FilesToMove { get; set; }
         public IFolderItem CurrentFolder { get; set; }
 
@@ -95,6 +102,8 @@ namespace SkyDrop.Core.ViewModels.Main
             DeleteFileCommand = new MvxAsyncCommand(DeleteFiles);
             SelectAllCommand = new MvxCommand(SelectAllFiles);
             SaveSelectedUnzippedFilesCommand = new MvxAsyncCommand(SaveSelectedUnzippedFiles);
+            SaveArchiveCommand = new MvxAsyncCommand(SaveArchive);
+            ExtractArchiveCommand = new MvxAsyncCommand(ExtractArchive);
 
             updateSelectionStateAction = () =>
             {
@@ -126,7 +135,8 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             catch(Exception e)
             {
-                userDialogs.Toast(e.Message);
+                if (!IsUnzippedFilesMode)
+                    userDialogs.Toast(e.Message);
             }
         }
 
@@ -179,7 +189,11 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 IsError = true;
                 var actionName = LoadingLabelText == downloadingText ? "download" : LoadingLabelText == decryptingText ? "decrypt" : "unzip";
+                if (actionName == "unzip")
+                    IsUnzipError = true;
+
                 LoadingLabelText = $"Failed to {actionName} file";
+                ErrorDetailText = e.Message;
                 log.Exception(e);
                 return null;
             }
@@ -525,6 +539,46 @@ namespace SkyDrop.Core.ViewModels.Main
             }
 
             ExitSelection();
+        }
+
+        private async Task SaveArchive()
+        {
+            try
+            {
+                IsSavingArchive = true;
+                await apiService.DownloadAndSaveSkyfile(ArchiveUrl, Util.SaveType.Files);
+            }
+            catch (Exception e)
+            {
+                log.Exception(e);
+                userDialogs.Toast(e.Message);
+            }
+            finally
+            {
+                IsSavingArchive = false;
+            }
+        }
+
+        private async Task ExtractArchive()
+        {
+            try
+            {
+                IsExtractingArchive = true;
+                var (stream, filename) = await apiService.DownloadFile(ArchiveUrl);
+                using(stream)
+                {
+                    fileSystemService.ExtractArchiveToDevice(stream, filename);
+                }
+            }
+            catch (Exception e)
+            {
+                log.Exception(e);
+                userDialogs.Toast(e.Message);
+            }
+            finally
+            {
+                IsExtractingArchive = false;
+            }
         }
 
         private bool GetIsSelectionActive()

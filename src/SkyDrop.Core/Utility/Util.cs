@@ -91,6 +91,9 @@ namespace SkyDrop.Core.Utility
 
         public static bool CanDisplayPreview(this string filename)
         {
+            if (filename == null)
+                return false;
+
             filename = filename.ToLowerInvariant();
             return filename.ExtensionMatches(".jpg", ".jpeg", ".bmp", ".png", ".gif", ".webp", ".heic");
         }

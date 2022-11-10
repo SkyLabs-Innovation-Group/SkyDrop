@@ -40,7 +40,7 @@ namespace SkyDrop.iOS.Views.Drop
         {
             base.AwakeFromNib();
 
-            ImageContainer.BackgroundColor = Colors.GradientTurqouise.ToNative();
+            ImageContainer.BackgroundColor = Colors.MidGrey.ToNative();
             ImageContainer.Layer.CornerRadius = 8;
         }
     }

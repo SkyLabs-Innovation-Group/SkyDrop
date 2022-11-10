@@ -269,6 +269,9 @@
     <Compile Include="Views\PortalPreferences\PortalPreferencesViewController.designer.cs">
       <DependentUpon>PortalPreferencesViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\HomeMenuAnimator.cs" />
+    <ImageAsset Include="Media.xcassets\ic_portals.imageset\camera-iris.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_portals.imageset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

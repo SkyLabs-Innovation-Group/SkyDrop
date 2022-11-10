@@ -66,15 +66,11 @@ namespace SkyDrop.Core.DataModels
             return portal;
         }
 
-        private const string Web3Portal = "https://web3portal.com";
+        public const string DefaultWeb3PortalUrl = "https://web3portal.com";
+        public static SkynetPortal DefaultWeb3Portal = new SkynetPortal(DefaultWeb3PortalUrl);
 
-        public string GetApiTokenPrefKey()
-        {
-            return $"{PreferenceKey.PrefixPortalApiToken}{BaseUrl}";
-        }
-        
-        public static SkynetPortal DefaultWeb3Portal = new SkynetPortal(Web3Portal);
-        
+        public string GetApiTokenPrefKey() => $"{PreferenceKey.PrefixPortalApiToken}{BaseUrl}";
+
         public SkynetPortal(string baseUrl)
         {
             this.BaseUrl = baseUrl;

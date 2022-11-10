@@ -13,6 +13,7 @@ using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.iOS.Bindings;
 using SkyDrop.iOS.Common;
+using SkyDrop.iOS.Converters;
 using UIKit;
 using UserNotifications;
 using static SkyDrop.Core.Utility.Util;
@@ -24,11 +25,12 @@ namespace SkyDrop.iOS.Views.Drop
     public partial class DropView : BaseViewController<DropViewModel>
     {
         private const int swipeMarginX = 20;
-        private bool isPressed;
+        private bool isPressed, didInit;
         private nfloat tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
         private const string DropUploadNotifRequestId = "drop_upload_notification_id";
         private nfloat screenWidth => UIScreen.MainScreen.Bounds.Width;
         private UILabel titleLabel;
+        private HomeMenuAnimator homeMenuAnimator;
 
         public DropView() : base("DropView", null)
         {
@@ -140,19 +142,39 @@ namespace SkyDrop.iOS.Views.Drop
             }
         }
 
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            if (didInit)
+                return;
+
+            //initialize animation container
+            var animationContainer = new UIView { UserInteractionEnabled = false };
+            View.LayoutInsideWithFrame(animationContainer);
+            homeMenuAnimator = new HomeMenuAnimator(HomeMenuSkyDriveIcon, HomeMenuPortalsIcon, HomeMenuContactsIcon, HomeMenuSettingsIcon,
+                MiniMenuSkyDriveIcon, MiniMenuPortalsIcon, MiniMenuContactsIcon, MiniMenuSettingsIcon,
+                animationContainer);
+
+            didInit = true;
+        }
+
         private void BindViews()
         {
             var set = CreateBindingSet();
 
-            //setup file preview collection view
-            var filePreviewSource = new MvxCollectionViewSource(FilePreviewCollectionView, FilePreviewCollectionViewCell.Key);
-            FilePreviewCollectionView.DataSource = filePreviewSource;
-            FilePreviewCollectionView.RegisterNibForCell(FilePreviewCollectionViewCell.Nib, FilePreviewCollectionViewCell.Key);
-            set.Bind(filePreviewSource).For(s => s.ItemsSource).To(vm => vm.StagedFiles);
-            set.Bind(FilePreviewCollectionView).For("Visible").To(vm => vm.IsStagedFilesVisible);
-
+            //send & receive buttons
             set.Bind(SendButton).For("Tap").To(vm => vm.SendCommand);
             set.Bind(ReceiveButton).For("Tap").To(vm => vm.ReceiveCommand);
+            set.Bind(SendActivityIndicator).For("Visible").To(vm => vm.IsUploading);
+            set.Bind(ReceiveActivityIndicator).For("Visible").To(vm => vm.IsReceivingFile);
+            set.Bind(SendIcon).For(v => v.Hidden).To(vm => vm.IsUploading);
+            set.Bind(ReceiveIcon).For(v => v.Hidden).To(vm => vm.IsReceivingFile);
+            set.Bind(SendLabel).To(vm => vm.SendButtonLabel);
+            set.Bind(ReceiveLabel).To(vm => vm.ReceiveButtonLabel);
+            set.Bind(FileSizeLabel).To(vm => vm.FileSize);
+            set.Bind(ProgressFillArea).For("Visible").To(vm => vm.IsUploading);
+            set.Bind(ProgressFillArea).For(ProgressFillHeightBinding.Name).To(vm => vm.UploadProgress);
 
             //home menu
             set.Bind(SkyDriveButton).For("Tap").To(vm => vm.MenuSkyDriveCommand);
@@ -162,46 +184,30 @@ namespace SkyDrop.iOS.Views.Drop
 
             //mini menu
             set.Bind(MiniMenuContainer).For("Visible").To(vm => vm.IsStagedFilesVisible);
+            set.Bind(MiniMenuSkyDriveButton).For("Tap").To(vm => vm.MenuSkyDriveCommand);
+            set.Bind(MiniMenuPortalsButton).For("Tap").To(vm => vm.MenuPortalsCommand);
+            set.Bind(MiniMenuContactsButton).For("Tap").To(vm => vm.MenuContactsCommand);
+            set.Bind(MiniMenuSettingsButton).For("Tap").To(vm => vm.MenuSettingsCommand);
 
             //QR menu
             set.Bind(CopyLinkButton).For("Tap").To(vm => vm.CopyLinkCommand);
             set.Bind(OpenButton).For("Tap").To(vm => vm.OpenFileInBrowserCommand);
             set.Bind(ShareButton).For("Tap").To(vm => vm.ShareLinkCommand);
             set.Bind(DownloadButton).For("Tap").To(vm => vm.DownloadFileCommand);
-
             set.Bind(DownloadButtonActivityIndicator).For("Visible").To(vm => vm.IsDownloadingFile);
             set.Bind(DownloadButtonIcon).For(t => t.Hidden).To(vm => vm.IsDownloadingFile);
             set.Bind(SaveFileLabel).For(t => t.Text).To(vm => vm.SaveButtonText);
             set.Bind(DownloadButtonIcon).For(a => a.ImagePath).To(vm => vm.IsFocusedFileAnArchive).WithConversion(new SaveUnzipIconConverter());
-
-            set.Bind(titleLabel).To(vm => vm.Title);
-
             set.Bind(BarcodeMenu).For("Visible").To(vm => vm.IsBarcodeVisible);
+
+            //barcode view
             set.Bind(BarcodeContainer).For("Visible").To(vm => vm.IsBarcodeVisible);
-
-            set.Bind(SendActivityIndicator).For("Visible").To(vm => vm.IsUploading);
-            set.Bind(ReceiveActivityIndicator).For("Visible").To(vm => vm.IsReceivingFile);
-            set.Bind(SendIcon).For(v => v.Hidden).To(vm => vm.IsUploading);
-            set.Bind(ReceiveIcon).For(v => v.Hidden).To(vm => vm.IsReceivingFile);
-
-            set.Bind(SendLabel).To(vm => vm.SendButtonLabel);
-            set.Bind(ReceiveLabel).To(vm => vm.ReceiveButtonLabel);
-
-            set.Bind(FileSizeLabel).To(vm => vm.FileSize);
-
-            set.Bind(ProgressFillArea).For("Visible").To(vm => vm.IsUploading);
-            set.Bind(ProgressFillArea).For(ProgressFillHeightBinding.Name).To(vm => vm.UploadProgress);
-
-            set.Bind(CancelButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
-            set.Bind(CancelButton).For("Tap").To(vm => vm.CancelUploadCommand);
-
-            set.Bind(LeftNavDot).For("Visible").To(vm => vm.NavDotsVisible);
-            set.Bind(RightNavDot).For("Visible").To(vm => vm.NavDotsVisible);
-
-            set.Bind(UrlLabel).To(vm => vm.FocusedFileUrl);
-
             set.Bind(PreviewImage).For("Visible").To(vm => vm.IsPreviewImageVisible);
             set.Bind(BarcodeImage).For(b => b.Hidden).To(vm => vm.IsPreviewImageVisible);
+            set.Bind(UrlLabel).To(vm => vm.FocusedFileUrl);
+
+            //icon behind preview image, to show while preview is loading
+            set.Bind(FileTypeIcon).For(FileCategoryIconBinding.Name).To(vm => vm.FocusedFile.Filename);
 
             //for barcode / preview toggle
             set.Bind(ShowBarcodeButton).For("Visible").To(vm => vm.IsShowBarcodeButtonVisible);
@@ -210,15 +216,28 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(ShowPreviewButton).For("Tap").To(vm => vm.ShowPreviewImageCommand);
             set.Bind(PreviewImage).For(i => i.ImagePath).To(vm => vm.PreviewImageUrl);
 
-            //icon behind preview image, to show while preview is loading
-            set.Bind(FileTypeIcon).For(FileCategoryIconBinding.Name).To(vm => vm.FocusedFile.Filename);
-
+            //encryption button
             set.Bind(EncryptButton).For("Tap").To(vm => vm.ChooseRecipientCommand);
             set.Bind(EncryptButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
-
+            set.Bind(EncryptButton).For("BackgroundColor").To(vm => vm.EncryptionButtonColor).WithConversion(new NativeColorConverter());
             set.Bind(EncryptionLabel).To(vm => vm.EncryptionText);
-
             set.Bind(this).For(t => t.EncryptIconType).To(vm => vm.EncryptionText);
+
+            set.Bind(CancelButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
+            set.Bind(CancelButton).For("Tap").To(vm => vm.CancelUploadCommand);
+
+            //setup file preview collection view
+            var filePreviewSource = new MvxCollectionViewSource(FilePreviewCollectionView, FilePreviewCollectionViewCell.Key);
+            FilePreviewCollectionView.DataSource = filePreviewSource;
+            FilePreviewCollectionView.RegisterNibForCell(FilePreviewCollectionViewCell.Nib, FilePreviewCollectionViewCell.Key);
+            set.Bind(filePreviewSource).For(s => s.ItemsSource).To(vm => vm.StagedFiles);
+            set.Bind(FilePreviewCollectionView).For("Visible").To(vm => vm.IsStagedFilesVisible);
+
+            set.Bind(LeftNavDot).For("Visible").To(vm => vm.NavDotsVisible);
+            set.Bind(RightNavDot).For("Visible").To(vm => vm.NavDotsVisible);
+
+            set.Bind(titleLabel).To(vm => vm.Title);
+
             set.Apply();
         }
 
@@ -411,14 +430,25 @@ namespace SkyDrop.iOS.Views.Drop
             var sendButtonCenterX = SendButton.ConvertPointToView(new CGPoint(SendButton.Bounds.Width * 0.5, SendButton.Bounds.Height), null).X;
             var translationX = screenCenterX - sendButtonCenterX;
 
-            MiniMenuContainer.Alpha = 0;
-            UIView.Animate(1, () =>
+            var duration = 1;
+            UIView.Animate(duration, () =>
             {
                 SendButton.Transform = CGAffineTransform.MakeTranslation(translationX, 0);
                 ReceiveButton.Alpha = 0;
-                HomeMenu.Alpha = 0;
-                MiniMenuContainer.Alpha = 1;
             });
+
+            UIView.Animate(duration / 3f, () =>
+            {
+                HomeMenu.Alpha = 0;
+            });
+
+            MiniMenuContainer.Alpha = 0;
+            UIView.Animate(duration / 3f, duration * 2f / 3f, UIViewAnimationOptions.CurveLinear, () =>
+            {
+                MiniMenuContainer.Alpha = 1;
+            }, null);
+
+            homeMenuAnimator.AnimateShrink(duration / 3f, duration / 3f);
         }
 
         /// <summary>
@@ -504,6 +534,8 @@ namespace SkyDrop.iOS.Views.Drop
 
                 HomeMenu.Alpha = 1;
                 HomeMenu.Transform = CGAffineTransform.MakeTranslation(0, 0);
+
+                MiniMenuContainer.Alpha = 0;
             }, completion: () =>
             {
                 ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState;

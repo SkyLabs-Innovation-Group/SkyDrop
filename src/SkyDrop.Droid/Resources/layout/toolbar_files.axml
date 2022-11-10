@@ -47,7 +47,7 @@
                 android:layout_height="match_parent"
                 android:paddingLeft="16dp"
                 android:src="@drawable/ic_select_all"
-                app:MvxBind="Click SelectAllCommand;Visibility Visibility(IsUnzippedFilesMode)"
+                app:MvxBind="Click SelectAllCommand;Visibility Visibility(IsSelectAllButtonVisible)"
                 />
 
             <ImageView

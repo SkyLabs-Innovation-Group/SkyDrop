@@ -94,6 +94,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public string SaveButtonText => IsFocusedFileAnArchive ? "Unzip" : "Save";
         public string EncryptionText => GetVisibilityText();
         public bool IsEncrypting { get; set; }
+        public Color EncryptionButtonColor => Recipient == null ? Colors.MidGrey : Colors.Primary;
+        public Contact Recipient { get; set; }
 
         public List<StagedFileDVM> StagedFiles { get; set; }
         public SkyFile FocusedFile { get; set; } //most recently sent or received file
@@ -142,7 +144,6 @@ namespace SkyDrop.Core.ViewModels.Main
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
         private TaskCompletionSource<SkyFile> iosMultipleImageSelectTask;
-        private Contact encryptionContact;
 
         private Func<string, Task> _generateBarcodeAsyncFunc;
         public Func<string, Task> GenerateBarcodeAsyncFunc
@@ -289,8 +290,7 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 IsUploading = true;
 
-                var isSkyDropArchive = StagedFiles.Count() > 2; //file and add more files button
-                if (isSkyDropArchive) 
+                if (StagedFiles.Count() > 2) //file and add more files button
                     FileToUpload = MakeZipFile();
                 else
                     FileToUpload = StagedFiles.First().SkyFile;
@@ -304,10 +304,10 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (UploadNotificationsEnabled)
                     UploadStartedNotificationCommand?.Execute();
 
-                if (encryptionContact != null)
+                if (Recipient != null)
                 {
                     IsEncrypting = true;
-                    var encryptedPath = await encryptionService.EncodeFileFor(FileToUpload.FullFilePath, new List<Contact> { encryptionContact }, isSkyDropArchive);
+                    var encryptedPath = await encryptionService.EncodeFileFor(FileToUpload.FullFilePath, new List<Contact> { Recipient });
 
                     //we use a second property for the encrypted path so that we can preserve the original path, in case file needs to be encrypted again (after changing recipients)
                     FileToUpload.EncryptedFilePath = encryptedPath;
@@ -978,7 +978,8 @@ namespace SkyDrop.Core.ViewModels.Main
                     await OpenPortalPreferences();
                     break;
                 case HomeMenuItem.Contacts:
-                    await OpenContactsMenu(false);
+                    var isSelecting = DropViewUIState == DropViewState.ConfirmFilesState;
+                    await OpenContactsMenu(isSelecting);
                     break;
                 case HomeMenuItem.Settings:
                     await OpenSettings();
@@ -993,16 +994,16 @@ namespace SkyDrop.Core.ViewModels.Main
                 return; //user tapped back button
 
             //set encryptionContact to null if item is AnyoneWithTheLinkItem
-            encryptionContact = item is ContactDVM contactDvm ? contactDvm.Contact : null;
+            Recipient = item is ContactDVM contactDvm ? contactDvm.Contact : null;
             RaisePropertyChanged(() => EncryptionText).Forget();
         }
 
         public string GetVisibilityText()
         {
-            if (encryptionContact == null)
+            if (Recipient == null)
                 return "Anyone with the link";
 
-            return encryptionContact.Name;
+            return Recipient.Name;
         }
     }
 }

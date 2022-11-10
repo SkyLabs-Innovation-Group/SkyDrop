@@ -70,10 +70,6 @@ namespace SkyDrop.Droid.Helper
             AnimateMoveToLocation(settingsIcon, miniMenuIconSettingsX, miniMenuIconSettingsY, duration);
         }
 
-        public void AnimateExpand()
-        {
-        }
-
         private void AddIconsToWindow(ImageView skyDriveIcon, ImageView portalsIcon, ImageView contactsIcon, ImageView settingsIcon)
         {
             var layoutParamsSkyDrive = new FrameLayout.LayoutParams(iconSize, iconSize);
@@ -118,6 +114,7 @@ namespace SkyDrop.Droid.Helper
                 .SetInterpolator(new AccelerateDecelerateInterpolator())
                 .WithEndAction(new Runnable(async () =>
                 {
+                    //wait for the icon behind to finish fading in 
                     await Task.Delay(500);
                     view.Remove();
                 }))

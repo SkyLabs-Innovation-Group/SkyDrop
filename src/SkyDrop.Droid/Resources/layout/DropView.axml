@@ -130,6 +130,7 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
+                <!--Barcode Menu-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -652,7 +653,7 @@
                 android:translationX="-16dp"
                 app:cardCornerRadius="8dp"
                 app:cardBackgroundColor="@color/skyGreen"
-                app:MvxBind="Click ChooseRecipientCommand;Visibility Visibility(IsStagedFilesVisible)">
+                app:MvxBind="Click ChooseRecipientCommand;Visibility Visibility(IsStagedFilesVisible);CardBackgroundColor EncryptionButtonColor">
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
