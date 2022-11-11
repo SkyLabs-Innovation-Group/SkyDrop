@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using SkyDrop.Core.DataModels;
@@ -15,17 +16,16 @@ namespace SkyDrop.Core.ViewModels
         public string TitleText { get; set; }
         public string DescriptionText { get; set; }
         public string Icon { get; set; }
+        public int CurrentPage { get; set; }
+        public bool IsLastPage => CurrentPage == totalPages - 1;
+        public bool IsFirstPage => CurrentPage == 0;
         public IMvxCommand BackCommand { get; set; }
         public IMvxCommand NextPageCommand { get; set; }
         public IMvxCommand PreviousPageCommand { get; set; }
 
-        public bool IsLastPage => currentPage == totalPages - 1;
-        public bool IsFirstPage => currentPage == 0;
+        private readonly IMvxNavigationService navigationService;
 
-        private IMvxNavigationService navigationService;
-
-        private int currentPage;
-        private const int totalPages = 3;
+        private int totalPages;
 
         public OnboardingViewModel(ISingletonService singletonService,
             IMvxNavigationService navigationService) : base(singletonService)
@@ -35,6 +35,8 @@ namespace SkyDrop.Core.ViewModels
             Title = "What's new?";
 
             BackCommand = new MvxCommand(Dismiss);
+
+            totalPages = OnboardingContent.Content.Length;
         }
 
         public override async Task Initialize()
@@ -44,18 +46,22 @@ namespace SkyDrop.Core.ViewModels
             NextPageCommand = new MvxCommand(NextPage);
             PreviousPageCommand = new MvxCommand(PreviousPage);
             UpdateText();
-            //OnboardingText = "New in SkyDrop V2\n\nSkyDrive\n- Recently sent and received files are saved in the SkyDrive for easy access\n- Create your own folders to organise your files\n- This is experimental tech so please keep backups of your files elsewhere\n\nPortals\n- Choose your preferred Skynet portals and rank them in order of preference\n- Uploads will first be attempted on your first choice portal, if the upload fails then the upload will be retried using the next portal in the list\n\nEnd-to-end encryption\n- Send encrypted files to your contacts for additional data security\n- To add a new contact, pair with the contact's device by scanning their public key QR code\n- Encrypted files can only be decrypted by the specified recipient device";
         }
 
         private void Dismiss()
         {
+            var seenBefore = Preferences.ContainsKey(PreferenceKey.OnboardingComplete);
+
             Preferences.Set(PreferenceKey.OnboardingComplete, true);
             navigationService.Close(this);
+
+            if (!seenBefore)
+                UserDialogs.Instance.Toast("Head to settings to see these screens again");
         }
 
         private void UpdateText()
         {
-            var content = OnboardingContent.Content[currentPage];
+            var content = OnboardingContent.Content[CurrentPage];
             TitleText = content.Title;
             DescriptionText = content.Description;
             Icon = content.Icon;
@@ -63,20 +69,24 @@ namespace SkyDrop.Core.ViewModels
 
         private void NextPage()
         {
-            currentPage++;
+            CurrentPage++;
 
-            if (currentPage > totalPages - 1)
-                currentPage = totalPages - 1;
+            if (CurrentPage > totalPages - 1)
+            {
+                //Done button was tapped
+                Dismiss();
+                return;
+            }
 
             UpdateText();
         }
 
         private void PreviousPage()
         {
-            currentPage--;
+            CurrentPage--;
 
-            if (currentPage < 0)
-                currentPage = 0;
+            if (CurrentPage < 0)
+                CurrentPage = 0;
 
             UpdateText();
         }

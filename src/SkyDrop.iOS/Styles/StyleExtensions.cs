@@ -23,6 +23,7 @@ namespace SkyDrop.iOS.Styles
             }
             else
             {
+                button.Layer.BorderWidth = 0;
                 button.BackgroundColor = color.ToNative();
             }
         }

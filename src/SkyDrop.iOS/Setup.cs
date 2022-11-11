@@ -34,6 +34,7 @@ namespace SkyDrop.iOS
             registry.RegisterCustomBindingFactory<UIView>(LongPressBinding.Name, view => new LongPressBinding(view));
             registry.RegisterCustomBindingFactory<UIImageView>(FileCategoryIconBinding.Name, view => new FileCategoryIconBinding(view));
             registry.RegisterCustomBindingFactory<UIImageView>(IconBinding.Name, view => new IconBinding(view));
+            registry.RegisterCustomBindingFactory<UIView>(NextButtonStyleBinding.Name, view => new NextButtonStyleBinding(view));
 
             base.FillTargetFactories(registry);
         }

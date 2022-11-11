@@ -21,7 +21,7 @@ namespace SkyDrop.Core.DataModels
             {
                 Title = "End-to-end encryption",
                 Description = "- Send encrypted files to your contacts for additional data security\n- To add a new contact, pair with the contact's device by scanning their public key QR code\n- Encrypted files can only be decrypted by the specified recipient device",
-                Icon = "ic_key"
+                Icon = "ic_encryption"
             }
         };
 

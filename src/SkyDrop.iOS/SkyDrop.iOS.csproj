@@ -276,6 +276,9 @@
     <ImageAsset Include="Media.xcassets\ic_next.imageset\Contents.json" />
     <Compile Include="Styles\StyleExtensions.cs" />
     <Compile Include="Bindings\IconBinding.cs" />
+    <Compile Include="Bindings\NextButtonStyleBinding.cs" />
+    <ImageAsset Include="Media.xcassets\ic_encryption.imageset\encrypted-file-icon.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_encryption.imageset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
