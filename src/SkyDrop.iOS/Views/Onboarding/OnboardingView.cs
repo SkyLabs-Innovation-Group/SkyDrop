@@ -20,6 +20,8 @@ namespace SkyDrop.iOS.Views.Onboarding
         {
             base.ViewDidLoad();
 
+            NavigationItem.HidesBackButton = true;
+
             Icon.TintColor = Colors.LightGrey.ToNative();
 
             TitleLabel.TextColor = Colors.LightGrey.ToNative();
