@@ -275,6 +275,7 @@
     <ImageAsset Include="Media.xcassets\ic_next.imageset\next-button.pdf" />
     <ImageAsset Include="Media.xcassets\ic_next.imageset\Contents.json" />
     <Compile Include="Styles\StyleExtensions.cs" />
+    <Compile Include="Bindings\IconBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

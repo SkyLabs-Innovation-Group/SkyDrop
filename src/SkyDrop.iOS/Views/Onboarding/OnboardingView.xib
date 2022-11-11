@@ -10,8 +10,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OnboardingView">
             <connections>
-                <outlet property="GotItButton" destination="fwX-JX-2OY" id="xCV-ys-vV5"/>
+                <outlet property="Icon" destination="q07-x6-IJS" id="YE1-Mf-od8"/>
                 <outlet property="MainTextView" destination="6cq-m6-cSe" id="NHT-V6-DMN"/>
+                <outlet property="NextButton" destination="fwX-JX-2OY" id="T3A-fD-2VD"/>
+                <outlet property="PreviousButton" destination="WUN-fM-Wyj" id="5lX-3P-n4E"/>
                 <outlet property="TitleLabel" destination="dWL-qe-qeJ" id="i6D-Wo-Vtl"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
@@ -22,26 +24,26 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6cq-m6-cSe">
-                    <rect key="frame" x="11" y="133" width="392" height="613.5"/>
+                    <rect key="frame" x="11" y="479" width="392" height="267.5"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MvX-hY-9jN" userLabel="HomeMenu">
                     <rect key="frame" x="16" y="762.5" width="382" height="83.5"/>
                     <subviews>
-                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WUN-fM-Wyj">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WUN-fM-Wyj">
                             <rect key="frame" x="0.0" y="0.0" width="83.5" height="83.5"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SkyDrive" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hJq-nj-S6O">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Previous" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hJq-nj-S6O">
                                     <rect key="frame" x="0.0" y="58" width="83.5" height="15"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                                     <color key="textColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_cloud" translatesAutoresizingMaskIntoConstraints="NO" id="qgZ-Cd-XYF">
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_back" translatesAutoresizingMaskIntoConstraints="NO" id="qgZ-Cd-XYF">
                                     <rect key="frame" x="24" y="8" width="35.5" height="48"/>
                                     <color key="tintColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
@@ -172,11 +174,17 @@
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Glacier Mints" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dWL-qe-qeJ">
-                    <rect key="frame" x="16" y="96" width="382" height="37"/>
+                    <rect key="frame" x="16" y="442" width="382" height="37"/>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="31"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="q07-x6-IJS">
+                    <rect key="frame" x="16" y="60" width="382" height="382"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="q07-x6-IJS" secondAttribute="height" multiplier="1:1" id="gp0-Ja-atZ"/>
+                    </constraints>
+                </imageView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -186,16 +194,19 @@
                 <constraint firstAttribute="trailing" secondItem="dWL-qe-qeJ" secondAttribute="trailing" constant="16" id="HKZ-qb-kLZ"/>
                 <constraint firstAttribute="trailing" secondItem="6cq-m6-cSe" secondAttribute="trailing" constant="11" id="Hud-t4-lLE"/>
                 <constraint firstAttribute="bottomMargin" secondItem="MvX-hY-9jN" secondAttribute="bottom" constant="16" id="I8a-jB-m9x"/>
-                <constraint firstItem="dWL-qe-qeJ" firstAttribute="top" secondItem="2" secondAttribute="top" constant="96" id="PAz-WU-Oat"/>
+                <constraint firstItem="q07-x6-IJS" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="JT3-L7-lv7"/>
+                <constraint firstItem="q07-x6-IJS" firstAttribute="top" secondItem="2" secondAttribute="topMargin" constant="16" id="OPp-S0-mBZ"/>
+                <constraint firstItem="dWL-qe-qeJ" firstAttribute="top" secondItem="q07-x6-IJS" secondAttribute="bottom" id="Spf-Yh-Mhc"/>
                 <constraint firstItem="dWL-qe-qeJ" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="XVy-sO-eqv"/>
                 <constraint firstItem="MvX-hY-9jN" firstAttribute="top" secondItem="6cq-m6-cSe" secondAttribute="bottom" constant="16" id="aor-yx-wSp"/>
+                <constraint firstAttribute="trailing" secondItem="q07-x6-IJS" secondAttribute="trailing" constant="16" id="e0q-kL-HkH"/>
                 <constraint firstItem="6cq-m6-cSe" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="11" id="zFY-Im-vzE"/>
             </constraints>
             <point key="canvasLocation" x="81.159420289855078" y="-21.428571428571427"/>
         </view>
     </objects>
     <resources>
-        <image name="ic_cloud" width="18" height="18"/>
+        <image name="ic_back" width="20" height="20"/>
         <image name="ic_key" width="18" height="18"/>
         <image name="ic_next" width="20" height="20"/>
         <image name="ic_portals" width="18" height="18"/>

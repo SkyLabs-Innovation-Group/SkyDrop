@@ -89,20 +89,12 @@ namespace SkyDrop.iOS.Views.Drop
                 ReceiveButton.Layer.CornerRadius = 8;
 
                 //QR menu
-                CopyLinkButton.BackgroundColor = Colors.Primary.ToNative();
-                OpenButton.BackgroundColor = Colors.GradientGreen.ToNative();
-                DownloadButton.BackgroundColor = Colors.GradientTurqouise.ToNative();
-                ShareButton.BackgroundColor = Colors.GradientOcean.ToNative();
-                CopyLinkButton.Layer.CornerRadius = 8;
-                OpenButton.Layer.CornerRadius = 8;
-                ShareButton.Layer.CornerRadius = 8;
-                DownloadButton.Layer.CornerRadius = 8;
+                CopyLinkButton.StyleButton(Colors.Primary);
+                OpenButton.StyleButton(Colors.GradientGreen);
+                DownloadButton.StyleButton(Colors.GradientTurqouise);
+                ShareButton.StyleButton(Colors.GradientOcean);
 
                 //home menu
-                SkyDriveButton.StyleButton(Colors.DarkGrey);
-                PortalsButton.StyleButton(Colors.DarkGrey);
-                ContactsButton.StyleButton(Colors.DarkGrey);
-                SettingsButton.StyleButton(Colors.DarkGrey);
                 SkyDriveButton.StyleButton(Colors.GradientOcean, true);
                 PortalsButton.StyleButton(Colors.GradientTurqouise, true);
                 ContactsButton.StyleButton(Colors.GradientGreen, true);

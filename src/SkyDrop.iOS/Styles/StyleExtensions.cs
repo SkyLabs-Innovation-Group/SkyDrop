@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using Acr.UserDialogs;
+using SkyDrop.Core.Utility;
 using UIKit;
 
 namespace SkyDrop.iOS.Styles
@@ -18,6 +19,7 @@ namespace SkyDrop.iOS.Styles
             {
                 button.Layer.BorderWidth = borderWidth;
                 button.Layer.BorderColor = color.ToNative().CGColor;
+                button.BackgroundColor = Colors.DarkGrey.ToNative();
             }
             else
             {

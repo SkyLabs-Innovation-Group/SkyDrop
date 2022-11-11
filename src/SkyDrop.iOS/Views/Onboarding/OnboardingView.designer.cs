@@ -13,29 +13,45 @@ namespace SkyDrop.iOS.Views.Onboarding
 	partial class OnboardingView
 	{
 		[Outlet]
-		UIKit.UIView GotItButton { get; set; }
+		UIKit.UIImageView Icon { get; set; }
 
 		[Outlet]
 		UIKit.UITextView MainTextView { get; set; }
+
+		[Outlet]
+		UIKit.UIView NextButton { get; set; }
+
+		[Outlet]
+		UIKit.UIView PreviousButton { get; set; }
 
 		[Outlet]
 		UIKit.UILabel TitleLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (MainTextView != null) {
+				MainTextView.Dispose ();
+				MainTextView = null;
+			}
+
+			if (NextButton != null) {
+				NextButton.Dispose ();
+				NextButton = null;
+			}
+
+			if (PreviousButton != null) {
+				PreviousButton.Dispose ();
+				PreviousButton = null;
+			}
+
 			if (TitleLabel != null) {
 				TitleLabel.Dispose ();
 				TitleLabel = null;
 			}
 
-			if (GotItButton != null) {
-				GotItButton.Dispose ();
-				GotItButton = null;
-			}
-
-			if (MainTextView != null) {
-				MainTextView.Dispose ();
-				MainTextView = null;
+			if (Icon != null) {
+				Icon.Dispose ();
+				Icon = null;
 			}
 		}
 	}

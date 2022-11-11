@@ -19,14 +19,20 @@ namespace SkyDrop.iOS.Views.Onboarding
         {
             base.ViewDidLoad();
 
+            Icon.TintColor = Colors.LightGrey.ToNative();
+
             TitleLabel.TextColor = Colors.LightGrey.ToNative();
             MainTextView.TextColor = Colors.LightGrey.ToNative();
 
-            GotItButton.StyleButton(Colors.Primary);
+            NextButton.StyleButton(Colors.Primary, true);
+            PreviousButton.StyleButton(Colors.Primary, true);
 
             var set = this.CreateBindingSet();
-            set.Bind(MainTextView).To(vm => vm.OnboardingText);
-            set.Bind(GotItButton).For("Tap").To(vm => vm.BackCommand);
+            set.Bind(TitleLabel).To(vm => vm.TitleText);
+            set.Bind(MainTextView).To(vm => vm.DescriptionText);
+            set.Bind(NextButton).For("Tap").To(vm => vm.NextPageCommand);
+            set.Bind(PreviousButton).For("Tap").To(vm => vm.PreviousPageCommand);
+            set.Bind(Icon).For("Icon").To(vm => vm.Icon);
             set.Bind(this).For(v => v.Title).To(vm => vm.Title);
             set.Apply();
         }
