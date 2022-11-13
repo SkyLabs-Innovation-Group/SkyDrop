@@ -20,7 +20,7 @@ namespace SkyDrop.iOS.Views.Onboarding
         {
             base.ViewDidLoad();
 
-            NavigationItem.HidesBackButton = true;
+            AddBackButton(() => ViewModel.BackCommand.Execute());
 
             Icon.TintColor = Colors.LightGrey.ToNative();
 
