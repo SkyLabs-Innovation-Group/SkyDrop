@@ -10,7 +10,7 @@ namespace SkyDrop.Droid.Bindings
 {
     /// <summary>
     /// Binding for use with SaveUnzipIconConverter
-    /// Expects icons in this format "res:ic_download"
+    /// Expects icons in these formats: "res:ic_download", "ic_download"
     /// </summary>
     public class IconBinding : MvxTargetBinding<ImageView, string>
     {
@@ -24,8 +24,9 @@ namespace SkyDrop.Droid.Bindings
 
         protected override void SetValue(string value)
         {
-            var identifier = value?.Substring(4); //remove "res:" prefix
-            Target.SetLocalImage(identifier);
+            if (value.StartsWith("res:"))
+                value = value?.Substring(4); //remove "res:" prefix
+            Target.SetLocalImage(value);
         }
     }
 }

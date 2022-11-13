@@ -17,7 +17,7 @@ namespace SkyDrop.Core.ViewModels
         public string DescriptionText { get; set; }
         public string Icon { get; set; }
         public int CurrentPage { get; set; }
-        public bool IsLastPage => CurrentPage == totalPages - 1;
+        public bool IsLastPage => CurrentPage >= totalPages - 1;
         public bool IsFirstPage => CurrentPage == 0;
         public IMvxCommand BackCommand { get; set; }
         public IMvxCommand NextPageCommand { get; set; }

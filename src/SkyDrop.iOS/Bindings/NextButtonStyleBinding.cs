@@ -26,14 +26,14 @@ namespace SkyDrop.iOS.Bindings
             {
                 Target.StyleButton(Colors.Primary);
                 icon.Image = UIImage.FromBundle("ic_tick");
-                icon.ContentMode = UIViewContentMode.ScaleAspectFit;
+                //icon.ContentMode = UIViewContentMode.ScaleAspectFit;
                 label.Text = "Done";
             }
             else
             {
                 Target.StyleButton(Colors.Primary, true);
                 icon.Image = UIImage.FromBundle("ic_next");
-                icon.ContentMode = UIViewContentMode.Center;
+                //icon.ContentMode = UIViewContentMode.Center;
                 label.Text = "Next";
             }
         }

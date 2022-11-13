@@ -48,7 +48,7 @@ namespace SkyDrop.Droid.Helper
             var settingsIcon = new ImageView(context);
 
             skyDriveIcon.SetImageResource(Resource.Drawable.ic_cloud);
-            portalsIcon.SetImageResource(Resource.Drawable.ic_portal);
+            portalsIcon.SetImageResource(Resource.Drawable.ic_portals);
             contactsIcon.SetImageResource(Resource.Drawable.ic_key);
             settingsIcon.SetImageResource(Resource.Drawable.ic_cog);
 

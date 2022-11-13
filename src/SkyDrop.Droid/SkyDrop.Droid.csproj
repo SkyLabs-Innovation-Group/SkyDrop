@@ -105,6 +105,8 @@
     <Compile Include="Bindings\ButtonClickBinding.cs" />
     <Compile Include="Helper\HomeMenuAnimator.cs" />
     <Compile Include="Views\Onboarding\OnboardingView.cs" />
+    <Compile Include="Styles\StyleExtensions.cs" />
+    <Compile Include="Bindings\NextButtonStyleBinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -510,7 +512,7 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_portal.xml">
+    <AndroidResource Include="Resources\drawable\ic_portals.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
@@ -527,6 +529,10 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\toolbar_onboarding.axml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable\ic_encryption.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
@@ -564,6 +570,7 @@
     <Folder Include="Views\Files\" />
     <Folder Include="Views\Contacts\" />
     <Folder Include="Views\Onboarding\" />
+    <Folder Include="Styles\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

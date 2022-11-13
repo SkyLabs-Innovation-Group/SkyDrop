@@ -10,7 +10,10 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Google.Android.Material.Card;
+using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels;
+using SkyDrop.Droid.Styles;
 
 namespace SkyDrop.Droid.Views.Onboarding
 {
@@ -23,7 +26,8 @@ namespace SkyDrop.Droid.Views.Onboarding
         {
             base.OnCreate(savedInstanceState);
 
-            // Create your application here
+            var previousButton = FindViewById<MaterialCardView>(Resource.Id.PreviousButton);
+            previousButton.StyleButton(Colors.Primary, true);
         }
     }
 }
