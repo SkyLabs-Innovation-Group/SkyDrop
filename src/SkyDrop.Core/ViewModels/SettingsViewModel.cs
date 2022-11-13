@@ -12,7 +12,7 @@ namespace SkyDrop.Core.ViewModels
     {
         public bool UploadNotificationsEnabled { get; set; } = true;
         public bool VerifySslCertificates { get; set; } = true;
-        public string SkynetPortalLabelText { get; set; } = "Enter a skynet portal to use in the app (default is siasky.net):";
+        public string SkynetPortalLabelText { get; set; } = "Skynet portal:";
         public string DeviceName { get; set; }
 
         public IMvxCommand BackCommand { get; set; }
