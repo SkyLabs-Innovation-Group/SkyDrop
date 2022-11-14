@@ -72,6 +72,12 @@ namespace SkyDrop.iOS.Views
 
             NavigationController.TopViewController.NavigationItem.LeftBarButtonItems = new[] { fixedSpace, backButtonItem };
         }
+
+        protected void StyleButton(UIButton button)
+        {
+            button.Layer.CornerRadius = 8;
+            button.BackgroundColor = UIColor.White;
+        }
     }
 }
 

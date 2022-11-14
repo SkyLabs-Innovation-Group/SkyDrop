@@ -267,6 +267,18 @@
     <Compile Include="Common\HomeMenuAnimator.cs" />
     <ImageAsset Include="Media.xcassets\ic_portals.imageset\camera-iris.pdf" />
     <ImageAsset Include="Media.xcassets\ic_portals.imageset\Contents.json" />
+    <InterfaceDefinition Include="Views\Onboarding\OnboardingView.xib" />
+    <Compile Include="Views\Onboarding\OnboardingView.cs" />
+    <Compile Include="Views\Onboarding\OnboardingView.designer.cs">
+      <DependentUpon>OnboardingView.cs</DependentUpon>
+    </Compile>
+    <ImageAsset Include="Media.xcassets\ic_next.imageset\next-button.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_next.imageset\Contents.json" />
+    <Compile Include="Styles\StyleExtensions.cs" />
+    <Compile Include="Bindings\IconBinding.cs" />
+    <Compile Include="Bindings\NextButtonStyleBinding.cs" />
+    <ImageAsset Include="Media.xcassets\ic_encryption.imageset\encrypted-file-icon.pdf" />
+    <ImageAsset Include="Media.xcassets\ic_encryption.imageset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -310,6 +322,7 @@
     <Folder Include="Views\Files\" />
     <Folder Include="Media.xcassets\" />
     <Folder Include="Views\Contacts\" />
+    <Folder Include="Views\Onboarding\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

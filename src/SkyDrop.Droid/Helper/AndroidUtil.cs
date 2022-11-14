@@ -18,6 +18,7 @@ using SkyDrop.Droid.Views.Main;
 using Xamarin.Essentials;
 using ZXing.Common;
 using ZXing.Mobile;
+using static Android.Provider.CalendarContract;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 
 namespace SkyDrop.Droid.Helper
@@ -285,6 +286,9 @@ namespace SkyDrop.Droid.Helper
 
         public static void SetLocalImage(this ImageView target, string drawableName)
         {
+            if (target == null)
+                return;
+
             var res = target.Context.Resources.GetIdentifier(drawableName, "drawable", target.Context.PackageName);
             target.SetImageResource(res);
         }
@@ -292,6 +296,24 @@ namespace SkyDrop.Droid.Helper
         public static void Remove(this View view)
         {
             (view.Parent as ViewGroup).RemoveView(view);
+        }
+
+        public static T FindViewByType<T>(this ViewGroup viewGroup)
+        {
+            for (int i = 0; i < viewGroup.ChildCount; i++)
+            {
+                var view = viewGroup.GetChildAt(i);
+                if (view is T foundView)
+                    return foundView;
+            }
+
+            if (viewGroup.ChildCount > 0)
+            {
+                var firstChild = viewGroup.GetChildAt(0) as ViewGroup;
+                return FindViewByType<T>(firstChild);
+            }
+
+            return default(T);
         }
     }
 }

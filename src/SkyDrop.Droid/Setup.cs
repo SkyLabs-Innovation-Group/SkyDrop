@@ -54,6 +54,7 @@ namespace SkyDrop.Droid
             registry.RegisterCustomBindingFactory<ImageView>(EncryptIconBinding.Name, view => new EncryptIconBinding(view));
             registry.RegisterCustomBindingFactory<View>(ContactsDeleteVisibilityBinding.Name, view => new ContactsDeleteVisibilityBinding(view));
             registry.RegisterCustomBindingFactory<Button>(ButtonClickBinding.Name, view => new ButtonClickBinding(view));
+            registry.RegisterCustomBindingFactory<MaterialCardView>(NextButtonStyleBinding.Name, view => new NextButtonStyleBinding(view));
         }
 
         protected override void FillValueConverters(IMvxValueConverterRegistry registry)
@@ -62,6 +63,7 @@ namespace SkyDrop.Droid
             registry.AddOrOverwrite(CanDisplayPreviewConverter.Name, new CanDisplayPreviewConverter(invert: false));
             registry.AddOrOverwrite(CanDisplayPreviewConverter.InvertName, new CanDisplayPreviewConverter(invert: true));
             registry.AddOrOverwrite(SaveUnzipIconConverter.Name, new SaveUnzipIconConverter());
+            registry.AddOrOverwrite(BoolInvertConverter.Name, new BoolInvertConverter());
         }
 
         protected override IMvxApplication CreateApp()

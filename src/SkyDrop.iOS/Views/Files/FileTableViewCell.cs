@@ -15,12 +15,12 @@ namespace SkyDrop.iOS.Views.Files
 		public static readonly NSString Key = new NSString ("FileTableViewCell");
 		public static readonly UINib Nib;
 
-		static FileTableViewCell ()
+		static FileTableViewCell()
 		{
 			Nib = UINib.FromName ("FileTableViewCell", NSBundle.MainBundle);
 		}
 
-		protected FileTableViewCell (IntPtr handle) : base (handle)
+		protected FileTableViewCell(IntPtr handle) : base(handle)
 		{
 			this.DelayBind(() =>
 			{

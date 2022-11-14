@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:background="@color/darkGrey"
+    >
+    <include
+        android:id="@+id/toolbar_onboarding"
+        layout="@layout/toolbar_onboarding" />
+    <ImageView
+        android:id="@+id/IconImage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="?android:attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:MvxBind="Icon Icon"
+        />
+    <TextView
+        android:id="@+id/TitleLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:textColor="@color/lightGrey"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/IconImage"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:MvxBind="Text TitleText"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="16dp"
+        android:textColor="@color/lightGrey"
+        android:textSize="16sp"
+        android:text="The text will go here"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/TitleLabel"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:MvxBind="Text DescriptionText"/>
+    <!--Menu-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginHorizontal="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/PreviousButton"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="16dp"
+            app:cardElevation="1dp"
+            app:cardCornerRadius="8dp"
+            app:cardBackgroundColor="@color/primaryColor"
+            app:MvxBind="Click PreviousPageCommand; VisibleHidden BoolInvert(IsFirstPage)">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="center"
+                app:layout_constraintDimensionRatio="1:1"
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="8dp"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_back"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Previous"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/lightGrey"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="12dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="16dp"
+            android:visibility="invisible"
+            app:cardElevation="1dp"
+            app:cardCornerRadius="8dp"
+            app:cardBackgroundColor="@color/skyGreen"
+            app:MvxBind="Click SaveArchiveCommand">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+                <FrameLayout
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="8dp" >
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_download"
+                        app:MvxBind="Visibility InvertedVisibility(IsSavingArchive);"
+                        />
+                    <ProgressBar
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        app:MvxBind="Visibility Visibility(IsSavingArchive)"/>
+                </FrameLayout>
+                        
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Save"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/lightGrey"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="12dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="16dp"
+            android:visibility="invisible"
+            app:cardElevation="1dp"
+            app:cardCornerRadius="8dp"
+            app:cardBackgroundColor="@color/skyTurqouise"
+            app:MvxBind="Click ExtractArchiveCommand">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+                <FrameLayout
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="8dp" >
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_folder"
+                        app:MvxBind="Visibility InvertedVisibility(IsExtractingArchive);"
+                        />
+                    <ProgressBar
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        app:MvxBind="Visibility Visibility(IsExtractingArchive)"/>
+                </FrameLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Extract"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/lightGrey"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="12dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:cardElevation="1dp"
+            app:cardCornerRadius="8dp"
+            app:cardBackgroundColor="@color/skyOcean"
+            app:MvxBind="Click NextPageCommand;NextButtonStyle IsLastPage">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_back"
+                    android:scaleType="center"
+                    android:rotationY="180"
+                    android:layout_marginTop="8dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Next"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/lightGrey"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="12dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
