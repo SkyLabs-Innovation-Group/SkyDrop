@@ -11,6 +11,7 @@
             <connections>
                 <outlet property="EnableUploadNotificationsSwitch" destination="hpJ-eu-1Ju" id="DPk-rK-Pj8"/>
                 <outlet property="NameTextView" destination="Oax-Dt-UKc" id="rsa-YW-XLL"/>
+                <outlet property="OnboardingButton" destination="bqb-eL-3Hq" id="aXL-8M-ItD"/>
                 <outlet property="PortalTextView" destination="6GC-oA-PHg" id="jFy-rc-kGF"/>
                 <outlet property="SavePortalButton" destination="cVG-P6-CxS" id="iqT-Tv-VFe"/>
                 <outlet property="SetNameButton" destination="y7a-AC-dHr" id="L0u-Tw-fmx"/>
@@ -86,6 +87,17 @@
                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hpJ-eu-1Ju">
                     <rect key="frame" x="349" y="260" width="51" height="31"/>
                 </switch>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bqb-eL-3Hq">
+                    <rect key="frame" x="302" y="481.5" width="96" height="27"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="96" id="Xzg-Xo-Acg"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                    <state key="normal" title="WHAT'S NEW?">
+                        <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                </button>
             </subviews>
             <color key="backgroundColor" red="0.14901961389999999" green="0.1725490093" blue="0.18823529780000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
@@ -95,11 +107,13 @@
                 <constraint firstItem="hpJ-eu-1Ju" firstAttribute="centerY" secondItem="pZA-MF-C9R" secondAttribute="centerY" id="4bF-Jh-qaY"/>
                 <constraint firstItem="J2S-Mi-hf3" firstAttribute="leading" secondItem="aX5-Kq-34w" secondAttribute="leading" constant="16" id="AgE-AE-NFB"/>
                 <constraint firstItem="J2S-Mi-hf3" firstAttribute="top" secondItem="hpJ-eu-1Ju" secondAttribute="bottom" constant="21" id="G0f-x5-YRx"/>
+                <constraint firstAttribute="trailing" secondItem="bqb-eL-3Hq" secondAttribute="trailing" constant="16" id="GS5-f7-BCF"/>
                 <constraint firstAttribute="trailing" secondItem="cVG-P6-CxS" secondAttribute="trailing" constant="16" id="IxD-kH-hW7"/>
                 <constraint firstItem="6GC-oA-PHg" firstAttribute="leading" secondItem="aX5-Kq-34w" secondAttribute="leading" constant="16" id="Jdg-FF-SDR"/>
                 <constraint firstItem="Oax-Dt-UKc" firstAttribute="top" secondItem="PXZ-yT-k6k" secondAttribute="bottom" constant="16" id="Nl4-vs-wKL"/>
                 <constraint firstItem="6GC-oA-PHg" firstAttribute="top" secondItem="J2S-Mi-hf3" secondAttribute="bottom" constant="18" id="QDU-ci-bmk"/>
                 <constraint firstItem="PXZ-yT-k6k" firstAttribute="leading" secondItem="aX5-Kq-34w" secondAttribute="leading" constant="16" id="Uuz-F4-Yzr"/>
+                <constraint firstItem="bqb-eL-3Hq" firstAttribute="top" secondItem="cVG-P6-CxS" secondAttribute="bottom" constant="48" id="aAL-tY-bbQ"/>
                 <constraint firstItem="y7a-AC-dHr" firstAttribute="top" secondItem="Oax-Dt-UKc" secondAttribute="bottom" constant="16" id="gAi-HV-nxb"/>
                 <constraint firstAttribute="trailing" secondItem="Oax-Dt-UKc" secondAttribute="trailing" constant="16" id="jU1-WJ-II9"/>
                 <constraint firstAttribute="trailing" secondItem="J2S-Mi-hf3" secondAttribute="trailing" constant="42" id="mOn-Ad-mCY"/>

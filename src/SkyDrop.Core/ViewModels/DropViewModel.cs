@@ -232,6 +232,12 @@ namespace SkyDrop.Core.ViewModels.Main
                 userDialogs.Toast(errorMessage);
                 errorMessage = null;
             }
+
+            if (!Preferences.Get(PreferenceKey.OnboardingComplete, false))
+            {
+                //show onboarding
+                navigationService.Navigate<OnboardingViewModel>();
+            }
         }
 
         public void ResetUI(bool leaveBarcode = false)

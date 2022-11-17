@@ -19,6 +19,7 @@ namespace SkyDrop.Core.ViewModels
         public IMvxAsyncCommand<string> ValidateAndTrySetSkynetPortalCommand { get; set; }
         public IMvxCommand SetDeviceNameCommand { get; set; }
         public IMvxCommand CloseKeyboardCommand { get; set; }
+        public IMvxCommand ViewOnboardingCommand { get; set; }
 
         /// <summary>
         /// Currently, the best way to verify a Skynet portal that I can think of would be to query for a sky file's metadata.
@@ -43,6 +44,7 @@ namespace SkyDrop.Core.ViewModels
             BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
             ValidateAndTrySetSkynetPortalCommand = new MvxAsyncCommand<string>(async url => await ValidateAndTrySetSkynetPortal(url));
             SetDeviceNameCommand = new MvxCommand(SetDeviceName);
+            ViewOnboardingCommand = new MvxAsyncCommand(async () => await navigationService.Navigate<OnboardingViewModel>());
 
             DeviceName = encryptionService.GetDeviceName();
         }
