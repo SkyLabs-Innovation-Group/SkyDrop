@@ -2,6 +2,7 @@
 using Android.App;
 using System.Reflection.Emit;
 using SkyDrop.Core.ViewModels;
+using Android.OS;
 
 namespace SkyDrop.Droid.Views.PortalPreferences
 {

@@ -8,16 +8,19 @@ using MvvmCross.ViewModels;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Services;
+using static SkyDrop.Core.ViewModels.EditPortalViewModel;
 
 namespace SkyDrop.Core.ViewModels
 {
-	public class PortalPreferencesViewModel : BaseViewModel
-	{
+    public class PortalPreferencesViewModel : BaseViewModel
+    {
         private readonly IApiService apiService;
         private readonly IMvxNavigationService navigationService;
         private readonly IStorageService storageService;
 
         public IMvxCommand BackCommand { get; set; }
+
+        public IMvxCommand AddNewPortalCommand { get; set; }
 
         private readonly IPortalService portalService;
 
@@ -36,21 +39,26 @@ namespace SkyDrop.Core.ViewModels
             Title = "Portal Preferences";
             UserPortals = new MvxObservableCollection<SkynetPortalDVM>();
             BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
+            AddNewPortalCommand = new MvxAsyncCommand(async() => await AddNewPortal());
             this.portalService = portalService;
         }
 
-        public async override Task Initialize()
+        private Task AddNewPortal() => navigationService.Navigate<EditPortalViewModel, NavParam>(new NavParam());
+
+        public override void ViewAppearing()
         {
-             LoadUserPortals();
+            base.ViewAppearing();
+            LoadUserPortals();
         }
 
         public void LoadUserPortals()
         {
             var savedPortals = storageService.LoadSkynetPortals();
 
-            if (savedPortals == null)
+            if (savedPortals.Count == 0)
             {
-                storageService.SaveSkynetPortal(SkynetPortal.DefaultWeb3Portal);
+                storageService.SaveSkynetPortal(new SkynetPortal(SkynetPortal.DefaultWeb3PortalUrl) { Name = "Web3 Portal"});
+                savedPortals = storageService.LoadSkynetPortals();
             }
 
             var savedPortalsDvms = portalService.ConvertSkynetPortalsToDVMs(savedPortals);
@@ -70,10 +78,16 @@ namespace SkyDrop.Core.ViewModels
 
             foreach (var portal in copy)
             {
-              storageService.EditSkynetPortal(portal.RealmId);
+                storageService.EditSkynetPortal(portal.RealmId);
             }
 
             UserPortals.SwitchTo(copy);
+        }
+
+        public void EditPortal(int position)
+        {
+            string portalId = UserPortals[position].RealmId;
+            navigationService.Navigate<EditPortalViewModel, NavParam>(new NavParam() { PortalId = portalId });
         }
     }
 }

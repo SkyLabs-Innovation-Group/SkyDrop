@@ -15,9 +15,9 @@ namespace SkyDrop.Core.Components
         protected Dictionary<SkynetPortal, HttpClient> HttpClientsPerPortal { get; private set; } = new Dictionary<SkynetPortal, HttpClient>();
 
         /// <summary>
-        /// This is the default paramaterless implementation for GetSkyDropHttpClientInstance(), it returns the Siasky.net portal.
+        /// This is the default paramaterless implementation for GetSkyDropHttpClientInstance(), it returns the default portal.
         /// </summary>
-        public HttpClient GetSkyDropHttpClientInstance() => GetSkyDropHttpClientInstance(SkynetPortal.DefaultWeb3Portal);
+        public HttpClient GetSkyDropHttpClientInstance() => GetSkyDropHttpClientInstance(new SkynetPortal(SkynetPortal.DefaultWeb3PortalUrl));
 
         /// <summary>
         /// This method returns a HttpClient connected to $portal.BaseUrl.

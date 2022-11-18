@@ -373,33 +373,45 @@ namespace SkyDrop.Core.Services
             };
         }
 
-        public void SaveSkynetPortal(SkynetPortal portal)
+        public void SaveSkynetPortal(SkynetPortal portal, string apiToken = null)
         {
-          realm.Write(() =>
+          realm.Write(async () =>
           {
+            await SaveApiTokenForPortal(portal.GetApiTokenPrefKey(), apiToken);
             realm.Add(portal);
           });
         }
 
-        public void EditSkynetPortal(SkynetPortal portal)
+        public void EditSkynetPortal(string id) => EditSkynetPortal(new SkynetPortalDVM(realm.Find<SkynetPortal>(id)));
+
+        public void EditSkynetPortal(SkynetPortalDVM portal, string apiToken = null)
         {
-          realm.Write(() =>
+          realm.Write(async () =>
           {
-            var storedPortal = realm.Find<SkynetPortal>(portal.Id.ToString());
+            await SaveApiTokenForPortal(portal.ApiTokenPrefKey, apiToken);
+
+            var storedPortal = realm.Find<SkynetPortal>(portal.RealmId.ToString());
 
             storedPortal.Name = portal.Name;
             storedPortal.BaseUrl = portal.BaseUrl;
-            storedPortal.PortalPreferencePosition = portal.PortalPreferencePosition;
-            storedPortal.UserApiToken = portal.UserApiToken;
+            storedPortal.PortalPreferencesPosition = portal.PortalPreferencesPosition;
 
             realm.Add(storedPortal);
           });
         }
 
-      public void EditSkynetPortal(string id) => EditSkynetPortal(realm.Find<SkynetPortal>(id));
+        private Task SaveApiTokenForPortal(string portalPrefKey, string apiToken)
+        {
+            if (!string.IsNullOrEmpty(apiToken))
+                return Xamarin.Essentials.SecureStorage.SetAsync(portalPrefKey, apiToken);
+            else
+                return Task.CompletedTask;
+        }
 
       public List<SkynetPortal> LoadSkynetPortals() => realm.All<SkynetPortal>().ToList();
-  }
+
+        public SkynetPortal LoadSkynetPortal(string portalId) => realm.Find<SkynetPortal>(portalId);
+    }
 
     public interface IStorageService
     {
@@ -443,11 +455,13 @@ namespace SkyDrop.Core.Services
 
         void RenameContact(Contact contact, string newName);
 
-        void SaveSkynetPortal(SkynetPortal portal);
+        void SaveSkynetPortal(SkynetPortal portal, string apiToken = null);
 
-        void EditSkynetPortal(SkynetPortal portal);
+        void EditSkynetPortal(SkynetPortalDVM portal, string apiToken = null);
 
         List<SkynetPortal> LoadSkynetPortals();
+
+        SkynetPortal LoadSkynetPortal(string portalId);
 
         void EditSkynetPortal(string id);
   }

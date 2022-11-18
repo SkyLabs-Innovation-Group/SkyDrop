@@ -24,7 +24,7 @@ namespace SkyDrop.Core.DataModels
             string portalUrl = Preferences.Get(PreferenceKey.SelectedSkynetPortal, "");
 
             if (string.IsNullOrEmpty(portalUrl))
-                return DefaultWeb3Portal;
+                return new SkynetPortal(DefaultWeb3PortalUrl);
             else
             {
                 var portal = new SkynetPortal(portalUrl);
@@ -43,7 +43,7 @@ namespace SkyDrop.Core.DataModels
         private static SkynetPortal SetSelectedSkynetPortal(SkynetPortal portal)
         {
             if (string.IsNullOrEmpty(portal.ToString()))
-                return DefaultWeb3Portal;
+                return new SkynetPortal(DefaultWeb3PortalUrl);
 
             Preferences.Remove(PreferenceKey.SelectedSkynetPortal);
             Preferences.Set(PreferenceKey.SelectedSkynetPortal, portal.ToString());
@@ -67,27 +67,25 @@ namespace SkyDrop.Core.DataModels
         }
 
         public const string DefaultWeb3PortalUrl = "https://web3portal.com";
-        public static SkynetPortal DefaultWeb3Portal = new SkynetPortal(DefaultWeb3PortalUrl);
 
-        public string GetApiTokenPrefKey() => $"{PreferenceKey.PrefixPortalApiToken}{BaseUrl}";
+        public string GetApiTokenPrefKey() => $"{PreferenceKey.PrefixPortalApiToken}{BaseUrl}".ToLowerInvariant();
 
         public SkynetPortal(string baseUrl)
         {
             this.BaseUrl = baseUrl;
             this.InitialBaseUrl = baseUrl;
+            Id = Guid.NewGuid().ToString();
         }
 
-        public SkynetPortal(string baseUrl, string name)
+        public SkynetPortal(string baseUrl, string name) : this(baseUrl)
         {
-            this.BaseUrl = baseUrl;
-            this.InitialBaseUrl = baseUrl;
             this.Name = name;
         }
 
         [PrimaryKey]
         public string Id { get; set; }
 
-        public int PortalPreferencePosition { get; set; }
+        public int PortalPreferencesPosition { get; set; }
 
         public string Name { get; set; }
         

@@ -27,10 +27,7 @@ namespace SkyDrop.Droid.Views.PortalPreferences
             this.View = view;
         }
 
-        internal void EditPortal(int position)
-        {
-
-        }
+        internal void EditPortal(int position) => View.EditPortal(position);
 
         internal void ReorderPortals(int position, int newPosition) => View.ReorderPortals(position, newPosition);
     }
