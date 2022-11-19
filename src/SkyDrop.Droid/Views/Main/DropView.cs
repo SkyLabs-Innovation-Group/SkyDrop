@@ -30,6 +30,7 @@ using Plugin.CurrentActivity;
 using Java.Lang;
 using System.Runtime.Remoting.Contexts;
 using Environment = System.Environment;
+using static SkyDrop.Droid.Styles.StyleExtensions;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -92,6 +93,8 @@ namespace SkyDrop.Droid.Views.Main
             sendReceiveButtonsContainer = FindViewById<ConstraintLayout>(Resource.Id.SendReceiveContainer);
             homeMenu = FindViewById<LinearLayout>(Resource.Id.HomeMenu);
             homeMenuMini = FindViewById<MaterialCardView>(Resource.Id.HomeMenuMini);
+
+            receiveButton.StyleButton(Colors.Primary, true);
 
             animationContainer.TranslationZ = 100;
 

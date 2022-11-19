@@ -381,7 +381,7 @@
                     app:strokeWidth="1dp"
                     android:clickable="true"
                     app:cardCornerRadius="8dp"
-                    app:MvxBind="Click ReceiveCommand;MaterialCardState IsReceiveButtonGreen">
+                    app:MvxBind="Click ReceiveCommand">
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
