@@ -27,7 +27,6 @@ namespace SkyDrop.iOS.Views.PortalPreferences
       
       var set = CreateBindingSet();
       set.Bind(portalsTableSource).For(f => f.ItemsSource).To(vm => vm.UserPortals);
-
       set.Apply();
       
       

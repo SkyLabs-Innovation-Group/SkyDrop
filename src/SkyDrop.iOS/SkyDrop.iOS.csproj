@@ -119,10 +119,15 @@
     <Compile Include="Common\TouchInterceptor.cs" />
     <Compile Include="Bindings\LocalImagePreviewBinding.cs" />
     <Compile Include="Common\iOSUtil.cs" />
+    <Compile Include="Views\PortalPreferences\EditPortalViewController.cs" />
+    <Compile Include="Views\PortalPreferences\EditPortalViewController.designer.cs" >
+        <DependentUpon>FilePreviewCollectionViewCell.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\Settings\SettingsView.cs" />
     <Compile Include="Views\Settings\SettingsView.designer.cs">
       <DependentUpon>SettingsView.cs</DependentUpon>
     </Compile>
+    <InterfaceDefinition Include="Views\PortalPreferences\EditPortalViewController.xib" />
     <InterfaceDefinition Include="Views\PortalPreferences\PortalPreferencesCell.xib" />
     <InterfaceDefinition Include="Views\Settings\SettingsView.xib" />
     <InterfaceDefinition Include="Views\Files\FilesView.xib" />

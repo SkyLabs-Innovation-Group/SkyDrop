@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Acr.UserDialogs;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
 using Realms;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
+using SkyDrop.Core.ViewModels;
 
 namespace SkyDrop.Core.Services
 {
@@ -16,51 +20,38 @@ namespace SkyDrop.Core.Services
     private readonly IFileSystemService fileSystemService;
 
     public List<SkynetPortal> skynetPortals;
+    private readonly ISingletonService singletonService
+      ;
 
-    public PortalService(ILog log, IUserDialogs userDialogs, IFileSystemService fileSystemService)
+    private readonly IMvxNavigationService navigationService;
+
+    public PortalService(ISingletonService singletonService, ILog log, 
+      IUserDialogs userDialogs, IFileSystemService fileSystemService, IMvxNavigationService navigationService)
     {
+      this.singletonService = singletonService;
       this.log = log;
       this.userDialogs = userDialogs;
       this.fileSystemService = fileSystemService;
+      this.navigationService = navigationService;
     }
-
-    //public void SavePortal(SkynetPortal skynetPortal)
-    //{
-    //  string initialPortalNames = Xamarin.Essentials.Preferences.Get(UserPortalsListPrefKey, "");
-
-    //  string portalNames = initialPortalNames;
-    //  var portalNameList = portalNames.Split(',');
-
-    //  if (portalNameList.Contains(skynetPortal.BaseUrl))
-    //    return;
-
-    //  portalNames = portalNames + skynetPortal.BaseUrl + (string.IsNullOrEmpty(initialPortalNames) ? "" : ",");
-    //  Xamarin.Essentials.Preferences.Set(UserPortalsListPrefKey, portalNames);
-
-      
-    //}
-
-    //public List<SkynetPortal> GetSavedPortals()
-    //{
-    //  var portalList = new List<SkynetPortal>();
-    //  var portalNameList = Xamarin.Essentials.Preferences.Get(UserPortalsListPrefKey, "https://web3portal.com");
-
-    //  foreach (string portal in portalNameList.Split(','))
-    //  {
-    //    portalList.Add(new SkynetPortal(portal));
-    //  }
-
-    //  return portalList;
-    //}
 
     public List<SkynetPortalDVM> ConvertSkynetPortalsToDVMs(List<SkynetPortal> skynetPortals)
     {
       var dvmList = new List<SkynetPortalDVM>();
       foreach (var portal in skynetPortals)
       {
-        dvmList.Add(new SkynetPortalDVM(portal));
+        dvmList.Add(new SkynetPortalDVM(portal)
+        {
+          TapCommand = new MvxAsyncCommand(async () => await NavigateToEditPortal(portal.Id))
+        });
       }
       return dvmList.OrderByDescending(p => p.PortalPreferencesPosition).ToList();
+    }
+
+    private Task NavigateToEditPortal(string realmId)
+    {
+      return navigationService.Navigate<EditPortalViewModel, EditPortalViewModel.NavParam>(
+        new EditPortalViewModel.NavParam() { PortalId = realmId });
     }
   }
 

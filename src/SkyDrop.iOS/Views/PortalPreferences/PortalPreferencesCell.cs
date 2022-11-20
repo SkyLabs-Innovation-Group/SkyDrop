@@ -26,6 +26,7 @@ namespace SkyDrop.iOS.Views.PortalPreferences
                 var set = this.CreateBindingSet<PortalPreferencesCell, SkynetPortalDVM>();
                 set.Bind(PortalNameLabel).For(t => t.Text).To(vm => vm.Name);
                 set.Bind(PortalUrlLabel).For(t => t.Text).To(vm => vm.BaseUrl);
+                set.Bind(ContentView).For("Tap").To(vm => vm.TapCommand);
                 set.Apply();
             });   
         }
