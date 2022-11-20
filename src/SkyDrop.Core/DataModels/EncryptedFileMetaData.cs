@@ -18,30 +18,40 @@ namespace SkyDrop.Core.DataModels
         private const int recipientIdSizeBytes = 16;
         private const int recipientKeySizeBytes = 64;
 
-        public static (EncryptedFileMetaData metaData, byte[] encryptedData) GetEncryptedFileMetaData(byte[] encryptedFile)
+        public static (EncryptedFileMetaData metaData, byte[] encryptedData) GetEncryptedFileMetaData(
+            byte[] encryptedFile)
         {
-            var headerFormatIdentifierBytes = encryptedFile.Take(headerFormatIdentifierSizeBytes).ToArray(); //first 2 bytes
+            var headerFormatIdentifierBytes =
+                encryptedFile.Take(headerFormatIdentifierSizeBytes).ToArray(); //first 2 bytes
             var headerFormatIdentifier = BinaryPrimitives.ReadUInt16BigEndian(headerFormatIdentifierBytes);
 
             //check this is the headerFormatIdentifier value we expect (there is currently only 1)
             if (headerFormatIdentifier != 1)
                 throw new Exception("Unexpected file format");
 
-            var recipientsCountBytes = encryptedFile.Skip(headerFormatIdentifierSizeBytes).Take(recipientsCountSizeBytes).ToArray(); //second 2 bytes
+            var recipientsCountBytes = encryptedFile.Skip(headerFormatIdentifierSizeBytes)
+                .Take(recipientsCountSizeBytes).ToArray(); //second 2 bytes
             var recipientsCount = BinaryPrimitives.ReadUInt16BigEndian(recipientsCountBytes);
 
-            var metadataSizeBytes = headerFormatIdentifierSizeBytes + recipientsCountSizeBytes + senderIdSizeBytes + (recipientIdSizeBytes + recipientKeySizeBytes) * recipientsCount;
+            var metadataSizeBytes = headerFormatIdentifierSizeBytes + recipientsCountSizeBytes + senderIdSizeBytes +
+                                    (recipientIdSizeBytes + recipientKeySizeBytes) * recipientsCount;
 
             var metaDataBytes = encryptedFile.Take(metadataSizeBytes).ToArray();
             var encryptedData = encryptedFile.Skip(metadataSizeBytes).ToArray();
 
-            var senderIdBytes = metaDataBytes.Skip(headerFormatIdentifierSizeBytes).Skip(recipientsCountSizeBytes).Take(senderIdSizeBytes).ToArray();
+            var senderIdBytes = metaDataBytes.Skip(headerFormatIdentifierSizeBytes).Skip(recipientsCountSizeBytes)
+                .Take(senderIdSizeBytes).ToArray();
             var senderId = new Guid(senderIdBytes);
 
-            var recipientsListBytes = metaDataBytes.Skip(headerFormatIdentifierSizeBytes).Skip(recipientsCountSizeBytes).Skip(senderIdSizeBytes).ToArray();
+            var recipientsListBytes = metaDataBytes.Skip(headerFormatIdentifierSizeBytes).Skip(recipientsCountSizeBytes)
+                .Skip(senderIdSizeBytes).ToArray();
             var recipientKeys = DecodeRecipientsList(recipientsListBytes, recipientsCount);
 
-            var metaData = new EncryptedFileMetaData { HeaderFormatIdentifier = headerFormatIdentifier, RecipientsCount = recipientsCount, SenderId = senderId, RecipientKeys = recipientKeys };
+            var metaData = new EncryptedFileMetaData
+            {
+                HeaderFormatIdentifier = headerFormatIdentifier, RecipientsCount = recipientsCount, SenderId = senderId,
+                RecipientKeys = recipientKeys
+            };
 
             return (metaData, encryptedData);
         }
@@ -50,7 +60,7 @@ namespace SkyDrop.Core.DataModels
         {
             var recipientKeys = new Dictionary<Guid, byte[]>();
             int readIndex = 0;
-            for(int i = 0; i < recipientsCount; i++)
+            for (int i = 0; i < recipientsCount; i++)
             {
                 var recipientId = new Guid(recipientsList.Skip(readIndex).Take(recipientIdSizeBytes).ToArray());
                 readIndex += recipientIdSizeBytes;
@@ -65,4 +75,3 @@ namespace SkyDrop.Core.DataModels
         }
     }
 }
-
