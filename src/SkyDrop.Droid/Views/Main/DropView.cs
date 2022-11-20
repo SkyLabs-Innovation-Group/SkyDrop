@@ -94,7 +94,8 @@ namespace SkyDrop.Droid.Views.Main
             homeMenu = FindViewById<LinearLayout>(Resource.Id.HomeMenu);
             homeMenuMini = FindViewById<MaterialCardView>(Resource.Id.HomeMenuMini);
 
-            receiveButton.StyleButton(Colors.Primary, true);
+            sendButton.StyleButton(Colors.Primary, true);
+            receiveButton.StyleButton(Colors.GradientOcean, true);
 
             animationContainer.TranslationZ = 100;
 

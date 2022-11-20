@@ -83,8 +83,8 @@ namespace SkyDrop.iOS.Views.Drop
                 CancelIcon.TintColor = Colors.Red.ToNative();
                 CancelLabel.TextColor = Colors.Red.ToNative();
 
-                SendButton.StyleButton(Colors.Primary);
-                ReceiveButton.StyleButton(Colors.Primary, true);
+                SendButton.StyleButton(Colors.Primary, true);
+                ReceiveButton.StyleButton(Colors.GradientOcean, true);
 
                 //QR menu
                 CopyLinkButton.StyleButton(Colors.Primary);
@@ -100,7 +100,7 @@ namespace SkyDrop.iOS.Views.Drop
 
                 MiniMenuContainer.BackgroundColor = Colors.MidGrey.ToNative();
 
-                ProgressFillArea.BackgroundColor = Colors.GradientTurqouise.ToNative();
+                ProgressFillArea.BackgroundColor = Colors.Primary.ToNative();
                 ProgressFillArea.Layer.CornerRadius = 8;
 
                 BarcodeContainer.Layer.CornerRadius = 8;

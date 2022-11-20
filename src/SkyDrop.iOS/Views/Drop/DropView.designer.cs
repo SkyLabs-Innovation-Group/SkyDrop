@@ -269,56 +269,6 @@ namespace SkyDrop.iOS.Views.Drop
 				HomeMenu = null;
 			}
 
-			if (LeftNavDot != null) {
-				LeftNavDot.Dispose ();
-				LeftNavDot = null;
-			}
-
-			if (MiniMenuContactsButton != null) {
-				MiniMenuContactsButton.Dispose ();
-				MiniMenuContactsButton = null;
-			}
-
-			if (MiniMenuContainer != null) {
-				MiniMenuContainer.Dispose ();
-				MiniMenuContainer = null;
-			}
-
-			if (MiniMenuPortalsButton != null) {
-				MiniMenuPortalsButton.Dispose ();
-				MiniMenuPortalsButton = null;
-			}
-
-			if (MiniMenuSettingsButton != null) {
-				MiniMenuSettingsButton.Dispose ();
-				MiniMenuSettingsButton = null;
-			}
-
-			if (MiniMenuSkyDriveButton != null) {
-				MiniMenuSkyDriveButton.Dispose ();
-				MiniMenuSkyDriveButton = null;
-			}
-
-			if (MiniMenuContactsIcon != null) {
-				MiniMenuContactsIcon.Dispose ();
-				MiniMenuContactsIcon = null;
-			}
-
-			if (MiniMenuPortalsIcon != null) {
-				MiniMenuPortalsIcon.Dispose ();
-				MiniMenuPortalsIcon = null;
-			}
-
-			if (MiniMenuSettingsIcon != null) {
-				MiniMenuSettingsIcon.Dispose ();
-				MiniMenuSettingsIcon = null;
-			}
-
-			if (MiniMenuSkyDriveIcon != null) {
-				MiniMenuSkyDriveIcon.Dispose ();
-				MiniMenuSkyDriveIcon = null;
-			}
-
 			if (HomeMenuContactsIcon != null) {
 				HomeMenuContactsIcon.Dispose ();
 				HomeMenuContactsIcon = null;
@@ -337,6 +287,56 @@ namespace SkyDrop.iOS.Views.Drop
 			if (HomeMenuSkyDriveIcon != null) {
 				HomeMenuSkyDriveIcon.Dispose ();
 				HomeMenuSkyDriveIcon = null;
+			}
+
+			if (LeftNavDot != null) {
+				LeftNavDot.Dispose ();
+				LeftNavDot = null;
+			}
+
+			if (MiniMenuContactsButton != null) {
+				MiniMenuContactsButton.Dispose ();
+				MiniMenuContactsButton = null;
+			}
+
+			if (MiniMenuContactsIcon != null) {
+				MiniMenuContactsIcon.Dispose ();
+				MiniMenuContactsIcon = null;
+			}
+
+			if (MiniMenuContainer != null) {
+				MiniMenuContainer.Dispose ();
+				MiniMenuContainer = null;
+			}
+
+			if (MiniMenuPortalsButton != null) {
+				MiniMenuPortalsButton.Dispose ();
+				MiniMenuPortalsButton = null;
+			}
+
+			if (MiniMenuPortalsIcon != null) {
+				MiniMenuPortalsIcon.Dispose ();
+				MiniMenuPortalsIcon = null;
+			}
+
+			if (MiniMenuSettingsButton != null) {
+				MiniMenuSettingsButton.Dispose ();
+				MiniMenuSettingsButton = null;
+			}
+
+			if (MiniMenuSettingsIcon != null) {
+				MiniMenuSettingsIcon.Dispose ();
+				MiniMenuSettingsIcon = null;
+			}
+
+			if (MiniMenuSkyDriveButton != null) {
+				MiniMenuSkyDriveButton.Dispose ();
+				MiniMenuSkyDriveButton = null;
+			}
+
+			if (MiniMenuSkyDriveIcon != null) {
+				MiniMenuSkyDriveIcon.Dispose ();
+				MiniMenuSkyDriveIcon = null;
 			}
 
 			if (OpenButton != null) {
