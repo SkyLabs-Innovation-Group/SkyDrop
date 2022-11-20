@@ -1,10 +1,10 @@
 ﻿using System;
-
+using SkyDrop.Core.ViewModels;
 using UIKit;
 
 namespace SkyDrop.iOS.Views.PortalPreferences
 {
-  public partial class PortalPreferencesViewController : UIViewController
+  public partial class PortalPreferencesViewController : BaseViewController<PortalPreferencesViewModel>
   {
     public PortalPreferencesViewController() : base("PortalPreferencesViewController", null)
     {
@@ -14,6 +14,9 @@ namespace SkyDrop.iOS.Views.PortalPreferences
     {
       base.ViewDidLoad();
       // Perform any additional setup after loading the view, typically from a nib.
+      
+      var set = CreateBindingSet(); 
+      set.Apply();
     }
 
     public override void DidReceiveMemoryWarning()
