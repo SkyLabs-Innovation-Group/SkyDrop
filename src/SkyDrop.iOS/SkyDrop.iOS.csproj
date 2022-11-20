@@ -123,6 +123,7 @@
     <Compile Include="Views\Settings\SettingsView.designer.cs">
       <DependentUpon>SettingsView.cs</DependentUpon>
     </Compile>
+    <InterfaceDefinition Include="Views\PortalPreferences\PortalPreferencesCell.xib" />
     <InterfaceDefinition Include="Views\Settings\SettingsView.xib" />
     <InterfaceDefinition Include="Views\Files\FilesView.xib" />
     <Compile Include="Views\Files\FilesView.cs" />
@@ -284,6 +285,10 @@
     <Compile Include="Bindings\NextButtonStyleBinding.cs" />
     <ImageAsset Include="Media.xcassets\ic_encryption.imageset\encrypted-file-icon.pdf" />
     <ImageAsset Include="Media.xcassets\ic_encryption.imageset\Contents.json" />
+    <Compile Include="Views\PortalPreferences\PortalPreferencesCell.cs" />
+    <Compile Include="Views\PortalPreferences\PortalPreferencesCell.designer.cs">
+      <DependentUpon>PortalPreferencesCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

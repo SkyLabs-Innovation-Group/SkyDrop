@@ -1,5 +1,9 @@
 ﻿using System;
+using Acr.UserDialogs;
+using MvvmCross.Platforms.Ios.Binding.Views;
+using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels;
+using SkyDrop.iOS.Views.Files;
 using UIKit;
 
 namespace SkyDrop.iOS.Views.PortalPreferences
@@ -15,8 +19,18 @@ namespace SkyDrop.iOS.Views.PortalPreferences
       base.ViewDidLoad();
       // Perform any additional setup after loading the view, typically from a nib.
       
-      var set = CreateBindingSet(); 
+      var portalsTableSource = new MvxSimpleTableViewSource(PortalPreferencesTableView, PortalPreferencesCell.Key);
+      PortalPreferencesTableView.Source = portalsTableSource;
+      PortalPreferencesTableView.RegisterNibForCellReuse(PortalPreferencesCell.Nib, PortalPreferencesCell.Key);
+      PortalPreferencesTableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
+      PortalPreferencesTableView.BackgroundColor = Colors.DarkGrey.ToNative();
+      
+      var set = CreateBindingSet();
+      set.Bind(portalsTableSource).For(f => f.ItemsSource).To(vm => vm.UserPortals);
+
       set.Apply();
+      
+      
     }
 
     public override void DidReceiveMemoryWarning()

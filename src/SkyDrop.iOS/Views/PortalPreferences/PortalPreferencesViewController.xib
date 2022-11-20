@@ -10,6 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PortalPreferencesViewController">
             <connections>
+                <outlet property="PortalPreferencesTableView" destination="Ju0-6O-ZI8" id="ahp-La-H5g"/>
                 <outlet property="view" destination="Ju0-6O-ZI8" id="bSb-rl-ENV"/>
             </connections>
         </placeholder>
@@ -18,7 +19,7 @@
             <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-            <point key="canvasLocation" x="608" y="-64"/>
+            <point key="canvasLocation" x="760" y="-77"/>
         </tableView>
     </objects>
     <resources>
