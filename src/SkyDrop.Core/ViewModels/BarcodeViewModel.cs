@@ -14,12 +14,7 @@ namespace SkyDrop.Core.ViewModels.Main
 {
     public class BarcodeViewModel : BaseViewModel
     {
-        private readonly IApiService apiService;
-        private readonly IStorageService storageService;
-        private readonly IUserDialogs userDialogs;
-        private readonly IBarcodeService barcodeService;
-
-        private string barcodeMessage;
+        public const int TextDelayerTimeMs = 300;
 
         public IMvxCommand GenerateBarcodeCommand { get; set; }
         public IMvxCommand ScanBarcodeCommand { get; set; }
@@ -30,6 +25,13 @@ namespace SkyDrop.Core.ViewModels.Main
             get => _generateBarcodeAsyncFunc;
             set => _generateBarcodeAsyncFunc = value;
         }
+
+        private readonly IApiService apiService;
+        private readonly IStorageService storageService;
+        private readonly IUserDialogs userDialogs;
+        private readonly IBarcodeService barcodeService;
+
+        private string barcodeMessage;
 
         public BarcodeViewModel(ISingletonService singletonService,
                              IApiService apiService,

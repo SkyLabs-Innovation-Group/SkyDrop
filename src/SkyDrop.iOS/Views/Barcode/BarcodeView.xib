@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BarcodeView">
+            <connections>
+                <outlet property="BarcodeContainer" destination="yL5-8O-WaH" id="szL-KX-9yR"/>
+                <outlet property="BarcodeImage" destination="QpA-sF-4uK" id="ZtU-G9-238"/>
+                <outlet property="TextInput" destination="pcM-NE-mGY" id="6JF-O5-UKS"/>
+                <outlet property="TextInputContainer" destination="pTp-Cc-GWu" id="6Ty-Iu-hl5"/>
+                <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="2">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yL5-8O-WaH">
+                    <rect key="frame" x="16" y="60" width="382" height="382"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QpA-sF-4uK">
+                            <rect key="frame" x="0.0" y="0.0" width="382" height="382"/>
+                        </imageView>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="QpA-sF-4uK" firstAttribute="top" secondItem="yL5-8O-WaH" secondAttribute="top" id="OcQ-4l-iyG"/>
+                        <constraint firstAttribute="bottom" secondItem="QpA-sF-4uK" secondAttribute="bottom" id="TA6-yj-HO2"/>
+                        <constraint firstAttribute="width" secondItem="yL5-8O-WaH" secondAttribute="height" multiplier="1:1" id="gHF-wh-eUx"/>
+                        <constraint firstAttribute="trailing" secondItem="QpA-sF-4uK" secondAttribute="trailing" id="pMM-1N-VH6"/>
+                        <constraint firstItem="QpA-sF-4uK" firstAttribute="leading" secondItem="yL5-8O-WaH" secondAttribute="leading" id="vaS-bA-rvB"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="8"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pTp-Cc-GWu">
+                    <rect key="frame" x="16" y="458" width="382" height="42"/>
+                    <subviews>
+                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pcM-NE-mGY">
+                            <rect key="frame" x="4" y="4" width="374" height="34"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </textField>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="pcM-NE-mGY" firstAttribute="top" secondItem="pTp-Cc-GWu" secondAttribute="top" constant="4" id="LEQ-Df-ySn"/>
+                        <constraint firstItem="pcM-NE-mGY" firstAttribute="leading" secondItem="pTp-Cc-GWu" secondAttribute="leading" constant="4" id="dgd-3h-IwM"/>
+                        <constraint firstAttribute="trailing" secondItem="pcM-NE-mGY" secondAttribute="trailing" constant="4" id="ogF-h1-8wF"/>
+                        <constraint firstAttribute="bottom" secondItem="pcM-NE-mGY" secondAttribute="bottom" constant="4" id="zk6-su-UIU"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="pTp-Cc-GWu" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="TZ1-40-RiF"/>
+                <constraint firstAttribute="trailing" secondItem="yL5-8O-WaH" secondAttribute="trailing" constant="16" id="ahJ-wp-lrD"/>
+                <constraint firstItem="yL5-8O-WaH" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="b5w-Od-bFS"/>
+                <constraint firstItem="yL5-8O-WaH" firstAttribute="top" secondItem="2" secondAttribute="topMargin" constant="16" id="f4z-b4-V47"/>
+                <constraint firstItem="pTp-Cc-GWu" firstAttribute="top" secondItem="yL5-8O-WaH" secondAttribute="bottom" constant="16" id="xHs-ll-nzg"/>
+                <constraint firstAttribute="trailing" secondItem="pTp-Cc-GWu" secondAttribute="trailing" constant="16" id="y72-Jg-Wfj"/>
+            </constraints>
+            <point key="canvasLocation" x="88.405797101449281" y="-214.95535714285714"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
