@@ -563,10 +563,17 @@ namespace SkyDrop.Core.ViewModels.Main
             var file = isIos ? "Select Files" : "Select Multiple Files";
             var image = isIos ? "Select Images" : "Select Image File";
             var video = isIos ? "Select Video" : "Select Video File";
+            var text = "Text";
             var cancel = "cancel";
-            var fileType = await userDialogs.ActionSheetAsync("", cancel, null, null, file, image, video);
+            var fileType = await userDialogs.ActionSheetAsync("", cancel, null, null, file, image, video, text);
             if (fileType == cancel)
                 return null;
+
+            if (fileType == text)
+            {
+                await navigationService.Navigate<BarcodeViewModel>();
+                return null;
+            }
 
             SkyFilePickerType chosenType;
             if (fileType == image)
