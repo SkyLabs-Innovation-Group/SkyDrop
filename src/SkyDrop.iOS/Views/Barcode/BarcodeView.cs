@@ -27,6 +27,8 @@ namespace SkyDrop.iOS.Views.Barcode
             TextInputContainer.BackgroundColor = Colors.MidGrey.ToNative();
             TextInputContainer.Layer.CornerRadius = 8;
             TextInput.TextColor = Colors.LightGrey.ToNative();
+            TextInput.Layer.BorderWidth = 0;
+            TextInput.BorderStyle = UITextBorderStyle.None;
 
             InitTextTimer();
         }

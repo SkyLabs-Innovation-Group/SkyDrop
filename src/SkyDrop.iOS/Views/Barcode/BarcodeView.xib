@@ -44,21 +44,21 @@
                     </userDefinedRuntimeAttributes>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pTp-Cc-GWu">
-                    <rect key="frame" x="16" y="458" width="382" height="42"/>
+                    <rect key="frame" x="16" y="458" width="382" height="50"/>
                     <subviews>
                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pcM-NE-mGY">
-                            <rect key="frame" x="4" y="4" width="374" height="34"/>
+                            <rect key="frame" x="8" y="8" width="366" height="34"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits"/>
+                            <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                         </textField>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstItem="pcM-NE-mGY" firstAttribute="top" secondItem="pTp-Cc-GWu" secondAttribute="top" constant="4" id="LEQ-Df-ySn"/>
-                        <constraint firstItem="pcM-NE-mGY" firstAttribute="leading" secondItem="pTp-Cc-GWu" secondAttribute="leading" constant="4" id="dgd-3h-IwM"/>
-                        <constraint firstAttribute="trailing" secondItem="pcM-NE-mGY" secondAttribute="trailing" constant="4" id="ogF-h1-8wF"/>
-                        <constraint firstAttribute="bottom" secondItem="pcM-NE-mGY" secondAttribute="bottom" constant="4" id="zk6-su-UIU"/>
+                        <constraint firstItem="pcM-NE-mGY" firstAttribute="top" secondItem="pTp-Cc-GWu" secondAttribute="top" constant="8" id="LEQ-Df-ySn"/>
+                        <constraint firstItem="pcM-NE-mGY" firstAttribute="leading" secondItem="pTp-Cc-GWu" secondAttribute="leading" constant="8" id="dgd-3h-IwM"/>
+                        <constraint firstAttribute="trailing" secondItem="pcM-NE-mGY" secondAttribute="trailing" constant="8" id="ogF-h1-8wF"/>
+                        <constraint firstAttribute="bottom" secondItem="pcM-NE-mGY" secondAttribute="bottom" constant="8" id="zk6-su-UIU"/>
                     </constraints>
                 </view>
             </subviews>
