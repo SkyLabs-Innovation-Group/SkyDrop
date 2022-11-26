@@ -81,8 +81,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool UserIsSwipingResult { get; set; }
         public bool NavDotsVisible => DropViewUIState != DropViewState.ConfirmFilesState && SwipeNavigationEnabled;
         public string SendButtonLabel => IsEncrypting ? "ENCRYPTING" :
-            IsUploading ? StagedFiles?.Count > 2 ? "SENDING FILES" : "SENDING FILE" :
-            DropViewUIState == DropViewState.ConfirmFilesState && StagedFiles?.Count > 2 ? "SEND FILES" : "SEND FILE";
+            IsUploading ? StagedFiles?.Count > 2 ? "SENDING FILES" : "SENDING FILE" : "SEND";
         public string ReceiveButtonLabel { get; set; } = receiveFileText;
         public bool IsReceivingFile { get; set; }
         public bool IsDownloadingFile { get; set; }
@@ -138,8 +137,8 @@ namespace SkyDrop.Core.ViewModels.Main
             Settings = 4
         }
 
-        private const string receiveFileText = "RECEIVE FILE";
-        private const string receivingFileText = "RECEIVING FILE...";
+        private const string receiveFileText = "RECEIVE";
+        private const string receivingFileText = "RECEIVING...";
         private const string noInternetPrompt = "Please check your internet connection";
         private string errorMessage;
         private CancellationTokenSource uploadCancellationToken;
