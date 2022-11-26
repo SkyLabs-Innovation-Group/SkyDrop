@@ -22,6 +22,8 @@ namespace SkyDrop.iOS.Views.Barcode
         {
             base.ViewDidLoad();
 
+            AddBackButton(() => ViewModel.BackCommand.Execute());
+
             BarcodeContainer.ClipsToBounds = true;
             BarcodeContainer.BackgroundColor = Colors.MidGrey.ToNative();
             BarcodeContainer.AddGestureRecognizer(new UITapGestureRecognizer(() => TextInput.BecomeFirstResponder()));

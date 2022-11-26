@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using MvvmCross.Commands;
+using MvvmCross.Navigation;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Services;
@@ -19,6 +20,8 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public IMvxCommand GenerateBarcodeCommand { get; set; }
         public IMvxCommand ScanBarcodeCommand { get; set; }
+        public IMvxCommand BackCommand { get; set; }
+        public IMvxCommand CloseKeyboardCommand { get; set; }
 
         private Func<Task> _generateBarcodeAsyncFunc;
         public Func<Task> GenerateBarcodeAsyncFunc
@@ -31,6 +34,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IStorageService storageService;
         private readonly IUserDialogs userDialogs;
         private readonly IBarcodeService barcodeService;
+        private readonly IMvxNavigationService navigationService;
 
         private string barcodeMessage;
 
@@ -39,6 +43,7 @@ namespace SkyDrop.Core.ViewModels.Main
                              IStorageService storageService,
                              IUserDialogs userDialogs,
                              IBarcodeService barcodeService,
+                             IMvxNavigationService navigationService,
                              ILog log) : base(singletonService)
         {
             Title = "Create QR";
@@ -47,9 +52,11 @@ namespace SkyDrop.Core.ViewModels.Main
             this.storageService = storageService;
             this.userDialogs = userDialogs;
             this.barcodeService = barcodeService;
+            this.navigationService = navigationService;
 
             GenerateBarcodeCommand = new MvxAsyncCommand(async () => await GenerateBarcodeAsyncFunc());
             ScanBarcodeCommand = new MvxAsyncCommand(async () => await ScanBarcode());
+            BackCommand = new MvxAsyncCommand(Done);
         }
 
         private async Task ScanBarcode()
@@ -68,6 +75,12 @@ namespace SkyDrop.Core.ViewModels.Main
 
             if (!string.IsNullOrEmpty(barcodeMessage))
                 userDialogs.Toast(barcodeMessage, new TimeSpan(0, 0, 10));
+        }
+
+        private async Task Done()
+        {
+            await navigationService.Close(this);
+            CloseKeyboardCommand?.Execute();
         }
     }
 }

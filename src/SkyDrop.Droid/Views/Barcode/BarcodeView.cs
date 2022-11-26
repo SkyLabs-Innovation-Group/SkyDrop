@@ -12,6 +12,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Google.Android.Material.Card;
+using MvvmCross.Commands;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels;
 using SkyDrop.Core.ViewModels.Main;
@@ -32,6 +33,8 @@ namespace SkyDrop.Droid.Views.Barcode
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+
+            ViewModel.CloseKeyboardCommand = new MvxCommand(() => this.HideKeyboard());
 
             editText = FindViewById<EditText>(Resource.Id.BarcodeEditText);
             editText.RequestFocus();
