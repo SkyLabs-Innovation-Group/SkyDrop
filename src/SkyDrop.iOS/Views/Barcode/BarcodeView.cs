@@ -24,13 +24,20 @@ namespace SkyDrop.iOS.Views.Barcode
 
             BarcodeContainer.ClipsToBounds = true;
             BarcodeContainer.BackgroundColor = Colors.MidGrey.ToNative();
+            BarcodeContainer.AddGestureRecognizer(new UITapGestureRecognizer(() => TextInput.BecomeFirstResponder()));
             TextInputContainer.BackgroundColor = Colors.MidGrey.ToNative();
             TextInputContainer.Layer.CornerRadius = 8;
             TextInput.TextColor = Colors.LightGrey.ToNative();
             TextInput.Layer.BorderWidth = 0;
             TextInput.BorderStyle = UITextBorderStyle.None;
+            TextInput.Text = BarcodeViewModel.DefaultText;
+            TextInput.BecomeFirstResponder();
 
             InitTextTimer();
+
+            var set = this.CreateBindingSet();
+            set.Bind(this).For(t => t.Title).To(vm => vm.Title);
+            set.Apply();
         }
 
         /// <summary>
@@ -42,6 +49,13 @@ namespace SkyDrop.iOS.Views.Barcode
             {
                 try
                 {
+                    if (TextInput.Text.IsNullOrEmpty())
+                    {
+                        //clear image view
+                        BarcodeImage.Image = null;
+                        return;
+                    }
+
                     var screenDensity = (int)UIScreen.MainScreen.Scale;
                     var matrix = ViewModel.GenerateBarcode(TextInput.Text, (int)BarcodeImage.Frame.Width * screenDensity, (int)BarcodeImage.Frame.Height * screenDensity);
                     var image = await iOSUtil.BitMatrixToImage(matrix);
@@ -64,6 +78,7 @@ namespace SkyDrop.iOS.Views.Barcode
             textTimer.Interval = BarcodeViewModel.TextDelayerTimeMs;
             textTimer.Elapsed += TextTimer_Tick;
             TextInput.EditingChanged += (s, e) => textTimer.Start();
+            textTimer.Start();
         }
 
         private void TextTimer_Tick(object sender, EventArgs e)

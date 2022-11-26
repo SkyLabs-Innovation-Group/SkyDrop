@@ -34,10 +34,20 @@ namespace SkyDrop.Droid.Views.Barcode
             base.OnCreate(savedInstanceState);
 
             editText = FindViewById<EditText>(Resource.Id.BarcodeEditText);
+            editText.RequestFocus();
 
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImageView);
 
+            var textInputContainer = FindViewById<MaterialCardView>(Resource.Id.TextInputContainer);
+            textInputContainer.Click += (s, e) =>
+            {
+                editText.RequestFocus();
+                this.ShowKeyboard();
+            };
+
             InitTextTimer();
+
+            this.ShowKeyboard();
         }
 
         /// <summary>
@@ -50,13 +60,14 @@ namespace SkyDrop.Droid.Views.Barcode
                 if (text.IsNullOrEmpty())
                 {
                     //clear image view
-                    barcodeImageView.SetImageResource(Resource.Color.clear);
+                    RunOnUiThread(() => barcodeImageView.SetImageResource(Resource.Color.clear));
                     return;
                 }
 
                 var matrix = ViewModel.GenerateBarcode(text, barcodeImageView.Width, barcodeImageView.Height);
                 var bitmap = await AndroidUtil.BitMatrixToBitmap(matrix);
-                barcodeImageView.SetImageBitmap(bitmap);
+
+                RunOnUiThread(() => barcodeImageView.SetImageBitmap(bitmap));
             }
             catch(Exception e)
             {
@@ -73,6 +84,7 @@ namespace SkyDrop.Droid.Views.Barcode
             textTimer.Interval = BarcodeViewModel.TextDelayerTimeMs;
             textTimer.Elapsed += TextTimer_Tick;
             editText.AfterTextChanged += (s, e) => textTimer.Start();
+            textTimer.Start();
         }
 
         private void TextTimer_Tick(object sender, EventArgs e)

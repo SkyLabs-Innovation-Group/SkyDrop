@@ -31,6 +31,7 @@
                 android:layout_height="match_parent"/>
         </com.google.android.material.card.MaterialCardView>
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/TextInputContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -43,8 +44,11 @@
                 android:id="@+id/BarcodeEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:textColor="@color/lightGrey"/>
+                android:layout_margin="16dp"
+                android:text="QR text"
+                android:textColor="@color/lightGrey"
+                android:background="@android:color/transparent"
+                android:inputType="textFilter|textNoSuggestions"/>
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

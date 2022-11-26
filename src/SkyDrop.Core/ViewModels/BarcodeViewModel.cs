@@ -15,6 +15,7 @@ namespace SkyDrop.Core.ViewModels.Main
     public class BarcodeViewModel : BaseViewModel
     {
         public const int TextDelayerTimeMs = 300;
+        public const string DefaultText = "QR text";
 
         public IMvxCommand GenerateBarcodeCommand { get; set; }
         public IMvxCommand ScanBarcodeCommand { get; set; }
@@ -40,7 +41,7 @@ namespace SkyDrop.Core.ViewModels.Main
                              IBarcodeService barcodeService,
                              ILog log) : base(singletonService)
         {
-            Title = "Scan";
+            Title = "Create QR";
 
             this.apiService = apiService;
             this.storageService = storageService;
