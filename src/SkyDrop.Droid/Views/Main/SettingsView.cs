@@ -25,12 +25,12 @@ namespace SkyDrop.Droid.Views.Main
             base.OnCreate(savedInstanceState);
             BindViews();
 
-            ViewModel.CloseKeyboardCommand = new MvxCommand(() => this.HideKeyboard());
+            ViewModel.CloseKeyboardCommand = new MvxAsyncCommand(this.HideKeyboard);
 
             portalEditText.Text = SkynetPortal.SelectedPortal.ToString();
             saveButton.Click += async (s, e) =>
             {
-                this.HideKeyboard();
+                await this.HideKeyboard();
                 await ViewModel.ValidateAndTrySetSkynetPortalCommand.ExecuteAsync(portalEditText.Text);
                 portalEditText.Text = SkynetPortal.SelectedPortal.BaseUrl;
             };

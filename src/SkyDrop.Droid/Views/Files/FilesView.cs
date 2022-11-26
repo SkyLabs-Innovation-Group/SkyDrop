@@ -31,6 +31,9 @@ namespace SkyDrop.Droid.Views.Main
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+
+            ViewModel.CloseKeyboardCommand = new MvxAsyncCommand(this.HideKeyboard);
+
             FileExplorerView = FindViewById<FileExplorerView>(Resource.Id.FilesRecycler);
             FileExplorerView.Init(BindingContext);
 
