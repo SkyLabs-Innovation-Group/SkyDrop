@@ -938,7 +938,7 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             catch(Exception e)
             {
-                userDialogs.Toast(e.Message);
+                userDialogs.Toast(e.Message, TimeSpan.FromSeconds(4));
             }
             finally
             {
