@@ -71,7 +71,6 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsBarcodeVisible { get; set; } //visibility for BarcodeContainer and BarcodeMenu
         public bool IsPreviewImageVisible { get; set; } //toggle for barcode / preview image
         public bool IsStagedFilesVisible => DropViewUIState == DropViewState.ConfirmFilesState;
-        public bool IsSendButtonGreen { get; set; } = true;
         public bool IsReceiveButtonGreen { get; set; } = true;
         public string UploadTimerText { get; set; }
         public bool IsAnimatingBarcodeOut { get; set; }
@@ -239,7 +238,6 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public void ResetUI(bool leaveBarcode = false)
         {
-            IsSendButtonGreen = true;
             IsReceiveButtonGreen = true;
             UploadTimerText = "";
             FileSize = "";
@@ -269,7 +267,6 @@ namespace SkyDrop.Core.ViewModels.Main
 
             if (UserIsSwiping()) return;
 
-            IsSendButtonGreen = true;
             IsReceiveButtonGreen = false;
 
             //select file
@@ -423,7 +420,6 @@ namespace SkyDrop.Core.ViewModels.Main
                 //don't allow user to scan barcode from confirm upload screen
                 if (DropViewUIState == DropViewState.ConfirmFilesState) return;
 
-                IsSendButtonGreen = false;
                 IsReceiveButtonGreen = true;
                 SlideReceiveButtonToCenterCommand.Execute();
                 ReceiveButtonLabel = receivingFileText;
@@ -484,7 +480,6 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 IsReceivingFile = false;
                 ReceiveButtonLabel = receiveFileText;
-                IsSendButtonGreen = true;
                 IsReceiveButtonGreen = true;
             }
         }

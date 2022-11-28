@@ -309,7 +309,7 @@
                     android:clickable="true"
                     app:cardCornerRadius="8dp"
                     android:translationZ="1dp"
-                    app:MvxBind="Click SendCommand;MaterialCardState IsSendButtonGreen">
+                    app:MvxBind="Click SendCommand">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
