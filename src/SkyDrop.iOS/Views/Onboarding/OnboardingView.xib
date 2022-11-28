@@ -179,6 +179,9 @@
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Glacier Mints" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dWL-qe-qeJ">
                     <rect key="frame" x="16" y="409.5" width="382" height="37"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="37" id="5SG-vS-p0U"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="31"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -202,7 +205,7 @@
                 <constraint firstItem="q07-x6-IJS" firstAttribute="top" secondItem="2" secondAttribute="topMargin" constant="16" id="OPp-S0-mBZ"/>
                 <constraint firstItem="dWL-qe-qeJ" firstAttribute="top" secondItem="q07-x6-IJS" secondAttribute="bottom" id="Spf-Yh-Mhc"/>
                 <constraint firstItem="dWL-qe-qeJ" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="16" id="XVy-sO-eqv"/>
-                <constraint firstItem="MvX-hY-9jN" firstAttribute="top" secondItem="6cq-m6-cSe" secondAttribute="bottom" constant="16" id="aor-yx-wSp"/>
+                <constraint firstItem="MvX-hY-9jN" firstAttribute="top" secondItem="6cq-m6-cSe" secondAttribute="bottom" priority="999" constant="16" id="aor-yx-wSp"/>
                 <constraint firstAttribute="trailing" secondItem="q07-x6-IJS" secondAttribute="trailing" constant="16" id="e0q-kL-HkH"/>
                 <constraint firstItem="6cq-m6-cSe" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="11" id="zFY-Im-vzE"/>
             </constraints>
