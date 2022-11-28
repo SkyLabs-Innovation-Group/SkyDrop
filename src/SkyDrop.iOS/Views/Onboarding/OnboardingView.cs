@@ -7,7 +7,6 @@ using SkyDrop.Core.ViewModels;
 using SkyDrop.iOS.Bindings;
 using SkyDrop.iOS.Styles;
 using UIKit;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SkyDrop.iOS.Views.Onboarding
 {
