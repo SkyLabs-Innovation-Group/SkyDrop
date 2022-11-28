@@ -83,10 +83,8 @@ namespace SkyDrop.iOS.Views.Drop
                 CancelIcon.TintColor = Colors.Red.ToNative();
                 CancelLabel.TextColor = Colors.Red.ToNative();
 
-                SendButton.BackgroundColor = Colors.Primary.ToNative();
-                ReceiveButton.BackgroundColor = Colors.GradientOcean.ToNative();
-                SendButton.Layer.CornerRadius = 8;
-                ReceiveButton.Layer.CornerRadius = 8;
+                SendButton.StyleButton(Colors.Primary, true);
+                ReceiveButton.StyleButton(Colors.GradientOcean, true);
 
                 //QR menu
                 CopyLinkButton.StyleButton(Colors.Primary);
@@ -95,14 +93,14 @@ namespace SkyDrop.iOS.Views.Drop
                 ShareButton.StyleButton(Colors.GradientOcean);
 
                 //home menu
-                SkyDriveButton.StyleButton(Colors.GradientOcean, true);
-                PortalsButton.StyleButton(Colors.GradientTurqouise, true);
-                ContactsButton.StyleButton(Colors.GradientGreen, true);
-                SettingsButton.StyleButton(Colors.Primary, true);
+                SkyDriveButton.StyleButton(Colors.Primary, true);
+                PortalsButton.StyleButton(Colors.GradientGreen, true);
+                ContactsButton.StyleButton(Colors.GradientTurqouise, true);
+                SettingsButton.StyleButton(Colors.GradientOcean, true);
 
                 MiniMenuContainer.BackgroundColor = Colors.MidGrey.ToNative();
 
-                ProgressFillArea.BackgroundColor = Colors.GradientTurqouise.ToNative();
+                ProgressFillArea.BackgroundColor = Colors.Primary.ToNative();
                 ProgressFillArea.Layer.CornerRadius = 8;
 
                 BarcodeContainer.Layer.CornerRadius = 8;

@@ -43,6 +43,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand SaveSelectedUnzippedFilesCommand { get; set; }
         public IMvxCommand SaveArchiveCommand { get; set; }
         public IMvxCommand ExtractArchiveCommand { get; set; }
+        public IMvxCommand CloseKeyboardCommand { get; set; }
         public bool IsUnzippedFilesMode { get; set; }
         public string ArchiveUrl { get; set; }
         public bool IsError { get; set; }
@@ -452,6 +453,8 @@ namespace SkyDrop.Core.ViewModels.Main
         private async Task AddFolder()
         {
             var result = await userDialogs.PromptAsync("Folder name");
+            CloseKeyboardCommand?.Execute();
+
             if (!result.Ok)
                 return;
 

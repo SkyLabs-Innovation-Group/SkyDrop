@@ -25,7 +25,7 @@ namespace SkyDrop.Droid.Views.Main
         {
             base.OnCreate(bundle);
 
-            ViewModel.CloseKeyboardCommand = new MvxCommand(() => this.HideKeyboard());
+            ViewModel.CloseKeyboardCommand = new MvxAsyncCommand(this.HideKeyboard);
         }
     }
 }
