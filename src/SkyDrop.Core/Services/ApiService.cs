@@ -100,6 +100,9 @@ namespace SkyDrop.Core.Services
             //download
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var response = await httpClient.GetAsync(url);
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                throw new Exception("Unauthorized. Check your API key is set correctly in the Portals screen.");
+
             if (!response.IsSuccessStatusCode)
                 throw new Exception(response.StatusCode.ToString());
             
