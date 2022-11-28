@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Acr.UserDialogs;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using SkyDrop.Core.Utility;
@@ -12,6 +13,8 @@ namespace SkyDrop.iOS.Views.Onboarding
     [MvxChildPresentation]
     public partial class OnboardingView : BaseViewController<OnboardingViewModel>
     {
+        private bool isFirstConstraintUpdate = true;
+
         public OnboardingView() : base("OnboardingView", null)
         {
         }
@@ -32,7 +35,7 @@ namespace SkyDrop.iOS.Views.Onboarding
 
             var set = this.CreateBindingSet();
             set.Bind(TitleLabel).To(vm => vm.TitleText);
-            set.Bind(MainTextView).To(vm => vm.DescriptionText);
+            set.Bind(this).For(t => t.DescriptionText).To(vm => vm.DescriptionText);
             set.Bind(NextButton).For(NextButtonStyleBinding.Name).To(vm => vm.IsLastPage);
             set.Bind(PreviousButton).For(a => a.Hidden).To(vm => vm.IsFirstPage);
             set.Bind(NextButton).For("Tap").To(vm => vm.NextPageCommand);
@@ -40,6 +43,20 @@ namespace SkyDrop.iOS.Views.Onboarding
             set.Bind(Icon).For(IconBinding.Name).To(vm => vm.Icon);
             set.Bind(this).For(v => v.Title).To(vm => vm.Title);
             set.Apply();
+        }
+
+        public string DescriptionText
+        {
+            get => "";
+            set
+            {
+                MainTextView.Text = value;
+
+                //resize text box to fit
+                var totalHorizontalMargin = 22;
+                var idealSize = MainTextView.SizeThatFits(new CoreGraphics.CGSize(UIScreen.MainScreen.Bounds.Width - totalHorizontalMargin, double.MaxValue));
+                DescriptionHeightConstraint.Constant = idealSize.Height;
+            }
         }
     }
 }
