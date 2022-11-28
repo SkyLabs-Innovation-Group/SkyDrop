@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Acr.UserDialogs;
+using Microsoft.AppCenter.Crashes;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
@@ -464,6 +465,10 @@ namespace SkyDrop.Core.ViewModels.Main
             catch (Exception e)
             {
                 Log.Exception(e);
+
+                var dict = new Dictionary<string, string>();
+                dict.Add("Reason", "User scanned a QR code using Receive button");
+                Crashes.TrackError(e);
 
                 //avoid crashing android by NOT showing a toast before the scanner activity has closed
                 var error = "Not a link, QR code content was copied to clipboard";
