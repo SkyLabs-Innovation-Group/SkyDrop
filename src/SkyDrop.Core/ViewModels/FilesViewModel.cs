@@ -368,6 +368,7 @@ namespace SkyDrop.Core.ViewModels.Main
             Title = folder.Name;
             IsFoldersVisible = false;
             CurrentFolder = folder;
+            UpdateTopBarButtonsCommand?.Execute();
         }
 
         private async Task FileTapped(SkyFile selectedFile)
@@ -399,6 +400,14 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task GoBack()
         {
+            if (IsMovingFile)
+            {
+                IsMovingFile = false;
+                Title = "SkyDrive";
+                moveFilesCompletionSource.SetResult(null);
+                return;
+            }
+
             if (IsSelectionActive)
             {
                 ExitSelection();
@@ -411,6 +420,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 SkyFiles.Clear();
                 IsFoldersVisible = true;
                 Title = "SkyDrive";
+                UpdateTopBarButtonsCommand?.Execute();
                 return;
             }
 
@@ -482,6 +492,13 @@ namespace SkyDrop.Core.ViewModels.Main
             moveFilesCompletionSource = new TaskCompletionSource<IFolderItem>();
             var folder = await moveFilesCompletionSource.Task;
             IsMovingFile = false;
+
+            if (folder == null)
+            {
+                //user tapped back button to exit this action
+                return;
+            }
+
             if (folder is SentFolder || folder is ReceivedFolder)
             {
                 userDialogs.Toast($"Cannot move file{s} to {folder.Name}");

@@ -46,12 +46,13 @@ namespace SkyDrop.iOS.Views.Files
             deleteButton.Clicked += (s, e) => ViewModel.DeleteFileCommand.Execute();
             moveButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_folder_move") };
             moveButton.Clicked += (s, e) => ViewModel.MoveFileCommand.Execute();
-            layoutToggleButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_folder_add") };
+            layoutToggleButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_folder_list") };
             layoutToggleButton.Clicked += (s, e) => ToggleViewLayout();
             NavigationItem.RightBarButtonItem = layoutToggleButton;
             NavigationItem.RightBarButtonItem.TintColor = UIColor.White;
             NavigationController.NavigationBar.TintColor = UIColor.White;
             NavigationController.View.BackgroundColor = UIColor.Clear;
+            UpdateTopBarButtons();
 
             AddBackButton(() => ViewModel.BackCommand.Execute());
 
@@ -110,6 +111,7 @@ namespace SkyDrop.iOS.Views.Files
                 buttons.Add(saveFilesButton);
 
             NavigationItem.RightBarButtonItems = buttons.ToArray();
+            UpdateLayoutButtonIcon();
         }
 
         private void ToggleViewLayout()
