@@ -16,7 +16,7 @@ SkyDrop is free to download and has no ads; your files are uploaded to your pref
 
 This project is open source under MIT license. We built SkyDrop using .NET’s native cross-platform app framework Xamarin and MvvmCross framework.
 
-We are working on updates FAQs now that the Skynet Labs portals have shut down. The default portal in app now is https://web3portal.com/, please check their privacy policy.
+We are working on updated FAQs now that the Skynet Labs portals have shut down. The default portal in app now is https://web3portal.com/, please check their privacy policy.
 
 To turn a skylink into a QR code on your PC, you can use our adjacent web app at https://encodeqr.hns.web3portal.com/
 
