@@ -19,6 +19,9 @@ namespace SkyDrop.iOS.Views.Barcode
 		UIKit.UIImageView BarcodeImage { get; set; }
 
 		[Outlet]
+		UIKit.UIButton OkButton { get; set; }
+
+		[Outlet]
 		UIKit.UITextField TextInput { get; set; }
 
 		[Outlet]
@@ -26,6 +29,11 @@ namespace SkyDrop.iOS.Views.Barcode
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (BarcodeContainer != null) {
+				BarcodeContainer.Dispose ();
+				BarcodeContainer = null;
+			}
+
 			if (BarcodeImage != null) {
 				BarcodeImage.Dispose ();
 				BarcodeImage = null;
@@ -36,14 +44,14 @@ namespace SkyDrop.iOS.Views.Barcode
 				TextInput = null;
 			}
 
-			if (BarcodeContainer != null) {
-				BarcodeContainer.Dispose ();
-				BarcodeContainer = null;
-			}
-
 			if (TextInputContainer != null) {
 				TextInputContainer.Dispose ();
 				TextInputContainer = null;
+			}
+
+			if (OkButton != null) {
+				OkButton.Dispose ();
+				OkButton = null;
 			}
 		}
 	}

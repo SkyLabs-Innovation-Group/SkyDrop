@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Timers;
 using Acr.UserDialogs;
+using MvvmCross.Commands;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.iOS.Common;
@@ -24,6 +25,13 @@ namespace SkyDrop.iOS.Views.Barcode
 
             AddBackButton(() => ViewModel.BackCommand.Execute());
 
+            ViewModel.CloseKeyboardCommand = new MvxCommand(() =>
+            {
+                View.EndEditing(true);
+                OkButton.Hidden = true;
+            });
+            TextInput.EditingDidBegin += (s, e) => OkButton.Hidden = false;
+
             BarcodeContainer.ClipsToBounds = true;
             BarcodeContainer.BackgroundColor = Colors.MidGrey.ToNative();
             BarcodeContainer.AddGestureRecognizer(new UITapGestureRecognizer(() => TextInput.BecomeFirstResponder()));
@@ -34,11 +42,14 @@ namespace SkyDrop.iOS.Views.Barcode
             TextInput.BorderStyle = UITextBorderStyle.None;
             TextInput.Text = BarcodeViewModel.DefaultText;
             TextInput.BecomeFirstResponder();
+            OkButton.TintColor = Colors.Primary.ToNative();
+            OkButton.BackgroundColor = Colors.MidGrey.ToNative();
 
             InitTextTimer();
 
             var set = this.CreateBindingSet();
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
+            set.Bind(OkButton).To(vm => vm.CloseKeyboardCommand);
             set.Apply();
         }
 
