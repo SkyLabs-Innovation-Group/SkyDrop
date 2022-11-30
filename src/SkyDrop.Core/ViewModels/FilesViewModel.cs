@@ -488,6 +488,7 @@ namespace SkyDrop.Core.ViewModels.Main
             IsMovingFile = true;
             IsFoldersVisible = true;
             Title = $"Moving {selectedFiles.Count} file{s}";
+            UpdateTopBarButtonsCommand?.Execute();
 
             moveFilesCompletionSource = new TaskCompletionSource<IFolderItem>();
             var folder = await moveFilesCompletionSource.Task;

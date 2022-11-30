@@ -110,6 +110,9 @@ namespace SkyDrop.iOS.Views.Files
             if (ViewModel.IsSaveButtonVisible)
                 buttons.Add(saveFilesButton);
 
+            //buttons go right to left on iOS
+            buttons.Reverse();
+
             NavigationItem.RightBarButtonItems = buttons.ToArray();
             UpdateLayoutButtonIcon();
         }
