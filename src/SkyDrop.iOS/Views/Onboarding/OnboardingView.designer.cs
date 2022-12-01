@@ -13,6 +13,9 @@ namespace SkyDrop.iOS.Views.Onboarding
 	partial class OnboardingView
 	{
 		[Outlet]
+		UIKit.NSLayoutConstraint DescriptionHeightConstraint { get; set; }
+
+		[Outlet]
 		UIKit.UIImageView Icon { get; set; }
 
 		[Outlet]
@@ -29,6 +32,11 @@ namespace SkyDrop.iOS.Views.Onboarding
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (Icon != null) {
+				Icon.Dispose ();
+				Icon = null;
+			}
+
 			if (MainTextView != null) {
 				MainTextView.Dispose ();
 				MainTextView = null;
@@ -49,9 +57,9 @@ namespace SkyDrop.iOS.Views.Onboarding
 				TitleLabel = null;
 			}
 
-			if (Icon != null) {
-				Icon.Dispose ();
-				Icon = null;
+			if (DescriptionHeightConstraint != null) {
+				DescriptionHeightConstraint.Dispose ();
+				DescriptionHeightConstraint = null;
 			}
 		}
 	}

@@ -264,7 +264,7 @@ namespace SkyDrop.Droid.Helper
             });
         }
 
-        public static void HideKeyboard(this Activity activity)
+        public static async Task HideKeyboard(this Activity activity)
         {
             try
             {
@@ -272,9 +272,9 @@ namespace SkyDrop.Droid.Helper
                 var inputMethodManager = activity.GetSystemService(Activity.InputMethodService) as InputMethodManager;
                 if (inputMethodManager != null)
                 {
-                    var token = activity.CurrentFocus?.WindowToken;
-                    inputMethodManager.HideSoftInputFromWindow(token, HideSoftInputFlags.None);
+                    await Task.Delay(100);
 
+                    inputMethodManager.ToggleSoftInput((ShowFlags)1, 0);
                     activity.Window.DecorView.ClearFocus();
                 }
             }
@@ -314,6 +314,11 @@ namespace SkyDrop.Droid.Helper
             }
 
             return default(T);
+        }
+
+        public static ViewStates ToVisibility(this bool value)
+        {
+            return value ? ViewStates.Visible : ViewStates.Gone;
         }
     }
 }

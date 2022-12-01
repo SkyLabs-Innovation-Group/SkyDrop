@@ -43,6 +43,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand SaveSelectedUnzippedFilesCommand { get; set; }
         public IMvxCommand SaveArchiveCommand { get; set; }
         public IMvxCommand ExtractArchiveCommand { get; set; }
+        public IMvxCommand CloseKeyboardCommand { get; set; }
+        public IMvxCommand UpdateTopBarButtonsCommand { get; set; }
         public bool IsUnzippedFilesMode { get; set; }
         public string ArchiveUrl { get; set; }
         public bool IsError { get; set; }
@@ -54,16 +56,18 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsFoldersVisible { get; set; } = true;
         public bool IsSelectionActive => GetIsSelectionActive();
         public bool IsMovingFile { get; set; }
+        public bool IsSavingArchive { get; set; }
+        public bool IsExtractingArchive { get; set; }
+        public List<SkyFileDVM> FilesToMove { get; set; }
+        public IFolderItem CurrentFolder { get; set; }
+
+        //for top bar buttons
         public bool IsDeleteButtonVisible => IsSelectionActive && !IsUnzippedFilesMode;
         public bool IsMoveButtonVisible => IsSelectionActive && !IsFoldersVisible && !IsUnzippedFilesMode;
         public bool IsLayoutButtonVisible => !IsSelectionActive && !IsFoldersVisible && !IsLoading && !IsError;
         public bool IsSelectAllButtonVisible => IsUnzippedFilesMode && !IsLoading && !IsError;
         public bool IsAddFolderButtonVisible => !IsSelectionActive && IsFoldersVisible;
-        public bool IsUnzippedSelectionActive => IsSelectionActive && IsUnzippedFilesMode;
-        public bool IsSavingArchive { get; set; }
-        public bool IsExtractingArchive { get; set; }
-        public List<SkyFileDVM> FilesToMove { get; set; }
-        public IFolderItem CurrentFolder { get; set; }
+        public bool IsSaveButtonVisible => IsSelectionActive && IsUnzippedFilesMode;
 
         private readonly IApiService apiService;
         private readonly IFileSystemService fileSystemService;
@@ -73,7 +77,6 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly ILog log;
         private readonly IEncryptionService encryptionService;
 
-        private Action updateSelectionStateAction;
         private TaskCompletionSource<IFolderItem> moveFilesCompletionSource;
 
         public FilesViewModel(ISingletonService singletonService,
@@ -104,16 +107,6 @@ namespace SkyDrop.Core.ViewModels.Main
             SaveSelectedUnzippedFilesCommand = new MvxAsyncCommand(SaveSelectedUnzippedFiles);
             SaveArchiveCommand = new MvxAsyncCommand(SaveArchive);
             ExtractArchiveCommand = new MvxAsyncCommand(ExtractArchive);
-
-            updateSelectionStateAction = () =>
-            {
-                RaisePropertyChanged(() => IsSelectionActive).Forget();
-                RaisePropertyChanged(() => IsMoveButtonVisible).Forget();
-                RaisePropertyChanged(() => IsLayoutButtonVisible).Forget();
-                RaisePropertyChanged(() => IsAddFolderButtonVisible).Forget();
-                RaisePropertyChanged(() => IsUnzippedSelectionActive).Forget();
-                RaisePropertyChanged(() => IsDeleteButtonVisible).Forget();
-            };
         }
 
         public override async Task Initialize()
@@ -138,6 +131,8 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (!IsUnzippedFilesMode)
                     userDialogs.Toast(e.Message);
             }
+
+            UpdateTopBarButtonsCommand?.Execute();
         }
 
         private void LoadFolders()
@@ -236,7 +231,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     file.IsSelectionActive = false;
                     file.IsSelected = false;
                 }
-                updateSelectionStateAction?.Invoke();
+                UpdateTopBarButtonsCommand?.Execute();
 
                 var s = selectedFilesDVMs.Count == 1 ? "" : "s";
                 userDialogs.Toast($"Saved {selectedFilesDVMs.Count} file{s}");
@@ -268,7 +263,7 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             var dvm = new SkyFileDVM { SkyFile = skyFile };
             dvm.TapCommand = new MvxCommand(() => UnzippedFileTapped(dvm));
-            dvm.LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(SkyFiles, dvm, updateSelectionStateAction));
+            dvm.LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(SkyFiles, dvm, UpdateTopBarButtonsCommand));
             return dvm;
         }
         
@@ -276,7 +271,7 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             if (selectedFile.IsSelectionActive)
             {
-                FileExplorerViewUtil.ToggleItemSelected(selectedFile, SkyFiles, updateSelectionStateAction);
+                FileExplorerViewUtil.ToggleItemSelected(selectedFile, SkyFiles, UpdateTopBarButtonsCommand);
                 return;
             }
 
@@ -301,7 +296,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 TapCommand = new MvxAsyncCommand(() => FileTapped(skyFile))
             };
 
-            dvm.LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(SkyFiles, dvm, updateSelectionStateAction));
+            dvm.LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(SkyFiles, dvm, UpdateTopBarButtonsCommand));
             return dvm;
         }
 
@@ -309,7 +304,7 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             var dvm = new FolderDVM { Folder = folder };
             dvm.TapCommand = new MvxCommand(() => FolderTapped(dvm));
-            dvm.LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(ConvertFolderCollectionType(Folders), dvm, updateSelectionStateAction));
+            dvm.LongPressCommand = new MvxCommand(() => FileExplorerViewUtil.ActivateSelectionMode(ConvertFolderCollectionType(Folders), dvm, UpdateTopBarButtonsCommand));
             return dvm;
         }
 
@@ -336,7 +331,7 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             if (item is FolderDVM folder && folder.IsSelectionActive)
             {
-                FileExplorerViewUtil.ToggleItemSelected(folder, ConvertFolderCollectionType(Folders), updateSelectionStateAction);
+                FileExplorerViewUtil.ToggleItemSelected(folder, ConvertFolderCollectionType(Folders), UpdateTopBarButtonsCommand);
                 return;
             }
 
@@ -373,6 +368,7 @@ namespace SkyDrop.Core.ViewModels.Main
             Title = folder.Name;
             IsFoldersVisible = false;
             CurrentFolder = folder;
+            UpdateTopBarButtonsCommand?.Execute();
         }
 
         private async Task FileTapped(SkyFile selectedFile)
@@ -380,7 +376,7 @@ namespace SkyDrop.Core.ViewModels.Main
             var selectedFileDVM = SkyFiles.FirstOrDefault(s => s.SkyFile.Skylink == selectedFile.Skylink);
             if (selectedFileDVM.IsSelectionActive)
             {
-                FileExplorerViewUtil.ToggleItemSelected(selectedFileDVM, SkyFiles, updateSelectionStateAction);
+                FileExplorerViewUtil.ToggleItemSelected(selectedFileDVM, SkyFiles, UpdateTopBarButtonsCommand);
                 return;
             }
 
@@ -399,11 +395,19 @@ namespace SkyDrop.Core.ViewModels.Main
                 file.IsSelected = shouldSelectAll;
             }
 
-            updateSelectionStateAction?.Invoke();
+            UpdateTopBarButtonsCommand?.Execute();
         }
 
         private async Task GoBack()
         {
+            if (IsMovingFile)
+            {
+                IsMovingFile = false;
+                Title = "SkyDrive";
+                moveFilesCompletionSource.SetResult(null);
+                return;
+            }
+
             if (IsSelectionActive)
             {
                 ExitSelection();
@@ -416,6 +420,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 SkyFiles.Clear();
                 IsFoldersVisible = true;
                 Title = "SkyDrive";
+                UpdateTopBarButtonsCommand?.Execute();
                 return;
             }
 
@@ -446,12 +451,14 @@ namespace SkyDrop.Core.ViewModels.Main
                 }
             }
 
-            updateSelectionStateAction.Invoke();
+            UpdateTopBarButtonsCommand?.Execute();
         }
 
         private async Task AddFolder()
         {
             var result = await userDialogs.PromptAsync("Folder name");
+            CloseKeyboardCommand?.Execute();
+
             if (!result.Ok)
                 return;
 
@@ -481,10 +488,18 @@ namespace SkyDrop.Core.ViewModels.Main
             IsMovingFile = true;
             IsFoldersVisible = true;
             Title = $"Moving {selectedFiles.Count} file{s}";
+            UpdateTopBarButtonsCommand?.Execute();
 
             moveFilesCompletionSource = new TaskCompletionSource<IFolderItem>();
             var folder = await moveFilesCompletionSource.Task;
             IsMovingFile = false;
+
+            if (folder == null)
+            {
+                //user tapped back button to exit this action
+                return;
+            }
+
             if (folder is SentFolder || folder is ReceivedFolder)
             {
                 userDialogs.Toast($"Cannot move file{s} to {folder.Name}");
@@ -551,7 +566,7 @@ namespace SkyDrop.Core.ViewModels.Main
             catch (Exception e)
             {
                 log.Exception(e);
-                userDialogs.Toast(e.Message);
+                userDialogs.Toast(e.Message, TimeSpan.FromSeconds(4));
             }
             finally
             {
