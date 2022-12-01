@@ -15,7 +15,7 @@ namespace SkyDrop.Droid
 {
 	
 	
-	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Android.Build.Tasks", "13.1.0.5")]
+	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Android.Build.Tasks", "13.0.0.73")]
 	public partial class Resource
 	{
 		
@@ -18145,9 +18145,6 @@ namespace SkyDrop.Droid
 			// aapt resource value: 0x7F08004C
 			public const int accessibility_custom_action_6 = 2131230796;
 			
-			// aapt resource value: 0x7F08005E
-			public const int actions = 2131230814;
-			
 			// aapt resource value: 0x7F08004D
 			public const int accessibility_custom_action_7 = 2131230797;
 			
@@ -18226,9 +18223,6 @@ namespace SkyDrop.Droid
 			// aapt resource value: 0x7F080066
 			public const int aligned = 2131230822;
 			
-			// aapt resource value: 0x7F080001
-			public const int AnimationContainer = 2131230721;
-			
 			// aapt resource value: 0x7F080067
 			public const int all = 2131230823;
 			
@@ -18261,9 +18255,6 @@ namespace SkyDrop.Droid
 			
 			// aapt resource value: 0x7F08006F
 			public const int autoComplete = 2131230831;
-			
-			// aapt resource value: 0x7F080071
-			public const int beginning = 2131230833;
 			
 			// aapt resource value: 0x7F080070
 			public const int autoCompleteToEnd = 2131230832;
@@ -18300,12 +18291,6 @@ namespace SkyDrop.Droid
 			
 			// aapt resource value: 0x7F080074
 			public const int beginOnFirstDraw = 2131230836;
-			
-			// aapt resource value: 0x7F080075
-			public const int browser_actions_header_text = 2131230837;
-			
-			// aapt resource value: 0x7F080078
-			public const int browser_actions_menu_items = 2131230840;
 			
 			// aapt resource value: 0x7F080076
 			public const int blocking = 2131230838;
@@ -18358,9 +18343,6 @@ namespace SkyDrop.Droid
 			// aapt resource value: 0x7F080084
 			public const int chain = 2131230852;
 			
-			// aapt resource value: 0x7F080082
-			public const int checkIcon = 2131230850;
-			
 			// aapt resource value: 0x7F080085
 			public const int chains = 2131230853;
 			
@@ -18390,9 +18372,6 @@ namespace SkyDrop.Droid
 			
 			// aapt resource value: 0x7F08008E
 			public const int content = 2131230862;
-			
-			// aapt resource value: 0x7F080007
-			public const int CTRL = 2131230727;
 			
 			// aapt resource value: 0x7F08008F
 			public const int contentFrame = 2131230863;
@@ -18664,9 +18643,6 @@ namespace SkyDrop.Droid
 			// aapt resource value: 0x7F0800DE
 			public const int left = 2131230942;
 			
-			// aapt resource value: 0x7F0800E0
-			public const int listview_background_shape = 2131230944;
-			
 			// aapt resource value: 0x7F0800DF
 			public const int line1 = 2131230943;
 			
@@ -18754,9 +18730,6 @@ namespace SkyDrop.Droid
 			// aapt resource value: 0x7F0800F3
 			public const int none = 2131230963;
 			
-			// aapt resource value: 0x7F080018
-			public const int NO_DEBUG = 2131230744;
-			
 			// aapt resource value: 0x7F0800F4
 			public const int normal = 2131230964;
 			
@@ -18811,9 +18784,6 @@ namespace SkyDrop.Droid
 			// aapt resource value: 0x7F080104
 			public const int pin = 2131230980;
 			
-			// aapt resource value: 0x7F08001C
-			public const int QRContainer = 2131230748;
-			
 			// aapt resource value: 0x7F080105
 			public const int position = 2131230981;
 			
@@ -18849,9 +18819,6 @@ namespace SkyDrop.Droid
 			
 			// aapt resource value: 0x7F08010C
 			public const int recycler_view = 2131230988;
-			
-			// aapt resource value: 0x7F08001E
-			public const int Root = 2131230750;
 			
 			// aapt resource value: 0x7F08010D
 			public const int reverseSawtooth = 2131230989;
@@ -18952,15 +18919,6 @@ namespace SkyDrop.Droid
 			// aapt resource value: 0x7F080022
 			public const int SHIFT = 2131230754;
 			
-			// aapt resource value: 0x7F080020
-			public const int SHOW_ALL = 2131230752;
-			
-			// aapt resource value: 0x7F080021
-			public const int SHOW_PATH = 2131230753;
-			
-			// aapt resource value: 0x7F080022
-			public const int SHOW_PROGRESS = 2131230754;
-			
 			// aapt resource value: 0x7F080129
 			public const int shortcut = 2131231017;
 			
@@ -19024,9 +18982,6 @@ namespace SkyDrop.Droid
 			// aapt resource value: 0x7F080139
 			public const int spread_inside = 2131231033;
 			
-			// aapt resource value: 0x7F080028
-			public const int StagedFilesRecycler = 2131230760;
-			
 			// aapt resource value: 0x7F08013A
 			public const int square = 2131231034;
 			
@@ -19065,9 +19020,6 @@ namespace SkyDrop.Droid
 			
 			// aapt resource value: 0x7F080145
 			public const int stop = 2131231045;
-			
-			// aapt resource value: 0x7F080023
-			public const int SYM = 2131230755;
 			
 			// aapt resource value: 0x7F080146
 			public const int stretch = 2131231046;
@@ -19119,9 +19071,6 @@ namespace SkyDrop.Droid
 			
 			// aapt resource value: 0x7F08002C
 			public const int TextInputContainer = 2131230764;
-			
-			// aapt resource value: 0x7F080155
-			public const int text_input_password_toggle = 2131231061;
 			
 			// aapt resource value: 0x7F08015A
 			public const int textinput_counter = 2131231066;

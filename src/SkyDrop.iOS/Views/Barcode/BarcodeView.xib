@@ -15,6 +15,7 @@
                 <outlet property="OkButton" destination="Jj3-wM-Fcl" id="r3K-yH-OMy"/>
                 <outlet property="TextInput" destination="pcM-NE-mGY" id="6JF-O5-UKS"/>
                 <outlet property="TextInputContainer" destination="pTp-Cc-GWu" id="6Ty-Iu-hl5"/>
+                <outlet property="TextInputRightConstraint" destination="ogF-h1-8wF" id="P3b-sR-go6"/>
                 <outlet property="view" destination="2" id="RRd-Eg-VrN"/>
             </connections>
         </placeholder>
@@ -24,10 +25,10 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yL5-8O-WaH">
-                    <rect key="frame" x="16" y="60" width="382" height="382"/>
+                    <rect key="frame" x="16" y="134" width="382" height="382"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QpA-sF-4uK">
-                            <rect key="frame" x="0.0" y="189" width="382" height="382"/>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QpA-sF-4uK">
+                            <rect key="frame" x="0.0" y="0.0" width="382" height="382"/>
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -45,7 +46,7 @@
                     </userDefinedRuntimeAttributes>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pTp-Cc-GWu">
-                    <rect key="frame" x="16" y="0.0" width="382" height="58"/>
+                    <rect key="frame" x="16" y="60" width="382" height="58"/>
                     <subviews>
                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pcM-NE-mGY">
                             <rect key="frame" x="12" y="12" width="358" height="34"/>
@@ -54,7 +55,7 @@
                             <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                         </textField>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jj3-wM-Fcl">
-                            <rect key="frame" x="358" y="37" width="0.0" height="0.0"/>
+                            <rect key="frame" x="324.5" y="0.0" width="49.5" height="58"/>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="plain">
                                 <attributedString key="attributedTitle">
@@ -93,7 +94,7 @@
     </objects>
     <resources>
         <systemColor name="systemBackgroundColor">
-            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>

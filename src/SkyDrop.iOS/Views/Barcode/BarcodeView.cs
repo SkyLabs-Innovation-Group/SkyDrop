@@ -14,6 +14,8 @@ namespace SkyDrop.iOS.Views.Barcode
     public partial class BarcodeView : BaseViewController<BarcodeViewModel>
     {
         private Timer textTimer;
+        private const int textInputConstraintShort = 12;
+        private const int textInputConstraintLong = 60;
 
         public BarcodeView() : base("BarcodeView", null)
         {
@@ -29,8 +31,14 @@ namespace SkyDrop.iOS.Views.Barcode
             {
                 View.EndEditing(true);
                 OkButton.Hidden = true;
+                TextInputRightConstraint.Constant = textInputConstraintShort;
             });
-            TextInput.EditingDidBegin += (s, e) => OkButton.Hidden = false;
+
+            TextInput.EditingDidBegin += (s, e) =>
+            {
+                OkButton.Hidden = false;
+                TextInputRightConstraint.Constant = textInputConstraintLong;
+            };
 
             BarcodeContainer.ClipsToBounds = true;
             BarcodeContainer.BackgroundColor = Colors.MidGrey.ToNative();
