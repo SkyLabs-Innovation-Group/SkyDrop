@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
@@ -9,7 +10,7 @@ namespace SkyDrop.Core.Utility
 {
 	public static class FileExplorerViewUtil
 	{
-        public static void ActivateSelectionMode<T>(MvxObservableCollection<T> items, T selectedItem, Action selectionStartedAction) where T : ISelectableItem
+        public static void ActivateSelectionMode<T>(MvxObservableCollection<T> items, T selectedItem, IMvxCommand selectionStartedCommand) where T : ISelectableItem
         {
             //select the skyfile that was long pressed
             selectedItem.IsSelected = true;
@@ -20,10 +21,10 @@ namespace SkyDrop.Core.Utility
                 skyfile.IsSelectionActive = true;
             }
 
-            selectionStartedAction?.Invoke();
+            selectionStartedCommand?.Execute();
         }
 
-        public static void ToggleItemSelected<T>(T selectedFile, IEnumerable<T> skyFiles, Action selectionEndedAction) where T : ISelectableItem
+        public static void ToggleItemSelected<T>(T selectedFile, IEnumerable<T> skyFiles, IMvxCommand selectionEndedCommand) where T : ISelectableItem
         {
             selectedFile.IsSelected = !selectedFile.IsSelected;
 
@@ -35,7 +36,7 @@ namespace SkyDrop.Core.Utility
                     skyFile.IsSelectionActive = false;
                 }
 
-                selectionEndedAction?.Invoke();
+                selectionEndedCommand?.Execute();
             }
         }
     }

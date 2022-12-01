@@ -18,6 +18,7 @@ using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.Droid.Helper;
 using SkyDrop.Droid.Views.Files;
+using static SkyDrop.Droid.Helper.AndroidUtil;
 
 namespace SkyDrop.Droid.Views.Main
 {
@@ -28,14 +29,29 @@ namespace SkyDrop.Droid.Views.Main
 
         public FileExplorerView FileExplorerView { get; set; }
 
+        private ImageView buttonSelectAll;
+        private ImageView buttonToggleLayout;
+        private ImageView buttonAddFolder;
+        private ImageView buttonDeleteFile;
+        private ImageView buttonMoveFile;
+        private ImageView buttonSaveFile;
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
             ViewModel.CloseKeyboardCommand = new MvxAsyncCommand(this.HideKeyboard);
+            ViewModel.UpdateTopBarButtonsCommand = new MvxCommand(UpdateTopBarButtons);
 
             FileExplorerView = FindViewById<FileExplorerView>(Resource.Id.FilesRecycler);
             FileExplorerView.Init(BindingContext);
+
+            buttonSelectAll = FindViewById<ImageView>(Resource.Id.ButtonSelectAll);
+            buttonToggleLayout = FindViewById<ImageView>(Resource.Id.ButtonToggleLayout);
+            buttonAddFolder = FindViewById<ImageView>(Resource.Id.ButtonAddFolder);
+            buttonDeleteFile = FindViewById<ImageView>(Resource.Id.ButtonDeleteFile);
+            buttonMoveFile = FindViewById<ImageView>(Resource.Id.ButtonMoveFile);
+            buttonSaveFile = FindViewById<ImageView>(Resource.Id.ButtonSaveFile);
 
             var set = CreateBindingSet();
             set.Bind(FileExplorerView).For(t => t.LayoutType).To(vm => vm.LayoutType);
@@ -45,6 +61,16 @@ namespace SkyDrop.Droid.Views.Main
         public override void OnBackPressed()
         {
             ViewModel.BackCommand?.Execute();
+        }
+
+        private void UpdateTopBarButtons()
+        {
+            buttonSelectAll.Visibility = ViewModel.IsSelectAllButtonVisible.ToVisibility();
+            buttonToggleLayout.Visibility = ViewModel.IsLayoutButtonVisible.ToVisibility();
+            buttonAddFolder.Visibility = ViewModel.IsAddFolderButtonVisible.ToVisibility();
+            buttonDeleteFile.Visibility = ViewModel.IsDeleteButtonVisible.ToVisibility();
+            buttonMoveFile.Visibility = ViewModel.IsMoveButtonVisible.ToVisibility();
+            buttonSaveFile.Visibility = ViewModel.IsSaveButtonVisible.ToVisibility();
         }
     }
 }
