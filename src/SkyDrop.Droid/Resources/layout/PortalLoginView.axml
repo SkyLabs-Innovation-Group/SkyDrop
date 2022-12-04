@@ -14,10 +14,53 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
-        <ProgressBar
-            android:layout_width="128dp"
-            android:layout_height="128dp"
-            android:layout_gravity="center"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            app:MvxBind="Visibility Visibility(IsLoadingLabelVisible)">
+            <FrameLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp">
+                <ProgressBar
+                    android:id="@+id/ProgressBar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:progressTint="#eee"
+                    app:MvxBind="Visibility InvertedVisibility(IsError)"/>
+                <!--
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_error"
+                    app:MvxBind="Visibility Visibility(IsError)"/>-->
+            </FrameLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_horizontal"
+                android:textSize="17dp"
+                android:textStyle="bold"
+                android:textColor="#eee"
+                android:text="Doing something..."
+                app:MvxBind="Text LoadingLabelText"
+                />
+            <!--
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_horizontal"
+                android:textSize="14dp"
+                android:textColor="#eee"
+                android:text="Error details"
+                app:MvxBind="Text ErrorDetailText;"
+                />-->
+        </LinearLayout>
         <FrameLayout
             android:id="@+id/WebViewContainer"
             android:layout_width="match_parent"

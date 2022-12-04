@@ -15,6 +15,7 @@ namespace SkyDrop.Core.ViewModels
         private readonly IUserDialogs userDialogs;
         private readonly IMvxNavigationService navigationService;
 
+        public string LoadingLabelText { get; set; } = "Logging in...";
         public string PortalUrl { get; set; }
         public bool DidSetApiKey { get; set; }
         public bool IsLoggedIn { get; set; }
