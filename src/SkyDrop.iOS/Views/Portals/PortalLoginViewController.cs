@@ -34,6 +34,7 @@ namespace SkyDrop.iOS.Views.Portals
 
             var set = this.CreateBindingSet();
             set.Bind(this).For(w => w.WebViewHidden).To(vm => vm.IsLoggedIn);
+            set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Apply();
 		}
 
@@ -83,7 +84,7 @@ namespace SkyDrop.iOS.Views.Portals
             {
                 webView.EvaluateJavaScript(JsSnippets.GetApiKey, null);
 
-                await Task.Delay(2000);
+                await Task.Delay(3000);
             }
         }
 

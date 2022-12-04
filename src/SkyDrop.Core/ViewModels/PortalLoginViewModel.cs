@@ -29,7 +29,7 @@ namespace SkyDrop.Core.ViewModels
                              IMvxNavigationService navigationService,
                              ILog log) : base(singletonService)
         {
-            Title = "SkyDrop";
+            Title = "Login";
 
             this.apiService = apiService;
             this.storageService = storageService;
