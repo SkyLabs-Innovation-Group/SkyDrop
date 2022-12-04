@@ -2,19 +2,23 @@
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Foundation;
+using Newtonsoft.Json;
 using SkyDrop.Core.Components;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels;
 using SkyDrop.iOS.Common;
 using UIKit;
 using WebKit;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace SkyDrop.iOS.Views.Portals
 {
-	public partial class PortalLoginViewController : BaseViewController<PortalLoginViewModel>, IWKNavigationDelegate 
+	public partial class PortalLoginViewController : BaseViewController<PortalLoginViewModel>, IWKNavigationDelegate, IWKScriptMessageHandler
 	{
 		private bool didInitWebView;
         private WKWebView webView;
+
+        private const string javascriptBridgeFunction = "function invokeCSharpAction(data){window.webkit.messageHandlers.invokeAction.postMessage(JSON.stringify(data));}";
 
         public PortalLoginViewController() : base("PortalLoginViewController", null)
 		{
@@ -23,6 +27,8 @@ namespace SkyDrop.iOS.Views.Portals
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
+
+            AddBackButton(() => ViewModel.BackCommand.Execute());
 
             WebViewContainer.BackgroundColor = Colors.DarkGrey.ToNative();
 
@@ -48,8 +54,12 @@ namespace SkyDrop.iOS.Views.Portals
             webView = new WKWebView(View.Frame, new WKWebViewConfiguration { Preferences = new WKPreferences { JavaScriptEnabled = true } });
             webView.LoadRequest(new Foundation.NSUrlRequest(new NSUrl(ViewModel.PortalUrl)));
             WebViewContainer.LayoutInsideWithFrame(webView);
+            webView.NavigationDelegate = this;
 
-			webView.NavigationDelegate = this;
+            var userController = webView.Configuration.UserContentController;
+            var script = new WKUserScript(new NSString(javascriptBridgeFunction), WKUserScriptInjectionTime.AtDocumentEnd, false);
+            userController.AddUserScript(script);
+            userController.AddScriptMessageHandler(this, "invokeAction");
         }
 
         [Export("webView:didFinishNavigation:")]
@@ -71,20 +81,18 @@ namespace SkyDrop.iOS.Views.Portals
 		{
             while (!ViewModel.DidSetApiKey)
             {
-                await Task.Delay(5000);
+                webView.EvaluateJavaScript(JsSnippets.GetApiKey, null);
 
-                webView.EvaluateJavaScript(JsSnippets.GetApiKey, new WKJavascriptEvaluationResult((apiKey, error) =>
-                {
-                    if (apiKey != null && error == null)
-                    {
-                        ViewModel.SetApiKey(apiKey.ToString());
-                    }
-                    else
-                    {
-                        Console.WriteLine(error);
-                    }
-                }));
+                await Task.Delay(5000);
             }
+        }
+
+        public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
+        {
+            var messageJson = message.Body.ToString();
+            var messageObj = JsonConvert.DeserializeObject<JsArgs>(messageJson);
+
+            ViewModel.SetApiKey(messageObj.ApiKey);
         }
 
         public bool WebViewHidden
@@ -97,6 +105,11 @@ namespace SkyDrop.iOS.Views.Portals
 
                 webView.Hidden = value;
             }
+        }
+
+        public class JsArgs
+        {
+            public string ApiKey { get; set; }
         }
     }
 }

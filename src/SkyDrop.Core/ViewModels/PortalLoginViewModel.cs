@@ -19,6 +19,7 @@ namespace SkyDrop.Core.ViewModels
         public bool DidSetApiKey { get; set; }
         public bool IsLoggedIn { get; set; }
         public TaskCompletionSource<object> CloseCompletionSource { get; set; }
+        public IMvxCommand BackCommand { get; set; }
 
         public PortalLoginViewModel(ISingletonService singletonService,
                              IApiService apiService,
@@ -33,6 +34,8 @@ namespace SkyDrop.Core.ViewModels
             this.storageService = storageService;
             this.userDialogs = userDialogs;
             this.navigationService = navigationService;
+
+            BackCommand = new MvxCommand(() => navigationService.Close(this, null));
         }
 
         public void SetApiKey(string apiKey)
@@ -41,8 +44,6 @@ namespace SkyDrop.Core.ViewModels
                 return;
 
             DidSetApiKey = true;
-
-            Console.WriteLine(apiKey);
 
             userDialogs.Toast("Logged in");
 
