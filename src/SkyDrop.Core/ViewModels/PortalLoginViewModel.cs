@@ -8,14 +8,14 @@ using SkyDrop.Core.Services;
 
 namespace SkyDrop.Core.ViewModels
 {
-    public class PortalLoginViewModel : BaseViewModel, IMvxViewModel<bool, string>
+    public class PortalLoginViewModel : BaseViewModel, IMvxViewModel<string, string>
     {
         private readonly IApiService apiService;
         private readonly IStorageService storageService;
         private readonly IUserDialogs userDialogs;
         private readonly IMvxNavigationService navigationService;
 
-        public string PortalUrl { get; set; } = "https://account.web3portal.com";
+        public string PortalUrl { get; set; }
         public bool DidSetApiKey { get; set; }
         public bool IsLoggedIn { get; set; }
         public TaskCompletionSource<object> CloseCompletionSource { get; set; }
@@ -50,8 +50,15 @@ namespace SkyDrop.Core.ViewModels
             navigationService.Close(this, apiKey);
         }
 
-        public void Prepare(bool parameter)
+        public void Prepare(string url)
         {
+            //remove protocol
+            if (url.StartsWith("https://"))
+            {
+                url = url.Substring(8);
+            }
+
+            PortalUrl = $"https://account.{url}";
         }
     }
 }

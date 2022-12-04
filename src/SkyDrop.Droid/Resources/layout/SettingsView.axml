@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/layout_toolbar"
-        layout="@layout/toolbar_settings" />
+        layout="@layout/toolbar_default" />
 
     <!-- Device name -->
 
