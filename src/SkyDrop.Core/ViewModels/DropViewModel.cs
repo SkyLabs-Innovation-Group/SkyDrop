@@ -976,6 +976,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     await OpenSkyDrive();
                     break;
                 case HomeMenuItem.Portals:
+                    var apiKey = await navigationService.Navigate<PortalLoginViewModel, string>();
                     break;
                 case HomeMenuItem.Contacts:
                     var isSelecting = DropViewUIState == DropViewState.ConfirmFilesState;

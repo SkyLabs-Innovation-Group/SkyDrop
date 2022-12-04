@@ -281,6 +281,11 @@
     <Compile Include="Bindings\NextButtonStyleBinding.cs" />
     <ImageAsset Include="Media.xcassets\ic_encryption.imageset\encrypted-file-icon.pdf" />
     <ImageAsset Include="Media.xcassets\ic_encryption.imageset\Contents.json" />
+    <InterfaceDefinition Include="Views\Portals\PortalLoginViewController.xib" />
+    <Compile Include="Views\Portals\PortalLoginViewController.cs" />
+    <Compile Include="Views\Portals\PortalLoginViewController.designer.cs">
+      <DependentUpon>PortalLoginViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -325,6 +330,7 @@
     <Folder Include="Media.xcassets\" />
     <Folder Include="Views\Contacts\" />
     <Folder Include="Views\Onboarding\" />
+    <Folder Include="Views\Portals\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
