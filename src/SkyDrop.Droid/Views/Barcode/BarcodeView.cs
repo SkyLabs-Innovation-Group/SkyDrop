@@ -29,23 +29,31 @@ namespace SkyDrop.Droid.Views.Barcode
         private ImageView barcodeImageView;
         private Timer textTimer;
         private EditText editText;
+        private ImageView closeKeyboardButton;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
-            ViewModel.CloseKeyboardCommand = new MvxCommand(() => this.HideKeyboard());
+            ViewModel.CloseKeyboardCommand = new MvxAsyncCommand(this.HideKeyboard);
 
             editText = FindViewById<EditText>(Resource.Id.BarcodeEditText);
             editText.RequestFocus();
 
             barcodeImageView = FindViewById<ImageView>(Resource.Id.BarcodeImageView);
 
+            closeKeyboardButton = FindViewById<ImageView>(Resource.Id.CloseKeyboardButton);
+
             var textInputContainer = FindViewById<MaterialCardView>(Resource.Id.TextInputContainer);
             textInputContainer.Click += (s, e) =>
             {
                 editText.RequestFocus();
                 this.ShowKeyboard();
+            };
+
+            editText.FocusChange += (s, e) =>
+            {
+                closeKeyboardButton.Visibility = editText.IsFocused ? ViewStates.Visible : ViewStates.Gone;
             };
 
             InitTextTimer();

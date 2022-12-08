@@ -18,10 +18,11 @@ namespace SkyDrop.Core.ViewModels.Main
         public const int TextDelayerTimeMs = 300;
         public const string DefaultText = "QR text";
 
+        public bool IsKeyboardVisible { get; set; }
         public IMvxCommand GenerateBarcodeCommand { get; set; }
         public IMvxCommand ScanBarcodeCommand { get; set; }
         public IMvxCommand BackCommand { get; set; }
-        public IMvxCommand CloseKeyboardCommand { get; set; }
+        public IMvxAsyncCommand CloseKeyboardCommand { get; set; }
 
         private Func<Task> _generateBarcodeAsyncFunc;
         public Func<Task> GenerateBarcodeAsyncFunc
@@ -79,6 +80,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task Done()
         {
+            await CloseKeyboardCommand.ExecuteAsync();
             await navigationService.Close(this);
             CloseKeyboardCommand?.Execute();
         }
