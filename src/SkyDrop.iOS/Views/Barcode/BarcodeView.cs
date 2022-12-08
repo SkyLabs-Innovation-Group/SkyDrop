@@ -16,6 +16,7 @@ namespace SkyDrop.iOS.Views.Barcode
         private Timer textTimer;
         private const int textInputConstraintShort = 12;
         private const int textInputConstraintLong = 60;
+        private UIBarButtonItem closeKeyboardButton;
 
         public BarcodeView() : base("BarcodeView", null)
         {
@@ -27,16 +28,16 @@ namespace SkyDrop.iOS.Views.Barcode
 
             AddBackButton(() => ViewModel.BackCommand.Execute());
 
-            ViewModel.CloseKeyboardCommand = new MvxCommand(() =>
+            ViewModel.CloseKeyboardCommand = new MvxAsyncCommand(async () =>
             {
                 View.EndEditing(true);
-                OkButton.Hidden = true;
+                NavigationItem.RightBarButtonItem = null;
                 TextInputRightConstraint.Constant = textInputConstraintShort;
             });
 
             TextInput.EditingDidBegin += (s, e) =>
             {
-                OkButton.Hidden = false;
+                NavigationItem.RightBarButtonItem = closeKeyboardButton;
                 TextInputRightConstraint.Constant = textInputConstraintLong;
             };
 
@@ -50,14 +51,14 @@ namespace SkyDrop.iOS.Views.Barcode
             TextInput.BorderStyle = UITextBorderStyle.None;
             TextInput.Text = BarcodeViewModel.DefaultText;
             TextInput.BecomeFirstResponder();
-            OkButton.TintColor = Colors.Primary.ToNative();
-            OkButton.BackgroundColor = Colors.MidGrey.ToNative();
+
+            closeKeyboardButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_tick") };
+            closeKeyboardButton.Clicked += (s, e) => ViewModel.CloseKeyboardCommand.Execute();
 
             InitTextTimer();
 
             var set = this.CreateBindingSet();
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
-            set.Bind(OkButton).To(vm => vm.CloseKeyboardCommand);
             set.Apply();
         }
 

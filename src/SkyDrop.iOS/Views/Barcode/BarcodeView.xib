@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -12,7 +12,6 @@
             <connections>
                 <outlet property="BarcodeContainer" destination="yL5-8O-WaH" id="szL-KX-9yR"/>
                 <outlet property="BarcodeImage" destination="QpA-sF-4uK" id="ZtU-G9-238"/>
-                <outlet property="OkButton" destination="Jj3-wM-Fcl" id="r3K-yH-OMy"/>
                 <outlet property="TextInput" destination="pcM-NE-mGY" id="6JF-O5-UKS"/>
                 <outlet property="TextInputContainer" destination="pTp-Cc-GWu" id="6Ty-Iu-hl5"/>
                 <outlet property="TextInputRightConstraint" destination="ogF-h1-8wF" id="P3b-sR-go6"/>
@@ -25,7 +24,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yL5-8O-WaH">
-                    <rect key="frame" x="16" y="134" width="382" height="382"/>
+                    <rect key="frame" x="16" y="138" width="382" height="382"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QpA-sF-4uK">
                             <rect key="frame" x="0.0" y="0.0" width="382" height="382"/>
@@ -46,7 +45,7 @@
                     </userDefinedRuntimeAttributes>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pTp-Cc-GWu">
-                    <rect key="frame" x="16" y="60" width="382" height="58"/>
+                    <rect key="frame" x="16" y="64" width="382" height="58"/>
                     <subviews>
                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pcM-NE-mGY">
                             <rect key="frame" x="12" y="12" width="358" height="34"/>
@@ -54,28 +53,12 @@
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                         </textField>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jj3-wM-Fcl">
-                            <rect key="frame" x="324.5" y="0.0" width="49.5" height="58"/>
-                            <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="plain">
-                                <attributedString key="attributedTitle">
-                                    <fragment content="OK">
-                                        <attributes>
-                                            <font key="NSFont" size="17" name="Helvetica-Bold"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
-                            </buttonConfiguration>
-                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstItem="Jj3-wM-Fcl" firstAttribute="top" secondItem="pTp-Cc-GWu" secondAttribute="top" id="L0q-UW-Et6"/>
                         <constraint firstItem="pcM-NE-mGY" firstAttribute="top" secondItem="pTp-Cc-GWu" secondAttribute="top" constant="12" id="LEQ-Df-ySn"/>
-                        <constraint firstAttribute="bottom" secondItem="Jj3-wM-Fcl" secondAttribute="bottom" id="bfO-2M-l5b"/>
                         <constraint firstItem="pcM-NE-mGY" firstAttribute="leading" secondItem="pTp-Cc-GWu" secondAttribute="leading" constant="12" id="dgd-3h-IwM"/>
                         <constraint firstAttribute="trailing" secondItem="pcM-NE-mGY" secondAttribute="trailing" constant="12" id="ogF-h1-8wF"/>
-                        <constraint firstAttribute="trailing" secondItem="Jj3-wM-Fcl" secondAttribute="trailing" constant="8" id="uf1-ba-cCq"/>
                         <constraint firstAttribute="bottom" secondItem="pcM-NE-mGY" secondAttribute="bottom" constant="12" id="zk6-su-UIU"/>
                     </constraints>
                 </view>
