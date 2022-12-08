@@ -27,6 +27,8 @@ namespace SkyDrop.Core.Services
         private readonly IUserDialogs userDialogs;
         private readonly IEncryptionService encryptionService;
 
+        private const string unauthorizedExceptionMessage = "Unauthorized. Check your API key is set correctly in the Portals screen.";
+
         public ApiService(ILog log,
             ISkyDropHttpClientFactory skyDropHttpClientFactory,
             ISingletonService singletonService,
@@ -100,6 +102,11 @@ namespace SkyDrop.Core.Services
             //download
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var response = await httpClient.GetAsync(url);
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                throw new Exception(unauthorizedExceptionMessage);
+
+            if (!response.IsSuccessStatusCode)
+                throw new Exception(response.StatusCode.ToString());
             
             var fileName = GetFilenameFromResponse(response);
             if (fileName == null)
@@ -127,6 +134,9 @@ namespace SkyDrop.Core.Services
         {
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var response = await httpClient.GetAsync(url);
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                throw new Exception(unauthorizedExceptionMessage);
+
             response.EnsureSuccessStatusCode();
             var data = await response.Content.ReadAsStreamAsync();
             var fileName = GetFilenameFromResponse(response);

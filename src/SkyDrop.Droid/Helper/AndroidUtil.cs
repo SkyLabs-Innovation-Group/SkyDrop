@@ -335,5 +335,10 @@ namespace SkyDrop.Droid.Helper
 
             return default(T);
         }
+
+        public static ViewStates ToVisibility(this bool value)
+        {
+            return value ? ViewStates.Visible : ViewStates.Gone;
+        }
     }
 }

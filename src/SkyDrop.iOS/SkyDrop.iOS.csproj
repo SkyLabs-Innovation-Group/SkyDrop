@@ -28,6 +28,8 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
 <OptimizePNGs>false</OptimizePNGs>
+<CodesignProvision></CodesignProvision>
+<CodesignEntitlements>..\..\..\XamarinFormsPayments\PayPalTesting\PayPalTesting\PayPalTesting.iOS\Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
