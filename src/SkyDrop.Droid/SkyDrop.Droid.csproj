@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -113,6 +113,7 @@
     <Compile Include="Views\Onboarding\OnboardingView.cs" />
     <Compile Include="Styles\StyleExtensions.cs" />
     <Compile Include="Bindings\NextButtonStyleBinding.cs" />
+    <Compile Include="Views\Barcode\BarcodeView.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmCross">
@@ -570,6 +571,14 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\BarcodeView.axml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\toolbar_barcode.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\strings.xml" />
@@ -605,6 +614,7 @@
     <Folder Include="Views\Contacts\" />
     <Folder Include="Views\Onboarding\" />
     <Folder Include="Styles\" />
+    <Folder Include="Views\QR\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

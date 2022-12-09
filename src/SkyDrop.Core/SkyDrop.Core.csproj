@@ -14,7 +14,7 @@
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="System.Memory" Version="4.5.5" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Xamarin.FFImageLoading" Version="2.4.11.982" />
     <PackageReference Include="Acr.UserDialogs" Version="7.1.0.483" />
     <PackageReference Include="Realm" Version="10.1.2" />

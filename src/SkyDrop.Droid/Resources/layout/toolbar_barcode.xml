@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<com.google.android.material.appbar.AppBarLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/appbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+    app:elevation="0dp">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/darkGrey">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            app:MvxBind="Click BackCommand">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="8dp"
+                android:src="@drawable/ic_back"
+                />
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/textview_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SkyDrop"
+            android:textColor="#fff"
+            android:layout_gravity="center"
+            app:MvxBind="Text Title"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            app:MvxBind="Click CloseKeyboardCommand">
+
+            <ImageView
+                android:id="@+id/CloseKeyboardButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="16dp"
+                android:src="@drawable/ic_check"
+                />
+
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+</com.google.android.material.appbar.AppBarLayout>

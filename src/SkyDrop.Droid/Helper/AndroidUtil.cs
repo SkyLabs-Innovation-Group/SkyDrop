@@ -284,6 +284,26 @@ namespace SkyDrop.Droid.Helper
             }
         }
 
+        public static void ShowKeyboard(this Activity activity)
+        {
+            try
+            {
+                var isMainThread = MainThread.IsMainThread;
+                var inputMethodManager = activity.GetSystemService(Activity.InputMethodService) as InputMethodManager;
+                if (inputMethodManager != null)
+                {
+                    var focusView = activity.CurrentFocus;
+                    var token = focusView?.WindowToken;
+
+                    focusView.PostDelayed(() => inputMethodManager.ShowSoftInput(focusView, ShowFlags.Forced), 100);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Exception(ex);
+            }
+        }
+
         public static void SetLocalImage(this ImageView target, string drawableName)
         {
             if (target == null)
