@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditPortalViewController">
             <connections>
+                <outlet property="PortalApiTokenTextView" destination="THD-0C-rc7" id="RnS-ec-1u5"/>
+                <outlet property="PortalNameTextView" destination="rne-sc-ILc" id="aa6-sY-OUV"/>
+                <outlet property="SaveButton" destination="3tQ-5w-irR" id="KH2-zT-0zd"/>
                 <outlet property="view" destination="ATh-TK-TQk" id="1ec-oI-vQS"/>
             </connections>
         </placeholder>
@@ -18,13 +21,13 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Portal name:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yV0-j9-8iD">
-                    <rect key="frame" x="20" y="50" width="350" height="20.333333333333329"/>
+                    <rect key="frame" x="20" y="100" width="350" height="20.333333333333329"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Web3 Portal" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="rne-sc-ILc">
-                    <rect key="frame" x="20" y="75.333333333333329" width="350" height="40"/>
+                    <rect key="frame" x="20" y="125.33333333333331" width="350" height="40"/>
                     <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="shL-xe-dmz"/>
@@ -34,13 +37,13 @@
                     <textInputTraits key="textInputTraits" autocorrectionType="no" textContentType="url"/>
                 </textView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Portal url:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NUF-fZ-kNu">
-                    <rect key="frame" x="16" y="130.33333333333334" width="350" height="20.333333333333343"/>
+                    <rect key="frame" x="16" y="180.33333333333334" width="350" height="20.333333333333343"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="web3portal.com" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="2au-1A-0yz">
-                    <rect key="frame" x="16" y="155.66666666666666" width="350" height="40"/>
+                    <rect key="frame" x="16" y="205.66666666666666" width="350" height="40"/>
                     <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="4ZS-nT-Duu"/>
@@ -50,13 +53,13 @@
                     <textInputTraits key="textInputTraits" autocorrectionType="no" textContentType="url"/>
                 </textView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="API token:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YoW-7h-dsu">
-                    <rect key="frame" x="16" y="210.66666666666666" width="350" height="20.333333333333343"/>
+                    <rect key="frame" x="16" y="260.66666666666669" width="350" height="20.333333333333314"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="THD-0C-rc7">
-                    <rect key="frame" x="16" y="236" width="350" height="40"/>
+                    <rect key="frame" x="16" y="286" width="350" height="40"/>
                     <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="Die-ml-sZl"/>
@@ -65,9 +68,8 @@
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" textContentType="url"/>
                 </textView>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3tQ-5w-irR">
-                    <rect key="frame" x="256" y="294" width="110" height="35"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3tQ-5w-irR">
+                    <rect key="frame" x="256" y="346" width="110" height="35"/>
                     <color key="backgroundColor" red="0.22352941179999999" green="0.2901960784" blue="0.34509803919999998" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <state key="normal" title="Button"/>
                     <buttonConfiguration key="configuration" style="plain" title="Save portal">
@@ -79,9 +81,10 @@
             <constraints>
                 <constraint firstItem="NUF-fZ-kNu" firstAttribute="top" secondItem="rne-sc-ILc" secondAttribute="bottom" constant="15" id="6PW-N7-cpL"/>
                 <constraint firstAttribute="trailing" secondItem="YoW-7h-dsu" secondAttribute="trailing" constant="24" id="8TS-27-P5a"/>
-                <constraint firstItem="yV0-j9-8iD" firstAttribute="top" secondItem="ATh-TK-TQk" secondAttribute="top" constant="50" id="BND-as-0F7"/>
                 <constraint firstItem="rne-sc-ILc" firstAttribute="leading" secondItem="ATh-TK-TQk" secondAttribute="leading" constant="20" id="Eev-9E-6sN"/>
                 <constraint firstAttribute="trailing" secondItem="NUF-fZ-kNu" secondAttribute="trailing" constant="24" id="FP7-oO-Grx"/>
+                <constraint firstItem="3tQ-5w-irR" firstAttribute="top" secondItem="THD-0C-rc7" secondAttribute="bottom" constant="20" id="IZA-8P-EqA"/>
+                <constraint firstItem="yV0-j9-8iD" firstAttribute="top" secondItem="ATh-TK-TQk" secondAttribute="top" constant="100" id="IiE-sI-PuC"/>
                 <constraint firstAttribute="trailing" secondItem="rne-sc-ILc" secondAttribute="trailing" constant="20" id="UuK-DU-9z5"/>
                 <constraint firstItem="yV0-j9-8iD" firstAttribute="leading" secondItem="ATh-TK-TQk" secondAttribute="leading" constant="20" id="W2b-26-x0J"/>
                 <constraint firstAttribute="trailing" secondItem="yV0-j9-8iD" secondAttribute="trailing" constant="20" id="bQ0-aa-Nwq"/>
@@ -91,6 +94,7 @@
                 <constraint firstItem="2au-1A-0yz" firstAttribute="top" secondItem="NUF-fZ-kNu" secondAttribute="bottom" constant="5" id="gaW-eT-rYB"/>
                 <constraint firstAttribute="trailing" secondItem="THD-0C-rc7" secondAttribute="trailing" constant="24" id="jZH-P8-v5C"/>
                 <constraint firstAttribute="trailing" secondItem="2au-1A-0yz" secondAttribute="trailing" constant="24" id="nY3-tc-Ztc"/>
+                <constraint firstAttribute="trailing" secondItem="3tQ-5w-irR" secondAttribute="trailing" constant="24" id="rKc-SS-3HV"/>
                 <constraint firstItem="YoW-7h-dsu" firstAttribute="leading" secondItem="ATh-TK-TQk" secondAttribute="leading" constant="16" id="sbj-av-PZ7"/>
                 <constraint firstItem="NUF-fZ-kNu" firstAttribute="leading" secondItem="ATh-TK-TQk" secondAttribute="leading" constant="16" id="ttD-SB-hS2"/>
                 <constraint firstItem="THD-0C-rc7" firstAttribute="leading" secondItem="ATh-TK-TQk" secondAttribute="leading" constant="16" id="wbS-Ms-2gV"/>

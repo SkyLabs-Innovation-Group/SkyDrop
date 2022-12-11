@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
+using MvvmCross.Navigation;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Services;
@@ -12,6 +13,7 @@ namespace SkyDrop.Core.ViewModels
     public class EditPortalViewModel : BaseViewModel<NavParam>
     {
         public SkynetPortal Portal;
+        private readonly IMvxNavigationService navigationService;
 
         public string PortalName { get; set; }
 
@@ -21,9 +23,11 @@ namespace SkyDrop.Core.ViewModels
 
         public IMvxCommand SavePortalCommand { get; set; }
 
-        public EditPortalViewModel(ISingletonService singletonService) : base(singletonService)
+        public EditPortalViewModel(ISingletonService singletonService, IMvxNavigationService navigationService) : base(singletonService)
         {
             SavePortalCommand = new MvxCommand(SavePortal);
+            LoginWithPortalCommand = new MvxAsyncCommand(LoginWithPortal);
+            this.navigationService = navigationService;
         }
 
         private void SavePortal()
@@ -52,6 +56,7 @@ namespace SkyDrop.Core.ViewModels
         public bool AddingNewPortal { get; set; }
 
         public TaskCompletionSource<bool> PrepareTcs { get; set; } = new TaskCompletionSource<bool>();
+        public IMvxCommand LoginWithPortalCommand { get; set; }
 
         public override async void Prepare(NavParam parameter)
         {
@@ -79,6 +84,13 @@ namespace SkyDrop.Core.ViewModels
                 PortalName = Portal.Name;
                 PortalUrl = Portal.BaseUrl;
             }
+        }
+
+        private async Task LoginWithPortal()
+        {
+           var result = await navigationService.Navigate<PortalLoginViewModel, string, string>(PortalUrl);
+           if (!string.IsNullOrEmpty(result))
+               ApiToken = result;
         }
     }
 }
