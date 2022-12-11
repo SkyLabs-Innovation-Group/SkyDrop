@@ -983,6 +983,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     await OpenSkyDrive();
                     break;
                 case HomeMenuItem.Portals:
+                    var apiKey = await navigationService.Navigate<PortalLoginViewModel, string, string>("https://web3portal.com");
                     break;
                 case HomeMenuItem.Contacts:
                     var isSelecting = DropViewUIState == DropViewState.ConfirmFilesState;
