@@ -988,6 +988,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     break;
                 case HomeMenuItem.Portals:
                     await OpenPortalPreferences();
+                    // var apiKey = await navigationService.Navigate<PortalLoginViewModel, string, string>("https://web3portal.com");
                     break;
                 case HomeMenuItem.Contacts:
                     var isSelecting = DropViewUIState == DropViewState.ConfirmFilesState;

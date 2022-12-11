@@ -304,6 +304,10 @@
     <Compile Include="Views\PortalPreferences\PortalPreferencesCell.cs" />
     <Compile Include="Views\PortalPreferences\PortalPreferencesCell.designer.cs">
       <DependentUpon>PortalPreferencesCell.cs</DependentUpon>
+    <InterfaceDefinition Include="Views\Portals\PortalLoginViewController.xib" />
+    <Compile Include="Views\Portals\PortalLoginViewController.cs" />
+    <Compile Include="Views\Portals\PortalLoginViewController.designer.cs">
+      <DependentUpon>PortalLoginViewController.cs</DependentUpon>
     </Compile>
     <InterfaceDefinition Include="Views\Barcode\BarcodeView.xib" />
     <Compile Include="Views\Barcode\BarcodeView.cs" />
@@ -355,6 +359,7 @@
     <Folder Include="Views\Contacts\" />
     <Folder Include="Views\PortalPreferences\" />
     <Folder Include="Views\Onboarding\" />
+    <Folder Include="Views\Portals\" />
     <Folder Include="Views\Barcode\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

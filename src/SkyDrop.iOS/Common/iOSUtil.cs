@@ -6,6 +6,8 @@ using FFImageLoading.Cross;
 using MvvmCross;
 using MvvmCross.Platforms.Ios.Views;
 using UIKit;
+using WebKit;
+using Xamarin.Essentials;
 using ZXing.Common;
 using ZXing.Mobile;
 
@@ -48,6 +50,13 @@ namespace SkyDrop.iOS.Common
                     log.Error("Error setting SkyFile preview", ex);
                 }
             });
+        }
+
+        public static async Task ExecuteJs(this WKWebView webView, string js)
+        {
+            //need to handle the newline chars differently on iOS
+            //js = js.Replace(System.Environment.NewLine, @"\n");
+            await webView.EvaluateJavaScriptAsync(js);
         }
     }
 }
