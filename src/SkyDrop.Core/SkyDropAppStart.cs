@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using SkyDrop.Core.Services;
@@ -9,14 +8,14 @@ namespace SkyDrop.Core
 {
     public class SkyDropAppStart : MvxAppStart
     {
-        private readonly IMvxNavigationService navigationService;
+        private readonly IFfImageService ffImageService;
         private readonly IFileSystemService fileSystemService;
-        private readonly IFFImageService ffImageService;
+        private readonly IMvxNavigationService navigationService;
 
         public SkyDropAppStart(IMvxApplication application,
             IMvxNavigationService navigationService,
             IFileSystemService fileSystemService,
-            IFFImageService ffImageService,
+            IFfImageService ffImageService,
             ILog log) : base(application, navigationService)
         {
             this.navigationService = navigationService;
@@ -35,4 +34,3 @@ namespace SkyDrop.Core
         }
     }
 }
-

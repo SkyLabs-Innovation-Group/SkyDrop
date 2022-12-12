@@ -1,28 +1,25 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Timers;
-using Realms;
 using SkyDrop.Core.DataModels;
 
 namespace SkyDrop.Core.Services
 {
     /// <summary>
-    /// Keeps a running average of upload rates
-    /// This is used to calculate estimated upload progress
+    ///     Keeps a running average of upload rates
+    ///     This is used to calculate estimated upload progress
     /// </summary>
     public class UploadTimerService : IUploadTimerService
     {
         private readonly ILog log;
         private readonly IStorageService storageService;
-        private Stopwatch stopwatch;
-        private Timer timer;
         private TimeSpan estimatedUploadTime;
         private long fileSizeBytes;
+        private Stopwatch stopwatch;
+        private Timer timer;
 
         public UploadTimerService(ILog log,
-                                  IStorageService storageService)
+            IStorageService storageService)
         {
             this.log = log;
             this.storageService = storageService;
@@ -30,7 +27,7 @@ namespace SkyDrop.Core.Services
 
         public void AddReading(TimeSpan time, long fileSizeBytes)
         {
-            var uploadRate = (fileSizeBytes * 8) / time.TotalSeconds; //in bits/second
+            var uploadRate = fileSizeBytes * 8 / time.TotalSeconds; //in bits/second
 
             //add the new value to the average
             var currentAverage = storageService.GetAverageUploadRate();
@@ -50,7 +47,7 @@ namespace SkyDrop.Core.Services
 
         public TimeSpan EstimateUploadTime(long fileSizeBytes)
         {
-            long fileSizeBits = fileSizeBytes * 8;
+            var fileSizeBits = fileSizeBytes * 8;
             var currentAverage = storageService.GetAverageUploadRate();
             var averageUploadSpeed = currentAverage.Value;
             if (averageUploadSpeed == 0)
@@ -83,10 +80,8 @@ namespace SkyDrop.Core.Services
             if (stopwatch == null) return;
 
             if (stopwatch.IsRunning && !ignoreResult)
-            {
                 //save the upload time and file size to calculate average upload speed
                 AddReading(stopwatch.Elapsed, fileSizeBytes);
-            }
 
             stopwatch.Stop();
             timer.Stop();

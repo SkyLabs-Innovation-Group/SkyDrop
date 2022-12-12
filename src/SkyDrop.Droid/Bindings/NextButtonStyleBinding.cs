@@ -1,5 +1,4 @@
-﻿
-using Android.Widget;
+﻿using Android.Widget;
 using AndroidX.AppCompat.Widget;
 using Google.Android.Material.Card;
 using MvvmCross.Binding;
@@ -12,11 +11,11 @@ namespace SkyDrop.Droid.Bindings
 {
     public class NextButtonStyleBinding : MvxTargetBinding<MaterialCardView, bool>
     {
-        public static string Name => "NextButtonStyle";
-
         public NextButtonStyleBinding(MaterialCardView target) : base(target)
         {
         }
+
+        public static string Name => "NextButtonStyle";
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 

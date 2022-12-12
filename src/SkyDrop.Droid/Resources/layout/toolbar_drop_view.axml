@@ -1,27 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.appbar.AppBarLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/appbar"
-    android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
-    app:elevation="0dp">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/darkGrey">
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+        app:elevation="0dp">
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/darkGrey">
         <TextView
-            android:id="@+id/textview_toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SkyDrop"
-            android:textColor="#fff"
-            android:layout_gravity="center"
-            android:lines="1"
-            android:ellipsize="middle"
-            app:MvxBind="Text Title"
-            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
+                android:id="@+id/textview_toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SkyDrop"
+                android:textColor="#fff"
+                android:layout_gravity="center"
+                android:lines="1"
+                android:ellipsize="middle"
+                app:MvxBind="Text Title"
+                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
     </androidx.appcompat.widget.Toolbar>
 </com.google.android.material.appbar.AppBarLayout>

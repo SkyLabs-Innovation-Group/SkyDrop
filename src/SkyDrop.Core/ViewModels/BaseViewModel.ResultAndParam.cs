@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using MvvmCross.ViewModels;
 using SkyDrop.Core.Services;
 
 namespace SkyDrop.Core.ViewModels
 {
-    public abstract class BaseViewModel<TParameter, TResult> : BaseViewModelResult<TResult>, IMvxViewModel<TParameter, TResult>
+    public abstract class BaseViewModel<TParameter, TResult> : BaseViewModelResult<TResult>,
+        IMvxViewModel<TParameter, TResult>
         where TParameter : notnull
         where TResult : notnull
     {

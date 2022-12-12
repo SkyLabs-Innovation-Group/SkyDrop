@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Globalization;
 using Acr.UserDialogs;
-using CoreGraphics;
 using MvvmCross.Converters;
 using UIKit;
 

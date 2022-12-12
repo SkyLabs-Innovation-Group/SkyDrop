@@ -1,5 +1,4 @@
-﻿using System;
-namespace SkyDrop.Core.Components
+﻿namespace SkyDrop.Core.Components
 {
     public static class JsSnippets
     {

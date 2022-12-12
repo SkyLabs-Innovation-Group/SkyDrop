@@ -1,34 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
-using Android.Content;
-using Android.Graphics;
 using Android.OS;
-using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using Google.Android.Material.Card;
 using MvvmCross.Commands;
 using SkyDrop.Core.ViewModels;
-using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.Droid.Helper;
-using SkyDrop.Droid.Views.Files;
 using Xamarin.Essentials;
 using ZXing.Mobile;
-using static ZXing.Mobile.MobileBarcodeScanningOptions;
+using Result = ZXing.Result;
 
 namespace SkyDrop.Droid.Views.Main
 {
     [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden)]
     public class SharePublicKeyView : BaseActivity<SharePublicKeyViewModel>
     {
-        protected override int ActivityLayoutId => Resource.Layout.SharePublicKeyView;
-
         private ImageView barcodeImageView;
         private ZXingSurfaceView scannerView;
+        protected override int ActivityLayoutId => Resource.Layout.SharePublicKeyView;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -51,7 +42,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Generate and display QR code
+        ///     Generate and display QR code
         /// </summary>
         private async Task ShowBarcode()
         {
@@ -76,9 +67,11 @@ namespace SkyDrop.Droid.Views.Main
 
         private void ShowScanner()
         {
-            var scanningOptions = new MobileBarcodeScanningOptions { CameraResolutionSelector = new CameraResolutionSelectorDelegate(QRScannerHelper.GetSquareScannerResolution) };
+            var scanningOptions = new MobileBarcodeScanningOptions
+                { CameraResolutionSelector = QrScannerHelper.GetSquareScannerResolution };
             scannerView = new ZXingSurfaceView(this, scanningOptions);
-            scannerView.LayoutParameters = new MaterialCardView.LayoutParams(MaterialCardView.LayoutParams.MatchParent, MaterialCardView.LayoutParams.MatchParent);
+            scannerView.LayoutParameters = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent,
+                ViewGroup.LayoutParams.MatchParent);
 
             var scannerContainer = FindViewById<MaterialCardView>(Resource.Id.ScannerContainer);
             scannerContainer.AddView(scannerView);
@@ -92,7 +85,7 @@ namespace SkyDrop.Droid.Views.Main
             scannerView.Dispose();
         }
 
-        private void HandleScanResult(ZXing.Result result)
+        private void HandleScanResult(Result result)
         {
             if (result == null)
                 return;

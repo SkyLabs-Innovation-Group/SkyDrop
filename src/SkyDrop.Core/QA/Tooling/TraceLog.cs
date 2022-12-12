@@ -22,7 +22,7 @@ namespace SkyDrop
         {
             try
             {
-                string fileName = Path.GetFileName(sourceFilePath);
+                var fileName = Path.GetFileName(sourceFilePath);
 
                 Debug.WriteLine($"{fileName}:{sourceLineNumber} " + message);
             }

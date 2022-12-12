@@ -1,9 +1,4 @@
-using System;
-using System.Drawing;
-using Acr.UserDialogs;
-using AndroidX.CardView.Widget;
 using FFImageLoading.Cross;
-using Google.Android.Material.Card;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
 using SkyDrop.Core.DataModels;
@@ -14,11 +9,11 @@ namespace SkyDrop.Droid.Bindings
 {
     public class SkyFilePreviewImageBinding : MvxTargetBinding<MvxCachedImageView, SkyFile>
     {
-        public static string Name => "SkyFilePreviewImage";
-
         public SkyFilePreviewImageBinding(MvxCachedImageView target) : base(target)
         {
         }
+
+        public static string Name => "SkyFilePreviewImage";
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
@@ -29,7 +24,7 @@ namespace SkyDrop.Droid.Bindings
             if (value == null)
                 return;
 
-            if (!Util.CanDisplayPreview(value.Filename))
+            if (!value.Filename.CanDisplayPreview())
                 return;
 
             if (value.Skylink.IsNullOrEmpty())

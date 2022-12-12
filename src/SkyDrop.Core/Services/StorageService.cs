@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -10,83 +9,80 @@ using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.RealmObjects;
 using SkyDrop.Core.Utility;
-using static System.Net.WebRequestMethods;
+using Xamarin.Essentials;
+using Contact = SkyDrop.Core.DataModels.Contact;
 
 namespace SkyDrop.Core.Services
 {
     public class StorageService : IStorageService
     {
-        private const string privateKeyStorageKey = "private_key";
-        private const string publicKeyStorageKey = "public_key";
-        private const string idStorageKey = "device_id";
-        private const string nameStorageKey = "device_name";
+        private const string PrivateKeyStorageKey = "private_key";
+        private const string PublicKeyStorageKey = "public_key";
+        private const string IdStorageKey = "device_id";
+        private const string NameStorageKey = "device_name";
         private readonly ILog log;
-        private Realm realm => GetRealm();
+
+        private int saveCallCount;
 
         public StorageService(ILog log)
         {
             this.log = log;
         }
 
+        private Realm Realm => GetRealm();
+
         public List<SkyFile> LoadSentSkyFiles()
         {
-            var realmSkyFiles = realm.All<SkyFileRealmObject>().Where(f => f.WasSent);
+            var realmSkyFiles = Realm.All<SkyFileRealmObject>().Where(f => f.WasSent);
             return realmSkyFiles.Select(SkyFileFromRealmObject).ToList();
         }
 
         public List<SkyFile> LoadReceivedSkyFiles()
         {
-            var realmSkyFiles = realm.All<SkyFileRealmObject>().Where(f => !f.WasSent);
+            var realmSkyFiles = Realm.All<SkyFileRealmObject>().Where(f => !f.WasSent);
             return realmSkyFiles.Select(SkyFileFromRealmObject).ToList();
         }
 
         public List<SkyFile> LoadSkyFilesWithSkylinks(List<string> skylinks)
         {
-            var realmSkyFiles = realm.All<SkyFileRealmObject>().ToList() //additional ToList() fixes "Contains not supported" error
+            var realmSkyFiles = Realm.All<SkyFileRealmObject>()
+                .ToList() //additional ToList() fixes "Contains not supported" error
                 .Where(a => skylinks.Contains(a.Skylink)).Select(SkyFileFromRealmObject).ToList();
 
-            foreach (var skyFile in realmSkyFiles)
-            {
-                skyFile.Status = FileStatus.Uploaded;
-            }
+            foreach (var skyFile in realmSkyFiles) skyFile.Status = FileStatus.Uploaded;
 
             return realmSkyFiles;
         }
 
         public List<Folder> LoadFolders()
         {
-            var folders = realm.All<FolderRealmObject>();
+            var folders = Realm.All<FolderRealmObject>();
             return folders.Select(FolderFromRealmObject).OrderBy(f => f.Name).ToList();
         }
 
         public void SaveFolder(Folder folder)
         {
             var realmObject = FolderToRealmObject(folder);
-            realm.Write(() =>
-            {
-                realm.Add(realmObject, true);
-            });
+            Realm.Write(() => { Realm.Add(realmObject, true); });
         }
 
         public void DeleteFolder(Folder folder)
         {
-            realm.Write(() =>
+            Realm.Write(() =>
             {
-                var realmObject = realm.Find<FolderRealmObject>(folder.Id.ToString());
-                realm.Remove(realmObject);
+                var realmObject = Realm.Find<FolderRealmObject>(folder.Id.ToString());
+                Realm.Remove(realmObject);
             });
         }
-
-        int saveCallCount = 0;
 
         public void SaveSkyFiles(params SkyFile[] skyFiles)
         {
             saveCallCount++;
 
-            realm.Write(() =>
+            Realm.Write(() =>
             {
                 log.Trace("SaveSkyFiles() write for call #" + saveCallCount);
-                realm.Add(skyFiles.Select(SkyFileToRealmObject), true);
+                Realm.Add(skyFiles.Select(SkyFileToRealmObject), true);
             });
         }
 
@@ -94,10 +90,11 @@ namespace SkyDrop.Core.Services
         {
             if (folder == null)
             {
-                var folders = realm.All<FolderRealmObject>().ToList() //additional ToList() fixes "Contains not supported" error
+                var folders = Realm.All<FolderRealmObject>()
+                    .ToList() //additional ToList() fixes "Contains not supported" error
                     .Where(f => f.SkyLinks.Contains(skyFile.Skylink)).ToList();
 
-                realm.Write(() =>
+                Realm.Write(() =>
                 {
                     //remove the skylink from all folders
                     foreach (var oldFolderObj in folders)
@@ -105,13 +102,13 @@ namespace SkyDrop.Core.Services
                         var oldFolder = FolderFromRealmObject(oldFolderObj);
                         oldFolder.SkyLinks = oldFolder.SkyLinks.Where(s => s != skyFile.Skylink).ToList();
                         var newFolderObj = FolderToRealmObject(oldFolder);
-                        realm.Remove(oldFolderObj);
-                        realm.Add(newFolderObj);
+                        Realm.Remove(oldFolderObj);
+                        Realm.Add(newFolderObj);
                     }
 
                     //delete SkyFile record
-                    var fileObject = realm.Find<SkyFileRealmObject>(skyFile.Skylink);
-                    realm.Remove(fileObject);
+                    var fileObject = Realm.Find<SkyFileRealmObject>(skyFile.Skylink);
+                    Realm.Remove(fileObject);
                 });
 
                 return;
@@ -122,12 +119,12 @@ namespace SkyDrop.Core.Services
             folder.SkyLinks = folder.SkyLinks.Where(s => s != skyFile.Skylink).ToList();
             var newFolderObject = FolderToRealmObject(folder);
 
-            realm.Write(() =>
+            Realm.Write(() =>
             {
-                var oldFolderObject = realm.Find<FolderRealmObject>(folder.Id.ToString());
-                realm.Remove(oldFolderObject);
+                var oldFolderObject = Realm.Find<FolderRealmObject>(folder.Id.ToString());
+                Realm.Remove(oldFolderObject);
 
-                realm.Add(newFolderObject);
+                Realm.Add(newFolderObject);
             });
         }
 
@@ -136,12 +133,12 @@ namespace SkyDrop.Core.Services
             folder.SkyLinks.AddRange(skyFiles.Select(s => s.Skylink));
             var newFolderObject = FolderToRealmObject(folder);
 
-            realm.Write(() =>
+            Realm.Write(() =>
             {
-                var oldFolderObject = realm.Find<FolderRealmObject>(folder.Id.ToString());
-                realm.Remove(oldFolderObject);
+                var oldFolderObject = Realm.Find<FolderRealmObject>(folder.Id.ToString());
+                Realm.Remove(oldFolderObject);
 
-                realm.Add(newFolderObject);
+                Realm.Add(newFolderObject);
             });
         }
 
@@ -149,7 +146,7 @@ namespace SkyDrop.Core.Services
         {
             try
             {
-                var uploadAverage = realm.All<UploadAverage>().First();
+                var uploadAverage = Realm.All<UploadAverage>().First();
                 return uploadAverage;
             }
             catch (InvalidOperationException)
@@ -161,11 +158,11 @@ namespace SkyDrop.Core.Services
 
         public void SetAverageUploadRate(UploadAverage uploadAverage)
         {
-            realm.Write(() =>
+            Realm.Write(() =>
             {
                 log.Trace("SetAverageUploadRate()");
-                realm.RemoveAll<UploadAverage>();
-                realm.Add(uploadAverage);
+                Realm.RemoveAll<UploadAverage>();
+                Realm.Add(uploadAverage);
             });
         }
 
@@ -173,7 +170,7 @@ namespace SkyDrop.Core.Services
         {
             try
             {
-                var realmObjects = realm.All<ContactRealmObject>().ToArray();
+                var realmObjects = Realm.All<ContactRealmObject>().ToArray();
                 return ContactsFromRealmObjects(realmObjects);
             }
             catch (InvalidOperationException)
@@ -190,75 +187,69 @@ namespace SkyDrop.Core.Services
                 throw new Exception($"Contact already saved as {name}");
 
             //gracefully avoid naming collisions by adding (1), (2), (3) etc. to the end of the contact name
-            int i = 1;
+            var i = 1;
             while (ContactNameExists(contact.Name))
             {
-                string formattedContactName = contact.Name + " {0}";
+                var formattedContactName = contact.Name + " {0}";
                 contact.Name = string.Format(formattedContactName, "(" + i++ + ")");
             }
 
-            realm.Write(() =>
+            Realm.Write(() =>
             {
                 var realmObject = ContactToRealmObject(contact);
-                realm.Add(realmObject);
+                Realm.Add(realmObject);
             });
         }
 
         public (bool exists, string savedName) ContactExists(Guid id)
         {
-            var existingContact = realm.Find<ContactRealmObject>(id.ToString());
+            var existingContact = Realm.Find<ContactRealmObject>(id.ToString());
             var exists = existingContact != null;
             return (exists, existingContact?.Name);
         }
 
-        private bool ContactNameExists(string contactName)
-        {
-            var existingContact = realm.All<ContactRealmObject>().ToList().FirstOrDefault(c => c.Name == contactName);
-            var exists = existingContact != null;
-            return exists;
-        }
-
         public void DeleteContact(Contact contact)
         {
-            realm.Write(() =>
+            Realm.Write(() =>
             {
-                var realmObject = realm.Find<ContactRealmObject>(contact.Id.ToString());
-                realm.Remove(realmObject);
+                var realmObject = Realm.Find<ContactRealmObject>(contact.Id.ToString());
+                Realm.Remove(realmObject);
             });
         }
 
         public async Task UpdateDeviceName(string name)
         {
-            await Xamarin.Essentials.SecureStorage.SetAsync(nameStorageKey, name);
+            await SecureStorage.SetAsync(NameStorageKey, name);
         }
 
         public void RenameContact(Contact contact, string newName)
         {
             contact.Name = newName;
-            realm.Write(() =>
+            Realm.Write(() =>
             {
-                var realmObj = realm.Find<ContactRealmObject>(contact.Id.ToString());
+                var realmObj = Realm.Find<ContactRealmObject>(contact.Id.ToString());
                 realmObj.Name = newName;
-                realm.Add(realmObj);
+                Realm.Add(realmObj);
             });
         }
 
         public async Task<EncryptionKeys> GetMyEncryptionKeys()
         {
-            var id = await Xamarin.Essentials.SecureStorage.GetAsync(idStorageKey);
+            var id = await SecureStorage.GetAsync(IdStorageKey);
             if (id == null)
                 return null;
 
             return new EncryptionKeys
             {
                 Id = id,
-                PublicKeyBase64 = await Xamarin.Essentials.SecureStorage.GetAsync(publicKeyStorageKey),
-                PrivateKeyBase64 = await Xamarin.Essentials.SecureStorage.GetAsync(privateKeyStorageKey),
-                Name = await Xamarin.Essentials.SecureStorage.GetAsync(nameStorageKey)
+                PublicKeyBase64 = await SecureStorage.GetAsync(PublicKeyStorageKey),
+                PrivateKeyBase64 = await SecureStorage.GetAsync(PrivateKeyStorageKey),
+                Name = await SecureStorage.GetAsync(NameStorageKey)
             };
         }
 
-        public async Task SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id, string deviceName)
+        public async Task SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey,
+            X25519PublicKeyParameters publicKey, Guid id, string deviceName)
         {
             var privateBytes = privateKey.GetEncoded();
             var privateKeyString = Convert.ToBase64String(privateBytes);
@@ -266,25 +257,68 @@ namespace SkyDrop.Core.Services
             var publicBytes = publicKey.GetEncoded();
             var publicKeyString = Convert.ToBase64String(publicBytes);
 
-            await Xamarin.Essentials.SecureStorage.SetAsync(publicKeyStorageKey, publicKeyString);
-            await Xamarin.Essentials.SecureStorage.SetAsync(privateKeyStorageKey, privateKeyString);
-            await Xamarin.Essentials.SecureStorage.SetAsync(idStorageKey, id.ToString());
-            await Xamarin.Essentials.SecureStorage.SetAsync(nameStorageKey, deviceName);
+            await SecureStorage.SetAsync(PublicKeyStorageKey, publicKeyString);
+            await SecureStorage.SetAsync(PrivateKeyStorageKey, privateKeyString);
+            await SecureStorage.SetAsync(IdStorageKey, id.ToString());
+            await SecureStorage.SetAsync(NameStorageKey, deviceName);
         }
 
-        
 
-    public void ClearAllData()
+        public void ClearAllData()
         {
-            realm.Write(() =>
+            Realm.Write(() => { Realm.RemoveAll(); });
+        }
+
+        public void SaveSkynetPortal(SkynetPortal portal, string apiToken = null)
+        {
+            Realm.Write(async () =>
             {
-                realm.RemoveAll();
+                await SaveApiTokenForPortal(portal.GetApiTokenPrefKey(), apiToken);
+                Realm.Add(portal);
             });
         }
 
+        public void EditSkynetPortal(string id)
+        {
+            EditSkynetPortal(new SkynetPortalDvm(Realm.Find<SkynetPortal>(id)));
+        }
+
+        public void EditSkynetPortal(SkynetPortalDvm portal, string apiToken = null)
+        {
+            Realm.Write(async () =>
+            {
+                await SaveApiTokenForPortal(portal.ApiTokenPrefKey, apiToken);
+
+                var storedPortal = Realm.Find<SkynetPortal>(portal.RealmId);
+
+                storedPortal.Name = portal.Name;
+                storedPortal.BaseUrl = portal.BaseUrl;
+                storedPortal.PortalPreferencesPosition = portal.PortalPreferencesPosition;
+
+                Realm.Add(storedPortal);
+            });
+        }
+
+        public List<SkynetPortal> LoadSkynetPortals()
+        {
+            return Realm.All<SkynetPortal>().ToList();
+        }
+
+        public SkynetPortal LoadSkynetPortal(string portalId)
+        {
+            return Realm.Find<SkynetPortal>(portalId);
+        }
+
+        private bool ContactNameExists(string contactName)
+        {
+            var existingContact = Realm.All<ContactRealmObject>().ToList().FirstOrDefault(c => c.Name == contactName);
+            var exists = existingContact != null;
+            return exists;
+        }
+
         /// <summary>
-        /// If there is a data discrepancy,
-        /// Clears the whole database off and resets
+        ///     If there is a data discrepancy,
+        ///     Clears the whole database off and resets
         /// </summary>
         private Realm GetRealm()
         {
@@ -339,7 +373,7 @@ namespace SkyDrop.Core.Services
             {
                 Id = contact.Id.ToString(),
                 Name = contact.Name,
-                PublicKeyBase64 = Util.PublicKeyToBase64String(contact.PublicKey)
+                PublicKeyBase64 = contact.PublicKey.PublicKeyToBase64String()
             };
         }
 
@@ -349,17 +383,19 @@ namespace SkyDrop.Core.Services
             {
                 Id = new Guid(c.Id),
                 Name = c.Name,
-                PublicKey = Util.Base64StringToPublicKey(c.PublicKeyBase64)
+                PublicKey = c.PublicKeyBase64.Base64StringToPublicKey()
             }).ToList();
         }
-        
+
         private Folder FolderFromRealmObject(FolderRealmObject realmObject)
         {
             return new Folder
             {
                 Id = new Guid(realmObject.Id),
                 Name = realmObject.Name,
-                SkyLinks = realmObject.SkyLinks.IsNullOrEmpty() ? new List<string>() : realmObject.SkyLinks.Split(',').ToList()
+                SkyLinks = realmObject.SkyLinks.IsNullOrEmpty()
+                    ? new List<string>()
+                    : realmObject.SkyLinks.Split(',').ToList()
             };
         }
 
@@ -373,44 +409,12 @@ namespace SkyDrop.Core.Services
             };
         }
 
-        public void SaveSkynetPortal(SkynetPortal portal, string apiToken = null)
-        {
-          realm.Write(async () =>
-          {
-            await SaveApiTokenForPortal(portal.GetApiTokenPrefKey(), apiToken);
-            realm.Add(portal);
-          });
-        }
-
-        public void EditSkynetPortal(string id) => EditSkynetPortal(new SkynetPortalDVM(realm.Find<SkynetPortal>(id)));
-
-        public void EditSkynetPortal(SkynetPortalDVM portal, string apiToken = null)
-        {
-          realm.Write(async () =>
-          {
-            await SaveApiTokenForPortal(portal.ApiTokenPrefKey, apiToken);
-
-            var storedPortal = realm.Find<SkynetPortal>(portal.RealmId.ToString());
-
-            storedPortal.Name = portal.Name;
-            storedPortal.BaseUrl = portal.BaseUrl;
-            storedPortal.PortalPreferencesPosition = portal.PortalPreferencesPosition;
-
-            realm.Add(storedPortal);
-          });
-        }
-
         private Task SaveApiTokenForPortal(string portalPrefKey, string apiToken)
         {
             if (!string.IsNullOrEmpty(apiToken))
-                return Xamarin.Essentials.SecureStorage.SetAsync(portalPrefKey, apiToken);
-            else
-                return Task.CompletedTask;
+                return SecureStorage.SetAsync(portalPrefKey, apiToken);
+            return Task.CompletedTask;
         }
-
-      public List<SkynetPortal> LoadSkynetPortals() => realm.All<SkynetPortal>().ToList();
-
-        public SkynetPortal LoadSkynetPortal(string portalId) => realm.Find<SkynetPortal>(portalId);
     }
 
     public interface IStorageService
@@ -447,7 +451,8 @@ namespace SkyDrop.Core.Services
 
         void DeleteContact(Contact contact);
 
-        Task SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id, string deviceName);
+        Task SaveMyEncryptionKeys(X25519PrivateKeyParameters privateKey, X25519PublicKeyParameters publicKey, Guid id,
+            string deviceName);
 
         Task<EncryptionKeys> GetMyEncryptionKeys();
 
@@ -457,12 +462,12 @@ namespace SkyDrop.Core.Services
 
         void SaveSkynetPortal(SkynetPortal portal, string apiToken = null);
 
-        void EditSkynetPortal(SkynetPortalDVM portal, string apiToken = null);
+        void EditSkynetPortal(SkynetPortalDvm portal, string apiToken = null);
 
         List<SkynetPortal> LoadSkynetPortals();
 
         SkynetPortal LoadSkynetPortal(string portalId);
 
         void EditSkynetPortal(string id);
-  }
+    }
 }

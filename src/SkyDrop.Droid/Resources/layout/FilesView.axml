@@ -1,237 +1,237 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    android:background="@color/darkGrey">
-    <include
-        android:id="@+id/layout_toolbar"
-        layout="@layout/toolbar_files" />
-    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        android:background="@color/darkGrey">
+    <include
+            android:id="@+id/layout_toolbar"
+            layout="@layout/toolbar_files"/>
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
         <skydrop.droid.views.files.FileExplorerView
-            android:id="@+id/FilesRecycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:MvxItemTemplate="@layout/item_file_list"
-            app:MvxBind="ItemsSource SkyFiles; Visibility InvertedVisibility(IsFoldersVisible)"
-            />
-        <MvvmCross.Droid.Support.V7.RecyclerView.MvxRecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:MvxItemTemplate="@layout/item_folder"
-            app:MvxBind="ItemsSource Folders; Visibility Visibility(IsFoldersVisible)"
-            />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:orientation="vertical"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_horizontal"
-            app:MvxBind="Visibility Visibility(IsLoadingLabelVisible)">
-            <FrameLayout
-                android:layout_width="40dp"
-                android:layout_height="40dp">
-                <ProgressBar
-                    android:id="@+id/ProgressBar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:progressTint="#eee"
-                    app:MvxBind="Visibility InvertedVisibility(IsError)"/>
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_error"
-                    app:MvxBind="Visibility Visibility(IsError)"/>
-            </FrameLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center_horizontal"
-                android:textSize="17dp"
-                android:textStyle="bold"
-                android:textColor="#eee"
-                android:text="Doing something..."
-                app:MvxBind="Text LoadingLabelText"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center_horizontal"
-                android:textSize="14dp"
-                android:textColor="#eee"
-                android:text="Error details"
-                app:MvxBind="Text ErrorDetailText;"
-                />
-            <!--Unzip Error Menu-->
-            <LinearLayout
+                android:id="@+id/FilesRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginHorizontal="16dp"
-                android:orientation="horizontal"
-                app:MvxBind="Visibility Visibility(IsUnzipError)">
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0px"
+                app:MvxItemTemplate="@layout/item_file_list"
+                app:MvxBind="ItemsSource SkyFiles; Visibility InvertedVisibility(IsFoldersVisible)"
+        />
+        <MvvmCross.Droid.Support.V7.RecyclerView.MvxRecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:MvxItemTemplate="@layout/item_folder"
+                app:MvxBind="ItemsSource Folders; Visibility Visibility(IsFoldersVisible)"
+        />
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_horizontal"
+                app:MvxBind="Visibility Visibility(IsLoadingLabelVisible)">
+            <FrameLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp">
+                <ProgressBar
+                        android:id="@+id/ProgressBar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:progressTint="#eee"
+                        app:MvxBind="Visibility InvertedVisibility(IsError)"/>
+                <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_error"
+                        app:MvxBind="Visibility Visibility(IsError)"/>
+            </FrameLayout>
+            <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginRight="16dp"
-                    android:visibility="invisible"
-                    app:cardElevation="1dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardBackgroundColor="@color/primaryColor"
-                    app:MvxBind="Click CopyLinkCommand">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_horizontal"
+                    android:textSize="17dp"
+                    android:textStyle="bold"
+                    android:textColor="#eee"
+                    android:text="Doing something..."
+                    app:MvxBind="Text LoadingLabelText"
+            />
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_horizontal"
+                    android:textSize="14dp"
+                    android:textColor="#eee"
+                    android:text="Error details"
+                    app:MvxBind="Text ErrorDetailText;"
+            />
+            <!--Unzip Error Menu-->
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:orientation="horizontal"
+                    app:MvxBind="Visibility Visibility(IsUnzipError)">
+                <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0px"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_gravity="center"
-                        app:layout_constraintDimensionRatio="1:1"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_weight="1"
+                        android:layout_marginRight="16dp"
+                        android:visibility="invisible"
+                        app:cardElevation="1dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardBackgroundColor="@color/primaryColor"
+                        app:MvxBind="Click CopyLinkCommand">
+                    <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:layout_gravity="center"
+                            app:layout_constraintDimensionRatio="1:1"
+                            android:gravity="center"
+                            android:orientation="vertical">
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_marginTop="8dp"
-                            android:src="@drawable/ic_link"/>
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_marginTop="8dp"
+                                android:src="@drawable/ic_link"/>
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Copy"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/lightGrey"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="12dp"/>
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Copy"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/lightGrey"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="12dp"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0px"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginRight="16dp"
-                    app:cardElevation="1dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardBackgroundColor="@color/skyGreen"
-                    app:MvxBind="Click SaveArchiveCommand">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0px"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_weight="1"
+                        android:layout_marginRight="16dp"
+                        app:cardElevation="1dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardBackgroundColor="@color/skyGreen"
+                        app:MvxBind="Click SaveArchiveCommand">
+                    <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="vertical">
                         <FrameLayout
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_marginTop="8dp" >
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_marginTop="8dp">
                             <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:src="@drawable/ic_download"
-                                app:MvxBind="Visibility InvertedVisibility(IsSavingArchive);"
-                                />
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:src="@drawable/ic_download"
+                                    app:MvxBind="Visibility InvertedVisibility(IsSavingArchive);"
+                            />
                             <ProgressBar
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                app:MvxBind="Visibility Visibility(IsSavingArchive)"/>
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    app:MvxBind="Visibility Visibility(IsSavingArchive)"/>
                         </FrameLayout>
-                        
+
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Save"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/lightGrey"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="12dp"/>
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Save"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/lightGrey"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="12dp"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0px"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginRight="16dp"
-                    app:cardElevation="1dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardBackgroundColor="@color/skyTurqouise"
-                    app:MvxBind="Click ExtractArchiveCommand">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0px"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_weight="1"
+                        android:layout_marginRight="16dp"
+                        app:cardElevation="1dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardBackgroundColor="@color/skyTurqouise"
+                        app:MvxBind="Click ExtractArchiveCommand">
+                    <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="vertical">
                         <FrameLayout
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_marginTop="8dp" >
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_marginTop="8dp">
                             <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:src="@drawable/ic_folder"
-                                app:MvxBind="Visibility InvertedVisibility(IsExtractingArchive);"
-                                />
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:src="@drawable/ic_folder"
+                                    app:MvxBind="Visibility InvertedVisibility(IsExtractingArchive);"
+                            />
                             <ProgressBar
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                app:MvxBind="Visibility Visibility(IsExtractingArchive)"/>
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    app:MvxBind="Visibility Visibility(IsExtractingArchive)"/>
                         </FrameLayout>
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Extract"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/lightGrey"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="12dp"/>
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Extract"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/lightGrey"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="12dp"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0px"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:visibility="invisible"
-                    app:cardElevation="1dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardBackgroundColor="@color/skyOcean"
-                    app:MvxBind="Click ShareLinkCommand">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0px"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        app:cardElevation="1dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardBackgroundColor="@color/skyOcean"
+                        app:MvxBind="Click ShareLinkCommand">
+                    <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_share"
-                            android:layout_marginTop="8dp" />
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:src="@drawable/ic_share"
+                                android:layout_marginTop="8dp"/>
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Share"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/lightGrey"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="12dp"/>
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Share"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/lightGrey"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="12dp"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>
-    
+
 </LinearLayout>

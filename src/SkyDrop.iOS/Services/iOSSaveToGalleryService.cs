@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Foundation;
 using SkyDrop.Core.Services;
@@ -8,21 +7,20 @@ using Xamarin.Essentials;
 
 namespace SkyDrop.iOS.Services
 {
-	public class iOSSaveToGalleryService : ISaveToGalleryService
-	{
-		public async Task<string> SaveToGallery(Stream imageData, string filename)
+    public class IOsSaveToGalleryService : ISaveToGalleryService
+    {
+        public async Task<string> SaveToGallery(Stream imageData, string filename)
         {
-			await MainThread.InvokeOnMainThreadAsync(() =>
-			{
-				var nsData = NSData.FromStream(imageData);
-				var image = new UIImage(nsData);
-				var taskCompletionSource = new TaskCompletionSource<bool>();
-				image.SaveToPhotosAlbum((UIImage img, NSError error) => taskCompletionSource.SetResult(error == null));
-				return taskCompletionSource.Task;
-			});
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                var nsData = NSData.FromStream(imageData);
+                var image = new UIImage(nsData);
+                var taskCompletionSource = new TaskCompletionSource<bool>();
+                image.SaveToPhotosAlbum((UIImage img, NSError error) => taskCompletionSource.SetResult(error == null));
+                return taskCompletionSource.Task;
+            });
 
-			return filename;
-		}
-	}
+            return filename;
+        }
+    }
 }
-

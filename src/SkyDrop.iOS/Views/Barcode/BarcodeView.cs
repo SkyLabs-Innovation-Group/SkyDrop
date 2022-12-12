@@ -13,10 +13,10 @@ namespace SkyDrop.iOS.Views.Barcode
 {
     public partial class BarcodeView : BaseViewController<BarcodeViewModel>
     {
-        private Timer textTimer;
-        private const int textInputConstraintShort = 12;
-        private const int textInputConstraintLong = 60;
+        private const int TextInputConstraintShort = 12;
+        private const int TextInputConstraintLong = 60;
         private UIBarButtonItem closeKeyboardButton;
+        private Timer textTimer;
 
         public BarcodeView() : base("BarcodeView", null)
         {
@@ -32,13 +32,13 @@ namespace SkyDrop.iOS.Views.Barcode
             {
                 View.EndEditing(true);
                 NavigationItem.RightBarButtonItem = null;
-                TextInputRightConstraint.Constant = textInputConstraintShort;
+                TextInputRightConstraint.Constant = TextInputConstraintShort;
             });
 
             TextInput.EditingDidBegin += (s, e) =>
             {
                 NavigationItem.RightBarButtonItem = closeKeyboardButton;
-                TextInputRightConstraint.Constant = textInputConstraintLong;
+                TextInputRightConstraint.Constant = TextInputConstraintLong;
             };
 
             BarcodeContainer.ClipsToBounds = true;
@@ -57,13 +57,13 @@ namespace SkyDrop.iOS.Views.Barcode
 
             InitTextTimer();
 
-            var set = this.CreateBindingSet();
+            var set = CreateBindingSet();
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Apply();
         }
 
         /// <summary>
-        /// Generate and display QR code
+        ///     Generate and display QR code
         /// </summary>
         private async Task ShowBarcode()
         {
@@ -79,8 +79,9 @@ namespace SkyDrop.iOS.Views.Barcode
                     }
 
                     var screenDensity = (int)UIScreen.MainScreen.Scale;
-                    var matrix = ViewModel.GenerateBarcode(TextInput.Text, (int)BarcodeImage.Frame.Width * screenDensity, (int)BarcodeImage.Frame.Height * screenDensity);
-                    var image = await iOSUtil.BitMatrixToImage(matrix);
+                    var matrix = ViewModel.GenerateBarcode(TextInput.Text,
+                        (int)BarcodeImage.Frame.Width * screenDensity, (int)BarcodeImage.Frame.Height * screenDensity);
+                    var image = await IOsUtil.BitMatrixToImage(matrix);
                     BarcodeImage.Image = image;
                 }
                 catch (Exception ex)
@@ -92,7 +93,7 @@ namespace SkyDrop.iOS.Views.Barcode
         }
 
         /// <summary>
-        /// Delays the barcode generation so it doesn't need to render constantly while typing
+        ///     Delays the barcode generation so it doesn't need to render constantly while typing
         /// </summary>
         private void InitTextTimer()
         {
@@ -110,5 +111,3 @@ namespace SkyDrop.iOS.Views.Barcode
         }
     }
 }
-
-

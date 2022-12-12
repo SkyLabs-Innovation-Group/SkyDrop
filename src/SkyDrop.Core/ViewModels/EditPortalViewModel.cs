@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using SkyDrop.Core.DataModels;
@@ -12,8 +11,16 @@ namespace SkyDrop.Core.ViewModels
 {
     public class EditPortalViewModel : BaseViewModel<NavParam>
     {
-        public SkynetPortal Portal;
         private readonly IMvxNavigationService navigationService;
+        public SkynetPortal Portal;
+
+        public EditPortalViewModel(ISingletonService singletonService, IMvxNavigationService navigationService) : base(
+            singletonService)
+        {
+            SavePortalCommand = new MvxCommand(SavePortal);
+            LoginWithPortalCommand = new MvxAsyncCommand(LoginWithPortal);
+            this.navigationService = navigationService;
+        }
 
         public string PortalName { get; set; }
 
@@ -23,40 +30,28 @@ namespace SkyDrop.Core.ViewModels
 
         public IMvxCommand SavePortalCommand { get; set; }
 
-        public EditPortalViewModel(ISingletonService singletonService, IMvxNavigationService navigationService) : base(singletonService)
-        {
-            SavePortalCommand = new MvxCommand(SavePortal);
-            LoginWithPortalCommand = new MvxAsyncCommand(LoginWithPortal);
-            this.navigationService = navigationService;
-        }
+        public bool AddingNewPortal { get; set; }
+
+        public TaskCompletionSource<bool> PrepareTcs { get; set; } = new TaskCompletionSource<bool>();
+        public IMvxCommand LoginWithPortalCommand { get; set; }
 
         private void SavePortal()
         {
             Portal ??= new SkynetPortal(PortalUrl, PortalName);
 
-            var portalDVM = new SkynetPortalDVM(Portal)
+            var portalDvm = new SkynetPortalDvm(Portal)
             {
                 Name = PortalName,
-                BaseUrl = PortalUrl,
+                BaseUrl = PortalUrl
             };
 
             if (AddingNewPortal)
-                singletonService.StorageService.SaveSkynetPortal(Portal, ApiToken);
+                SingletonService.StorageService.SaveSkynetPortal(Portal, ApiToken);
             else
-                singletonService.StorageService.EditSkynetPortal(portalDVM, ApiToken);
+                SingletonService.StorageService.EditSkynetPortal(portalDvm, ApiToken);
 
-            singletonService.UserDialogs.Toast("Saved");
+            SingletonService.UserDialogs.Toast("Saved");
         }
-
-        public class NavParam
-        {
-            public string PortalId { get; set; }
-        }
-
-        public bool AddingNewPortal { get; set; }
-
-        public TaskCompletionSource<bool> PrepareTcs { get; set; } = new TaskCompletionSource<bool>();
-        public IMvxCommand LoginWithPortalCommand { get; set; }
 
         public override async void Prepare(NavParam parameter)
         {
@@ -66,14 +61,14 @@ namespace SkyDrop.Core.ViewModels
             }
             else
             {
-                Portal = singletonService.StorageService.LoadSkynetPortal(parameter.PortalId);
+                Portal = SingletonService.StorageService.LoadSkynetPortal(parameter.PortalId);
                 ApiToken = await SecureStorage.GetAsync(Portal.GetApiTokenPrefKey());
             }
 
             PrepareTcs.TrySetResult(true);
         }
 
-        public async override void ViewCreated()
+        public override async void ViewCreated()
         {
             base.ViewCreated();
 
@@ -88,10 +83,14 @@ namespace SkyDrop.Core.ViewModels
 
         private async Task LoginWithPortal()
         {
-           var result = await navigationService.Navigate<PortalLoginViewModel, string, string>(PortalUrl);
-           if (!string.IsNullOrEmpty(result))
-               ApiToken = result;
+            var result = await navigationService.Navigate<PortalLoginViewModel, string, string>(PortalUrl);
+            if (!string.IsNullOrEmpty(result))
+                ApiToken = result;
+        }
+
+        public class NavParam
+        {
+            public string PortalId { get; set; }
         }
     }
 }
-

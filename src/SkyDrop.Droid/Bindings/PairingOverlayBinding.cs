@@ -1,8 +1,6 @@
-using System.Drawing;
 using Acr.UserDialogs;
 using Android.Views;
 using Android.Widget;
-using AndroidX.CardView.Widget;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
 using SkyDrop.Core.Utility;
@@ -13,18 +11,18 @@ namespace SkyDrop.Droid.Bindings
 {
     public class PairingOverlayBinding : MvxTargetBinding<View, AddContactResult>
     {
-        public static string Name => "PairingOverlay";
-
         public PairingOverlayBinding(View target) : base(target)
         {
         }
+
+        public static string Name => "PairingOverlay";
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
         protected override void SetValue(AddContactResult value)
         {
             var checkIcon = Target.FindViewById<ImageView>(Resource.Id.checkIcon);
-            switch(value)
+            switch (value)
             {
                 case AddContactResult.Default:
                     Target.Visibility = ViewStates.Gone;

@@ -1,25 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Acr.UserDialogs;
-using CoreGraphics;
 using MvvmCross.Commands;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using MvvmCross.Platforms.Ios.Views;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.iOS.Common;
 using SkyDrop.iOS.Styles;
 using UIKit;
-using static SkyDrop.iOS.Common.iOSUtil;
 
 namespace SkyDrop.iOS.Views.Files
 {
     [MvxChildPresentationAttribute]
     public partial class FilesView : BaseViewController<FilesViewModel>
     {
-        private UIBarButtonItem layoutToggleButton, addFolderButton, deleteButton, moveButton, selectAllButton, saveFilesButton;
         private FileExplorerView fileExplorerView;
+
+        private UIBarButtonItem layoutToggleButton,
+            addFolderButton,
+            deleteButton,
+            moveButton,
+            selectAllButton,
+            saveFilesButton;
 
         public FilesView() : base("FilesView", null)
         {
@@ -131,4 +133,3 @@ namespace SkyDrop.iOS.Views.Files
         }
     }
 }
-

@@ -1,9 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
-using Realms;
-using SkyDrop.Core.DataModels;
 using Xamarin.Essentials;
 
 namespace SkyDrop.Core.Services
@@ -14,7 +10,7 @@ namespace SkyDrop.Core.Services
         private readonly IUserDialogs userDialogs;
 
         public ShareLinkService(ILog log,
-                                IUserDialogs userDialogs)
+            IUserDialogs userDialogs)
         {
             this.log = log;
             this.userDialogs = userDialogs;

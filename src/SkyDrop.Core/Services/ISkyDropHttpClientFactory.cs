@@ -6,7 +6,7 @@ namespace SkyDrop.Core.Services
     public interface ISkyDropHttpClientFactory
     {
         HttpClient GetSkyDropHttpClientInstance();
-        
+
         HttpClient GetSkyDropHttpClientInstance(SkynetPortal portal);
 
         void ClearCachedClients();

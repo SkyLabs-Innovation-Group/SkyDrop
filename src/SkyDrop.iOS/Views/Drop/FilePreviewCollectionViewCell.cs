@@ -1,14 +1,13 @@
 ﻿using System;
-using SkyDrop.iOS.Bindings;
+using Acr.UserDialogs;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding.Views;
-using SkyDrop.Core.DataModels;
-using UIKit;
-using SkyDrop.Core.Utility;
-using Acr.UserDialogs;
 using SkyDrop.Core.Converters;
 using SkyDrop.Core.DataViewModels;
+using SkyDrop.Core.Utility;
+using SkyDrop.iOS.Bindings;
+using UIKit;
 
 namespace SkyDrop.iOS.Views.Drop
 {
@@ -26,9 +25,10 @@ namespace SkyDrop.iOS.Views.Drop
         {
             this.DelayBind(() =>
             {
-                var set = this.CreateBindingSet<FilePreviewCollectionViewCell, StagedFileDVM>();
+                var set = this.CreateBindingSet<FilePreviewCollectionViewCell, StagedFileDvm>();
                 set.Bind(FilenameLabel).To(stagedFile => stagedFile.SkyFile.Filename);
-                set.Bind(FileExtensionLabel).To(stagedFile => stagedFile.SkyFile.Filename).WithConversion(FileExtensionConverter.Name);
+                set.Bind(FileExtensionLabel).To(stagedFile => stagedFile.SkyFile.Filename)
+                    .WithConversion(FileExtensionConverter.Name);
                 set.Bind(PreviewImage).For(LocalImagePreviewBinding.Name).To(stagedFile => stagedFile.SkyFile);
                 set.Bind(ContentView).For("Tap").To(stagedFile => stagedFile.TapCommand);
                 set.Bind(AddMoreFilesIcon).For("Visible").To(stagedFile => stagedFile.IsMoreFilesButton);

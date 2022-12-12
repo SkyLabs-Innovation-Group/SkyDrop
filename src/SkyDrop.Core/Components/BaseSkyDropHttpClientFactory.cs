@@ -12,15 +12,19 @@ namespace SkyDrop.Core.Components
         protected const string PortalApiTokenHeader = "Skynet-Api-Key";
 
         // todo: nb that this might one day cause issues if we stored too many HttpClient instances e.g. for 100s of portals
-        protected Dictionary<SkynetPortal, HttpClient> HttpClientsPerPortal { get; private set; } = new Dictionary<SkynetPortal, HttpClient>();
+        protected Dictionary<SkynetPortal, HttpClient> HttpClientsPerPortal { get; private set; } =
+            new Dictionary<SkynetPortal, HttpClient>();
 
         /// <summary>
-        /// This is the default paramaterless implementation for GetSkyDropHttpClientInstance(), it returns the default portal.
+        ///     This is the default paramaterless implementation for GetSkyDropHttpClientInstance(), it returns the default portal.
         /// </summary>
-        public HttpClient GetSkyDropHttpClientInstance() => GetSkyDropHttpClientInstance(new SkynetPortal(SkynetPortal.DefaultWeb3PortalUrl));
+        public HttpClient GetSkyDropHttpClientInstance()
+        {
+            return GetSkyDropHttpClientInstance(new SkynetPortal(SkynetPortal.DefaultWeb3PortalUrl));
+        }
 
         /// <summary>
-        /// This method returns a HttpClient connected to $portal.BaseUrl.
+        ///     This method returns a HttpClient connected to $portal.BaseUrl.
         /// </summary>
         public abstract HttpClient GetSkyDropHttpClientInstance(SkynetPortal portal);
 
@@ -36,16 +40,22 @@ namespace SkyDrop.Core.Components
             AddApiTokenHeader(httpClient, portal);
         }
 
-        public string GetTokenForHttpClient(SkynetPortal portal) => GetTokenForHttpClient(GetSkyDropHttpClientInstance(portal));
+        public string GetTokenForHttpClient(SkynetPortal portal)
+        {
+            return GetTokenForHttpClient(GetSkyDropHttpClientInstance(portal));
+        }
 
         public string GetTokenForHttpClient(HttpClient client)
         {
             string apiTokenHeader = null;
             try
             {
-                apiTokenHeader = client.DefaultRequestHeaders.Where(c => c.Key == PortalApiTokenHeader).FirstOrDefault().Value.FirstOrDefault();
+                apiTokenHeader = client.DefaultRequestHeaders.Where(c => c.Key == PortalApiTokenHeader).FirstOrDefault()
+                    .Value.FirstOrDefault();
             }
-            catch (Exception ex) { }
+            catch (Exception ex)
+            {
+            }
 
             return apiTokenHeader;
         }
@@ -54,10 +64,7 @@ namespace SkyDrop.Core.Components
         {
             client.DefaultRequestHeaders.Remove(PortalApiTokenHeader);
 
-            if (portal.HasApiToken())
-            {
-                client.DefaultRequestHeaders.Add(PortalApiTokenHeader, portal.UserApiToken);
-            }
+            if (portal.HasApiToken()) client.DefaultRequestHeaders.Add(PortalApiTokenHeader, portal.UserApiToken);
         }
     }
 }

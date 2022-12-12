@@ -1,15 +1,15 @@
 {
-  "images" : [
+  "images": [
     {
-      "filename" : "back_button.pdf",
-      "idiom" : "universal"
+      "filename": "back_button.pdf",
+      "idiom": "universal"
     }
   ],
-  "info" : {
-    "author" : "xcode",
-    "version" : 1
+  "info": {
+    "author": "xcode",
+    "version": 1
   },
-  "properties" : {
-    "template-rendering-intent" : "template"
+  "properties": {
+    "template-rendering-intent": "template"
   }
 }

@@ -2,15 +2,14 @@
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using CoreGraphics;
-using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
-using MvvmCross.Platforms.Ios.Views;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels;
 using SkyDrop.iOS.Common;
 using UIKit;
 using Xamarin.Essentials;
+using ZXing;
 using ZXing.Mobile;
 using static SkyDrop.Core.Services.EncryptionService;
 
@@ -19,11 +18,28 @@ namespace SkyDrop.iOS.Views.Contacts
     [MvxChildPresentation]
     public partial class SharePublicKeyView : BaseViewController<SharePublicKeyViewModel>
     {
-        private ZXingScannerView scannerView;
         private UIBarButtonItem nextButton;
+        private ZXingScannerView scannerView;
 
         public SharePublicKeyView() : base("SharePublicKeyView", null)
         {
+        }
+
+        public AddContactResult AddContactResult
+        {
+            get => AddContactResult.Default;
+            set
+            {
+                var isSuccess = value == AddContactResult.ContactAdded || value == AddContactResult.AlreadyExists ||
+                                value == AddContactResult.DevicesPaired;
+                var isError = value == AddContactResult.InvalidKey || value == AddContactResult.WrongDevice;
+                var overlayVisible = isSuccess || isError;
+                var overlayColor = isError ? Colors.Red : Colors.Primary;
+                ScannerOverlay.Hidden = !overlayVisible;
+                ScannerOverlay.BackgroundColor = overlayColor.ToNative();
+                ScannerContainer.BringSubviewToFront(ScannerOverlay);
+                StatusIcon.Image = isError ? UIImage.FromBundle("ic_error") : UIImage.FromBundle("ic_tick");
+            }
         }
 
         public override void ViewDidLoad()
@@ -55,7 +71,7 @@ namespace SkyDrop.iOS.Views.Contacts
         }
 
         /// <summary>
-        /// Generate and display QR code
+        ///     Generate and display QR code
         /// </summary>
         private async Task ShowBarcode()
         {
@@ -64,8 +80,9 @@ namespace SkyDrop.iOS.Views.Contacts
                 await MainThread.InvokeOnMainThreadAsync(async () =>
                 {
                     var screenDensity = (int)UIScreen.MainScreen.Scale;
-                    var matrix = ViewModel.GenerateBarcode((int)BarcodeImage.Frame.Width * screenDensity, (int)BarcodeImage.Frame.Height * screenDensity);
-                    var image = await iOSUtil.BitMatrixToImage(matrix);
+                    var matrix = ViewModel.GenerateBarcode((int)BarcodeImage.Frame.Width * screenDensity,
+                        (int)BarcodeImage.Frame.Height * screenDensity);
+                    var image = await IOsUtil.BitMatrixToImage(matrix);
                     BarcodeImage.Image = image;
                 });
             }
@@ -78,39 +95,24 @@ namespace SkyDrop.iOS.Views.Contacts
 
         private void ShowScanner()
         {
-            scannerView = new ZXingScannerView(new CGRect(0, 0, ScannerContainer.Frame.Width, ScannerContainer.Frame.Height))
-            {
-                AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
-                UseCustomOverlayView = true //hides red line overlay
-            };
+            scannerView =
+                new ZXingScannerView(new CGRect(0, 0, ScannerContainer.Frame.Width, ScannerContainer.Frame.Height))
+                {
+                    AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight,
+                    UseCustomOverlayView = true //hides red line overlay
+                };
 
             ScannerContainer.Add(scannerView);
 
-            scannerView.StartScanning(HandleScanResult, new MobileBarcodeScanningOptions { });
+            scannerView.StartScanning(HandleScanResult, new MobileBarcodeScanningOptions());
         }
 
-        private void HandleScanResult(ZXing.Result result)
+        private void HandleScanResult(Result result)
         {
             if (result == null)
                 return;
 
             ViewModel.AddContact(result.Text);
-        }
-
-        public AddContactResult AddContactResult
-        {
-            get => AddContactResult.Default;
-            set
-            {
-                var isSuccess = value == AddContactResult.ContactAdded || value == AddContactResult.AlreadyExists || value == AddContactResult.DevicesPaired;
-                var isError = value == AddContactResult.InvalidKey || value == AddContactResult.WrongDevice;
-                var overlayVisible = isSuccess || isError;
-                var overlayColor = isError ? Colors.Red : Colors.Primary;
-                ScannerOverlay.Hidden = !overlayVisible;
-                ScannerOverlay.BackgroundColor = overlayColor.ToNative();
-                ScannerContainer.BringSubviewToFront(ScannerOverlay);
-                StatusIcon.Image = isError ? UIImage.FromBundle("ic_error") : UIImage.FromBundle("ic_tick");
-            }
         }
 
         private void StopScanning()
@@ -120,5 +122,3 @@ namespace SkyDrop.iOS.Views.Contacts
         }
     }
 }
-
-

@@ -3,9 +3,10 @@ using System.IO;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
+using Android.Database;
 using Android.Graphics;
-using Android.InputMethodServices;
 using Android.OS;
+using Android.Provider;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
@@ -16,10 +17,12 @@ using Plugin.CurrentActivity;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Droid.Views.Main;
 using Xamarin.Essentials;
+using ZXing;
 using ZXing.Common;
 using ZXing.Mobile;
-using static Android.Provider.CalendarContract;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
+using String = Java.Lang.String;
+using Uri = Android.Net.Uri;
 
 namespace SkyDrop.Droid.Helper
 {
@@ -32,9 +35,9 @@ namespace SkyDrop.Droid.Helper
         private const string UploadNotificationChannelDescription = "Notifies you when a file has finished uploading";
         private const int UploadNotificationId = 200;
 
-        private static NotificationCompat.Builder uploadNotificationBuilder;
+        private static NotificationCompat.Builder _uploadNotificationBuilder;
 
-        private static readonly ILog log = Mvx.IoCProvider.Resolve<ILog>();
+        private static readonly ILog Log = Mvx.IoCProvider.Resolve<ILog>();
 
         public static int DpToPx(int dp)
         {
@@ -43,26 +46,25 @@ namespace SkyDrop.Droid.Helper
 
         public static (int width, int height) GetScreenSizePx()
         {
-            return (CrossCurrentActivity.Current.AppContext.Resources.DisplayMetrics.WidthPixels, CrossCurrentActivity.Current.AppContext.Resources.DisplayMetrics.HeightPixels);
+            return (CrossCurrentActivity.Current.AppContext.Resources.DisplayMetrics.WidthPixels,
+                CrossCurrentActivity.Current.AppContext.Resources.DisplayMetrics.HeightPixels);
         }
 
         /// <summary>
-        /// Get the filename for a local file on Android
+        ///     Get the filename for a local file on Android
         /// </summary>
-        public static string GetFileName(Context context, Android.Net.Uri uri)
+        public static string GetFileName(Context context, Uri uri)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
             string displayName;
-            Android.Database.ICursor cursor = null;
+            ICursor cursor = null;
             try
             {
                 if (uri.LastPathSegment.Contains("."))
-                {
                     //this is a "file"
                     return uri.LastPathSegment;
-                }
 
                 //this is an "image"
 
@@ -70,17 +72,17 @@ namespace SkyDrop.Droid.Helper
                 // one row. There's no need to filter, sort, or select fields,
                 // because we want all fields for one document.
                 cursor = context.ContentResolver.Query(uri, null, null, null, null, null);
-                
+
                 // moveToFirst() returns false if the cursor has 0 rows. Very handy for
                 // "if there's anything to look at, look at it" conditionals.
                 if (cursor != null && cursor.MoveToFirst())
                 {
                     // Note it's called "Display Name". This is
                     // provider-specific, and might not necessarily be the file name.
-                    displayName = cursor.GetString(cursor.GetColumnIndex(Android.Provider.IOpenableColumns.DisplayName));
-                    log.Trace("Display Name: " + displayName);
+                    displayName = cursor.GetString(cursor.GetColumnIndex(IOpenableColumns.DisplayName));
+                    Log.Trace("Display Name: " + displayName);
 
-                    var sizeIndex = cursor.GetColumnIndex(Android.Provider.IOpenableColumns.Size);
+                    var sizeIndex = cursor.GetColumnIndex(IOpenableColumns.Size);
                     // If the size is unknown, the value stored is null. But because an
                     // int can't be null, the behavior is implementation-specific,
                     // and unpredictable. So as
@@ -89,16 +91,12 @@ namespace SkyDrop.Droid.Helper
                     // size might not be locally known.
                     string size = null;
                     if (!cursor.IsNull(sizeIndex))
-                    {
                         // Technically the column stores an int, but cursor.getString()
                         // will do the conversion automatically.
                         size = cursor.GetString(sizeIndex);
-                    }
                     else
-                    {
                         size = "Unknown";
-                    }
-                    log.Trace("Size: " + size);
+                    Log.Trace("Size: " + size);
                 }
                 else
                 {
@@ -122,7 +120,7 @@ namespace SkyDrop.Droid.Helper
         {
             Toast.MakeText(context, $"Opening file {file.Filename}", ToastLength.Long)?.Show();
 
-            var browserIntent = new Intent(Intent.ActionView, Android.Net.Uri.Parse(file.GetSkylinkUrl()));
+            var browserIntent = new Intent(Intent.ActionView, Uri.Parse(file.GetSkylinkUrl()));
             context.StartActivity(browserIntent);
         }
 
@@ -138,27 +136,26 @@ namespace SkyDrop.Droid.Helper
             return Task.Run(() =>
             {
                 //computationally heavy but quick
-                return renderer.Render(bitMatrix, ZXing.BarcodeFormat.QR_CODE, "");
+                return renderer.Render(bitMatrix, BarcodeFormat.QR_CODE, "");
             });
         }
 
         /// <summary>
-        /// Creates a "channel" (category) for local notifications, required from Android O
-        /// Call this in OnCreate()
+        ///     Creates a "channel" (category) for local notifications, required from Android O
+        ///     Call this in OnCreate()
         /// </summary>
         public static void CreateNotificationChannel(Context context)
         {
             if (Build.VERSION.SdkInt < BuildVersionCodes.O)
-            {
                 // Notification channels are new in API 26 (and not a part of the
                 // support library). There is no need to create a notification
                 // channel on older versions of Android.
                 return;
-            }
 
             var channelName = UploadNotificationChannelName;
             var channelDescription = UploadNotificationChannelDescription;
-            var channel = new NotificationChannel(UploadNotificationChannelId, new Java.Lang.String(channelName), NotificationImportance.Default)
+            var channel = new NotificationChannel(UploadNotificationChannelId, new String(channelName),
+                NotificationImportance.Default)
             {
                 Description = channelDescription
             };
@@ -171,18 +168,18 @@ namespace SkyDrop.Droid.Helper
         public static void ShowUploadStartedNotification(Context context, string message)
         {
             // Set up an intent so that tapping the notifications returns to this app:
-            Intent intent = new Intent(context, typeof(DropView));
+            var intent = new Intent(context, typeof(DropView));
 
             //prevent the activity from being restarted (retain state)
             intent.SetFlags(ActivityFlags.SingleTop | ActivityFlags.ClearTop);
 
             // Create a PendingIntent; we're only using one PendingIntent (ID = 0):
             const int pendingIntentId = 0;
-            PendingIntent pendingIntent =
+            var pendingIntent =
                 PendingIntent.GetActivity(context, pendingIntentId, intent, 0);
 
             // Instantiate the builder and set notification elements:
-            uploadNotificationBuilder = new NotificationCompat.Builder(context, UploadNotificationChannelId)
+            _uploadNotificationBuilder = new NotificationCompat.Builder(context, UploadNotificationChannelId)
                 .SetContentTitle("Sending file...")
                 .SetContentText(message)
                 .SetSmallIcon(Resource.Drawable.ic_skydrop)
@@ -191,7 +188,7 @@ namespace SkyDrop.Droid.Helper
                 .SetAutoCancel(true); //dismiss notification when tapped
 
             // Build the notification:
-            Notification notification = uploadNotificationBuilder.Build();
+            var notification = _uploadNotificationBuilder.Build();
 
             // Publish the notification:
             GetNotificationManager(context).Notify(UploadNotificationId, notification);
@@ -202,12 +199,12 @@ namespace SkyDrop.Droid.Helper
             switch (uploadResult)
             {
                 case FileUploadResult.Success:
-                    uploadNotificationBuilder.SetContentTitle("File published successfully (tap to view)");
-                    uploadNotificationBuilder.SetProgress(0, 0, false); //hide progressbar
+                    _uploadNotificationBuilder.SetContentTitle("File published successfully (tap to view)");
+                    _uploadNotificationBuilder.SetProgress(0, 0, false); //hide progressbar
                     break;
                 case FileUploadResult.Fail:
-                    uploadNotificationBuilder.SetContentTitle("Upload failed");
-                    uploadNotificationBuilder.SetProgress(0, 0, false); //hide progressbar
+                    _uploadNotificationBuilder.SetContentTitle("Upload failed");
+                    _uploadNotificationBuilder.SetProgress(0, 0, false); //hide progressbar
                     break;
                 case FileUploadResult.Cancelled:
                     GetNotificationManager(context).CancelAll();
@@ -215,7 +212,7 @@ namespace SkyDrop.Droid.Helper
             }
 
             // Build a notification object with updated content:
-            var notification = uploadNotificationBuilder.Build();
+            var notification = _uploadNotificationBuilder.Build();
 
             // Publish the new notification with the existing ID:
             GetNotificationManager(context).Notify(UploadNotificationId, notification);
@@ -226,15 +223,15 @@ namespace SkyDrop.Droid.Helper
             if (normalProgress >= 1)
             {
                 //set indeterminate loader
-                uploadNotificationBuilder.SetProgress(100, 0, true);
-                var notification = uploadNotificationBuilder.Build();
+                _uploadNotificationBuilder.SetProgress(100, 0, true);
+                var notification = _uploadNotificationBuilder.Build();
                 GetNotificationManager(context).Notify(UploadNotificationId, notification);
                 return;
             }
 
             var intProgress = (int)Math.Floor(normalProgress * 100);
-            uploadNotificationBuilder.SetProgress(100, intProgress, false);
-            var notificationOther = uploadNotificationBuilder.Build();
+            _uploadNotificationBuilder.SetProgress(100, intProgress, false);
+            var notificationOther = _uploadNotificationBuilder.Build();
             GetNotificationManager(context).Notify(UploadNotificationId, notificationOther);
         }
 
@@ -251,7 +248,7 @@ namespace SkyDrop.Droid.Helper
                 try
                 {
                     var task = ImageService.Instance.LoadStream(
-                        c => Task.FromResult((Stream)System.IO.File.OpenRead(filePath)))
+                            c => Task.FromResult((Stream)File.OpenRead(filePath)))
                         .DownSampleInDip()
                         .IntoAsync(target);
 
@@ -269,7 +266,7 @@ namespace SkyDrop.Droid.Helper
             try
             {
                 var isMainThread = MainThread.IsMainThread;
-                var inputMethodManager = activity.GetSystemService(Activity.InputMethodService) as InputMethodManager;
+                var inputMethodManager = activity.GetSystemService(Context.InputMethodService) as InputMethodManager;
                 if (inputMethodManager != null)
                 {
                     await Task.Delay(100);
@@ -280,7 +277,7 @@ namespace SkyDrop.Droid.Helper
             }
             catch (Exception ex)
             {
-                log.Exception(ex);
+                Log.Exception(ex);
             }
         }
 
@@ -289,7 +286,7 @@ namespace SkyDrop.Droid.Helper
             try
             {
                 var isMainThread = MainThread.IsMainThread;
-                var inputMethodManager = activity.GetSystemService(Activity.InputMethodService) as InputMethodManager;
+                var inputMethodManager = activity.GetSystemService(Context.InputMethodService) as InputMethodManager;
                 if (inputMethodManager != null)
                 {
                     var focusView = activity.CurrentFocus;
@@ -300,7 +297,7 @@ namespace SkyDrop.Droid.Helper
             }
             catch (Exception ex)
             {
-                log.Exception(ex);
+                Log.Exception(ex);
             }
         }
 
@@ -320,7 +317,7 @@ namespace SkyDrop.Droid.Helper
 
         public static T FindViewByType<T>(this ViewGroup viewGroup)
         {
-            for (int i = 0; i < viewGroup.ChildCount; i++)
+            for (var i = 0; i < viewGroup.ChildCount; i++)
             {
                 var view = viewGroup.GetChildAt(i);
                 if (view is T foundView)
@@ -333,7 +330,7 @@ namespace SkyDrop.Droid.Helper
                 return FindViewByType<T>(firstChild);
             }
 
-            return default(T);
+            return default;
         }
 
         public static ViewStates ToVisibility(this bool value)

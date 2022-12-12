@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Diagnostics;
 using Android.Views;
 using Android.Widget;
-using Java.Interop;
-using MvvmCross;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
-using SkyDrop.Droid.Helper;
 
 namespace SkyDrop.Droid.Views.PortalPreferences
 {
     public class PortalViewHolder : MvxRecyclerViewHolder
     {
+        private readonly ImageView downvoteIcon;
         private PortalPreferencesListAdapter listAdapter;
-        private ImageView upvoteIcon;
-        private ImageView downvoteIcon;
-        private ImageView reorderIcon;
         private int position;
+        private ImageView reorderIcon;
+        private readonly ImageView upvoteIcon;
 
         public PortalViewHolder(View itemView, IMvxAndroidBindingContext context) : base(itemView, context)
         {
@@ -51,4 +47,3 @@ namespace SkyDrop.Droid.Views.PortalPreferences
         }
     }
 }
-

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using MvvmCross.ViewModels;
 using SkyDrop.Core.Services;
@@ -18,7 +15,8 @@ namespace SkyDrop.Core.ViewModels
 
         public override void ViewDestroy(bool viewFinishing = true)
         {
-            if (viewFinishing && CloseCompletionSource?.Task.IsCompleted == false && !CloseCompletionSource.Task.IsFaulted)
+            if (viewFinishing && CloseCompletionSource?.Task.IsCompleted == false &&
+                !CloseCompletionSource.Task.IsFaulted)
                 CloseCompletionSource?.TrySetCanceled();
 
             base.ViewDestroy(viewFinishing);

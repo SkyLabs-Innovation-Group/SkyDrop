@@ -1,65 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
-using Realms;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.ViewModels;
 
 namespace SkyDrop.Core.Services
 {
-  public class PortalService : IPortalService
-  {
-    private const string UserPortalsListPrefKey = "userPortalsList";
-    private readonly ILog log;
-    private readonly IUserDialogs userDialogs;
-    private readonly IFileSystemService fileSystemService;
-
-    public List<SkynetPortal> skynetPortals;
-    private readonly ISingletonService singletonService
-      ;
-
-    private readonly IMvxNavigationService navigationService;
-
-    public PortalService(ISingletonService singletonService, ILog log, 
-      IUserDialogs userDialogs, IFileSystemService fileSystemService, IMvxNavigationService navigationService)
+    public class PortalService : IPortalService
     {
-      this.singletonService = singletonService;
-      this.log = log;
-      this.userDialogs = userDialogs;
-      this.fileSystemService = fileSystemService;
-      this.navigationService = navigationService;
-    }
+        private const string UserPortalsListPrefKey = "userPortalsList";
+        private readonly IFileSystemService fileSystemService;
+        private readonly ILog log;
 
-    public List<SkynetPortalDVM> ConvertSkynetPortalsToDVMs(List<SkynetPortal> skynetPortals)
-    {
-      var dvmList = new List<SkynetPortalDVM>();
-      foreach (var portal in skynetPortals)
-      {
-        dvmList.Add(new SkynetPortalDVM(portal)
+        private readonly IMvxNavigationService navigationService;
+
+        private readonly ISingletonService singletonService;
+
+        private readonly IUserDialogs userDialogs;
+
+        public List<SkynetPortal> SkynetPortals;
+
+        public PortalService(ISingletonService singletonService, ILog log,
+            IUserDialogs userDialogs, IFileSystemService fileSystemService, IMvxNavigationService navigationService)
         {
-          TapCommand = new MvxAsyncCommand(async () => await NavigateToEditPortal(portal.Id))
-        });
-      }
-      return dvmList.OrderByDescending(p => p.PortalPreferencesPosition).ToList();
+            this.singletonService = singletonService;
+            this.log = log;
+            this.userDialogs = userDialogs;
+            this.fileSystemService = fileSystemService;
+            this.navigationService = navigationService;
+        }
+
+        public List<SkynetPortalDvm> ConvertSkynetPortalsToDvMs(List<SkynetPortal> skynetPortals)
+        {
+            var dvmList = new List<SkynetPortalDvm>();
+            foreach (var portal in skynetPortals)
+                dvmList.Add(new SkynetPortalDvm(portal)
+                {
+                    TapCommand = new MvxAsyncCommand(async () => await NavigateToEditPortal(portal.Id))
+                });
+            return dvmList.OrderByDescending(p => p.PortalPreferencesPosition).ToList();
+        }
+
+        private Task NavigateToEditPortal(string realmId)
+        {
+            return navigationService.Navigate<EditPortalViewModel, EditPortalViewModel.NavParam>(
+                new EditPortalViewModel.NavParam { PortalId = realmId });
+        }
     }
 
-    private Task NavigateToEditPortal(string realmId)
+    public interface IPortalService
     {
-      return navigationService.Navigate<EditPortalViewModel, EditPortalViewModel.NavParam>(
-        new EditPortalViewModel.NavParam() { PortalId = realmId });
+        //List<SkynetPortal> GetSavedPortals();
+        //void SavePortal(SkynetPortal skynetPortal);
+        List<SkynetPortalDvm> ConvertSkynetPortalsToDvMs(List<SkynetPortal> skynetPortals);
     }
-  }
-
-  public interface IPortalService
-  {
-    //List<SkynetPortal> GetSavedPortals();
-    //void SavePortal(SkynetPortal skynetPortal);
-    List<SkynetPortalDVM> ConvertSkynetPortalsToDVMs(List<SkynetPortal> skynetPortals);
-  }
 }
-

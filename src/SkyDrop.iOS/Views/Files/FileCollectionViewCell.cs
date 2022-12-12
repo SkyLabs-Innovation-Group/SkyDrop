@@ -28,21 +28,49 @@ namespace SkyDrop.iOS.Views.Files
         {
             this.DelayBind(() =>
             {
-                var set = this.CreateBindingSet<FileCollectionViewCell, SkyFileDVM>();
+                var set = this.CreateBindingSet<FileCollectionViewCell, SkyFileDvm>();
                 set.Bind(FileNameLabel).To(vm => vm.SkyFile.Filename);
                 set.Bind(this).For(t => t.SkyFile).To(vm => vm.SkyFile);
                 set.Bind(BottomPanel).For(i => i.BackgroundColor).To(vm => vm.FillColor).WithConversion("NativeColor");
-                set.Bind(SelectedIndicatorView).For(i => i.BackgroundColor).To(vm => vm.SelectionIndicatorColor).WithConversion("NativeColor");
+                set.Bind(SelectedIndicatorView).For(i => i.BackgroundColor).To(vm => vm.SelectionIndicatorColor)
+                    .WithConversion("NativeColor");
                 set.Bind(SelectedIndicatorView).For("Visible").To(vm => vm.IsSelectionActive);
                 set.Bind(SelectedIndicatorInnerView).For("Visible").To(vm => vm.IsSelected);
                 set.Bind(ContentView).For("Tap").To(vm => vm.TapCommand);
                 set.Bind(ContentView).For("LongPress").To(vm => vm.LongPressCommand);
                 set.Bind(ActivityIndicatorContainer).For("Visible").To(vm => vm.IsLoading);
-                set.Bind(ActivityIndicatorContainer).For(i => i.BackgroundColor).To(vm => vm.FillColor).WithConversion("NativeColor");
+                set.Bind(ActivityIndicatorContainer).For(i => i.BackgroundColor).To(vm => vm.FillColor)
+                    .WithConversion("NativeColor");
                 set.Bind(IconImage).For(FileCategoryIconBinding.Name).To(vm => vm.SkyFile.Filename);
-                set.Bind(IconImage).For("Visible").To(vm => vm.SkyFile.Filename).WithConversion(CanDisplayPreviewConverter.InvertName);
+                set.Bind(IconImage).For("Visible").To(vm => vm.SkyFile.Filename)
+                    .WithConversion(CanDisplayPreviewConverter.InvertName);
                 set.Apply();
             });
+        }
+
+        public SkyFile SkyFile
+        {
+            get => new SkyFile();
+            set
+            {
+                //clear previous preview image
+                PreviewImage.ImagePath = null;
+
+                //update preview image
+                if (value.Filename.CanDisplayPreview())
+                {
+                    if (value.Skylink.IsNullOrEmpty())
+                    {
+                        //this is an "unzipped" file
+                        IOsUtil.LoadLocalImagePreview(value.FullFilePath, PreviewImage);
+                        return;
+                    }
+
+                    //this is a SkyFile
+                    var url = value.GetSkylinkUrl();
+                    PreviewImage.ImagePath = url;
+                }
+            }
         }
 
         [Export("awakeFromNib")]
@@ -54,31 +82,6 @@ namespace SkyDrop.iOS.Views.Files
 
             InnerView.Layer.CornerRadius = 8;
             InnerView.Layer.MasksToBounds = true;
-        }
-
-        public SkyFile SkyFile
-        {
-            get => new SkyFile();
-            set
-            {
-                //clear previous preview image
-                PreviewImage.ImagePath = null; 
-
-                //update preview image
-                if (Util.CanDisplayPreview(value.Filename))
-                {
-                    if (value.Skylink.IsNullOrEmpty())
-                    {
-                        //this is an "unzipped" file
-                        iOSUtil.LoadLocalImagePreview(value.FullFilePath, PreviewImage);
-                        return;
-                    }
-
-                    //this is a SkyFile
-                    var url = value.GetSkylinkUrl();
-                    PreviewImage.ImagePath = url;
-                }
-            }
         }
     }
 }

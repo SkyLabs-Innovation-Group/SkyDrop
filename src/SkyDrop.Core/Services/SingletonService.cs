@@ -14,20 +14,20 @@ namespace SkyDrop.Core.Services
 
     public class SingletonService : ISingletonService
     {
-        private ILog _log;
-        public ILog Log => _log ??= ResolveSingleton<ILog>();
+        private IApiService apiService;
+        private ILog log;
 
-        private IStorageService _storageService;
-        public IStorageService StorageService => _storageService ??= ResolveSingleton<IStorageService>();
+        private IStorageService storageService;
 
-        private IApiService _apiService;
-        public IApiService ApiService => _apiService ??= ResolveSingleton<IApiService>();
-
-        private IUserDialogs _userDialogs;
-        public IUserDialogs UserDialogs => _userDialogs ??= ResolveSingleton<IUserDialogs>();
+        private IUserDialogs userDialogs;
+        public ILog Log => log ??= ResolveSingleton<ILog>();
+        public IStorageService StorageService => storageService ??= ResolveSingleton<IStorageService>();
+        public IApiService ApiService => apiService ??= ResolveSingleton<IApiService>();
+        public IUserDialogs UserDialogs => userDialogs ??= ResolveSingleton<IUserDialogs>();
 
         /// <summary>
-        /// This method will try to return the singleton resolved using Mvx.IocProvider, and will log and re-throw any caught exceptions.
+        ///     This method will try to return the singleton resolved using Mvx.IocProvider, and will log and re-throw any caught
+        ///     exceptions.
         /// </summary>
         private T ResolveSingleton<T>() where T : class
         {
@@ -42,11 +42,11 @@ namespace SkyDrop.Core.Services
             }
             catch (Exception ex)
             {
-                string message = "Exception caught resolving Singleton for type " + nameof(T) + ". Returning null...";
-                if (_log == null)
+                var message = "Exception caught resolving Singleton for type " + nameof(T) + ". Returning null...";
+                if (log == null)
                     Debug.WriteLine(message);
                 else
-                    _log.Trace(message);
+                    log.Trace(message);
 
                 Log.Exception(ex);
 

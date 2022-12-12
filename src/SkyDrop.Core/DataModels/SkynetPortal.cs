@@ -1,8 +1,5 @@
 using System;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using MvvmCross;
-using Newtonsoft.Json;
 using Realms;
 using SkyDrop.Core.Services;
 using Xamarin.Essentials;
@@ -11,33 +8,67 @@ namespace SkyDrop.Core.DataModels
 {
     public class SkynetPortal : RealmObject
     {
-        public SkynetPortal() { }
+        public const string DefaultWeb3PortalUrl = "https://web3portal.com";
 
         private static SkynetPortal _selectedPortalInstance;
-        public static SkynetPortal SelectedPortal { get => _selectedPortalInstance ?? GetSelectedSkynetPortal(); set => _selectedPortalInstance = SetSelectedSkynetPortal(value); }
+
+        public readonly string InitialBaseUrl;
+
+        public SkynetPortal()
+        {
+        }
+
+        public SkynetPortal(string baseUrl)
+        {
+            BaseUrl = baseUrl;
+            InitialBaseUrl = baseUrl;
+            Id = Guid.NewGuid().ToString();
+        }
+
+        public SkynetPortal(string baseUrl, string name) : this(baseUrl)
+        {
+            Name = name;
+        }
+
+        public static SkynetPortal SelectedPortal
+        {
+            get => _selectedPortalInstance ?? GetSelectedSkynetPortal();
+            set => _selectedPortalInstance = SetSelectedSkynetPortal(value);
+        }
+
+        [PrimaryKey] public string Id { get; set; }
+
+        public int PortalPreferencesPosition { get; set; }
+
+        public string Name { get; set; }
+
+        // Used for Fody.Weaver
+        public string BaseUrl { get; set; }
+
+        public string UserApiToken { get; set; }
 
         private static SkynetPortal GetSelectedSkynetPortal()
         {
             if (_selectedPortalInstance != null)
                 return _selectedPortalInstance;
 
-            string portalUrl = Preferences.Get(PreferenceKey.SelectedSkynetPortal, "");
+            var portalUrl = Preferences.Get(PreferenceKey.SelectedSkynetPortal, "");
 
             if (string.IsNullOrEmpty(portalUrl))
-                return new SkynetPortal(DefaultWeb3PortalUrl);
-            else
             {
-                var portal = new SkynetPortal(portalUrl);
-                portal.UserApiToken = SecureStorage.GetAsync(portal.GetApiTokenPrefKey()).GetAwaiter().GetResult();
-
-                if (portal.HasApiToken())
-                {
-                    var httpClientFactory = Mvx.IoCProvider.GetSingleton<ISkyDropHttpClientFactory>();
-                    httpClientFactory.UpdateHttpClientWithNewToken(portal);
-                }
-
-                return portal;
+                return new SkynetPortal(DefaultWeb3PortalUrl);
             }
+
+            var portal = new SkynetPortal(portalUrl);
+            portal.UserApiToken = SecureStorage.GetAsync(portal.GetApiTokenPrefKey()).GetAwaiter().GetResult();
+
+            if (portal.HasApiToken())
+            {
+                var httpClientFactory = Mvx.IoCProvider.GetSingleton<ISkyDropHttpClientFactory>();
+                httpClientFactory.UpdateHttpClientWithNewToken(portal);
+            }
+
+            return portal;
         }
 
         private static SkynetPortal SetSelectedSkynetPortal(SkynetPortal portal)
@@ -53,50 +84,29 @@ namespace SkyDrop.Core.DataModels
 
             if (portal.HasApiToken())
             {
-                string key = portal.GetApiTokenPrefKey();
+                var key = portal.GetApiTokenPrefKey();
                 SecureStorage.Remove(key);
                 SecureStorage.SetAsync(key, portal.UserApiToken).GetAwaiter().GetResult();
 
                 var httpClientFactory = Mvx.IoCProvider.GetSingleton<ISkyDropHttpClientFactory>();
                 httpClientFactory.UpdateHttpClientWithNewToken(portal);
 
-                var ffImageService = Mvx.IoCProvider.GetSingleton<IFFImageService>();
+                var ffImageService = Mvx.IoCProvider.GetSingleton<IFfImageService>();
                 ffImageService.UpdateHttpClient(httpClientFactory.GetSkyDropHttpClientInstance(portal));
             }
+
             return portal;
         }
 
-        public const string DefaultWeb3PortalUrl = "https://web3portal.com";
-
-        public string GetApiTokenPrefKey() => $"{PreferenceKey.PrefixPortalApiToken}{BaseUrl}".ToLowerInvariant();
-
-        public SkynetPortal(string baseUrl)
+        public string GetApiTokenPrefKey()
         {
-            this.BaseUrl = baseUrl;
-            this.InitialBaseUrl = baseUrl;
-            Id = Guid.NewGuid().ToString();
+            return $"{PreferenceKey.PrefixPortalApiToken}{BaseUrl}".ToLowerInvariant();
         }
 
-        public SkynetPortal(string baseUrl, string name) : this(baseUrl)
+        public bool HasApiToken()
         {
-            this.Name = name;
+            return !string.IsNullOrEmpty(UserApiToken);
         }
-
-        [PrimaryKey]
-        public string Id { get; set; }
-
-        public int PortalPreferencesPosition { get; set; }
-
-        public string Name { get; set; }
-        
-        // Used for Fody.Weaver
-        public string BaseUrl { get; set; }
-
-        public string UserApiToken { get; set; }
-
-        public bool HasApiToken() => !string.IsNullOrEmpty(UserApiToken);
-
-        public readonly string InitialBaseUrl;
 
         public override int GetHashCode()
         {
@@ -107,11 +117,13 @@ namespace SkyDrop.Core.DataModels
         {
             if (!(obj is SkynetPortal portal))
                 return false;
-            
-            else
-                return portal.BaseUrl == this.BaseUrl;
+
+            return portal.BaseUrl == BaseUrl;
         }
 
-        public override string ToString() => BaseUrl;
+        public override string ToString()
+        {
+            return BaseUrl;
+        }
     }
 }

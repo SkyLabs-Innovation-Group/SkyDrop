@@ -7,44 +7,43 @@ namespace SkyDrop.Core.DataModels
 {
     public class EncryptedFileMetaData
     {
+        private const int HeaderFormatIdentifierSizeBytes = 2;
+        private const int RecipientsCountSizeBytes = 2;
+        private const int SenderIdSizeBytes = 16;
+        private const int RecipientIdSizeBytes = 16;
+        private const int RecipientKeySizeBytes = 64;
         public ushort HeaderFormatIdentifier;
+        public Dictionary<Guid, byte[]> RecipientKeys;
         public ushort RecipientsCount;
         public Guid SenderId;
-        public Dictionary<Guid, byte[]> RecipientKeys;
-
-        private const int headerFormatIdentifierSizeBytes = 2;
-        private const int recipientsCountSizeBytes = 2;
-        private const int senderIdSizeBytes = 16;
-        private const int recipientIdSizeBytes = 16;
-        private const int recipientKeySizeBytes = 64;
 
         public static (EncryptedFileMetaData metaData, byte[] encryptedData) GetEncryptedFileMetaData(
             byte[] encryptedFile)
         {
             var headerFormatIdentifierBytes =
-                encryptedFile.Take(headerFormatIdentifierSizeBytes).ToArray(); //first 2 bytes
+                encryptedFile.Take(HeaderFormatIdentifierSizeBytes).ToArray(); //first 2 bytes
             var headerFormatIdentifier = BinaryPrimitives.ReadUInt16BigEndian(headerFormatIdentifierBytes);
 
             //check this is the headerFormatIdentifier value we expect (there is currently only 1)
             if (headerFormatIdentifier != 1)
                 throw new Exception("Unexpected file format");
 
-            var recipientsCountBytes = encryptedFile.Skip(headerFormatIdentifierSizeBytes)
-                .Take(recipientsCountSizeBytes).ToArray(); //second 2 bytes
+            var recipientsCountBytes = encryptedFile.Skip(HeaderFormatIdentifierSizeBytes)
+                .Take(RecipientsCountSizeBytes).ToArray(); //second 2 bytes
             var recipientsCount = BinaryPrimitives.ReadUInt16BigEndian(recipientsCountBytes);
 
-            var metadataSizeBytes = headerFormatIdentifierSizeBytes + recipientsCountSizeBytes + senderIdSizeBytes +
-                                    (recipientIdSizeBytes + recipientKeySizeBytes) * recipientsCount;
+            var metadataSizeBytes = HeaderFormatIdentifierSizeBytes + RecipientsCountSizeBytes + SenderIdSizeBytes +
+                                    (RecipientIdSizeBytes + RecipientKeySizeBytes) * recipientsCount;
 
             var metaDataBytes = encryptedFile.Take(metadataSizeBytes).ToArray();
             var encryptedData = encryptedFile.Skip(metadataSizeBytes).ToArray();
 
-            var senderIdBytes = metaDataBytes.Skip(headerFormatIdentifierSizeBytes).Skip(recipientsCountSizeBytes)
-                .Take(senderIdSizeBytes).ToArray();
+            var senderIdBytes = metaDataBytes.Skip(HeaderFormatIdentifierSizeBytes).Skip(RecipientsCountSizeBytes)
+                .Take(SenderIdSizeBytes).ToArray();
             var senderId = new Guid(senderIdBytes);
 
-            var recipientsListBytes = metaDataBytes.Skip(headerFormatIdentifierSizeBytes).Skip(recipientsCountSizeBytes)
-                .Skip(senderIdSizeBytes).ToArray();
+            var recipientsListBytes = metaDataBytes.Skip(HeaderFormatIdentifierSizeBytes).Skip(RecipientsCountSizeBytes)
+                .Skip(SenderIdSizeBytes).ToArray();
             var recipientKeys = DecodeRecipientsList(recipientsListBytes, recipientsCount);
 
             var metaData = new EncryptedFileMetaData
@@ -59,14 +58,14 @@ namespace SkyDrop.Core.DataModels
         private static Dictionary<Guid, byte[]> DecodeRecipientsList(byte[] recipientsList, int recipientsCount)
         {
             var recipientKeys = new Dictionary<Guid, byte[]>();
-            int readIndex = 0;
-            for (int i = 0; i < recipientsCount; i++)
+            var readIndex = 0;
+            for (var i = 0; i < recipientsCount; i++)
             {
-                var recipientId = new Guid(recipientsList.Skip(readIndex).Take(recipientIdSizeBytes).ToArray());
-                readIndex += recipientIdSizeBytes;
+                var recipientId = new Guid(recipientsList.Skip(readIndex).Take(RecipientIdSizeBytes).ToArray());
+                readIndex += RecipientIdSizeBytes;
 
-                var recipientKey = recipientsList.Skip(readIndex).Take(recipientKeySizeBytes).ToArray();
-                readIndex += recipientKeySizeBytes;
+                var recipientKey = recipientsList.Skip(readIndex).Take(RecipientKeySizeBytes).ToArray();
+                readIndex += RecipientKeySizeBytes;
 
                 recipientKeys.Add(recipientId, recipientKey);
             }

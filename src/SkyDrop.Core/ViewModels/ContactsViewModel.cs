@@ -15,26 +15,15 @@ namespace SkyDrop.Core.ViewModels
 {
     public class ContactsViewModel : BaseViewModel<NavParam, IContactItem>
     {
-        public class NavParam
-        {
-            public bool IsSelecting { get; set; }
-        }
-
-        public List<IContactItem> Contacts { get; set; }
-        public IMvxCommand SharePublicKeyCommand { get; set; }
-        public IMvxCommand BackCommand { get; set; }
-        public IMvxCommand CloseKeyboardCommand { get; set; }
-        public bool IsNoContacts { get; set; }
-
         private readonly IApiService apiService;
-        private readonly IStorageService storageService;
-        private readonly IUserDialogs userDialogs;
-        private readonly IMvxNavigationService navigationService;
-        private readonly IFileSystemService fileSystemService;
         private readonly IBarcodeService barcodeService;
-        private readonly IShareLinkService shareLinkService;
-        private readonly IUploadTimerService uploadTimerService;
         private readonly IEncryptionService encryptionService;
+        private readonly IFileSystemService fileSystemService;
+        private readonly IMvxNavigationService navigationService;
+        private readonly IShareLinkService shareLinkService;
+        private readonly IStorageService storageService;
+        private readonly IUploadTimerService uploadTimerService;
+        private readonly IUserDialogs userDialogs;
 
         private bool isSelecting;
 
@@ -67,6 +56,12 @@ namespace SkyDrop.Core.ViewModels
             BackCommand = new MvxCommand(() => navigationService.Close(this));
         }
 
+        public List<IContactItem> Contacts { get; set; }
+        public IMvxCommand SharePublicKeyCommand { get; set; }
+        public IMvxCommand BackCommand { get; set; }
+        public IMvxCommand CloseKeyboardCommand { get; set; }
+        public bool IsNoContacts { get; set; }
+
         public override void ViewAppeared()
         {
             base.ViewAppeared();
@@ -76,7 +71,7 @@ namespace SkyDrop.Core.ViewModels
 
         private void LoadContacts()
         {
-            var newContacts = storageService.LoadContacts().Select(GetContactDVM).ToList();
+            var newContacts = storageService.LoadContacts().Select(GetContactDvm).ToList();
             IsNoContacts = newContacts == null || newContacts.Count == 0;
             if (isSelecting && !IsNoContacts)
             {
@@ -91,9 +86,9 @@ namespace SkyDrop.Core.ViewModels
             RaisePropertyChanged(() => IsNoContacts).Forget();
         }
 
-        public IContactItem GetContactDVM(Contact contact)
+        public IContactItem GetContactDvm(Contact contact)
         {
-            var contactItem = new ContactDVM { Contact = contact };
+            var contactItem = new ContactDvm { Contact = contact };
             contactItem.DeleteCommand = new MvxAsyncCommand(async () => await DeleteContact(contactItem));
             contactItem.RenameCommand = new MvxAsyncCommand(async () => await RenameContact(contactItem));
             if (isSelecting)
@@ -115,16 +110,16 @@ namespace SkyDrop.Core.ViewModels
         {
             try
             {
-                if (item is ContactDVM contactDVM)
+                if (item is ContactDvm contactDvm)
                 {
-                    if (!await userDialogs.ConfirmAsync($"Delete contact {contactDVM.Name}?"))
+                    if (!await userDialogs.ConfirmAsync($"Delete contact {contactDvm.Name}?"))
                         return;
 
-                    storageService.DeleteContact(contactDVM.Contact);
+                    storageService.DeleteContact(contactDvm.Contact);
                     LoadContacts();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.Exception(e);
                 userDialogs.Toast("Error: Failed to delete contact");
@@ -135,17 +130,17 @@ namespace SkyDrop.Core.ViewModels
         {
             try
             {
-                if (item is ContactDVM contactDVM)
+                if (item is ContactDvm contactDvm)
                 {
-                    var result = await userDialogs.PromptAsync($"Contact name:", null, null, null, contactDVM.Name);
+                    var result = await userDialogs.PromptAsync("Contact name:", null, null, null, contactDvm.Name);
                     if (result.Text.IsNullOrEmpty())
                         return;
 
-                    storageService.RenameContact(contactDVM.Contact, result.Text.Trim());
+                    storageService.RenameContact(contactDvm.Contact, result.Text.Trim());
                     LoadContacts();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 userDialogs.Toast(e.Message);
             }
@@ -164,6 +159,10 @@ namespace SkyDrop.Core.ViewModels
         {
             ItemSelected(null);
         }
+
+        public class NavParam
+        {
+            public bool IsSelecting { get; set; }
+        }
     }
 }
-

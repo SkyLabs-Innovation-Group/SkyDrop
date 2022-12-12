@@ -1,4 +1,3 @@
-using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using SkyDrop.Core.Services;
 
@@ -6,16 +5,16 @@ namespace SkyDrop.Core.ViewModels
 {
     public abstract class BaseViewModel : MvxViewModel
     {
-        public readonly ISingletonService singletonService;
-
-        // Expose to views
-        public ILog Log { get; protected set; }
+        public readonly ISingletonService SingletonService;
 
         public BaseViewModel(ISingletonService singletonService)
         {
-            this.singletonService = singletonService;
-            this.Log = singletonService.Log;
+            this.SingletonService = singletonService;
+            Log = singletonService.Log;
         }
+
+        // Expose to views
+        public ILog Log { get; protected set; }
 
         public string Title { get; set; }
     }

@@ -1,18 +1,6 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
+﻿using Android.App;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
-using SkyDrop.Core.DataModels;
 using SkyDrop.Core.ViewModels;
 
 namespace SkyDrop.Droid.Views.PortalPreferences
@@ -28,13 +16,17 @@ namespace SkyDrop.Droid.Views.PortalPreferences
         {
             base.OnCreate(savedInstanceState);
             BindViews();
-
-            
         }
 
-        internal void EditPortal(int position) => ViewModel.EditPortal(position);
+        internal void EditPortal(int position)
+        {
+            ViewModel.EditPortal(position);
+        }
 
-        internal void ReorderPortals(int position, int newPosition) => ViewModel?.ReorderPortals(position, newPosition);
+        internal void ReorderPortals(int position, int newPosition)
+        {
+            ViewModel?.ReorderPortals(position, newPosition);
+        }
 
         private void BindViews()
         {
@@ -44,4 +36,3 @@ namespace SkyDrop.Droid.Views.PortalPreferences
         }
     }
 }
-

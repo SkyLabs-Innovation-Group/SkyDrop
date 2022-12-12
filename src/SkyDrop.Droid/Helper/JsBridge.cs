@@ -1,12 +1,13 @@
 ﻿using System;
 using Android.Webkit;
 using Java.Interop;
+using Object = Java.Lang.Object;
 
 namespace SkyDrop.Droid.Helper
 {
-    public class JsBridge : Java.Lang.Object
+    public class JsBridge : Object
     {
-        private Action<string> action;
+        private readonly Action<string> action;
 
         public JsBridge(Action<string> action)
         {
@@ -21,4 +22,3 @@ namespace SkyDrop.Droid.Helper
         }
     }
 }
-

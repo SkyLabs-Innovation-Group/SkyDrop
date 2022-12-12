@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
 using SkyDrop.Core.Utility;
@@ -10,11 +9,11 @@ namespace SkyDrop.iOS.Bindings
 {
     public class NextButtonStyleBinding : MvxTargetBinding<UIView, bool>
     {
-        public static string Name => "NextButtonStyle";
-
         public NextButtonStyleBinding(UIView target) : base(target)
         {
         }
+
+        public static string Name => "NextButtonStyle";
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 

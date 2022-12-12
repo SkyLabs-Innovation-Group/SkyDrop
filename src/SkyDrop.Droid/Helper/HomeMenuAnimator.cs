@@ -1,28 +1,31 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Views.Animations;
 using Android.Widget;
-using AndroidX.ConstraintLayout.Solver.Widgets;
-using AndroidX.ConstraintLayout.Widget;
 using Java.Lang;
 
 namespace SkyDrop.Droid.Helper
 {
     public class HomeMenuAnimator
     {
-        private Context context;
-        private ImageView homeMenuIconSkyDrive, homeMenuIconPortals, homeMenuIconContacts, homeMenuIconSettings;
-        private ImageView miniMenuIconSkyDrive, miniMenuIconPortals, miniMenuIconContacts, miniMenuIconSettings;
-        private FrameLayout animationContainer;
         private readonly int iconSize;
+        private readonly FrameLayout animationContainer;
+        private readonly Context context;
+        private readonly ImageView homeMenuIconSkyDrive;
+        private readonly ImageView homeMenuIconPortals;
+        private readonly ImageView homeMenuIconContacts;
+        private readonly ImageView homeMenuIconSettings;
+        private readonly ImageView miniMenuIconSkyDrive;
+        private readonly ImageView miniMenuIconPortals;
+        private readonly ImageView miniMenuIconContacts;
+        private readonly ImageView miniMenuIconSettings;
 
-        public HomeMenuAnimator(ImageView homeMenuIconSkyDrive, ImageView homeMenuIconPortals, ImageView homeMenuIconContacts, ImageView homeMenuIconSettings,
-                                ImageView miniMenuIconSkyDrive, ImageView miniMenuIconPortals, ImageView miniMenuIconContacts, ImageView miniMenuIconSettings,
-                                Context context, FrameLayout animationContainer)
+        public HomeMenuAnimator(ImageView homeMenuIconSkyDrive, ImageView homeMenuIconPortals,
+            ImageView homeMenuIconContacts, ImageView homeMenuIconSettings,
+            ImageView miniMenuIconSkyDrive, ImageView miniMenuIconPortals, ImageView miniMenuIconContacts,
+            ImageView miniMenuIconSettings,
+            Context context, FrameLayout animationContainer)
         {
             this.homeMenuIconSkyDrive = homeMenuIconSkyDrive;
             this.homeMenuIconPortals = homeMenuIconPortals;
@@ -37,7 +40,7 @@ namespace SkyDrop.Droid.Helper
             this.context = context;
             this.animationContainer = animationContainer;
 
-            this.iconSize = AndroidUtil.DpToPx(32);
+            iconSize = AndroidUtil.DpToPx(32);
         }
 
         public async Task AnimateShrink(int delay, int duration)
@@ -70,7 +73,8 @@ namespace SkyDrop.Droid.Helper
             AnimateMoveToLocation(settingsIcon, miniMenuIconSettingsX, miniMenuIconSettingsY, duration);
         }
 
-        private void AddIconsToWindow(ImageView skyDriveIcon, ImageView portalsIcon, ImageView contactsIcon, ImageView settingsIcon)
+        private void AddIconsToWindow(ImageView skyDriveIcon, ImageView portalsIcon, ImageView contactsIcon,
+            ImageView settingsIcon)
         {
             var layoutParamsSkyDrive = new FrameLayout.LayoutParams(iconSize, iconSize);
             (layoutParamsSkyDrive.LeftMargin, layoutParamsSkyDrive.TopMargin) = GetViewLocation(homeMenuIconSkyDrive);
@@ -122,4 +126,3 @@ namespace SkyDrop.Droid.Helper
         }
     }
 }
-

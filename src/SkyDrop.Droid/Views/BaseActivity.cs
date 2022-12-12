@@ -1,21 +1,18 @@
 using Android.Content.PM;
 using Android.OS;
-using Android.Views;
-using AndroidX.AppCompat.Widget;
 using MvvmCross.Platforms.Android.Views;
 using MvvmCross.ViewModels;
-using SkyDrop.Core.Services;
 using SkyDrop.Core.ViewModels;
 using SkyDrop.Droid.Helper;
-using System;
+using Xamarin.Essentials;
 
 namespace SkyDrop.Droid.Views
 {
     public abstract class BaseActivity<TViewModel> : MvxActivity<TViewModel>
         where TViewModel : class, IMvxViewModel
     {
-        private ILog _log;
-        public ILog Log => _log ??= (ViewModel as BaseViewModel)?.Log;
+        private ILog log;
+        public ILog Log => log ??= (ViewModel as BaseViewModel)?.Log;
 
         protected abstract int ActivityLayoutId { get; }
 
@@ -30,9 +27,10 @@ namespace SkyDrop.Droid.Views
             AndroidUtil.CreateNotificationChannel(this);
         }
 
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions,
+            Permission[] grantResults)
         {
-            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }

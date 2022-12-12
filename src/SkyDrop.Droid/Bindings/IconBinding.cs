@@ -1,7 +1,4 @@
-﻿using System;
-using Android.Content.Res;
-using Android.Views;
-using Android.Widget;
+﻿using Android.Widget;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
 using SkyDrop.Droid.Helper;
@@ -9,16 +6,16 @@ using SkyDrop.Droid.Helper;
 namespace SkyDrop.Droid.Bindings
 {
     /// <summary>
-    /// Binding for use with SaveUnzipIconConverter
-    /// Expects icons in these formats: "res:ic_download", "ic_download"
+    ///     Binding for use with SaveUnzipIconConverter
+    ///     Expects icons in these formats: "res:ic_download", "ic_download"
     /// </summary>
     public class IconBinding : MvxTargetBinding<ImageView, string>
     {
-        public static string Name => "Icon";
-
         public IconBinding(ImageView target) : base(target)
         {
         }
+
+        public static string Name => "Icon";
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 

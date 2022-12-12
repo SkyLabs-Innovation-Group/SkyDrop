@@ -7,7 +7,6 @@ using MvvmCross.Platforms.Ios.Binding.Views;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
 using UIKit;
-using static SkyDrop.iOS.Views.Files.FilesView;
 
 namespace SkyDrop.iOS.Views.Files
 {
@@ -15,9 +14,9 @@ namespace SkyDrop.iOS.Views.Files
     {
         public static readonly NSString Key = new NSString("FileExplorerView");
         public static readonly UINib Nib;
+        private MvxCollectionViewSource collectionViewSource;
 
         private MvxSimpleTableViewSource tableViewSource;
-        private MvxCollectionViewSource collectionViewSource;
 
         static FileExplorerView()
         {
@@ -26,11 +25,6 @@ namespace SkyDrop.iOS.Views.Files
 
         protected FileExplorerView(IntPtr handle) : base(handle)
         {
-        }
-
-        public static FileExplorerView CreateView()
-        {
-            return (FileExplorerView)Nib.Instantiate(null, null)[0];
         }
 
         public FileLayoutType CollectionViewAndTableViewVisibility
@@ -51,6 +45,11 @@ namespace SkyDrop.iOS.Views.Files
                 tableViewSource.ItemsSource = value;
                 collectionViewSource.ItemsSource = value;
             }
+        }
+
+        public static FileExplorerView CreateView()
+        {
+            return (FileExplorerView)Nib.Instantiate(null, null)[0];
         }
 
         public override void AwakeFromNib()
@@ -75,12 +74,12 @@ namespace SkyDrop.iOS.Views.Files
 
         private class FilesCollectionViewLayout : UICollectionViewFlowLayout
         {
-            private const int horizontalMargins = 16;
-            private nfloat itemWidth => (UIScreen.MainScreen.Bounds.Width - horizontalMargins) / 2;
+            private const int HorizontalMargins = 16;
+            private nfloat ItemWidth => (UIScreen.MainScreen.Bounds.Width - HorizontalMargins) / 2;
 
             public override CGSize ItemSize
             {
-                get => new CGSize(itemWidth, itemWidth);
+                get => new CGSize(ItemWidth, ItemWidth);
                 set => base.ItemSize = value;
             }
 
@@ -89,4 +88,3 @@ namespace SkyDrop.iOS.Views.Files
         }
     }
 }
-

@@ -23,33 +23,33 @@ namespace SkyDrop.iOS.Linker
         public void Include(UIButton uiButton)
         {
             uiButton.TouchUpInside += (s, e) =>
-                                      uiButton.SetTitle(uiButton.Title(UIControlState.Normal), UIControlState.Normal);
+                uiButton.SetTitle(uiButton.Title(UIControlState.Normal), UIControlState.Normal);
         }
 
         public void Include(UIBarButtonItem barButton)
         {
             barButton.Clicked += (s, e) =>
-                                 barButton.Title = $"{ barButton.Title }";
+                barButton.Title = $"{barButton.Title}";
         }
 
         public void Include(UITextField textField)
         {
-            textField.Text = $"{ textField.Text }";
+            textField.Text = $"{textField.Text}";
             textField.EditingChanged += (sender, args) => { textField.Text = ""; };
             textField.EditingDidEnd += (sender, args) => { textField.Text = ""; };
         }
 
         public void Include(UITextView textView)
         {
-            textView.Text = $"{ textView.Text }";
+            textView.Text = $"{textView.Text}";
             textView.TextStorage.DidProcessEditing += (sender, e) => textView.Text = "";
             textView.Changed += (sender, args) => { textView.Text = ""; };
         }
 
         public void Include(UILabel label)
         {
-            label.Text = $"{ label.Text }";
-            label.AttributedText = new NSAttributedString($"{ label.AttributedText.ToString() }");
+            label.Text = $"{label.Text}";
+            label.AttributedText = new NSAttributedString($"{label.AttributedText}");
         }
 
         public void Include(UIImageView imageView)
@@ -99,7 +99,10 @@ namespace SkyDrop.iOS.Linker
 
         public void Include(INotifyCollectionChanged changed)
         {
-            changed.CollectionChanged += (s, e) => { _ = $"{e.Action}{e.NewItems}{e.NewStartingIndex}{e.OldItems}{e.OldStartingIndex}"; };
+            changed.CollectionChanged += (s, e) =>
+            {
+                _ = $"{e.Action}{e.NewItems}{e.NewStartingIndex}{e.OldItems}{e.OldStartingIndex}";
+            };
         }
 
         public void Include(INotifyPropertyChanged changed)
@@ -109,7 +112,10 @@ namespace SkyDrop.iOS.Linker
 
         public void Include(ICommand command)
         {
-            command.CanExecuteChanged += (s, e) => { if (command.CanExecute(null)) command.Execute(null); };
+            command.CanExecuteChanged += (s, e) =>
+            {
+                if (command.CanExecute(null)) command.Execute(null);
+            };
         }
 
         public void Include(MvxPropertyInjector injector)
