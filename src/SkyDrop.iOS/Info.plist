@@ -5,7 +5,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>SkyDrop</string>
 	<key>CFBundleIdentifier</key>
-	<string>xy.skydrop.SkyDrop</string>
+	<string>skydrop.skydrop</string>
 	<key>CFBundleShortVersionString</key>
 	<string>12</string>
 	<key>CFBundleVersion</key>
