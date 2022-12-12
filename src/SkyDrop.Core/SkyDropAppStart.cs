@@ -8,14 +8,14 @@ namespace SkyDrop.Core
 {
     public class SkyDropAppStart : MvxAppStart
     {
-        private readonly IFFImageService ffImageService;
+        private readonly IFfImageService ffImageService;
         private readonly IFileSystemService fileSystemService;
         private readonly IMvxNavigationService navigationService;
 
         public SkyDropAppStart(IMvxApplication application,
             IMvxNavigationService navigationService,
             IFileSystemService fileSystemService,
-            IFFImageService ffImageService,
+            IFfImageService ffImageService,
             ILog log) : base(application, navigationService)
         {
             this.navigationService = navigationService;

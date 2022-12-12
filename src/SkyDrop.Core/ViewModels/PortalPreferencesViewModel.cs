@@ -29,7 +29,7 @@ namespace SkyDrop.Core.ViewModels
             this.storageService = storageService;
 
             Title = "Portal Preferences";
-            UserPortals = new MvxObservableCollection<SkynetPortalDVM>();
+            UserPortals = new MvxObservableCollection<SkynetPortalDvm>();
             BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
             AddNewPortalCommand = new MvxAsyncCommand(async () => await AddNewPortal());
             this.portalService = portalService;
@@ -39,8 +39,8 @@ namespace SkyDrop.Core.ViewModels
 
         public IMvxCommand AddNewPortalCommand { get; set; }
 
-        public MvxObservableCollection<SkynetPortalDVM> UserPortals { get; } =
-            new MvxObservableCollection<SkynetPortalDVM>();
+        public MvxObservableCollection<SkynetPortalDvm> UserPortals { get; } =
+            new MvxObservableCollection<SkynetPortalDvm>();
 
         private Task AddNewPortal()
         {
@@ -64,7 +64,7 @@ namespace SkyDrop.Core.ViewModels
                 savedPortals = storageService.LoadSkynetPortals();
             }
 
-            var savedPortalsDvms = portalService.ConvertSkynetPortalsToDVMs(savedPortals);
+            var savedPortalsDvms = portalService.ConvertSkynetPortalsToDvMs(savedPortals);
             UserPortals.SwitchTo(savedPortalsDvms);
         }
 
@@ -73,7 +73,7 @@ namespace SkyDrop.Core.ViewModels
             if (position == newPosition)
                 return;
 
-            var copy = new MvxObservableCollection<SkynetPortalDVM>(UserPortals);
+            var copy = new MvxObservableCollection<SkynetPortalDvm>(UserPortals);
             var portalCopy = copy[position];
 
             var newIndex = Math.Max(0, Math.Min(UserPortals.Count - 1, newPosition));

@@ -28,7 +28,7 @@ namespace SkyDrop.iOS.Views.Files
         {
             this.DelayBind(() =>
             {
-                var set = this.CreateBindingSet<FileCollectionViewCell, SkyFileDVM>();
+                var set = this.CreateBindingSet<FileCollectionViewCell, SkyFileDvm>();
                 set.Bind(FileNameLabel).To(vm => vm.SkyFile.Filename);
                 set.Bind(this).For(t => t.SkyFile).To(vm => vm.SkyFile);
                 set.Bind(BottomPanel).For(i => i.BackgroundColor).To(vm => vm.FillColor).WithConversion("NativeColor");
@@ -62,7 +62,7 @@ namespace SkyDrop.iOS.Views.Files
                     if (value.Skylink.IsNullOrEmpty())
                     {
                         //this is an "unzipped" file
-                        iOSUtil.LoadLocalImagePreview(value.FullFilePath, PreviewImage);
+                        IOsUtil.LoadLocalImagePreview(value.FullFilePath, PreviewImage);
                         return;
                     }
 

@@ -6,7 +6,7 @@ using SkyDrop.Core.Utility;
 
 namespace SkyDrop.Core.DataViewModels
 {
-    public class FolderDVM : MvxNotifyPropertyChanged, IFolderItem, ISelectableItem
+    public class FolderDvm : MvxNotifyPropertyChanged, IFolderItem, ISelectableItem
     {
         public Folder Folder { get; set; }
         public string Name => Folder.Name;

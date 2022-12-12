@@ -34,7 +34,7 @@ namespace SkyDrop.iOS.Bindings
                 if (!value.FullFilePath.CanDisplayPreview())
                     return;
 
-                iOSUtil.LoadLocalImagePreview(value.FullFilePath, Target);
+                IOsUtil.LoadLocalImagePreview(value.FullFilePath, Target);
             }
             catch (Exception e)
             {

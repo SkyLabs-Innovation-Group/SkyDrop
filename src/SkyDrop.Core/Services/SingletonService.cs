@@ -14,16 +14,16 @@ namespace SkyDrop.Core.Services
 
     public class SingletonService : ISingletonService
     {
-        private IApiService _apiService;
-        private ILog _log;
+        private IApiService apiService;
+        private ILog log;
 
-        private IStorageService _storageService;
+        private IStorageService storageService;
 
-        private IUserDialogs _userDialogs;
-        public ILog Log => _log ??= ResolveSingleton<ILog>();
-        public IStorageService StorageService => _storageService ??= ResolveSingleton<IStorageService>();
-        public IApiService ApiService => _apiService ??= ResolveSingleton<IApiService>();
-        public IUserDialogs UserDialogs => _userDialogs ??= ResolveSingleton<IUserDialogs>();
+        private IUserDialogs userDialogs;
+        public ILog Log => log ??= ResolveSingleton<ILog>();
+        public IStorageService StorageService => storageService ??= ResolveSingleton<IStorageService>();
+        public IApiService ApiService => apiService ??= ResolveSingleton<IApiService>();
+        public IUserDialogs UserDialogs => userDialogs ??= ResolveSingleton<IUserDialogs>();
 
         /// <summary>
         ///     This method will try to return the singleton resolved using Mvx.IocProvider, and will log and re-throw any caught
@@ -43,10 +43,10 @@ namespace SkyDrop.Core.Services
             catch (Exception ex)
             {
                 var message = "Exception caught resolving Singleton for type " + nameof(T) + ". Returning null...";
-                if (_log == null)
+                if (log == null)
                     Debug.WriteLine(message);
                 else
-                    _log.Trace(message);
+                    log.Trace(message);
 
                 Log.Exception(ex);
 

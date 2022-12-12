@@ -27,7 +27,7 @@ namespace SkyDrop.Droid.Views.Files
         {
         }
 
-        private int gridMarginPx => AndroidUtil.DpToPx(16);
+        private int GridMarginPx => AndroidUtil.DpToPx(16);
 
         public FileLayoutType LayoutType
         {
@@ -61,7 +61,7 @@ namespace SkyDrop.Droid.Views.Files
         public void Init(IMvxBindingContext bindingContext)
         {
             filesGridAdapter = new FilesGridAdapter(bindingContext as IMvxAndroidBindingContext)
-                { MarginPx = gridMarginPx };
+                { MarginPx = GridMarginPx };
             filesListAdapter = new MvxRecyclerAdapter(bindingContext as IMvxAndroidBindingContext);
             Adapter = filesGridAdapter;
         }

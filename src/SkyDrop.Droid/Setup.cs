@@ -26,7 +26,7 @@ namespace SkyDrop.Droid
 {
     public class Setup : MvxAndroidSetup<App>
     {
-        private IMvxAndroidCurrentTopActivity topActivityProvider { get; set; }
+        private IMvxAndroidCurrentTopActivity TopActivityProvider { get; set; }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
@@ -73,7 +73,7 @@ namespace SkyDrop.Droid
         {
             Debug.WriteLine("CreateApp() droid");
 
-            UserDialogs.Init(topActivityProvider.Activity);
+            UserDialogs.Init(TopActivityProvider.Activity);
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton(() => UserDialogs.Instance);
 
             return base.CreateApp();
@@ -83,8 +83,8 @@ namespace SkyDrop.Droid
         {
             Debug.WriteLine("CreateAndroidCurrentTopActivity() droid");
 
-            topActivityProvider = base.CreateAndroidCurrentTopActivity();
-            return topActivityProvider;
+            TopActivityProvider = base.CreateAndroidCurrentTopActivity();
+            return TopActivityProvider;
         }
 
         public override MvxLogProviderType GetDefaultLogProviderType()

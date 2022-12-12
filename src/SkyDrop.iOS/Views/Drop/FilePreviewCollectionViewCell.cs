@@ -25,7 +25,7 @@ namespace SkyDrop.iOS.Views.Drop
         {
             this.DelayBind(() =>
             {
-                var set = this.CreateBindingSet<FilePreviewCollectionViewCell, StagedFileDVM>();
+                var set = this.CreateBindingSet<FilePreviewCollectionViewCell, StagedFileDvm>();
                 set.Bind(FilenameLabel).To(stagedFile => stagedFile.SkyFile.Filename);
                 set.Bind(FileExtensionLabel).To(stagedFile => stagedFile.SkyFile.Filename)
                     .WithConversion(FileExtensionConverter.Name);

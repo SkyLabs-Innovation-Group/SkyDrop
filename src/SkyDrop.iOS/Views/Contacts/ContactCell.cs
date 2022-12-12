@@ -23,7 +23,7 @@ namespace SkyDrop.iOS.Views.Contacts
         {
             this.DelayBind(() =>
             {
-                var set = this.CreateBindingSet<ContactCell, ContactDVM>();
+                var set = this.CreateBindingSet<ContactCell, ContactDvm>();
                 set.Bind(NameLabel).To(vm => vm.Name);
                 set.Bind(ContentView).For("Tap").To(vm => vm.TapCommand);
                 set.Bind(DeleteButton).For("Tap").To(vm => vm.DeleteCommand);

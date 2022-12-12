@@ -71,7 +71,7 @@ namespace SkyDrop.Core.ViewModels
 
         private void LoadContacts()
         {
-            var newContacts = storageService.LoadContacts().Select(GetContactDVM).ToList();
+            var newContacts = storageService.LoadContacts().Select(GetContactDvm).ToList();
             IsNoContacts = newContacts == null || newContacts.Count == 0;
             if (isSelecting && !IsNoContacts)
             {
@@ -86,9 +86,9 @@ namespace SkyDrop.Core.ViewModels
             RaisePropertyChanged(() => IsNoContacts).Forget();
         }
 
-        public IContactItem GetContactDVM(Contact contact)
+        public IContactItem GetContactDvm(Contact contact)
         {
-            var contactItem = new ContactDVM { Contact = contact };
+            var contactItem = new ContactDvm { Contact = contact };
             contactItem.DeleteCommand = new MvxAsyncCommand(async () => await DeleteContact(contactItem));
             contactItem.RenameCommand = new MvxAsyncCommand(async () => await RenameContact(contactItem));
             if (isSelecting)
@@ -110,12 +110,12 @@ namespace SkyDrop.Core.ViewModels
         {
             try
             {
-                if (item is ContactDVM contactDVM)
+                if (item is ContactDvm contactDvm)
                 {
-                    if (!await userDialogs.ConfirmAsync($"Delete contact {contactDVM.Name}?"))
+                    if (!await userDialogs.ConfirmAsync($"Delete contact {contactDvm.Name}?"))
                         return;
 
-                    storageService.DeleteContact(contactDVM.Contact);
+                    storageService.DeleteContact(contactDvm.Contact);
                     LoadContacts();
                 }
             }
@@ -130,13 +130,13 @@ namespace SkyDrop.Core.ViewModels
         {
             try
             {
-                if (item is ContactDVM contactDVM)
+                if (item is ContactDvm contactDvm)
                 {
-                    var result = await userDialogs.PromptAsync("Contact name:", null, null, null, contactDVM.Name);
+                    var result = await userDialogs.PromptAsync("Contact name:", null, null, null, contactDvm.Name);
                     if (result.Text.IsNullOrEmpty())
                         return;
 
-                    storageService.RenameContact(contactDVM.Contact, result.Text.Trim());
+                    storageService.RenameContact(contactDvm.Contact, result.Text.Trim());
                     LoadContacts();
                 }
             }

@@ -35,9 +35,9 @@ namespace SkyDrop.Droid.Helper
         private const string UploadNotificationChannelDescription = "Notifies you when a file has finished uploading";
         private const int UploadNotificationId = 200;
 
-        private static NotificationCompat.Builder uploadNotificationBuilder;
+        private static NotificationCompat.Builder _uploadNotificationBuilder;
 
-        private static readonly ILog log = Mvx.IoCProvider.Resolve<ILog>();
+        private static readonly ILog Log = Mvx.IoCProvider.Resolve<ILog>();
 
         public static int DpToPx(int dp)
         {
@@ -80,7 +80,7 @@ namespace SkyDrop.Droid.Helper
                     // Note it's called "Display Name". This is
                     // provider-specific, and might not necessarily be the file name.
                     displayName = cursor.GetString(cursor.GetColumnIndex(IOpenableColumns.DisplayName));
-                    log.Trace("Display Name: " + displayName);
+                    Log.Trace("Display Name: " + displayName);
 
                     var sizeIndex = cursor.GetColumnIndex(IOpenableColumns.Size);
                     // If the size is unknown, the value stored is null. But because an
@@ -96,7 +96,7 @@ namespace SkyDrop.Droid.Helper
                         size = cursor.GetString(sizeIndex);
                     else
                         size = "Unknown";
-                    log.Trace("Size: " + size);
+                    Log.Trace("Size: " + size);
                 }
                 else
                 {
@@ -179,7 +179,7 @@ namespace SkyDrop.Droid.Helper
                 PendingIntent.GetActivity(context, pendingIntentId, intent, 0);
 
             // Instantiate the builder and set notification elements:
-            uploadNotificationBuilder = new NotificationCompat.Builder(context, UploadNotificationChannelId)
+            _uploadNotificationBuilder = new NotificationCompat.Builder(context, UploadNotificationChannelId)
                 .SetContentTitle("Sending file...")
                 .SetContentText(message)
                 .SetSmallIcon(Resource.Drawable.ic_skydrop)
@@ -188,7 +188,7 @@ namespace SkyDrop.Droid.Helper
                 .SetAutoCancel(true); //dismiss notification when tapped
 
             // Build the notification:
-            var notification = uploadNotificationBuilder.Build();
+            var notification = _uploadNotificationBuilder.Build();
 
             // Publish the notification:
             GetNotificationManager(context).Notify(UploadNotificationId, notification);
@@ -199,12 +199,12 @@ namespace SkyDrop.Droid.Helper
             switch (uploadResult)
             {
                 case FileUploadResult.Success:
-                    uploadNotificationBuilder.SetContentTitle("File published successfully (tap to view)");
-                    uploadNotificationBuilder.SetProgress(0, 0, false); //hide progressbar
+                    _uploadNotificationBuilder.SetContentTitle("File published successfully (tap to view)");
+                    _uploadNotificationBuilder.SetProgress(0, 0, false); //hide progressbar
                     break;
                 case FileUploadResult.Fail:
-                    uploadNotificationBuilder.SetContentTitle("Upload failed");
-                    uploadNotificationBuilder.SetProgress(0, 0, false); //hide progressbar
+                    _uploadNotificationBuilder.SetContentTitle("Upload failed");
+                    _uploadNotificationBuilder.SetProgress(0, 0, false); //hide progressbar
                     break;
                 case FileUploadResult.Cancelled:
                     GetNotificationManager(context).CancelAll();
@@ -212,7 +212,7 @@ namespace SkyDrop.Droid.Helper
             }
 
             // Build a notification object with updated content:
-            var notification = uploadNotificationBuilder.Build();
+            var notification = _uploadNotificationBuilder.Build();
 
             // Publish the new notification with the existing ID:
             GetNotificationManager(context).Notify(UploadNotificationId, notification);
@@ -223,15 +223,15 @@ namespace SkyDrop.Droid.Helper
             if (normalProgress >= 1)
             {
                 //set indeterminate loader
-                uploadNotificationBuilder.SetProgress(100, 0, true);
-                var notification = uploadNotificationBuilder.Build();
+                _uploadNotificationBuilder.SetProgress(100, 0, true);
+                var notification = _uploadNotificationBuilder.Build();
                 GetNotificationManager(context).Notify(UploadNotificationId, notification);
                 return;
             }
 
             var intProgress = (int)Math.Floor(normalProgress * 100);
-            uploadNotificationBuilder.SetProgress(100, intProgress, false);
-            var notificationOther = uploadNotificationBuilder.Build();
+            _uploadNotificationBuilder.SetProgress(100, intProgress, false);
+            var notificationOther = _uploadNotificationBuilder.Build();
             GetNotificationManager(context).Notify(UploadNotificationId, notificationOther);
         }
 
@@ -277,7 +277,7 @@ namespace SkyDrop.Droid.Helper
             }
             catch (Exception ex)
             {
-                log.Exception(ex);
+                Log.Exception(ex);
             }
         }
 
@@ -297,7 +297,7 @@ namespace SkyDrop.Droid.Helper
             }
             catch (Exception ex)
             {
-                log.Exception(ex);
+                Log.Exception(ex);
             }
         }
 

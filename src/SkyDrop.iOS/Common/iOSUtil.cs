@@ -12,7 +12,7 @@ using ZXing.Mobile;
 
 namespace SkyDrop.iOS.Common
 {
-    public static class iOSUtil
+    public static class IOsUtil
     {
         public static Task<UIImage> BitMatrixToImage(BitMatrix bitMatrix)
         {

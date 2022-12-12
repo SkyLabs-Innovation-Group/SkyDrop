@@ -6,7 +6,7 @@ using SkyDrop.Core.Utility;
 
 namespace SkyDrop.Core.DataViewModels
 {
-    public class SkyFileDVM : MvxNotifyPropertyChanged, ISelectableItem
+    public class SkyFileDvm : MvxNotifyPropertyChanged, ISelectableItem
     {
         public SkyFile SkyFile { get; set; }
         public IMvxCommand CopySkyLinkCommand { get; set; }

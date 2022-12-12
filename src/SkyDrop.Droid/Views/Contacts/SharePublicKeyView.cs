@@ -68,7 +68,7 @@ namespace SkyDrop.Droid.Views.Main
         private void ShowScanner()
         {
             var scanningOptions = new MobileBarcodeScanningOptions
-                { CameraResolutionSelector = QRScannerHelper.GetSquareScannerResolution };
+                { CameraResolutionSelector = QrScannerHelper.GetSquareScannerResolution };
             scannerView = new ZXingSurfaceView(this, scanningOptions);
             scannerView.LayoutParameters = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent,
                 ViewGroup.LayoutParams.MatchParent);

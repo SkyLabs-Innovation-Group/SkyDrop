@@ -8,16 +8,16 @@ namespace SkyDrop.Droid.Styles
 {
     public static class StyleExtensions
     {
-        private const int cornerRadius = 8;
-        private const int borderWidth = 2;
+        private const int CornerRadius = 8;
+        private const int BorderWidth = 2;
 
         public static void StyleButton(this MaterialCardView button, Color color, bool isOutline = false)
         {
-            button.Radius = DpToPx(cornerRadius);
+            button.Radius = DpToPx(CornerRadius);
 
             if (isOutline)
             {
-                button.StrokeWidth = DpToPx(borderWidth);
+                button.StrokeWidth = DpToPx(BorderWidth);
                 button.StrokeColor = color.ToNative();
                 button.SetCardBackgroundColor(Colors.DarkGrey.ToNative());
             }

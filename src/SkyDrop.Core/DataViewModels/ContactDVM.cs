@@ -3,7 +3,7 @@ using SkyDrop.Core.DataModels;
 
 namespace SkyDrop.Core.DataViewModels
 {
-    public class ContactDVM : IContactItem
+    public class ContactDvm : IContactItem
     {
         public Contact Contact { get; set; }
 

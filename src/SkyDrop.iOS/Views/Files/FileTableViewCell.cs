@@ -24,7 +24,7 @@ namespace SkyDrop.iOS.Views.Files
         {
             this.DelayBind(() =>
             {
-                var set = this.CreateBindingSet<FileTableViewCell, SkyFileDVM>();
+                var set = this.CreateBindingSet<FileTableViewCell, SkyFileDvm>();
                 set.Bind(FileNameLabel).To(vm => vm.SkyFile.Filename);
                 set.Bind(SelectedIndicatorView).For(i => i.BackgroundColor).To(vm => vm.SelectionIndicatorColor)
                     .WithConversion("NativeColor");

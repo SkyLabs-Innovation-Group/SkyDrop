@@ -13,7 +13,7 @@ namespace SkyDrop.iOS.Views.Portals
     public partial class PortalLoginViewController : BaseViewController<PortalLoginViewModel>, IWKNavigationDelegate,
         IWKScriptMessageHandler
     {
-        private const string javascriptBridgeFunction =
+        private const string JavascriptBridgeFunction =
             "function invokeCSharpAction(data){window.webkit.messageHandlers.invokeAction.postMessage(JSON.stringify(data));}";
 
         private bool didInitWebView;
@@ -78,7 +78,7 @@ namespace SkyDrop.iOS.Views.Portals
             webView.NavigationDelegate = this;
 
             var userController = webView.Configuration.UserContentController;
-            var script = new WKUserScript(new NSString(javascriptBridgeFunction),
+            var script = new WKUserScript(new NSString(JavascriptBridgeFunction),
                 WKUserScriptInjectionTime.AtDocumentEnd, false);
             userController.AddUserScript(script);
             userController.AddScriptMessageHandler(this, "invokeAction");

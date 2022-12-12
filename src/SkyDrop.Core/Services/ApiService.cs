@@ -19,7 +19,7 @@ namespace SkyDrop.Core.Services
     [ConfigureAwait(false)]
     public class ApiService : IApiService
     {
-        private const string unauthorizedExceptionMessage =
+        private const string UnauthorizedExceptionMessage =
             "Unauthorized. Check your API key is set correctly in the Portals screen.";
 
         private const int SkynetPortalApiTokenLength = 52;
@@ -107,7 +107,7 @@ namespace SkyDrop.Core.Services
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var response = await httpClient.GetAsync(url);
             if (response.StatusCode == HttpStatusCode.Unauthorized)
-                throw new Exception(unauthorizedExceptionMessage);
+                throw new Exception(UnauthorizedExceptionMessage);
 
             if (!response.IsSuccessStatusCode)
                 throw new Exception(response.StatusCode.ToString());
@@ -140,7 +140,7 @@ namespace SkyDrop.Core.Services
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
             var response = await httpClient.GetAsync(url);
             if (response.StatusCode == HttpStatusCode.Unauthorized)
-                throw new Exception(unauthorizedExceptionMessage);
+                throw new Exception(UnauthorizedExceptionMessage);
 
             response.EnsureSuccessStatusCode();
             var data = await response.Content.ReadAsStreamAsync();

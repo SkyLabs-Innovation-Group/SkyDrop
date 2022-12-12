@@ -31,7 +31,7 @@ namespace SkyDrop.Droid.Views.Main
         ScreenOrientation = ScreenOrientation.Portrait)]
     public class DropView : BaseActivity<DropViewModel>
     {
-        private const int swipeMarginX = 100;
+        private const int SwipeMarginX = 100;
         private FrameLayout animationContainer;
         private ConstraintLayout barcodeContainer, sendReceiveButtonsContainer;
         private ImageView barcodeImageView;
@@ -65,7 +65,7 @@ namespace SkyDrop.Droid.Views.Main
             Log.Trace("DropView OnCreate()");
 
             ViewModel.GenerateBarcodeAsyncFunc = t => ShowBarcode(t);
-            ViewModel.ResetUIStateCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
+            ViewModel.ResetUiStateCommand = new MvxCommand(() => SetSendReceiveButtonUiState());
             ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
             ViewModel.SlideReceiveButtonToCenterCommand = new MvxCommand(AnimateSlideReceiveButton);
             ViewModel.CheckUserIsSwipingCommand = new MvxCommand(CheckUserIsSwiping);
@@ -159,7 +159,7 @@ namespace SkyDrop.Droid.Views.Main
         /// </summary>
         private void SetBarcodeCodeUiState(bool isSlow = false)
         {
-            ViewModel.DropViewUIState = DropViewState.QRCodeState;
+            ViewModel.DropViewUiState = DropViewState.QrCodeState;
             ViewModel.Title = ViewModel.FocusedFile?.Filename;
             ViewModel.IsBarcodeVisible = true;
 
@@ -274,8 +274,8 @@ namespace SkyDrop.Droid.Views.Main
                 .SetDuration(duration)
                 .WithEndAction(new Runnable(() =>
                 {
-                    ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState;
-                    ViewModel.ResetUI();
+                    ViewModel.DropViewUiState = DropViewState.SendReceiveButtonState;
+                    ViewModel.ResetUi();
                 }))
                 .Start();
             barcodeContainer.Animate()
@@ -356,7 +356,7 @@ namespace SkyDrop.Droid.Views.Main
         {
             if (!ViewModel.SwipeNavigationEnabled || //don't allow swipe before first file is uploaded
                 ViewModel.IsUploading || //don't allow swipe while file is uploading
-                ViewModel.DropViewUIState ==
+                ViewModel.DropViewUiState ==
                 DropViewState.ConfirmFilesState) //don't allow swipe on confirm file UI state
                 return base.DispatchTouchEvent(e);
 
@@ -381,7 +381,7 @@ namespace SkyDrop.Droid.Views.Main
                     {
                         //send & receive buttons are visible
 
-                        if (sendReceiveButtonsContainer.TranslationX <= -swipeMarginX)
+                        if (sendReceiveButtonsContainer.TranslationX <= -SwipeMarginX)
                             SetBarcodeCodeUiState();
                         else
                             AnimateSlideSendReceiveCenter();
@@ -390,7 +390,7 @@ namespace SkyDrop.Droid.Views.Main
                     {
                         //barcode is visible
 
-                        if (barcodeContainer.TranslationX >= swipeMarginX)
+                        if (barcodeContainer.TranslationX >= SwipeMarginX)
                             SetSendReceiveButtonUiState();
                         else
                             AnimateSlideBarcodeToCenter();
@@ -433,7 +433,7 @@ namespace SkyDrop.Droid.Views.Main
                                                sendReceiveButtonsContainer.TranslationX <= thresholdOffset;
             var isBarcodeCentered = barcodeContainer.TranslationX >= -thresholdOffset &&
                                     barcodeContainer.TranslationX <= thresholdOffset;
-            var interfaceIsCentered = ViewModel.DropViewUIState == DropViewState.SendReceiveButtonState
+            var interfaceIsCentered = ViewModel.DropViewUiState == DropViewState.SendReceiveButtonState
                 ? isSendReceiveButtonsCentered
                 : isBarcodeCentered;
             var userIsSwipingResult = !interfaceIsCentered;
@@ -470,14 +470,14 @@ namespace SkyDrop.Droid.Views.Main
         {
             var duration = 250; //ms
 
-            switch (ViewModel.DropViewUIState)
+            switch (ViewModel.DropViewUiState)
             {
                 case DropViewState.SendReceiveButtonState:
                 case DropViewState.ConfirmFilesState:
                     leftDot.Animate().Alpha(NavDotsMaxAlpha).SetDuration(duration).Start();
                     rightDot.Animate().Alpha(NavDotsMinAlpha).SetDuration(duration).Start();
                     break;
-                case DropViewState.QRCodeState:
+                case DropViewState.QrCodeState:
                     leftDot.Animate().Alpha(NavDotsMinAlpha).SetDuration(duration).Start();
                     rightDot.Animate().Alpha(NavDotsMaxAlpha).SetDuration(duration).Start();
                     break;

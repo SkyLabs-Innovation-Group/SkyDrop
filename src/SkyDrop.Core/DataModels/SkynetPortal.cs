@@ -91,7 +91,7 @@ namespace SkyDrop.Core.DataModels
                 var httpClientFactory = Mvx.IoCProvider.GetSingleton<ISkyDropHttpClientFactory>();
                 httpClientFactory.UpdateHttpClientWithNewToken(portal);
 
-                var ffImageService = Mvx.IoCProvider.GetSingleton<IFFImageService>();
+                var ffImageService = Mvx.IoCProvider.GetSingleton<IFfImageService>();
                 ffImageService.UpdateHttpClient(httpClientFactory.GetSkyDropHttpClientInstance(portal));
             }
 

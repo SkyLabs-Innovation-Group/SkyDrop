@@ -11,13 +11,11 @@ namespace SkyDrop.Droid.Bindings
     /// </summary>
     public class LayoutImageBinding : MvxTargetBinding<ImageView, FileLayoutType>
     {
-        private ILog _log;
-
         public LayoutImageBinding(ImageView target) : base(target)
         {
         }
 
-        private ILog log => _log ??= Mvx.IoCProvider.Resolve<ILog>();
+        private ILog Log => Mvx.IoCProvider.Resolve<ILog>();
 
         public static string Name => "LayoutImage";
 

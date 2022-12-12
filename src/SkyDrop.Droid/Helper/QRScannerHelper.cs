@@ -9,7 +9,7 @@ namespace SkyDrop.Droid.Helper
     /// <summary>
     ///     Enables us to show the scanner camera using the correct aspect ratio
     /// </summary>
-    public static class QRScannerHelper
+    public static class QrScannerHelper
     {
         public static CameraResolution GetSquareScannerResolution(List<CameraResolution> availableResolutions)
         {

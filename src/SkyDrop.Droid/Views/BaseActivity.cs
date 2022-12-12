@@ -11,8 +11,8 @@ namespace SkyDrop.Droid.Views
     public abstract class BaseActivity<TViewModel> : MvxActivity<TViewModel>
         where TViewModel : class, IMvxViewModel
     {
-        private ILog _log;
-        public ILog Log => _log ??= (ViewModel as BaseViewModel)?.Log;
+        private ILog log;
+        public ILog Log => log ??= (ViewModel as BaseViewModel)?.Log;
 
         protected abstract int ActivityLayoutId { get; }
 

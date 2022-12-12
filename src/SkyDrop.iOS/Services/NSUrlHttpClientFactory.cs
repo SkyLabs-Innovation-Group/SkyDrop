@@ -8,7 +8,7 @@ using SkyDrop.Core.DataModels;
 
 namespace SkyDrop.iOS.Services
 {
-    public class NSUrlHttpClientFactory : BaseSkyDropHttpClientFactory
+    public class NsUrlHttpClientFactory : BaseSkyDropHttpClientFactory
     {
         // Check BaseSkyDropHttpClientFactory for the default portal logic.
 

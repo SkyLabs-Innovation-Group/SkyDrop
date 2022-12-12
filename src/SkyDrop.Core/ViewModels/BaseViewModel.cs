@@ -5,11 +5,11 @@ namespace SkyDrop.Core.ViewModels
 {
     public abstract class BaseViewModel : MvxViewModel
     {
-        public readonly ISingletonService singletonService;
+        public readonly ISingletonService SingletonService;
 
         public BaseViewModel(ISingletonService singletonService)
         {
-            this.singletonService = singletonService;
+            this.SingletonService = singletonService;
             Log = singletonService.Log;
         }
 

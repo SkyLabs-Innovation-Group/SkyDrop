@@ -23,7 +23,7 @@ namespace SkyDrop.iOS.Views.Files
         {
             this.DelayBind(() =>
             {
-                var set = this.CreateBindingSet<FolderCell, FolderDVM>();
+                var set = this.CreateBindingSet<FolderCell, FolderDvm>();
                 set.Bind(NameLabel).To(vm => vm.Name);
                 set.Bind(ContentView).For("Tap").To(vm => vm.TapCommand);
                 set.Bind(ContentView).For("LongPress").To(vm => vm.LongPressCommand);

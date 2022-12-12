@@ -3,7 +3,7 @@ using SkyDrop.Core.DataModels;
 
 namespace SkyDrop.Core.DataViewModels
 {
-    public class StagedFileDVM
+    public class StagedFileDvm
     {
         public SkyFile SkyFile { get; set; }
 

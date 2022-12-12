@@ -13,7 +13,7 @@ namespace SkyDrop
 
         private static IMvxLog _mvxLog;
 
-        protected long exceptionCount;
+        protected long ExceptionCount;
 
         public SkyLogger(IMvxLogProvider logProvider)
         {
@@ -48,9 +48,9 @@ namespace SkyDrop
                 return;
             }
 
-            exceptionCount++;
+            ExceptionCount++;
 
-            PrintError($"Encoutered exception no# {exceptionCount}", sourceFilePath, sourceLineNumber);
+            PrintError($"Encoutered exception no# {ExceptionCount}", sourceFilePath, sourceLineNumber);
 
             PrintExceptionInfo(ex, false, sourceFilePath, sourceLineNumber);
         }

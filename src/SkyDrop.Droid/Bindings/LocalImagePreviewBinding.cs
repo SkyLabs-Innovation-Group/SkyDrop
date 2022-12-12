@@ -16,13 +16,11 @@ namespace SkyDrop.Droid.Bindings
     /// </summary>
     public class LocalImagePreviewBinding : MvxTargetBinding<MvxCachedImageView, SkyFile>
     {
-        private ILog _log;
-
         public LocalImagePreviewBinding(MvxCachedImageView target) : base(target)
         {
         }
 
-        private ILog log => _log ??= Mvx.IoCProvider.Resolve<ILog>();
+        private static ILog Log => Mvx.IoCProvider.Resolve<ILog>();
 
         public static string Name => "ImagePreview";
 
@@ -61,7 +59,7 @@ namespace SkyDrop.Droid.Bindings
             }
             catch (Exception e)
             {
-                log.Exception(e);
+                Log.Exception(e);
             }
         }
     }

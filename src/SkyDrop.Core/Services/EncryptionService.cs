@@ -65,7 +65,7 @@ namespace SkyDrop.Core.Services
             DevicesPaired
         }
 
-        private const int guidSizeBytes = 16;
+        private const int GuidSizeBytes = 16;
         private readonly IFileSystemService fileSystemService;
         private readonly SecureRandom random = new SecureRandom();
         private readonly IStorageService storageService;
@@ -93,7 +93,7 @@ namespace SkyDrop.Core.Services
             GetKeys().Forget();
         }
 
-        private Contact myContact => new Contact { Id = myId, PublicKey = myPublicKey, Name = myName };
+        private Contact MyContact => new Contact { Id = myId, PublicKey = myPublicKey, Name = myName };
 
         public string GetMyPublicKeyWithId(Guid justScannedId)
         {
@@ -120,7 +120,7 @@ namespace SkyDrop.Core.Services
             return Task.Run(() =>
             {
                 //allow sender to decrypt their own files
-                recipients.Add(myContact);
+                recipients.Add(MyContact);
 
                 //generate random encryption key
                 var encryptionKey = GenerateEncryptionKey(); //32 bytes
@@ -276,7 +276,7 @@ namespace SkyDrop.Core.Services
                 throw new Exception("You are not a valid recipient of this encrypted file");
 
             //check if user recognises the sender
-            var senderPublicKey = GetSenderPublicKey(metaData.SenderId, myContact);
+            var senderPublicKey = GetSenderPublicKey(metaData.SenderId, MyContact);
             if (senderPublicKey == null)
                 throw new Exception("The sender of this file is not recognised");
 
@@ -323,10 +323,10 @@ namespace SkyDrop.Core.Services
                 var nameLength = BinaryPrimitives.ReadUInt16BigEndian(bytes.Skip(2).Take(2).ToArray());
                 var name = Encoding.ASCII.GetString(bytes.Skip(2).Skip(2).Take(nameLength).ToArray());
 
-                var keyId = new Guid(bytes.Skip(2).Skip(2).Skip(nameLength).Take(guidSizeBytes).ToArray());
-                var justScannedId = new Guid(bytes.Skip(2).Skip(2).Skip(nameLength).Skip(guidSizeBytes)
-                    .Take(guidSizeBytes).ToArray());
-                var keyBytes = bytes.Skip(2).Skip(2).Skip(nameLength).Skip(guidSizeBytes).Skip(guidSizeBytes).ToArray();
+                var keyId = new Guid(bytes.Skip(2).Skip(2).Skip(nameLength).Take(GuidSizeBytes).ToArray());
+                var justScannedId = new Guid(bytes.Skip(2).Skip(2).Skip(nameLength).Skip(GuidSizeBytes)
+                    .Take(GuidSizeBytes).ToArray());
+                var keyBytes = bytes.Skip(2).Skip(2).Skip(nameLength).Skip(GuidSizeBytes).Skip(GuidSizeBytes).ToArray();
                 var publicKey = new X25519PublicKeyParameters(keyBytes);
                 var sharedSecret = GetSharedSecret(myPrivateKey, publicKey);
                 return (publicKey, keyId, justScannedId, name);

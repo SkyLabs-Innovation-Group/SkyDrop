@@ -26,7 +26,7 @@ namespace SkyDrop.iOS.Views.Drop
     [MvxRootPresentation(WrapInNavigationController = true)]
     public partial class DropView : BaseViewController<DropViewModel>
     {
-        private const int swipeMarginX = 20;
+        private const int SwipeMarginX = 20;
         private const string DropUploadNotifRequestId = "drop_upload_notification_id";
         private HomeMenuAnimator homeMenuAnimator;
         private bool isPressed, didInit;
@@ -37,7 +37,7 @@ namespace SkyDrop.iOS.Views.Drop
         {
         }
 
-        private nfloat screenWidth => UIScreen.MainScreen.Bounds.Width;
+        private nfloat ScreenWidth => UIScreen.MainScreen.Bounds.Width;
 
         public string EncryptIconType
         {
@@ -58,7 +58,7 @@ namespace SkyDrop.iOS.Views.Drop
                 ViewModel.SlideSendButtonToCenterCommand = new MvxCommand(AnimateSlideSendButton);
                 ViewModel.SlideReceiveButtonToCenterCommand = new MvxCommand(AnimateSlideReceiveButton);
                 ViewModel.GenerateBarcodeAsyncFunc = t => ShowBarcode(t);
-                ViewModel.ResetUIStateCommand = new MvxCommand(SetSendReceiveButtonUiState);
+                ViewModel.ResetUiStateCommand = new MvxCommand(SetSendReceiveButtonUiState);
                 ViewModel.UpdateNavDotsCommand = new MvxCommand(() => UpdateNavDots());
                 ViewModel.UploadStartedNotificationCommand =
                     new MvxAsyncCommand(async () => await ShowUploadStartedNotification());
@@ -344,7 +344,7 @@ namespace SkyDrop.iOS.Views.Drop
         {
             var duration = 0.25;
 
-            switch (ViewModel.DropViewUIState)
+            switch (ViewModel.DropViewUiState)
             {
                 case DropViewState.SendReceiveButtonState:
                 case DropViewState.ConfirmFilesState:
@@ -355,7 +355,7 @@ namespace SkyDrop.iOS.Views.Drop
                     });
 
                     break;
-                case DropViewState.QRCodeState:
+                case DropViewState.QrCodeState:
                     UIView.Animate(duration, () =>
                     {
                         LeftNavDot.Alpha = NavDotsMinAlpha;
@@ -378,7 +378,7 @@ namespace SkyDrop.iOS.Views.Drop
                 var screenDensity = (int)UIScreen.MainScreen.Scale;
                 var matrix = ViewModel.GenerateBarcode(url, (int)BarcodeImage.Frame.Width * screenDensity,
                     (int)BarcodeImage.Frame.Height * screenDensity);
-                var image = await iOSUtil.BitMatrixToImage(matrix);
+                var image = await IOsUtil.BitMatrixToImage(matrix);
                 BarcodeImage.Image = image;
                 ViewModel.SwipeNavigationEnabled = true;
             }
@@ -409,7 +409,7 @@ namespace SkyDrop.iOS.Views.Drop
         /// </summary>
         private void SetBarcodeCodeUiState(bool isSlow)
         {
-            ViewModel.DropViewUIState = DropViewState.QRCodeState;
+            ViewModel.DropViewUiState = DropViewState.QrCodeState;
             ViewModel.IsBarcodeVisible = true;
             ViewModel.Title = ViewModel.FocusedFile?.Filename;
 
@@ -469,11 +469,11 @@ namespace SkyDrop.iOS.Views.Drop
         /// </summary>
         private void AnimateSlideBarcodeIn(bool isSlow = false)
         {
-            var screenCenterX = screenWidth * 0.5;
-            var barcodeTranslationX = screenWidth;
+            var screenCenterX = ScreenWidth * 0.5;
+            var barcodeTranslationX = ScreenWidth;
 
-            BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(screenWidth, 0);
-            BarcodeContainer.Transform = CGAffineTransform.MakeTranslation(screenWidth, 0);
+            BarcodeMenu.Transform = CGAffineTransform.MakeTranslation(ScreenWidth, 0);
+            BarcodeContainer.Transform = CGAffineTransform.MakeTranslation(ScreenWidth, 0);
 
             var duration = isSlow ? 0.666 : 0.25;
             UIView.Animate(duration, () =>
@@ -488,7 +488,7 @@ namespace SkyDrop.iOS.Views.Drop
         /// </summary>
         private void AnimateSlideSendReceiveButtonsOut(bool toLeft)
         {
-            var translationX = toLeft ? -screenWidth : screenWidth;
+            var translationX = toLeft ? -ScreenWidth : ScreenWidth;
             var duration = 0.25;
             UIView.Animate(duration, () =>
             {
@@ -511,7 +511,7 @@ namespace SkyDrop.iOS.Views.Drop
             ReceiveButton.Alpha = 0;
 
             var duration = 0.25;
-            var barcodeTranslationX = screenWidth;
+            var barcodeTranslationX = ScreenWidth;
             UIView.Animate(duration, () =>
             {
                 //slide barcode out
@@ -533,8 +533,8 @@ namespace SkyDrop.iOS.Views.Drop
                 MiniMenuContainer.Alpha = 0;
             }, () =>
             {
-                ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState;
-                ViewModel.ResetUI();
+                ViewModel.DropViewUiState = DropViewState.SendReceiveButtonState;
+                ViewModel.ResetUi();
             });
         }
 
@@ -558,7 +558,7 @@ namespace SkyDrop.iOS.Views.Drop
         /// </summary>
         private void AnimateSlideSendReceiveCenter()
         {
-            var screenCenterX = screenWidth * 0.5;
+            var screenCenterX = ScreenWidth * 0.5;
 
             var sendReceiveButtonsContainerFrame = SendReceiveButtonsContainer.Frame;
             var duration = 0.5;
@@ -592,11 +592,11 @@ namespace SkyDrop.iOS.Views.Drop
 
                 isPressed = false;
 
-                if (ViewModel.DropViewUIState == DropViewState.SendReceiveButtonState)
+                if (ViewModel.DropViewUiState == DropViewState.SendReceiveButtonState)
                 {
                     //send & receive buttons are visible
 
-                    if (SendReceiveButtonsContainer.Transform.x0 <= -swipeMarginX)
+                    if (SendReceiveButtonsContainer.Transform.x0 <= -SwipeMarginX)
                         SetBarcodeCodeUiState(false);
                     else
                         AnimateSlideSendReceiveCenter();
@@ -605,7 +605,7 @@ namespace SkyDrop.iOS.Views.Drop
                 {
                     //barcode is visible
 
-                    if (BarcodeContainer.Transform.x0 >= swipeMarginX)
+                    if (BarcodeContainer.Transform.x0 >= SwipeMarginX)
                         SetSendReceiveButtonUiState();
                     else
                         AnimateSlideBarcodeToCenter();
@@ -642,7 +642,7 @@ namespace SkyDrop.iOS.Views.Drop
         {
             return !ViewModel.SwipeNavigationEnabled || //don't allow swipe before first file is uploaded
                    ViewModel.IsUploading || //don't allow swipe while file is uploading
-                   ViewModel.DropViewUIState ==
+                   ViewModel.DropViewUiState ==
                    DropViewState.ConfirmFilesState; //don't allow swipe on confirm file UI state
         }
     }

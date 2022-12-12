@@ -5,7 +5,7 @@ namespace SkyDrop.Droid.Views.Portals
 {
     public class PortalLoginWebViewClient : WebViewClient
     {
-        private const string javascriptFunction =
+        private const string JavascriptFunction =
             "javascript: function invokeCSharpAction(data){jsBridge.invokeAction(JSON.stringify(data));}";
 
         public EventHandler<bool> Navigated;
@@ -14,7 +14,7 @@ namespace SkyDrop.Droid.Views.Portals
         {
             base.OnPageFinished(view, url);
 
-            view.EvaluateJavascript(javascriptFunction, null);
+            view.EvaluateJavascript(JavascriptFunction, null);
 
             Navigated?.Invoke(this, true);
         }

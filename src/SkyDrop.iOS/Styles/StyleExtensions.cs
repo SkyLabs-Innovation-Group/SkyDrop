@@ -7,16 +7,16 @@ namespace SkyDrop.iOS.Styles
 {
     public static class StyleExtensions
     {
-        private const int cornerRadius = 8;
-        private const int borderWidth = 2;
+        private const int CornerRadius = 8;
+        private const int BorderWidth = 2;
 
         public static void StyleButton(this UIView button, Color color, bool isOutline = false)
         {
-            button.Layer.CornerRadius = cornerRadius;
+            button.Layer.CornerRadius = CornerRadius;
 
             if (isOutline)
             {
-                button.Layer.BorderWidth = borderWidth;
+                button.Layer.BorderWidth = BorderWidth;
                 button.Layer.BorderColor = color.ToNative().CGColor;
                 button.BackgroundColor = Colors.DarkGrey.ToNative();
             }

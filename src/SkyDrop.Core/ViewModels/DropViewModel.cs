@@ -28,7 +28,7 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             SendReceiveButtonState = 1,
             ConfirmFilesState = 2,
-            QRCodeState = 3
+            QrCodeState = 3
         }
 
         public enum FileUploadResult
@@ -46,13 +46,13 @@ namespace SkyDrop.Core.ViewModels.Main
             Settings = 4
         }
 
-        private const string receiveFileText = "RECEIVE";
-        private const string receivingFileText = "RECEIVING...";
-        private const string noInternetPrompt = "Please check your internet connection";
+        private const string ReceiveFileText = "RECEIVE";
+        private const string ReceivingFileText = "RECEIVING...";
+        private const string NoInternetPrompt = "Please check your internet connection";
         private readonly IApiService apiService;
         private readonly IBarcodeService barcodeService;
         private readonly IEncryptionService encryptionService;
-        private readonly IFFImageService ffImageService;
+        private readonly IFfImageService ffImageService;
         private readonly IFileSystemService fileSystemService;
         private readonly IMvxNavigationService navigationService;
         private readonly IShareLinkService shareLinkService;
@@ -60,7 +60,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IUploadTimerService uploadTimerService;
         private readonly IUserDialogs userDialogs;
 
-        private DropViewState _dropViewUIState;
+        private DropViewState dropViewUiState;
 
         private string errorMessage;
         private TaskCompletionSource<SkyFile> iosMultipleImageSelectTask;
@@ -77,7 +77,7 @@ namespace SkyDrop.Core.ViewModels.Main
             IFileSystemService fileSystemService,
             IEncryptionService encryptionService,
             ILog log,
-            IFFImageService fFImageService) : base(singletonService)
+            IFfImageService fFImageService) : base(singletonService)
         {
             Log = log;
             Title = "SkyDrop";
@@ -105,14 +105,14 @@ namespace SkyDrop.Core.ViewModels.Main
             CancelUploadCommand = new MvxCommand(CancelUpload);
             ChooseRecipientCommand = new MvxAsyncCommand(() => OpenContactsMenu(true));
             ShowStagedFileMenuCommand =
-                new MvxAsyncCommand<StagedFileDVM>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
+                new MvxAsyncCommand<StagedFileDvm>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
 
             //QR code state
             CopyLinkCommand = new MvxAsyncCommand(async () => await CopySkyLinkToClipboard());
             ShareLinkCommand = new MvxAsyncCommand(async () => await ShareLink());
             CancelUploadCommand = new MvxCommand(CancelUpload);
             ShowStagedFileMenuCommand =
-                new MvxAsyncCommand<StagedFileDVM>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
+                new MvxAsyncCommand<StagedFileDvm>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
             DownloadFileCommand = new MvxAsyncCommand(SaveOrUnzipFocusedFile);
             ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
@@ -126,7 +126,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public MvxAsyncCommand MenuContactsCommand { get; }
         public MvxAsyncCommand MenuSettingsCommand { get; }
         public IMvxCommand CopyLinkCommand { get; set; }
-        public IMvxCommand ResetUIStateCommand { get; set; }
+        public IMvxCommand ResetUiStateCommand { get; set; }
         public IMvxCommand ShareLinkCommand { get; set; }
         public IMvxCommand OpenFileInBrowserCommand { get; set; }
         public IMvxCommand DownloadFileCommand { get; set; }
@@ -135,7 +135,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand CancelUploadCommand { get; set; }
         public IMvxCommand ChooseRecipientCommand { get; }
         public IMvxCommand CheckUserIsSwipingCommand { get; set; }
-        public IMvxCommand<StagedFileDVM> ShowStagedFileMenuCommand { get; set; }
+        public IMvxCommand<StagedFileDvm> ShowStagedFileMenuCommand { get; set; }
         public IMvxCommand UpdateNavDotsCommand { get; set; }
         public IMvxCommand UploadStartedNotificationCommand { get; set; }
         public IMvxCommand<FileUploadResult> UploadFinishedNotificationCommand { get; set; }
@@ -150,7 +150,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool IsBarcodeLoading { get; set; }
         public bool IsBarcodeVisible { get; set; } //visibility for BarcodeContainer and BarcodeMenu
         public bool IsPreviewImageVisible { get; set; } //toggle for barcode / preview image
-        public bool IsStagedFilesVisible => DropViewUIState == DropViewState.ConfirmFilesState;
+        public bool IsStagedFilesVisible => DropViewUiState == DropViewState.ConfirmFilesState;
         public bool IsReceiveButtonGreen { get; set; } = true;
         public string UploadTimerText { get; set; }
         public bool IsAnimatingBarcodeOut { get; set; }
@@ -158,12 +158,12 @@ namespace SkyDrop.Core.ViewModels.Main
         public double UploadProgress { get; set; } //0-1
         public bool SwipeNavigationEnabled { get; set; } //determines whether user can swipe to the QR code screen
         public bool UserIsSwipingResult { get; set; }
-        public bool NavDotsVisible => DropViewUIState != DropViewState.ConfirmFilesState && SwipeNavigationEnabled;
+        public bool NavDotsVisible => DropViewUiState != DropViewState.ConfirmFilesState && SwipeNavigationEnabled;
 
         public string SendButtonLabel => IsEncrypting ? "ENCRYPTING" :
             IsUploading ? StagedFiles?.Count > 2 ? "SENDING FILES" : "SENDING FILE" : "SEND";
 
-        public string ReceiveButtonLabel { get; set; } = receiveFileText;
+        public string ReceiveButtonLabel { get; set; } = ReceiveFileText;
         public bool IsReceivingFile { get; set; }
         public bool IsDownloadingFile { get; set; }
         public string PreviewImageUrl { get; set; }
@@ -180,17 +180,17 @@ namespace SkyDrop.Core.ViewModels.Main
         public Color EncryptionButtonColor => Recipient == null ? Colors.MidGrey : Colors.Primary;
         public Contact Recipient { get; set; }
 
-        public List<StagedFileDVM> StagedFiles { get; set; }
+        public List<StagedFileDvm> StagedFiles { get; set; }
         public SkyFile FocusedFile { get; set; } //most recently sent or received file
         public string FocusedFileUrl => FocusedFile?.GetSkylinkUrl();
         public SkyFile FileToUpload { get; set; }
 
-        public DropViewState DropViewUIState
+        public DropViewState DropViewUiState
         {
-            get => _dropViewUIState;
+            get => dropViewUiState;
             set
             {
-                _dropViewUIState = value;
+                dropViewUiState = value;
                 Log.Trace($"New UI State: {value}");
 
                 UpdateNavDotsCommand?.Execute();
@@ -203,7 +203,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public override async Task Initialize()
         {
-            DropViewUIState = DropViewState.SendReceiveButtonState;
+            DropViewUiState = DropViewState.SendReceiveButtonState;
 
             await base.Initialize();
         }
@@ -220,7 +220,7 @@ namespace SkyDrop.Core.ViewModels.Main
             base.ViewAppeared();
 
             //make sure buttons return to green when returning from QR scanner
-            ResetUI(true);
+            ResetUi(true);
 
             //show error message after the qr code scanner view has closed to avoid exception
             if (!string.IsNullOrEmpty(errorMessage))
@@ -234,7 +234,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 navigationService.Navigate<OnboardingViewModel>();
         }
 
-        public void ResetUI(bool leaveBarcode = false)
+        public void ResetUi(bool leaveBarcode = false)
         {
             IsReceiveButtonGreen = true;
             UploadTimerText = "";
@@ -248,9 +248,9 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task SendButtonTapped()
         {
-            if (DropViewUIState == DropViewState.SendReceiveButtonState)
+            if (DropViewUiState == DropViewState.SendReceiveButtonState)
                 await StartSendFile();
-            else if (DropViewUIState == DropViewState.ConfirmFilesState) await FinishSendFile();
+            else if (DropViewUiState == DropViewState.ConfirmFilesState) await FinishSendFile();
         }
 
         private async Task StartSendFile()
@@ -267,7 +267,7 @@ namespace SkyDrop.Core.ViewModels.Main
             var pickedFiles = await SelectFiles();
             if (pickedFiles == null || pickedFiles.Count == 0)
             {
-                ResetUI();
+                ResetUi();
                 return;
             }
 
@@ -383,7 +383,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private void HandleUploadError(Exception ex, string prompt, FileUploadResult result)
         {
             if (Connectivity.NetworkAccess != NetworkAccess.Internet)
-                prompt = noInternetPrompt;
+                prompt = NoInternetPrompt;
 
             if (result == FileUploadResult.Fail)
             {
@@ -415,11 +415,11 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (IsBarcodeVisible) return;
 
                 //don't allow user to scan barcode from confirm upload screen
-                if (DropViewUIState == DropViewState.ConfirmFilesState) return;
+                if (DropViewUiState == DropViewState.ConfirmFilesState) return;
 
                 IsReceiveButtonGreen = true;
                 SlideReceiveButtonToCenterCommand.Execute();
-                ReceiveButtonLabel = receivingFileText;
+                ReceiveButtonLabel = ReceivingFileText;
                 IsReceivingFile = true;
 
                 //open the QR code scan view
@@ -427,7 +427,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (barcodeData == null)
                 {
                     Log.Trace("barcodeData is null");
-                    ResetUIStateCommand?.Execute();
+                    ResetUiStateCommand?.Execute();
                     return;
                 }
 
@@ -435,7 +435,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 {
                     //not a skylink
                     await OpenUrlInBrowser(barcodeData);
-                    ResetUIStateCommand?.Execute();
+                    ResetUiStateCommand?.Execute();
                     return;
                 }
 
@@ -473,21 +473,21 @@ namespace SkyDrop.Core.ViewModels.Main
                 else
                     errorMessage = error;
 
-                ResetUIStateCommand.Execute();
+                ResetUiStateCommand.Execute();
 
                 await Clipboard.SetTextAsync(barcodeData);
             }
             finally
             {
                 IsReceivingFile = false;
-                ReceiveButtonLabel = receiveFileText;
+                ReceiveButtonLabel = ReceiveFileText;
                 IsReceiveButtonGreen = true;
             }
         }
 
         private void StageFiles(List<SkyFile> userFiles, bool keepExisting)
         {
-            var newStagedFiles = userFiles.Select(s => new StagedFileDVM
+            var newStagedFiles = userFiles.Select(s => new StagedFileDvm
             {
                 SkyFile = s,
                 TapCommand = new MvxAsyncCommand(async () => await ShowStagedFileMenu(s))
@@ -514,7 +514,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 //staging for the first time
 
                 //add more files button 
-                newStagedFiles.Add(new StagedFileDVM
+                newStagedFiles.Add(new StagedFileDvm
                 {
                     IsMoreFilesButton = true,
                     TapCommand = new MvxAsyncCommand(AddMoreFiles)
@@ -523,7 +523,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 StagedFiles = newStagedFiles;
             }
 
-            DropViewUIState = DropViewState.ConfirmFilesState;
+            DropViewUiState = DropViewState.ConfirmFilesState;
         }
 
         private async Task<SkyFile> UploadFile()
@@ -629,7 +629,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 IsStagingFiles = false;
 
                 //reset the UI
-                ResetUIStateCommand?.Execute();
+                ResetUiStateCommand?.Execute();
                 return null;
             }
 
@@ -731,7 +731,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 return;
             }
 
-            ResetUIStateCommand?.Execute();
+            ResetUiStateCommand?.Execute();
         }
 
         public BitMatrix GenerateBarcode(string text, int width, int height)
@@ -995,7 +995,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     // var apiKey = await navigationService.Navigate<PortalLoginViewModel, string, string>("https://web3portal.com");
                     break;
                 case HomeMenuItem.Contacts:
-                    var isSelecting = DropViewUIState == DropViewState.ConfirmFilesState;
+                    var isSelecting = DropViewUiState == DropViewState.ConfirmFilesState;
                     await OpenContactsMenu(isSelecting);
                     break;
                 case HomeMenuItem.Settings:
@@ -1012,7 +1012,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 return; //user tapped back button
 
             //set encryptionContact to null if item is AnyoneWithTheLinkItem
-            Recipient = item is ContactDVM contactDvm ? contactDvm.Contact : null;
+            Recipient = item is ContactDvm contactDvm ? contactDvm.Contact : null;
             RaisePropertyChanged(() => EncryptionText).Forget();
         }
 

@@ -82,7 +82,7 @@ namespace SkyDrop.iOS.Views.Contacts
                     var screenDensity = (int)UIScreen.MainScreen.Scale;
                     var matrix = ViewModel.GenerateBarcode((int)BarcodeImage.Frame.Width * screenDensity,
                         (int)BarcodeImage.Frame.Height * screenDensity);
-                    var image = await iOSUtil.BitMatrixToImage(matrix);
+                    var image = await IOsUtil.BitMatrixToImage(matrix);
                     BarcodeImage.Image = image;
                 });
             }

@@ -94,7 +94,7 @@ namespace SkyDrop.iOS.Common
             }
         }
 
-        private static async Task<string> UIImageToFile(UIImage image)
+        private static async Task<string> UiImageToFile(UIImage image)
         {
             try
             {

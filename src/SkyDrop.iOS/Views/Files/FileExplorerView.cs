@@ -74,12 +74,12 @@ namespace SkyDrop.iOS.Views.Files
 
         private class FilesCollectionViewLayout : UICollectionViewFlowLayout
         {
-            private const int horizontalMargins = 16;
-            private nfloat itemWidth => (UIScreen.MainScreen.Bounds.Width - horizontalMargins) / 2;
+            private const int HorizontalMargins = 16;
+            private nfloat ItemWidth => (UIScreen.MainScreen.Bounds.Width - HorizontalMargins) / 2;
 
             public override CGSize ItemSize
             {
-                get => new CGSize(itemWidth, itemWidth);
+                get => new CGSize(ItemWidth, ItemWidth);
                 set => base.ItemSize = value;
             }
 

@@ -39,18 +39,18 @@ namespace SkyDrop.Core.ViewModels
         {
             Portal ??= new SkynetPortal(PortalUrl, PortalName);
 
-            var portalDVM = new SkynetPortalDVM(Portal)
+            var portalDvm = new SkynetPortalDvm(Portal)
             {
                 Name = PortalName,
                 BaseUrl = PortalUrl
             };
 
             if (AddingNewPortal)
-                singletonService.StorageService.SaveSkynetPortal(Portal, ApiToken);
+                SingletonService.StorageService.SaveSkynetPortal(Portal, ApiToken);
             else
-                singletonService.StorageService.EditSkynetPortal(portalDVM, ApiToken);
+                SingletonService.StorageService.EditSkynetPortal(portalDvm, ApiToken);
 
-            singletonService.UserDialogs.Toast("Saved");
+            SingletonService.UserDialogs.Toast("Saved");
         }
 
         public override async void Prepare(NavParam parameter)
@@ -61,7 +61,7 @@ namespace SkyDrop.Core.ViewModels
             }
             else
             {
-                Portal = singletonService.StorageService.LoadSkynetPortal(parameter.PortalId);
+                Portal = SingletonService.StorageService.LoadSkynetPortal(parameter.PortalId);
                 ApiToken = await SecureStorage.GetAsync(Portal.GetApiTokenPrefKey());
             }
 

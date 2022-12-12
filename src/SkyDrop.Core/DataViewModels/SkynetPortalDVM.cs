@@ -6,11 +6,11 @@ using Xamarin.Essentials;
 
 namespace SkyDrop.Core.DataViewModels
 {
-    public class SkynetPortalDVM : MvxNotifyPropertyChanged
+    public class SkynetPortalDvm : MvxNotifyPropertyChanged
     {
         private SkynetPortal portal;
 
-        public SkynetPortalDVM(SkynetPortal portal)
+        public SkynetPortalDvm(SkynetPortal portal)
         {
             this.portal = portal;
             Name = portal.Name;

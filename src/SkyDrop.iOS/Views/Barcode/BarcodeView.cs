@@ -13,8 +13,8 @@ namespace SkyDrop.iOS.Views.Barcode
 {
     public partial class BarcodeView : BaseViewController<BarcodeViewModel>
     {
-        private const int textInputConstraintShort = 12;
-        private const int textInputConstraintLong = 60;
+        private const int TextInputConstraintShort = 12;
+        private const int TextInputConstraintLong = 60;
         private UIBarButtonItem closeKeyboardButton;
         private Timer textTimer;
 
@@ -32,13 +32,13 @@ namespace SkyDrop.iOS.Views.Barcode
             {
                 View.EndEditing(true);
                 NavigationItem.RightBarButtonItem = null;
-                TextInputRightConstraint.Constant = textInputConstraintShort;
+                TextInputRightConstraint.Constant = TextInputConstraintShort;
             });
 
             TextInput.EditingDidBegin += (s, e) =>
             {
                 NavigationItem.RightBarButtonItem = closeKeyboardButton;
-                TextInputRightConstraint.Constant = textInputConstraintLong;
+                TextInputRightConstraint.Constant = TextInputConstraintLong;
             };
 
             BarcodeContainer.ClipsToBounds = true;
@@ -81,7 +81,7 @@ namespace SkyDrop.iOS.Views.Barcode
                     var screenDensity = (int)UIScreen.MainScreen.Scale;
                     var matrix = ViewModel.GenerateBarcode(TextInput.Text,
                         (int)BarcodeImage.Frame.Width * screenDensity, (int)BarcodeImage.Frame.Height * screenDensity);
-                    var image = await iOSUtil.BitMatrixToImage(matrix);
+                    var image = await IOsUtil.BitMatrixToImage(matrix);
                     BarcodeImage.Image = image;
                 }
                 catch (Exception ex)

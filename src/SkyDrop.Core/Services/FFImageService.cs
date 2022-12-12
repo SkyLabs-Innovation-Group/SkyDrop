@@ -9,14 +9,14 @@ using SkyDrop.Core.DataModels;
 
 namespace SkyDrop.Core.Services
 {
-    public class FFImageService : IFFImageService
+    public class FfImageService : IFfImageService
     {
         private readonly ISkyDropHttpClientFactory httpClientFactory;
         private readonly ILog log;
 
         public TaskCompletionSource<bool> InitialiseTask;
 
-        public FFImageService(ILog log, ISkyDropHttpClientFactory skyDropHttpClientFactory)
+        public FfImageService(ILog log, ISkyDropHttpClientFactory skyDropHttpClientFactory)
         {
             this.log = log;
             httpClientFactory = skyDropHttpClientFactory;
@@ -56,7 +56,7 @@ namespace SkyDrop.Core.Services
         }
     }
 
-    public interface IFFImageService
+    public interface IFfImageService
     {
         Task Initialise();
         void UpdateHttpClient(HttpClient httpClient);
