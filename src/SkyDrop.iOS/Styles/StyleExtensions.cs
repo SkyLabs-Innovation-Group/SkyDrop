@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using Acr.UserDialogs;
 using SkyDrop.Core.Utility;
 using UIKit;
@@ -29,4 +28,3 @@ namespace SkyDrop.iOS.Styles
         }
     }
 }
-

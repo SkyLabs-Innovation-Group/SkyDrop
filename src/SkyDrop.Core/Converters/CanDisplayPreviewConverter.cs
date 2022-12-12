@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using MvvmCross;
 using MvvmCross.Converters;
 using SkyDrop.Core.Utility;
 
@@ -11,7 +10,7 @@ namespace SkyDrop.Core.Converters
         public const string Name = "CanDisplayPreview";
         public const string InvertName = "CannotDisplayPreview";
 
-        private bool invert;
+        private readonly bool invert;
 
         public CanDisplayPreviewConverter(bool invert)
         {

@@ -1,98 +1,98 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:clipToPadding="false"
-    android:paddingTop="16dp"
-    android:paddingLeft="16dp"
-    app:MvxBind="Click TapCommand;LongClick LongPressCommand">
-    
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingTop="16dp"
+        android:paddingLeft="16dp"
+        app:MvxBind="Click TapCommand;LongClick LongPressCommand">
+
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="1dp"
-        app:cardBackgroundColor="@color/midGrey">
-        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-            <FrameLayout
+            android:layout_gravity="center"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="@color/midGrey">
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
-                <FFImageLoading.Cross.MvxCachedImageView
+            <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    app:MvxBind="SkyFilePreviewImage SkyFile"/>
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                <FFImageLoading.Cross.MvxCachedImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        app:MvxBind="SkyFilePreviewImage SkyFile"/>
                 <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_cloud"
-                    app:MvxBind="FileCategoryIcon SkyFile.Filename;Visibility InvertedVisibility(CanDisplayPreview(SkyFile.Filename))"/>
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_cloud"
+                        app:MvxBind="FileCategoryIcon SkyFile.Filename;Visibility InvertedVisibility(CanDisplayPreview(SkyFile.Filename))"/>
             </FrameLayout>
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:padding="8dp"
-                android:orientation="horizontal"
-                app:MvxBind="BackgroundColor FillColor">
-                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:lines="1"
-                    android:ellipsize="middle"
-                    android:textColor="#fff"
-                    android:layout_gravity="center_vertical"
-                    app:MvxBind="Text SkyFile.Filename"
-                    />
+                    android:layout_gravity="bottom"
+                    android:padding="8dp"
+                    android:orientation="horizontal"
+                    app:MvxBind="BackgroundColor FillColor">
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lines="1"
+                        android:ellipsize="middle"
+                        android:textColor="#fff"
+                        android:layout_gravity="center_vertical"
+                        app:MvxBind="Text SkyFile.Filename"
+                />
 
             </LinearLayout>
-            
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <!--Selection Indicator-->
     <androidx.cardview.widget.CardView
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:translationX="-8dp"
-        android:translationY="-8dp"
-        app:cardCornerRadius="16dp"
-        app:MvxBind="Visibility Visibility(IsSelectionActive);CardBackgroundColor SelectionIndicatorColor">
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:translationX="-8dp"
+            android:translationY="-8dp"
+            app:cardCornerRadius="16dp"
+            app:MvxBind="Visibility Visibility(IsSelectionActive);CardBackgroundColor SelectionIndicatorColor">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:layout_gravity="center"
-            app:cardCornerRadius="16dp"
-            app:cardBackgroundColor="#fff"
-            app:MvxBind="Visibility Visibility(IsSelected)"/>
-        
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_gravity="center"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="#fff"
+                app:MvxBind="Visibility Visibility(IsSelected)"/>
+
     </androidx.cardview.widget.CardView>
 
     <!--Saving File Indicator-->
     <androidx.cardview.widget.CardView
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:translationX="-8dp"
-        android:translationY="-8dp"
-        app:cardCornerRadius="16dp"
-        app:MvxBind="Visibility Visibility(IsLoading);CardBackgroundColor FillColor">
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:translationX="-8dp"
+            android:translationY="-8dp"
+            app:cardCornerRadius="16dp"
+            app:MvxBind="Visibility Visibility(IsLoading);CardBackgroundColor FillColor">
 
         <ProgressBar
-            android:id="@+id/ProgressBar"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:progressTint="#eee"/>
-        
+                android:id="@+id/ProgressBar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:progressTint="#eee"/>
+
     </androidx.cardview.widget.CardView>
 </FrameLayout>

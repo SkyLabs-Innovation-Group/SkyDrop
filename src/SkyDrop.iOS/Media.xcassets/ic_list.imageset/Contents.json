@@ -1,27 +1,27 @@
 {
-  "images" : [
+  "images": [
     {
-      "filename" : "format-list-bulleted-square.pdf",
-      "idiom" : "universal"
+      "filename": "format-list-bulleted-square.pdf",
+      "idiom": "universal"
     },
     {
-      "idiom" : "iphone"
+      "idiom": "iphone"
     },
     {
-      "idiom" : "ipad"
+      "idiom": "ipad"
     },
     {
-      "idiom" : "car"
+      "idiom": "car"
     },
     {
-      "idiom" : "watch"
+      "idiom": "watch"
     },
     {
-      "idiom" : "tv"
+      "idiom": "tv"
     }
   ],
-  "info" : {
-    "author" : "xcode",
-    "version" : 1
+  "info": {
+    "author": "xcode",
+    "version": 1
   }
 }

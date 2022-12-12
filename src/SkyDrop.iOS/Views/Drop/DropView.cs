@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using CoreGraphics;
@@ -19,7 +20,6 @@ using UIKit;
 using UserNotifications;
 using static SkyDrop.Core.Utility.Util;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
-using static SkyDrop.iOS.Styles.StyleExtensions;
 
 namespace SkyDrop.iOS.Views.Drop
 {
@@ -27,15 +27,26 @@ namespace SkyDrop.iOS.Views.Drop
     public partial class DropView : BaseViewController<DropViewModel>
     {
         private const int swipeMarginX = 20;
+        private const string DropUploadNotifRequestId = "drop_upload_notification_id";
+        private HomeMenuAnimator homeMenuAnimator;
         private bool isPressed, didInit;
         private nfloat tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
-        private const string DropUploadNotifRequestId = "drop_upload_notification_id";
-        private nfloat screenWidth => UIScreen.MainScreen.Bounds.Width;
         private UILabel titleLabel;
-        private HomeMenuAnimator homeMenuAnimator;
 
         public DropView() : base("DropView", null)
         {
+        }
+
+        private nfloat screenWidth => UIScreen.MainScreen.Bounds.Width;
+
+        public string EncryptIconType
+        {
+            get => "";
+            set
+            {
+                var icon = value == new AnyoneWithTheLinkItem().Name ? "ic_world" : "ic_key";
+                EncryptIcon.Image = UIImage.FromBundle(icon);
+            }
         }
 
         public override void ViewDidLoad()
@@ -49,9 +60,13 @@ namespace SkyDrop.iOS.Views.Drop
                 ViewModel.GenerateBarcodeAsyncFunc = t => ShowBarcode(t);
                 ViewModel.ResetUIStateCommand = new MvxCommand(SetSendReceiveButtonUiState);
                 ViewModel.UpdateNavDotsCommand = new MvxCommand(() => UpdateNavDots());
-                ViewModel.UploadStartedNotificationCommand = new MvxAsyncCommand(async() => await ShowUploadStartedNotification()); ;
-                ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>((result) => ShowUploadFinishedNotification(result));
-                ViewModel.UpdateNotificationProgressCommand = new MvxCommand<double>((progress) => UpdateUploadNotificationProgress(progress));
+                ViewModel.UploadStartedNotificationCommand =
+                    new MvxAsyncCommand(async () => await ShowUploadStartedNotification());
+                ;
+                ViewModel.UploadFinishedNotificationCommand =
+                    new MvxCommand<FileUploadResult>(result => ShowUploadFinishedNotification(result));
+                ViewModel.UpdateNotificationProgressCommand =
+                    new MvxCommand<double>(progress => UpdateUploadNotificationProgress(progress));
                 ViewModel.IosSelectFileCommand = new MvxCommand(() =>
                 {
                     var successAction = new Action<string>(path => ViewModel.IosStageImage(path));
@@ -60,15 +75,16 @@ namespace SkyDrop.iOS.Views.Drop
                 });
 
                 var fileSystemService = Mvx.IoCProvider.Resolve<IFileSystemService>();
-                fileSystemService.DownloadsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                fileSystemService.CacheFolderPath = System.IO.Path.GetTempPath();
+                fileSystemService.DownloadsFolderPath =
+                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                fileSystemService.CacheFolderPath = Path.GetTempPath();
 
                 SetupGestureListener();
                 SetupNavDots();
 
                 //setup nav bar
                 NavigationController.NavigationBar.BarTintColor = Colors.GradientDark.ToNative();
-                NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes()
+                NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes
                 {
                     ForegroundColor = Colors.White.ToNative()
                 };
@@ -76,7 +92,8 @@ namespace SkyDrop.iOS.Views.Drop
                 MakeTitleTruncateFromMiddle();
 
                 View.BackgroundColor = Colors.DarkGrey.ToNative();
-                BarcodeContainer.BackgroundColor = Colors.MidGrey.ToNative(); //so that preview image fades in from dark color
+                BarcodeContainer.BackgroundColor =
+                    Colors.MidGrey.ToNative(); //so that preview image fades in from dark color
 
                 CancelButton.BackgroundColor = Colors.MidGrey.ToNative();
                 CancelButton.Layer.CornerRadius = 8;
@@ -120,7 +137,7 @@ namespace SkyDrop.iOS.Views.Drop
 
                 BindViews();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 ViewModel.Log.Exception(e);
             }
@@ -136,7 +153,8 @@ namespace SkyDrop.iOS.Views.Drop
             //initialize animation container
             var animationContainer = new UIView { UserInteractionEnabled = false };
             View.LayoutInsideWithFrame(animationContainer);
-            homeMenuAnimator = new HomeMenuAnimator(HomeMenuSkyDriveIcon, HomeMenuPortalsIcon, HomeMenuContactsIcon, HomeMenuSettingsIcon,
+            homeMenuAnimator = new HomeMenuAnimator(HomeMenuSkyDriveIcon, HomeMenuPortalsIcon, HomeMenuContactsIcon,
+                HomeMenuSettingsIcon,
                 MiniMenuSkyDriveIcon, MiniMenuPortalsIcon, MiniMenuContactsIcon, MiniMenuSettingsIcon,
                 animationContainer);
 
@@ -181,7 +199,8 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(DownloadButtonActivityIndicator).For("Visible").To(vm => vm.IsDownloadingFile);
             set.Bind(DownloadButtonIcon).For(t => t.Hidden).To(vm => vm.IsDownloadingFile);
             set.Bind(SaveFileLabel).For(t => t.Text).To(vm => vm.SaveButtonText);
-            set.Bind(DownloadButtonIcon).For(a => a.ImagePath).To(vm => vm.IsFocusedFileAnArchive).WithConversion(new SaveUnzipIconConverter());
+            set.Bind(DownloadButtonIcon).For(a => a.ImagePath).To(vm => vm.IsFocusedFileAnArchive)
+                .WithConversion(new SaveUnzipIconConverter());
             set.Bind(BarcodeMenu).For("Visible").To(vm => vm.IsBarcodeVisible);
 
             //barcode view
@@ -203,7 +222,8 @@ namespace SkyDrop.iOS.Views.Drop
             //encryption button
             set.Bind(EncryptButton).For("Tap").To(vm => vm.ChooseRecipientCommand);
             set.Bind(EncryptButton).For("Visible").To(vm => vm.IsStagedFilesVisible);
-            set.Bind(EncryptButton).For("BackgroundColor").To(vm => vm.EncryptionButtonColor).WithConversion(new NativeColorConverter());
+            set.Bind(EncryptButton).For("BackgroundColor").To(vm => vm.EncryptionButtonColor)
+                .WithConversion(new NativeColorConverter());
             set.Bind(EncryptionLabel).To(vm => vm.EncryptionText);
             set.Bind(this).For(t => t.EncryptIconType).To(vm => vm.EncryptionText);
 
@@ -211,9 +231,11 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(CancelButton).For("Tap").To(vm => vm.CancelUploadCommand);
 
             //setup file preview collection view
-            var filePreviewSource = new MvxCollectionViewSource(FilePreviewCollectionView, FilePreviewCollectionViewCell.Key);
+            var filePreviewSource =
+                new MvxCollectionViewSource(FilePreviewCollectionView, FilePreviewCollectionViewCell.Key);
             FilePreviewCollectionView.DataSource = filePreviewSource;
-            FilePreviewCollectionView.RegisterNibForCell(FilePreviewCollectionViewCell.Nib, FilePreviewCollectionViewCell.Key);
+            FilePreviewCollectionView.RegisterNibForCell(FilePreviewCollectionViewCell.Nib,
+                FilePreviewCollectionViewCell.Key);
             set.Bind(filePreviewSource).For(s => s.ItemsSource).To(vm => vm.StagedFiles);
             set.Bind(FilePreviewCollectionView).For("Visible").To(vm => vm.IsStagedFilesVisible);
 
@@ -223,16 +245,6 @@ namespace SkyDrop.iOS.Views.Drop
             set.Bind(titleLabel).To(vm => vm.Title);
 
             set.Apply();
-        }
-
-        public string EncryptIconType
-        {
-            get => "";
-            set
-            {
-                var icon = value == new AnyoneWithTheLinkItem().Name ? "ic_world" : "ic_key";
-                EncryptIcon.Image = UIImage.FromBundle(icon);
-            }
         }
 
         private void MakeTitleTruncateFromMiddle()
@@ -255,7 +267,7 @@ namespace SkyDrop.iOS.Views.Drop
 
         private void UpdateUploadNotificationProgress(double progress)
         {
-            int progressPercentage = (int)Math.Floor(progress * 100);
+            var progressPercentage = (int)Math.Floor(progress * 100);
 
             var content = new UNMutableNotificationContent();
             content.Title = "Upload started";
@@ -266,18 +278,18 @@ namespace SkyDrop.iOS.Views.Drop
 
             var trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(1, false);
             var request = UNNotificationRequest.FromIdentifier(DropUploadNotifRequestId, content, trigger);
-            UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) => { });
+            UNUserNotificationCenter.Current.AddNotificationRequest(request, err => { });
         }
 
         private async Task ShowUploadStartedNotification()
         {
-            var (granted, _) = await UNUserNotificationCenter.Current.RequestAuthorizationAsync(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge);
+            var (granted, _) =
+                await UNUserNotificationCenter.Current.RequestAuthorizationAsync(UNAuthorizationOptions.Alert |
+                    UNAuthorizationOptions.Badge);
 
             if (!granted)
-            {
                 // No notification permission
                 return;
-            }
 
             var content = new UNMutableNotificationContent();
             content.Title = "Upload started";
@@ -286,11 +298,12 @@ namespace SkyDrop.iOS.Views.Drop
 
             var request = UNNotificationRequest.FromIdentifier(DropUploadNotifRequestId, content, trigger);
 
-            UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) => {
+            UNUserNotificationCenter.Current.AddNotificationRequest(request, err =>
+            {
                 if (err != null)
                 {
                     ViewModel.Log.Error($"{err.Description}");
-                    ViewModel.Log.Error($"{err.ToString()}");
+                    ViewModel.Log.Error($"{err}");
                 }
             });
         }
@@ -315,7 +328,7 @@ namespace SkyDrop.iOS.Views.Drop
 
             var request = UNNotificationRequest.FromIdentifier(DropUploadNotifRequestId, content, trigger);
 
-            UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) => { });
+            UNUserNotificationCenter.Current.AddNotificationRequest(request, err => { });
         }
 
         private void SetupNavDots()
@@ -325,7 +338,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        /// Change alpha of navigation dots display to reflect new UI state
+        ///     Change alpha of navigation dots display to reflect new UI state
         /// </summary>
         private void UpdateNavDots()
         {
@@ -340,7 +353,7 @@ namespace SkyDrop.iOS.Views.Drop
                         LeftNavDot.Alpha = NavDotsMaxAlpha;
                         RightNavDot.Alpha = NavDotsMinAlpha;
                     });
-                    
+
                     break;
                 case DropViewState.QRCodeState:
                     UIView.Animate(duration, () =>
@@ -354,16 +367,17 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        /// Generate and display QR code
+        ///     Generate and display QR code
         /// </summary>
         private async Task ShowBarcode(string url)
         {
             try
             {
-                SetBarcodeCodeUiState(isSlow: true);
+                SetBarcodeCodeUiState(true);
 
                 var screenDensity = (int)UIScreen.MainScreen.Scale;
-                var matrix = ViewModel.GenerateBarcode(url, (int)BarcodeImage.Frame.Width * screenDensity, (int)BarcodeImage.Frame.Height * screenDensity);
+                var matrix = ViewModel.GenerateBarcode(url, (int)BarcodeImage.Frame.Width * screenDensity,
+                    (int)BarcodeImage.Frame.Height * screenDensity);
                 var image = await iOSUtil.BitMatrixToImage(matrix);
                 BarcodeImage.Image = image;
                 ViewModel.SwipeNavigationEnabled = true;
@@ -376,7 +390,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        /// Return to the initial UI state
+        ///     Return to the initial UI state
         /// </summary>
         private void SetSendReceiveButtonUiState()
         {
@@ -391,7 +405,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        /// Show the QR code UI state
+        ///     Show the QR code UI state
         /// </summary>
         private void SetBarcodeCodeUiState(bool isSlow)
         {
@@ -402,16 +416,17 @@ namespace SkyDrop.iOS.Views.Drop
             ViewModel.Log.Trace("Sliding in QR code view");
 
             AnimateSlideBarcodeIn(isSlow);
-            AnimateSlideSendReceiveButtonsOut(toLeft: true);
+            AnimateSlideSendReceiveButtonsOut(true);
         }
-        
+
         /// <summary>
-        /// Slide send button to center
+        ///     Slide send button to center
         /// </summary>
         private void AnimateSlideSendButton()
         {
             var screenCenterX = UIScreen.MainScreen.Bounds.Width / 2;
-            var sendButtonCenterX = SendButton.ConvertPointToView(new CGPoint(SendButton.Bounds.Width * 0.5, SendButton.Bounds.Height), null).X;
+            var sendButtonCenterX = SendButton
+                .ConvertPointToView(new CGPoint(SendButton.Bounds.Width * 0.5, SendButton.Bounds.Height), null).X;
             var translationX = screenCenterX - sendButtonCenterX;
 
             var duration = 1;
@@ -421,28 +436,24 @@ namespace SkyDrop.iOS.Views.Drop
                 ReceiveButton.Alpha = 0;
             });
 
-            UIView.Animate(duration / 3f, () =>
-            {
-                HomeMenu.Alpha = 0;
-            });
+            UIView.Animate(duration / 3f, () => { HomeMenu.Alpha = 0; });
 
             MiniMenuContainer.Alpha = 0;
-            UIView.Animate(duration / 3f, duration * 2f / 3f, UIViewAnimationOptions.CurveLinear, () =>
-            {
-                MiniMenuContainer.Alpha = 1;
-            }, null);
+            UIView.Animate(duration / 3f, duration * 2f / 3f, UIViewAnimationOptions.CurveLinear,
+                () => { MiniMenuContainer.Alpha = 1; }, null);
 
             homeMenuAnimator.AnimateShrink(duration / 3f, duration / 3f);
         }
 
         /// <summary>
-        /// Slide receive button to center
+        ///     Slide receive button to center
         /// </summary>
         private void AnimateSlideReceiveButton()
         {
             var screenCenterX = UIScreen.MainScreen.Bounds.Width / 2;
 
-            var receiveButtonCenterX = ReceiveButton.ConvertPointToView(new CGPoint(ReceiveButton.Bounds.Width * 0.5, ReceiveButton.Bounds.Height), null).X;
+            var receiveButtonCenterX = ReceiveButton
+                .ConvertPointToView(new CGPoint(ReceiveButton.Bounds.Width * 0.5, ReceiveButton.Bounds.Height), null).X;
             var translationX = screenCenterX - receiveButtonCenterX;
 
             UIView.Animate(1, () =>
@@ -454,7 +465,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        /// Slide in the QR code from the left or right
+        ///     Slide in the QR code from the left or right
         /// </summary>
         private void AnimateSlideBarcodeIn(bool isSlow = false)
         {
@@ -473,7 +484,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        /// Slide send receive buttons out to left or right
+        ///     Slide send receive buttons out to left or right
         /// </summary>
         private void AnimateSlideSendReceiveButtonsOut(bool toLeft)
         {
@@ -489,7 +500,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        /// Slide barcode out, slide send receive buttons in
+        ///     Slide barcode out, slide send receive buttons in
         /// </summary>
         private void AnimateSlideBarcodeOut()
         {
@@ -520,7 +531,7 @@ namespace SkyDrop.iOS.Views.Drop
                 HomeMenu.Transform = CGAffineTransform.MakeTranslation(0, 0);
 
                 MiniMenuContainer.Alpha = 0;
-            }, completion: () =>
+            }, () =>
             {
                 ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState;
                 ViewModel.ResetUI();
@@ -528,7 +539,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        /// Return barcode to center when user cancels a dismiss-slide action
+        ///     Return barcode to center when user cancels a dismiss-slide action
         /// </summary>
         private void AnimateSlideBarcodeToCenter()
         {
@@ -543,7 +554,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        /// Slide the send receive buttons to screen center when user cancels swipe back to barcode action
+        ///     Slide the send receive buttons to screen center when user cancels swipe back to barcode action
         /// </summary>
         private void AnimateSlideSendReceiveCenter()
         {
@@ -586,7 +597,7 @@ namespace SkyDrop.iOS.Views.Drop
                     //send & receive buttons are visible
 
                     if (SendReceiveButtonsContainer.Transform.x0 <= -swipeMarginX)
-                        SetBarcodeCodeUiState(isSlow: false);
+                        SetBarcodeCodeUiState(false);
                     else
                         AnimateSlideSendReceiveCenter();
                 }
@@ -630,9 +641,9 @@ namespace SkyDrop.iOS.Views.Drop
         private bool IgnoreSwipes()
         {
             return !ViewModel.SwipeNavigationEnabled || //don't allow swipe before first file is uploaded
-                ViewModel.IsUploading || //don't allow swipe while file is uploading
-                ViewModel.DropViewUIState == DropViewState.ConfirmFilesState; //don't allow swipe on confirm file UI state
+                   ViewModel.IsUploading || //don't allow swipe while file is uploading
+                   ViewModel.DropViewUIState ==
+                   DropViewState.ConfirmFilesState; //don't allow swipe on confirm file UI state
         }
     }
 }
-

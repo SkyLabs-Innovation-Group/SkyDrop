@@ -1,5 +1,4 @@
 using System;
-
 using Android.App;
 using Android.Runtime;
 using Microsoft.AppCenter;
@@ -7,6 +6,7 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using MvvmCross.Platforms.Android.Views;
 using SkyDrop.Core;
+using Xamarin.Essentials;
 
 namespace SkyDrop.Droid
 {
@@ -22,10 +22,10 @@ namespace SkyDrop.Droid
 
         public MainApplication(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
         {
-            Xamarin.Essentials.Platform.Init(this);
+            Platform.Init(this);
 
             AppCenter.Start(AndroidAppCenterApiKey,
-                   typeof(Analytics), typeof(Crashes));
+                typeof(Analytics), typeof(Crashes));
         }
     }
 }

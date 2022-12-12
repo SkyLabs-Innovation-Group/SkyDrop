@@ -15,6 +15,7 @@ using MvvmCross.Core;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.IoC;
 using MvvmCross.Navigation;
+using MvvmCross.Plugin;
 using MvvmCross.ViewModels;
 using MvvmCross.WeakSubscription;
 
@@ -99,7 +100,10 @@ namespace SkyDrop.Droid.Linker
 
         public void Include(INotifyCollectionChanged changed)
         {
-            changed.CollectionChanged += (s, e) => { _ = $"{e.Action}{e.NewItems}{e.NewStartingIndex}{e.OldItems}{e.OldStartingIndex}"; };
+            changed.CollectionChanged += (s, e) =>
+            {
+                _ = $"{e.Action}{e.NewItems}{e.NewStartingIndex}{e.OldItems}{e.OldStartingIndex}";
+            };
         }
 
         public void Include(INotifyPropertyChanged changed)
@@ -186,12 +190,12 @@ namespace SkyDrop.Droid.Linker
             _ = new MvxChildViewModelCache();
         }
 
-        public void Include(MvvmCross.Plugin.MvxPluginManager p)
+        public void Include(MvxPluginManager p)
         {
             var _ = p;
         }
 
-        public void Include(MvvmCross.Plugin.MvxPluginAttribute p)
+        public void Include(MvxPluginAttribute p)
         {
             var _ = p;
         }
@@ -202,7 +206,7 @@ namespace SkyDrop.Droid.Linker
             mvxWeakEventSubscription?.Dispose();
         }
 
-        public void Include(MvvmCross.Plugin.IMvxPlugin p)
+        public void Include(IMvxPlugin p)
         {
             var _ = p;
         }

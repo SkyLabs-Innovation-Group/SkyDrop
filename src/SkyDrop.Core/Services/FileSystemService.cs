@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using SkyDrop.Core.DataModels;
-using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
 using static SkyDrop.Core.Utility.Util;
 
@@ -15,6 +13,20 @@ namespace SkyDrop.Core.Services
 {
     public class FileSystemService : IFileSystemService
     {
+        private readonly ISaveToGalleryService saveToGalleryService;
+
+        private readonly IUserDialogs userDialogs;
+        private string cacheFolderPath;
+
+        public FileSystemService(ILog log, IUserDialogs userDialogs, ISaveToGalleryService saveToGalleryService)
+        {
+            Log = log;
+            this.userDialogs = userDialogs;
+            this.saveToGalleryService = saveToGalleryService;
+        }
+
+        public ILog Log { get; }
+
         public string CacheFolderPath
         {
             get => cacheFolderPath;
@@ -24,19 +36,8 @@ namespace SkyDrop.Core.Services
                 ClearCache();
             }
         }
+
         public string DownloadsFolderPath { get; set; }
-        public ILog Log { get; }
-
-        private readonly IUserDialogs userDialogs;
-        private readonly ISaveToGalleryService saveToGalleryService;
-        private string cacheFolderPath;
-
-        public FileSystemService(ILog log, IUserDialogs userDialogs, ISaveToGalleryService saveToGalleryService)
-        {
-            this.Log = log;
-            this.userDialogs = userDialogs;
-            this.saveToGalleryService = saveToGalleryService;
-        }
 
         public async Task<IEnumerable<FileResult>> PickFilesAsync(SkyFilePickerType fileType)
         {
@@ -57,36 +58,33 @@ namespace SkyDrop.Core.Services
 
                     if (pickedFiles == null)
                         break;
-                    
+
                     break;
-        
+
                 case SkyFilePickerType.Image:
                     var pickPhoto = await MediaPicker.PickPhotoAsync();
 
                     if (pickPhoto == null)
                         break;
-                    
-                    pickedFiles = new List<FileResult>() { pickPhoto };
+
+                    pickedFiles = new List<FileResult> { pickPhoto };
                     break;
-        
+
                 case SkyFilePickerType.Video:
                     var pickVideo = await MediaPicker.PickVideoAsync();
 
                     if (pickVideo == null)
                         break;
-                    
-                    pickedFiles = new List<FileResult>() { pickVideo };
+
+                    pickedFiles = new List<FileResult> { pickVideo };
                     break;
-        
+
                 default:
                     throw new ArgumentException(nameof(fileType));
             }
-        
-            if (pickedFiles == null)
-            {
-                Log.Trace("No file was picked");
-            }
-        
+
+            if (pickedFiles == null) Log.Trace("No file was picked");
+
             return pickedFiles;
         }
 
@@ -99,7 +97,7 @@ namespace SkyDrop.Core.Services
                     File.Delete(destinationZipFullPath);
 
                 var filenames = new List<string>();
-                using (ZipArchive zip = ZipFile.Open(destinationZipFullPath, ZipArchiveMode.Create))
+                using (var zip = ZipFile.Open(destinationZipFullPath, ZipArchiveMode.Create))
                 {
                     foreach (var file in filesToZip)
                     {
@@ -107,7 +105,7 @@ namespace SkyDrop.Core.Services
                         var filename = GetNextZipFilename(file.Filename, filenames);
                         filenames.Add(filename);
                         zip.CreateEntryFromFile(file.FullFilePath, filename, CompressionLevel.Optimal);
-                    }               
+                    }
                 }
 
                 return File.Exists(destinationZipFullPath);
@@ -117,19 +115,6 @@ namespace SkyDrop.Core.Services
                 Log.Exception(e);
                 return false;
             }
-        }
-
-        private string GetNextZipFilename(string filename, List<string> filenames)
-        {
-            int i = 1;
-            string extension = Util.GetFullExtension(filename);
-            string file = Path.GetFileName(filename);
-            string fileWithoutExtension = file.Substring(0, file.Length - extension.Length) + " {0}";
-
-            while (filenames.Contains(filename))
-                filename = string.Format(fileWithoutExtension, "(" + i++ + ")") + extension;
-
-            return filename;
         }
 
         public List<SkyFile> UnzipArchive(Stream data)
@@ -153,7 +138,8 @@ namespace SkyDrop.Core.Services
             if (di.GetDirectories().Count() > 0)
                 throw new Exception("SkyDrop doesn't support viewing archives which contain folders");
 
-            var files = di.GetFiles().Select(f => new SkyFile { Filename = f.Name, FullFilePath = f.FullName }).ToList();
+            var files = di.GetFiles().Select(f => new SkyFile { Filename = f.Name, FullFilePath = f.FullName })
+                .ToList();
             if (files.Count == 0)
                 throw new Exception("The archive appears to be empty");
 
@@ -178,11 +164,11 @@ namespace SkyDrop.Core.Services
 
         public async Task<string> SaveFile(Stream data, string fileName, bool isPersistent)
         {
-            string directory = isPersistent ? DownloadsFolderPath : CacheFolderPath;
-            string filePath = Path.Combine(directory, fileName);
+            var directory = isPersistent ? DownloadsFolderPath : CacheFolderPath;
+            var filePath = Path.Combine(directory, fileName);
 
             //ensure path is unique by adding a number at the end if it already exists
-            filePath = GetNextFilename(filePath); 
+            filePath = GetNextFilename(filePath);
 
             using var fileStream = File.OpenWrite(filePath);
             await data.CopyToAsync(fileStream);
@@ -192,7 +178,7 @@ namespace SkyDrop.Core.Services
 
         public async Task<string> SaveToGalleryOrFiles(Stream data, string filename, SaveType saveType)
         {
-            string newFileName = "";
+            var newFileName = "";
             if (saveType == SaveType.Photos)
             {
                 //save to photos gallery
@@ -209,20 +195,6 @@ namespace SkyDrop.Core.Services
             return newFileName;
         }
 
-        private string GetNextFilename(string filename)
-        {
-            int i = 1;
-            string dir = Path.GetDirectoryName(filename);
-            string extension = Util.GetFullExtension(filename);
-            string file = Path.GetFileName(filename);
-            string fileWithoutExtension = file.Substring(0, file.Length - extension.Length) + " {0}";
-
-            while (System.IO.File.Exists(filename))
-                filename = Path.Combine(dir, string.Format(fileWithoutExtension, "(" + i++ + ")") + extension);
-
-            return filename;
-        }
-
         public void ClearCache()
         {
             try
@@ -237,7 +209,7 @@ namespace SkyDrop.Core.Services
 
                     file.Delete();
                 }
-                    
+
                 foreach (var dir in di.GetDirectories())
                     dir.Delete(true);
             }
@@ -246,9 +218,41 @@ namespace SkyDrop.Core.Services
                 userDialogs.Toast("Failed to clear cache");
             }
         }
+
+        private string GetNextZipFilename(string filename, List<string> filenames)
+        {
+            var i = 1;
+            var extension = GetFullExtension(filename);
+            var file = Path.GetFileName(filename);
+            var fileWithoutExtension = file.Substring(0, file.Length - extension.Length) + " {0}";
+
+            while (filenames.Contains(filename))
+                filename = string.Format(fileWithoutExtension, "(" + i++ + ")") + extension;
+
+            return filename;
+        }
+
+        private string GetNextFilename(string filename)
+        {
+            var i = 1;
+            var dir = Path.GetDirectoryName(filename);
+            var extension = GetFullExtension(filename);
+            var file = Path.GetFileName(filename);
+            var fileWithoutExtension = file.Substring(0, file.Length - extension.Length) + " {0}";
+
+            while (File.Exists(filename))
+                filename = Path.Combine(dir, string.Format(fileWithoutExtension, "(" + i++ + ")") + extension);
+
+            return filename;
+        }
     }
 
-    public enum SkyFilePickerType { Generic = 0, Image = 1, Video = 2 }
+    public enum SkyFilePickerType
+    {
+        Generic = 0,
+        Image = 1,
+        Video = 2
+    }
 
     public interface IFileSystemService
     {

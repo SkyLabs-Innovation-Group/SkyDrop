@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using SkyDrop.Core.DataModels;
@@ -13,12 +12,12 @@ namespace SkyDrop.Core.DataViewModels
 
         public SkynetPortalDVM(SkynetPortal portal)
         {
-          this.portal = portal;
-          this.Name = portal.Name;
-          this.BaseUrl = portal.BaseUrl;
-          this.RealmId = portal.Id;
-          this.PortalPreferencesPosition = portal.PortalPreferencesPosition;
-          this.ApiTokenPrefKey = portal.GetApiTokenPrefKey(); 
+            this.portal = portal;
+            Name = portal.Name;
+            BaseUrl = portal.BaseUrl;
+            RealmId = portal.Id;
+            PortalPreferencesPosition = portal.PortalPreferencesPosition;
+            ApiTokenPrefKey = portal.GetApiTokenPrefKey();
         }
 
         public string RealmId { get; set; }
@@ -29,7 +28,9 @@ namespace SkyDrop.Core.DataViewModels
         public IMvxCommand TapCommand { get; set; }
         public IMvxCommand LongPressCommand { get; set; }
 
-        public Task<string> GetApiToken() => SecureStorage.GetAsync(ApiTokenPrefKey);
+        public Task<string> GetApiToken()
+        {
+            return SecureStorage.GetAsync(ApiTokenPrefKey);
+        }
     }
 }
-

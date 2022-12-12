@@ -3,11 +3,12 @@ using Android.Webkit;
 
 namespace SkyDrop.Droid.Views.Portals
 {
-	public class PortalLoginWebViewClient : WebViewClient
-	{
-        public EventHandler<bool> Navigated;
+    public class PortalLoginWebViewClient : WebViewClient
+    {
+        private const string javascriptFunction =
+            "javascript: function invokeCSharpAction(data){jsBridge.invokeAction(JSON.stringify(data));}";
 
-        private const string javascriptFunction = "javascript: function invokeCSharpAction(data){jsBridge.invokeAction(JSON.stringify(data));}";
+        public EventHandler<bool> Navigated;
 
         public override void OnPageFinished(WebView view, string url)
         {
@@ -19,4 +20,3 @@ namespace SkyDrop.Droid.Views.Portals
         }
     }
 }
-

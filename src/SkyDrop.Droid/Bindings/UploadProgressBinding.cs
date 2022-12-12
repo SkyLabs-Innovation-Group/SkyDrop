@@ -1,6 +1,4 @@
-﻿using System;
-using Android.Animation;
-using Android.Views;
+﻿using Android.Animation;
 using Android.Views.Animations;
 using Android.Widget;
 using MvvmCross.Binding;

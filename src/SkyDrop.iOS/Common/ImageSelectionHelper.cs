@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using AssetsLibrary;
-using CoreGraphics;
 using FFImageLoading.Extensions;
 using Foundation;
 using GMImagePicker;
@@ -11,7 +9,6 @@ using MvvmCross;
 using Photos;
 using SkyDrop.Core.Services;
 using SkyDrop.Core.Utility;
-using SkyDrop.Core.ViewModels.Main;
 using UIKit;
 using Xamarin.Essentials;
 
@@ -33,7 +30,8 @@ namespace SkyDrop.iOS.Common
             vc.PresentModalViewController(picker, true);
         }
 
-        private static async Task HandlePickedImages(MultiAssetEventArgs e, Action<string> successAction, Action failAction)
+        private static async Task HandlePickedImages(MultiAssetEventArgs e, Action<string> successAction,
+            Action failAction)
         {
             foreach (var phasset in e.Assets)
             {
@@ -50,9 +48,14 @@ namespace SkyDrop.iOS.Common
             var manager = new PHCachingImageManager();
             var tcs = new TaskCompletionSource<string>();
             var image = manager.RequestImageData(
-                asset: asset,
-                options: new PHImageRequestOptions() { ResizeMode = PHImageRequestOptionsResizeMode.None, DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat, NetworkAccessAllowed = true, Synchronous = true },
-                handler: (data, dataUti, orientation, info) =>
+                asset,
+                new PHImageRequestOptions
+                {
+                    ResizeMode = PHImageRequestOptionsResizeMode.None,
+                    DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat, NetworkAccessAllowed = true,
+                    Synchronous = true
+                },
+                (data, dataUti, orientation, info) =>
                 {
                     asset.RequestContentEditingInput(new PHContentEditingInputRequestOptions(), async (s, e) =>
                     {
@@ -72,8 +75,8 @@ namespace SkyDrop.iOS.Common
                 var fileSystemService = Mvx.IoCProvider.Resolve<IFileSystemService>();
                 using (var stream = imageData.AsStream())
                 {
-                    string extension = Path.GetExtension(fileName);
-                    string newFilePath = Path.Combine(fileSystemService.CacheFolderPath, Guid.NewGuid().ToString() + extension);
+                    var extension = Path.GetExtension(fileName);
+                    var newFilePath = Path.Combine(fileSystemService.CacheFolderPath, Guid.NewGuid() + extension);
 
                     using (var fileStream = File.Create(newFilePath))
                     {
@@ -98,7 +101,8 @@ namespace SkyDrop.iOS.Common
                 if (image == null)
                     return null;
 
-                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), Guid.NewGuid().ToString() + ".png");
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    Guid.NewGuid() + ".png");
                 using (image)
                 using (var stream = image.AsJpegStream())
                 {
@@ -120,7 +124,7 @@ namespace SkyDrop.iOS.Common
 
         private static GMImagePickerController GetPicker()
         {
-            return new GMImagePickerController()
+            return new GMImagePickerController
             {
                 Title = "Select Images",
                 ColsInPortrait = 3,
@@ -141,10 +145,13 @@ namespace SkyDrop.iOS.Common
             var status = ALAssetsLibrary.AuthorizationStatus;
             if (status == ALAuthorizationStatus.Denied)
             {
-                var alert = UIAlertController.Create(Strings.NoPhotoAccessTitle, Strings.NoPhotoAccessMessage, UIAlertControllerStyle.Alert);
+                var alert = UIAlertController.Create(Strings.NoPhotoAccessTitle, Strings.NoPhotoAccessMessage,
+                    UIAlertControllerStyle.Alert);
 
                 alert.AddAction(UIAlertAction.Create(Strings.Cancel, UIAlertActionStyle.Cancel, null));
-                alert.AddAction(UIAlertAction.Create(Strings.Settings, UIAlertActionStyle.Default, action => UIApplication.SharedApplication.OpenUrl(NSUrl.FromString(UIApplication.OpenSettingsUrlString))));
+                alert.AddAction(UIAlertAction.Create(Strings.Settings, UIAlertActionStyle.Default,
+                    action => UIApplication.SharedApplication.OpenUrl(
+                        NSUrl.FromString(UIApplication.OpenSettingsUrlString))));
 
                 var vc = Platform.GetCurrentUIViewController();
                 await vc.PresentViewControllerAsync(alert, true);
@@ -156,4 +163,3 @@ namespace SkyDrop.iOS.Common
         }
     }
 }
-

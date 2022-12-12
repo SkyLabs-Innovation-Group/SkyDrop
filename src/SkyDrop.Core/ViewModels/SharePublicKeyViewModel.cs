@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Acr.UserDialogs;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using SkyDrop.Core.Services;
-using SkyDrop.Core.Utility;
 using ZXing.Common;
 using static SkyDrop.Core.Services.EncryptionService;
 
@@ -15,16 +13,9 @@ namespace SkyDrop.Core.ViewModels
         private readonly IBarcodeService barcodeService;
         private readonly IEncryptionService encryptionService;
         private readonly IMvxNavigationService navigationService;
-
-        public AddContactResult AddContactResult { get; set; }
-        public IMvxCommand BackCommand { get; set; }
-        public IMvxCommand RefreshBarcodeCommand { get; set; }
-        public IMvxCommand StopScanningCommand { get; set; }
-        public string HintText => GetHintText(AddContactResult);
-        public string ContactSavedName { get; set; }
-
-        private Guid justScannedId = default;
         private bool isBusy;
+
+        private Guid justScannedId;
 
         public SharePublicKeyViewModel(ISingletonService singletonService,
             IApiService apiService,
@@ -47,9 +38,16 @@ namespace SkyDrop.Core.ViewModels
             BackCommand = new MvxCommand(() => navigationService.Close(this));
         }
 
+        public AddContactResult AddContactResult { get; set; }
+        public IMvxCommand BackCommand { get; set; }
+        public IMvxCommand RefreshBarcodeCommand { get; set; }
+        public IMvxCommand StopScanningCommand { get; set; }
+        public string HintText => GetHintText(AddContactResult);
+        public string ContactSavedName { get; set; }
+
         public BitMatrix GenerateBarcode(int width, int height)
         {
-            string publicKey = encryptionService.GetMyPublicKeyWithId(justScannedId);
+            var publicKey = encryptionService.GetMyPublicKeyWithId(justScannedId);
             return barcodeService.GenerateBarcode(publicKey, width, height);
         }
 
@@ -64,11 +62,11 @@ namespace SkyDrop.Core.ViewModels
                 }
 
                 //wait for user interaction before scanning again
-                if (AddContactResult != AddContactResult.Default) 
+                if (AddContactResult != AddContactResult.Default)
                     return;
 
                 //prevents double dialog issue
-                if (isBusy) 
+                if (isBusy)
                     return;
 
                 isBusy = true;
@@ -84,16 +82,19 @@ namespace SkyDrop.Core.ViewModels
             }
         }
 
-        public string GetHintText(AddContactResult result) => result switch
+        public string GetHintText(AddContactResult result)
         {
-            AddContactResult.DevicesPaired => "Devices paired",
-            AddContactResult.AlreadyExists => $"Contact already saved as {ContactSavedName}",
-            AddContactResult.ContactAdded => "Pairing is complete when both devices show this icon",
-            AddContactResult.InvalidKey => "Invalid key",
-            AddContactResult.WrongDevice => "Unexpected device! Please go back and try to pair again",
-            AddContactResult.Default => "",
-            _ => throw new Exception("Unexpected AddContactResult")
-        };
+            return result switch
+            {
+                AddContactResult.DevicesPaired => "Devices paired",
+                AddContactResult.AlreadyExists => $"Contact already saved as {ContactSavedName}",
+                AddContactResult.ContactAdded => "Pairing is complete when both devices show this icon",
+                AddContactResult.InvalidKey => "Invalid key",
+                AddContactResult.WrongDevice => "Unexpected device! Please go back and try to pair again",
+                AddContactResult.Default => "",
+                _ => throw new Exception("Unexpected AddContactResult")
+            };
+        }
 
         public void Close()
         {
@@ -101,4 +102,3 @@ namespace SkyDrop.Core.ViewModels
         }
     }
 }
-

@@ -1,5 +1,4 @@
-﻿using System;
-using Android.Support.V7.Widget;
+﻿using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
@@ -10,11 +9,12 @@ namespace SkyDrop.Droid.Views.PortalPreferences
     {
         public readonly PortalPreferencesListView View;
 
-        public PortalPreferencesListAdapter(PortalPreferencesListView view, IMvxAndroidBindingContext bindingContext) : base(bindingContext)
+        public PortalPreferencesListAdapter(PortalPreferencesListView view, IMvxAndroidBindingContext bindingContext) :
+            base(bindingContext)
         {
-            this.View = view;
+            View = view;
         }
-        
+
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
             base.OnBindViewHolder(holder, position);
@@ -22,10 +22,10 @@ namespace SkyDrop.Droid.Views.PortalPreferences
             var portalViewHolder = holder as PortalViewHolder;
             portalViewHolder.Bind(this, position);
         }
-        
+
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
-            var itemBindingContext = new MvxAndroidBindingContext(parent.Context, BindingContext.LayoutInflaterHolder, (object)null);
+            var itemBindingContext = new MvxAndroidBindingContext(parent.Context, BindingContext.LayoutInflaterHolder);
             return new PortalViewHolder(InflateViewForHolder(parent, viewType, itemBindingContext), itemBindingContext);
         }
 
@@ -34,7 +34,9 @@ namespace SkyDrop.Droid.Views.PortalPreferences
             View.EditPortal(position);
         }
 
-        internal void ReorderPortals(int position, int newPosition) => View.ReorderPortals(position, newPosition);
+        internal void ReorderPortals(int position, int newPosition)
+        {
+            View.ReorderPortals(position, newPosition);
+        }
     }
 }
-

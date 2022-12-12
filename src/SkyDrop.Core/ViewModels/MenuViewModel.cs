@@ -9,22 +9,18 @@ namespace SkyDrop.Core.ViewModels.Main
     public class MenuViewModel : BaseViewModel
     {
         private readonly IApiService apiService;
+        private readonly IBarcodeService barcodeService;
+        private readonly IMvxNavigationService navigationService;
         private readonly IStorageService storageService;
         private readonly IUserDialogs userDialogs;
-        private readonly IMvxNavigationService navigationService;
-        private readonly IBarcodeService barcodeService;
-
-        public IMvxCommand NavToDropCommand { get; set; }
-        public IMvxCommand NavToFilesCommand { get; set; }
-        public IMvxCommand NavToBarcodeCommand { get; set; }
 
         public MenuViewModel(ISingletonService singletonService,
-                             IApiService apiService,
-                             IStorageService storageService,
-                             IBarcodeService barcodeService,
-                             IUserDialogs userDialogs,
-                             IMvxNavigationService navigationService,
-                             ILog log) : base(singletonService)
+            IApiService apiService,
+            IStorageService storageService,
+            IBarcodeService barcodeService,
+            IUserDialogs userDialogs,
+            IMvxNavigationService navigationService,
+            ILog log) : base(singletonService)
         {
             Title = "SkyDrop";
 
@@ -38,6 +34,10 @@ namespace SkyDrop.Core.ViewModels.Main
             NavToFilesCommand = new MvxAsyncCommand(async () => await NavToFiles());
             NavToBarcodeCommand = new MvxAsyncCommand(async () => await NavToBarcode());
         }
+
+        public IMvxCommand NavToDropCommand { get; set; }
+        public IMvxCommand NavToFilesCommand { get; set; }
+        public IMvxCommand NavToBarcodeCommand { get; set; }
 
         private Task NavToDrop()
         {

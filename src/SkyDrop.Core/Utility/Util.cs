@@ -3,22 +3,34 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Generators;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Utilities.IO.Pem;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using MvvmCross;
-using SkyDrop.Core.DataModels;
+using Org.BouncyCastle.Crypto.Parameters;
 using Xamarin.Essentials;
-using System.Runtime.InteropServices.ComTypes;
-using System.IO.Compression;
 
 namespace SkyDrop.Core.Utility
 {
     public static class Util
     {
+        public enum FileCategory
+        {
+            None,
+            Document,
+            Image,
+            Audio,
+            Video,
+            Zip,
+            Encrypted
+        }
+
+        public enum SaveType
+        {
+            Cancel, //do nothing
+            Photos, //save image to gallery
+            Files //save to files
+        }
+
         public const float NavDotsMinAlpha = 0.2f;
         public const float NavDotsMaxAlpha = 0.8f;
 
@@ -26,7 +38,7 @@ namespace SkyDrop.Core.Utility
         {
             string[] sizes = { "B", "KB", "MB", "GB", "TB" };
             double bytes = bytesCount;
-            int order = 0;
+            var order = 0;
             while (bytes >= 1024 && order < sizes.Length - 1)
             {
                 order++;
@@ -57,16 +69,19 @@ namespace SkyDrop.Core.Utility
 
             filename = filename.ToLowerInvariant();
 
-            if (filename.ExtensionMatches(new[] { ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx", ".ods", ".odt", ".pdf", ".txt", ".html", ".htm" }))
+            if (filename.ExtensionMatches(".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx", ".ods", ".odt", ".pdf",
+                    ".txt", ".html", ".htm"))
                 return FileCategory.Document;
 
-            if (filename.ExtensionMatches(new[] { ".jpg", ".jpeg", ".bmp", ".png", ".gif", ".webp", ".tiff", ".psd", ".raw", ".svg", ".heic" }))
+            if (filename.ExtensionMatches(".jpg", ".jpeg", ".bmp", ".png", ".gif", ".webp", ".tiff", ".psd", ".raw",
+                    ".svg", ".heic"))
                 return FileCategory.Image;
 
-            if (filename.ExtensionMatches(new[] { ".wav", ".mp3", ".aac", ".ogg", ".aiff", ".wma", ".flac", ".alac" }))
+            if (filename.ExtensionMatches(".wav", ".mp3", ".aac", ".ogg", ".aiff", ".wma", ".flac", ".alac"))
                 return FileCategory.Audio;
 
-            if (filename.ExtensionMatches(new[] { ".mp4", ".m4p", ".m4v", ".mov", ".avi", ".webm", ".mpg", ".mp2", ".mpeg", ".mpe", ".mpv", ".wmv", ".qt", ".mkv" }))
+            if (filename.ExtensionMatches(".mp4", ".m4p", ".m4v", ".mov", ".avi", ".webm", ".mpg", ".mp2", ".mpeg",
+                    ".mpe", ".mpv", ".wmv", ".qt", ".mkv"))
                 return FileCategory.Video;
 
             if (filename.ExtensionMatches(".zip"))
@@ -76,17 +91,6 @@ namespace SkyDrop.Core.Utility
                 return FileCategory.Encrypted;
 
             return FileCategory.None;
-        }
-
-        public enum FileCategory
-        {
-            None,
-            Document,
-            Image,
-            Audio,
-            Video,
-            Zip,
-            Encrypted
         }
 
         public static bool CanDisplayPreview(this string filename)
@@ -120,45 +124,42 @@ namespace SkyDrop.Core.Utility
         }
 
         /// <summary>
-        /// Concatenate byte arrays
+        ///     Concatenate byte arrays
         /// </summary>
         public static byte[] Combine(params byte[][] arrays)
         {
-            byte[] rv = new byte[arrays.Sum(a => a.Length)];
-            int offset = 0;
-            foreach (byte[] array in arrays)
+            var rv = new byte[arrays.Sum(a => a.Length)];
+            var offset = 0;
+            foreach (var array in arrays)
             {
-                System.Buffer.BlockCopy(array, 0, rv, offset, array.Length);
+                Buffer.BlockCopy(array, 0, rv, offset, array.Length);
                 offset += array.Length;
             }
+
             return rv;
         }
 
         /// <summary>
-        /// Enables matching extensions with multiple periods correctly e.g. .jpeg.pdf
+        ///     Enables matching extensions with multiple periods correctly e.g. .jpeg.pdf
         /// </summary>
         public static string GetFullExtension(string filename)
         {
-            int lastSlashIndex = filename.LastIndexOf("/") + 1;
+            var lastSlashIndex = filename.LastIndexOf("/") + 1;
             filename = filename.Substring(lastSlashIndex, filename.Length - lastSlashIndex);
             return Regex.Match(filename, @"\..*").Value;
         }
 
         public static async Task<SaveType> GetSaveType(string filename)
         {
-            if (!Util.CanDisplayPreview(filename))
-            {
+            if (!filename.CanDisplayPreview())
                 //not an image
                 return SaveType.Files;
-            }
 
             //file is an image
 
             if (DeviceInfo.Platform == DevicePlatform.Android)
-            {
                 //always save images to gallery on Android
                 return SaveType.Photos;
-            }
 
             //show gallery / files menu on iOS
 
@@ -167,17 +168,13 @@ namespace SkyDrop.Core.Utility
 
         public static async Task<SaveType> GetSaveTypeForMultiple(List<string> filenames)
         {
-            if (!filenames.Any(f => Util.CanDisplayPreview(f)))
-            {
+            if (!filenames.Any(f => f.CanDisplayPreview()))
                 //none of the files are images
                 return SaveType.Files;
-            }
 
             if (DeviceInfo.Platform == DevicePlatform.Android)
-            {
                 //always save images to gallery on Android
                 return SaveType.Photos;
-            }
 
             //show gallery / files menu on iOS
 
@@ -191,7 +188,8 @@ namespace SkyDrop.Core.Utility
             const string files = "Files";
             var userDialogs = Mvx.IoCProvider.Resolve<IUserDialogs>();
             var s = isPlural ? "s" : "";
-            var result = await userDialogs.ActionSheetAsync($"Save image{s} to Photos or Files?", cancel, null, null, new[] { photos, files });
+            var result = await userDialogs.ActionSheetAsync($"Save image{s} to Photos or Files?", cancel, null, null,
+                photos, files);
             switch (result)
             {
                 case photos:
@@ -202,13 +200,6 @@ namespace SkyDrop.Core.Utility
                 default:
                     return SaveType.Cancel;
             }
-        }
-
-        public enum SaveType
-        {
-            Cancel, //do nothing
-            Photos, //save image to gallery
-            Files //save to files
         }
 
         public static bool IsEncryptedFile(this string filename)
@@ -231,14 +222,11 @@ namespace SkyDrop.Core.Utility
 
         public static byte[] StreamToBytes(this Stream input)
         {
-            byte[] buffer = new byte[16 * 1024];
-            using (MemoryStream ms = new MemoryStream())
+            var buffer = new byte[16 * 1024];
+            using (var ms = new MemoryStream())
             {
                 int read;
-                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    ms.Write(buffer, 0, read);
-                }
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0) ms.Write(buffer, 0, read);
                 return ms.ToArray();
             }
         }

@@ -1,21 +1,18 @@
 ﻿using Android.App;
 using Android.OS;
-using Android.Views;
-using Android.Views.InputMethods;
 using Android.Widget;
 using MvvmCross.Commands;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.ViewModels;
 using SkyDrop.Droid.Helper;
-using System;
 
 namespace SkyDrop.Droid.Views.Main
 {
     [Activity(Label = "SettingsView")]
     public class SettingsView : BaseActivity<SettingsViewModel>
     {
-        private Button saveButton;
         private EditText portalEditText;
+        private Button saveButton;
         private CheckBox uploadNotificationCheckbox, verifySslCheckbox;
 
         protected override int ActivityLayoutId => Resource.Layout.SettingsView;

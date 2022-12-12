@@ -1,5 +1,4 @@
-﻿using System;
-using MvvmCross.Commands;
+﻿using MvvmCross.Commands;
 using SkyDrop.Core.DataModels;
 
 namespace SkyDrop.Core.DataViewModels

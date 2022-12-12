@@ -1,49 +1,31 @@
-using Acr.UserDialogs;
-using Android.Views;
-using Android.Widget;
-using Google.Android.Material.Card;
+using System;
+using FFImageLoading.Cross;
+using MvvmCross;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
-using SkyDrop.Core.Utility;
-using SkyDrop.Droid;
-using System.Drawing;
-using Xamarin.Essentials;
-using Android.Graphics;
-using System.Threading.Tasks;
-using System;
-using System.IO;
-using System.Net;
-using System.Threading;
-using FFImageLoading;
-using MvvmCross;
-using SkyDrop;
-using SkyDrop.Core;
 using SkyDrop.Core.DataModels;
-using FFImageLoading.Cross;
-using Serilog;
-using Serilog.Core;
-using File = Java.IO.File;
-using Path = System.IO.Path;
+using SkyDrop.Core.Utility;
 using SkyDrop.Droid.Helper;
 
 namespace SkyDrop.Droid.Bindings
 {
     /// <summary>
-    /// Binds a SkyFile to an MvxCachedImageView for file preview
-    ///
-    /// FFImageLoading handles optimising the stream, so I am generating it only right before passing it to Target.ImageStream.
+    ///     Binds a SkyFile to an MvxCachedImageView for file preview
+    ///     FFImageLoading handles optimising the stream, so I am generating it only right before passing it to
+    ///     Target.ImageStream.
     /// </summary>
     public class LocalImagePreviewBinding : MvxTargetBinding<MvxCachedImageView, SkyFile>
     {
         private ILog _log;
-        private ILog log => _log ??= Mvx.IoCProvider.Resolve<ILog>();
-        
-        public static string Name => "ImagePreview";
 
         public LocalImagePreviewBinding(MvxCachedImageView target) : base(target)
         {
         }
-        
+
+        private ILog log => _log ??= Mvx.IoCProvider.Resolve<ILog>();
+
+        public static string Name => "ImagePreview";
+
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
         protected override void SetValue(SkyFile value)
@@ -51,11 +33,11 @@ namespace SkyDrop.Droid.Bindings
             try
             {
                 Target.SetImageBitmap(null);
-                
+
                 if (string.IsNullOrEmpty(value?.FullFilePath))
                     return;
-                
-                if (!Util.CanDisplayPreview(value.FullFilePath))
+
+                if (!value.FullFilePath.CanDisplayPreview())
                     return;
 
                 AndroidUtil.LoadLocalImagePreview(value.FullFilePath, Target);
@@ -77,7 +59,7 @@ namespace SkyDrop.Droid.Bindings
                     }
                 }).Forget();*/
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 log.Exception(e);
             }

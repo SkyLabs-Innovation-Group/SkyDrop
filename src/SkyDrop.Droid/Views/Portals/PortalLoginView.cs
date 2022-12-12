@@ -8,19 +8,17 @@ using Android.Widget;
 using Newtonsoft.Json;
 using SkyDrop.Core.Components;
 using SkyDrop.Core.ViewModels;
-using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.Droid.Helper;
-using static Android.Content.Res.Resources;
-using static Google.Android.Material.Tabs.TabLayout;
+using Exception = System.Exception;
+using Object = Java.Lang.Object;
 
 namespace SkyDrop.Droid.Views.Portals
 {
     [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden)]
     public class PortalLoginView : BaseActivity<PortalLoginViewModel>
     {
-        protected override int ActivityLayoutId => Resource.Layout.PortalLoginView;
-
         private WebView webView;
+        protected override int ActivityLayoutId => Resource.Layout.PortalLoginView;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -31,7 +29,7 @@ namespace SkyDrop.Droid.Views.Portals
 
         private void InitWebView()
         {
-            Android.Webkit.WebView.SetWebContentsDebuggingEnabled(true);
+            WebView.SetWebContentsDebuggingEnabled(true);
 
             webView = new WebView(this);
             webView.Settings.JavaScriptEnabled = true;
@@ -80,22 +78,22 @@ namespace SkyDrop.Droid.Views.Portals
 
                 ViewModel.SetApiKey(dataObject.ApiKey);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
         }
 
-        private class ValueCallback : Java.Lang.Object, IValueCallback
+        private class ValueCallback : Object, IValueCallback
         {
-            private Action<Java.Lang.Object> action;
+            private readonly System.Action<Object> action;
 
-            public ValueCallback(Action<Java.Lang.Object> action)
+            public ValueCallback(System.Action<Object> action)
             {
                 this.action = action;
             }
 
-            public void OnReceiveValue(Java.Lang.Object value)
+            public void OnReceiveValue(Object value)
             {
                 action(value);
             }
@@ -107,4 +105,3 @@ namespace SkyDrop.Droid.Views.Portals
         }
     }
 }
-

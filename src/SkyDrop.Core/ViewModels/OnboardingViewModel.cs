@@ -1,31 +1,18 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Acr.UserDialogs;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using SkyDrop.Core.DataModels;
-using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Services;
 using Xamarin.Essentials;
-using static SkyDrop.Core.ViewModels.OnboardingViewModel;
 
 namespace SkyDrop.Core.ViewModels
 {
     public class OnboardingViewModel : BaseViewModel
     {
-        public string TitleText { get; set; }
-        public string DescriptionText { get; set; }
-        public string Icon { get; set; }
-        public int CurrentPage { get; set; }
-        public bool IsLastPage => CurrentPage >= totalPages - 1;
-        public bool IsFirstPage => CurrentPage == 0;
-        public IMvxCommand BackCommand { get; set; }
-        public IMvxCommand NextPageCommand { get; set; }
-        public IMvxCommand PreviousPageCommand { get; set; }
-
         private readonly IMvxNavigationService navigationService;
 
-        private int totalPages;
+        private readonly int totalPages;
 
         public OnboardingViewModel(ISingletonService singletonService,
             IMvxNavigationService navigationService) : base(singletonService)
@@ -38,6 +25,16 @@ namespace SkyDrop.Core.ViewModels
 
             totalPages = OnboardingContent.Content.Length;
         }
+
+        public string TitleText { get; set; }
+        public string DescriptionText { get; set; }
+        public string Icon { get; set; }
+        public int CurrentPage { get; set; }
+        public bool IsLastPage => CurrentPage >= totalPages - 1;
+        public bool IsFirstPage => CurrentPage == 0;
+        public IMvxCommand BackCommand { get; set; }
+        public IMvxCommand NextPageCommand { get; set; }
+        public IMvxCommand PreviousPageCommand { get; set; }
 
         public override async Task Initialize()
         {
@@ -92,4 +89,3 @@ namespace SkyDrop.Core.ViewModels
         }
     }
 }
-

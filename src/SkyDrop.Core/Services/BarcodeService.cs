@@ -1,11 +1,8 @@
 using System.Threading.Tasks;
-using Plugin.Permissions.Abstractions;
 using Xamarin.Essentials;
 using ZXing;
 using ZXing.Common;
 using ZXing.Mobile;
-using ZXing.QrCode;
-using PermissionStatus = Xamarin.Essentials.PermissionStatus;
 
 namespace SkyDrop.Core.Services
 {
@@ -27,18 +24,13 @@ namespace SkyDrop.Core.Services
                 log.Error("Camera permission not granted.");
                 return null;
             }
-            else
-            {
-                log.Trace("ScanBarcode() was called, with camera permission granted");
-            }
-                
+
+            log.Trace("ScanBarcode() was called, with camera permission granted");
+
             var scanner = new MobileBarcodeScanner();
             var result = await scanner.Scan();
 
-            if (result == null)
-            {
-                log.Error("MobileBarcodeScanner result was null");
-            }
+            if (result == null) log.Error("MobileBarcodeScanner result was null");
 
             return result?.Text;
         }

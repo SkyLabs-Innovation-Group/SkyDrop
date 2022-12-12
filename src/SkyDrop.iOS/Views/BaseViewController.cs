@@ -1,46 +1,45 @@
 ﻿using System;
 using Acr.UserDialogs;
+using CoreGraphics;
 using Foundation;
 using MvvmCross.Platforms.Ios.Views;
 using SkyDrop.Core.Utility;
-using CoreGraphics;
-using Foundation;
 using SkyDrop.Core.ViewModels;
 using UIKit;
 
 namespace SkyDrop.iOS.Views
 {
-	public class BaseViewController<T> : MvxViewController<T> where T : BaseViewModel
-	{
-		public BaseViewController(string name, NSBundle bundle) : base(name, bundle)
-		{
-		}
+    public class BaseViewController<T> : MvxViewController<T> where T : BaseViewModel
+    {
+        public BaseViewController(string name, NSBundle bundle) : base(name, bundle)
+        {
+        }
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
             Initialize();
-		}
+        }
 
         private void Initialize()
         {
-			//setup nav bar
-			NavigationController.NavigationBar.TintColor = UIColor.White;
-			NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes()
-			{
-				ForegroundColor = Colors.White.ToNative()
-			};
+            //setup nav bar
+            NavigationController.NavigationBar.TintColor = UIColor.White;
+            NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes
+            {
+                ForegroundColor = Colors.White.ToNative()
+            };
 
-			//set background color
-			View.BackgroundColor = Colors.DarkGrey.ToNative();
+            //set background color
+            View.BackgroundColor = Colors.DarkGrey.ToNative();
 
             //fixes issues where nav bar changes color when scrolling down
             NavigationController.NavigationBar.Translucent = true;
             NavigationController.NavigationBar.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
             NavigationController.NavigationBar.ShadowImage = new UIImage();
         }
-        
+
         protected void AddBackButton(Action backAction)
         {
             var backImage = UIImage.FromBundle("ic_back");
@@ -70,7 +69,8 @@ namespace SkyDrop.iOS.Views
                 CustomView = backBtn
             };
 
-            NavigationController.TopViewController.NavigationItem.LeftBarButtonItems = new[] { fixedSpace, backButtonItem };
+            NavigationController.TopViewController.NavigationItem.LeftBarButtonItems =
+                new[] { fixedSpace, backButtonItem };
         }
 
         protected void StyleButton(UIButton button)
@@ -80,4 +80,3 @@ namespace SkyDrop.iOS.Views
         }
     }
 }
-

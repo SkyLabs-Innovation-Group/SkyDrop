@@ -1,40 +1,27 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Android.App;
-using Android.Content;
-using Android.Graphics;
+﻿using Android.App;
 using Android.OS;
-using Android.Runtime;
-using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using AndroidX.CardView.Widget;
 using MvvmCross.Commands;
-using MvvmCross.Droid.Support.V7.RecyclerView;
-using MvvmCross.Platforms.Android.Binding.BindingContext;
-using SkyDrop.Core.DataModels;
-using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.Droid.Helper;
 using SkyDrop.Droid.Views.Files;
-using static SkyDrop.Droid.Helper.AndroidUtil;
 
 namespace SkyDrop.Droid.Views.Main
 {
     [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden)]
     public class FilesView : BaseActivity<FilesViewModel>
     {
-        protected override int ActivityLayoutId => Resource.Layout.FilesView;
-
-        public FileExplorerView FileExplorerView { get; set; }
-
-        private ImageView buttonSelectAll;
-        private ImageView buttonToggleLayout;
         private ImageView buttonAddFolder;
         private ImageView buttonDeleteFile;
         private ImageView buttonMoveFile;
         private ImageView buttonSaveFile;
+
+        private ImageView buttonSelectAll;
+        private ImageView buttonToggleLayout;
+        protected override int ActivityLayoutId => Resource.Layout.FilesView;
+
+        public FileExplorerView FileExplorerView { get; set; }
 
         protected override void OnCreate(Bundle bundle)
         {

@@ -1,35 +1,26 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
 using System.Timers;
 using Android.App;
-using Android.Content;
 using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Google.Android.Material.Card;
 using MvvmCross.Commands;
 using SkyDrop.Core.Utility;
-using SkyDrop.Core.ViewModels;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.Droid.Helper;
-using SkyDrop.Droid.Styles;
 
 namespace SkyDrop.Droid.Views.Barcode
 {
     [Activity(Label = "BarcodeView")]
     public class BarcodeView : BaseActivity<BarcodeViewModel>
     {
-        protected override int ActivityLayoutId => Resource.Layout.BarcodeView;
-
         private ImageView barcodeImageView;
-        private Timer textTimer;
-        private EditText editText;
         private ImageView closeKeyboardButton;
+        private EditText editText;
+        private Timer textTimer;
+        protected override int ActivityLayoutId => Resource.Layout.BarcodeView;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -62,7 +53,7 @@ namespace SkyDrop.Droid.Views.Barcode
         }
 
         /// <summary>
-        /// Generate and display QR code
+        ///     Generate and display QR code
         /// </summary>
         private async Task ShowBarcode(string text)
         {
@@ -80,17 +71,17 @@ namespace SkyDrop.Droid.Views.Barcode
 
                 RunOnUiThread(() => barcodeImageView.SetImageBitmap(bitmap));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.Exception(e);
             }
         }
 
         /// <summary>
-        /// Delays the barcode generation so it doesn't need to render constantly while typing
+        ///     Delays the barcode generation so it doesn't need to render constantly while typing
         /// </summary>
         private void InitTextTimer()
-        { 
+        {
             textTimer = new Timer();
             textTimer.Interval = BarcodeViewModel.TextDelayerTimeMs;
             textTimer.Elapsed += TextTimer_Tick;
@@ -108,4 +99,3 @@ namespace SkyDrop.Droid.Views.Barcode
         }
     }
 }
-

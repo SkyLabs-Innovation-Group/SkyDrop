@@ -1,645 +1,645 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{729B3DEE-1D24-47B7-8EEE-3D75F2090F0A}</ProjectGuid>
-    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SkyDrop.Droid</RootNamespace>
-    <AssemblyName>SkyDrop.Droid</AssemblyName>
-    <FileAlignment>512</FileAlignment>
-    <AndroidApplication>True</AndroidApplication>
-    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
-    <AndroidResgenClass>Resource</AndroidResgenClass>
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <TargetFrameworkVersion>v11.0</TargetFrameworkVersion>
-    <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
-    <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
-    <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>Full</DebugType>
-    <Optimize>False</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
-    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-    <EnableProguard>false</EnableProguard>
-    <AotAssemblies>false</AotAssemblies>
-    <EnableLLVM>false</EnableLLVM>
-    <BundleAssemblies>false</BundleAssemblies>
-    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
-    <LangVersion>8.0</LangVersion>
-    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
-    <AndroidLinkMode>None</AndroidLinkMode>
-    <AndroidUseAapt2>true</AndroidUseAapt2>
-    <MandroidI18n />
-    <AndroidTlsProvider>btls</AndroidTlsProvider>
-    <MandroidExtraArgs>-v -v -v -v</MandroidExtraArgs>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>PdbOnly</DebugType>
-    <Optimize>True</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>RELEASE;TRACE;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AndroidManagedSymbols>true</AndroidManagedSymbols>
-    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
-    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
-    <EnableProguard>true</EnableProguard>
-    <LangVersion>8.0</LangVersion>
-    <AndroidLinkTool>r8</AndroidLinkTool>
-    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
-    <AndroidTlsProvider>btls</AndroidTlsProvider>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Mono.Android.Export" />
-    <Reference Include="System" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="Mono.Android" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Linker\LinkerPleaseInclude.cs" />
-    <Compile Include="MainApplication.cs" />
-    <Compile Include="Services\AndroidHttpClientFactory.cs" />
-    <Compile Include="Setup.cs" />
-    <Compile Include="Views\BaseActivity.cs" />
-    <Compile Include="Views\BaseFragment.cs" />
-    <Compile Include="Views\Main\SettingsView.cs" />
-    <Compile Include="Views\Splash\SplashActivity.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Helper\AndroidUtil.cs" />
-    <Compile Include="Bindings\CardBackgroundColorBinding.cs" />
-    <Compile Include="Views\Main\DropView.cs" />
-    <Compile Include="Bindings\VisibleHiddenBinding.cs" />
-    <Compile Include="Bindings\UploadProgressBinding.cs" />
-    <Compile Include="Bindings\LocalImagePreviewBinding.cs" />
-    <Compile Include="Bindings\LayoutImageBinding.cs" />
-    <Compile Include="Bindings\SkyFilePreviewImageBinding.cs" />
-    <Compile Include="Bindings\BackgroundColorBinding.cs" />
-    <Compile Include="Bindings\FileCategoryIconBinding.cs" />
-    <Compile Include="Views\Files\FileExplorerView.cs" />
-    <Compile Include="Bindings\IconBinding.cs" />
-    <Compile Include="Views\Contacts\ContactsView.cs" />
-    <Compile Include="Views\Files\FilesView.cs" />
-    <Compile Include="Views\Contacts\SharePublicKeyView.cs" />
-    <Compile Include="Views\Files\FilesView.cs" />
-    <Compile Include="Services\AndroidSaveToGalleryService.cs" />
-    <Compile Include="Helper\QRScannerHelper.cs" />
-    <Compile Include="Bindings\PairingOverlayBinding.cs" />
-    <Compile Include="Bindings\EncryptIconBinding.cs" />
-    <Compile Include="Bindings\ContactsDeleteVisibilityBinding.cs" />
-    <Compile Include="Bindings\ButtonClickBinding.cs" />
-    <Compile Include="Helper\HomeMenuAnimator.cs" />
-    <Compile Include="Views\PortalPreferences\PortalPreferencesListView.cs" />
-    <Compile Include="Views\PortalPreferences\PortalViewHolder.cs" />
-    <Compile Include="Helper\BaseOnDragListener.cs" />
-    <Compile Include="Views\PortalPreferences\PortalPreferencesListAdapter.cs" />
-    <Compile Include="Views\PortalPreferences\PortalPreferencesView.cs" />
-    <Compile Include="Views\PortalPreferences\EditPortalView.cs" />
-    <Compile Include="Views\Onboarding\OnboardingView.cs" />
-    <Compile Include="Styles\StyleExtensions.cs" />
-    <Compile Include="Bindings\NextButtonStyleBinding.cs" />
-    <Compile Include="Views\Portals\PortalLoginView.cs" />
-    <Compile Include="Views\Portals\PortalLoginWebViewClient.cs" />
-    <Compile Include="Helper\JsBridge.cs" />
-    <Compile Include="Views\Barcode\BarcodeView.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="MvvmCross">
-      <Version>7.1.2</Version>
-    </PackageReference>
-    <PackageReference Include="MvvmCross.DroidX.Material">
-      <Version>7.1.2</Version>
-    </PackageReference>
-    <PackageReference Include="Serilog.Sinks.Xamarin">
-      <Version>0.2.0.64</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.AndroidX.ConstraintLayout">
-      <Version>2.0.4.1</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Essentials">
-      <Version>1.6.1</Version>
-    </PackageReference>
-    <PackageReference Include="Plugin.CurrentActivity">
-      <Version>2.1.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="MvvmCross.Plugin.Visibility">
-      <Version>7.1.2</Version>
-    </PackageReference>
-    <PackageReference Include="MvvmCross.Droid.Support.V7.RecyclerView">
-      <Version>6.4.2</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.AndroidX.Lifecycle.LiveData">
-      <Version>2.2.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="Realm">
-      <Version>10.1.1</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.AndroidX.Legacy.Support.V4">
-      <Version>1.0.0.5</Version>
-    </PackageReference>
-    <PackageReference Include="ZXing.Net.Mobile">
-      <Version>3.1.0-beta2</Version>
-    </PackageReference>
-    <PackageReference Include="Realm.Fody">
-      <Version>10.1.1</Version>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProguardConfiguration Include="proguard.cfg" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\fragment_main.axml" />
-    <AndroidResource Include="Resources\layout\toolbar_drop_view.axml" />
-    <AndroidResource Include="Resources\layout\FilesView.axml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_file.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_siacoin.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_link.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\item_file_staged.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_delete.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\DropView.axml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_upload.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_cloud.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_share.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_barcode.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_download.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_upload_grey.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\launch_skydrop_background.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_cog.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\progress_circular.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_cancel.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable-xhdpi\ic_skydrop_logo.png">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable-mdpi\ic_skydrop_logo.png">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable-hdpi\ic_skydrop_logo.png">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable-xxhdpi\ic_skydrop_logo.png">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_skydrop_logo.png">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\launch_skydrop_foreground.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher_round.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_round.png">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_round.png">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher.png">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_round.png">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher.png">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_round.png">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher.png">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_round.png">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\item_file_staged_square.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_plus.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_circle.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_skydrop.xml">
-      <SubType>
-      </SubType>
-      <Generator>
-      </Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_menu.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\item_contact.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_back.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_list.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_grid.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\item_file_grid.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\toolbar_default.axml" />
-    <AndroidResource Include="Resources\drawable\ic_file_audio.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_file_image.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_file_document.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_file_video.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_file_generic.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_qr.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_image.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_zip.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_error.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\ContactsView.axml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\item_file_list.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\toolbar_contacts.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\SharePublicKeyView.axml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\item_folder.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_folder.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\toolbar_files.axml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_folder_add.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_bin.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_folder_move.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_select_all.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_check.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_pair.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_file_encrypted.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_world.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_portals.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_key.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_pencil.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\item_skynet_portal.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_skynet_logo.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\PortalPreferencesView.axml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_downvote.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_upvote.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\EditPortalView.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\OnboardingView.axml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\toolbar_onboarding.axml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\ic_encryption.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\toolbar_portal_preferences.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\PortalLoginView.axml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\BarcodeView.axml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\toolbar_barcode.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values\strings.xml" />
-    <AndroidResource Include="Resources\values\styles.xml" />
-    <AndroidResource Include="Resources\values\colors.xml" />
-    <AndroidResource Include="Resources\values\dimens.xml" />
-    <AndroidResource Include="Resources\values-v21\styles.xml" />
-    <AndroidResource Include="Resources\drawable\splash_screen.xml" />
-    <AndroidResource Include="Resources\drawable-hdpi\ic_mvvmcross_logo.png" />
-    <AndroidResource Include="Resources\drawable-mdpi\ic_mvvmcross_logo.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\ic_mvvmcross_logo.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\ic_mvvmcross_logo.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_mvvmcross_logo.png" />
-    <AndroidResource Include="Resources\values-v19\styles.xml" />
-    <AndroidResource Include="Resources\values\ic_launcher_background.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SkyDrop.Core\SkyDrop.Core.csproj">
-      <Project>{DFB7B938-900C-4AA0-A8B5-56306CCFC564}</Project>
-      <Name>SkyDrop.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\SettingsView.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Properties\AndroidManifest.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Files\" />
-    <Folder Include="Views\Contacts\" />
-    <Folder Include="Views\Onboarding\" />
-    <Folder Include="Styles\" />
-    <Folder Include="Views\Portals\" />
-    <Folder Include="Views\QR\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-    Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
-  -->
-  <ProjectExtensions>
-    <MonoDevelop>
-      <Properties>
-        <Policies>
-          <TextStylePolicy TabWidth="4" IndentWidth="4" RemoveTrailingWhitespace="True" NoTabsAfterNonTabs="False" EolMarker="Native" FileWidth="80" TabsToSpaces="True" scope="text/x-csharp" />
-          <CSharpFormattingPolicy IndentBlock="True" IndentBraces="False" IndentSwitchSection="True" IndentSwitchCaseSection="True" LabelPositioning="OneLess" NewLinesForBracesInTypes="True" NewLinesForBracesInMethods="True" NewLinesForBracesInProperties="True" NewLinesForBracesInAccessors="True" NewLinesForBracesInAnonymousMethods="True" NewLinesForBracesInControlBlocks="True" NewLinesForBracesInAnonymousTypes="True" NewLinesForBracesInObjectCollectionArrayInitializers="True" NewLinesForBracesInLambdaExpressionBody="True" NewLineForElse="True" NewLineForCatch="True" NewLineForFinally="True" NewLineForMembersInObjectInit="True" NewLineForMembersInAnonymousTypes="True" NewLineForClausesInQuery="True" SpacingAfterMethodDeclarationName="False" SpaceWithinMethodDeclarationParenthesis="False" SpaceBetweenEmptyMethodDeclarationParentheses="False" SpaceAfterMethodCallName="False" SpaceWithinMethodCallParentheses="False" SpaceBetweenEmptyMethodCallParentheses="False" SpaceAfterControlFlowStatementKeyword="True" SpaceWithinExpressionParentheses="False" SpaceWithinCastParentheses="False" SpaceWithinOtherParentheses="False" SpaceAfterCast="False" SpacesIgnoreAroundVariableDeclaration="False" SpaceBeforeOpenSquareBracket="False" SpaceBetweenEmptySquareBrackets="False" SpaceWithinSquareBrackets="False" SpaceAfterColonInBaseTypeDeclaration="True" SpaceAfterComma="True" SpaceAfterDot="False" SpaceAfterSemicolonsInForStatement="True" SpaceBeforeColonInBaseTypeDeclaration="True" SpaceBeforeComma="False" SpaceBeforeDot="False" SpaceBeforeSemicolonsInForStatement="False" SpacingAroundBinaryOperator="Single" WrappingPreserveSingleLine="True" WrappingKeepStatementsOnSingleLine="True" scope="text/x-csharp" />
-        </Policies>
-      </Properties>
-    </MonoDevelop>
-  </ProjectExtensions>
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProductVersion>8.0.30703</ProductVersion>
+        <SchemaVersion>2.0</SchemaVersion>
+        <ProjectGuid>{729B3DEE-1D24-47B7-8EEE-3D75F2090F0A}</ProjectGuid>
+        <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>SkyDrop.Droid</RootNamespace>
+        <AssemblyName>SkyDrop.Droid</AssemblyName>
+        <FileAlignment>512</FileAlignment>
+        <AndroidApplication>True</AndroidApplication>
+        <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+        <AndroidResgenClass>Resource</AndroidResgenClass>
+        <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+        <TargetFrameworkVersion>v11.0</TargetFrameworkVersion>
+        <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
+        <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
+        <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+        <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <DebugSymbols>True</DebugSymbols>
+        <DebugType>Full</DebugType>
+        <Optimize>False</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE;</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
+        <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+        <EnableProguard>false</EnableProguard>
+        <AotAssemblies>false</AotAssemblies>
+        <EnableLLVM>false</EnableLLVM>
+        <BundleAssemblies>false</BundleAssemblies>
+        <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+        <LangVersion>8.0</LangVersion>
+        <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
+        <AndroidLinkMode>None</AndroidLinkMode>
+        <AndroidUseAapt2>true</AndroidUseAapt2>
+        <MandroidI18n/>
+        <AndroidTlsProvider>btls</AndroidTlsProvider>
+        <MandroidExtraArgs>-v -v -v -v</MandroidExtraArgs>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <DebugSymbols>True</DebugSymbols>
+        <DebugType>PdbOnly</DebugType>
+        <Optimize>True</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>RELEASE;TRACE;</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <AndroidManagedSymbols>true</AndroidManagedSymbols>
+        <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
+        <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+        <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+        <EnableProguard>true</EnableProguard>
+        <LangVersion>8.0</LangVersion>
+        <AndroidLinkTool>r8</AndroidLinkTool>
+        <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
+        <AndroidTlsProvider>btls</AndroidTlsProvider>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="Mono.Android.Export"/>
+        <Reference Include="System"/>
+        <Reference Include="System.Xml"/>
+        <Reference Include="System.Core"/>
+        <Reference Include="Mono.Android"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Linker\LinkerPleaseInclude.cs"/>
+        <Compile Include="MainApplication.cs"/>
+        <Compile Include="Services\AndroidHttpClientFactory.cs"/>
+        <Compile Include="Setup.cs"/>
+        <Compile Include="Views\BaseActivity.cs"/>
+        <Compile Include="Views\BaseFragment.cs"/>
+        <Compile Include="Views\Main\SettingsView.cs"/>
+        <Compile Include="Views\Splash\SplashActivity.cs"/>
+        <Compile Include="Resources\Resource.Designer.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="Helper\AndroidUtil.cs"/>
+        <Compile Include="Bindings\CardBackgroundColorBinding.cs"/>
+        <Compile Include="Views\Main\DropView.cs"/>
+        <Compile Include="Bindings\VisibleHiddenBinding.cs"/>
+        <Compile Include="Bindings\UploadProgressBinding.cs"/>
+        <Compile Include="Bindings\LocalImagePreviewBinding.cs"/>
+        <Compile Include="Bindings\LayoutImageBinding.cs"/>
+        <Compile Include="Bindings\SkyFilePreviewImageBinding.cs"/>
+        <Compile Include="Bindings\BackgroundColorBinding.cs"/>
+        <Compile Include="Bindings\FileCategoryIconBinding.cs"/>
+        <Compile Include="Views\Files\FileExplorerView.cs"/>
+        <Compile Include="Bindings\IconBinding.cs"/>
+        <Compile Include="Views\Contacts\ContactsView.cs"/>
+        <Compile Include="Views\Files\FilesView.cs"/>
+        <Compile Include="Views\Contacts\SharePublicKeyView.cs"/>
+        <Compile Include="Views\Files\FilesView.cs"/>
+        <Compile Include="Services\AndroidSaveToGalleryService.cs"/>
+        <Compile Include="Helper\QRScannerHelper.cs"/>
+        <Compile Include="Bindings\PairingOverlayBinding.cs"/>
+        <Compile Include="Bindings\EncryptIconBinding.cs"/>
+        <Compile Include="Bindings\ContactsDeleteVisibilityBinding.cs"/>
+        <Compile Include="Bindings\ButtonClickBinding.cs"/>
+        <Compile Include="Helper\HomeMenuAnimator.cs"/>
+        <Compile Include="Views\PortalPreferences\PortalPreferencesListView.cs"/>
+        <Compile Include="Views\PortalPreferences\PortalViewHolder.cs"/>
+        <Compile Include="Helper\BaseOnDragListener.cs"/>
+        <Compile Include="Views\PortalPreferences\PortalPreferencesListAdapter.cs"/>
+        <Compile Include="Views\PortalPreferences\PortalPreferencesView.cs"/>
+        <Compile Include="Views\PortalPreferences\EditPortalView.cs"/>
+        <Compile Include="Views\Onboarding\OnboardingView.cs"/>
+        <Compile Include="Styles\StyleExtensions.cs"/>
+        <Compile Include="Bindings\NextButtonStyleBinding.cs"/>
+        <Compile Include="Views\Portals\PortalLoginView.cs"/>
+        <Compile Include="Views\Portals\PortalLoginWebViewClient.cs"/>
+        <Compile Include="Helper\JsBridge.cs"/>
+        <Compile Include="Views\Barcode\BarcodeView.cs"/>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="MvvmCross">
+            <Version>7.1.2</Version>
+        </PackageReference>
+        <PackageReference Include="MvvmCross.DroidX.Material">
+            <Version>7.1.2</Version>
+        </PackageReference>
+        <PackageReference Include="Serilog.Sinks.Xamarin">
+            <Version>0.2.0.64</Version>
+        </PackageReference>
+        <PackageReference Include="Xamarin.AndroidX.ConstraintLayout">
+            <Version>2.0.4.1</Version>
+        </PackageReference>
+        <PackageReference Include="Xamarin.Essentials">
+            <Version>1.6.1</Version>
+        </PackageReference>
+        <PackageReference Include="Plugin.CurrentActivity">
+            <Version>2.1.0.4</Version>
+        </PackageReference>
+        <PackageReference Include="MvvmCross.Plugin.Visibility">
+            <Version>7.1.2</Version>
+        </PackageReference>
+        <PackageReference Include="MvvmCross.Droid.Support.V7.RecyclerView">
+            <Version>6.4.2</Version>
+        </PackageReference>
+        <PackageReference Include="Xamarin.AndroidX.Lifecycle.LiveData">
+            <Version>2.2.0.4</Version>
+        </PackageReference>
+        <PackageReference Include="Realm">
+            <Version>10.1.1</Version>
+        </PackageReference>
+        <PackageReference Include="Xamarin.AndroidX.Legacy.Support.V4">
+            <Version>1.0.0.5</Version>
+        </PackageReference>
+        <PackageReference Include="ZXing.Net.Mobile">
+            <Version>3.1.0-beta2</Version>
+        </PackageReference>
+        <PackageReference Include="Realm.Fody">
+            <Version>10.1.1</Version>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <ProguardConfiguration Include="proguard.cfg"/>
+    </ItemGroup>
+    <ItemGroup>
+        <AndroidResource Include="Resources\layout\fragment_main.axml"/>
+        <AndroidResource Include="Resources\layout\toolbar_drop_view.axml"/>
+        <AndroidResource Include="Resources\layout\FilesView.axml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_file.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_siacoin.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_link.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\item_file_staged.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_delete.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\DropView.axml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_upload.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_cloud.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_share.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_barcode.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_download.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_upload_grey.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\launch_skydrop_background.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_cog.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\progress_circular.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_cancel.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable-xhdpi\ic_skydrop_logo.png">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable-mdpi\ic_skydrop_logo.png">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable-hdpi\ic_skydrop_logo.png">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable-xxhdpi\ic_skydrop_logo.png">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable-xxxhdpi\ic_skydrop_logo.png">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\launch_skydrop_foreground.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher_round.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_round.png">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_round.png">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher.png">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_round.png">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher.png">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_round.png">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher.png">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_round.png">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\item_file_staged_square.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_plus.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_circle.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_skydrop.xml">
+            <SubType>
+            </SubType>
+            <Generator>
+            </Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_menu.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\item_contact.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_back.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_list.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_grid.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\item_file_grid.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\toolbar_default.axml"/>
+        <AndroidResource Include="Resources\drawable\ic_file_audio.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_file_image.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_file_document.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_file_video.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_file_generic.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_qr.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_image.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_zip.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_error.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\ContactsView.axml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\item_file_list.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\toolbar_contacts.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\SharePublicKeyView.axml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\item_folder.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_folder.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\toolbar_files.axml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_folder_add.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_bin.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_folder_move.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_select_all.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_check.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_pair.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_file_encrypted.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_world.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_portals.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_key.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_pencil.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\item_skynet_portal.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_skynet_logo.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\PortalPreferencesView.axml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_downvote.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_upvote.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\EditPortalView.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\OnboardingView.axml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\toolbar_onboarding.axml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_encryption.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\toolbar_portal_preferences.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\PortalLoginView.axml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\BarcodeView.axml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\layout\toolbar_barcode.xml">
+            <SubType></SubType>
+            <Generator></Generator>
+        </AndroidResource>
+    </ItemGroup>
+    <ItemGroup>
+        <AndroidResource Include="Resources\values\strings.xml"/>
+        <AndroidResource Include="Resources\values\styles.xml"/>
+        <AndroidResource Include="Resources\values\colors.xml"/>
+        <AndroidResource Include="Resources\values\dimens.xml"/>
+        <AndroidResource Include="Resources\values-v21\styles.xml"/>
+        <AndroidResource Include="Resources\drawable\splash_screen.xml"/>
+        <AndroidResource Include="Resources\drawable-hdpi\ic_mvvmcross_logo.png"/>
+        <AndroidResource Include="Resources\drawable-mdpi\ic_mvvmcross_logo.png"/>
+        <AndroidResource Include="Resources\drawable-xhdpi\ic_mvvmcross_logo.png"/>
+        <AndroidResource Include="Resources\drawable-xxhdpi\ic_mvvmcross_logo.png"/>
+        <AndroidResource Include="Resources\drawable-xxxhdpi\ic_mvvmcross_logo.png"/>
+        <AndroidResource Include="Resources\values-v19\styles.xml"/>
+        <AndroidResource Include="Resources\values\ic_launcher_background.xml"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\SkyDrop.Core\SkyDrop.Core.csproj">
+            <Project>{DFB7B938-900C-4AA0-A8B5-56306CCFC564}</Project>
+            <Name>SkyDrop.Core</Name>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <AndroidResource Include="Resources\layout\SettingsView.axml">
+            <SubType>Designer</SubType>
+        </AndroidResource>
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="Properties\AndroidManifest.xml"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Views\Files\"/>
+        <Folder Include="Views\Contacts\"/>
+        <Folder Include="Views\Onboarding\"/>
+        <Folder Include="Styles\"/>
+        <Folder Include="Views\Portals\"/>
+        <Folder Include="Views\QR\"/>
+    </ItemGroup>
+    <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets"/>
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+      Other similar extension points exist, see Microsoft.Common.targets.
+      <Target Name="BeforeBuild">
+      </Target>
+      <Target Name="AfterBuild">
+      </Target>
+    -->
+    <ProjectExtensions>
+        <MonoDevelop>
+            <Properties>
+                <Policies>
+                    <TextStylePolicy TabWidth="4" IndentWidth="4" RemoveTrailingWhitespace="True" NoTabsAfterNonTabs="False" EolMarker="Native" FileWidth="80" TabsToSpaces="True" scope="text/x-csharp"/>
+                    <CSharpFormattingPolicy IndentBlock="True" IndentBraces="False" IndentSwitchSection="True" IndentSwitchCaseSection="True" LabelPositioning="OneLess" NewLinesForBracesInTypes="True" NewLinesForBracesInMethods="True" NewLinesForBracesInProperties="True" NewLinesForBracesInAccessors="True" NewLinesForBracesInAnonymousMethods="True" NewLinesForBracesInControlBlocks="True" NewLinesForBracesInAnonymousTypes="True" NewLinesForBracesInObjectCollectionArrayInitializers="True" NewLinesForBracesInLambdaExpressionBody="True" NewLineForElse="True" NewLineForCatch="True" NewLineForFinally="True" NewLineForMembersInObjectInit="True" NewLineForMembersInAnonymousTypes="True" NewLineForClausesInQuery="True" SpacingAfterMethodDeclarationName="False" SpaceWithinMethodDeclarationParenthesis="False" SpaceBetweenEmptyMethodDeclarationParentheses="False" SpaceAfterMethodCallName="False" SpaceWithinMethodCallParentheses="False" SpaceBetweenEmptyMethodCallParentheses="False" SpaceAfterControlFlowStatementKeyword="True" SpaceWithinExpressionParentheses="False" SpaceWithinCastParentheses="False" SpaceWithinOtherParentheses="False" SpaceAfterCast="False" SpacesIgnoreAroundVariableDeclaration="False" SpaceBeforeOpenSquareBracket="False" SpaceBetweenEmptySquareBrackets="False" SpaceWithinSquareBrackets="False" SpaceAfterColonInBaseTypeDeclaration="True" SpaceAfterComma="True" SpaceAfterDot="False" SpaceAfterSemicolonsInForStatement="True" SpaceBeforeColonInBaseTypeDeclaration="True" SpaceBeforeComma="False" SpaceBeforeDot="False" SpaceBeforeSemicolonsInForStatement="False" SpacingAroundBinaryOperator="Single" WrappingPreserveSingleLine="True" WrappingKeepStatementsOnSingleLine="True" scope="text/x-csharp"/>
+                </Policies>
+            </Properties>
+        </MonoDevelop>
+    </ProjectExtensions>
 </Project>

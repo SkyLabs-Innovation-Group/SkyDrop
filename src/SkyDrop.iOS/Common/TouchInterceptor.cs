@@ -8,8 +8,8 @@ namespace SkyDrop.iOS.Common
     public class TouchInterceptor : UIGestureRecognizer
     {
         public EventHandler<CGPoint> TouchDown;
-        public EventHandler<CGPoint> TouchUp;
         public EventHandler<CGPoint> TouchMove;
+        public EventHandler<CGPoint> TouchUp;
 
         public override void TouchesBegan(NSSet touches, UIEvent evt)
         {
@@ -36,7 +36,7 @@ namespace SkyDrop.iOS.Common
         }
 
         /// <summary>
-        /// Invokes TouchesUp, so cancelled gestures are treated the same as normal gestures
+        ///     Invokes TouchesUp, so cancelled gestures are treated the same as normal gestures
         /// </summary>
         public override void TouchesCancelled(NSSet touches, UIEvent evt)
         {

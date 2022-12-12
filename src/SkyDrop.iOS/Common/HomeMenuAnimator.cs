@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Cirrious.FluentLayouts.Touch;
 using CoreGraphics;
 using UIKit;
 
@@ -8,16 +7,23 @@ namespace SkyDrop.iOS.Common
 {
     public class HomeMenuAnimator
     {
-        private UIImageView homeMenuButtonSkyDrive, homeMenuButtonPortals, homeMenuButtonContacts, homeMenuButtonSettings;
-        private UIImageView miniMenuButtonSkyDrive, miniMenuButtonPortals, miniMenuButtonContacts, miniMenuButtonSettings;
-        private UIView animationContainer;
-
         private readonly nfloat homeMenuIconSize;
         private readonly nfloat miniMenuIconSize;
+        private readonly UIView animationContainer;
+        private readonly UIImageView homeMenuButtonSkyDrive;
+        private readonly UIImageView homeMenuButtonPortals;
+        private readonly UIImageView homeMenuButtonContacts;
+        private readonly UIImageView homeMenuButtonSettings;
+        private readonly UIImageView miniMenuButtonSkyDrive;
+        private readonly UIImageView miniMenuButtonPortals;
+        private readonly UIImageView miniMenuButtonContacts;
+        private readonly UIImageView miniMenuButtonSettings;
 
-        public HomeMenuAnimator(UIImageView homeMenuButtonSkyDrive, UIImageView homeMenuButtonPortals, UIImageView homeMenuButtonContacts, UIImageView homeMenuButtonSettings,
-                                UIImageView miniMenuButtonSkyDrive, UIImageView miniMenuButtonPortals, UIImageView miniMenuButtonContacts, UIImageView miniMenuButtonSettings,
-                                UIView animationContainer)
+        public HomeMenuAnimator(UIImageView homeMenuButtonSkyDrive, UIImageView homeMenuButtonPortals,
+            UIImageView homeMenuButtonContacts, UIImageView homeMenuButtonSettings,
+            UIImageView miniMenuButtonSkyDrive, UIImageView miniMenuButtonPortals, UIImageView miniMenuButtonContacts,
+            UIImageView miniMenuButtonSettings,
+            UIView animationContainer)
         {
             this.homeMenuButtonSkyDrive = homeMenuButtonSkyDrive;
             this.homeMenuButtonPortals = homeMenuButtonPortals;
@@ -31,16 +37,20 @@ namespace SkyDrop.iOS.Common
 
             this.animationContainer = animationContainer;
 
-            this.homeMenuIconSize = homeMenuButtonSkyDrive.Frame.Width;
-            this.miniMenuIconSize = miniMenuButtonSkyDrive.Frame.Width;
+            homeMenuIconSize = homeMenuButtonSkyDrive.Frame.Width;
+            miniMenuIconSize = miniMenuButtonSkyDrive.Frame.Width;
         }
 
         public async Task AnimateShrink(float delay, float duration)
         {
-            var skyDriveIcon = new UIImageView(UIImage.FromBundle("ic_cloud")) { TintColor = miniMenuButtonSkyDrive.TintColor };
-            var portalsIcon = new UIImageView(UIImage.FromBundle("ic_portals")) { TintColor = miniMenuButtonPortals.TintColor };
-            var contactsIcon = new UIImageView(UIImage.FromBundle("ic_key")) { TintColor = miniMenuButtonContacts.TintColor };
-            var settingsIcon = new UIImageView(UIImage.FromBundle("ic_settings")) { TintColor = miniMenuButtonSettings.TintColor };
+            var skyDriveIcon = new UIImageView(UIImage.FromBundle("ic_cloud"))
+                { TintColor = miniMenuButtonSkyDrive.TintColor };
+            var portalsIcon = new UIImageView(UIImage.FromBundle("ic_portals"))
+                { TintColor = miniMenuButtonPortals.TintColor };
+            var contactsIcon = new UIImageView(UIImage.FromBundle("ic_key"))
+                { TintColor = miniMenuButtonContacts.TintColor };
+            var settingsIcon = new UIImageView(UIImage.FromBundle("ic_settings"))
+                { TintColor = miniMenuButtonSettings.TintColor };
 
             AddIconsToWindow(skyDriveIcon, portalsIcon, contactsIcon, settingsIcon);
 
@@ -57,7 +67,8 @@ namespace SkyDrop.iOS.Common
             AnimateMoveToLocation(settingsIcon, miniMenuButtonSettingsPosition, duration);
         }
 
-        private void AddIconsToWindow(UIImageView skyDriveIcon, UIImageView portalsIcon, UIImageView contactsIcon, UIImageView settingsIcon)
+        private void AddIconsToWindow(UIImageView skyDriveIcon, UIImageView portalsIcon, UIImageView contactsIcon,
+            UIImageView settingsIcon)
         {
             var skyDriveLocation = GetViewLocation(homeMenuButtonSkyDrive);
             var portalsLocation = GetViewLocation(homeMenuButtonPortals);
@@ -78,7 +89,7 @@ namespace SkyDrop.iOS.Common
         private CGPoint GetViewLocation(UIView view)
         {
             var point = view.Superview.ConvertPointToView(view.Frame.Location, null);
-            
+
             //measure from the center of the view
             point.X += view.Frame.Width / 2;
             point.Y += view.Frame.Height / 2;
@@ -109,7 +120,8 @@ namespace SkyDrop.iOS.Common
 
         private CGRect GetFrameForLocation(CGPoint location)
         {
-            return new CGRect(location.X - homeMenuIconSize / 2, location.Y - homeMenuIconSize / 2, homeMenuIconSize, homeMenuIconSize);
+            return new CGRect(location.X - homeMenuIconSize / 2, location.Y - homeMenuIconSize / 2, homeMenuIconSize,
+                homeMenuIconSize);
         }
 
         private void ResizeFrame(UIView view)
@@ -120,4 +132,3 @@ namespace SkyDrop.iOS.Common
         }
     }
 }
-

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using SkyDrop.Core.DataModels;
@@ -12,8 +11,16 @@ namespace SkyDrop.Core.ViewModels
 {
     public class EditPortalViewModel : BaseViewModel<NavParam>
     {
-        public SkynetPortal Portal;
         private readonly IMvxNavigationService navigationService;
+        public SkynetPortal Portal;
+
+        public EditPortalViewModel(ISingletonService singletonService, IMvxNavigationService navigationService) : base(
+            singletonService)
+        {
+            SavePortalCommand = new MvxCommand(SavePortal);
+            LoginWithPortalCommand = new MvxAsyncCommand(LoginWithPortal);
+            this.navigationService = navigationService;
+        }
 
         public string PortalName { get; set; }
 
@@ -23,12 +30,10 @@ namespace SkyDrop.Core.ViewModels
 
         public IMvxCommand SavePortalCommand { get; set; }
 
-        public EditPortalViewModel(ISingletonService singletonService, IMvxNavigationService navigationService) : base(singletonService)
-        {
-            SavePortalCommand = new MvxCommand(SavePortal);
-            LoginWithPortalCommand = new MvxAsyncCommand(LoginWithPortal);
-            this.navigationService = navigationService;
-        }
+        public bool AddingNewPortal { get; set; }
+
+        public TaskCompletionSource<bool> PrepareTcs { get; set; } = new TaskCompletionSource<bool>();
+        public IMvxCommand LoginWithPortalCommand { get; set; }
 
         private void SavePortal()
         {
@@ -37,7 +42,7 @@ namespace SkyDrop.Core.ViewModels
             var portalDVM = new SkynetPortalDVM(Portal)
             {
                 Name = PortalName,
-                BaseUrl = PortalUrl,
+                BaseUrl = PortalUrl
             };
 
             if (AddingNewPortal)
@@ -47,16 +52,6 @@ namespace SkyDrop.Core.ViewModels
 
             singletonService.UserDialogs.Toast("Saved");
         }
-
-        public class NavParam
-        {
-            public string PortalId { get; set; }
-        }
-
-        public bool AddingNewPortal { get; set; }
-
-        public TaskCompletionSource<bool> PrepareTcs { get; set; } = new TaskCompletionSource<bool>();
-        public IMvxCommand LoginWithPortalCommand { get; set; }
 
         public override async void Prepare(NavParam parameter)
         {
@@ -73,7 +68,7 @@ namespace SkyDrop.Core.ViewModels
             PrepareTcs.TrySetResult(true);
         }
 
-        public async override void ViewCreated()
+        public override async void ViewCreated()
         {
             base.ViewCreated();
 
@@ -88,10 +83,14 @@ namespace SkyDrop.Core.ViewModels
 
         private async Task LoginWithPortal()
         {
-           var result = await navigationService.Navigate<PortalLoginViewModel, string, string>(PortalUrl);
-           if (!string.IsNullOrEmpty(result))
-               ApiToken = result;
+            var result = await navigationService.Navigate<PortalLoginViewModel, string, string>(PortalUrl);
+            if (!string.IsNullOrEmpty(result))
+                ApiToken = result;
+        }
+
+        public class NavParam
+        {
+            public string PortalId { get; set; }
         }
     }
 }
-

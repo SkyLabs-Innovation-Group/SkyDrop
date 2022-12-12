@@ -1,27 +1,23 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using Acr.UserDialogs;
-using FFImageLoading;
-using FFImageLoading.Config;
-using FFImageLoading.Helpers;
-using FFImageLoading.Work;
-using SkyDrop.iOS.Bindings;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
+using MvvmCross.Converters;
 using MvvmCross.IoC;
+using MvvmCross.Logging;
 using MvvmCross.Platforms.Ios.Core;
 using MvvmCross.Platforms.Ios.Presenters;
 using MvvmCross.ViewModels;
-using SkyDrop.Core;
-using UIKit;
-using MvvmCross.Converters;
-using MvvmCross.Logging;
 using Serilog;
+using SkyDrop.Core;
 using SkyDrop.Core.Converters;
 using SkyDrop.Core.Services;
-using SkyDrop.iOS.Services;
-using Xamarin.Essentials;
+using SkyDrop.iOS.Bindings;
 using SkyDrop.iOS.Converters;
+using SkyDrop.iOS.Services;
+using UIKit;
+using Xamarin.Essentials;
 
 namespace SkyDrop.iOS
 {
@@ -29,12 +25,16 @@ namespace SkyDrop.iOS
     {
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
-            registry.RegisterCustomBindingFactory<UIView>(ProgressFillHeightBinding.Name, view => new ProgressFillHeightBinding(view));
-            registry.RegisterCustomBindingFactory<UIImageView>(LocalImagePreviewBinding.Name, view => new LocalImagePreviewBinding(view));
+            registry.RegisterCustomBindingFactory<UIView>(ProgressFillHeightBinding.Name,
+                view => new ProgressFillHeightBinding(view));
+            registry.RegisterCustomBindingFactory<UIImageView>(LocalImagePreviewBinding.Name,
+                view => new LocalImagePreviewBinding(view));
             registry.RegisterCustomBindingFactory<UIView>(LongPressBinding.Name, view => new LongPressBinding(view));
-            registry.RegisterCustomBindingFactory<UIImageView>(FileCategoryIconBinding.Name, view => new FileCategoryIconBinding(view));
+            registry.RegisterCustomBindingFactory<UIImageView>(FileCategoryIconBinding.Name,
+                view => new FileCategoryIconBinding(view));
             registry.RegisterCustomBindingFactory<UIImageView>(IconBinding.Name, view => new IconBinding(view));
-            registry.RegisterCustomBindingFactory<UIView>(NextButtonStyleBinding.Name, view => new NextButtonStyleBinding(view));
+            registry.RegisterCustomBindingFactory<UIView>(NextButtonStyleBinding.Name,
+                view => new NextButtonStyleBinding(view));
 
             base.FillTargetFactories(registry);
         }
@@ -43,8 +43,8 @@ namespace SkyDrop.iOS
         {
             registry.AddOrOverwrite(FileExtensionConverter.Name, new FileExtensionConverter());
             registry.AddOrOverwrite(NativeColorConverter.Name, new NativeColorConverter());
-            registry.AddOrOverwrite(CanDisplayPreviewConverter.Name, new CanDisplayPreviewConverter(invert: false));
-            registry.AddOrOverwrite(CanDisplayPreviewConverter.InvertName, new CanDisplayPreviewConverter(invert: true));
+            registry.AddOrOverwrite(CanDisplayPreviewConverter.Name, new CanDisplayPreviewConverter(false));
+            registry.AddOrOverwrite(CanDisplayPreviewConverter.InvertName, new CanDisplayPreviewConverter(true));
             registry.AddOrOverwrite(SaveUnzipIconConverter.Name, new SaveUnzipIconConverter());
 
             base.FillValueConverters(registry);
@@ -55,35 +55,42 @@ namespace SkyDrop.iOS
             Debug.WriteLine("CreateApp() iOS");
 
             UserDialogs.Instance = new UserDialogsImpl();
-            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IUserDialogs>(() => UserDialogs.Instance);
-            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISkyDropHttpClientFactory>(() => new NSUrlHttpClientFactory());
-            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISaveToGalleryService>(() => new iOSSaveToGalleryService());
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton(() => UserDialogs.Instance);
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISkyDropHttpClientFactory>(() =>
+                new NSUrlHttpClientFactory());
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISaveToGalleryService>(
+                () => new iOSSaveToGalleryService());
 
             return base.CreateApp();
         }
-        
+
         protected override IMvxIosViewPresenter CreateViewPresenter()
         {
             var presenter = base.CreateViewPresenter();
-            Mvx.IoCProvider.RegisterSingleton<IMvxIosViewPresenter>(presenter);
+            Mvx.IoCProvider.RegisterSingleton(presenter);
             return presenter;
         }
-        
-        public override MvxLogProviderType GetDefaultLogProviderType() => MvxLogProviderType.Serilog;
+
+        public override MvxLogProviderType GetDefaultLogProviderType()
+        {
+            return MvxLogProviderType.Serilog;
+        }
 
         protected override IMvxLogProvider CreateLogProvider()
         {
             // From https://prin53.medium.com/logging-in-xamarin-application-logging-infrastructure-with-mvvmcross-2c9bef960c60
-            Serilog.Log.Logger = new LoggerConfiguration()
+            Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Verbose()
                 .Enrich.FromLogContext()
-                .WriteTo.NSLog(outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj} ({SourceContext}) {Exception}")
+                .WriteTo.NSLog(
+                    outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj} ({SourceContext}) {Exception}")
                 .WriteTo.File(
                     Path.Combine(FileSystem.CacheDirectory, "Logs", "Log.log"),
                     rollingInterval: RollingInterval.Day,
-                    outputTemplate: "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj} ({SourceContext}) {Exception}{NewLine}"
+                    outputTemplate:
+                    "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj} ({SourceContext}) {Exception}{NewLine}"
                 ).CreateLogger();
-            
+
             var logProvider = base.CreateLogProvider();
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILog>(() => new SkyLogger(logProvider));
             return logProvider;

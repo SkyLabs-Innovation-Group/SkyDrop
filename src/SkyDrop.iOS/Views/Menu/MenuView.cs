@@ -1,10 +1,8 @@
-﻿using System;
-using Acr.UserDialogs;
+﻿using Acr.UserDialogs;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
-using UIKit;
 
 namespace SkyDrop.iOS.Views.Menu
 {
@@ -13,7 +11,6 @@ namespace SkyDrop.iOS.Views.Menu
     {
         public MenuView() : base("MenuView", null)
         {
-
         }
 
         public override void ViewDidLoad()
@@ -23,9 +20,6 @@ namespace SkyDrop.iOS.Views.Menu
             //TODO: dark green navigation bar with title seems to be covered by another (grey) navigation bar
             NavigationController.Title = "SkyDrop";
             NavigationController.NavigationBar.BackgroundColor = Colors.GradientDark.ToNative();
-
-
-
 
 
             View.BackgroundColor = Colors.DarkGrey.ToNative();
@@ -41,4 +35,3 @@ namespace SkyDrop.iOS.Views.Menu
         }
     }
 }
-

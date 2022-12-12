@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
-using SkyDrop.Core.DataModels;
-using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Services;
 using ZXing.Common;
 
@@ -18,34 +13,21 @@ namespace SkyDrop.Core.ViewModels.Main
         public const int TextDelayerTimeMs = 300;
         public const string DefaultText = "QR text";
 
-        public bool IsKeyboardVisible { get; set; }
-        public IMvxCommand GenerateBarcodeCommand { get; set; }
-        public IMvxCommand ScanBarcodeCommand { get; set; }
-        public IMvxCommand BackCommand { get; set; }
-        public IMvxAsyncCommand CloseKeyboardCommand { get; set; }
-
-        private Func<Task> _generateBarcodeAsyncFunc;
-        public Func<Task> GenerateBarcodeAsyncFunc
-        {
-            get => _generateBarcodeAsyncFunc;
-            set => _generateBarcodeAsyncFunc = value;
-        }
-
         private readonly IApiService apiService;
-        private readonly IStorageService storageService;
-        private readonly IUserDialogs userDialogs;
         private readonly IBarcodeService barcodeService;
         private readonly IMvxNavigationService navigationService;
+        private readonly IStorageService storageService;
+        private readonly IUserDialogs userDialogs;
 
         private string barcodeMessage;
 
         public BarcodeViewModel(ISingletonService singletonService,
-                             IApiService apiService,
-                             IStorageService storageService,
-                             IUserDialogs userDialogs,
-                             IBarcodeService barcodeService,
-                             IMvxNavigationService navigationService,
-                             ILog log) : base(singletonService)
+            IApiService apiService,
+            IStorageService storageService,
+            IUserDialogs userDialogs,
+            IBarcodeService barcodeService,
+            IMvxNavigationService navigationService,
+            ILog log) : base(singletonService)
         {
             Title = "Create QR";
 
@@ -59,6 +41,14 @@ namespace SkyDrop.Core.ViewModels.Main
             ScanBarcodeCommand = new MvxAsyncCommand(async () => await ScanBarcode());
             BackCommand = new MvxAsyncCommand(Done);
         }
+
+        public bool IsKeyboardVisible { get; set; }
+        public IMvxCommand GenerateBarcodeCommand { get; set; }
+        public IMvxCommand ScanBarcodeCommand { get; set; }
+        public IMvxCommand BackCommand { get; set; }
+        public IMvxAsyncCommand CloseKeyboardCommand { get; set; }
+
+        public Func<Task> GenerateBarcodeAsyncFunc { get; set; }
 
         private async Task ScanBarcode()
         {

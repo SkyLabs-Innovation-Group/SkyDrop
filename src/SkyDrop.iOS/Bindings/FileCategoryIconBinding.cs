@@ -1,8 +1,5 @@
-using System.Drawing;
-using Acr.UserDialogs;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
-using SkyDrop.Core.Utility;
 using UIKit;
 using static SkyDrop.Core.Utility.Util;
 
@@ -10,11 +7,11 @@ namespace SkyDrop.iOS.Bindings
 {
     public class FileCategoryIconBinding : MvxTargetBinding<UIImageView, string>
     {
-        public static string Name => "FileCategoryIcon";
-
         public FileCategoryIconBinding(UIImageView target) : base(target)
         {
         }
+
+        public static string Name => "FileCategoryIcon";
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
@@ -27,7 +24,7 @@ namespace SkyDrop.iOS.Bindings
         private string GetImageResource(string filename)
         {
             var fileCategory = GetFileCategory(filename);
-            switch(fileCategory)
+            switch (fileCategory)
             {
                 case FileCategory.Document:
                     return "ic_file_document";

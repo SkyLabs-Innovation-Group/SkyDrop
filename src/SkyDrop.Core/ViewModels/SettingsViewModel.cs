@@ -10,6 +10,37 @@ namespace SkyDrop.Core.ViewModels
 {
     public class SettingsViewModel : BaseViewModel
     {
+        /// <summary>
+        ///     Currently, the best way to verify a Skynet portal that I can think of would be to query for a sky file's metadata.
+        /// </summary>
+        private const string RandomFileToQueryFor = "AACEA6yg7OM0_gl6_sHx2D7ztt20-g0oXum5GNbCc0ycRg";
+
+        private readonly IEncryptionService encryptionService;
+
+        private readonly ISkyDropHttpClientFactory httpClientFactory;
+        private readonly IMvxNavigationService navigationService;
+
+        public SettingsViewModel(ISingletonService singletonService,
+            ISkyDropHttpClientFactory skyDropHttpClientFactory,
+            IMvxNavigationService navigationService,
+            IEncryptionService encryptionService) : base(singletonService)
+        {
+            httpClientFactory = skyDropHttpClientFactory;
+            this.navigationService = navigationService;
+            this.encryptionService = encryptionService;
+
+            Title = "Settings";
+
+            BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
+            ValidateAndTrySetSkynetPortalCommand =
+                new MvxAsyncCommand<string>(async url => await ValidateAndTrySetSkynetPortal(url));
+            SetDeviceNameCommand = new MvxCommand(SetDeviceName);
+            ViewOnboardingCommand =
+                new MvxAsyncCommand(async () => await navigationService.Navigate<OnboardingViewModel>());
+
+            DeviceName = encryptionService.GetDeviceName();
+        }
+
         public bool UploadNotificationsEnabled { get; set; } = true;
         public bool VerifySslCertificates { get; set; } = true;
         public string SkynetPortalLabelText { get; set; } = "Skynet portal:";
@@ -20,34 +51,6 @@ namespace SkyDrop.Core.ViewModels
         public IMvxCommand SetDeviceNameCommand { get; set; }
         public IMvxCommand CloseKeyboardCommand { get; set; }
         public IMvxCommand ViewOnboardingCommand { get; set; }
-
-        /// <summary>
-        /// Currently, the best way to verify a Skynet portal that I can think of would be to query for a sky file's metadata.
-        /// </summary>
-        private const string RandomFileToQueryFor = "AACEA6yg7OM0_gl6_sHx2D7ztt20-g0oXum5GNbCc0ycRg";
-
-        private readonly ISkyDropHttpClientFactory httpClientFactory;
-        private readonly IMvxNavigationService navigationService;
-        private readonly IEncryptionService encryptionService;
-
-        public SettingsViewModel(ISingletonService singletonService,
-                                 ISkyDropHttpClientFactory skyDropHttpClientFactory,
-                                 IMvxNavigationService navigationService,
-                                 IEncryptionService encryptionService) : base(singletonService)
-        {
-            this.httpClientFactory = skyDropHttpClientFactory;
-            this.navigationService = navigationService;
-            this.encryptionService = encryptionService;
-
-            Title = "Settings";
-
-            BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
-            ValidateAndTrySetSkynetPortalCommand = new MvxAsyncCommand<string>(async url => await ValidateAndTrySetSkynetPortal(url));
-            SetDeviceNameCommand = new MvxCommand(SetDeviceName);
-            ViewOnboardingCommand = new MvxAsyncCommand(async () => await navigationService.Navigate<OnboardingViewModel>());
-
-            DeviceName = encryptionService.GetDeviceName();
-        }
 
         public override void ViewCreated()
         {
@@ -70,17 +73,20 @@ namespace SkyDrop.Core.ViewModels
 
                 portalUrl = FormatPortalUrl(portalUrl);
                 var portal = new SkynetPortal(portalUrl);
-             
-                bool userHasConfirmed = await singletonService.UserDialogs.ConfirmAsync($"Set your portal to {portalUrl} ?");
+
+                var userHasConfirmed =
+                    await singletonService.UserDialogs.ConfirmAsync($"Set your portal to {portalUrl} ?");
                 if (!userHasConfirmed)
                     return;
 
                 var promptResult = await singletonService.UserDialogs
-                    .PromptAsync("Paste your API key if you have one, close if you already entered one for this portal before", "Optional Authentication", "Save", "Close", "", Acr.UserDialogs.InputType.Default);
+                    .PromptAsync(
+                        "Paste your API key if you have one, close if you already entered one for this portal before",
+                        "Optional Authentication", "Save", "Close");
                 portal.UserApiToken = promptResult.Text;
 
                 singletonService.UserDialogs.ShowLoading("Validating portal...");
-                bool success = await ValidatePortal(portal);
+                var success = await ValidatePortal(portal);
                 if (!success)
                     return;
 
@@ -107,9 +113,11 @@ namespace SkyDrop.Core.ViewModels
         }
 
         public Task<bool> ValidatePortal(SkynetPortal portal)
-            //=> singletonService.ApiService.PingPortalForSkylink(RandomFileToQueryFor, portal);
-            => Task.FromResult(true);
-     
+        //=> singletonService.ApiService.PingPortalForSkylink(RandomFileToQueryFor, portal);
+        {
+        return Task.FromResult(true);
+        }
+
         public void SetUploadNotificationEnabled(bool value)
         {
             UploadNotificationsEnabled = value;
@@ -132,7 +140,8 @@ namespace SkyDrop.Core.ViewModels
             if (Preferences.ContainsKey(PreferenceKey.DidShowWeb3PortalMessage))
                 return; //already shown
 
-            singletonService.UserDialogs.Alert("Selected portal has been set to web3portal.com because siasky.net and other portals are shutting down");
+            singletonService.UserDialogs.Alert(
+                "Selected portal has been set to web3portal.com because siasky.net and other portals are shutting down");
             Preferences.Set(PreferenceKey.DidShowWeb3PortalMessage, true);
         }
 
@@ -163,7 +172,7 @@ namespace SkyDrop.Core.ViewModels
             {
                 encryptionService.UpdateDeviceName(DeviceName);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.Exception(e);
             }

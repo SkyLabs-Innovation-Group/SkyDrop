@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using Acr.UserDialogs;
-using Android.Widget;
 using Google.Android.Material.Card;
 using SkyDrop.Core.Utility;
 using static SkyDrop.Droid.Helper.AndroidUtil;
@@ -33,4 +32,3 @@ namespace SkyDrop.Droid.Styles
         }
     }
 }
-

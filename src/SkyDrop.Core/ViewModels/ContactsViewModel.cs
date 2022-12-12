@@ -15,26 +15,15 @@ namespace SkyDrop.Core.ViewModels
 {
     public class ContactsViewModel : BaseViewModel<NavParam, IContactItem>
     {
-        public class NavParam
-        {
-            public bool IsSelecting { get; set; }
-        }
-
-        public List<IContactItem> Contacts { get; set; }
-        public IMvxCommand SharePublicKeyCommand { get; set; }
-        public IMvxCommand BackCommand { get; set; }
-        public IMvxCommand CloseKeyboardCommand { get; set; }
-        public bool IsNoContacts { get; set; }
-
         private readonly IApiService apiService;
-        private readonly IStorageService storageService;
-        private readonly IUserDialogs userDialogs;
-        private readonly IMvxNavigationService navigationService;
-        private readonly IFileSystemService fileSystemService;
         private readonly IBarcodeService barcodeService;
-        private readonly IShareLinkService shareLinkService;
-        private readonly IUploadTimerService uploadTimerService;
         private readonly IEncryptionService encryptionService;
+        private readonly IFileSystemService fileSystemService;
+        private readonly IMvxNavigationService navigationService;
+        private readonly IShareLinkService shareLinkService;
+        private readonly IStorageService storageService;
+        private readonly IUploadTimerService uploadTimerService;
+        private readonly IUserDialogs userDialogs;
 
         private bool isSelecting;
 
@@ -66,6 +55,12 @@ namespace SkyDrop.Core.ViewModels
             SharePublicKeyCommand = new MvxCommand(SharePublicKey);
             BackCommand = new MvxCommand(() => navigationService.Close(this));
         }
+
+        public List<IContactItem> Contacts { get; set; }
+        public IMvxCommand SharePublicKeyCommand { get; set; }
+        public IMvxCommand BackCommand { get; set; }
+        public IMvxCommand CloseKeyboardCommand { get; set; }
+        public bool IsNoContacts { get; set; }
 
         public override void ViewAppeared()
         {
@@ -124,7 +119,7 @@ namespace SkyDrop.Core.ViewModels
                     LoadContacts();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.Exception(e);
                 userDialogs.Toast("Error: Failed to delete contact");
@@ -137,7 +132,7 @@ namespace SkyDrop.Core.ViewModels
             {
                 if (item is ContactDVM contactDVM)
                 {
-                    var result = await userDialogs.PromptAsync($"Contact name:", null, null, null, contactDVM.Name);
+                    var result = await userDialogs.PromptAsync("Contact name:", null, null, null, contactDVM.Name);
                     if (result.Text.IsNullOrEmpty())
                         return;
 
@@ -145,7 +140,7 @@ namespace SkyDrop.Core.ViewModels
                     LoadContacts();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 userDialogs.Toast(e.Message);
             }
@@ -164,6 +159,10 @@ namespace SkyDrop.Core.ViewModels
         {
             ItemSelected(null);
         }
+
+        public class NavParam
+        {
+            public bool IsSelecting { get; set; }
+        }
     }
 }
-

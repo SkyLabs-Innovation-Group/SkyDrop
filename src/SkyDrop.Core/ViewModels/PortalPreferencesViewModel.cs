@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
@@ -16,21 +14,15 @@ namespace SkyDrop.Core.ViewModels
     {
         private readonly IApiService apiService;
         private readonly IMvxNavigationService navigationService;
-        private readonly IStorageService storageService;
-
-        public IMvxCommand BackCommand { get; set; }
-
-        public IMvxCommand AddNewPortalCommand { get; set; }
 
         private readonly IPortalService portalService;
-
-        public MvxObservableCollection<SkynetPortalDVM> UserPortals { get; } = new MvxObservableCollection<SkynetPortalDVM>();
+        private readonly IStorageService storageService;
 
         public PortalPreferencesViewModel(ISingletonService singletonService,
-                                          IApiService apiService,
-                                          IMvxNavigationService navigationService,
-                                          IPortalService portalService,
-                                          IStorageService storageService) : base(singletonService)
+            IApiService apiService,
+            IMvxNavigationService navigationService,
+            IPortalService portalService,
+            IStorageService storageService) : base(singletonService)
         {
             this.apiService = apiService;
             this.navigationService = navigationService;
@@ -39,11 +31,21 @@ namespace SkyDrop.Core.ViewModels
             Title = "Portal Preferences";
             UserPortals = new MvxObservableCollection<SkynetPortalDVM>();
             BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
-            AddNewPortalCommand = new MvxAsyncCommand(async() => await AddNewPortal());
+            AddNewPortalCommand = new MvxAsyncCommand(async () => await AddNewPortal());
             this.portalService = portalService;
         }
 
-        private Task AddNewPortal() => navigationService.Navigate<EditPortalViewModel, NavParam>(new NavParam());
+        public IMvxCommand BackCommand { get; set; }
+
+        public IMvxCommand AddNewPortalCommand { get; set; }
+
+        public MvxObservableCollection<SkynetPortalDVM> UserPortals { get; } =
+            new MvxObservableCollection<SkynetPortalDVM>();
+
+        private Task AddNewPortal()
+        {
+            return navigationService.Navigate<EditPortalViewModel, NavParam>(new NavParam());
+        }
 
         public override void ViewAppearing()
         {
@@ -57,7 +59,8 @@ namespace SkyDrop.Core.ViewModels
 
             if (savedPortals.Count == 0)
             {
-                storageService.SaveSkynetPortal(new SkynetPortal(SkynetPortal.DefaultWeb3PortalUrl) { Name = "Web3 Portal"});
+                storageService.SaveSkynetPortal(new SkynetPortal(SkynetPortal.DefaultWeb3PortalUrl)
+                    { Name = "Web3 Portal" });
                 savedPortals = storageService.LoadSkynetPortals();
             }
 
@@ -73,22 +76,18 @@ namespace SkyDrop.Core.ViewModels
             var copy = new MvxObservableCollection<SkynetPortalDVM>(UserPortals);
             var portalCopy = copy[position];
 
-            int newIndex = Math.Max(0, Math.Min(UserPortals.Count - 1, newPosition));
+            var newIndex = Math.Max(0, Math.Min(UserPortals.Count - 1, newPosition));
             copy.Move(position, newIndex);
 
-            foreach (var portal in copy)
-            {
-                storageService.EditSkynetPortal(portal.RealmId);
-            }
+            foreach (var portal in copy) storageService.EditSkynetPortal(portal.RealmId);
 
             UserPortals.SwitchTo(copy);
         }
 
         public void EditPortal(int position)
         {
-            string portalId = UserPortals[position].RealmId;
-            navigationService.Navigate<EditPortalViewModel, NavParam>(new NavParam() { PortalId = portalId });
+            var portalId = UserPortals[position].RealmId;
+            navigationService.Navigate<EditPortalViewModel, NavParam>(new NavParam { PortalId = portalId });
         }
     }
 }
-

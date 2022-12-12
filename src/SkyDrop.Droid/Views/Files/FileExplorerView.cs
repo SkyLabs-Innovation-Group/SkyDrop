@@ -12,30 +12,23 @@ using SkyDrop.Droid.Helper;
 
 namespace SkyDrop.Droid.Views.Files
 {
-	public class FileExplorerView : MvxRecyclerView
-	{
+    public class FileExplorerView : MvxRecyclerView
+    {
         private FilesGridAdapter filesGridAdapter;
         private MvxRecyclerAdapter filesListAdapter;
-        private int gridMarginPx => AndroidUtil.DpToPx(16);
+
+        private FileLayoutType layoutType;
 
         public FileExplorerView(Context context, IAttributeSet attrs) : base(context, attrs)
         {
-
         }
 
         public FileExplorerView(Context context, IAttributeSet attrs, int defStyle) : base(context, attrs, defStyle)
         {
-
         }
 
-        public void Init(IMvxBindingContext bindingContext)
-        {
-            filesGridAdapter = new FilesGridAdapter(bindingContext as IMvxAndroidBindingContext) { MarginPx = gridMarginPx };
-            filesListAdapter = new MvxRecyclerAdapter(bindingContext as IMvxAndroidBindingContext);
-            Adapter = filesGridAdapter;
-        }
+        private int gridMarginPx => AndroidUtil.DpToPx(16);
 
-        private FileLayoutType layoutType;
         public FileLayoutType LayoutType
         {
             get => FileLayoutType.List;
@@ -65,11 +58,28 @@ namespace SkyDrop.Droid.Views.Files
             }
         }
 
+        public void Init(IMvxBindingContext bindingContext)
+        {
+            filesGridAdapter = new FilesGridAdapter(bindingContext as IMvxAndroidBindingContext)
+                { MarginPx = gridMarginPx };
+            filesListAdapter = new MvxRecyclerAdapter(bindingContext as IMvxAndroidBindingContext);
+            Adapter = filesGridAdapter;
+        }
+
         private class FilesGridAdapter : MvxRecyclerAdapter
         {
+            public FilesGridAdapter(IMvxAndroidBindingContext bindingContext) : base(bindingContext)
+            {
+            }
+
+            public FilesGridAdapter(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
+            {
+            }
+
             public int MarginPx { get; set; }
 
-            protected override View InflateViewForHolder(ViewGroup parent, int viewType, IMvxAndroidBindingContext bindingContext)
+            protected override View InflateViewForHolder(ViewGroup parent, int viewType,
+                IMvxAndroidBindingContext bindingContext)
             {
                 //calculate view size based on screen width
                 var (screenWidth, _) = AndroidUtil.GetScreenSizePx();
@@ -81,11 +91,6 @@ namespace SkyDrop.Droid.Views.Files
                 view.LayoutParameters.Width = gridItemSize;
                 return view;
             }
-
-            public FilesGridAdapter(IMvxAndroidBindingContext bindingContext) : base(bindingContext) { }
-
-            public FilesGridAdapter(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer) { }
         }
     }
 }
-

@@ -1,6 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using Acr.UserDialogs;
+﻿using Acr.UserDialogs;
+using CoreGraphics;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels;
@@ -19,6 +18,22 @@ namespace SkyDrop.iOS.Views.Onboarding
         {
         }
 
+        public string DescriptionText
+        {
+            get => "";
+            set
+            {
+                MainTextView.Text = value;
+
+                //resize text box to fit
+                var totalHorizontalMargin = 22;
+                var idealSize =
+                    MainTextView.SizeThatFits(new CGSize(UIScreen.MainScreen.Bounds.Width - totalHorizontalMargin,
+                        double.MaxValue));
+                DescriptionHeightConstraint.Constant = idealSize.Height;
+            }
+        }
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
@@ -33,7 +48,7 @@ namespace SkyDrop.iOS.Views.Onboarding
             NextButton.StyleButton(Colors.Primary, true);
             PreviousButton.StyleButton(Colors.Primary, true);
 
-            var set = this.CreateBindingSet();
+            var set = CreateBindingSet();
             set.Bind(TitleLabel).To(vm => vm.TitleText);
             set.Bind(this).For(t => t.DescriptionText).To(vm => vm.DescriptionText);
             set.Bind(NextButton).For(NextButtonStyleBinding.Name).To(vm => vm.IsLastPage);
@@ -44,21 +59,5 @@ namespace SkyDrop.iOS.Views.Onboarding
             set.Bind(this).For(v => v.Title).To(vm => vm.Title);
             set.Apply();
         }
-
-        public string DescriptionText
-        {
-            get => "";
-            set
-            {
-                MainTextView.Text = value;
-
-                //resize text box to fit
-                var totalHorizontalMargin = 22;
-                var idealSize = MainTextView.SizeThatFits(new CoreGraphics.CGSize(UIScreen.MainScreen.Bounds.Width - totalHorizontalMargin, double.MaxValue));
-                DescriptionHeightConstraint.Constant = idealSize.Height;
-            }
-        }
     }
 }
-
-

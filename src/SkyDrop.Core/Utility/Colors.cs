@@ -1,4 +1,3 @@
-using System;
 using System.Drawing;
 using Xamarin.Essentials;
 
@@ -21,6 +20,5 @@ namespace SkyDrop.Core.Utility
         public static Color Red => ColorConverters.FromHex("EE4443");
 
         public static Color NewBlue => ColorConverters.FromHex("#004db6");
-
     }
 }

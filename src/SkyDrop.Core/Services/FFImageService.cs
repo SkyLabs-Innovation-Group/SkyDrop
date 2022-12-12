@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using FFImageLoading;
 using FFImageLoading.Config;
@@ -7,32 +6,32 @@ using FFImageLoading.Helpers;
 using FFImageLoading.Work;
 using MvvmCross;
 using SkyDrop.Core.DataModels;
-using Xamarin.Essentials;
 
 namespace SkyDrop.Core.Services
 {
     public class FFImageService : IFFImageService
     {
+        private readonly ISkyDropHttpClientFactory httpClientFactory;
+        private readonly ILog log;
+
+        public TaskCompletionSource<bool> InitialiseTask;
+
         public FFImageService(ILog log, ISkyDropHttpClientFactory skyDropHttpClientFactory)
         {
             this.log = log;
-            this.httpClientFactory = skyDropHttpClientFactory;
+            httpClientFactory = skyDropHttpClientFactory;
         }
-
-        public TaskCompletionSource<bool> InitialiseTask;
-        private readonly ILog log;
-        private readonly ISkyDropHttpClientFactory httpClientFactory;
 
         public async Task Initialise()
         {
             if (InitialiseTask == null)
                 InitialiseTask = new TaskCompletionSource<bool>();
-            else 
+            else
                 return;
 
             var selectedPortal = SkynetPortal.SelectedPortal;
 
-            ImageService.Instance.Initialize(new Configuration()
+            ImageService.Instance.Initialize(new Configuration
             {
                 ClearMemoryCacheOnOutOfMemory = true,
                 DownsampleInterpolationMode = InterpolationMode.Low,
@@ -43,7 +42,7 @@ namespace SkyDrop.Core.Services
                 //VerboseLoadingCancelledLogging = true,
                 //VerbosePerformanceLogging = true,
                 //VerboseMemoryCacheLogging = true,
-                HttpClient = httpClientFactory.GetSkyDropHttpClientInstance(selectedPortal),
+                HttpClient = httpClientFactory.GetSkyDropHttpClientInstance(selectedPortal)
             });
 
             ImageService.Instance.Config.Logger = (IMiniLogger)Mvx.IoCProvider.Resolve<ILog>();
@@ -63,4 +62,3 @@ namespace SkyDrop.Core.Services
         void UpdateHttpClient(HttpClient httpClient);
     }
 }
-

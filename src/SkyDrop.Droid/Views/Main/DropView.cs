@@ -1,8 +1,6 @@
-﻿using System;
+﻿using System.IO;
 using System.Threading.Tasks;
-using Acr.UserDialogs;
 using Android.App;
-using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
@@ -10,51 +8,43 @@ using Android.Views;
 using Android.Widget;
 using AndroidX.ConstraintLayout.Widget;
 using Google.Android.Material.Card;
+using Java.Lang;
+using MvvmCross;
 using MvvmCross.Commands;
-using SkyDrop.Core.DataModels;
+using Plugin.CurrentActivity;
+using SkyDrop.Core.Services;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels.Main;
 using SkyDrop.Droid.Helper;
-using ZXing.Mobile;
 using static SkyDrop.Core.ViewModels.Main.DropViewModel;
 using static SkyDrop.Core.Utility.Util;
-using MvvmCross;
-using SkyDrop.Core.Services;
-using System.IO;
-using FFImageLoading.Cross;
-using Android;
-using AndroidX.Core.Content;
-using AndroidX.Core.App;
-using Java.IO;
-using Plugin.CurrentActivity;
-using Java.Lang;
-using System.Runtime.Remoting.Contexts;
-using Environment = System.Environment;
 using static SkyDrop.Droid.Styles.StyleExtensions;
+using Environment = System.Environment;
+using Toolbar = AndroidX.AppCompat.Widget.Toolbar;
 
 namespace SkyDrop.Droid.Views.Main
 {
     /// <summary>
-    /// File transfer screen
+    ///     File transfer screen
     /// </summary>
-    [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden, ScreenOrientation = ScreenOrientation.Portrait)]
+    [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden,
+        ScreenOrientation = ScreenOrientation.Portrait)]
     public class DropView : BaseActivity<DropViewModel>
     {
+        private const int swipeMarginX = 100;
+        private FrameLayout animationContainer;
+        private ConstraintLayout barcodeContainer, sendReceiveButtonsContainer;
+        private ImageView barcodeImageView;
+        private LinearLayout barcodeMenu, homeMenu;
+        private HomeMenuAnimator homeMenuAnimator;
+        private bool isPressed;
+        private View leftDot, rightDot;
+        private MaterialCardView sendButton, receiveButton, homeMenuMini;
+        private float tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
         protected override int ActivityLayoutId => Resource.Layout.DropView;
 
-        private const int swipeMarginX = 100;
-        private bool isPressed;
-        private float tapStartX, barcodeStartX, sendReceiveButtonsContainerStartX;
-        private MaterialCardView sendButton, receiveButton, homeMenuMini;
-        private ConstraintLayout barcodeContainer, sendReceiveButtonsContainer;
-        private LinearLayout barcodeMenu, homeMenu;
-        private ImageView barcodeImageView;
-        private View leftDot, rightDot;
-        private HomeMenuAnimator homeMenuAnimator;
-        private FrameLayout animationContainer;
-
         /// <summary>
-        /// Initialize view
+        ///     Initialize view
         /// </summary>
         protected override async void OnCreate(Bundle bundle)
         {
@@ -64,9 +54,9 @@ namespace SkyDrop.Droid.Views.Main
 
             var fileSystemService = Mvx.IoCProvider.Resolve<IFileSystemService>();
             fileSystemService.DownloadsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            fileSystemService.CacheFolderPath = System.IO.Path.GetTempPath();
+            fileSystemService.CacheFolderPath = Path.GetTempPath();
 
-            var toolbar = FindViewById<AndroidX.AppCompat.Widget.Toolbar>(Resource.Id.toolbar);
+            var toolbar = FindViewById<Toolbar>(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
             SupportActionBar.SetDisplayShowTitleEnabled(false);
 
@@ -80,9 +70,13 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.SlideReceiveButtonToCenterCommand = new MvxCommand(AnimateSlideReceiveButton);
             ViewModel.CheckUserIsSwipingCommand = new MvxCommand(CheckUserIsSwiping);
             ViewModel.UpdateNavDotsCommand = new MvxCommand(() => UpdateNavDots());
-            ViewModel.UploadStartedNotificationCommand = new MvxCommand(() => AndroidUtil.ShowUploadStartedNotification(this, $"{ViewModel.FileToUpload.Filename} {ViewModel.FileSize}"));
-            ViewModel.UploadFinishedNotificationCommand = new MvxCommand<FileUploadResult>(result => AndroidUtil.ShowUploadFinishedNotification(this, result));
-            ViewModel.UpdateNotificationProgressCommand = new MvxCommand<double>(progress => AndroidUtil.UpdateNotificationProgress(this, progress));
+            ViewModel.UploadStartedNotificationCommand = new MvxCommand(() =>
+                AndroidUtil.ShowUploadStartedNotification(this,
+                    $"{ViewModel.FileToUpload.Filename} {ViewModel.FileSize}"));
+            ViewModel.UploadFinishedNotificationCommand =
+                new MvxCommand<FileUploadResult>(result => AndroidUtil.ShowUploadFinishedNotification(this, result));
+            ViewModel.UpdateNotificationProgressCommand =
+                new MvxCommand<double>(progress => AndroidUtil.UpdateNotificationProgress(this, progress));
 
             animationContainer = FindViewById<FrameLayout>(Resource.Id.AnimationContainer);
             sendButton = FindViewById<MaterialCardView>(Resource.Id.SendFileButton);
@@ -122,7 +116,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Hide barcode when user presses hardware back button
+        ///     Hide barcode when user presses hardware back button
         /// </summary>
         public override void OnBackPressed()
         {
@@ -136,11 +130,11 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Generate and display QR code
+        ///     Generate and display QR code
         /// </summary>
         private async Task ShowBarcode(string url)
         {
-            SetBarcodeCodeUiState(isSlow: true);
+            SetBarcodeCodeUiState(true);
 
             var matrix = ViewModel.GenerateBarcode(url, barcodeImageView.Width, barcodeImageView.Height);
             var bitmap = await AndroidUtil.BitMatrixToBitmap(matrix);
@@ -149,7 +143,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Return to the initial UI state
+        ///     Return to the initial UI state
         /// </summary>
         private void SetSendReceiveButtonUiState()
         {
@@ -161,7 +155,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Show the QR code UI state
+        ///     Show the QR code UI state
         /// </summary>
         private void SetBarcodeCodeUiState(bool isSlow = false)
         {
@@ -169,12 +163,12 @@ namespace SkyDrop.Droid.Views.Main
             ViewModel.Title = ViewModel.FocusedFile?.Filename;
             ViewModel.IsBarcodeVisible = true;
 
-            AnimateSlideBarcodeIn(fromLeft: false, isSlow);
-            AnimateSlideSendReceiveButtonsOut(toLeft: true);
+            AnimateSlideBarcodeIn(false, isSlow);
+            AnimateSlideSendReceiveButtonsOut(true);
         }
 
         /// <summary>
-        /// Slide send button to center
+        ///     Slide send button to center
         /// </summary>
         private void AnimateSlideSendButton()
         {
@@ -209,7 +203,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Slide receive button to center
+        ///     Slide receive button to center
         /// </summary>
         private void AnimateSlideReceiveButton()
         {
@@ -236,7 +230,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Slide in the QR code from the left or right
+        ///     Slide in the QR code from the left or right
         /// </summary>
         private void AnimateSlideBarcodeIn(bool fromLeft, bool isSlow)
         {
@@ -257,7 +251,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Slide barcode out, slide send receive buttons in
+        ///     Slide barcode out, slide send receive buttons in
         /// </summary>
         private void AnimateSlideBarcodeOut()
         {
@@ -278,7 +272,11 @@ namespace SkyDrop.Droid.Views.Main
             sendReceiveButtonsContainer.Animate()
                 .TranslationX(0)
                 .SetDuration(duration)
-                .WithEndAction(new Java.Lang.Runnable(() => { ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState; ViewModel.ResetUI(); }))
+                .WithEndAction(new Runnable(() =>
+                {
+                    ViewModel.DropViewUIState = DropViewState.SendReceiveButtonState;
+                    ViewModel.ResetUI();
+                }))
                 .Start();
             barcodeContainer.Animate()
                 .TranslationX(screenWidth)
@@ -297,7 +295,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Return barcode to center when user cancels a dismiss-slide action
+        ///     Return barcode to center when user cancels a dismiss-slide action
         /// </summary>
         private void AnimateSlideBarcodeToCenter()
         {
@@ -315,7 +313,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Slide send receive buttons out to left or right
+        ///     Slide send receive buttons out to left or right
         /// </summary>
         private void AnimateSlideSendReceiveButtonsOut(bool toLeft)
         {
@@ -336,7 +334,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Slide the send receive buttons to screen center when user cancels swipe back to barcode action
+        ///     Slide the send receive buttons to screen center when user cancels swipe back to barcode action
         /// </summary>
         private void AnimateSlideSendReceiveCenter()
         {
@@ -352,13 +350,14 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Intercept touch events for the whole screen to handle swipe gestures
+        ///     Intercept touch events for the whole screen to handle swipe gestures
         /// </summary>
         public override bool DispatchTouchEvent(MotionEvent e)
         {
             if (!ViewModel.SwipeNavigationEnabled || //don't allow swipe before first file is uploaded
                 ViewModel.IsUploading || //don't allow swipe while file is uploading
-                ViewModel.DropViewUIState == DropViewState.ConfirmFilesState) //don't allow swipe on confirm file UI state
+                ViewModel.DropViewUIState ==
+                DropViewState.ConfirmFilesState) //don't allow swipe on confirm file UI state
                 return base.DispatchTouchEvent(e);
 
             switch (e.Action)
@@ -425,28 +424,37 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Checks whether the user is doing a swipe and returns the result to the VM
+        ///     Checks whether the user is doing a swipe and returns the result to the VM
         /// </summary>
         private void CheckUserIsSwiping()
         {
             var thresholdOffset = AndroidUtil.DpToPx(16);
-            var isSendReceiveButtonsCentered = sendReceiveButtonsContainer.TranslationX >= -thresholdOffset && sendReceiveButtonsContainer.TranslationX <= thresholdOffset;
-            var isBarcodeCentered = barcodeContainer.TranslationX >= -thresholdOffset && barcodeContainer.TranslationX <= thresholdOffset;
-            var interfaceIsCentered = ViewModel.DropViewUIState == DropViewState.SendReceiveButtonState ? isSendReceiveButtonsCentered : isBarcodeCentered;
+            var isSendReceiveButtonsCentered = sendReceiveButtonsContainer.TranslationX >= -thresholdOffset &&
+                                               sendReceiveButtonsContainer.TranslationX <= thresholdOffset;
+            var isBarcodeCentered = barcodeContainer.TranslationX >= -thresholdOffset &&
+                                    barcodeContainer.TranslationX <= thresholdOffset;
+            var interfaceIsCentered = ViewModel.DropViewUIState == DropViewState.SendReceiveButtonState
+                ? isSendReceiveButtonsCentered
+                : isBarcodeCentered;
             var userIsSwipingResult = !interfaceIsCentered;
             ViewModel.Log.Trace($"UserIsSwipingResult: {userIsSwipingResult}");
             ViewModel.UserIsSwipingResult = userIsSwipingResult;
         }
 
         /// <summary>
-        /// Create navigation dots display
+        ///     Create navigation dots display
         /// </summary>
         private void CreateNavDots()
         {
             var dotSize = 40;
 
-            leftDot = new View(this) { Alpha = NavDotsMaxAlpha, LayoutParameters = new LinearLayout.LayoutParams(dotSize, dotSize) { RightMargin = dotSize } };
-            rightDot = new View(this) { Alpha = NavDotsMinAlpha, LayoutParameters = new LinearLayout.LayoutParams(dotSize, dotSize) };
+            leftDot = new View(this)
+            {
+                Alpha = NavDotsMaxAlpha,
+                LayoutParameters = new LinearLayout.LayoutParams(dotSize, dotSize) { RightMargin = dotSize }
+            };
+            rightDot = new View(this)
+                { Alpha = NavDotsMinAlpha, LayoutParameters = new LinearLayout.LayoutParams(dotSize, dotSize) };
             leftDot.Background = GetDrawable(Resource.Drawable.ic_circle);
             rightDot.Background = GetDrawable(Resource.Drawable.ic_circle);
 
@@ -456,7 +464,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        /// Change alpha of navigation dots display to reflect new UI state
+        ///     Change alpha of navigation dots display to reflect new UI state
         /// </summary>
         private void UpdateNavDots()
         {
