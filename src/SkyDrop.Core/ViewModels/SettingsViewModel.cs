@@ -107,8 +107,9 @@ namespace SkyDrop.Core.ViewModels
         }
 
         public Task<bool> ValidatePortal(SkynetPortal portal)
-            => singletonService.ApiService.PingPortalForSkylink(RandomFileToQueryFor, portal);
-
+            //=> singletonService.ApiService.PingPortalForSkylink(RandomFileToQueryFor, portal);
+            => Task.FromResult(true);
+     
         public void SetUploadNotificationEnabled(bool value)
         {
             UploadNotificationsEnabled = value;

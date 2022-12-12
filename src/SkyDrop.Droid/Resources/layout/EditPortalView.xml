@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:background="@color/darkGrey">
+    <include
+        android:id="@+id/layout_toolbar"
+        layout="@layout/toolbar_portal_preferences" />
+    <TextView
+        android:id="@+id/editPortalNameTextView"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:textColor="@android:color/white"
+        android:text="Portal name: "/>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="#555"
+        app:cardCornerRadius="8dp">
+
+        <EditText
+            android:id="@+id/portalNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="8dp"
+            android:textColor="#fff"
+            android:background="#555"
+            android:inputType="textCapWords"
+            app:MvxBind="Text PortalName"
+            />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/editPortalUrlTextView"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:textColor="@android:color/white"
+        android:text="Portal url: "/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="#555"
+        app:cardCornerRadius="8dp">
+
+        <EditText
+            android:id="@+id/portalUrlEditText"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="8dp"
+            android:textColor="#fff"
+            android:background="#555"
+            android:inputType="textUri"
+            app:MvxBind="Text PortalUrl"
+            />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/portalApiTokenTextView"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:textColor="@android:color/white"
+        android:text="API token: "/>
+
+        <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="#555"
+        app:cardCornerRadius="8dp">
+
+        <EditText
+            android:id="@+id/portalApiTokenEditText"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="8dp"
+            android:textColor="#fff"
+            android:background="#555"
+            android:inputType="textPassword"
+            app:MvxBind="Text ApiToken; Click LoginWithPortalCommand"
+            />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="16dp"
+    android:layout_gravity="right"
+    app:cardBackgroundColor="#555"
+    app:cardCornerRadius="8dp">
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="112dp"
+            android:layout_height="40dp"
+            android:text="Save portal"
+            android:background="#555"
+            android:textColor="#fff"
+            app:MvxBind="Click SavePortalCommand"
+            />
+
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>

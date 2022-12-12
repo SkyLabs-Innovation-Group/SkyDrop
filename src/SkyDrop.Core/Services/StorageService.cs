@@ -272,7 +272,9 @@ namespace SkyDrop.Core.Services
             await Xamarin.Essentials.SecureStorage.SetAsync(nameStorageKey, deviceName);
         }
 
-        public void ClearAllData()
+        
+
+    public void ClearAllData()
         {
             realm.Write(() =>
             {
@@ -370,6 +372,45 @@ namespace SkyDrop.Core.Services
                 SkyLinks = string.Join(",", folder.SkyLinks)
             };
         }
+
+        public void SaveSkynetPortal(SkynetPortal portal, string apiToken = null)
+        {
+          realm.Write(async () =>
+          {
+            await SaveApiTokenForPortal(portal.GetApiTokenPrefKey(), apiToken);
+            realm.Add(portal);
+          });
+        }
+
+        public void EditSkynetPortal(string id) => EditSkynetPortal(new SkynetPortalDVM(realm.Find<SkynetPortal>(id)));
+
+        public void EditSkynetPortal(SkynetPortalDVM portal, string apiToken = null)
+        {
+          realm.Write(async () =>
+          {
+            await SaveApiTokenForPortal(portal.ApiTokenPrefKey, apiToken);
+
+            var storedPortal = realm.Find<SkynetPortal>(portal.RealmId.ToString());
+
+            storedPortal.Name = portal.Name;
+            storedPortal.BaseUrl = portal.BaseUrl;
+            storedPortal.PortalPreferencesPosition = portal.PortalPreferencesPosition;
+
+            realm.Add(storedPortal);
+          });
+        }
+
+        private Task SaveApiTokenForPortal(string portalPrefKey, string apiToken)
+        {
+            if (!string.IsNullOrEmpty(apiToken))
+                return Xamarin.Essentials.SecureStorage.SetAsync(portalPrefKey, apiToken);
+            else
+                return Task.CompletedTask;
+        }
+
+      public List<SkynetPortal> LoadSkynetPortals() => realm.All<SkynetPortal>().ToList();
+
+        public SkynetPortal LoadSkynetPortal(string portalId) => realm.Find<SkynetPortal>(portalId);
     }
 
     public interface IStorageService
@@ -413,5 +454,15 @@ namespace SkyDrop.Core.Services
         Task UpdateDeviceName(string name);
 
         void RenameContact(Contact contact, string newName);
-    }
+
+        void SaveSkynetPortal(SkynetPortal portal, string apiToken = null);
+
+        void EditSkynetPortal(SkynetPortalDVM portal, string apiToken = null);
+
+        List<SkynetPortal> LoadSkynetPortals();
+
+        SkynetPortal LoadSkynetPortal(string portalId);
+
+        void EditSkynetPortal(string id);
+  }
 }

@@ -28,8 +28,6 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
 <OptimizePNGs>false</OptimizePNGs>
-<CodesignProvision></CodesignProvision>
-<CodesignEntitlements>..\..\..\XamarinFormsPayments\PayPalTesting\PayPalTesting\PayPalTesting.iOS\Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -121,10 +119,16 @@
     <Compile Include="Common\TouchInterceptor.cs" />
     <Compile Include="Bindings\LocalImagePreviewBinding.cs" />
     <Compile Include="Common\iOSUtil.cs" />
+    <Compile Include="Views\PortalPreferences\EditPortalViewController.cs" />
+    <Compile Include="Views\PortalPreferences\EditPortalViewController.designer.cs" >
+        <DependentUpon>FilePreviewCollectionViewCell.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\Settings\SettingsView.cs" />
     <Compile Include="Views\Settings\SettingsView.designer.cs">
       <DependentUpon>SettingsView.cs</DependentUpon>
     </Compile>
+    <InterfaceDefinition Include="Views\PortalPreferences\EditPortalViewController.xib" />
+    <InterfaceDefinition Include="Views\PortalPreferences\PortalPreferencesCell.xib" />
     <InterfaceDefinition Include="Views\Settings\SettingsView.xib" />
     <InterfaceDefinition Include="Views\Files\FilesView.xib" />
     <Compile Include="Views\Files\FilesView.cs" />
@@ -266,6 +270,11 @@
     <ImageAsset Include="Media.xcassets\ic_key.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_pencil.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\ic_pencil.imageset\pencil.pdf" />
+    <InterfaceDefinition Include="Views\PortalPreferences\PortalPreferencesViewController.xib" />
+    <Compile Include="Views\PortalPreferences\PortalPreferencesViewController.cs" />
+    <Compile Include="Views\PortalPreferences\PortalPreferencesViewController.designer.cs">
+      <DependentUpon>PortalPreferencesViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common\HomeMenuAnimator.cs" />
     <ImageAsset Include="Media.xcassets\ic_portals.imageset\camera-iris.pdf" />
     <ImageAsset Include="Media.xcassets\ic_portals.imageset\Contents.json" />
@@ -281,6 +290,10 @@
     <Compile Include="Bindings\NextButtonStyleBinding.cs" />
     <ImageAsset Include="Media.xcassets\ic_encryption.imageset\encrypted-file-icon.pdf" />
     <ImageAsset Include="Media.xcassets\ic_encryption.imageset\Contents.json" />
+    <Compile Include="Views\PortalPreferences\PortalPreferencesCell.cs" />
+    <Compile Include="Views\PortalPreferences\PortalPreferencesCell.designer.cs">
+      <DependentUpon>PortalPreferencesCell.cs</DependentUpon>
+    </Compile>
     <InterfaceDefinition Include="Views\Portals\PortalLoginViewController.xib" />
     <Compile Include="Views\Portals\PortalLoginViewController.cs" />
     <Compile Include="Views\Portals\PortalLoginViewController.designer.cs">
@@ -334,6 +347,7 @@
     <Folder Include="Views\Files\" />
     <Folder Include="Media.xcassets\" />
     <Folder Include="Views\Contacts\" />
+    <Folder Include="Views\PortalPreferences\" />
     <Folder Include="Views\Onboarding\" />
     <Folder Include="Views\Portals\" />
     <Folder Include="Views\Barcode\" />

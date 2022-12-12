@@ -18,6 +18,8 @@ namespace SkyDrop.Core.DataViewModels
 
         public IMvxCommand TapCommand { get; set; }
         public IMvxCommand LongPressCommand { get; set; }
+        public IMvxCommand CopySkyLinkCommand { get; set; }
+        public IMvxCommand DeleteCommand { get; set; }
 
         public bool IsSelected { get; set; }
         public bool IsSelectionActive { get; set; }

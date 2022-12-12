@@ -42,7 +42,11 @@ namespace SkyDrop.Core.ViewModels.Main
 
         public IMvxCommand SendCommand { get; set; }
         public IMvxCommand ReceiveCommand { get; set; }
-        public IMvxCommand CopyLinkCommand { get; set; }
+    public MvxAsyncCommand MenuSkyDriveCommand { get; }
+    public MvxAsyncCommand MenuPortalsCommand { get; }
+    public MvxAsyncCommand MenuContactsCommand { get; }
+    public MvxAsyncCommand MenuSettingsCommand { get; }
+    public IMvxCommand CopyLinkCommand { get; set; }
         public IMvxCommand ResetUIStateCommand { get; set; }
         public IMvxCommand ShareLinkCommand { get; set; }
         public IMvxCommand OpenFileInBrowserCommand { get; set; }
@@ -50,6 +54,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand SlideSendButtonToCenterCommand { get; set; }
         public IMvxCommand SlideReceiveButtonToCenterCommand { get; set; }
         public IMvxCommand CancelUploadCommand { get; set; }
+        public IMvxCommand ChooseRecipientCommand { get; }
         public IMvxCommand CheckUserIsSwipingCommand { get; set; }
         public IMvxCommand<StagedFileDVM> ShowStagedFileMenuCommand { get; set; }
         public IMvxCommand UpdateNavDotsCommand { get; set; }
@@ -59,11 +64,6 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand IosSelectFileCommand { get; set; }
         public IMvxCommand ShowBarcodeCommand { get; set; }
         public IMvxCommand ShowPreviewImageCommand { get; set; }
-        public IMvxCommand ChooseRecipientCommand { get; set; }
-        public IMvxCommand MenuSkyDriveCommand { get; set; }
-        public IMvxCommand MenuPortalsCommand { get; set; }
-        public IMvxCommand MenuContactsCommand { get; set; }
-        public IMvxCommand MenuSettingsCommand { get; set; }
 
         public bool IsUploading { get; set; }
         public bool IsStagingFiles { get; set; }
@@ -196,6 +196,8 @@ namespace SkyDrop.Core.ViewModels.Main
             //QR code state
             CopyLinkCommand = new MvxAsyncCommand(async () => await CopySkyLinkToClipboard());
             ShareLinkCommand = new MvxAsyncCommand(async () => await ShareLink());
+            CancelUploadCommand = new MvxCommand(CancelUpload);
+            ShowStagedFileMenuCommand = new MvxAsyncCommand<StagedFileDVM>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
             DownloadFileCommand = new MvxAsyncCommand(SaveOrUnzipFocusedFile);
             ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
@@ -913,6 +915,8 @@ namespace SkyDrop.Core.ViewModels.Main
             await GenerateBarcodeAsyncFunc(FocusedFile.GetSkylinkUrl());
         }
 
+        public Task OpenPortalPreferences() => navigationService.Navigate<PortalPreferencesViewModel>();
+
         private async Task SaveOrUnzipFocusedFile()
         {
             try
@@ -983,7 +987,8 @@ namespace SkyDrop.Core.ViewModels.Main
                     await OpenSkyDrive();
                     break;
                 case HomeMenuItem.Portals:
-                    var apiKey = await navigationService.Navigate<PortalLoginViewModel, string, string>("https://web3portal.com");
+                    await OpenPortalPreferences();
+                    // var apiKey = await navigationService.Navigate<PortalLoginViewModel, string, string>("https://web3portal.com");
                     break;
                 case HomeMenuItem.Contacts:
                     var isSelecting = DropViewUIState == DropViewState.ConfirmFilesState;
