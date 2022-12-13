@@ -17,11 +17,7 @@ namespace SkyDrop.iOS.Views.PortalPreferences
         {
             base.ViewWillAppear(animated);
 
-            //var doneButtonView = new UIView { BackgroundColor = Colors.Primary.ToNative() };
-            //var doneButtonImageView = new UIImageView(UIImage.FromBundle("ic_tick"));
-            //doneButtonView.AddSubview(doneButtonImageView);
-
-            doneButton = new UIBarButtonItem(UIBarButtonSystemItem.Done);// { CustomView = doneButtonView };
+            doneButton = new UIBarButtonItem(UIBarButtonSystemItem.Done);
             doneButton.Clicked += (s, e) => ViewModel.SavePortalCommand.Execute();
             NavigationItem.RightBarButtonItem = doneButton;
 
