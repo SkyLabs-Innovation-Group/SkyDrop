@@ -1,8 +1,10 @@
 ﻿using System;
+using Acr.UserDialogs;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using SkyDrop.Core.DataViewModels;
+using SkyDrop.Core.Utility;
 using UIKit;
 
 namespace SkyDrop.iOS.Views.PortalPreferences
@@ -27,6 +29,12 @@ namespace SkyDrop.iOS.Views.PortalPreferences
                 set.Bind(ContentView).For("Tap").To(vm => vm.TapCommand);
                 set.Apply();
             });
+        }
+
+        [Export("awakeFromNib")]
+        public void AwakeFromNib()
+        {
+            Icon.TintColor = Colors.LightGrey.ToNative();
         }
     }
 }

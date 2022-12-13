@@ -17,6 +17,8 @@ namespace SkyDrop.Core.ViewModels
         public EditPortalViewModel(ISingletonService singletonService, IMvxNavigationService navigationService) : base(
             singletonService)
         {
+            Title = "Edit Portal";
+
             SavePortalCommand = new MvxCommand(SavePortal);
             LoginWithPortalCommand = new MvxAsyncCommand(LoginWithPortal);
             this.navigationService = navigationService;

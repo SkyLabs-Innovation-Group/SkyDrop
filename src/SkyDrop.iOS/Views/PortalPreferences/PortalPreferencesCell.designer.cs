@@ -13,6 +13,9 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 	partial class PortalPreferencesCell
 	{
 		[Outlet]
+		UIKit.UIImageView Icon { get; set; }
+
+		[Outlet]
 		UIKit.UILabel PortalNameLabel { get; set; }
 
 		[Outlet]
@@ -20,14 +23,19 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (PortalNameLabel != null) {
+				PortalNameLabel.Dispose ();
+				PortalNameLabel = null;
+			}
+
 			if (PortalUrlLabel != null) {
 				PortalUrlLabel.Dispose ();
 				PortalUrlLabel = null;
 			}
 
-			if (PortalNameLabel != null) {
-				PortalNameLabel.Dispose ();
-				PortalNameLabel = null;
+			if (Icon != null) {
+				Icon.Dispose ();
+				Icon = null;
 			}
 		}
 	}

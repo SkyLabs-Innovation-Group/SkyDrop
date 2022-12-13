@@ -1,8 +1,7 @@
-﻿// WARNING
+// WARNING
 //
-// This file has been generated automatically by Rider IDE
-//   to store outlets and actions made in Xcode.
-// If it is removed, they will be lost.
+// This file has been generated automatically by Visual Studio to store outlets and
+// actions made in the UI designer. If it is removed, they will be lost.
 // Manual changes to this file may not be handled correctly.
 //
 using Foundation;
@@ -14,39 +13,62 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 	partial class EditPortalViewController
 	{
 		[Outlet]
-		UIKit.UITextView PortalApiTokenTextView { get; set; }
+		UIKit.UITextField PortalApiTokenInput { get; set; }
 
 		[Outlet]
-		UIKit.UITextView PortalNameTextView { get; set; }
+		UIKit.UIView PortalApiTokenInputContainer { get; set; }
 
 		[Outlet]
-		UIKit.UITextView PortalUrlTextView { get; set; }
+		UIKit.UITextField PortalNameInput { get; set; }
 
 		[Outlet]
-		UIKit.UIButton SaveButton { get; set; }
+		UIKit.UIView PortalNameInputContainer { get; set; }
 
+		[Outlet]
+		UIKit.UITextField PortalUrlInput { get; set; }
+
+		[Outlet]
+		UIKit.UIView PortalUrlInputContainer { get; set; }
+
+		[Outlet]
+		UIKit.UIView SaveButton { get; set; }
+		
 		void ReleaseDesignerOutlets ()
 		{
-			if (PortalNameTextView != null) {
-				PortalNameTextView.Dispose ();
-				PortalNameTextView = null;
+			if (PortalApiTokenInput != null) {
+				PortalApiTokenInput.Dispose ();
+				PortalApiTokenInput = null;
 			}
 
-			if (PortalUrlTextView != null) {
-				PortalUrlTextView.Dispose ();
-				PortalUrlTextView = null;
+			if (PortalNameInput != null) {
+				PortalNameInput.Dispose ();
+				PortalNameInput = null;
 			}
 
-			if (PortalApiTokenTextView != null) {
-				PortalApiTokenTextView.Dispose ();
-				PortalApiTokenTextView = null;
+			if (PortalUrlInput != null) {
+				PortalUrlInput.Dispose ();
+				PortalUrlInput = null;
+			}
+
+			if (PortalApiTokenInputContainer != null) {
+				PortalApiTokenInputContainer.Dispose ();
+				PortalApiTokenInputContainer = null;
+			}
+
+			if (PortalNameInputContainer != null) {
+				PortalNameInputContainer.Dispose ();
+				PortalNameInputContainer = null;
+			}
+
+			if (PortalUrlInputContainer != null) {
+				PortalUrlInputContainer.Dispose ();
+				PortalUrlInputContainer = null;
 			}
 
 			if (SaveButton != null) {
 				SaveButton.Dispose ();
 				SaveButton = null;
 			}
-
 		}
 	}
 }
