@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using SkyDrop.Core.DataModels;
@@ -55,6 +56,8 @@ namespace SkyDrop.Core.ViewModels
                 SingletonService.StorageService.EditSkynetPortal(portalDvm, ApiToken);
 
             SingletonService.UserDialogs.Toast("Saved");
+
+            navigationService.Close(this);
         }
 
         public override async void Prepare(NavParam parameter)
@@ -99,7 +102,9 @@ namespace SkyDrop.Core.ViewModels
             if (text == null)
                 return;
 
-            ApiToken = text.Trim().Substring(0, maxLength);
+            text = text.Trim();
+            text = text.Substring(0, Math.Min(text.Length, maxLength));
+            ApiToken = text;
         }
     }
 }

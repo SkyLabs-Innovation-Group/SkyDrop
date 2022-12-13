@@ -7,6 +7,8 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 {
     internal partial class EditPortalViewController : BaseViewController<EditPortalViewModel>
     {
+        private UIBarButtonItem doneButton;
+
         public EditPortalViewController() : base(nameof(EditPortalViewController), null)
         {
         }
@@ -14,6 +16,14 @@ namespace SkyDrop.iOS.Views.PortalPreferences
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
+
+            //var doneButtonView = new UIView { BackgroundColor = Colors.Primary.ToNative() };
+            //var doneButtonImageView = new UIImageView(UIImage.FromBundle("ic_tick"));
+            //doneButtonView.AddSubview(doneButtonImageView);
+
+            doneButton = new UIBarButtonItem(UIBarButtonSystemItem.Done);// { CustomView = doneButtonView };
+            doneButton.Clicked += (s, e) => ViewModel.SavePortalCommand.Execute();
+            NavigationItem.RightBarButtonItem = doneButton;
 
             PortalNameInputContainer.BackgroundColor = Colors.MidGrey.ToNative();
             PortalUrlInputContainer.BackgroundColor = Colors.MidGrey.ToNative();
@@ -29,12 +39,12 @@ namespace SkyDrop.iOS.Views.PortalPreferences
             PortalUrlInput.TextColor = Colors.White.ToNative();
             PortalApiTokenInput.TextColor = Colors.White.ToNative();
 
-            SaveButton.BackgroundColor = Colors.Primary.ToNative();
-            SaveButton.Layer.CornerRadius = 8;
-
             PasteApiKeyButton.BackgroundColor = Colors.MidGrey.ToNative();
             PasteApiKeyButton.Layer.CornerRadius = 8;
             PasteIcon.TintColor = Colors.LightGrey.ToNative();
+
+            PortalNameInputContainer.AddGestureRecognizer(new UITapGestureRecognizer(() => PortalNameInput.BecomeFirstResponder()));
+            PortalUrlInputContainer.AddGestureRecognizer(new UITapGestureRecognizer(() => PortalUrlInput.BecomeFirstResponder()));
 
             var set = CreateBindingSet();
             set.Bind(PortalNameInput).For(v => v.Text).To(vm => vm.PortalName);
@@ -42,7 +52,6 @@ namespace SkyDrop.iOS.Views.PortalPreferences
             set.Bind(PortalApiTokenInput).For(v => v.Text).To(vm => vm.ApiToken);
             set.Bind(PortalApiTokenInput).For("Tap").To(vm => vm.LoginWithPortalCommand);
             set.Bind(PortalApiTokenInputContainer).For("Tap").To(vm => vm.LoginWithPortalCommand);
-            set.Bind(SaveButton).For("Tap").To(vm => vm.SavePortalCommand);
             set.Bind(PasteApiKeyButton).For("Tap").To(vm => vm.PasteApiKeyCommand);
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Apply();

@@ -35,47 +35,9 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 
 		[Outlet]
 		UIKit.UIView PortalUrlInputContainer { get; set; }
-
-		[Outlet]
-		UIKit.UIView SaveButton { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (PortalApiTokenInput != null) {
-				PortalApiTokenInput.Dispose ();
-				PortalApiTokenInput = null;
-			}
-
-			if (PortalNameInput != null) {
-				PortalNameInput.Dispose ();
-				PortalNameInput = null;
-			}
-
-			if (PortalUrlInput != null) {
-				PortalUrlInput.Dispose ();
-				PortalUrlInput = null;
-			}
-
-			if (PortalApiTokenInputContainer != null) {
-				PortalApiTokenInputContainer.Dispose ();
-				PortalApiTokenInputContainer = null;
-			}
-
-			if (PortalNameInputContainer != null) {
-				PortalNameInputContainer.Dispose ();
-				PortalNameInputContainer = null;
-			}
-
-			if (PortalUrlInputContainer != null) {
-				PortalUrlInputContainer.Dispose ();
-				PortalUrlInputContainer = null;
-			}
-
-			if (SaveButton != null) {
-				SaveButton.Dispose ();
-				SaveButton = null;
-			}
-
 			if (PasteApiKeyButton != null) {
 				PasteApiKeyButton.Dispose ();
 				PasteApiKeyButton = null;
@@ -84,6 +46,36 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 			if (PasteIcon != null) {
 				PasteIcon.Dispose ();
 				PasteIcon = null;
+			}
+
+			if (PortalApiTokenInput != null) {
+				PortalApiTokenInput.Dispose ();
+				PortalApiTokenInput = null;
+			}
+
+			if (PortalApiTokenInputContainer != null) {
+				PortalApiTokenInputContainer.Dispose ();
+				PortalApiTokenInputContainer = null;
+			}
+
+			if (PortalNameInput != null) {
+				PortalNameInput.Dispose ();
+				PortalNameInput = null;
+			}
+
+			if (PortalNameInputContainer != null) {
+				PortalNameInputContainer.Dispose ();
+				PortalNameInputContainer = null;
+			}
+
+			if (PortalUrlInput != null) {
+				PortalUrlInput.Dispose ();
+				PortalUrlInput = null;
+			}
+
+			if (PortalUrlInputContainer != null) {
+				PortalUrlInputContainer.Dispose ();
+				PortalUrlInputContainer = null;
 			}
 		}
 	}
