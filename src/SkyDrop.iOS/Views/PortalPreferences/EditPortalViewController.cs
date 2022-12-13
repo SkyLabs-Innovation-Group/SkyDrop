@@ -32,6 +32,10 @@ namespace SkyDrop.iOS.Views.PortalPreferences
             SaveButton.BackgroundColor = Colors.Primary.ToNative();
             SaveButton.Layer.CornerRadius = 8;
 
+            PasteApiKeyButton.BackgroundColor = Colors.MidGrey.ToNative();
+            PasteApiKeyButton.Layer.CornerRadius = 8;
+            PasteIcon.TintColor = Colors.LightGrey.ToNative();
+
             var set = CreateBindingSet();
             set.Bind(PortalNameInput).For(v => v.Text).To(vm => vm.PortalName);
             set.Bind(PortalUrlInput).For(v => v.Text).To(vm => vm.PortalUrl);
@@ -39,6 +43,7 @@ namespace SkyDrop.iOS.Views.PortalPreferences
             set.Bind(PortalApiTokenInput).For("Tap").To(vm => vm.LoginWithPortalCommand);
             set.Bind(PortalApiTokenInputContainer).For("Tap").To(vm => vm.LoginWithPortalCommand);
             set.Bind(SaveButton).For("Tap").To(vm => vm.SavePortalCommand);
+            set.Bind(PasteApiKeyButton).For("Tap").To(vm => vm.PasteApiKeyCommand);
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Apply();
         }

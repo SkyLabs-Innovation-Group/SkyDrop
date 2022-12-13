@@ -13,6 +13,12 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 	partial class EditPortalViewController
 	{
 		[Outlet]
+		UIKit.UIView PasteApiKeyButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView PasteIcon { get; set; }
+
+		[Outlet]
 		UIKit.UITextField PortalApiTokenInput { get; set; }
 
 		[Outlet]
@@ -68,6 +74,16 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 			if (SaveButton != null) {
 				SaveButton.Dispose ();
 				SaveButton = null;
+			}
+
+			if (PasteApiKeyButton != null) {
+				PasteApiKeyButton.Dispose ();
+				PasteApiKeyButton = null;
+			}
+
+			if (PasteIcon != null) {
+				PasteIcon.Dispose ();
+				PasteIcon = null;
 			}
 		}
 	}

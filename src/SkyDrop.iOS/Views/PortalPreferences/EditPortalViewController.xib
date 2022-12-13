@@ -10,6 +10,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditPortalViewController">
             <connections>
+                <outlet property="PasteApiKeyButton" destination="iI6-GF-nUd" id="E3Q-Hr-9dz"/>
+                <outlet property="PasteIcon" destination="Aws-cR-2al" id="J9f-QM-uw1"/>
                 <outlet property="PortalApiTokenInput" destination="xmq-1o-jJc" id="Ryw-cE-ybQ"/>
                 <outlet property="PortalApiTokenInputContainer" destination="dGZ-d4-7Q5" id="nKu-t0-iXD"/>
                 <outlet property="PortalNameInput" destination="a7p-pT-ilD" id="NlA-kB-Vts"/>
@@ -80,10 +82,10 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dGZ-d4-7Q5">
-                    <rect key="frame" x="16" y="339" width="358" height="66"/>
+                    <rect key="frame" x="16" y="339" width="286" height="66"/>
                     <subviews>
                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xmq-1o-jJc">
-                            <rect key="frame" x="16" y="16" width="326" height="34"/>
+                            <rect key="frame" x="16" y="16" width="254" height="34"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <textInputTraits key="textInputTraits"/>
@@ -98,11 +100,11 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tDc-NK-byc">
-                    <rect key="frame" x="325.66666666666669" y="445" width="48.333333333333314" height="30.333333333333314"/>
+                    <rect key="frame" x="320.66666666666669" y="445" width="53.333333333333314" height="33"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SAVE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p7X-bB-f9a">
-                            <rect key="frame" x="8" y="8" width="32.333333333333336" height="14.333333333333336"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                            <rect key="frame" x="8" y="8" width="37.333333333333336" height="17"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -115,6 +117,25 @@
                         <constraint firstItem="p7X-bB-f9a" firstAttribute="top" secondItem="tDc-NK-byc" secondAttribute="top" constant="8" id="kRG-a6-doH"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iI6-GF-nUd">
+                    <rect key="frame" x="318" y="344" width="56" height="56"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_paste" translatesAutoresizingMaskIntoConstraints="NO" id="Aws-cR-2al">
+                            <rect key="frame" x="16" y="16" width="24" height="24"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="24" id="8LJ-qC-mAz"/>
+                                <constraint firstAttribute="height" constant="24" id="Dn5-M6-nZY"/>
+                            </constraints>
+                        </imageView>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="Aws-cR-2al" secondAttribute="bottom" constant="16" id="C7i-Se-emU"/>
+                        <constraint firstItem="Aws-cR-2al" firstAttribute="top" secondItem="iI6-GF-nUd" secondAttribute="top" constant="16" id="Ctp-jJ-vPA"/>
+                        <constraint firstItem="Aws-cR-2al" firstAttribute="leading" secondItem="iI6-GF-nUd" secondAttribute="leading" constant="16" id="Dxa-Td-uLW"/>
+                        <constraint firstAttribute="trailing" secondItem="Aws-cR-2al" secondAttribute="trailing" constant="16" id="LkD-lw-ujJ"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.14901961389999999" green="0.1725490093" blue="0.18823529780000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
@@ -122,16 +143,18 @@
                 <constraint firstAttribute="trailing" secondItem="tDc-NK-byc" secondAttribute="trailing" constant="16" id="1hQ-c7-ucR"/>
                 <constraint firstAttribute="trailing" secondItem="YoW-7h-dsu" secondAttribute="trailing" constant="24" id="8TS-27-P5a"/>
                 <constraint firstItem="dGZ-d4-7Q5" firstAttribute="leading" secondItem="ATh-TK-TQk" secondAttribute="leading" constant="16" id="AP3-IO-6Re"/>
+                <constraint firstAttribute="trailing" secondItem="iI6-GF-nUd" secondAttribute="trailing" constant="16" id="DMs-T2-nTi"/>
                 <constraint firstAttribute="trailing" secondItem="NUF-fZ-kNu" secondAttribute="trailing" constant="24" id="FP7-oO-Grx"/>
                 <constraint firstItem="yV0-j9-8iD" firstAttribute="top" secondItem="ATh-TK-TQk" secondAttribute="top" constant="100" id="IiE-sI-PuC"/>
                 <constraint firstAttribute="trailing" secondItem="fnx-3A-AUq" secondAttribute="trailing" constant="16" id="OS8-cA-EaV"/>
+                <constraint firstItem="iI6-GF-nUd" firstAttribute="leading" secondItem="dGZ-d4-7Q5" secondAttribute="trailing" constant="16" id="UqM-vz-uM6"/>
                 <constraint firstItem="yV0-j9-8iD" firstAttribute="leading" secondItem="ATh-TK-TQk" secondAttribute="leading" constant="16" id="W2b-26-x0J"/>
                 <constraint firstAttribute="trailing" secondItem="yV0-j9-8iD" secondAttribute="trailing" constant="20" id="bQ0-aa-Nwq"/>
                 <constraint firstItem="hpL-QQ-yFE" firstAttribute="top" secondItem="NUF-fZ-kNu" secondAttribute="bottom" constant="8" id="eLE-hZ-viX"/>
                 <constraint firstItem="tDc-NK-byc" firstAttribute="top" secondItem="dGZ-d4-7Q5" secondAttribute="bottom" constant="40" id="eVb-lR-h2V"/>
                 <constraint firstAttribute="trailing" secondItem="hpL-QQ-yFE" secondAttribute="trailing" constant="16" id="k76-da-zG2"/>
                 <constraint firstItem="YoW-7h-dsu" firstAttribute="top" secondItem="hpL-QQ-yFE" secondAttribute="bottom" constant="16" id="l6P-bW-txr"/>
-                <constraint firstAttribute="trailing" secondItem="dGZ-d4-7Q5" secondAttribute="trailing" constant="16" id="n8u-rc-K1m"/>
+                <constraint firstItem="iI6-GF-nUd" firstAttribute="centerY" secondItem="dGZ-d4-7Q5" secondAttribute="centerY" id="lLd-7T-9cA"/>
                 <constraint firstItem="NUF-fZ-kNu" firstAttribute="top" secondItem="fnx-3A-AUq" secondAttribute="bottom" constant="16" id="nYx-BL-bTg"/>
                 <constraint firstItem="fnx-3A-AUq" firstAttribute="top" secondItem="yV0-j9-8iD" secondAttribute="bottom" constant="8" id="oKy-Ls-bbZ"/>
                 <constraint firstItem="hpL-QQ-yFE" firstAttribute="leading" secondItem="ATh-TK-TQk" secondAttribute="leading" constant="16" id="oN6-29-xd9"/>
@@ -143,6 +166,7 @@
         </view>
     </objects>
     <resources>
+        <image name="ic_paste" width="18" height="18"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

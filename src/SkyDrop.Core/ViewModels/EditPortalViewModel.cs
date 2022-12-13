@@ -11,8 +11,22 @@ namespace SkyDrop.Core.ViewModels
 {
     public class EditPortalViewModel : BaseViewModel<NavParam>
     {
-        private readonly IMvxNavigationService navigationService;
         public SkynetPortal Portal;
+        public TaskCompletionSource<bool> PrepareTcs { get; set; } = new TaskCompletionSource<bool>();
+        public string PortalName { get; set; }
+        public string PortalUrl { get; set; }
+        public string ApiToken { get; set; }
+        public bool AddingNewPortal { get; set; }
+        public IMvxCommand SavePortalCommand { get; set; }
+        public IMvxCommand LoginWithPortalCommand { get; set; }
+        public IMvxCommand PasteApiKeyCommand { get; set; }
+
+        private readonly IMvxNavigationService navigationService;
+
+        public class NavParam
+        {
+            public string PortalId { get; set; }
+        }
 
         public EditPortalViewModel(ISingletonService singletonService, IMvxNavigationService navigationService) : base(
             singletonService)
@@ -21,21 +35,9 @@ namespace SkyDrop.Core.ViewModels
 
             SavePortalCommand = new MvxCommand(SavePortal);
             LoginWithPortalCommand = new MvxAsyncCommand(LoginWithPortal);
+            PasteApiKeyCommand = new MvxAsyncCommand(PasteApiKey);
             this.navigationService = navigationService;
         }
-
-        public string PortalName { get; set; }
-
-        public string PortalUrl { get; set; }
-
-        public string ApiToken { get; set; }
-
-        public IMvxCommand SavePortalCommand { get; set; }
-
-        public bool AddingNewPortal { get; set; }
-
-        public TaskCompletionSource<bool> PrepareTcs { get; set; } = new TaskCompletionSource<bool>();
-        public IMvxCommand LoginWithPortalCommand { get; set; }
 
         private void SavePortal()
         {
@@ -90,9 +92,14 @@ namespace SkyDrop.Core.ViewModels
                 ApiToken = result;
         }
 
-        public class NavParam
+        private async Task PasteApiKey()
         {
-            public string PortalId { get; set; }
+            var maxLength = 100;
+            var text = await Xamarin.Essentials.Clipboard.GetTextAsync();
+            if (text == null)
+                return;
+
+            ApiToken = text.Trim().Substring(0, maxLength);
         }
     }
 }
