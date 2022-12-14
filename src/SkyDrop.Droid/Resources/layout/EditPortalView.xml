@@ -9,7 +9,7 @@
         android:background="@color/darkGrey">
     <include
             android:id="@+id/layout_toolbar"
-            layout="@layout/toolbar_portal_preferences"/>
+            layout="@layout/toolbar_edit_portal"/>
     <TextView
             android:id="@+id/editPortalNameTextView"
             android:layout_height="wrap_content"
@@ -21,16 +21,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:cardBackgroundColor="#555"
+            app:cardBackgroundColor="@color/midGrey"
             app:cardCornerRadius="8dp">
 
         <EditText
                 android:id="@+id/portalNameEditText"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_margin="8dp"
+                android:layout_margin="12dp"
                 android:textColor="#fff"
-                android:background="#555"
+                android:background="@color/clear"
                 android:inputType="textCapWords"
                 app:MvxBind="Text PortalName"
         />
@@ -49,16 +49,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:cardBackgroundColor="#555"
+            app:cardBackgroundColor="@color/midGrey"
             app:cardCornerRadius="8dp">
 
         <EditText
                 android:id="@+id/portalUrlEditText"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_margin="8dp"
+                android:layout_margin="12dp"
                 android:textColor="#fff"
-                android:background="#555"
+                android:background="@color/clear"
                 android:inputType="textUri"
                 app:MvxBind="Text PortalUrl"
         />
@@ -77,17 +77,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:cardBackgroundColor="#555"
+            app:cardBackgroundColor="@color/midGrey"
             app:cardCornerRadius="8dp">
 
         <EditText
                 android:id="@+id/portalApiTokenEditText"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_margin="8dp"
+                android:layout_margin="12dp"
                 android:textColor="#fff"
-                android:background="#555"
-                android:inputType="textPassword"
+                android:background="@color/clear"
+                android:inputType="text"
                 app:MvxBind="Text ApiToken; Click LoginWithPortalCommand"
         />
 

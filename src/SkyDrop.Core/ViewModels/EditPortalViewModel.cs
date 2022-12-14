@@ -21,6 +21,7 @@ namespace SkyDrop.Core.ViewModels
         public IMvxCommand SavePortalCommand { get; set; }
         public IMvxCommand LoginWithPortalCommand { get; set; }
         public IMvxCommand PasteApiKeyCommand { get; set; }
+        public IMvxCommand BackCommand { get; set; }
 
         private readonly IMvxNavigationService navigationService;
 
@@ -34,6 +35,7 @@ namespace SkyDrop.Core.ViewModels
         {
             Title = "Edit Portal";
 
+            BackCommand = new MvxCommand(() => navigationService.Close(this));
             SavePortalCommand = new MvxCommand(SavePortal);
             LoginWithPortalCommand = new MvxAsyncCommand(LoginWithPortal);
             PasteApiKeyCommand = new MvxAsyncCommand(PasteApiKey);
