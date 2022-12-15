@@ -5,6 +5,7 @@ using MvvmCross.Navigation;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Services;
+using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
 using static SkyDrop.Core.ViewModels.EditPortalViewModel;
 
@@ -92,6 +93,12 @@ namespace SkyDrop.Core.ViewModels
 
         private async Task LoginWithPortal()
         {
+            if (PortalUrl.IsNullOrEmpty())
+            {
+                SingletonService.UserDialogs.Alert("Please enter a portal url before adding an API key");
+                return;
+            }
+
             var result = await navigationService.Navigate<PortalLoginViewModel, string, string>(PortalUrl);
             if (!string.IsNullOrEmpty(result))
                 ApiToken = result;

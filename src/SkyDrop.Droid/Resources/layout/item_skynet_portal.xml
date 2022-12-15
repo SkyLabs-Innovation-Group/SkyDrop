@@ -9,34 +9,32 @@
         android:paddingTop="16dp"
         android:paddingHorizontal="16dp"
         android:clipToPadding="false"
-        android:background="@color/skyDarkBlue">
+        android:background="@color/darkGrey">
     <ImageView
             android:layout_width="54dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:src="@drawable/ic_skynet_logo"
-            android:tint="@color/skyGreen"/>
+            android:tint="@color/lightGrey"/>
     <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="16dp"
-            android:layout_weight="5"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="16dp"
             android:orientation="vertical">
         <TextView
                 android:id="@+id/portalTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginBottom="4dp"
                 android:text="Portal.Title"
                 android:textColor="@android:color/white"
+                android:textSize="17sp"
                 app:MvxBind="Text Name;"/>
         <TextView
                 android:id="@+id/portalUrl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
                 android:textSize="12sp"
                 tools:text="https://web3portal.com"
                 android:clickable="false"
@@ -50,7 +48,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="16dp"
-            android:layout_weight="5"
             android:orientation="vertical">
         <ImageView
                 android:id="@+id/upvoteButton"
@@ -59,7 +56,8 @@
                 android:color="#FFFFFF"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:src="@drawable/ic_upvote"/>
+                android:src="@drawable/ic_upvote"
+                android:tint="@color/lightGrey"/>
         <ImageView
                 android:id="@+id/downvoteButton"
                 android:layout_width="28dp"
@@ -67,7 +65,8 @@
                 android:color="#FFFFFF"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:src="@drawable/ic_downvote"/>
+                android:src="@drawable/ic_downvote"
+                android:tint="@color/lightGrey"/>
 
     </LinearLayout>
 

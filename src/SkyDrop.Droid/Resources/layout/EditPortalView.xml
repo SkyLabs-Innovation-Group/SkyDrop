@@ -93,23 +93,4 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
-            android:layout_gravity="right"
-            app:cardBackgroundColor="#555"
-            app:cardCornerRadius="8dp">
-
-        <Button
-                android:id="@+id/saveButton"
-                android:layout_width="112dp"
-                android:layout_height="40dp"
-                android:text="Save portal"
-                android:background="#555"
-                android:textColor="#fff"
-                app:MvxBind="Click SavePortalCommand"
-        />
-
-    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
