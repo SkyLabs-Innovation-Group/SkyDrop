@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
@@ -64,11 +65,20 @@ namespace SkyDrop.Core.ViewModels
                 savedPortals = storageService.LoadSkynetPortals();
             }
 
-            var savedPortalsDvms = portalService.ConvertSkynetPortalsToDvMs(savedPortals);
+            var savedPortalsDvms = portalService.ConvertSkynetPortalsToDvMs(savedPortals, ReorderAction);
             UserPortals.SwitchTo(savedPortalsDvms);
         }
 
-        public void ReorderPortals(int position, int newPosition)
+        private void ReorderAction(SkynetPortal portal, bool moveUp)
+        {
+            var portalDvm = UserPortals.FirstOrDefault(a => a.Portal == portal);
+            var portalCurrentIndex = UserPortals.IndexOf(portalDvm);
+            var portalNewIndex = moveUp ? portalCurrentIndex - 1 : portalCurrentIndex + 1;
+
+            ReorderPortals(portalCurrentIndex, portalNewIndex);
+        }
+
+        private void ReorderPortals(int position, int newPosition)
         {
             if (position == newPosition)
                 return;

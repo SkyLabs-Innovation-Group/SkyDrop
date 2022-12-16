@@ -9,7 +9,8 @@
         android:paddingTop="16dp"
         android:paddingHorizontal="16dp"
         android:clipToPadding="false"
-        android:background="@color/darkGrey">
+        android:background="@color/darkGrey"
+        app:MvxBind="Click TapCommand">
     <ImageView
             android:layout_width="54dp"
             android:layout_height="match_parent"
@@ -57,7 +58,8 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:src="@drawable/ic_upvote"
-                android:tint="@color/lightGrey"/>
+                android:tint="@color/lightGrey"
+                app:MvxBind="Click MoveUpCommand"/>
         <ImageView
                 android:id="@+id/downvoteButton"
                 android:layout_width="28dp"
@@ -66,7 +68,8 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:src="@drawable/ic_downvote"
-                android:tint="@color/lightGrey"/>
+                android:tint="@color/lightGrey"
+                app:MvxBind="Click MoveDownCommand"/>
 
     </LinearLayout>
 

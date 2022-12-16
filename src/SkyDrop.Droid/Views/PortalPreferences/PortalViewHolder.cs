@@ -6,6 +6,7 @@ using MvvmCross.Platforms.Android.Binding.BindingContext;
 
 namespace SkyDrop.Droid.Views.PortalPreferences
 {
+    /*
     public class PortalViewHolder : MvxRecyclerViewHolder
     {
         private readonly ImageView downvoteIcon;
@@ -33,17 +34,6 @@ namespace SkyDrop.Droid.Views.PortalPreferences
             listAdapter = adapter;
             this.position = position;
         }
-
-        private void UpvoteIcon_Click(object sender, EventArgs e)
-        {
-            var vm = listAdapter.View.View.ViewModel;
-            vm.ReorderPortals(position, position - 1);
-        }
-
-        private void DownvoteIcon_Click(object sender, EventArgs e)
-        {
-            var vm = listAdapter.View.View.ViewModel;
-            vm.ReorderPortals(position, position + 1);
-        }
     }
+    */
 }
