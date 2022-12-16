@@ -24,13 +24,13 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Portal name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HOB-6c-j0H">
-                        <rect key="frame" x="72" y="22" width="203" height="20"/>
+                        <rect key="frame" x="72" y="22" width="200" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Portalurl.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BY4-Na-SNd">
-                        <rect key="frame" x="72" y="42" width="203" height="15"/>
+                        <rect key="frame" x="72" y="42" width="200" height="15"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
@@ -38,15 +38,15 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cgb-IU-792" userLabel="Button Container">
                         <rect key="frame" x="280" y="14" width="24" height="48"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.down" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="e65-pf-bOg">
-                                <rect key="frame" x="0.0" y="29.333333333333329" width="24" height="14"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_down" translatesAutoresizingMaskIntoConstraints="NO" id="e65-pf-bOg">
+                                <rect key="frame" x="0.0" y="24" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="Hqf-5f-MAR"/>
                                     <constraint firstAttribute="height" constant="24" id="UCf-I0-ryZ"/>
                                 </constraints>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.up" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="TF3-4R-A03">
-                                <rect key="frame" x="0.0" y="4.6666666666666634" width="24" height="14"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_up" translatesAutoresizingMaskIntoConstraints="NO" id="TF3-4R-A03">
+                                <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="eco-yi-4A6"/>
                                     <constraint firstAttribute="width" constant="24" id="rYi-GU-yuZ"/>
@@ -71,14 +71,14 @@
                     <constraint firstItem="BY4-Na-SNd" firstAttribute="top" secondItem="HOB-6c-j0H" secondAttribute="bottom" id="FWo-Jk-reb"/>
                     <constraint firstItem="BY4-Na-SNd" firstAttribute="top" secondItem="HOB-6c-j0H" secondAttribute="bottom" id="GQ4-SY-lGS"/>
                     <constraint firstItem="Epf-7u-75H" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="16" id="L5R-CZ-OgH"/>
+                    <constraint firstItem="Cgb-IU-792" firstAttribute="leading" secondItem="BY4-Na-SNd" secondAttribute="trailing" constant="8" id="U3a-PC-BgG"/>
                     <constraint firstItem="BY4-Na-SNd" firstAttribute="leading" secondItem="Epf-7u-75H" secondAttribute="trailing" constant="12" id="XUD-DI-vYE"/>
-                    <constraint firstAttribute="trailing" secondItem="BY4-Na-SNd" secondAttribute="trailing" constant="45" id="Yrb-Uo-tYd"/>
                     <constraint firstItem="Epf-7u-75H" firstAttribute="leading" secondItem="YTl-1W-gDM" secondAttribute="leading" constant="16" id="bGt-ya-18F"/>
                     <constraint firstItem="Cgb-IU-792" firstAttribute="centerY" secondItem="YTl-1W-gDM" secondAttribute="centerY" id="kFt-yy-cb0"/>
                     <constraint firstAttribute="trailing" secondItem="Cgb-IU-792" secondAttribute="trailing" constant="16" id="n2o-wd-IDU"/>
                     <constraint firstItem="HOB-6c-j0H" firstAttribute="top" secondItem="YTl-1W-gDM" secondAttribute="top" constant="22" id="ncP-fJ-zXl"/>
+                    <constraint firstItem="Cgb-IU-792" firstAttribute="leading" secondItem="HOB-6c-j0H" secondAttribute="trailing" constant="8" id="tgl-pH-tJD"/>
                     <constraint firstAttribute="bottom" secondItem="Epf-7u-75H" secondAttribute="bottom" constant="16" id="xZa-0F-2JH"/>
-                    <constraint firstAttribute="trailing" secondItem="HOB-6c-j0H" secondAttribute="trailing" constant="45" id="xt2-u8-hC6"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
@@ -92,8 +92,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="chevron.down" catalog="system" width="128" height="70"/>
-        <image name="chevron.up" catalog="system" width="128" height="70"/>
+        <image name="ic_down" width="18" height="18"/>
         <image name="ic_portals" width="18" height="18"/>
+        <image name="ic_up" width="18" height="18"/>
     </resources>
 </document>
