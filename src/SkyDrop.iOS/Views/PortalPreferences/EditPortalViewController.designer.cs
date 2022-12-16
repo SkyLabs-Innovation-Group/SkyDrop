@@ -13,6 +13,12 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 	partial class EditPortalViewController
 	{
 		[Outlet]
+		UIKit.UIView DeleteButton { get; set; }
+
+		[Outlet]
+		UIKit.UILabel DeleteLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIView PasteApiKeyButton { get; set; }
 
 		[Outlet]
@@ -38,6 +44,11 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (DeleteButton != null) {
+				DeleteButton.Dispose ();
+				DeleteButton = null;
+			}
+
 			if (PasteApiKeyButton != null) {
 				PasteApiKeyButton.Dispose ();
 				PasteApiKeyButton = null;
@@ -76,6 +87,11 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 			if (PortalUrlInputContainer != null) {
 				PortalUrlInputContainer.Dispose ();
 				PortalUrlInputContainer = null;
+			}
+
+			if (DeleteLabel != null) {
+				DeleteLabel.Dispose ();
+				DeleteLabel = null;
 			}
 		}
 	}

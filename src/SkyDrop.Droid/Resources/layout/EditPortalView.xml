@@ -112,6 +112,20 @@
                 android:tint="@color/lightGrey"/>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
-    
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="32dp"
+        app:MvxBind="Click DeletePortalCommand; Visibility InvertedVisibility(IsAddingNewPortal)">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/skyRed"
+            android:textStyle="bold"
+            android:text="Delete Portal"/>
+    </FrameLayout>
 
 </LinearLayout>

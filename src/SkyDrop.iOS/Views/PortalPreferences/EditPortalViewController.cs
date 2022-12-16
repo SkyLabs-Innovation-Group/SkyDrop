@@ -39,6 +39,8 @@ namespace SkyDrop.iOS.Views.PortalPreferences
             PasteApiKeyButton.Layer.CornerRadius = 8;
             PasteIcon.TintColor = Colors.LightGrey.ToNative();
 
+            DeleteLabel.TextColor = Colors.Red.ToNative();
+
             PortalNameInputContainer.AddGestureRecognizer(new UITapGestureRecognizer(() => PortalNameInput.BecomeFirstResponder()));
             PortalUrlInputContainer.AddGestureRecognizer(new UITapGestureRecognizer(() => PortalUrlInput.BecomeFirstResponder()));
 
@@ -49,6 +51,8 @@ namespace SkyDrop.iOS.Views.PortalPreferences
             set.Bind(PortalApiTokenInput).For("Tap").To(vm => vm.LoginWithPortalCommand);
             set.Bind(PortalApiTokenInputContainer).For("Tap").To(vm => vm.LoginWithPortalCommand);
             set.Bind(PasteApiKeyButton).For("Tap").To(vm => vm.PasteApiKeyCommand);
+            set.Bind(DeleteButton).For("Tap").To(vm => vm.DeletePortalCommand);
+            set.Bind(DeleteButton).For(a => a.Hidden).To(vm => vm.IsAddingNewPortal);
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Apply();
         }
