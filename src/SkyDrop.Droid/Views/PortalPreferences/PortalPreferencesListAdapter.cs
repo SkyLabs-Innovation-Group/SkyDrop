@@ -14,15 +14,7 @@ namespace SkyDrop.Droid.Views.PortalPreferences
         {
             View = view;
         }
-        /*
-        public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
-        {
-            base.OnBindViewHolder(holder, position);
 
-            //var portalViewHolder = holder as PortalViewHolder;
-            //holder.Bind(this, position);
-        }
-        */
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
             var itemBindingContext = new MvxAndroidBindingContext(parent.Context, BindingContext.LayoutInflaterHolder);

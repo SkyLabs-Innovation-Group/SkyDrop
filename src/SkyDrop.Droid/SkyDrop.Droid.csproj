@@ -105,7 +105,6 @@
         <Compile Include="Bindings\ButtonClickBinding.cs" />
         <Compile Include="Helper\HomeMenuAnimator.cs" />
         <Compile Include="Views\PortalPreferences\PortalPreferencesListView.cs" />
-        <Compile Include="Views\PortalPreferences\PortalViewHolder.cs" />
         <Compile Include="Helper\BaseOnDragListener.cs" />
         <Compile Include="Views\PortalPreferences\PortalPreferencesListAdapter.cs" />
         <Compile Include="Views\PortalPreferences\PortalPreferencesView.cs" />
