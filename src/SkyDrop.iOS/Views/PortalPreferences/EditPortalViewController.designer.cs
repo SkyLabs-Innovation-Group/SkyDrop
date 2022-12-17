@@ -19,6 +19,9 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 		UIKit.UILabel DeleteLabel { get; set; }
 
 		[Outlet]
+		UIKit.UIView LoginButton { get; set; }
+
+		[Outlet]
 		UIKit.UIView PasteApiKeyButton { get; set; }
 
 		[Outlet]
@@ -47,6 +50,11 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 			if (DeleteButton != null) {
 				DeleteButton.Dispose ();
 				DeleteButton = null;
+			}
+
+			if (DeleteLabel != null) {
+				DeleteLabel.Dispose ();
+				DeleteLabel = null;
 			}
 
 			if (PasteApiKeyButton != null) {
@@ -89,9 +97,9 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 				PortalUrlInputContainer = null;
 			}
 
-			if (DeleteLabel != null) {
-				DeleteLabel.Dispose ();
-				DeleteLabel = null;
+			if (LoginButton != null) {
+				LoginButton.Dispose ();
+				LoginButton = null;
 			}
 		}
 	}

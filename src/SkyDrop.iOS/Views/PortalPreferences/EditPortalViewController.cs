@@ -41,6 +41,8 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 
             DeleteLabel.TextColor = Colors.Red.ToNative();
 
+            LoginButton.BackgroundColor = Colors.MidGrey.ToNative();
+
             PortalNameInputContainer.AddGestureRecognizer(new UITapGestureRecognizer(() => PortalNameInput.BecomeFirstResponder()));
             PortalUrlInputContainer.AddGestureRecognizer(new UITapGestureRecognizer(() => PortalUrlInput.BecomeFirstResponder()));
 
@@ -53,6 +55,7 @@ namespace SkyDrop.iOS.Views.PortalPreferences
             set.Bind(PasteApiKeyButton).For("Tap").To(vm => vm.PasteApiKeyCommand);
             set.Bind(DeleteButton).For("Tap").To(vm => vm.DeletePortalCommand);
             set.Bind(DeleteButton).For(a => a.Hidden).To(vm => vm.IsAddingNewPortal);
+            set.Bind(LoginButton).For("Visible").To(vm => vm.IsLoginButtonVisible);
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Apply();
         }

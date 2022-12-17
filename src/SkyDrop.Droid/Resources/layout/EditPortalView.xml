@@ -71,19 +71,21 @@
         android:layout_width="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:textColor="@android:color/white"
-        android:text="API token: "/>
+        android:text="API key: "/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical">
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             app:cardBackgroundColor="@color/midGrey"
-            app:cardCornerRadius="8dp">
+            app:cardCornerRadius="8dp"
+            app:cardPreventCornerOverlap="false"
+            app:cardUseCompatPadding="true">
 
             <EditText
                 android:id="@+id/portalApiTokenEditText"
@@ -95,7 +97,23 @@
                 android:inputType="text"
                 app:MvxBind="Text ApiToken; Click LoginWithPortalCommand"
             />
-        </com.google.android.material.card.MaterialCardView>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/primaryColor"
+                app:MvxBind="Visibility Visibility(IsApiTokenSet)"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:text="Log in"/>
+
+            </FrameLayout>
+        </androidx.cardview.widget.CardView>
         <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

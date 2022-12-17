@@ -19,6 +19,7 @@ namespace SkyDrop.Core.ViewModels
         public string PortalUrl { get; set; }
         public string ApiToken { get; set; }
         public bool IsAddingNewPortal { get; set; }
+        public bool IsLoginButtonVisible => ApiToken.IsNullOrEmpty();
         public IMvxCommand SavePortalCommand { get; set; }
         public IMvxCommand LoginWithPortalCommand { get; set; }
         public IMvxCommand PasteApiKeyCommand { get; set; }
@@ -74,7 +75,8 @@ namespace SkyDrop.Core.ViewModels
             else
             {
                 Portal = SingletonService.StorageService.LoadSkynetPortal(parameter.PortalId);
-                ApiToken = await SecureStorage.GetAsync(Portal.GetApiTokenPrefKey());
+                var tokenPrefKey = Portal.GetApiTokenPrefKey();
+                ApiToken = await SecureStorage.GetAsync(tokenPrefKey);
             }
 
             PrepareTcs.TrySetResult(true);
