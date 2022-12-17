@@ -85,7 +85,8 @@
             app:cardBackgroundColor="@color/midGrey"
             app:cardCornerRadius="8dp"
             app:cardPreventCornerOverlap="false"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            app:MvxBind="Click LoginWithPortalCommand">
 
             <EditText
                 android:id="@+id/portalApiTokenEditText"
@@ -95,14 +96,14 @@
                 android:textColor="#fff"
                 android:background="@color/clear"
                 android:inputType="text"
-                app:MvxBind="Text ApiToken; Click LoginWithPortalCommand"
+                app:MvxBind="Text ApiToken"
             />
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/primaryColor"
-                app:MvxBind="Visibility Visibility(IsApiTokenSet)"
+                android:background="@color/midGrey"
+                app:MvxBind="Visibility Visibility(IsLoginButtonVisible);Click LoginWithPortalCommand"
                 >
                 <TextView
                     android:layout_width="wrap_content"
