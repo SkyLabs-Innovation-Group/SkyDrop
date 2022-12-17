@@ -96,7 +96,7 @@
                 android:textColor="#fff"
                 android:background="@color/clear"
                 android:inputType="text"
-                app:MvxBind="Text ApiToken"
+                app:MvxBind="Text ApiToken;Click LoginWithPortalCommand"
             />
 
             <FrameLayout
