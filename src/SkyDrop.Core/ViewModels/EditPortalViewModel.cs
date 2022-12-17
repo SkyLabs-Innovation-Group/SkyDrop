@@ -99,7 +99,7 @@ namespace SkyDrop.Core.ViewModels
         {
             if (PortalUrl.IsNullOrEmpty())
             {
-                SingletonService.UserDialogs.Alert("Please enter a portal url before adding an API key");
+                SingletonService.UserDialogs.Alert("Please enter a portal url before logging in");
                 return;
             }
 
