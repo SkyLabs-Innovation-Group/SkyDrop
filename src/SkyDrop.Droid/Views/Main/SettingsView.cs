@@ -11,8 +11,6 @@ namespace SkyDrop.Droid.Views.Main
     [Activity(Label = "SettingsView")]
     public class SettingsView : BaseActivity<SettingsViewModel>
     {
-        private EditText portalEditText;
-        private Button saveButton;
         private CheckBox uploadNotificationCheckbox, verifySslCheckbox;
 
         protected override int ActivityLayoutId => Resource.Layout.SettingsView;
@@ -23,21 +21,10 @@ namespace SkyDrop.Droid.Views.Main
             BindViews();
 
             ViewModel.CloseKeyboardCommand = new MvxAsyncCommand(this.HideKeyboard);
-
-            portalEditText.Text = SkynetPortal.SelectedPortal.ToString();
-            saveButton.Click += async (s, e) =>
-            {
-                await this.HideKeyboard();
-                await ViewModel.ValidateAndTrySetSkynetPortalCommand.ExecuteAsync(portalEditText.Text);
-                portalEditText.Text = SkynetPortal.SelectedPortal.BaseUrl;
-            };
         }
 
         private void BindViews()
         {
-            saveButton = FindViewById<Button>(Resource.Id.saveButton);
-            portalEditText = FindViewById<EditText>(Resource.Id.skynetPortalEditText);
-
             uploadNotificationCheckbox = FindViewById<CheckBox>(Resource.Id.uploadNotificationCheckbox);
             uploadNotificationCheckbox.CheckedChange += (s, e) => ViewModel.SetUploadNotificationEnabled(e.IsChecked);
 

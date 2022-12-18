@@ -10,11 +10,6 @@ namespace SkyDrop.Core.ViewModels
 {
     public class SettingsViewModel : BaseViewModel
     {
-        /// <summary>
-        ///     Currently, the best way to verify a Skynet portal that I can think of would be to query for a sky file's metadata.
-        /// </summary>
-        private const string RandomFileToQueryFor = "AACEA6yg7OM0_gl6_sHx2D7ztt20-g0oXum5GNbCc0ycRg";
-
         private readonly IEncryptionService encryptionService;
 
         private readonly ISkyDropHttpClientFactory httpClientFactory;
@@ -32,22 +27,17 @@ namespace SkyDrop.Core.ViewModels
             Title = "Settings";
 
             BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
-            ValidateAndTrySetSkynetPortalCommand =
-                new MvxAsyncCommand<string>(async url => await ValidateAndTrySetSkynetPortal(url));
             SetDeviceNameCommand = new MvxCommand(SetDeviceName);
-            ViewOnboardingCommand =
-                new MvxAsyncCommand(async () => await navigationService.Navigate<OnboardingViewModel>());
+            ViewOnboardingCommand = new MvxAsyncCommand(async () => await navigationService.Navigate<OnboardingViewModel>());
 
             DeviceName = encryptionService.GetDeviceName();
         }
 
         public bool UploadNotificationsEnabled { get; set; } = true;
         public bool VerifySslCertificates { get; set; } = true;
-        public string SkynetPortalLabelText { get; set; } = "Skynet portal:";
         public string DeviceName { get; set; }
 
         public IMvxCommand BackCommand { get; set; }
-        public IMvxAsyncCommand<string> ValidateAndTrySetSkynetPortalCommand { get; set; }
         public IMvxCommand SetDeviceNameCommand { get; set; }
         public IMvxCommand CloseKeyboardCommand { get; set; }
         public IMvxCommand ViewOnboardingCommand { get; set; }
@@ -57,65 +47,6 @@ namespace SkyDrop.Core.ViewModels
             UploadNotificationsEnabled = Preferences.Get(PreferenceKey.UploadNotificationsEnabled, true);
             VerifySslCertificates = Preferences.Get(PreferenceKey.RequireSecureConnection, true);
             base.ViewCreated();
-
-            ShowWeb3PortalMessage();
-        }
-
-        private async Task ValidateAndTrySetSkynetPortal(string portalUrl)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(portalUrl))
-                {
-                    Log.Error("User entered null or empty portal");
-                    return;
-                }
-
-                portalUrl = FormatPortalUrl(portalUrl);
-                var portal = new SkynetPortal(portalUrl);
-
-                var userHasConfirmed =
-                    await SingletonService.UserDialogs.ConfirmAsync($"Set your portal to {portalUrl} ?");
-                if (!userHasConfirmed)
-                    return;
-
-                var promptResult = await SingletonService.UserDialogs
-                    .PromptAsync(
-                        "Paste your API key if you have one, close if you already entered one for this portal before",
-                        "Optional Authentication", "Save", "Close");
-                portal.UserApiToken = promptResult.Text;
-
-                SingletonService.UserDialogs.ShowLoading("Validating portal...");
-                var success = await ValidatePortal(portal);
-                if (!success)
-                    return;
-
-                SingletonService.UserDialogs.Toast("Your SkyDrop portal is now set to " + portalUrl);
-                SkynetPortal.SelectedPortal = portal;
-                // Once the user updates SkynetPortal.SelectedPortal, file downloads and uploads should use their preferred portal
-                // If this degrades performance significantly, I think it would be ideal to make toggling between portals:
-                // 1) Suggested by the app with a dialog if net is slow,
-                // 2) Manually toggleable between saved portals in settings
-            }
-            catch (UriFormatException)
-            {
-                SingletonService.UserDialogs.Toast("You must enter a valid URL format");
-            }
-            catch (Exception ex)
-            {
-                SingletonService.UserDialogs.Toast("Error - couldn't reach portal " + portalUrl);
-                Log.Exception(ex);
-            }
-            finally
-            {
-                SingletonService.UserDialogs.HideLoading();
-            }
-        }
-
-        public Task<bool> ValidatePortal(SkynetPortal portal)
-        //=> singletonService.ApiService.PingPortalForSkylink(RandomFileToQueryFor, portal);
-        {
-        return Task.FromResult(true);
         }
 
         public void SetUploadNotificationEnabled(bool value)
@@ -133,27 +64,6 @@ namespace SkyDrop.Core.ViewModels
 
             //clients must be rebuilt after changing this setting
             httpClientFactory.ClearCachedClients();
-        }
-
-        private void ShowWeb3PortalMessage()
-        {
-            if (Preferences.ContainsKey(PreferenceKey.DidShowWeb3PortalMessage))
-                return; //already shown
-
-            SingletonService.UserDialogs.Alert(
-                "Selected portal has been set to web3portal.com because siasky.net and other portals are shutting down");
-            Preferences.Set(PreferenceKey.DidShowWeb3PortalMessage, true);
-        }
-
-        private string FormatPortalUrl(string portalUrl)
-        {
-            if (!portalUrl.StartsWith("http"))
-                portalUrl = $"https://{portalUrl}";
-
-            if (portalUrl.StartsWith("http://"))
-                portalUrl = $"https://{portalUrl.Substring(7)}";
-
-            return portalUrl.TrimEnd('/');
         }
 
         public void Toast(string message)
