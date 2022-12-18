@@ -23,27 +23,16 @@ namespace SkyDrop.iOS.Views.Settings
             ViewModel.CloseKeyboardCommand = new MvxCommand(() => View.EndEditing(true));
 
             var set = CreateBindingSet();
-            set.Bind(SetPortalLabel).For(v => v.Text).To(vm => vm.SkynetPortalLabelText);
             set.Bind(NameTextView).For(v => v.Text).To(vm => vm.DeviceName);
             set.Bind(SetNameButton).To(vm => vm.SetDeviceNameCommand);
             set.Bind(OnboardingButton).To(vm => vm.ViewOnboardingCommand);
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Apply();
 
-            StyleTextInput(PortalTextView);
             StyleTextInput(NameTextView);
 
-            StyleButton(SavePortalButton);
             StyleButton(SetNameButton);
             StyleButton(OnboardingButton);
-
-            PortalTextView.Text = SkynetPortal.SelectedPortal.ToString();
-            SavePortalButton.TouchUpInside += async (s, e) =>
-            {
-                UIApplication.SharedApplication.KeyWindow.EndEditing(true);
-                await ViewModel.ValidateAndTrySetSkynetPortalCommand.ExecuteAsync(PortalTextView.Text);
-                PortalTextView.Text = SkynetPortal.SelectedPortal.BaseUrl;
-            };
 
             EnableUploadNotificationsSwitch.On = ViewModel.UploadNotificationsEnabled;
             EnableUploadNotificationsSwitch.ValueChanged += EnableUploadNotificationsSwitch_ValueChanged;
@@ -69,7 +58,7 @@ namespace SkyDrop.iOS.Views.Settings
             textView.BackgroundColor = Colors.MidGrey.ToNative();
             textView.TextColor = UIColor.White;
             textView.Layer.CornerRadius = 8;
-            textView.Changed += (s, e) => AdjustTextBoxContentSize(PortalTextView);
+            textView.Changed += (s, e) => AdjustTextBoxContentSize(textView);
             AdjustTextBoxContentSize(textView);
         }
     }

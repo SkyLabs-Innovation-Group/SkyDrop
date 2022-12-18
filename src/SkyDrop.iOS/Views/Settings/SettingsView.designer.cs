@@ -22,24 +22,10 @@ namespace SkyDrop.iOS.Views.Settings
 		UIKit.UIButton OnboardingButton { get; set; }
 
 		[Outlet]
-		UIKit.UITextView PortalTextView { get; set; }
-
-		[Outlet]
-		UIKit.UIButton SavePortalButton { get; set; }
-
-		[Outlet]
 		UIKit.UIButton SetNameButton { get; set; }
-
-		[Outlet]
-		UIKit.UILabel SetPortalLabel { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (OnboardingButton != null) {
-				OnboardingButton.Dispose ();
-				OnboardingButton = null;
-			}
-
 			if (EnableUploadNotificationsSwitch != null) {
 				EnableUploadNotificationsSwitch.Dispose ();
 				EnableUploadNotificationsSwitch = null;
@@ -50,24 +36,14 @@ namespace SkyDrop.iOS.Views.Settings
 				NameTextView = null;
 			}
 
-			if (PortalTextView != null) {
-				PortalTextView.Dispose ();
-				PortalTextView = null;
-			}
-
-			if (SavePortalButton != null) {
-				SavePortalButton.Dispose ();
-				SavePortalButton = null;
+			if (OnboardingButton != null) {
+				OnboardingButton.Dispose ();
+				OnboardingButton = null;
 			}
 
 			if (SetNameButton != null) {
 				SetNameButton.Dispose ();
 				SetNameButton = null;
-			}
-
-			if (SetPortalLabel != null) {
-				SetPortalLabel.Dispose ();
-				SetPortalLabel = null;
 			}
 		}
 	}
