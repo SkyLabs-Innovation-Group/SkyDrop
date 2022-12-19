@@ -75,242 +75,248 @@
         <BuildIpa>true</BuildIpa>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
-        <AppExtensionDebugBundleId/>
+        <AppExtensionDebugBundleId />
     </PropertyGroup>
     <ItemGroup>
-        <Compile Include="Linker\LinkerPleaseInclude.cs"/>
-        <Compile Include="Main.cs"/>
-        <Compile Include="AppDelegate.cs"/>
-        <Compile Include="Services\NSUrlHttpClientFactory.cs"/>
-        <Compile Include="Setup.cs"/>
-        <Compile Include="Styles\ColorPalette.cs"/>
+        <Compile Include="Linker\LinkerPleaseInclude.cs" />
+        <Compile Include="Main.cs" />
+        <Compile Include="AppDelegate.cs" />
+        <Compile Include="Services\NSUrlHttpClientFactory.cs" />
+        <Compile Include="Setup.cs" />
+        <Compile Include="Styles\ColorPalette.cs" />
         <None Include="Info.plist">
             <SubType>Designer</SubType>
         </None>
-        <Compile Include="Properties\AssemblyInfo.cs"/>
-        <Content Include="Entitlements.plist"/>
-        <ITunesArtwork Include="iTunesArtwork"/>
-        <ITunesArtwork Include="iTunesArtwork%402x"/>
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Content Include="Entitlements.plist" />
+        <ITunesArtwork Include="iTunesArtwork" />
+        <ITunesArtwork Include="iTunesArtwork%402x" />
         <InterfaceDefinition Include="LaunchScreen.storyboard">
             <SubType>Designer</SubType>
         </InterfaceDefinition>
         <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
             <Visible>false</Visible>
         </ImageAsset>
-        <InterfaceDefinition Include="Views\Menu\MenuView.xib"/>
-        <Compile Include="Views\Menu\MenuView.cs"/>
+        <InterfaceDefinition Include="Views\Menu\MenuView.xib" />
+        <Compile Include="Views\Menu\MenuView.cs" />
         <Compile Include="Views\Menu\MenuView.designer.cs">
             <DependentUpon>MenuView.cs</DependentUpon>
         </Compile>
-        <InterfaceDefinition Include="Views\Drop\DropView.xib"/>
-        <Compile Include="Views\Drop\DropView.cs"/>
+        <InterfaceDefinition Include="Views\Drop\DropView.xib" />
+        <Compile Include="Views\Drop\DropView.cs" />
         <Compile Include="Views\Drop\DropView.designer.cs">
             <DependentUpon>DropView.cs</DependentUpon>
         </Compile>
-        <InterfaceDefinition Include="Views\Drop\FilePreviewCollectionViewCell.xib"/>
-        <Compile Include="Views\Drop\FilePreviewCollectionViewCell.cs"/>
+        <InterfaceDefinition Include="Views\Drop\FilePreviewCollectionViewCell.xib" />
+        <Compile Include="Views\Drop\FilePreviewCollectionViewCell.cs" />
         <Compile Include="Views\Drop\FilePreviewCollectionViewCell.designer.cs">
             <DependentUpon>FilePreviewCollectionViewCell.cs</DependentUpon>
         </Compile>
-        <BundleResource Include="Resources\launch_image.png"/>
-        <BundleResource Include="Resources\launch_image%402x.png"/>
-        <BundleResource Include="Resources\launch_image%403x.png"/>
-        <Compile Include="Bindings\ProgressFillHeightBinding.cs"/>
-        <Compile Include="Common\TouchInterceptor.cs"/>
-        <Compile Include="Bindings\LocalImagePreviewBinding.cs"/>
-        <Compile Include="Common\iOSUtil.cs"/>
-        <Compile Include="Views\PortalPreferences\EditPortalViewController.cs"/>
+        <BundleResource Include="Resources\launch_image.png" />
+        <BundleResource Include="Resources\launch_image%402x.png" />
+        <BundleResource Include="Resources\launch_image%403x.png" />
+        <Compile Include="Bindings\ProgressFillHeightBinding.cs" />
+        <Compile Include="Common\TouchInterceptor.cs" />
+        <Compile Include="Bindings\LocalImagePreviewBinding.cs" />
+        <Compile Include="Common\iOSUtil.cs" />
+        <Compile Include="Views\PortalPreferences\EditPortalViewController.cs" />
         <Compile Include="Views\PortalPreferences\EditPortalViewController.designer.cs">
             <DependentUpon>FilePreviewCollectionViewCell.cs</DependentUpon>
         </Compile>
-        <Compile Include="Views\Settings\SettingsView.cs"/>
+        <Compile Include="Views\Settings\SettingsView.cs" />
         <Compile Include="Views\Settings\SettingsView.designer.cs">
             <DependentUpon>SettingsView.cs</DependentUpon>
         </Compile>
-        <InterfaceDefinition Include="Views\PortalPreferences\EditPortalViewController.xib"/>
-        <InterfaceDefinition Include="Views\PortalPreferences\PortalPreferencesCell.xib"/>
-        <InterfaceDefinition Include="Views\Settings\SettingsView.xib"/>
-        <InterfaceDefinition Include="Views\Files\FilesView.xib"/>
-        <Compile Include="Views\Files\FilesView.cs"/>
+        <InterfaceDefinition Include="Views\PortalPreferences\EditPortalViewController.xib" />
+        <InterfaceDefinition Include="Views\PortalPreferences\PortalPreferencesCell.xib" />
+        <InterfaceDefinition Include="Views\Settings\SettingsView.xib" />
+        <InterfaceDefinition Include="Views\Files\FilesView.xib" />
+        <Compile Include="Views\Files\FilesView.cs" />
         <Compile Include="Views\Files\FilesView.designer.cs">
             <DependentUpon>FilesView.cs</DependentUpon>
         </Compile>
-        <InterfaceDefinition Include="Views\Files\FileCollectionViewCell.xib"/>
-        <Compile Include="Views\Files\FileCollectionViewCell.cs"/>
+        <InterfaceDefinition Include="Views\Files\FileCollectionViewCell.xib" />
+        <Compile Include="Views\Files\FileCollectionViewCell.cs" />
         <Compile Include="Views\Files\FileCollectionViewCell.designer.cs">
             <DependentUpon>FileCollectionViewCell.cs</DependentUpon>
         </Compile>
-        <Compile Include="Converters\NativeColorConverter.cs"/>
-        <InterfaceDefinition Include="Views\Files\FileTableViewCell.xib"/>
-        <Compile Include="Views\Files\FileTableViewCell.cs"/>
+        <Compile Include="Converters\NativeColorConverter.cs" />
+        <InterfaceDefinition Include="Views\Files\FileTableViewCell.xib" />
+        <Compile Include="Views\Files\FileTableViewCell.cs" />
         <Compile Include="Views\Files\FileTableViewCell.designer.cs">
             <DependentUpon>FileTableViewCell.cs</DependentUpon>
         </Compile>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\120-1.png"/>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\120.png"/>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\152.png"/>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\167.png"/>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\180.png"/>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\20.png"/>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\29.png"/>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\40-1.png"/>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\40-2.png"/>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\40.png"/>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\58-1.png"/>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\58.png"/>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\60.png"/>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\76.png"/>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\80-1.png"/>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\80.png"/>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\87.png"/>
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\120-1.png" />
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\120.png" />
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\152.png" />
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\167.png" />
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\180.png" />
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\20.png" />
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\29.png" />
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\40-1.png" />
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\40-2.png" />
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\40.png" />
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\58-1.png" />
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\58.png" />
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\60.png" />
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\76.png" />
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\80-1.png" />
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\80.png" />
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\87.png" />
         <ImageAsset Include="Media.xcassets\AppIcons.appiconset\Contents.json">
             <Visible>false</Visible>
         </ImageAsset>
-        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\SkyDrop Logo 1024.png"/>
-        <ImageAsset Include="Media.xcassets\ic_cancel.imageset\cancel.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_cancel.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_cloud.imageset\cloud.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_cloud.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_download.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_download.imageset\ic_download.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_list.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_list.imageset\format-list-bulleted-square.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_menu.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_menu.imageset\menu.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_settings.imageset\cog.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_settings.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_share.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_share.imageset\share.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_upload.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_upload.imageset\ic_upload.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_grid.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_grid.imageset\view-grid.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_file_generic.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_file_generic.imageset\file.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_file_document.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_file_document.imageset\file-document.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_file_audio.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_file_audio.imageset\file-music.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_file_video.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_file_video.imageset\file-video.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_file_image.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_file_image.imageset\file-image.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_zip.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_zip.imageset\zip-box.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_qr.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_qr.imageset\qrcode.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_error.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_error.imageset\alert-circle.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_image.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_image.imageset\image.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_folder.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_folder.imageset\folder.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_plus.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_plus.imageset\plus.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\folder-plus.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_back.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_back.imageset\back_button.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_bin.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_bin.imageset\bin.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\folder-arrow-right.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_select_all.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_select_all.imageset\select-all.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_user.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_user.imageset\user.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_user_multiple.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_user_multiple.imageset\user-multiple.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_skydrop.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_skydrop.imageset\skydrop-logo.pdf"/>
+        <ImageAsset Include="Media.xcassets\AppIcons.appiconset\SkyDrop Logo 1024.png" />
+        <ImageAsset Include="Media.xcassets\ic_cancel.imageset\cancel.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_cancel.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_cloud.imageset\cloud.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_cloud.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_download.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_download.imageset\ic_download.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_list.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_list.imageset\format-list-bulleted-square.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_menu.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_menu.imageset\menu.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_settings.imageset\cog.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_settings.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_share.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_share.imageset\share.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_upload.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_upload.imageset\ic_upload.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_grid.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_grid.imageset\view-grid.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_file_generic.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_file_generic.imageset\file.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_file_document.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_file_document.imageset\file-document.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_file_audio.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_file_audio.imageset\file-music.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_file_video.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_file_video.imageset\file-video.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_file_image.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_file_image.imageset\file-image.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_zip.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_zip.imageset\zip-box.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_qr.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_qr.imageset\qrcode.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_error.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_error.imageset\alert-circle.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_image.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_image.imageset\image.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_folder.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_folder.imageset\folder.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_plus.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_plus.imageset\plus.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_folder_add.imageset\folder-plus.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_back.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_back.imageset\back_button.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_bin.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_bin.imageset\bin.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_folder_move.imageset\folder-arrow-right.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_select_all.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_select_all.imageset\select-all.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_user.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_user.imageset\user.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_user_multiple.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_user_multiple.imageset\user-multiple.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_skydrop.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_skydrop.imageset\skydrop-logo.pdf" />
         <ImageAsset Include="Media.xcassets\LaunchImages.launchimage\Contents.json">
             <Visible>false</Visible>
         </ImageAsset>
-        <Compile Include="Common\ImageSelectionHelper.cs"/>
-        <Compile Include="Bindings\LongPressBinding.cs"/>
-        <Compile Include="Bindings\FileCategoryIconBinding.cs"/>
-        <InterfaceDefinition Include="Views\Files\FileExplorerView.xib"/>
-        <Compile Include="Views\Files\FileExplorerView.cs"/>
+        <Compile Include="Common\ImageSelectionHelper.cs" />
+        <Compile Include="Bindings\LongPressBinding.cs" />
+        <Compile Include="Bindings\FileCategoryIconBinding.cs" />
+        <InterfaceDefinition Include="Views\Files\FileExplorerView.xib" />
+        <Compile Include="Views\Files\FileExplorerView.cs" />
         <Compile Include="Views\Files\FileExplorerView.designer.cs">
             <DependentUpon>FileExplorerView.cs</DependentUpon>
         </Compile>
-        <InterfaceDefinition Include="Views\Contacts\ContactsView.xib"/>
-        <Compile Include="Views\Contacts\ContactsView.cs"/>
+        <InterfaceDefinition Include="Views\Contacts\ContactsView.xib" />
+        <Compile Include="Views\Contacts\ContactsView.cs" />
         <Compile Include="Views\Contacts\ContactsView.designer.cs">
             <DependentUpon>ContactsView.cs</DependentUpon>
         </Compile>
-        <InterfaceDefinition Include="Views\Contacts\SharePublicKeyView.xib"/>
-        <Compile Include="Views\Contacts\SharePublicKeyView.cs"/>
+        <InterfaceDefinition Include="Views\Contacts\SharePublicKeyView.xib" />
+        <Compile Include="Views\Contacts\SharePublicKeyView.cs" />
         <Compile Include="Views\Contacts\SharePublicKeyView.designer.cs">
             <DependentUpon>SharePublicKeyView.cs</DependentUpon>
         </Compile>
-        <InterfaceDefinition Include="Views\Contacts\ContactCell.xib"/>
-        <Compile Include="Views\Contacts\ContactCell.cs"/>
+        <InterfaceDefinition Include="Views\Contacts\ContactCell.xib" />
+        <Compile Include="Views\Contacts\ContactCell.cs" />
         <Compile Include="Views\Contacts\ContactCell.designer.cs">
             <DependentUpon>ContactCell.cs</DependentUpon>
         </Compile>
-        <Compile Include="Views\BaseViewController.cs"/>
-        <InterfaceDefinition Include="Views\Files\FolderCell.xib"/>
-        <Compile Include="Views\Files\FolderCell.cs"/>
+        <Compile Include="Views\BaseViewController.cs" />
+        <InterfaceDefinition Include="Views\Files\FolderCell.xib" />
+        <Compile Include="Views\Files\FolderCell.cs" />
         <Compile Include="Views\Files\FolderCell.designer.cs">
             <DependentUpon>FolderCell.cs</DependentUpon>
         </Compile>
-        <Compile Include="Views\BaseViewController.cs"/>
-        <Compile Include="Services\iOSSaveToGalleryService.cs"/>
-        <ImageAsset Include="Media.xcassets\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_pair.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_pair.imageset\account-multiple-plus.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_tick.imageset\check.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_tick.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_file_encrypted.imageset\file-lock.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_file_encrypted.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_world.imageset\earth.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_world.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_key.imageset\key.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_key.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_pencil.imageset\Contents.json"/>
-        <ImageAsset Include="Media.xcassets\ic_pencil.imageset\pencil.pdf"/>
-        <InterfaceDefinition Include="Views\PortalPreferences\PortalPreferencesViewController.xib"/>
-        <Compile Include="Views\PortalPreferences\PortalPreferencesViewController.cs"/>
+        <Compile Include="Views\BaseViewController.cs" />
+        <Compile Include="Services\iOSSaveToGalleryService.cs" />
+        <ImageAsset Include="Media.xcassets\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_pair.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_pair.imageset\account-multiple-plus.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_tick.imageset\check.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_tick.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_file_encrypted.imageset\file-lock.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_file_encrypted.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_world.imageset\earth.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_world.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_key.imageset\key.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_key.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_pencil.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_pencil.imageset\pencil.pdf" />
+        <InterfaceDefinition Include="Views\PortalPreferences\PortalPreferencesViewController.xib" />
+        <Compile Include="Views\PortalPreferences\PortalPreferencesViewController.cs" />
         <Compile Include="Views\PortalPreferences\PortalPreferencesViewController.designer.cs">
             <DependentUpon>PortalPreferencesViewController.cs</DependentUpon>
         </Compile>
-        <Compile Include="Common\HomeMenuAnimator.cs"/>
-        <ImageAsset Include="Media.xcassets\ic_portals.imageset\camera-iris.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_portals.imageset\Contents.json"/>
-        <InterfaceDefinition Include="Views\Onboarding\OnboardingView.xib"/>
-        <Compile Include="Views\Onboarding\OnboardingView.cs"/>
+        <Compile Include="Common\HomeMenuAnimator.cs" />
+        <ImageAsset Include="Media.xcassets\ic_portals.imageset\camera-iris.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_portals.imageset\Contents.json" />
+        <InterfaceDefinition Include="Views\Onboarding\OnboardingView.xib" />
+        <Compile Include="Views\Onboarding\OnboardingView.cs" />
         <Compile Include="Views\Onboarding\OnboardingView.designer.cs">
             <DependentUpon>OnboardingView.cs</DependentUpon>
         </Compile>
-        <ImageAsset Include="Media.xcassets\ic_next.imageset\next-button.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_next.imageset\Contents.json"/>
-        <Compile Include="Styles\StyleExtensions.cs"/>
-        <Compile Include="Bindings\IconBinding.cs"/>
-        <Compile Include="Bindings\NextButtonStyleBinding.cs"/>
-        <ImageAsset Include="Media.xcassets\ic_encryption.imageset\encrypted-file-icon.pdf"/>
-        <ImageAsset Include="Media.xcassets\ic_encryption.imageset\Contents.json"/>
-        <Compile Include="Views\PortalPreferences\PortalPreferencesCell.cs"/>
+        <ImageAsset Include="Media.xcassets\ic_next.imageset\next-button.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_next.imageset\Contents.json" />
+        <Compile Include="Styles\StyleExtensions.cs" />
+        <Compile Include="Bindings\IconBinding.cs" />
+        <Compile Include="Bindings\NextButtonStyleBinding.cs" />
+        <ImageAsset Include="Media.xcassets\ic_encryption.imageset\encrypted-file-icon.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_encryption.imageset\Contents.json" />
+        <Compile Include="Views\PortalPreferences\PortalPreferencesCell.cs" />
         <Compile Include="Views\PortalPreferences\PortalPreferencesCell.designer.cs">
             <DependentUpon>PortalPreferencesCell.cs</DependentUpon>
         </Compile>
-        <InterfaceDefinition Include="Views\Portals\PortalLoginViewController.xib"/>
-        <Compile Include="Views\Portals\PortalLoginViewController.cs"/>
+        <InterfaceDefinition Include="Views\Portals\PortalLoginViewController.xib" />
+        <Compile Include="Views\Portals\PortalLoginViewController.cs" />
         <Compile Include="Views\Portals\PortalLoginViewController.designer.cs">
             <DependentUpon>PortalLoginViewController.cs</DependentUpon>
         </Compile>
-        <InterfaceDefinition Include="Views\Barcode\BarcodeView.xib"/>
-        <Compile Include="Views\Barcode\BarcodeView.cs"/>
+        <InterfaceDefinition Include="Views\Barcode\BarcodeView.xib" />
+        <Compile Include="Views\Barcode\BarcodeView.cs" />
         <Compile Include="Views\Barcode\BarcodeView.designer.cs">
             <DependentUpon>BarcodeView.cs</DependentUpon>
         </Compile>
+        <ImageAsset Include="Media.xcassets\ic_paste.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_paste.imageset\content-paste.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_up.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_down.imageset\chevron-down.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_down.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_up.imageset\chevron-up.pdf" />
     </ItemGroup>
     <ItemGroup>
-        <Reference Include="System"/>
-        <Reference Include="System.Net.Http"/>
-        <Reference Include="System.Xml"/>
-        <Reference Include="System.Core"/>
-        <Reference Include="Xamarin.iOS"/>
+        <Reference Include="System" />
+        <Reference Include="System.Net.Http" />
+        <Reference Include="System.Xml" />
+        <Reference Include="System.Core" />
+        <Reference Include="Xamarin.iOS" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\SkyDrop.Core\SkyDrop.Core.csproj">
@@ -338,21 +344,21 @@
         </PackageReference>
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="Views\Menu\"/>
-        <Folder Include="Views\Drop\"/>
-        <Folder Include="Bindings\"/>
-        <Folder Include="Common\"/>
-        <Folder Include="Converters\"/>
-        <Folder Include="Views\Settings\"/>
-        <Folder Include="Views\Files\"/>
-        <Folder Include="Media.xcassets\"/>
-        <Folder Include="Views\Contacts\"/>
-        <Folder Include="Views\PortalPreferences\"/>
-        <Folder Include="Views\Onboarding\"/>
-        <Folder Include="Views\Portals\"/>
-        <Folder Include="Views\Barcode\"/>
+        <Folder Include="Views\Menu\" />
+        <Folder Include="Views\Drop\" />
+        <Folder Include="Bindings\" />
+        <Folder Include="Common\" />
+        <Folder Include="Converters\" />
+        <Folder Include="Views\Settings\" />
+        <Folder Include="Views\Files\" />
+        <Folder Include="Media.xcassets\" />
+        <Folder Include="Views\Contacts\" />
+        <Folder Include="Views\PortalPreferences\" />
+        <Folder Include="Views\Onboarding\" />
+        <Folder Include="Views\Portals\" />
+        <Folder Include="Views\Barcode\" />
     </ItemGroup>
-    <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets"/>
+    <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
     <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
         <PropertyGroup>
             <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them. For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>

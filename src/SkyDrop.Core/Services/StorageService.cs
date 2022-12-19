@@ -269,6 +269,14 @@ namespace SkyDrop.Core.Services
             Realm.Write(() => { Realm.RemoveAll(); });
         }
 
+        public void DeleteSkynetPortal(SkynetPortal portal)
+        {
+            Realm.Write(() =>
+            {
+                Realm.Remove(portal);
+            });
+        }
+
         public void SaveSkynetPortal(SkynetPortal portal, string apiToken = null)
         {
             Realm.Write(async () =>
@@ -469,5 +477,7 @@ namespace SkyDrop.Core.Services
         SkynetPortal LoadSkynetPortal(string portalId);
 
         void EditSkynetPortal(string id);
+
+        void DeleteSkynetPortal(SkynetPortal portal);
     }
 }

@@ -1,8 +1,11 @@
 ﻿using System;
+using Acr.UserDialogs;
+using CarPlay;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using SkyDrop.Core.DataViewModels;
+using SkyDrop.Core.Utility;
 using UIKit;
 
 namespace SkyDrop.iOS.Views.PortalPreferences
@@ -25,8 +28,18 @@ namespace SkyDrop.iOS.Views.PortalPreferences
                 set.Bind(PortalNameLabel).For(t => t.Text).To(vm => vm.Name);
                 set.Bind(PortalUrlLabel).For(t => t.Text).To(vm => vm.BaseUrl);
                 set.Bind(ContentView).For("Tap").To(vm => vm.TapCommand);
+                set.Bind(UpButton).For("Tap").To(vm => vm.MoveUpCommand);
+                set.Bind(DownButton).For("Tap").To(vm => vm.MoveDownCommand);
                 set.Apply();
             });
+        }
+
+        [Export("awakeFromNib")]
+        public void AwakeFromNib()
+        {
+            Icon.TintColor = Colors.LightGrey.ToNative();
+            UpButton.TintColor = Colors.LightGrey.ToNative();
+            DownButton.TintColor = Colors.LightGrey.ToNative();
         }
     }
 }

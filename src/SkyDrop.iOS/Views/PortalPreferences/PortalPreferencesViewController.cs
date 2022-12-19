@@ -15,7 +15,10 @@ namespace SkyDrop.iOS.Views.PortalPreferences
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            // Perform any additional setup after loading the view, typically from a nib.
+
+            var plusButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_plus") };
+            plusButton.Clicked += (s, e) => ViewModel.AddNewPortalCommand?.Execute();
+            NavigationItem.RightBarButtonItem = plusButton;
 
             var portalsTableSource =
                 new MvxSimpleTableViewSource(PortalPreferencesTableView, PortalPreferencesCell.Key);
@@ -26,6 +29,7 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 
             var set = CreateBindingSet();
             set.Bind(portalsTableSource).For(f => f.ItemsSource).To(vm => vm.UserPortals);
+            set.Bind(this).For(f => f.Title).To(vm => vm.Title);
             set.Apply();
         }
 

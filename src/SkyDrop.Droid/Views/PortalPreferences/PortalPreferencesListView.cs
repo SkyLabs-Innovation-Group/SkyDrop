@@ -27,15 +27,5 @@ namespace SkyDrop.Droid.Views.PortalPreferences
             Adapter = portalPrefsAdapter;
             View = view;
         }
-
-        internal void EditPortal(int position)
-        {
-            View.EditPortal(position);
-        }
-
-        internal void ReorderPortals(int position, int newPosition)
-        {
-            View.ReorderPortals(position, newPosition);
-        }
     }
 }

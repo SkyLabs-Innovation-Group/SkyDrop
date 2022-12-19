@@ -13,21 +13,45 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 	partial class PortalPreferencesCell
 	{
 		[Outlet]
+		UIKit.UIImageView DownButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView Icon { get; set; }
+
+		[Outlet]
 		UIKit.UILabel PortalNameLabel { get; set; }
 
 		[Outlet]
 		UIKit.UILabel PortalUrlLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView UpButton { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (PortalUrlLabel != null) {
-				PortalUrlLabel.Dispose ();
-				PortalUrlLabel = null;
+			if (Icon != null) {
+				Icon.Dispose ();
+				Icon = null;
 			}
 
 			if (PortalNameLabel != null) {
 				PortalNameLabel.Dispose ();
 				PortalNameLabel = null;
+			}
+
+			if (PortalUrlLabel != null) {
+				PortalUrlLabel.Dispose ();
+				PortalUrlLabel = null;
+			}
+
+			if (UpButton != null) {
+				UpButton.Dispose ();
+				UpButton = null;
+			}
+
+			if (DownButton != null) {
+				DownButton.Dispose ();
+				DownButton = null;
 			}
 		}
 	}

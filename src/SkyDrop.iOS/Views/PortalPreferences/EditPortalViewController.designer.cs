@@ -1,8 +1,7 @@
-﻿// WARNING
+// WARNING
 //
-// This file has been generated automatically by Rider IDE
-//   to store outlets and actions made in Xcode.
-// If it is removed, they will be lost.
+// This file has been generated automatically by Visual Studio to store outlets and
+// actions made in the UI designer. If it is removed, they will be lost.
 // Manual changes to this file may not be handled correctly.
 //
 using Foundation;
@@ -14,39 +13,94 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 	partial class EditPortalViewController
 	{
 		[Outlet]
-		UIKit.UITextView PortalApiTokenTextView { get; set; }
+		UIKit.UIView DeleteButton { get; set; }
 
 		[Outlet]
-		UIKit.UITextView PortalNameTextView { get; set; }
+		UIKit.UILabel DeleteLabel { get; set; }
 
 		[Outlet]
-		UIKit.UITextView PortalUrlTextView { get; set; }
+		UIKit.UIView LoginButton { get; set; }
 
 		[Outlet]
-		UIKit.UIButton SaveButton { get; set; }
+		UIKit.UIView PasteApiKeyButton { get; set; }
 
+		[Outlet]
+		UIKit.UIImageView PasteIcon { get; set; }
+
+		[Outlet]
+		UIKit.UITextField PortalApiTokenInput { get; set; }
+
+		[Outlet]
+		UIKit.UIView PortalApiTokenInputContainer { get; set; }
+
+		[Outlet]
+		UIKit.UITextField PortalNameInput { get; set; }
+
+		[Outlet]
+		UIKit.UIView PortalNameInputContainer { get; set; }
+
+		[Outlet]
+		UIKit.UITextField PortalUrlInput { get; set; }
+
+		[Outlet]
+		UIKit.UIView PortalUrlInputContainer { get; set; }
+		
 		void ReleaseDesignerOutlets ()
 		{
-			if (PortalNameTextView != null) {
-				PortalNameTextView.Dispose ();
-				PortalNameTextView = null;
+			if (DeleteButton != null) {
+				DeleteButton.Dispose ();
+				DeleteButton = null;
 			}
 
-			if (PortalUrlTextView != null) {
-				PortalUrlTextView.Dispose ();
-				PortalUrlTextView = null;
+			if (DeleteLabel != null) {
+				DeleteLabel.Dispose ();
+				DeleteLabel = null;
 			}
 
-			if (PortalApiTokenTextView != null) {
-				PortalApiTokenTextView.Dispose ();
-				PortalApiTokenTextView = null;
+			if (PasteApiKeyButton != null) {
+				PasteApiKeyButton.Dispose ();
+				PasteApiKeyButton = null;
 			}
 
-			if (SaveButton != null) {
-				SaveButton.Dispose ();
-				SaveButton = null;
+			if (PasteIcon != null) {
+				PasteIcon.Dispose ();
+				PasteIcon = null;
 			}
 
+			if (PortalApiTokenInput != null) {
+				PortalApiTokenInput.Dispose ();
+				PortalApiTokenInput = null;
+			}
+
+			if (PortalApiTokenInputContainer != null) {
+				PortalApiTokenInputContainer.Dispose ();
+				PortalApiTokenInputContainer = null;
+			}
+
+			if (PortalNameInput != null) {
+				PortalNameInput.Dispose ();
+				PortalNameInput = null;
+			}
+
+			if (PortalNameInputContainer != null) {
+				PortalNameInputContainer.Dispose ();
+				PortalNameInputContainer = null;
+			}
+
+			if (PortalUrlInput != null) {
+				PortalUrlInput.Dispose ();
+				PortalUrlInput = null;
+			}
+
+			if (PortalUrlInputContainer != null) {
+				PortalUrlInputContainer.Dispose ();
+				PortalUrlInputContainer = null;
+			}
+
+			if (LoginButton != null) {
+				LoginButton.Dispose ();
+				LoginButton = null;
+			}
 		}
 	}
 }
