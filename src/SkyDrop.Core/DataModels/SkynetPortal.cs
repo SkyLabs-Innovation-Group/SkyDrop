@@ -12,7 +12,7 @@ namespace SkyDrop.Core.DataModels
 
         private static SkynetPortal _selectedPortalInstance;
 
-        public readonly string InitialBaseUrl;
+        public string InitialBaseUrl { get; set; }
 
         public SkynetPortal()
         {
@@ -47,6 +47,8 @@ namespace SkyDrop.Core.DataModels
 
         public string UserApiToken { get; set; }
 
+        public bool HasLoggedInBrowser { get; set; }
+
         private static SkynetPortal GetSelectedSkynetPortal()
         {
             if (_selectedPortalInstance != null)
@@ -69,6 +71,14 @@ namespace SkyDrop.Core.DataModels
             }
 
             return portal;
+        }
+
+        public static string GetLoginUrl(string url)
+        {
+            //remove protocol
+            if (url.StartsWith("https://")) url = url.Substring(8);
+
+            return $"https://account.{url}";
         }
 
         private static SkynetPortal SetSelectedSkynetPortal(SkynetPortal portal)

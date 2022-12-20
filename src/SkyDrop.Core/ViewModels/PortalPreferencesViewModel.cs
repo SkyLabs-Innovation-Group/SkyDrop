@@ -67,6 +67,8 @@ namespace SkyDrop.Core.ViewModels
 
             var savedPortalsDvms = portalService.ConvertSkynetPortalsToDvMs(savedPortals, ReorderAction);
             UserPortals.SwitchTo(savedPortalsDvms);
+
+            SetTopPortalSelected();
         }
 
         private void ReorderAction(SkynetPortal portal, bool moveUp)
@@ -92,12 +94,23 @@ namespace SkyDrop.Core.ViewModels
             foreach (var portal in copy) storageService.EditSkynetPortal(portal.RealmId);
 
             UserPortals.SwitchTo(copy);
+
+            SetTopPortalSelected();
         }
 
         public void EditPortal(int position)
         {
             var portalId = UserPortals[position].RealmId;
             navigationService.Navigate<EditPortalViewModel, NavParam>(new NavParam { PortalId = portalId });
+        }
+
+        private void SetTopPortalSelected()
+        {
+            var topPortal = UserPortals.FirstOrDefault();
+            if (topPortal == null)
+                return;
+
+            SkynetPortal.SelectedPortal = topPortal.Portal;
         }
     }
 }

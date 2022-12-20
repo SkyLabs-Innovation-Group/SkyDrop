@@ -307,6 +307,17 @@ namespace SkyDrop.Core.Services
             });
         }
 
+        public void SetSkynetPortalLoggedInBrowser(SkynetPortal portal)
+        {
+            Realm.Write(() =>
+            {
+                var storedPortal = Realm.Find<SkynetPortal>(portal.Id);
+                storedPortal.HasLoggedInBrowser = true;
+
+                Realm.Add(storedPortal);
+            });
+        }
+
         public List<SkynetPortal> LoadSkynetPortals()
         {
             return Realm.All<SkynetPortal>().ToList();
@@ -479,5 +490,7 @@ namespace SkyDrop.Core.Services
         void EditSkynetPortal(string id);
 
         void DeleteSkynetPortal(SkynetPortal portal);
+
+        void SetSkynetPortalLoggedInBrowser(SkynetPortal portal);
     }
 }
