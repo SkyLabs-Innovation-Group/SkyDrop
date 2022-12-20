@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <!-- Base theme applied regardless of API level -->
-    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme.Base"
+        parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="colorPrimary">@color/primaryColor</item>
@@ -15,18 +16,21 @@
     </style>
 
     <!-- Default App theme applied if no resource style overrides for specific API level -->
-    <style name="AppTheme" parent="AppTheme.Base">
+    <style name="AppTheme"
+        parent="AppTheme.Base">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
     </style>
 
     <!-- App Splash Screen Theme -->
-    <style name="AppTheme.Splash.Base" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme.Splash.Base"
+        parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 
     <!-- Default Splash Screen theme applied if no resource style overrides for specific API level -->
-    <style name="AppTheme.Splash" parent="AppTheme.Splash.Base">
+    <style name="AppTheme.Splash"
+        parent="AppTheme.Splash.Base">
     </style>
 
 </resources>

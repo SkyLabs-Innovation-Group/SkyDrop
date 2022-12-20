@@ -26,33 +26,28 @@ namespace SkyDrop.Core.Services
 {
     /// <summary>
     /// A public key QR code contains this data format:
-    /// qrFormatIdentifier [2 bytes]
-    /// <- the value should be 1 because we only have one format currently
-    ///     nameLength [2 bytes]
-    ///     name [ nameLength bytes]
-    ///     myId [16 bytes]
-    ///     justScannedId [16 bytes]
-    ///     publicKey [32 bytes]
-    ///     An encrypted file contains this data format:
-    ///     headerFormatIdentifier [2 bytes] <- the value should be 1 because we only have one format currently
-    ///                                          recipientsCount [2 bytes]
-    ///                                          senderId [16 bytes]
-    ///                                          recipient1Id [16 bytes]
-    ///                                          keyForRecipient1 [64 bytes]
-    /// <- the key is encrypted using the
-    ///     recipient's public key
+    /// qrFormatIdentifier [2 bytes] - the value should be 1 because we only have one format currently
+    /// nameLength [2 bytes]
+    /// name [ nameLength bytes]
+    /// myId [16 bytes]
+    /// justScannedId [16 bytes]
+    /// publicKey [32 bytes]
+    /// An encrypted file contains this data format:
+    /// headerFormatIdentifier [2 bytes] - the value should be 1 because we only have one format currently
+    /// recipientsCount [2 bytes]
+    /// senderId [16 bytes]
+    /// recipient1Id [16 bytes]
+    /// keyForRecipient1 [64 bytes] - the key is encrypted using the recipient's public key
     /// recipient2Id [16 bytes]
     /// keyForRecipient2 [64 bytes]
     /// recipient3Id [16 bytes]
     /// keyForRecipient3 [64 bytes]
     /// ...
-    /// encryptedData [? bytes] 
-    ///     
-    /// <- this is encrypted with the key ^
-    ///     encryptedData, when decrypted, contains the following data format:
-    ///     filenameLength [2 bytes]
-    ///     filename [ filenameLength bytes]
-    ///     content [? bytes]
+    /// encryptedData [? bytes] - this is encrypted with the key ^
+    /// encryptedData, when decrypted, contains the following data format:
+    /// filenameLength [2 bytes]
+    /// filename [ filenameLength bytes]
+    /// content [? bytes]
     /// </summary>
     public class EncryptionService : IEncryptionService
     {

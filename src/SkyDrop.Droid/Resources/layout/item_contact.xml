@@ -1,62 +1,62 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="16dp"
+    android:paddingHorizontal="16dp"
+    android:clipToPadding="false"
+    app:MvxBind="Click TapCommand;LongClick LongPressCommand">
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="16dp"
-        android:paddingHorizontal="16dp"
-        android:clipToPadding="false"
-        app:MvxBind="Click TapCommand;LongClick LongPressCommand">
-    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="8dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/midGrey">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="1dp"
-            app:cardBackgroundColor="@color/midGrey">
-        <LinearLayout
+            android:orientation="vertical">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                android:orientation="horizontal">
                 <FrameLayout
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_margin="8dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="8dp"
                 >
                     <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_world"
-                            app:MvxBind="EncryptIcon Name;"/>
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_world"
+                        app:MvxBind="EncryptIcon Name;"/>
                 </FrameLayout>
                 <TextView
-                        android:layout_width="0px"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginRight="8dp"
-                        app:MvxBind="Text Name"
-                        android:textColor="#fff"
-                        android:lines="1"
-                        android:ellipsize="middle"
-                        android:layout_gravity="center_vertical"/>
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginRight="8dp"
+                    app:MvxBind="Text Name"
+                    android:textColor="#fff"
+                    android:lines="1"
+                    android:ellipsize="middle"
+                    android:layout_gravity="center_vertical"/>
                 <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_marginVertical="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:src="@drawable/ic_pencil"
-                        app:MvxBind="Click RenameCommand;ContactsDeleteVisibility ."/>
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/ic_pencil"
+                    app:MvxBind="Click RenameCommand;ContactsDeleteVisibility ."/>
                 <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_margin="8dp"
-                        android:src="@drawable/ic_bin"
-                        app:MvxBind="Click DeleteCommand;ContactsDeleteVisibility ."/>
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="8dp"
+                    android:src="@drawable/ic_bin"
+                    app:MvxBind="Click DeleteCommand;ContactsDeleteVisibility ."/>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
