@@ -124,7 +124,7 @@ namespace SkyDrop.Core.Utility
         }
 
         /// <summary>
-        ///     Concatenate byte arrays
+        /// Concatenate byte arrays
         /// </summary>
         public static byte[] Combine(params byte[][] arrays)
         {
@@ -140,7 +140,7 @@ namespace SkyDrop.Core.Utility
         }
 
         /// <summary>
-        ///     Enables matching extensions with multiple periods correctly e.g. .jpeg.pdf
+        /// Enables matching extensions with multiple periods correctly e.g. .jpeg.pdf
         /// </summary>
         public static string GetFullExtension(string filename)
         {

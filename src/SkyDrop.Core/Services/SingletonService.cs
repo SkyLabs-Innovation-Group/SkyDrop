@@ -26,8 +26,8 @@ namespace SkyDrop.Core.Services
         public IUserDialogs UserDialogs => userDialogs ??= ResolveSingleton<IUserDialogs>();
 
         /// <summary>
-        ///     This method will try to return the singleton resolved using Mvx.IocProvider, and will log and re-throw any caught
-        ///     exceptions.
+        /// This method will try to return the singleton resolved using Mvx.IocProvider, and will log and re-throw any caught
+        /// exceptions.
         /// </summary>
         private T ResolveSingleton<T>() where T : class
         {

@@ -10,7 +10,7 @@ using UIKit;
 namespace SkyDrop.iOS.Bindings
 {
     /// <summary>
-    ///     Binds local file to an ImageView for image previews
+    /// Binds local file to an ImageView for image previews
     /// </summary>
     public class LocalImagePreviewBinding : MvxTargetBinding<UIImageView, SkyFile>
     {

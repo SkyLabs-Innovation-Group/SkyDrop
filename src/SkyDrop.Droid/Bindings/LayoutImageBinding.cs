@@ -7,7 +7,7 @@ using SkyDrop.Core.ViewModels.Main;
 namespace SkyDrop.Droid.Bindings
 {
     /// <summary>
-    ///     Maps a local drawable onto the layout type toggle in files view
+    /// Maps a local drawable onto the layout type toggle in files view
     /// </summary>
     public class LayoutImageBinding : MvxTargetBinding<ImageView, FileLayoutType>
     {

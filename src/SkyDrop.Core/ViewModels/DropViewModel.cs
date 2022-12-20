@@ -63,8 +63,8 @@ namespace SkyDrop.Core.ViewModels.Main
         private DropViewState dropViewUiState;
 
         private string errorMessage;
-        private bool isLoggingIn;
         private TaskCompletionSource<SkyFile> iosMultipleImageSelectTask;
+        private bool isLoggingIn;
         private CancellationTokenSource uploadCancellationToken;
 
         public DropViewModel(ISingletonService singletonService,
@@ -796,7 +796,7 @@ namespace SkyDrop.Core.ViewModels.Main
         }
 
         /// <summary>
-        ///     Asks DropView whether the user is currently performing a swipe gesture
+        /// Asks DropView whether the user is currently performing a swipe gesture
         /// </summary>
         public bool UserIsSwiping()
         {
@@ -877,15 +877,15 @@ namespace SkyDrop.Core.ViewModels.Main
                     var login = "Log in";
                     var open = "Open in browser";
                     var dontShowAgain = "Don't show this again";
-                    var result = await userDialogs.ActionSheetAsync("You may need to log in before you can open in browser", cancel, null, null, login, open, dontShowAgain);
+                    var result = await userDialogs.ActionSheetAsync(
+                        "You may need to log in before you can open in browser", cancel, null, null, login, open,
+                        dontShowAgain);
                     if (result == cancel)
                         return;
 
                     if (result == login)
-                    {
                         //show login page in browser
                         isLoggingIn = true;
-                    }
 
                     if (result == dontShowAgain)
                     {
@@ -904,15 +904,15 @@ namespace SkyDrop.Core.ViewModels.Main
                     TitleMode = BrowserTitleMode.Show
                 });
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.Exception(e);
             }
         }
 
         /// <summary>
-        ///     Open a non-skylink URL
-        ///     For opening SkyFiles, Use OpenFileInBrowser instead
+        /// Open a non-skylink URL
+        /// For opening SkyFiles, Use OpenFileInBrowser instead
         /// </summary>
         private async Task OpenUrlInBrowser(string url)
         {

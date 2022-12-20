@@ -338,7 +338,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        ///     Change alpha of navigation dots display to reflect new UI state
+        /// Change alpha of navigation dots display to reflect new UI state
         /// </summary>
         private void UpdateNavDots()
         {
@@ -367,7 +367,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        ///     Generate and display QR code
+        /// Generate and display QR code
         /// </summary>
         private async Task ShowBarcode(string url)
         {
@@ -390,7 +390,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        ///     Return to the initial UI state
+        /// Return to the initial UI state
         /// </summary>
         private void SetSendReceiveButtonUiState()
         {
@@ -405,7 +405,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        ///     Show the QR code UI state
+        /// Show the QR code UI state
         /// </summary>
         private void SetBarcodeCodeUiState(bool isSlow)
         {
@@ -420,7 +420,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        ///     Slide send button to center
+        /// Slide send button to center
         /// </summary>
         private void AnimateSlideSendButton()
         {
@@ -446,7 +446,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        ///     Slide receive button to center
+        /// Slide receive button to center
         /// </summary>
         private void AnimateSlideReceiveButton()
         {
@@ -465,7 +465,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        ///     Slide in the QR code from the left or right
+        /// Slide in the QR code from the left or right
         /// </summary>
         private void AnimateSlideBarcodeIn(bool isSlow = false)
         {
@@ -484,7 +484,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        ///     Slide send receive buttons out to left or right
+        /// Slide send receive buttons out to left or right
         /// </summary>
         private void AnimateSlideSendReceiveButtonsOut(bool toLeft)
         {
@@ -500,7 +500,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        ///     Slide barcode out, slide send receive buttons in
+        /// Slide barcode out, slide send receive buttons in
         /// </summary>
         private void AnimateSlideBarcodeOut()
         {
@@ -539,7 +539,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        ///     Return barcode to center when user cancels a dismiss-slide action
+        /// Return barcode to center when user cancels a dismiss-slide action
         /// </summary>
         private void AnimateSlideBarcodeToCenter()
         {
@@ -554,7 +554,7 @@ namespace SkyDrop.iOS.Views.Drop
         }
 
         /// <summary>
-        ///     Slide the send receive buttons to screen center when user cancels swipe back to barcode action
+        /// Slide the send receive buttons to screen center when user cancels swipe back to barcode action
         /// </summary>
         private void AnimateSlideSendReceiveCenter()
         {

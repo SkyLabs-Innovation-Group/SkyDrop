@@ -271,10 +271,7 @@ namespace SkyDrop.Core.Services
 
         public void DeleteSkynetPortal(SkynetPortal portal)
         {
-            Realm.Write(() =>
-            {
-                Realm.Remove(portal);
-            });
+            Realm.Write(() => { Realm.Remove(portal); });
         }
 
         public void SaveSkynetPortal(SkynetPortal portal, string apiToken = null)
@@ -336,8 +333,8 @@ namespace SkyDrop.Core.Services
         }
 
         /// <summary>
-        ///     If there is a data discrepancy,
-        ///     Clears the whole database off and resets
+        /// If there is a data discrepancy,
+        /// Clears the whole database off and resets
         /// </summary>
         private Realm GetRealm()
         {

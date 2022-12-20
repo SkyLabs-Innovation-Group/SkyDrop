@@ -6,8 +6,8 @@ using SkyDrop.Droid.Helper;
 namespace SkyDrop.Droid.Bindings
 {
     /// <summary>
-    ///     Binding for use with SaveUnzipIconConverter
-    ///     Expects icons in these formats: "res:ic_download", "ic_download"
+    /// Binding for use with SaveUnzipIconConverter
+    /// Expects icons in these formats: "res:ic_download", "ic_download"
     /// </summary>
     public class IconBinding : MvxTargetBinding<ImageView, string>
     {

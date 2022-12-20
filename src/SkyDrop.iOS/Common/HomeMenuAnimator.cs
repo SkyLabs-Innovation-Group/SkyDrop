@@ -7,17 +7,17 @@ namespace SkyDrop.iOS.Common
 {
     public class HomeMenuAnimator
     {
-        private readonly nfloat homeMenuIconSize;
-        private readonly nfloat miniMenuIconSize;
         private readonly UIView animationContainer;
-        private readonly UIImageView homeMenuButtonSkyDrive;
-        private readonly UIImageView homeMenuButtonPortals;
         private readonly UIImageView homeMenuButtonContacts;
+        private readonly UIImageView homeMenuButtonPortals;
         private readonly UIImageView homeMenuButtonSettings;
-        private readonly UIImageView miniMenuButtonSkyDrive;
-        private readonly UIImageView miniMenuButtonPortals;
+        private readonly UIImageView homeMenuButtonSkyDrive;
+        private readonly nfloat homeMenuIconSize;
         private readonly UIImageView miniMenuButtonContacts;
+        private readonly UIImageView miniMenuButtonPortals;
         private readonly UIImageView miniMenuButtonSettings;
+        private readonly UIImageView miniMenuButtonSkyDrive;
+        private readonly nfloat miniMenuIconSize;
 
         public HomeMenuAnimator(UIImageView homeMenuButtonSkyDrive, UIImageView homeMenuButtonPortals,
             UIImageView homeMenuButtonContacts, UIImageView homeMenuButtonSettings,

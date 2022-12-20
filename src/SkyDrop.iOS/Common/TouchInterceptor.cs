@@ -36,7 +36,7 @@ namespace SkyDrop.iOS.Common
         }
 
         /// <summary>
-        ///     Invokes TouchesUp, so cancelled gestures are treated the same as normal gestures
+        /// Invokes TouchesUp, so cancelled gestures are treated the same as normal gestures
         /// </summary>
         public override void TouchesCancelled(NSSet touches, UIEvent evt)
         {

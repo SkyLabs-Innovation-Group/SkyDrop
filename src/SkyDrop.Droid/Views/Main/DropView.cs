@@ -25,7 +25,7 @@ using Toolbar = AndroidX.AppCompat.Widget.Toolbar;
 namespace SkyDrop.Droid.Views.Main
 {
     /// <summary>
-    ///     File transfer screen
+    /// File transfer screen
     /// </summary>
     [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden,
         ScreenOrientation = ScreenOrientation.Portrait)]
@@ -44,7 +44,7 @@ namespace SkyDrop.Droid.Views.Main
         protected override int ActivityLayoutId => Resource.Layout.DropView;
 
         /// <summary>
-        ///     Initialize view
+        /// Initialize view
         /// </summary>
         protected override async void OnCreate(Bundle bundle)
         {
@@ -116,7 +116,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        ///     Hide barcode when user presses hardware back button
+        /// Hide barcode when user presses hardware back button
         /// </summary>
         public override void OnBackPressed()
         {
@@ -130,7 +130,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        ///     Generate and display QR code
+        /// Generate and display QR code
         /// </summary>
         private async Task ShowBarcode(string url)
         {
@@ -143,7 +143,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        ///     Return to the initial UI state
+        /// Return to the initial UI state
         /// </summary>
         private void SetSendReceiveButtonUiState()
         {
@@ -155,7 +155,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        ///     Show the QR code UI state
+        /// Show the QR code UI state
         /// </summary>
         private void SetBarcodeCodeUiState(bool isSlow = false)
         {
@@ -168,7 +168,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        ///     Slide send button to center
+        /// Slide send button to center
         /// </summary>
         private void AnimateSlideSendButton()
         {
@@ -203,7 +203,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        ///     Slide receive button to center
+        /// Slide receive button to center
         /// </summary>
         private void AnimateSlideReceiveButton()
         {
@@ -230,7 +230,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        ///     Slide in the QR code from the left or right
+        /// Slide in the QR code from the left or right
         /// </summary>
         private void AnimateSlideBarcodeIn(bool fromLeft, bool isSlow)
         {
@@ -251,7 +251,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        ///     Slide barcode out, slide send receive buttons in
+        /// Slide barcode out, slide send receive buttons in
         /// </summary>
         private void AnimateSlideBarcodeOut()
         {
@@ -295,7 +295,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        ///     Return barcode to center when user cancels a dismiss-slide action
+        /// Return barcode to center when user cancels a dismiss-slide action
         /// </summary>
         private void AnimateSlideBarcodeToCenter()
         {
@@ -313,7 +313,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        ///     Slide send receive buttons out to left or right
+        /// Slide send receive buttons out to left or right
         /// </summary>
         private void AnimateSlideSendReceiveButtonsOut(bool toLeft)
         {
@@ -334,7 +334,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        ///     Slide the send receive buttons to screen center when user cancels swipe back to barcode action
+        /// Slide the send receive buttons to screen center when user cancels swipe back to barcode action
         /// </summary>
         private void AnimateSlideSendReceiveCenter()
         {
@@ -350,7 +350,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        ///     Intercept touch events for the whole screen to handle swipe gestures
+        /// Intercept touch events for the whole screen to handle swipe gestures
         /// </summary>
         public override bool DispatchTouchEvent(MotionEvent e)
         {
@@ -424,7 +424,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        ///     Checks whether the user is doing a swipe and returns the result to the VM
+        /// Checks whether the user is doing a swipe and returns the result to the VM
         /// </summary>
         private void CheckUserIsSwiping()
         {
@@ -442,7 +442,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        ///     Create navigation dots display
+        /// Create navigation dots display
         /// </summary>
         private void CreateNavDots()
         {
@@ -464,7 +464,7 @@ namespace SkyDrop.Droid.Views.Main
         }
 
         /// <summary>
-        ///     Change alpha of navigation dots display to reflect new UI state
+        /// Change alpha of navigation dots display to reflect new UI state
         /// </summary>
         private void UpdateNavDots()
         {

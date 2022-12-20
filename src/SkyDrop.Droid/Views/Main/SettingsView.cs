@@ -2,7 +2,6 @@
 using Android.OS;
 using Android.Widget;
 using MvvmCross.Commands;
-using SkyDrop.Core.DataModels;
 using SkyDrop.Core.ViewModels;
 using SkyDrop.Droid.Helper;
 
