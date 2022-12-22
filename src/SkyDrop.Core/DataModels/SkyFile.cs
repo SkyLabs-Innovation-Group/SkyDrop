@@ -11,8 +11,8 @@ namespace SkyDrop.Core.DataModels
         private const int SkylinkLength = 46;
 
         /// <summary>
-        ///     If true, scanned SkyFiles use the scanned URL unmodified, if false, scanned skylinks uses the SkyDrop user's
-        ///     selected portal URL.
+        /// If true, scanned SkyFiles use the scanned URL unmodified, if false, scanned skylinks uses the SkyDrop user's
+        /// selected portal URL.
         /// </summary>
         public static bool UseUploadPortal = false;
 
@@ -43,8 +43,8 @@ namespace SkyDrop.Core.DataModels
         }
 
         /// <summary>
-        ///     True if this file was sent from this device
-        ///     False if this file was recieved from another device
+        /// True if this file was sent from this device
+        /// False if this file was recieved from another device
         /// </summary>
         public bool WasSent { get; set; }
 
@@ -58,7 +58,7 @@ namespace SkyDrop.Core.DataModels
         }
 
         /// <summary>
-        ///     Convert raw skylink to full skylink url
+        /// Convert raw skylink to full skylink url
         /// </summary>
         public string GetSkylinkUrl()
         {
@@ -68,7 +68,7 @@ namespace SkyDrop.Core.DataModels
         }
 
         /// <summary>
-        ///     Checks if a URL is a skyfile
+        /// Checks if a URL is a skyfile
         /// </summary>
         public static bool IsSkyfile(string fullSkylinkUrl)
         {

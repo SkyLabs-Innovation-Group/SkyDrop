@@ -1,77 +1,77 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="16dp"
-        android:paddingLeft="16dp"
-        android:clipToPadding="false"
-        android:background="@color/darkGrey"
-        app:MvxBind="Click TapCommand">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="16dp"
+    android:paddingLeft="16dp"
+    android:clipToPadding="false"
+    android:background="@color/darkGrey"
+    app:MvxBind="Click TapCommand">
     <ImageView
-            android:layout_width="54dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_skynet_logo"
-            android:tint="@color/lightGrey"/>
+        android:layout_width="54dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_skynet_logo"
+        android:tint="@color/lightGrey"/>
     <LinearLayout
-            android:layout_width="0dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/portalTitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="16dp"
-            android:orientation="vertical">
+            android:text="Portal.Title"
+            android:textColor="@android:color/white"
+            android:textSize="17sp"
+            app:MvxBind="Text Name;"/>
         <TextView
-                android:id="@+id/portalTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Portal.Title"
-                android:textColor="@android:color/white"
-                android:textSize="17sp"
-                app:MvxBind="Text Name;"/>
-        <TextView
-                android:id="@+id/portalUrl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                tools:text="https://web3portal.com"
-                android:clickable="false"
-                android:textColor="@android:color/white"
-                app:MvxBind="Text BaseUrl;"/>
+            android:id="@+id/portalUrl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            tools:text="https://web3portal.com"
+            android:clickable="false"
+            android:textColor="@android:color/white"
+            app:MvxBind="Text BaseUrl;"/>
 
     </LinearLayout>
 
     <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginVertical="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="14dp"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/upvoteButton"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:color="#FFFFFF"
             android:layout_gravity="center"
-            android:layout_marginVertical="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="14dp"
-            android:orientation="vertical">
+            android:layout_weight="1"
+            android:src="@drawable/ic_upvote"
+            android:tint="@color/lightGrey"
+            app:MvxBind="Click MoveUpCommand"/>
         <ImageView
-                android:id="@+id/upvoteButton"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:color="#FFFFFF"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:src="@drawable/ic_upvote"
-                android:tint="@color/lightGrey"
-                app:MvxBind="Click MoveUpCommand"/>
-        <ImageView
-                android:id="@+id/downvoteButton"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:color="#FFFFFF"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:src="@drawable/ic_downvote"
-                android:tint="@color/lightGrey"
-                app:MvxBind="Click MoveDownCommand"/>
+            android:id="@+id/downvoteButton"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:color="#FFFFFF"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@drawable/ic_downvote"
+            android:tint="@color/lightGrey"
+            app:MvxBind="Click MoveDownCommand"/>
 
     </LinearLayout>
 

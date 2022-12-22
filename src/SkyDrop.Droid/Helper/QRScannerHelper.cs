@@ -7,7 +7,7 @@ using ZXing.Mobile;
 namespace SkyDrop.Droid.Helper
 {
     /// <summary>
-    ///     Enables us to show the scanner camera using the correct aspect ratio
+    /// Enables us to show the scanner camera using the correct aspect ratio
     /// </summary>
     public static class QrScannerHelper
     {

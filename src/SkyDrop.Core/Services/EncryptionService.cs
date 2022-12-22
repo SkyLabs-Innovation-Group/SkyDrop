@@ -25,33 +25,29 @@ using Contact = SkyDrop.Core.DataModels.Contact;
 namespace SkyDrop.Core.Services
 {
     /// <summary>
-    ///     A public key QR code contains this data format:
-    ///     qrFormatIdentifier [2 bytes]
-    ///     <- the value should be 1 because we only have one format currently
-    ///         nameLength [2 bytes]
-    ///         name [ nameLength bytes]
-    ///         myId [16 bytes]
-    ///         justScannedId [16 bytes]
-    ///         publicKey [32 bytes]
-    ///         An encrypted file contains this data format:
-    ///         headerFormatIdentifier [2 bytes] <- the value should be 1 because we only have one format currently
-    ///                                              recipientsCount [2 bytes]
-    ///                                              senderId [16 bytes]
-    ///                                              recipient1Id [16 bytes]
-    ///                                              keyForRecipient1 [64 bytes]
-    ///     <- the key is encrypted using the
-    ///         recipient's public key
+    /// A public key QR code contains this data format:
+    /// qrFormatIdentifier [2 bytes] - the value should be 1 because we only have one format currently
+    /// nameLength [2 bytes]
+    /// name [ nameLength bytes]
+    /// myId [16 bytes]
+    /// justScannedId [16 bytes]
+    /// publicKey [32 bytes]
+    /// An encrypted file contains this data format:
+    /// headerFormatIdentifier [2 bytes] - the value should be 1 because we only have one format currently
+    /// recipientsCount [2 bytes]
+    /// senderId [16 bytes]
+    /// recipient1Id [16 bytes]
+    /// keyForRecipient1 [64 bytes] - the key is encrypted using the recipient's public key
     /// recipient2Id [16 bytes]
     /// keyForRecipient2 [64 bytes]
     /// recipient3Id [16 bytes]
     /// keyForRecipient3 [64 bytes]
     /// ...
-    /// encryptedData [? bytes] 
-    ///     <- this is encrypted with the key ^
-    ///         encryptedData, when decrypted, contains the following data format:
-    ///         filenameLength [2 bytes]
-    ///         filename [ filenameLength bytes]
-    ///         content [? bytes]
+    /// encryptedData [? bytes] - this is encrypted with the key ^
+    /// encryptedData, when decrypted, contains the following data format:
+    /// filenameLength [2 bytes]
+    /// filename [ filenameLength bytes]
+    /// content [? bytes]
     /// </summary>
     public class EncryptionService : IEncryptionService
     {
@@ -66,16 +62,17 @@ namespace SkyDrop.Core.Services
         }
 
         private const int GuidSizeBytes = 16;
+
+        private readonly IBlockCipher engine = new ThreefishEngine(256); //the cipher engine for encryption
         private readonly IFileSystemService fileSystemService;
+
+        private readonly IAsymmetricCipherKeyPairGenerator
+            keyGen = new X25519KeyPairGenerator(); //keypair generator for X25519 key agreement scheme
+
         private readonly SecureRandom random = new SecureRandom();
         private readonly IStorageService storageService;
 
         private readonly IUserDialogs userDialogs;
-
-        private readonly IBlockCipher engine = new ThreefishEngine(256); //the cipher engine for encryption
-
-        private readonly IAsymmetricCipherKeyPairGenerator
-            keyGen = new X25519KeyPairGenerator(); //keypair generator for X25519 key agreement scheme
 
         private Guid myId;
         private string myName;
@@ -485,7 +482,7 @@ namespace SkyDrop.Core.Services
     public interface IEncryptionService
     {
         /// <summary>
-        ///     Get data for QR code for pairing devices
+        /// Get data for QR code for pairing devices
         /// </summary>
         /// <param name="justScannedId">The ID of the public key QR code you just scanned OR a GUID filled with zeros by default</param>
         /// <returns></returns>

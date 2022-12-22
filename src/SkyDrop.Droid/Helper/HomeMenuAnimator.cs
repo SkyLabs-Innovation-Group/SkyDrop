@@ -9,17 +9,17 @@ namespace SkyDrop.Droid.Helper
 {
     public class HomeMenuAnimator
     {
-        private readonly int iconSize;
         private readonly FrameLayout animationContainer;
         private readonly Context context;
-        private readonly ImageView homeMenuIconSkyDrive;
-        private readonly ImageView homeMenuIconPortals;
         private readonly ImageView homeMenuIconContacts;
+        private readonly ImageView homeMenuIconPortals;
         private readonly ImageView homeMenuIconSettings;
-        private readonly ImageView miniMenuIconSkyDrive;
-        private readonly ImageView miniMenuIconPortals;
+        private readonly ImageView homeMenuIconSkyDrive;
+        private readonly int iconSize;
         private readonly ImageView miniMenuIconContacts;
+        private readonly ImageView miniMenuIconPortals;
         private readonly ImageView miniMenuIconSettings;
+        private readonly ImageView miniMenuIconSkyDrive;
 
         public HomeMenuAnimator(ImageView homeMenuIconSkyDrive, ImageView homeMenuIconPortals,
             ImageView homeMenuIconContacts, ImageView homeMenuIconSettings,

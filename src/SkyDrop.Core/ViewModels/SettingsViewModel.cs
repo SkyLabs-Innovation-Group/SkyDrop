@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
-using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Services;
 using Xamarin.Essentials;
 
@@ -28,7 +26,8 @@ namespace SkyDrop.Core.ViewModels
 
             BackCommand = new MvxAsyncCommand(async () => await navigationService.Close(this));
             SetDeviceNameCommand = new MvxCommand(SetDeviceName);
-            ViewOnboardingCommand = new MvxAsyncCommand(async () => await navigationService.Navigate<OnboardingViewModel>());
+            ViewOnboardingCommand =
+                new MvxAsyncCommand(async () => await navigationService.Navigate<OnboardingViewModel>());
 
             DeviceName = encryptionService.GetDeviceName();
         }

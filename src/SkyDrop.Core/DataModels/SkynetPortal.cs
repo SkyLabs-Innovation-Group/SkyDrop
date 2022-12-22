@@ -12,8 +12,6 @@ namespace SkyDrop.Core.DataModels
 
         private static SkynetPortal _selectedPortalInstance;
 
-        public string InitialBaseUrl { get; set; }
-
         public SkynetPortal()
         {
         }
@@ -29,6 +27,8 @@ namespace SkyDrop.Core.DataModels
         {
             Name = name;
         }
+
+        public string InitialBaseUrl { get; set; }
 
         public static SkynetPortal SelectedPortal
         {
@@ -56,10 +56,7 @@ namespace SkyDrop.Core.DataModels
 
             var portalUrl = Preferences.Get(PreferenceKey.SelectedSkynetPortal, "");
 
-            if (string.IsNullOrEmpty(portalUrl))
-            {
-                return new SkynetPortal(DefaultWeb3PortalUrl);
-            }
+            if (string.IsNullOrEmpty(portalUrl)) return new SkynetPortal(DefaultWeb3PortalUrl);
 
             var portal = new SkynetPortal(portalUrl);
             portal.UserApiToken = SecureStorage.GetAsync(portal.GetApiTokenPrefKey()).GetAwaiter().GetResult();

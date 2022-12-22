@@ -6,8 +6,8 @@ using SkyDrop.Core.DataModels;
 namespace SkyDrop.Core.Services
 {
     /// <summary>
-    ///     Keeps a running average of upload rates
-    ///     This is used to calculate estimated upload progress
+    /// Keeps a running average of upload rates
+    /// This is used to calculate estimated upload progress
     /// </summary>
     public class UploadTimerService : IUploadTimerService
     {

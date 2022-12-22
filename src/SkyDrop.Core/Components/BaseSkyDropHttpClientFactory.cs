@@ -16,7 +16,7 @@ namespace SkyDrop.Core.Components
             new Dictionary<SkynetPortal, HttpClient>();
 
         /// <summary>
-        ///     This is the default paramaterless implementation for GetSkyDropHttpClientInstance(), it returns the default portal.
+        /// This is the default paramaterless implementation for GetSkyDropHttpClientInstance(), it returns the default portal.
         /// </summary>
         public HttpClient GetSkyDropHttpClientInstance()
         {
@@ -24,7 +24,7 @@ namespace SkyDrop.Core.Components
         }
 
         /// <summary>
-        ///     This method returns a HttpClient connected to $portal.BaseUrl.
+        /// This method returns a HttpClient connected to $portal.BaseUrl.
         /// </summary>
         public abstract HttpClient GetSkyDropHttpClientInstance(SkynetPortal portal);
 

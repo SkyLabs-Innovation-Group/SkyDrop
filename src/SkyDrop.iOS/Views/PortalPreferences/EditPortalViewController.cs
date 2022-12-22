@@ -43,8 +43,10 @@ namespace SkyDrop.iOS.Views.PortalPreferences
 
             LoginButton.BackgroundColor = Colors.MidGrey.ToNative();
 
-            PortalNameInputContainer.AddGestureRecognizer(new UITapGestureRecognizer(() => PortalNameInput.BecomeFirstResponder()));
-            PortalUrlInputContainer.AddGestureRecognizer(new UITapGestureRecognizer(() => PortalUrlInput.BecomeFirstResponder()));
+            PortalNameInputContainer.AddGestureRecognizer(new UITapGestureRecognizer(() =>
+                PortalNameInput.BecomeFirstResponder()));
+            PortalUrlInputContainer.AddGestureRecognizer(new UITapGestureRecognizer(() =>
+                PortalUrlInput.BecomeFirstResponder()));
 
             var set = CreateBindingSet();
             set.Bind(PortalNameInput).For(v => v.Text).To(vm => vm.PortalName);

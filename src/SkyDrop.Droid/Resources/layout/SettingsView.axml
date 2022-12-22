@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/layout_toolbar"
-        layout="@layout/toolbar_default" />
+        layout="@layout/toolbar_default"/>
 
     <!-- Device name -->
 
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        />
+    />
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
@@ -40,7 +40,7 @@
             android:background="#555"
             android:inputType="textUri"
             app:MvxBind="Text DeviceName"
-            />
+        />
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -59,12 +59,12 @@
             android:background="#555"
             android:textColor="#fff"
             app:MvxBind="Click SetDeviceNameCommand"
-            />
+        />
 
     </com.google.android.material.card.MaterialCardView>
 
     <!-- Checkbox toggles -->
-    
+
     <CheckBox
         android:id="@+id/uploadNotificationCheckbox"
         android:layout_width="wrap_content"
@@ -73,7 +73,7 @@
         app:MvxBind="Checked UploadNotificationsEnabled"
         android:layout_marginVertical="16dp"
         android:layout_marginLeft="10dp"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"/>
 
     <CheckBox
         android:id="@+id/verifySslCheckbox"
@@ -83,7 +83,7 @@
         app:MvxBind="Checked VerifySslCertificates"
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="10dp"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"/>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
@@ -101,7 +101,7 @@
             android:background="#555"
             android:textColor="#fff"
             app:MvxBind="Click ViewOnboardingCommand"
-            />
+        />
 
     </com.google.android.material.card.MaterialCardView>
 

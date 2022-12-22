@@ -35,7 +35,8 @@ namespace SkyDrop.Core.Services
             this.navigationService = navigationService;
         }
 
-        public List<SkynetPortalDvm> ConvertSkynetPortalsToDvMs(List<SkynetPortal> skynetPortals, Action<SkynetPortal, bool> reorderAction)
+        public List<SkynetPortalDvm> ConvertSkynetPortalsToDvMs(List<SkynetPortal> skynetPortals,
+            Action<SkynetPortal, bool> reorderAction)
         {
             var dvmList = new List<SkynetPortalDvm>();
             foreach (var portal in skynetPortals)
@@ -57,6 +58,7 @@ namespace SkyDrop.Core.Services
 
     public interface IPortalService
     {
-        List<SkynetPortalDvm> ConvertSkynetPortalsToDvMs(List<SkynetPortal> skynetPortals, Action<SkynetPortal, bool> reorderAction);
+        List<SkynetPortalDvm> ConvertSkynetPortalsToDvMs(List<SkynetPortal> skynetPortals,
+            Action<SkynetPortal, bool> reorderAction);
     }
 }

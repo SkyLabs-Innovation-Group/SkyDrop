@@ -1,7 +1,6 @@
 ﻿using System;
 using Acr.UserDialogs;
 using MvvmCross.Commands;
-using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Utility;
 using SkyDrop.Core.ViewModels;
 using UIKit;
@@ -39,7 +38,7 @@ namespace SkyDrop.iOS.Views.Settings
         }
 
         /// <summary>
-        ///     Keeps text input text centered vertically
+        /// Keeps text input text centered vertically
         /// </summary>
         private void AdjustTextBoxContentSize(UITextView tv)
         {

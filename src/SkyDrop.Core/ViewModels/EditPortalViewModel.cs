@@ -13,25 +13,8 @@ namespace SkyDrop.Core.ViewModels
 {
     public class EditPortalViewModel : BaseViewModel<NavParam>
     {
-        public SkynetPortal Portal;
-        public TaskCompletionSource<bool> PrepareTcs { get; set; } = new TaskCompletionSource<bool>();
-        public string PortalName { get; set; }
-        public string PortalUrl { get; set; }
-        public string ApiToken { get; set; }
-        public bool IsAddingNewPortal { get; set; }
-        public bool IsLoginButtonVisible => ApiToken.IsNullOrEmpty();
-        public IMvxCommand SavePortalCommand { get; set; }
-        public IMvxCommand LoginWithPortalCommand { get; set; }
-        public IMvxCommand PasteApiKeyCommand { get; set; }
-        public IMvxCommand BackCommand { get; set; }
-        public IMvxCommand DeletePortalCommand { get; set; }
-
         private readonly IMvxNavigationService navigationService;
-
-        public class NavParam
-        {
-            public string PortalId { get; set; }
-        }
+        public SkynetPortal Portal;
 
         public EditPortalViewModel(ISingletonService singletonService, IMvxNavigationService navigationService) : base(
             singletonService)
@@ -45,6 +28,18 @@ namespace SkyDrop.Core.ViewModels
             DeletePortalCommand = new MvxAsyncCommand(DeletePortal);
             this.navigationService = navigationService;
         }
+
+        public TaskCompletionSource<bool> PrepareTcs { get; set; } = new TaskCompletionSource<bool>();
+        public string PortalName { get; set; }
+        public string PortalUrl { get; set; }
+        public string ApiToken { get; set; }
+        public bool IsAddingNewPortal { get; set; }
+        public bool IsLoginButtonVisible => ApiToken.IsNullOrEmpty();
+        public IMvxCommand SavePortalCommand { get; set; }
+        public IMvxCommand LoginWithPortalCommand { get; set; }
+        public IMvxCommand PasteApiKeyCommand { get; set; }
+        public IMvxCommand BackCommand { get; set; }
+        public IMvxCommand DeletePortalCommand { get; set; }
 
         private void SavePortal()
         {
@@ -111,7 +106,7 @@ namespace SkyDrop.Core.ViewModels
         private async Task PasteApiKey()
         {
             var maxLength = 100;
-            var text = await Xamarin.Essentials.Clipboard.GetTextAsync();
+            var text = await Clipboard.GetTextAsync();
             if (text == null)
                 return;
 
@@ -122,7 +117,8 @@ namespace SkyDrop.Core.ViewModels
 
         private async Task DeletePortal()
         {
-            var confirmed = await SingletonService.UserDialogs.ConfirmAsync("Are you sure you want to delete this portal?");
+            var confirmed =
+                await SingletonService.UserDialogs.ConfirmAsync("Are you sure you want to delete this portal?");
             if (!confirmed)
                 return;
 
@@ -131,6 +127,11 @@ namespace SkyDrop.Core.ViewModels
             SingletonService.UserDialogs.Toast("Deleted");
 
             await navigationService.Close(this);
+        }
+
+        public class NavParam
+        {
+            public string PortalId { get; set; }
         }
     }
 }
