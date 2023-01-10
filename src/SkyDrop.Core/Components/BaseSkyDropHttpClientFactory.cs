@@ -63,7 +63,6 @@ namespace SkyDrop.Core.Components
         protected static void AddApiTokenHeader(HttpClient client, SkynetPortal portal)
         {
             client.DefaultRequestHeaders.Remove(PortalApiTokenHeader);
-
             if (portal.HasApiToken()) client.DefaultRequestHeaders.Add(PortalApiTokenHeader, portal.UserApiToken);
         }
     }

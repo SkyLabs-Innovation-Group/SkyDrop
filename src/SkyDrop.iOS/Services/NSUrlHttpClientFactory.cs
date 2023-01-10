@@ -5,6 +5,7 @@ using Foundation;
 using ObjCRuntime;
 using SkyDrop.Core.Components;
 using SkyDrop.Core.DataModels;
+using SkyDrop.iOS.Common;
 
 namespace SkyDrop.iOS.Services
 {
@@ -28,7 +29,7 @@ namespace SkyDrop.iOS.Services
                     $"skydrop.skydrop.{HttpClientsPerPortal.Count}")
                 : NSUrlSessionConfiguration.DefaultSessionConfiguration;
 
-            var client = new HttpClient(new NSUrlSessionHandler(configuration))
+            var client = new HttpClient(new RetryHandler(configuration))
             {
                 BaseAddress = new Uri(portal.BaseUrl),
                 Timeout = TimeSpan.FromMinutes(120)

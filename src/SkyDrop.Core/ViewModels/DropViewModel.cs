@@ -383,18 +383,13 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void HandleUploadError(Exception ex, string prompt, FileUploadResult result)
         {
+            Log.Exception(ex);
+
             if (Connectivity.NetworkAccess != NetworkAccess.Internet)
                 prompt = NoInternetPrompt;
 
-            if (result == FileUploadResult.Fail)
-            {
+            if (result == FileUploadResult.Fail || result == FileUploadResult.Cancelled)
                 userDialogs.Alert(prompt);
-                Log.Exception(ex);
-            }
-            else if (result == FileUploadResult.Cancelled)
-            {
-                userDialogs.Toast(prompt);
-            }
 
             //reset progress indicator for next attempt
             UploadProgress = 0;
