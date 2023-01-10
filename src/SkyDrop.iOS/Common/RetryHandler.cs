@@ -35,7 +35,9 @@ namespace SkyDrop.iOS.Common
 
                 try
                 {
+                    // Switch these to test with the cancellationToken enabled
                     response = await base.SendAsync(request, CancellationToken.None);
+                    //response = await base.SendAsync(request, cancellationToken);
                 }
                 catch (Exception ex)
                 {
