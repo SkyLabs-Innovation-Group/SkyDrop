@@ -1,24 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical"
-        android:background="@color/darkGrey">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:background="@color/darkGrey">
     <include
-            android:id="@+id/layout_toolbar"
-            layout="@layout/toolbar_portal_preferences"/>
-
+        android:id="@+id/layout_toolbar"
+        layout="@layout/toolbar_portal_preferences"/>
 
     <skydrop.droid.views.portalpreferences.PortalPreferencesListView
-            android:id="@+id/PortalPreferencesListView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            app:MvxItemTemplate="@layout/item_skynet_portal"
-            app:MvxBind="ItemsSource UserPortals;"/>
-
+        android:id="@+id/PortalPreferencesListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        app:MvxItemTemplate="@layout/item_skynet_portal"
+        app:MvxBind="ItemsSource UserPortals;"/>
 
 </LinearLayout>

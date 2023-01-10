@@ -9,7 +9,7 @@ namespace SkyDrop.Core.ViewModels
 
         public BaseViewModel(ISingletonService singletonService)
         {
-            this.SingletonService = singletonService;
+            SingletonService = singletonService;
             Log = singletonService.Log;
         }
 

@@ -14,7 +14,7 @@ namespace SkyDrop.Droid.Services
         // Check BaseSkyDropHttpClientFactory for the default portal logic.
 
         /// <summary>
-        ///     Get the HttpClient which connects to the portal provided by argument.
+        /// Get the HttpClient which connects to the portal provided by argument.
         /// </summary>
         public override HttpClient GetSkyDropHttpClientInstance(SkynetPortal portal)
         {

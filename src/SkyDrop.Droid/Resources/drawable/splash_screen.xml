@@ -5,8 +5,8 @@
     </item>
     <item>
         <bitmap android:src="@drawable/ic_skydrop_logo"
-                android:tileMode="disabled"
-                android:gravity="center"
-                android:layout_gravity="center"/>
+            android:tileMode="disabled"
+            android:gravity="center"
+            android:layout_gravity="center"/>
     </item>
 </layer-list>

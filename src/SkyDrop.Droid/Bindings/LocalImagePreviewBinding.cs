@@ -10,9 +10,9 @@ using SkyDrop.Droid.Helper;
 namespace SkyDrop.Droid.Bindings
 {
     /// <summary>
-    ///     Binds a SkyFile to an MvxCachedImageView for file preview
-    ///     FFImageLoading handles optimising the stream, so I am generating it only right before passing it to
-    ///     Target.ImageStream.
+    /// Binds a SkyFile to an MvxCachedImageView for file preview
+    /// FFImageLoading handles optimising the stream, so I am generating it only right before passing it to
+    /// Target.ImageStream.
     /// </summary>
     public class LocalImagePreviewBinding : MvxTargetBinding<MvxCachedImageView, SkyFile>
     {

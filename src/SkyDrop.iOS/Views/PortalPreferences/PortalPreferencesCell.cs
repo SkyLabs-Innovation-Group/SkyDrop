@@ -1,6 +1,5 @@
 ﻿using System;
 using Acr.UserDialogs;
-using CarPlay;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding.Views;

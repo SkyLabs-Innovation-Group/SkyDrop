@@ -6,13 +6,12 @@ using UIKit;
 namespace SkyDrop.iOS.Bindings
 {
     /// <summary>
-    ///     Binds long press event to a command
+    /// Binds long press event to a command
     /// </summary>
     public class LongPressBinding : MvxTargetBinding<UIView, IMvxCommand>
     {
-        private IMvxCommand command;
-
         private readonly UILongPressGestureRecognizer longPressRecognizer;
+        private IMvxCommand command;
 
         public LongPressBinding(UIView target) : base(target)
         {

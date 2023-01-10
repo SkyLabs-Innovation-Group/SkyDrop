@@ -62,7 +62,7 @@ namespace SkyDrop.iOS.Views.Barcode
         }
 
         /// <summary>
-        ///     Generate and display QR code
+        /// Generate and display QR code
         /// </summary>
         private async Task ShowBarcode()
         {
@@ -92,7 +92,7 @@ namespace SkyDrop.iOS.Views.Barcode
         }
 
         /// <summary>
-        ///     Delays the barcode generation so it doesn't need to render constantly while typing
+        /// Delays the barcode generation so it doesn't need to render constantly while typing
         /// </summary>
         private void InitTextTimer()
         {

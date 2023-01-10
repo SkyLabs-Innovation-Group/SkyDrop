@@ -8,6 +8,16 @@ namespace SkyDrop.Core.DataViewModels
 {
     public class SkynetPortalDvm : MvxNotifyPropertyChanged
     {
+        public SkynetPortalDvm(SkynetPortal portal)
+        {
+            Portal = portal;
+            Name = portal.Name;
+            BaseUrl = portal.BaseUrl;
+            RealmId = portal.Id;
+            PortalPreferencesPosition = portal.PortalPreferencesPosition;
+            ApiTokenPrefKey = portal.GetApiTokenPrefKey();
+        }
+
         public SkynetPortal Portal { get; set; }
         public string RealmId { get; set; }
         public string Name { get; set; }
@@ -18,16 +28,6 @@ namespace SkyDrop.Core.DataViewModels
         public IMvxCommand LongPressCommand { get; set; }
         public IMvxCommand MoveUpCommand { get; set; }
         public IMvxCommand MoveDownCommand { get; set; }
-
-        public SkynetPortalDvm(SkynetPortal portal)
-        {
-            Portal = portal;
-            Name = portal.Name;
-            BaseUrl = portal.BaseUrl;
-            RealmId = portal.Id;
-            PortalPreferencesPosition = portal.PortalPreferencesPosition;
-            ApiTokenPrefKey = portal.GetApiTokenPrefKey();
-        }
 
         public Task<string> GetApiToken()
         {

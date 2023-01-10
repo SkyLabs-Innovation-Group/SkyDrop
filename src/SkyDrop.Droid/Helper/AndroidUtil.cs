@@ -51,7 +51,7 @@ namespace SkyDrop.Droid.Helper
         }
 
         /// <summary>
-        ///     Get the filename for a local file on Android
+        /// Get the filename for a local file on Android
         /// </summary>
         public static string GetFileName(Context context, Uri uri)
         {
@@ -141,8 +141,8 @@ namespace SkyDrop.Droid.Helper
         }
 
         /// <summary>
-        ///     Creates a "channel" (category) for local notifications, required from Android O
-        ///     Call this in OnCreate()
+        /// Creates a "channel" (category) for local notifications, required from Android O
+        /// Call this in OnCreate()
         /// </summary>
         public static void CreateNotificationChannel(Context context)
         {

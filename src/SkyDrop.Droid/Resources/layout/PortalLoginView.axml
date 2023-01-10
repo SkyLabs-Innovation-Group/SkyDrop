@@ -1,54 +1,54 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical"
-        android:background="@color/darkGrey">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:background="@color/darkGrey">
     <include
-            android:id="@+id/layout_toolbar"
-            layout="@layout/toolbar_default"/>
+        android:id="@+id/layout_toolbar"
+        layout="@layout/toolbar_default"/>
     <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                android:orientation="vertical"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_horizontal"
-                app:MvxBind="Visibility Visibility(IsLoadingLabelVisible)">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            app:MvxBind="Visibility Visibility(IsLoadingLabelVisible)">
             <FrameLayout
-                    android:layout_width="40dp"
-                    android:layout_height="40dp">
+                android:layout_width="40dp"
+                android:layout_height="40dp">
                 <ProgressBar
-                        android:id="@+id/ProgressBar"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:progressTint="#eee"
-                        app:MvxBind="Visibility InvertedVisibility(IsError)"/>
+                    android:id="@+id/ProgressBar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:progressTint="#eee"
+                    app:MvxBind="Visibility InvertedVisibility(IsError)"/>
             </FrameLayout>
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center_horizontal"
-                    android:textSize="17dp"
-                    android:textStyle="bold"
-                    android:textColor="#eee"
-                    android:text="Doing something..."
-                    app:MvxBind="Text LoadingLabelText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_horizontal"
+                android:textSize="17dp"
+                android:textStyle="bold"
+                android:textColor="#eee"
+                android:text="Doing something..."
+                app:MvxBind="Text LoadingLabelText"
             />
         </LinearLayout>
         <FrameLayout
-                android:id="@+id/WebViewContainer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:MvxBind="Visibility InvertedVisibility(IsLoggedIn)">
+            android:id="@+id/WebViewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:MvxBind="Visibility InvertedVisibility(IsLoggedIn)">
         </FrameLayout>
     </FrameLayout>
 </LinearLayout>

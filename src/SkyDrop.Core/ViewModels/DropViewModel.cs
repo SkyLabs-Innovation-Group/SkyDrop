@@ -64,6 +64,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private string errorMessage;
         private TaskCompletionSource<SkyFile> iosMultipleImageSelectTask;
+        private bool isLoggingIn;
         private CancellationTokenSource uploadCancellationToken;
 
         public DropViewModel(ISingletonService singletonService,
@@ -795,7 +796,7 @@ namespace SkyDrop.Core.ViewModels.Main
         }
 
         /// <summary>
-        ///     Asks DropView whether the user is currently performing a swipe gesture
+        /// Asks DropView whether the user is currently performing a swipe gesture
         /// </summary>
         public bool UserIsSwiping()
         {
@@ -861,21 +862,57 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task OpenFileInBrowser()
         {
-            if (UserIsSwiping())
-                return;
-
-            var skylinkUrl = FocusedFile.GetSkylinkUrl();
-            Log.Trace("Opening Skylink " + skylinkUrl);
-            await Browser.OpenAsync(skylinkUrl, new BrowserLaunchOptions
+            try
             {
-                LaunchMode = BrowserLaunchMode.SystemPreferred,
-                TitleMode = BrowserTitleMode.Show
-            });
+                if (UserIsSwiping())
+                    return;
+
+                var isLoggingIn = false;
+                if (!SkynetPortal.SelectedPortal.HasLoggedInBrowser)
+                {
+                    //user hasn't seen the login screen for this portal before
+                    //show "do you want to login" dialog
+
+                    var cancel = "Cancel";
+                    var login = "Log in";
+                    var open = "Open in browser";
+                    var dontShowAgain = "Don't show this again";
+                    var result = await userDialogs.ActionSheetAsync(
+                        "You may need to log in before you can open in browser", cancel, null, null, login, open,
+                        dontShowAgain);
+                    if (result == cancel)
+                        return;
+
+                    if (result == login)
+                        //show login page in browser
+                        isLoggingIn = true;
+
+                    if (result == dontShowAgain)
+                    {
+                        //assume the user has logged in
+                        storageService.SetSkynetPortalLoggedInBrowser(SkynetPortal.SelectedPortal);
+                        return;
+                    }
+                }
+
+                var skylinkUrl = FocusedFile.GetSkylinkUrl();
+                var url = isLoggingIn ? SkynetPortal.GetLoginUrl(SkynetPortal.SelectedPortal.BaseUrl) : skylinkUrl;
+                Log.Trace("Opening Skylink " + url);
+                await Browser.OpenAsync(url, new BrowserLaunchOptions
+                {
+                    LaunchMode = BrowserLaunchMode.SystemPreferred,
+                    TitleMode = BrowserTitleMode.Show
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e);
+            }
         }
 
         /// <summary>
-        ///     Open a non-skylink URL
-        ///     For opening SkyFiles, Use OpenFileInBrowser instead
+        /// Open a non-skylink URL
+        /// For opening SkyFiles, Use OpenFileInBrowser instead
         /// </summary>
         private async Task OpenUrlInBrowser(string url)
         {

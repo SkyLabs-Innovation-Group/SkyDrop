@@ -71,7 +71,7 @@ namespace SkyDrop.iOS.Views.Contacts
         }
 
         /// <summary>
-        ///     Generate and display QR code
+        /// Generate and display QR code
         /// </summary>
         private async Task ShowBarcode()
         {
