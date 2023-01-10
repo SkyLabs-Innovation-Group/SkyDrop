@@ -111,7 +111,6 @@ namespace SkyDrop.Core.ViewModels.Main
             //QR code state
             CopyLinkCommand = new MvxAsyncCommand(async () => await CopySkyLinkToClipboard());
             ShareLinkCommand = new MvxAsyncCommand(async () => await ShareLink());
-            CancelUploadCommand = new MvxCommand(CancelUpload);
             ShowStagedFileMenuCommand =
                 new MvxAsyncCommand<StagedFileDvm>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
@@ -721,6 +720,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void CancelUpload()
         {
+            Log.Trace("Called CancelUpload(), IsUploading = " + IsUploading);
             if (IsUploading)
             {
                 uploadCancellationToken?.Cancel();
