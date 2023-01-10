@@ -18,8 +18,8 @@ namespace SkyDrop.iOS.Common
         // network cable got pulled out."
         private const int MaxRetries = 5;
 
-        public RetryHandler()
-            : base()
+        public RetryHandler(NSUrlSessionConfiguration config)
+            : base(config)
         { }
 
         protected override async Task<HttpResponseMessage> SendAsync(
