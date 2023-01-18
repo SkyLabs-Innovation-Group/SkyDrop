@@ -64,7 +64,6 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private string errorMessage;
         private TaskCompletionSource<SkyFile> iosMultipleImageSelectTask;
-        private bool isLoggingIn;
         private CancellationTokenSource uploadCancellationToken;
 
         public DropViewModel(ISingletonService singletonService,
@@ -115,6 +114,7 @@ namespace SkyDrop.Core.ViewModels.Main
             ShowStagedFileMenuCommand =
                 new MvxAsyncCommand<StagedFileDvm>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
+            LoginToBrowserCommand = new MvxAsyncCommand(LoginToBrowser);
             DownloadFileCommand = new MvxAsyncCommand(SaveOrUnzipFocusedFile);
             ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
             ShowPreviewImageCommand = new MvxCommand(() => IsPreviewImageVisible = true);
@@ -144,6 +144,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand IosSelectFileCommand { get; set; }
         public IMvxCommand ShowBarcodeCommand { get; set; }
         public IMvxCommand ShowPreviewImageCommand { get; set; }
+        public IMvxCommand LoginToBrowserCommand { get; set; }
 
         public bool IsUploading { get; set; }
         public bool IsStagingFiles { get; set; }
@@ -867,7 +868,6 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (UserIsSwiping())
                     return;
 
-                var isLoggingIn = false;
                 if (!SkynetPortal.SelectedPortal.HasLoggedInBrowser)
                 {
                     //user hasn't seen the login screen for this portal before
@@ -884,8 +884,10 @@ namespace SkyDrop.Core.ViewModels.Main
                         return;
 
                     if (result == login)
-                        //show login page in browser
-                        isLoggingIn = true;
+                    {
+                        await LoginToBrowser();
+                        return;
+                    }
 
                     if (result == dontShowAgain)
                     {
@@ -896,9 +898,8 @@ namespace SkyDrop.Core.ViewModels.Main
                 }
 
                 var skylinkUrl = FocusedFile.GetSkylinkUrl();
-                var url = isLoggingIn ? SkynetPortal.GetLoginUrl(SkynetPortal.SelectedPortal.BaseUrl) : skylinkUrl;
-                Log.Trace("Opening Skylink " + url);
-                await Browser.OpenAsync(url, new BrowserLaunchOptions
+                Log.Trace("Opening Skylink " + skylinkUrl);
+                await Browser.OpenAsync(skylinkUrl, new BrowserLaunchOptions
                 {
                     LaunchMode = BrowserLaunchMode.SystemPreferred,
                     TitleMode = BrowserTitleMode.Show
@@ -917,6 +918,16 @@ namespace SkyDrop.Core.ViewModels.Main
         private async Task OpenUrlInBrowser(string url)
         {
             await Browser.OpenAsync(url, new BrowserLaunchOptions
+            {
+                LaunchMode = BrowserLaunchMode.SystemPreferred,
+                TitleMode = BrowserTitleMode.Show
+            });
+        }
+
+        private Task LoginToBrowser()
+        {
+            var url = SkynetPortal.GetLoginUrl(SkynetPortal.SelectedPortal.BaseUrl);
+            return Browser.OpenAsync(url, new BrowserLaunchOptions
             {
                 LaunchMode = BrowserLaunchMode.SystemPreferred,
                 TitleMode = BrowserTitleMode.Show
