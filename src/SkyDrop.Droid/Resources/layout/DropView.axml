@@ -132,12 +132,13 @@
 
                 <!--Barcode Menu-->
                 <LinearLayout
+                    android:id="@+id/BarcodeMenuButtonsContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0px"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:layout_marginRight="16dp"
                         app:cardElevation="1dp"
@@ -170,7 +171,7 @@
                     </com.google.android.material.card.MaterialCardView>
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0px"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:layout_marginRight="16dp"
                         app:cardElevation="1dp"
@@ -201,7 +202,7 @@
                     </com.google.android.material.card.MaterialCardView>
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0px"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:layout_marginRight="16dp"
                         app:cardElevation="1dp"
@@ -243,7 +244,7 @@
                     </com.google.android.material.card.MaterialCardView>
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0px"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         app:cardElevation="1dp"
                         app:cardCornerRadius="8dp"
@@ -432,12 +433,13 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/HomeMenuButtonsContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0px"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:layout_marginRight="16dp"
                         app:cardElevation="1dp"
@@ -474,7 +476,7 @@
                     </com.google.android.material.card.MaterialCardView>
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0px"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:layout_marginRight="16dp"
                         app:cardElevation="1dp"
@@ -509,7 +511,7 @@
                     </com.google.android.material.card.MaterialCardView>
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0px"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:layout_marginRight="16dp"
                         app:cardElevation="1dp"
@@ -546,7 +548,7 @@
                     </com.google.android.material.card.MaterialCardView>
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0px"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         app:cardElevation="1dp"
                         app:cardCornerRadius="8dp"
