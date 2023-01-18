@@ -108,7 +108,7 @@ namespace SkyDrop.iOS.Views.Drop
                 OpenButton.StyleButton(Colors.GradientGreen);
                 DownloadButton.StyleButton(Colors.GradientTurqouise);
                 ShareButton.StyleButton(Colors.GradientOcean);
-                LoginToBrowserButton.TintColor = Colors.LightGrey.ToNative();
+                LoginToBrowserIcon.TintColor = Colors.LightGrey.ToNative();
 
                 //home menu
                 SkyDriveButton.StyleButton(Colors.Primary, true);

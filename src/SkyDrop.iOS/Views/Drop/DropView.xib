@@ -33,7 +33,8 @@
                 <outlet property="HomeMenuSettingsIcon" destination="D64-jp-uLG" id="Shh-6R-vhz"/>
                 <outlet property="HomeMenuSkyDriveIcon" destination="OMj-co-XWT" id="jDb-pZ-TuN"/>
                 <outlet property="LeftNavDot" destination="WPb-AT-AvM" id="upV-fs-Bzv"/>
-                <outlet property="LoginToBrowserButton" destination="QC1-U7-jL8" id="Pwh-bU-jWo"/>
+                <outlet property="LoginToBrowserButton" destination="XWL-Zr-F7D" id="gMp-dy-smM"/>
+                <outlet property="LoginToBrowserIcon" destination="QC1-U7-jL8" id="LXB-pu-DjF"/>
                 <outlet property="MiniMenuContactsButton" destination="MtM-c0-rYD" id="j2s-ie-8vD"/>
                 <outlet property="MiniMenuContactsIcon" destination="jV6-pU-KOa" id="S5c-T1-7Mg"/>
                 <outlet property="MiniMenuContainer" destination="v8R-l1-wWF" id="9Xr-rF-aL1"/>
@@ -373,25 +374,37 @@
                                         <constraint firstAttribute="height" constant="48" id="Ecm-Zp-WSs"/>
                                     </constraints>
                                 </imageView>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_user" translatesAutoresizingMaskIntoConstraints="NO" id="QC1-U7-jL8">
-                                    <rect key="frame" x="63.5" y="4" width="16" height="16"/>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XWL-Zr-F7D">
+                                    <rect key="frame" x="59.5" y="0.0" width="24" height="24"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_user" translatesAutoresizingMaskIntoConstraints="NO" id="QC1-U7-jL8">
+                                            <rect key="frame" x="4" y="4" width="16" height="16"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="16" id="SG4-eT-1Fk"/>
+                                                <constraint firstAttribute="width" constant="16" id="lld-hO-xVt"/>
+                                            </constraints>
+                                        </imageView>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" constant="16" id="SG4-eT-1Fk"/>
-                                        <constraint firstAttribute="width" constant="16" id="lld-hO-xVt"/>
+                                        <constraint firstAttribute="height" constant="24" id="LnB-LQ-jp7"/>
+                                        <constraint firstItem="QC1-U7-jL8" firstAttribute="centerY" secondItem="XWL-Zr-F7D" secondAttribute="centerY" id="Lxk-Bj-5UC"/>
+                                        <constraint firstAttribute="width" constant="24" id="vzL-Vk-V0A"/>
+                                        <constraint firstItem="QC1-U7-jL8" firstAttribute="centerX" secondItem="XWL-Zr-F7D" secondAttribute="centerX" id="wKv-ub-Yv4"/>
                                     </constraints>
-                                </imageView>
+                                </view>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemYellowColor"/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="rhP-Ru-BgC" secondAttribute="height" multiplier="1:1" id="46Z-Rj-xi0"/>
-                                <constraint firstAttribute="trailing" secondItem="QC1-U7-jL8" secondAttribute="trailing" constant="4" id="4NX-eQ-otW"/>
-                                <constraint firstItem="QC1-U7-jL8" firstAttribute="top" secondItem="rhP-Ru-BgC" secondAttribute="top" constant="4" id="K86-MX-aaa"/>
                                 <constraint firstItem="gpQ-iG-edJ" firstAttribute="leading" secondItem="rhP-Ru-BgC" secondAttribute="leading" id="My4-PI-gBf"/>
+                                <constraint firstItem="XWL-Zr-F7D" firstAttribute="top" secondItem="rhP-Ru-BgC" secondAttribute="top" id="NBC-FF-Qe9"/>
                                 <constraint firstItem="dZF-4O-FlZ" firstAttribute="centerY" secondItem="rhP-Ru-BgC" secondAttribute="centerY" constant="-10" id="PIq-0H-ehQ"/>
                                 <constraint firstAttribute="trailing" secondItem="dZF-4O-FlZ" secondAttribute="trailing" constant="24" id="RPZ-NE-HEA"/>
                                 <constraint firstItem="gpQ-iG-edJ" firstAttribute="top" secondItem="dZF-4O-FlZ" secondAttribute="bottom" constant="2" id="W39-pd-Nsv"/>
                                 <constraint firstAttribute="trailing" secondItem="gpQ-iG-edJ" secondAttribute="trailing" id="bRV-82-S3j"/>
                                 <constraint firstItem="dZF-4O-FlZ" firstAttribute="leading" secondItem="rhP-Ru-BgC" secondAttribute="leading" constant="24" id="dnE-RB-7UB"/>
+                                <constraint firstAttribute="trailing" secondItem="XWL-Zr-F7D" secondAttribute="trailing" id="wfC-Ia-1hJ"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="39U-MZ-Zba">
