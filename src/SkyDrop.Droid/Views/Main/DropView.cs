@@ -91,6 +91,9 @@ namespace SkyDrop.Droid.Views.Main
             sendButton.StyleButton(Colors.Primary, true);
             receiveButton.StyleButton(Colors.GradientOcean, true);
 
+            MakeMenuButtonsSquare(FindViewById<LinearLayout>(Resource.Id.BarcodeMenuButtonsContainer));
+            MakeMenuButtonsSquare(FindViewById<LinearLayout>(Resource.Id.HomeMenuButtonsContainer));
+
             animationContainer.TranslationZ = 100;
 
             var stagedFilesRecycler = FindViewById<RecyclerView>(Resource.Id.StagedFilesRecycler);
@@ -99,6 +102,17 @@ namespace SkyDrop.Droid.Views.Main
             CreateNavDots();
 
             SetUpMenuAnimator();
+        }
+
+        private void MakeMenuButtonsSquare(LinearLayout buttonsContainer)
+        {
+            var buttonSpacing = AndroidUtil.DpToPx(16);
+            var (screenWidth, _) = AndroidUtil.GetScreenSizePx();
+            var buttonWidth = (screenWidth - buttonSpacing * 5) / 4;
+
+            var layoutParams = buttonsContainer.LayoutParameters;
+            layoutParams.Height = buttonWidth;
+            buttonsContainer.LayoutParameters = layoutParams;
         }
 
         private void SetUpMenuAnimator()
