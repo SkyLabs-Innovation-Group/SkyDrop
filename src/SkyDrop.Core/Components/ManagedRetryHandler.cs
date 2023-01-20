@@ -36,7 +36,7 @@ namespace SkyDrop.Core.Components
                 log.Trace("Trying upload: try number " + i);
 
                 try
-                {
+                { 
                     // Switch these to test with the cancellationToken enabled
                     response = await base.SendAsync(request, cancellationToken);
                 }

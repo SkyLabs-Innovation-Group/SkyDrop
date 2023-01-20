@@ -23,24 +23,24 @@ namespace SkyDrop.Droid.Services
             if (HttpClientsPerPortal.ContainsKey(portal))
                 return HttpClientsPerPortal[portal];
 
-            HttpClient client = null;
-            if (Preferences.Get(PreferenceKey.RequireSecureConnection, true))
-            {
-                //normal SSL certificate verification
-                client = new HttpClient(new ManagedRetryHandler())
-                {
-                    BaseAddress = new Uri(portal.BaseUrl),
-                };
-            }
-            else
-            {
+            HttpClient client = null; // todo: re-enable secure message handler on android when we can
+            //if (Preferences.Get(PreferenceKey.RequireSecureConnection, true))
+            //{
+            //    //normal SSL certificate verification
+            //    client = new HttpClient(new ManagedRetryHandler())
+            //    {
+            //        BaseAddress = new Uri(portal.BaseUrl),
+            //    };
+            //}
+            //else
+            //{
                 //don't verify SSL certificates
                 var handler = GetInsecureMessageHandler();
                 client = new HttpClient(handler)
                 {
                     BaseAddress = new Uri(portal.BaseUrl),
                 };
-            }
+            //}
 
             if (portal.HasApiToken())
                 AddApiTokenHeader(client, portal);
