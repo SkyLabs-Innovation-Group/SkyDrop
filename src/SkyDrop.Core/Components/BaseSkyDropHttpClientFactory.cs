@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using MvvmCross;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Services;
 
@@ -64,6 +65,13 @@ namespace SkyDrop.Core.Components
         {
             client.DefaultRequestHeaders.Remove(PortalApiTokenHeader);
             if (portal.HasApiToken()) client.DefaultRequestHeaders.Add(PortalApiTokenHeader, portal.UserApiToken);
+        }
+
+        public void CancelAllUploadsForClient(SkynetPortal portal)
+        {
+            var log = Mvx.IoCProvider.Resolve<ILog>();
+            log.Trace("Cancelling uploads for portal " + portal);
+            GetSkyDropHttpClientInstance(portal).CancelPendingRequests();
         }
     }
 }

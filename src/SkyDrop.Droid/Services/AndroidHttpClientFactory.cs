@@ -23,11 +23,11 @@ namespace SkyDrop.Droid.Services
             if (HttpClientsPerPortal.ContainsKey(portal))
                 return HttpClientsPerPortal[portal];
 
-            HttpClient client;
+            HttpClient client = null;
             if (Preferences.Get(PreferenceKey.RequireSecureConnection, true))
             {
                 //normal SSL certificate verification
-                client = new HttpClient(new RetryHandler())
+                client = new HttpClient(new ManagedRetryHandler())
                 {
                     BaseAddress = new Uri(portal.BaseUrl),
                 };
@@ -53,9 +53,9 @@ namespace SkyDrop.Droid.Services
             return client;
         }
 
-        private AndroidMessageHandler GetInsecureMessageHandler()
+        private ManagedRetryHandler GetInsecureMessageHandler()
         {
-            var handler = new RetryHandler();
+            var handler = new ManagedRetryHandler();
 
             //accept all SSL certificates (insecure!)
             handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;

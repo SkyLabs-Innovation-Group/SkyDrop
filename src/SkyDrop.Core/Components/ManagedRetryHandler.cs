@@ -1,14 +1,13 @@
 ﻿using System;
+using MvvmCross;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Fody;
-using Foundation;
-using MvvmCross;
+using SkyDrop.Core.ViewModels.Main;
 
-namespace SkyDrop.iOS.Common
+namespace SkyDrop.Core.Components
 {
-    public class RetryHandler : NSUrlSessionHandler
+    public class ManagedRetryHandler : HttpClientHandler
     {
         private ILog _log;
         private ILog log => (_log ??= Mvx.IoCProvider.Resolve<ILog>());
@@ -18,8 +17,7 @@ namespace SkyDrop.iOS.Common
         // network cable got pulled out."
         private const int MaxRetries = 5;
 
-        public RetryHandler(NSUrlSessionConfiguration config)
-            : base(config)
+        public ManagedRetryHandler() : base()
         { }
 
         protected override async Task<HttpResponseMessage> SendAsync(
@@ -42,6 +40,10 @@ namespace SkyDrop.iOS.Common
                 {
                     log.Error("Error trying request try number " + i);
                     log.Exception(ex);
+                    DropViewModel.UploadCancellationToken?.Dispose();
+                    DropViewModel.UploadCancellationToken = null;
+                    DropViewModel.UploadCancellationToken = new CancellationTokenSource();
+                    cancellationToken = DropViewModel.UploadCancellationToken.Token;
                 }
 
                 if (response?.IsSuccessStatusCode ?? false)

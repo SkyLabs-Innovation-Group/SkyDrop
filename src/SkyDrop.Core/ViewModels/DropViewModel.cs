@@ -65,7 +65,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private string errorMessage;
         private TaskCompletionSource<SkyFile> iosMultipleImageSelectTask;
         private bool isLoggingIn;
-        private CancellationTokenSource uploadCancellationToken;
+        public static CancellationTokenSource UploadCancellationToken;
 
         public DropViewModel(ISingletonService singletonService,
             IApiService apiService,
@@ -523,8 +523,8 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task<SkyFile> UploadFile()
         {
-            uploadCancellationToken = new CancellationTokenSource();
-            var skyFile = await apiService.UploadFile(FileToUpload, uploadCancellationToken);
+            UploadCancellationToken = new CancellationTokenSource();
+            var skyFile = await apiService.UploadFile(FileToUpload, UploadCancellationToken.Token);
             return skyFile;
         }
 
@@ -721,9 +721,11 @@ namespace SkyDrop.Core.ViewModels.Main
         private void CancelUpload()
         {
             Log.Trace("Called CancelUpload(), IsUploading = " + IsUploading);
+
+            
             if (IsUploading)
             {
-                uploadCancellationToken?.Cancel();
+                UploadCancellationToken?.Cancel();
                 return;
             }
 

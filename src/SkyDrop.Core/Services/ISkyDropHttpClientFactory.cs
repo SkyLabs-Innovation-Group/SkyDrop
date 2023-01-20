@@ -9,6 +9,8 @@ namespace SkyDrop.Core.Services
 
         HttpClient GetSkyDropHttpClientInstance(SkynetPortal portal);
 
+        void CancelAllUploadsForClient(SkynetPortal portal);
+
         void ClearCachedClients();
 
         void UpdateHttpClientWithNewToken(SkynetPortal portal);

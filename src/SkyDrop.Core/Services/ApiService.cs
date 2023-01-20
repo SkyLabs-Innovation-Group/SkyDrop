@@ -47,7 +47,7 @@ namespace SkyDrop.Core.Services
 
         public ILog Log { get; }
 
-        public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationTokenSource)
+        public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationToken ct)
         {
             var fileSizeBytes = skyfile.FileSizeBytes;
             var filename = skyfile.EncryptedFilename ?? skyfile.Filename;
@@ -71,10 +71,10 @@ namespace SkyDrop.Core.Services
 
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
 
-            var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead,
-                cancellationTokenSource.Token);
+            var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
 
             response.EnsureSuccessStatusCode();
+
 
             var responseString = await response.Content.ReadAsStringAsync();
             Log.Trace(responseString);
@@ -269,7 +269,7 @@ namespace SkyDrop.Core.Services
 
     public interface IApiService
     {
-        Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationTokenSource);
+        Task<SkyFile> UploadFile(SkyFile skyFile, CancellationToken ct);
 
         Task DownloadAndSaveSkyfile(string url, SaveType saveType);
 
