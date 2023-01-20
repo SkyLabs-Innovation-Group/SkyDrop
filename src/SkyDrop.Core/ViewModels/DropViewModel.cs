@@ -64,7 +64,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private string errorMessage;
         private TaskCompletionSource<SkyFile> iosMultipleImageSelectTask;
-        private CancellationTokenSource uploadCancellationToken;
+        public static CancellationTokenSource UploadCancellationToken;
 
         public DropViewModel(ISingletonService singletonService,
             IApiService apiService,
@@ -110,7 +110,6 @@ namespace SkyDrop.Core.ViewModels.Main
             //QR code state
             CopyLinkCommand = new MvxAsyncCommand(async () => await CopySkyLinkToClipboard());
             ShareLinkCommand = new MvxAsyncCommand(async () => await ShareLink());
-            CancelUploadCommand = new MvxCommand(CancelUpload);
             ShowStagedFileMenuCommand =
                 new MvxAsyncCommand<StagedFileDvm>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
@@ -384,18 +383,13 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void HandleUploadError(Exception ex, string prompt, FileUploadResult result)
         {
+            Log.Exception(ex);
+
             if (Connectivity.NetworkAccess != NetworkAccess.Internet)
                 prompt = NoInternetPrompt;
 
-            if (result == FileUploadResult.Fail)
-            {
+            if (result == FileUploadResult.Fail || result == FileUploadResult.Cancelled)
                 userDialogs.Alert(prompt);
-                Log.Exception(ex);
-            }
-            else if (result == FileUploadResult.Cancelled)
-            {
-                userDialogs.Toast(prompt);
-            }
 
             //reset progress indicator for next attempt
             UploadProgress = 0;
@@ -530,8 +524,8 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private async Task<SkyFile> UploadFile()
         {
-            uploadCancellationToken = new CancellationTokenSource();
-            var skyFile = await apiService.UploadFile(FileToUpload, uploadCancellationToken);
+            UploadCancellationToken = new CancellationTokenSource();
+            var skyFile = await apiService.UploadFile(FileToUpload);
             return skyFile;
         }
 
@@ -727,9 +721,12 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void CancelUpload()
         {
+            Log.Trace("Called CancelUpload(), IsUploading = " + IsUploading);
+
+            
             if (IsUploading)
             {
-                uploadCancellationToken?.Cancel();
+                UploadCancellationToken?.Cancel();
                 return;
             }
 

@@ -38,11 +38,11 @@
         <BundleAssemblies>false</BundleAssemblies>
         <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
         <LangVersion>8.0</LangVersion>
-        <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
+        <AndroidHttpClientHandlerType>System.Net.Http.HttpClientHandler</AndroidHttpClientHandlerType>
+        <AndroidTlsProvider>btls</AndroidTlsProvider>
         <AndroidLinkMode>None</AndroidLinkMode>
         <AndroidUseAapt2>true</AndroidUseAapt2>
         <MandroidI18n />
-        <AndroidTlsProvider>btls</AndroidTlsProvider>
         <MandroidExtraArgs>-v -v -v -v</MandroidExtraArgs>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -60,7 +60,7 @@
         <EnableProguard>true</EnableProguard>
         <LangVersion>8.0</LangVersion>
         <AndroidLinkTool>r8</AndroidLinkTool>
-        <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
+        <AndroidHttpClientHandlerType>System.Net.Http.HttpClientHandler</AndroidHttpClientHandlerType>
         <AndroidTlsProvider>btls</AndroidTlsProvider>
     </PropertyGroup>
     <ItemGroup>
@@ -592,6 +592,10 @@
         <AndroidResource Include="Resources\drawable\ic_paste.xml">
             <SubType></SubType>
             <Generator></Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\ic_user.xml">
+          <SubType></SubType>
+          <Generator></Generator>
         </AndroidResource>
     </ItemGroup>
     <ItemGroup>

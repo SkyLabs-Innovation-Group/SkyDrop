@@ -11,6 +11,7 @@ using Fody;
 using Newtonsoft.Json;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Utility;
+using SkyDrop.Core.ViewModels.Main;
 using Xamarin.Essentials;
 using static SkyDrop.Core.Utility.Util;
 
@@ -30,6 +31,8 @@ namespace SkyDrop.Core.Services
         private readonly ISingletonService singletonService;
         private readonly IUserDialogs userDialogs;
 
+        public CancellationTokenSource UploadCancellationTokenSource { get; private set; } = new CancellationTokenSource();
+
         public ApiService(ILog log,
             ISkyDropHttpClientFactory skyDropHttpClientFactory,
             ISingletonService singletonService,
@@ -47,7 +50,7 @@ namespace SkyDrop.Core.Services
 
         public ILog Log { get; }
 
-        public async Task<SkyFile> UploadFile(SkyFile skyfile, CancellationTokenSource cancellationTokenSource)
+        public async Task<SkyFile> UploadFile(SkyFile skyfile)
         {
             var fileSizeBytes = skyfile.FileSizeBytes;
             var filename = skyfile.EncryptedFilename ?? skyfile.Filename;
@@ -71,8 +74,7 @@ namespace SkyDrop.Core.Services
 
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
 
-            var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead,
-                cancellationTokenSource.Token);
+            var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, UploadCancellationTokenSource.Token);
 
             response.EnsureSuccessStatusCode();
 
@@ -265,11 +267,19 @@ namespace SkyDrop.Core.Services
 
             return false;
         }
+
+        public CancellationToken GetNewCancellationToken()
+        {
+            UploadCancellationTokenSource?.Dispose();
+            UploadCancellationTokenSource = null;
+            UploadCancellationTokenSource = new CancellationTokenSource();
+            return UploadCancellationTokenSource.Token;
+        }
     }
 
     public interface IApiService
     {
-        Task<SkyFile> UploadFile(SkyFile skyFile, CancellationTokenSource cancellationTokenSource);
+        Task<SkyFile> UploadFile(SkyFile skyFile);
 
         Task DownloadAndSaveSkyfile(string url, SaveType saveType);
 
@@ -278,5 +288,7 @@ namespace SkyDrop.Core.Services
         Task<string> GetSkyFileFilename(string skyfile);
 
         Task<bool> PingPortalForSkylink(string skylink, SkynetPortal skynetPortal);
+
+        CancellationToken GetNewCancellationToken();
     }
 }

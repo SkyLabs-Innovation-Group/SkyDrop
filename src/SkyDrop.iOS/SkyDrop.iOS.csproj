@@ -310,6 +310,13 @@
         <ImageAsset Include="Media.xcassets\ic_down.imageset\chevron-down.pdf"/>
         <ImageAsset Include="Media.xcassets\ic_down.imageset\Contents.json"/>
         <ImageAsset Include="Media.xcassets\ic_up.imageset\chevron-up.pdf"/>
+        <ImageAsset Include="Media.xcassets\ic_paste.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_paste.imageset\content-paste.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_up.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_down.imageset\chevron-down.pdf" />
+        <ImageAsset Include="Media.xcassets\ic_down.imageset\Contents.json" />
+        <ImageAsset Include="Media.xcassets\ic_up.imageset\chevron-up.pdf" />
+        <Compile Include="Common\RetryHandler.cs" />
     </ItemGroup>
     <ItemGroup>
         <Reference Include="System"/>
