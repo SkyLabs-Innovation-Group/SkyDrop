@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using SkyDrop.Core.ViewModels.Main;
+using SkyDrop.Core.Services;
 
 namespace SkyDrop.Core.Components
 {
@@ -11,6 +12,9 @@ namespace SkyDrop.Core.Components
     {
         private ILog _log;
         private ILog log => (_log ??= Mvx.IoCProvider.Resolve<ILog>());
+
+        private IApiService _apiService;
+        private IApiService apiService => (_apiService ??= Mvx.IoCProvider.Resolve<IApiService>());
 
         // Strongly consider limiting the number of retries - "retry forever" is
         // probably not the most user friendly way you could respond to "the
@@ -40,10 +44,7 @@ namespace SkyDrop.Core.Components
                 {
                     log.Error("Error trying request try number " + i);
                     log.Exception(ex);
-                    DropViewModel.UploadCancellationToken?.Dispose();
-                    DropViewModel.UploadCancellationToken = null;
-                    DropViewModel.UploadCancellationToken = new CancellationTokenSource();
-                    cancellationToken = DropViewModel.UploadCancellationToken.Token;
+                    cancellationToken = apiService.GetNewCancellationToken();
                 }
 
                 if (response?.IsSuccessStatusCode ?? false)

@@ -525,7 +525,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private async Task<SkyFile> UploadFile()
         {
             UploadCancellationToken = new CancellationTokenSource();
-            var skyFile = await apiService.UploadFile(FileToUpload, UploadCancellationToken.Token);
+            var skyFile = await apiService.UploadFile(FileToUpload);
             return skyFile;
         }
 
