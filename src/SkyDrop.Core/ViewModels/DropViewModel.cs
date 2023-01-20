@@ -382,7 +382,7 @@ namespace SkyDrop.Core.ViewModels.Main
 
         private void HandleUploadError(Exception ex, string prompt, FileUploadResult result)
         {
-            Log.Exception(ex);
+            Log.Exception(ex); 
 
             if (Connectivity.NetworkAccess != NetworkAccess.Internet)
                 prompt = NoInternetPrompt;

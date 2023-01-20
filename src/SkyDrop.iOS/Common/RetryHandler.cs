@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Fody;
 using Foundation;
 using MvvmCross;
+using SkyDrop.Core.Services;
 
 namespace SkyDrop.iOS.Common
 {
@@ -12,6 +13,9 @@ namespace SkyDrop.iOS.Common
     {
         private ILog _log;
         private ILog log => (_log ??= Mvx.IoCProvider.Resolve<ILog>());
+
+        private IApiService _apiService;
+        private IApiService apiService => (_apiService ??= Mvx.IoCProvider.Resolve<IApiService>());
 
         // Strongly consider limiting the number of retries - "retry forever" is
         // probably not the most user friendly way you could respond to "the
@@ -37,6 +41,15 @@ namespace SkyDrop.iOS.Common
                 {
                     // Switch these to test with the cancellationToken enabled
                     response = await base.SendAsync(request, cancellationToken);
+                }
+                catch (TaskCanceledException tce)
+                {
+                    if (apiService.DidRequestCancellation)
+                        throw;
+
+                    log.Error("Error trying request try number " + i);
+                    log.Exception(tce);
+                    cancellationToken = apiService.GetNewCancellationToken();
                 }
                 catch (Exception ex)
                 {
