@@ -82,6 +82,12 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIImageView LeftNavDot { get; set; }
 
 		[Outlet]
+		UIKit.UIView LoginToBrowserButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView LoginToBrowserIcon { get; set; }
+
+		[Outlet]
 		UIKit.UIView MiniMenuContactsButton { get; set; }
 
 		[Outlet]
@@ -179,6 +185,11 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (LoginToBrowserButton != null) {
+				LoginToBrowserButton.Dispose ();
+				LoginToBrowserButton = null;
+			}
+
 			if (BarcodeContainer != null) {
 				BarcodeContainer.Dispose ();
 				BarcodeContainer = null;
@@ -292,6 +303,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (LeftNavDot != null) {
 				LeftNavDot.Dispose ();
 				LeftNavDot = null;
+			}
+
+			if (LoginToBrowserIcon != null) {
+				LoginToBrowserIcon.Dispose ();
+				LoginToBrowserIcon = null;
 			}
 
 			if (MiniMenuContactsButton != null) {

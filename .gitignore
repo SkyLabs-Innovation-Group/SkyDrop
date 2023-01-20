@@ -3,10 +3,10 @@
 packages/
 TestResults/
 
-SkyDrop/.vs/SkyDrop/xs/UserPrefs.xml
+.vs/SkyDrop/xs/UserPrefs.xml
 
 
-SkyDrop/src/SkyDrop.Droid/Resources/Resource.Designer.cs
+src/SkyDrop.Droid/Resources/Resource.Designer.cs
 
 
 *~
