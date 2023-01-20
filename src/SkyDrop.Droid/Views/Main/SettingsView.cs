@@ -28,6 +28,7 @@ namespace SkyDrop.Droid.Views.Main
             uploadNotificationCheckbox.CheckedChange += (s, e) => ViewModel.SetUploadNotificationEnabled(e.IsChecked);
 
             verifySslCheckbox = FindViewById<CheckBox>(Resource.Id.verifySslCheckbox);
+            verifySslCheckbox.Visibility = Android.Views.ViewStates.Gone;
             verifySslCheckbox.CheckedChange += (s, e) => ViewModel.SetVerifySslCertificates(e.IsChecked);
         }
     }
