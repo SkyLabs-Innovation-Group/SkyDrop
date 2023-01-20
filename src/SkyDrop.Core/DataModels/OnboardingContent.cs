@@ -15,7 +15,7 @@
             {
                 Title = "Portals",
                 Description =
-                    "- Choose your preferred Skynet portals and rank them in order of preference\n- Uploads will first be attempted on your first choice portal, if the upload fails then the upload will be retried using the next portal in the list",
+                    "- Choose your preferred Skynet portals and rank them in order of preference\n- Your top choice portal will be used for sending & receiving files",
                 Icon = "ic_portals"
             },
             new OnboardingContent
