@@ -40,6 +40,15 @@ namespace SkyDrop.Core.Components
                     // Switch these to test with the cancellationToken enabled
                     response = await base.SendAsync(request, cancellationToken);
                 }
+                catch (TaskCanceledException tce)
+                {
+                    if (apiService.DidRequestCancellation)
+                        throw;
+
+                    log.Error("Error trying request try number " + i);
+                    log.Exception(tce);
+                    cancellationToken = apiService.GetNewCancellationToken();
+                }
                 catch (Exception ex)
                 {
                     log.Error("Error trying request try number " + i);

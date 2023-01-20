@@ -49,6 +49,7 @@ namespace SkyDrop.Core.Services
         }
 
         public ILog Log { get; }
+        public bool DidRequestCancellation { get; private set; }
 
         public async Task<SkyFile> UploadFile(SkyFile skyfile)
         {
@@ -270,6 +271,7 @@ namespace SkyDrop.Core.Services
 
         public CancellationToken GetNewCancellationToken()
         {
+            DidRequestCancellation = false; // reset DidRequestCancellation when requesting a new token for new upload attempt
             UploadCancellationTokenSource?.Dispose();
             UploadCancellationTokenSource = null;
             UploadCancellationTokenSource = new CancellationTokenSource();
@@ -278,6 +280,7 @@ namespace SkyDrop.Core.Services
 
         public void CancelUpload()
         {
+            DidRequestCancellation = true;
             UploadCancellationTokenSource?.Cancel();
         }
     }
@@ -297,5 +300,7 @@ namespace SkyDrop.Core.Services
         CancellationToken GetNewCancellationToken();
 
         void CancelUpload();
+
+        bool DidRequestCancellation { get; }
     }
 }
