@@ -275,6 +275,11 @@ namespace SkyDrop.Core.Services
             UploadCancellationTokenSource = new CancellationTokenSource();
             return UploadCancellationTokenSource.Token;
         }
+
+        public void CancelUpload()
+        {
+            UploadCancellationTokenSource?.Cancel();
+        }
     }
 
     public interface IApiService
@@ -290,5 +295,7 @@ namespace SkyDrop.Core.Services
         Task<bool> PingPortalForSkylink(string skylink, SkynetPortal skynetPortal);
 
         CancellationToken GetNewCancellationToken();
+
+        void CancelUpload();
     }
 }
