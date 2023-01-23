@@ -155,6 +155,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     Stream decryptedStream;
                     if (filename.IsEncryptedZipFile())
                     {
+                        //decrypt and unzip
                         LoadingLabelText = decryptingText;
                         await Task.Delay(500);
                         var decryptedPath = await encryptionService.DecodeZipFile(stream, filename);
