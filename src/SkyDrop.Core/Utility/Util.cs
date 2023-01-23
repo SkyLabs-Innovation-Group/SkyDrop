@@ -208,7 +208,7 @@ namespace SkyDrop.Core.Utility
                 return false;
 
             var skSignatureExists = filename[15] == 's' && filename[16] == 'k'; //is encrypted file
-            return skSignatureExists || filename.IsEncryptedZipFile();
+            return skSignatureExists || filename.IsEncryptedZipFile() || filename.IsEncryptedImageFile();
         }
 
         public static bool IsEncryptedZipFile(this string filename)
@@ -218,6 +218,15 @@ namespace SkyDrop.Core.Utility
 
             var ziSignatureExists = filename[15] == 'z' && filename[16] == 'i'; //is encrypted zip file
             return ziSignatureExists;
+        }
+
+        public static bool IsEncryptedImageFile(this string filename)
+        {
+            if (filename?.Length != 32) //length of a guid without dashes
+                return false;
+
+            var imSignatureExists = filename[15] == 'i' && filename[16] == 'm'; //is encrypted image file
+            return imSignatureExists;
         }
 
         public static byte[] StreamToBytes(this Stream input)

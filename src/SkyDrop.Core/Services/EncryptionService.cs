@@ -468,6 +468,12 @@ namespace SkyDrop.Core.Services
                 name[15] = 'z';
                 name[16] = 'i';
             }
+            else if(originalFileName.CanDisplayPreview())
+            {
+                //add im signature to identify skydrop encrypted images
+                name[15] = 'i';
+                name[16] = 'm';
+            }
             else
             {
                 //add sk signature to identify skydrop encrypted files
