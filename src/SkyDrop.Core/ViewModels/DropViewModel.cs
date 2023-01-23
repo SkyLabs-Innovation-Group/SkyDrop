@@ -864,6 +864,12 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (UserIsSwiping())
                     return;
 
+                if (FocusedFile.Filename.IsEncryptedFile())
+                {
+                    DownloadAndUnzipArchive();
+                    return;
+                }
+
                 if (!SkynetPortal.SelectedPortal.HasLoggedInBrowser)
                 {
                     //user hasn't seen the login screen for this portal before
