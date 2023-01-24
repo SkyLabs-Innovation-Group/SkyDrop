@@ -29,7 +29,8 @@ namespace SkyDrop.iOS.Views.Certificates
 
             ContactsTableView.BackgroundColor = Colors.DarkGrey.ToNative();
 
-            var pairButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_pair") };
+            var pairButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_pair"), Width = 70, ImageInsets = new UIEdgeInsets(top: 2, left: 10, bottom: 0, right: 0) };
+            
             pairButton.Clicked += (s, e) => ViewModel.SharePublicKeyCommand.Execute();
             NavigationItem.RightBarButtonItems = new[] { pairButton };
 
