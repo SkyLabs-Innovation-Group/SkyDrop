@@ -13,6 +13,7 @@ using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
+using SkyDrop.Core.Exceptions;
 using SkyDrop.Core.Services;
 using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
@@ -366,6 +367,10 @@ namespace SkyDrop.Core.ViewModels.Main
             catch (UnauthorizedAccessException authEx)
             {
                 HandleUploadError(authEx, "Access denied when reading selected files", FileUploadResult.Fail);
+            }
+            catch (PortalUnreachableException portalEx)
+            {
+                HandleUploadError(portalEx, $"Could not reach {portalEx.SkynetPortal}, please try again later", FileUploadResult.Fail);
             }
             catch (Exception ex) // General error
             {

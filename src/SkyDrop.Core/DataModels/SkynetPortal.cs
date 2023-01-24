@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using MvvmCross;
 using Realms;
 using SkyDrop.Core.Services;
@@ -78,15 +79,38 @@ namespace SkyDrop.Core.DataModels
             return $"https://account.{url}";
         }
 
+        public static bool IsValidUri(string uriString)
+        {
+            if (!Uri.TryCreate(uriString, UriKind.Absolute, out Uri uri))
+            {
+                return false;
+            }
+            return true;
+        }
+
         private static SkynetPortal SetSelectedSkynetPortal(SkynetPortal portal)
         {
             if (string.IsNullOrEmpty(portal.ToString()))
                 return new SkynetPortal(DefaultWeb3PortalUrl);
 
+            var storageService = Mvx.IoCProvider.Resolve<IStorageService>();
+
+            if (!IsValidUri(portal.BaseUrl))
+            {
+                Realm.GetInstance().Write(() =>
+                {
+                    portal.BaseUrl = "http://" + portal.BaseUrl;
+                    portal.BaseUrl = Uri.EscapeUriString(portal.BaseUrl);
+                    Realm.GetInstance().Add(portal);
+                });
+
+                if (!IsValidUri(portal.BaseUrl))
+                    return storageService.LoadSkynetPortals().Where(p => p.BaseUrl.Contains(DefaultWeb3PortalUrl)).FirstOrDefault();
+            }
+
             Preferences.Remove(PreferenceKey.SelectedSkynetPortal);
             Preferences.Set(PreferenceKey.SelectedSkynetPortal, portal.ToString());
 
-            var storageService = Mvx.IoCProvider.Resolve<IStorageService>();
             storageService.SaveSkynetPortal(portal);
 
             if (portal.HasApiToken())

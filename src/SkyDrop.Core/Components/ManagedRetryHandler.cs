@@ -28,6 +28,9 @@ namespace SkyDrop.Core.Components
             HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
+            if (apiService.IsTestingEndpoint)
+                return await base.SendAsync(request, cancellationToken);
+
             log.Trace("RetryHandler Sending request ");
             log.Trace(request.ToString());
             HttpResponseMessage response = null;
@@ -42,11 +45,20 @@ namespace SkyDrop.Core.Components
                 }
                 catch (TaskCanceledException tce)
                 {
-                    if (apiService.DidRequestCancellation)
+                    if (apiService.DidRequestCancellation || apiService.IsTestingEndpoint)
                         throw;
 
                     log.Error("Error trying request try number " + i);
                     log.Exception(tce);
+                    cancellationToken = apiService.GetNewCancellationToken();
+                }
+                catch (HttpRequestException httpEx)
+                {
+                    if (apiService.DidRequestCancellation || apiService.IsTestingEndpoint)
+                        throw;
+
+                    log.Error("Error trying request try number " + i);
+                    log.Exception(httpEx);
                     cancellationToken = apiService.GetNewCancellationToken();
                 }
                 catch (Exception ex)

@@ -48,11 +48,14 @@ namespace SkyDrop.Core.ViewModels
             var portalDvm = new SkynetPortalDvm(Portal)
             {
                 Name = PortalName,
-                BaseUrl = PortalUrl
+                BaseUrl = PortalUrl,
             };
 
             if (IsAddingNewPortal)
+            {
+                Portal.PortalPreferencesPosition = SingletonService.StorageService.LoadSkynetPortals().Count;
                 SingletonService.StorageService.SaveSkynetPortal(Portal, ApiToken);
+            }
             else
                 SingletonService.StorageService.EditSkynetPortal(portalDvm, ApiToken);
 
