@@ -44,12 +44,21 @@ namespace SkyDrop.iOS.Common
                 }
                 catch (TaskCanceledException tce)
                 {
-                    if (apiService.DidRequestCancellation)
+                    if (apiService.DidRequestCancellation || apiService.IsTestingEndpoint)
                         throw;
 
                     log.Error("Error trying request try number " + i);
                     log.Exception(tce);
                     cancellationToken = apiService.GetNewCancellationToken();
+                }
+                catch (Exception ex) when (ex.InnerException is NSErrorException nSErrorException &&
+                    nSErrorException.Error.LocalizedDescription.Contains("The request timed out"))
+                {
+                    log.Error("Error trying request try number " + i);
+                    log.Exception(ex);
+
+                    if (apiService.IsTestingEndpoint)
+                        throw;
                 }
                 catch (Exception ex)
                 {

@@ -23,6 +23,11 @@ namespace SkyDrop.Droid.Services
             if (HttpClientsPerPortal.ContainsKey(portal))
                 return HttpClientsPerPortal[portal];
 
+            if (!IsValidUri(portal.BaseUrl))
+            {
+
+            }
+
             HttpClient client = null; // todo: re-enable secure message handler on android when we can
             //if (Preferences.Get(PreferenceKey.RequireSecureConnection, true))
             //{
@@ -51,6 +56,15 @@ namespace SkyDrop.Droid.Services
             HttpClientsPerPortal.Add(portal, client);
 
             return client;
+        }
+
+        private bool IsValidUri(string uriString)
+        {
+            if (!Uri.TryCreate(uriString, UriKind.Absolute, out Uri uri))
+            {
+                return false;
+            }
+            return true;
         }
 
         private ManagedRetryHandler GetInsecureMessageHandler()
