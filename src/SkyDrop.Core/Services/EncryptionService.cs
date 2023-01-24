@@ -151,7 +151,7 @@ namespace SkyDrop.Core.Services
             });
         }
 
-        public Task<string> DecodeFile(string filePath, bool persistent)
+        public Task<string> DecodeFile(string filePath, bool isPersistent)
         {
             return Task.Run(async () =>
             {
@@ -171,7 +171,7 @@ namespace SkyDrop.Core.Services
                 //save the file
                 using (var stream = new MemoryStream(file))
                 {
-                    if (persistent)
+                    if (isPersistent)
                     {
                         var saveType = await GetSaveType(fileName);
                         if (saveType == SaveType.Cancel)
