@@ -16,6 +16,6 @@ This project is open source under MIT license. We built SkyDrop using .NET’s n
 
 We are working on updated FAQs now that the Skynet Labs portals have shut down. The default portal in app now is https://web3portal.com/, please check their privacy policy when using public uploads, and we recommend using the new end-to-end encryption feature to secure your files so they could only be decrypted by their intended recipient.
 
-To turn a skylink into a QR code on your PC, you could use our web app at https://encodeqr.hns.web3portal.com/ to convert text to QR codes.
+To turn your links into QR codes, you can use the mobile app or our web app at https://encodeqr.hns.web3portal.com/ to convert text to QR codes (which can also be received by the mobile app).
 
 *Note: [Check here for known issues](https://github.com/SkyLabs-Innovation-Group/SkyDrop/issues?q=is%3Aissue+is%3Aopen+label%3A%22known+issues%22), you may submit bug reports and feature requests*
