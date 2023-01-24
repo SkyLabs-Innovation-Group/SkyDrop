@@ -151,27 +151,40 @@ namespace SkyDrop.Core.Services
             });
         }
 
-        public Task<string> DecodeFile(string filePath)
+        public Task<string> DecodeFile(string filePath, bool isPersistent)
         {
             return Task.Run(async () =>
             {
-                if (!Path.GetFileName(filePath).IsEncryptedFile())
+                var name = Path.GetFileName(filePath);
+                if (!name.Substring(0, 32).IsEncryptedFile())
                     throw new Exception("File not recognised as an encrypted file");
 
                 if (!File.Exists(filePath))
                     throw new Exception("File does not exist");
 
                 var fileBytes = File.ReadAllBytes(filePath);
+                if (fileBytes.Length == 0)
+                    throw new Exception("File is empty");
+
                 var (fileName, file) = GetFilePlainText(fileBytes);
 
-                var saveType = await GetSaveType(fileName);
-                if (saveType == SaveType.Cancel)
-                    throw new Exception("Action cancelled");
-
                 //save the file
-                using var stream = new MemoryStream(file);
-                var decryptedFilePath = await fileSystemService.SaveToGalleryOrFiles(stream, fileName, saveType);
-                return decryptedFilePath;
+                using (var stream = new MemoryStream(file))
+                {
+                    if (isPersistent)
+                    {
+                        var saveType = await GetSaveType(fileName);
+                        if (saveType == SaveType.Cancel)
+                            throw new Exception("Action cancelled");
+
+                        var decryptedFilePath = await fileSystemService.SaveToGalleryOrFiles(stream, fileName, saveType);
+                        return decryptedFilePath;
+                    }
+                    else
+                    {
+                        return await fileSystemService.SaveFile(stream, fileName, false);
+                    }
+                }
             });
         }
 
@@ -468,6 +481,12 @@ namespace SkyDrop.Core.Services
                 name[15] = 'z';
                 name[16] = 'i';
             }
+            else if(originalFileName.CanDisplayPreview())
+            {
+                //add im signature to identify skydrop encrypted images
+                name[15] = 'i';
+                name[16] = 'm';
+            }
             else
             {
                 //add sk signature to identify skydrop encrypted files
@@ -493,7 +512,7 @@ namespace SkyDrop.Core.Services
 
         Task<string> EncodeFileFor(string filePath, List<Contact> recipients);
 
-        Task<string> DecodeFile(string filePath);
+        Task<string> DecodeFile(string filePath, bool isPersistent);
 
         Task<string> DecodeZipFile(Stream data, string filename);
 

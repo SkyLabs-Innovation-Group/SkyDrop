@@ -155,10 +155,18 @@ namespace SkyDrop.Core.ViewModels.Main
                     Stream decryptedStream;
                     if (filename.IsEncryptedZipFile())
                     {
+                        //decrypt and unzip
                         LoadingLabelText = decryptingText;
                         await Task.Delay(500);
                         var decryptedPath = await encryptionService.DecodeZipFile(stream, filename);
                         decryptedStream = File.OpenRead(decryptedPath);
+                    }
+                    else if (filename.IsEncryptedFile())
+                    {
+                        //no need to unzip
+                        var filePath = await fileSystemService.SaveFile(stream, filename, false);
+                        var decryptedPath = await encryptionService.DecodeFile(filePath, false);
+                        return GetUnzippedFileDvMs(new List<SkyFile> { new SkyFile { Filename = Path.GetFileName(decryptedPath), FullFilePath = decryptedPath } });
                     }
                     else
                     {
