@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using FFImageLoading.Cross;
 using MvvmCross;
 using MvvmCross.Binding;
@@ -26,10 +27,15 @@ namespace SkyDrop.Droid.Bindings
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
+        private CancellationTokenSource tcs = new CancellationTokenSource();
+
         protected override void SetValue(SkyFile value)
         {
             try
             {
+                tcs.Cancel();
+                tcs = new CancellationTokenSource();
+
                 Target.SetImageBitmap(null);
 
                 if (string.IsNullOrEmpty(value?.FullFilePath))
@@ -38,24 +44,7 @@ namespace SkyDrop.Droid.Bindings
                 if (!value.FullFilePath.CanDisplayPreview())
                     return;
 
-                AndroidUtil.LoadLocalImagePreview(value.FullFilePath, Target);
-                /*
-                Task.Run(async () =>
-                {
-                    try
-                    {
-                        var task = ImageService.Instance.LoadStream(
-                                c => Task.FromResult((Stream) System.IO.File.OpenRead(value.FullFilePath)))
-                            .DownSampleInDip()
-                            .IntoAsync(Target);
-
-                        await task;
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Logger.Error(ex, "Error loading image binding");
-                    }
-                }).Forget();*/
+                AndroidUtil.LoadLocalImagePreview(value.FullFilePath, Target, tcs.Token);
             }
             catch (Exception e)
             {

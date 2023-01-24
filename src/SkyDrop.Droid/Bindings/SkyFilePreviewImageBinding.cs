@@ -1,3 +1,4 @@
+using System.Threading;
 using FFImageLoading.Cross;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
@@ -17,8 +18,13 @@ namespace SkyDrop.Droid.Bindings
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
+        private CancellationTokenSource tcs = new CancellationTokenSource();
+
         protected override void SetValue(SkyFile value)
         {
+            tcs.Cancel();
+            tcs = new CancellationTokenSource();
+
             Target.ImagePath = null;
 
             if (value == null)
@@ -29,7 +35,7 @@ namespace SkyDrop.Droid.Bindings
 
             if (value.Skylink.IsNullOrEmpty())
             {
-                AndroidUtil.LoadLocalImagePreview(value.FullFilePath, Target);
+                AndroidUtil.LoadLocalImagePreview(value.FullFilePath, Target, tcs.Token);
                 return;
             }
 
