@@ -111,7 +111,7 @@ namespace SkyDrop.Core.ViewModels.Main
             ShareLinkCommand = new MvxAsyncCommand(async () => await ShareLink());
             ShowStagedFileMenuCommand =
                 new MvxAsyncCommand<StagedFileDvm>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
-            OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFileInBrowser());
+            OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFile());
             LoginToBrowserCommand = new MvxAsyncCommand(LoginToBrowser);
             DownloadFileCommand = new MvxAsyncCommand(SaveOrUnzipFocusedFile);
             ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
@@ -857,7 +857,7 @@ namespace SkyDrop.Core.ViewModels.Main
             FileSize = "";
         }
 
-        private async Task OpenFileInBrowser()
+        private async Task OpenFile()
         {
             try
             {

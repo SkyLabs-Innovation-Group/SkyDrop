@@ -163,6 +163,9 @@ namespace SkyDrop.Core.Services
                     throw new Exception("File does not exist");
 
                 var fileBytes = File.ReadAllBytes(filePath);
+                if (fileBytes.Length == 0)
+                    throw new Exception("File is empty");
+
                 var (fileName, file) = GetFilePlainText(fileBytes);
 
                 //save the file

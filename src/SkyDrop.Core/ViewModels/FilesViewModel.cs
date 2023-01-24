@@ -161,7 +161,7 @@ namespace SkyDrop.Core.ViewModels.Main
                         var decryptedPath = await encryptionService.DecodeZipFile(stream, filename);
                         decryptedStream = File.OpenRead(decryptedPath);
                     }
-                    if (filename.IsEncryptedFile())
+                    else if (filename.IsEncryptedFile())
                     {
                         //no need to unzip
                         var filePath = await fileSystemService.SaveFile(stream, filename, false);
