@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.ViewModels;
 using Org.BouncyCastle.Crypto.Parameters;
 using Realms;
 using Realms.Exceptions;
@@ -317,7 +318,7 @@ namespace SkyDrop.Core.Services
 
         public List<SkynetPortal> LoadSkynetPortals()
         {
-            return Realm.All<SkynetPortal>().ToList();
+            return Realm.All<SkynetPortal>().OrderBy(portal => portal.PortalPreferencesPosition).ToList();
         }
 
         public SkynetPortal LoadSkynetPortal(string portalId)
@@ -431,6 +432,27 @@ namespace SkyDrop.Core.Services
                 return SecureStorage.SetAsync(portalPrefKey, apiToken);
             return Task.CompletedTask;
         }
+
+        public void ReorderPortals(SkynetPortal portal, int oldPosition, int newPosition)
+        {
+            Realm.Write(() =>
+            {
+                var portals = LoadSkynetPortals();
+
+                if (oldPosition < 0 || oldPosition >= portals.Count || newPosition < 0 || newPosition >= portals.Count)
+                    return;
+
+                var temp = portals[oldPosition];
+                portals[oldPosition] = portals[newPosition];
+                portals[newPosition] = temp;
+
+                portals[oldPosition].PortalPreferencesPosition = oldPosition;
+                portals[newPosition].PortalPreferencesPosition = newPosition;
+
+                Realm.Add(portals[oldPosition]);
+                Realm.Add(portals[newPosition]);
+            });
+        }
     }
 
     public interface IStorageService
@@ -489,5 +511,8 @@ namespace SkyDrop.Core.Services
         void DeleteSkynetPortal(SkynetPortal portal);
 
         void SetSkynetPortalLoggedInBrowser(SkynetPortal portal);
+
+        void ReorderPortals(SkynetPortal portal, int oldPosition, int newPosition);
+
     }
 }

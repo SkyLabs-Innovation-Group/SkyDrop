@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
+using Org.BouncyCastle.Utilities;
+using Realms;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Services;
@@ -76,25 +78,27 @@ namespace SkyDrop.Core.ViewModels
             var portalDvm = UserPortals.FirstOrDefault(a => a.Portal == portal);
             var portalCurrentIndex = UserPortals.IndexOf(portalDvm);
             var portalNewIndex = moveUp ? portalCurrentIndex - 1 : portalCurrentIndex + 1;
-
-            ReorderPortals(portalCurrentIndex, portalNewIndex);
+            
+            ReorderPortals(portal, portalCurrentIndex, portalNewIndex);
         }
 
-        private void ReorderPortals(int position, int newPosition)
+        private void ReorderPortals(SkynetPortal portal, int oldPosition, int newPosition)
         {
-            if (position == newPosition)
+            if (oldPosition == newPosition)
                 return;
 
-            var copy = new MvxObservableCollection<SkynetPortalDvm>(UserPortals);
-            var portalCopy = copy[position];
+            if (oldPosition < 0 || oldPosition >= UserPortals.Count || newPosition < 0 || newPosition >= UserPortals.Count)
+                return;
 
-            var newIndex = Math.Max(0, Math.Min(UserPortals.Count - 1, newPosition));
-            copy.Move(position, newIndex);
+            var temp = UserPortals[oldPosition];
+            UserPortals[oldPosition] = UserPortals[newPosition];
+            UserPortals[newPosition] = temp;
 
-            foreach (var portal in copy) storageService.EditSkynetPortal(portal.RealmId);
+            UserPortals[oldPosition].PortalPreferencesPosition = oldPosition;
+            UserPortals[newPosition].PortalPreferencesPosition = newPosition;
 
-            UserPortals.SwitchTo(copy);
-
+            storageService.ReorderPortals(portal, oldPosition, newPosition);
+            
             SetTopPortalSelected();
         }
 

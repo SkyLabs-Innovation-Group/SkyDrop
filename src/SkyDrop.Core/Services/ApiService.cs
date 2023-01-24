@@ -159,80 +159,6 @@ namespace SkyDrop.Core.Services
             return GetFilenameFromResponse(response);
         }
 
-        public async Task<bool> PingPortalForSkylink(string skylink, SkynetPortal skynetPortal)
-        {
-            string oldToken = null;
-            if (skynetPortal.HasApiToken() && !HasValidLength(skynetPortal.UserApiToken))
-            {
-                userDialogs.Toast("The API token entered was invalid");
-                Log.Error("The API token entered was invalid");
-                return FailedPortalCheck(skynetPortal, oldToken);
-            }
-
-            if (skynetPortal.HasApiToken())
-            {
-                // Store oldToken while validating the new token using a HEAD request, swap back in FailedPortalCheck()
-                oldToken = httpClientFactory.GetTokenForHttpClient(skynetPortal);
-
-                if (oldToken == skynetPortal.UserApiToken) // if oldToken == newToken, treat as a new token
-                    oldToken = null;
-
-                httpClientFactory.UpdateHttpClientWithNewToken(skynetPortal);
-            }
-
-            var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(skynetPortal);
-
-            var requestUrl = $"{skynetPortal}/{skylink}";
-
-            var request = new HttpRequestMessage(HttpMethod.Head, requestUrl);
-
-            HttpResponseMessage result = null;
-            try
-            {
-                result = await httpClient.SendAsync(request);
-            }
-            catch (HttpRequestException httpEx) when (httpEx.Message.Contains("SSL") &&
-                                                      DeviceInfo.Platform == DevicePlatform.Android)
-            {
-                userDialogs.Alert(Strings.SslPrompt);
-                Log.Exception(httpEx);
-                return FailedPortalCheck(skynetPortal, oldToken);
-            }
-            catch (HttpRequestException e)
-            {
-                Log.Error("Error pinging skynet portal at " + skynetPortal.BaseUrl);
-                Log.Exception(e);
-            }
-
-            if (result == null)
-            {
-                userDialogs.Toast("No response from " + skynetPortal);
-                Log.Error($"Head request to {skynetPortal} returned null");
-                return FailedPortalCheck(skynetPortal, oldToken);
-            }
-
-            Log.Trace(result.ToString());
-
-            if (result.StatusCode != HttpStatusCode.OK)
-            {
-                userDialogs.Toast($"{skynetPortal} refused the portal check request");
-                Log.Error($"Head request to {skynetPortal} returned status code {result.StatusCode}");
-                return FailedPortalCheck(skynetPortal, oldToken);
-            }
-
-            var headers = result.Headers;
-            var skylinkHeader = headers.GetValues("Skynet-Skylink").FirstOrDefault();
-            if (!(skylinkHeader == skylink))
-            {
-                Log.Error("!(skylinkHeader == skylink)");
-                userDialogs.Toast($"{skynetPortal} Skylink Header did not match");
-                return FailedPortalCheck(skynetPortal, oldToken);
-            }
-
-            Log.Trace("Success querying for file header on portal " + skynetPortal);
-            return true;
-        }
-
         private string GetFilenameFromResponse(HttpResponseMessage response)
         {
             if (response == null)
@@ -294,8 +220,6 @@ namespace SkyDrop.Core.Services
         Task<(Stream data, string filename)> DownloadFile(string url);
 
         Task<string> GetSkyFileFilename(string skyfile);
-
-        Task<bool> PingPortalForSkylink(string skylink, SkynetPortal skynetPortal);
 
         CancellationToken GetNewCancellationToken();
 
