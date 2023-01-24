@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using MvvmCross;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Bindings.Target;
@@ -22,10 +23,15 @@ namespace SkyDrop.iOS.Bindings
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
+        private CancellationTokenSource tcs = new CancellationTokenSource();
+
         protected override void SetValue(SkyFile value)
         {
             try
             {
+                tcs.Cancel();
+                tcs = new CancellationTokenSource();
+
                 Target.Image = null;
 
                 if (value == null)
@@ -34,7 +40,7 @@ namespace SkyDrop.iOS.Bindings
                 if (!value.FullFilePath.CanDisplayPreview())
                     return;
 
-                IOsUtil.LoadLocalImagePreview(value.FullFilePath, Target);
+                IOsUtil.LoadLocalImagePreview(value.FullFilePath, Target, tcs.Token);
             }
             catch (Exception e)
             {

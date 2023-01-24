@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using CoreGraphics;
 using FFImageLoading;
 using MvvmCross;
 using UIKit;
 using WebKit;
+using Xamarin.Essentials;
 using ZXing;
 using ZXing.Common;
 using ZXing.Mobile;
@@ -30,32 +32,32 @@ namespace SkyDrop.iOS.Common
             child.Frame = new CGRect(0, 0, parent.Frame.Width, parent.Frame.Height);
         }
 
-        public static void LoadLocalImagePreview(string filePath, UIImageView target)
+        public static void LoadLocalImagePreview(string filePath, UIImageView target, CancellationToken token)
         {
             var log = Mvx.IoCProvider.Resolve<ILog>();
             Task.Run(async () =>
             {
                 try
                 {
-                    var task = ImageService.Instance.LoadStream(
+                    var uiImage = await ImageService.Instance.LoadStream(
                             c => Task.FromResult((Stream)File.OpenRead(filePath)))
                         .DownSampleInDip()
-                        .IntoAsync(target);
+                        .AsUIImageAsync();
 
-                    await task;
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        //prevents race conditions
+                        if (token.IsCancellationRequested)
+                            return;
+
+                        target.Image = uiImage;
+                    });
                 }
                 catch (Exception ex)
                 {
                     log.Error("Error setting SkyFile preview", ex);
                 }
             });
-        }
-
-        public static async Task ExecuteJs(this WKWebView webView, string js)
-        {
-            //need to handle the newline chars differently on iOS
-            //js = js.Replace(System.Environment.NewLine, @"\n");
-            await webView.EvaluateJavaScriptAsync(js);
         }
     }
 }

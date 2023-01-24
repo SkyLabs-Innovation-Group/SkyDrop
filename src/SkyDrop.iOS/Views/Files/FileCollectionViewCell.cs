@@ -62,7 +62,7 @@ namespace SkyDrop.iOS.Views.Files
                     if (value.Skylink.IsNullOrEmpty())
                     {
                         //this is an "unzipped" file
-                        IOsUtil.LoadLocalImagePreview(value.FullFilePath, PreviewImage);
+                        IOsUtil.LoadLocalImagePreview(value.FullFilePath, PreviewImage, default);
                         return;
                     }
 
