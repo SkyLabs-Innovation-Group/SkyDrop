@@ -286,16 +286,16 @@ namespace SkyDrop.Core.Services
 
         public void EditSkynetPortal(string id)
         {
-            EditSkynetPortal(new SkynetPortalDvm(Realm.Find<SkynetPortal>(id)));
+            EditSkynetPortal(Realm.Find<SkynetPortal>(id));
         }
 
-        public void EditSkynetPortal(SkynetPortalDvm portal, string apiToken = null)
+        public void EditSkynetPortal(SkynetPortal portal, string apiToken = null)
         {
             Realm.Write(async () =>
             {
-                await SaveApiTokenForPortal(portal.ApiTokenPrefKey, apiToken);
+                await SaveApiTokenForPortal(portal.GetApiTokenPrefKey(), apiToken);
 
-                var storedPortal = Realm.Find<SkynetPortal>(portal.RealmId);
+                var storedPortal = Realm.Find<SkynetPortal>(portal.Id);
 
                 storedPortal.Name = portal.Name;
                 storedPortal.BaseUrl = portal.BaseUrl;
@@ -500,7 +500,7 @@ namespace SkyDrop.Core.Services
 
         void SaveSkynetPortal(SkynetPortal portal, string apiToken = null);
 
-        void EditSkynetPortal(SkynetPortalDvm portal, string apiToken = null);
+        void EditSkynetPortal(SkynetPortal portal, string apiToken = null);
 
         List<SkynetPortal> LoadSkynetPortals();
 

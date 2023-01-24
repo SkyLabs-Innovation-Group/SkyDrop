@@ -231,8 +231,14 @@ namespace SkyDrop.Core.ViewModels.Main
             }
 
             if (!Preferences.Get(PreferenceKey.OnboardingComplete, false))
+            {
                 //show onboarding
                 navigationService.Navigate<OnboardingViewModel>();
+            }
+            else if (!SkynetPortal.SelectedPortal.HasApiToken())
+            {
+                _ = ShowLoginPrompt();
+            }
         }
 
         public void ResetUi(bool leaveBarcode = false)
@@ -1077,6 +1083,30 @@ namespace SkyDrop.Core.ViewModels.Main
                 return "Anyone with the link";
 
             return Recipient.Name;
+        }
+
+        private async Task ShowLoginPrompt()
+        {
+            try
+            {
+                var selectedPortal = SkynetPortal.SelectedPortal;
+
+                var confirmed = await userDialogs.ConfirmAsync($"You need to log in to a Skynet portal. Do you want to log in to {selectedPortal.BaseUrl}?");
+                if (!confirmed)
+                    return;
+
+                var apiToken = await navigationService.Navigate<PortalLoginViewModel, string, string>(selectedPortal.BaseUrl);
+                if (string.IsNullOrEmpty(apiToken))
+                    return;
+
+                SingletonService.StorageService.SaveSkynetPortal(selectedPortal, apiToken);
+
+                userDialogs.Toast($"Logged in to {selectedPortal.BaseUrl}");
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e);
+            }
         }
     }
 }
