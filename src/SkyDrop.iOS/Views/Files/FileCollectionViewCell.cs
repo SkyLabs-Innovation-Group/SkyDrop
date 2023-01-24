@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Acr.UserDialogs;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
@@ -18,6 +19,8 @@ namespace SkyDrop.iOS.Views.Files
     {
         public static readonly NSString Key = new NSString("FileCollectionViewCell");
         public static readonly UINib Nib;
+
+        private CancellationTokenSource tcs = new CancellationTokenSource();
 
         static FileCollectionViewCell()
         {
@@ -53,6 +56,9 @@ namespace SkyDrop.iOS.Views.Files
             get => new SkyFile();
             set
             {
+                tcs.Cancel();
+                tcs = new CancellationTokenSource();
+
                 //clear previous preview image
                 PreviewImage.ImagePath = null;
 
@@ -62,7 +68,7 @@ namespace SkyDrop.iOS.Views.Files
                     if (value.Skylink.IsNullOrEmpty())
                     {
                         //this is an "unzipped" file
-                        IOsUtil.LoadLocalImagePreview(value.FullFilePath, PreviewImage);
+                        IOsUtil.LoadLocalImagePreview(value.FullFilePath, PreviewImage, tcs.Token);
                         return;
                     }
 

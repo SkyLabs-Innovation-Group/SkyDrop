@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
@@ -240,19 +241,28 @@ namespace SkyDrop.Droid.Helper
             return context.GetSystemService(Context.NotificationService) as NotificationManager;
         }
 
-        public static void LoadLocalImagePreview(string filePath, ImageView target)
+        public static void LoadLocalImagePreview(string filePath, ImageView target, CancellationToken token)
         {
             var log = Mvx.IoCProvider.Resolve<ILog>();
             Task.Run(async () =>
             {
                 try
                 {
-                    var task = ImageService.Instance.LoadStream(
+                    var bitmapDrawable = await ImageService.Instance.LoadStream(
                             c => Task.FromResult((Stream)File.OpenRead(filePath)))
                         .DownSampleInDip()
-                        .IntoAsync(target);
+                        .AsBitmapDrawableAsync();
 
-                    await task;
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        if (token.IsCancellationRequested)
+                        {
+                            bitmapDrawable.SetNoLongerDisplayed();
+                            return;
+                        }
+
+                        target.SetImageBitmap(bitmapDrawable.Bitmap);
+                    });
                 }
                 catch (Exception ex)
                 {
