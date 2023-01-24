@@ -11,6 +11,7 @@ using Acr.UserDialogs;
 using Microsoft.AppCenter.Crashes;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
+using Realms;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Exceptions;
@@ -214,7 +215,7 @@ namespace SkyDrop.Core.ViewModels.Main
             UploadNotificationsEnabled = Preferences.Get(PreferenceKey.UploadNotificationsEnabled, true);
         }
 
-        public override void ViewAppeared()
+        public override async void ViewAppeared()
         {
             Log.Trace($"{nameof(DropViewModel)} ViewAppeared()");
 
@@ -233,11 +234,19 @@ namespace SkyDrop.Core.ViewModels.Main
             if (!Preferences.Get(PreferenceKey.OnboardingComplete, false))
             {
                 //show onboarding
-                navigationService.Navigate<OnboardingViewModel>();
+                await navigationService.Navigate<OnboardingViewModel>();
             }
-            else if (!SkynetPortal.SelectedPortal.HasApiToken())
+            else
             {
-                _ = ShowLoginPrompt();
+                await Realm.GetInstance().WriteAsync(async (s) =>
+                {
+                    var apiToken = SkynetPortal.SelectedPortal.UserApiToken ?? await SecureStorage.GetAsync(SkynetPortal.SelectedPortal.GetApiTokenPrefKey());
+
+                    SkynetPortal.SelectedPortal.UserApiToken = apiToken;
+
+                    if (string.IsNullOrEmpty(SkynetPortal.SelectedPortal.UserApiToken))
+                        await ShowLoginPrompt();
+                });
             }
         }
 
@@ -1085,10 +1094,17 @@ namespace SkyDrop.Core.ViewModels.Main
             return Recipient.Name;
         }
 
+        private bool didShowLoginPrompt;
+
         private async Task ShowLoginPrompt()
         {
             try
-            {
+           {
+                if (didShowLoginPrompt)
+                    return;
+
+                didShowLoginPrompt = true;
+
                 var selectedPortal = SkynetPortal.SelectedPortal;
 
                 var confirmed = await userDialogs.ConfirmAsync($"You need to log in to a Skynet portal. Do you want to log in to {selectedPortal.BaseUrl}?");

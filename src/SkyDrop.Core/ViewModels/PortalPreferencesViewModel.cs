@@ -9,6 +9,7 @@ using Realms;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Services;
+using Xamarin.Essentials;
 using static SkyDrop.Core.ViewModels.EditPortalViewModel;
 
 namespace SkyDrop.Core.ViewModels
@@ -50,13 +51,13 @@ namespace SkyDrop.Core.ViewModels
             return navigationService.Navigate<EditPortalViewModel, NavParam>(new NavParam());
         }
 
-        public override void ViewAppearing()
+        public override async void ViewAppearing()
         {
             base.ViewAppearing();
-            LoadUserPortals();
+            await LoadUserPortals();
         }
 
-        public void LoadUserPortals()
+        public async Task LoadUserPortals()
         {
             var savedPortals = storageService.LoadSkynetPortals();
 
@@ -70,19 +71,19 @@ namespace SkyDrop.Core.ViewModels
             var savedPortalsDvms = portalService.ConvertSkynetPortalsToDvMs(savedPortals, ReorderAction);
             UserPortals.SwitchTo(savedPortalsDvms);
 
-            SetTopPortalSelected();
+            await SetTopPortalSelected();
         }
 
-        private void ReorderAction(SkynetPortal portal, bool moveUp)
+        private async void ReorderAction(SkynetPortal portal, bool moveUp)
         {
             var portalDvm = UserPortals.FirstOrDefault(a => a.Portal == portal);
             var portalCurrentIndex = UserPortals.IndexOf(portalDvm);
             var portalNewIndex = moveUp ? portalCurrentIndex - 1 : portalCurrentIndex + 1;
             
-            ReorderPortals(portal, portalCurrentIndex, portalNewIndex);
+            await ReorderPortals(portal, portalCurrentIndex, portalNewIndex);
         }
 
-        private void ReorderPortals(SkynetPortal portal, int oldPosition, int newPosition)
+        private async Task ReorderPortals(SkynetPortal portal, int oldPosition, int newPosition)
         {
             if (oldPosition == newPosition)
                 return;
@@ -99,7 +100,7 @@ namespace SkyDrop.Core.ViewModels
 
             storageService.ReorderPortals(portal, oldPosition, newPosition);
             
-            SetTopPortalSelected();
+            await SetTopPortalSelected();
         }
 
         public void EditPortal(int position)
@@ -108,13 +109,17 @@ namespace SkyDrop.Core.ViewModels
             navigationService.Navigate<EditPortalViewModel, NavParam>(new NavParam { PortalId = portalId });
         }
 
-        private void SetTopPortalSelected()
+        private async Task SetTopPortalSelected()
         {
             var topPortal = UserPortals.FirstOrDefault();
             if (topPortal == null)
                 return;
 
-            SkynetPortal.SelectedPortal = topPortal.Portal;
+            await Realm.GetInstance().WriteAsync(async (s) =>
+            {
+                SkynetPortal.SelectedPortal = topPortal.Portal;
+                SkynetPortal.SelectedPortal.UserApiToken ??= await SecureStorage.GetAsync(topPortal.Portal.GetApiTokenPrefKey());
+            });
         }
     }
 }

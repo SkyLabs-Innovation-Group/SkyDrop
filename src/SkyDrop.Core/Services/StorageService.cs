@@ -279,7 +279,8 @@ namespace SkyDrop.Core.Services
         {
             Realm.Write(async () =>
             {
-                await SaveApiTokenForPortal(portal.GetApiTokenPrefKey(), apiToken);
+                portal.UserApiToken ??= apiToken;
+                await SaveApiTokenToSecureStorage(portal.GetApiTokenPrefKey(), apiToken);
                 Realm.Add(portal);
             });
         }
@@ -293,7 +294,8 @@ namespace SkyDrop.Core.Services
         {
             Realm.Write(async () =>
             {
-                await SaveApiTokenForPortal(portal.GetApiTokenPrefKey(), apiToken);
+                portal.UserApiToken ??= apiToken;
+                await SaveApiTokenToSecureStorage(portal.GetApiTokenPrefKey(), apiToken);
 
                 var storedPortal = Realm.Find<SkynetPortal>(portal.Id);
 
@@ -426,11 +428,12 @@ namespace SkyDrop.Core.Services
             };
         }
 
-        private Task SaveApiTokenForPortal(string portalPrefKey, string apiToken)
+        private Task SaveApiTokenToSecureStorage(string portalPrefKey, string apiToken)
         {
-            if (!string.IsNullOrEmpty(apiToken))
-                return SecureStorage.SetAsync(portalPrefKey, apiToken);
-            return Task.CompletedTask;
+            if (string.IsNullOrEmpty(apiToken))
+                return Task.CompletedTask;
+
+            return SecureStorage.SetAsync(portalPrefKey, apiToken);
         }
 
         public void ReorderPortals(SkynetPortal portal, int oldPosition, int newPosition)
