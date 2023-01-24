@@ -60,14 +60,17 @@ namespace SkyDrop.Core.DataModels
             if (string.IsNullOrEmpty(portalUrl)) return new SkynetPortal(DefaultWeb3PortalUrl);
 
             var portal = new SkynetPortal(portalUrl);
-            portal.UserApiToken = SecureStorage.GetAsync(portal.GetApiTokenPrefKey()).GetAwaiter().GetResult();
-
-            if (portal.HasApiToken())
+            Realm.GetInstance().Write(() =>
             {
-                var httpClientFactory = Mvx.IoCProvider.GetSingleton<ISkyDropHttpClientFactory>();
-                httpClientFactory.UpdateHttpClientWithNewToken(portal);
-            }
+                portal.UserApiToken = SecureStorage.GetAsync(portal.GetApiTokenPrefKey()).GetAwaiter().GetResult();
 
+                if (portal.HasApiToken())
+                {
+                    var httpClientFactory = Mvx.IoCProvider.GetSingleton<ISkyDropHttpClientFactory>();
+                    httpClientFactory.UpdateHttpClientWithNewToken(portal);
+                }
+            });
+    
             return portal;
         }
 
