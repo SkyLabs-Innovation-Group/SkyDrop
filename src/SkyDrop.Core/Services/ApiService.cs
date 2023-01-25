@@ -76,7 +76,6 @@ namespace SkyDrop.Core.Services
 
             var request = new HttpRequestMessage(HttpMethod.Post, url) { Content = form };
 
-
             var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
 
             if (!await TestUrl(httpClient, url))

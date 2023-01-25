@@ -11,6 +11,7 @@ using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.RealmObjects;
 using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 using Contact = SkyDrop.Core.DataModels.Contact;
 
 namespace SkyDrop.Core.Services
@@ -275,27 +276,30 @@ namespace SkyDrop.Core.Services
             Realm.Write(() => { Realm.Remove(portal); });
         }
 
-        public void SaveSkynetPortal(SkynetPortal portal, string apiToken = null)
+        public async Task SaveSkynetPortal(SkynetPortal portal, string apiToken = null)
         {
-            Realm.Write(async () =>
+            Realm.Write(() =>
             {
-                await SaveApiTokenForPortal(portal.GetApiTokenPrefKey(), apiToken);
                 Realm.Add(portal);
             });
+
+            portal.UserApiToken ??= apiToken;
+            await SaveApiTokenToSecureStorage(portal.GetApiTokenPrefKey(), apiToken);
         }
 
-        public void EditSkynetPortal(string id)
+        public async Task EditSkynetPortal(string id)
         {
-            EditSkynetPortal(new SkynetPortalDvm(Realm.Find<SkynetPortal>(id)));
+            await EditSkynetPortal(Realm.Find<SkynetPortal>(id));
         }
 
-        public void EditSkynetPortal(SkynetPortalDvm portal, string apiToken = null)
+        public async Task EditSkynetPortal(SkynetPortal portal, string apiToken = null)
         {
-            Realm.Write(async () =>
+            portal.UserApiToken ??= apiToken;
+            await SaveApiTokenToSecureStorage(portal.GetApiTokenPrefKey(), apiToken);
+
+            await Realm.Write(async () =>
             {
-                await SaveApiTokenForPortal(portal.ApiTokenPrefKey, apiToken);
-
-                var storedPortal = Realm.Find<SkynetPortal>(portal.RealmId);
+                var storedPortal = Realm.Find<SkynetPortal>(portal.Id);
 
                 storedPortal.Name = portal.Name;
                 storedPortal.BaseUrl = portal.BaseUrl;
@@ -339,11 +343,30 @@ namespace SkyDrop.Core.Services
         /// </summary>
         private Realm GetRealm()
         {
-            var realmConfiguration = new RealmConfiguration();
+            const ulong currentSchemaVersion = 1;
+
+            var realmConfiguration = new RealmConfiguration()
+            {
+                SchemaVersion = currentSchemaVersion
+            };
 
             try
             {
-                return Realm.GetInstance(realmConfiguration);
+
+                realmConfiguration.MigrationCallback = (migration, oldSchemaVersion) =>
+                {
+                    if (oldSchemaVersion < 1)
+                    {
+                        //var newPortals = migration.NewRealm.All<SkynetPortal>();
+                        //var oldPortals = migration.OldRealm.All<SkynetPortal>();
+
+                        // No migration needed
+                    }
+                };
+
+                var instance = Realm.GetInstance(realmConfiguration);
+
+                return instance;
             }
             catch (RealmException e)
             {
@@ -426,11 +449,12 @@ namespace SkyDrop.Core.Services
             };
         }
 
-        private Task SaveApiTokenForPortal(string portalPrefKey, string apiToken)
+        private Task SaveApiTokenToSecureStorage(string portalPrefKey, string apiToken)
         {
-            if (!string.IsNullOrEmpty(apiToken))
-                return SecureStorage.SetAsync(portalPrefKey, apiToken);
-            return Task.CompletedTask;
+            if (string.IsNullOrEmpty(apiToken))
+                return Task.CompletedTask;
+
+            return SecureStorage.SetAsync(portalPrefKey, apiToken);
         }
 
         public void ReorderPortals(SkynetPortal portal, int oldPosition, int newPosition)
@@ -498,15 +522,15 @@ namespace SkyDrop.Core.Services
 
         void RenameContact(Contact contact, string newName);
 
-        void SaveSkynetPortal(SkynetPortal portal, string apiToken = null);
+        Task SaveSkynetPortal(SkynetPortal portal, string apiToken = null);
 
-        void EditSkynetPortal(SkynetPortalDvm portal, string apiToken = null);
+        Task EditSkynetPortal(SkynetPortal portal, string apiToken = null);
 
         List<SkynetPortal> LoadSkynetPortals();
 
         SkynetPortal LoadSkynetPortal(string portalId);
 
-        void EditSkynetPortal(string id);
+        Task EditSkynetPortal(string id);
 
         void DeleteSkynetPortal(SkynetPortal portal);
 

@@ -9,8 +9,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Microsoft.AppCenter.Crashes;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
+using Realms;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Exceptions;
@@ -214,7 +216,7 @@ namespace SkyDrop.Core.ViewModels.Main
             UploadNotificationsEnabled = Preferences.Get(PreferenceKey.UploadNotificationsEnabled, true);
         }
 
-        public override void ViewAppeared()
+        public override async void ViewAppeared()
         {
             Log.Trace($"{nameof(DropViewModel)} ViewAppeared()");
 
@@ -231,8 +233,19 @@ namespace SkyDrop.Core.ViewModels.Main
             }
 
             if (!Preferences.Get(PreferenceKey.OnboardingComplete, false))
+            {
                 //show onboarding
-                navigationService.Navigate<OnboardingViewModel>();
+                await navigationService.Navigate<OnboardingViewModel>();
+            }
+            else
+            {
+                var httpClientFactory = Mvx.IoCProvider.Resolve<ISkyDropHttpClientFactory>();
+                var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
+                var apiToken = httpClientFactory.GetTokenForHttpClient(httpClient);
+
+                if (string.IsNullOrEmpty(apiToken))
+                    await ShowLoginPrompt();
+            }
         }
 
         public void ResetUi(bool leaveBarcode = false)
@@ -1077,6 +1090,38 @@ namespace SkyDrop.Core.ViewModels.Main
                 return "Anyone with the link";
 
             return Recipient.Name;
+        }
+
+        private bool didShowLoginPrompt;
+
+        private async Task ShowLoginPrompt()
+        {
+            try
+           {
+                if (didShowLoginPrompt)
+                    return;
+
+                didShowLoginPrompt = true;
+
+                var selectedPortal = SkynetPortal.SelectedPortal;
+
+                var urlWithoutProtocol = new Uri(selectedPortal.BaseUrl).Host;
+                var confirmed = await userDialogs.ConfirmAsync($"You're not yet logged in to a Skynet portal. Do you want to log in to {urlWithoutProtocol}?", null, "OK", "Cancel");
+                if (!confirmed)
+                    return;
+
+                var apiToken = await navigationService.Navigate<PortalLoginViewModel, string, string>(selectedPortal.BaseUrl);
+                if (string.IsNullOrEmpty(apiToken))
+                    return;
+
+                await SingletonService.StorageService.SaveSkynetPortal(selectedPortal, apiToken);
+
+                userDialogs.Toast($"Logged in to {selectedPortal.BaseUrl}");
+            }
+            catch (Exception e)
+            {
+                Log.Exception(e);
+            }
         }
     }
 }

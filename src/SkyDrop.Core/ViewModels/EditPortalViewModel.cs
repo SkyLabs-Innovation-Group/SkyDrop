@@ -22,7 +22,7 @@ namespace SkyDrop.Core.ViewModels
             Title = "Edit Portal";
 
             BackCommand = new MvxCommand(() => navigationService.Close(this));
-            SavePortalCommand = new MvxCommand(SavePortal);
+            SavePortalCommand = new MvxAsyncCommand(SavePortal);
             LoginWithPortalCommand = new MvxAsyncCommand(LoginWithPortal);
             PasteApiKeyCommand = new MvxAsyncCommand(PasteApiKey);
             DeletePortalCommand = new MvxAsyncCommand(DeletePortal);
@@ -41,27 +41,21 @@ namespace SkyDrop.Core.ViewModels
         public IMvxCommand BackCommand { get; set; }
         public IMvxCommand DeletePortalCommand { get; set; }
 
-        private void SavePortal()
+        private async Task SavePortal()
         {
-            Portal ??= new SkynetPortal(PortalUrl, PortalName);
-
-            var portalDvm = new SkynetPortalDvm(Portal)
-            {
-                Name = PortalName,
-                BaseUrl = PortalUrl,
-            };
+            Portal ??= new SkynetPortal(CleanUri(PortalUrl), PortalName);
 
             if (IsAddingNewPortal)
             {
                 Portal.PortalPreferencesPosition = SingletonService.StorageService.LoadSkynetPortals().Count;
-                SingletonService.StorageService.SaveSkynetPortal(Portal, ApiToken);
+                await SingletonService.StorageService.SaveSkynetPortal(Portal, ApiToken);
             }
             else
-                SingletonService.StorageService.EditSkynetPortal(portalDvm, ApiToken);
+                await SingletonService.StorageService.EditSkynetPortal(Portal, ApiToken);
 
             SingletonService.UserDialogs.Toast("Saved");
 
-            navigationService.Close(this);
+            await navigationService.Close(this);
         }
 
         public override async void Prepare(NavParam parameter)
@@ -130,6 +124,29 @@ namespace SkyDrop.Core.ViewModels
             SingletonService.UserDialogs.Toast("Deleted");
 
             await navigationService.Close(this);
+        }
+
+        private bool IsValidUri(string uriString)
+        {
+            if (!Uri.TryCreate(uriString, UriKind.Absolute, out Uri uri))
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        public string CleanUri(string portalUrl)
+        {
+            if (!IsValidUri(portalUrl))
+            {
+                string newPortalUrl = "https://" + portalUrl;
+                if (!IsValidUri(newPortalUrl))
+                    return SkynetPortal.DefaultWeb3PortalUrl;
+                return newPortalUrl;
+            }
+
+            return portalUrl;
         }
 
         public class NavParam

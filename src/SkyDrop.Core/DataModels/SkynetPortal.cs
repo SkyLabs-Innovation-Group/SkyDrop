@@ -46,6 +46,7 @@ namespace SkyDrop.Core.DataModels
         // Used for Fody.Weaver
         public string BaseUrl { get; set; }
 
+        [Ignored]
         public string UserApiToken { get; set; }
 
         public bool HasLoggedInBrowser { get; set; }
@@ -60,6 +61,7 @@ namespace SkyDrop.Core.DataModels
             if (string.IsNullOrEmpty(portalUrl)) return new SkynetPortal(DefaultWeb3PortalUrl);
 
             var portal = new SkynetPortal(portalUrl);
+
             portal.UserApiToken = SecureStorage.GetAsync(portal.GetApiTokenPrefKey()).GetAwaiter().GetResult();
 
             if (portal.HasApiToken())
@@ -95,19 +97,6 @@ namespace SkyDrop.Core.DataModels
 
             var storageService = Mvx.IoCProvider.Resolve<IStorageService>();
 
-            if (!IsValidUri(portal.BaseUrl))
-            {
-                Realm.GetInstance().Write(() =>
-                {
-                    portal.BaseUrl = "http://" + portal.BaseUrl;
-                    portal.BaseUrl = Uri.EscapeUriString(portal.BaseUrl);
-                    Realm.GetInstance().Add(portal);
-                });
-
-                if (!IsValidUri(portal.BaseUrl))
-                    return storageService.LoadSkynetPortals().Where(p => p.BaseUrl.Contains(DefaultWeb3PortalUrl)).FirstOrDefault();
-            }
-
             Preferences.Remove(PreferenceKey.SelectedSkynetPortal);
             Preferences.Set(PreferenceKey.SelectedSkynetPortal, portal.ToString());
 
@@ -116,8 +105,13 @@ namespace SkyDrop.Core.DataModels
             if (portal.HasApiToken())
             {
                 var key = portal.GetApiTokenPrefKey();
-                SecureStorage.Remove(key);
-                SecureStorage.SetAsync(key, portal.UserApiToken).GetAwaiter().GetResult();
+
+                if (!string.IsNullOrEmpty(portal.UserApiToken) &&
+                   !(SecureStorage.GetAsync(key).GetAwaiter().GetResult() == portal.UserApiToken))
+                {
+                    SecureStorage.Remove(key);
+                    SecureStorage.SetAsync(key, portal.UserApiToken).GetAwaiter().GetResult();
+                }
 
                 var httpClientFactory = Mvx.IoCProvider.GetSingleton<ISkyDropHttpClientFactory>();
                 httpClientFactory.UpdateHttpClientWithNewToken(portal);

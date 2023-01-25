@@ -6,6 +6,7 @@ using ObjCRuntime;
 using SkyDrop.Core.Components;
 using SkyDrop.Core.DataModels;
 using SkyDrop.iOS.Common;
+using Xamarin.Essentials;
 
 namespace SkyDrop.iOS.Services
 {
@@ -35,8 +36,9 @@ namespace SkyDrop.iOS.Services
                 Timeout = TimeSpan.FromMinutes(120)
             };
 
-            if (portal.HasApiToken())
-                AddApiTokenHeader(client, portal); // comment out in release
+            portal.UserApiToken ??= SecureStorage.GetAsync(portal.GetApiTokenPrefKey()).GetAwaiter().GetResult();
+
+            AddApiTokenHeader(client, portal);
 
             client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
 
