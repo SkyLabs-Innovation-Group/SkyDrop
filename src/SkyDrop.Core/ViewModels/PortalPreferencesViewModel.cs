@@ -115,11 +115,8 @@ namespace SkyDrop.Core.ViewModels
             if (topPortal == null)
                 return;
 
-            await Realm.GetInstance().WriteAsync(async (s) =>
-            {
-                SkynetPortal.SelectedPortal = topPortal.Portal;
-                SkynetPortal.SelectedPortal.UserApiToken ??= await SecureStorage.GetAsync(topPortal.Portal.GetApiTokenPrefKey());
-            });
+            SkynetPortal.SelectedPortal = topPortal.Portal;
+            SkynetPortal.SelectedPortal.UserApiToken ??= await SecureStorage.GetAsync(topPortal.Portal.GetApiTokenPrefKey());
         }
     }
 }
