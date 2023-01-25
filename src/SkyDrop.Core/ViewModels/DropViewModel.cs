@@ -238,15 +238,12 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             else
             {
-                await Realm.GetInstance().WriteAsync(async (s) =>
-                {
-                    var apiToken = SkynetPortal.SelectedPortal.UserApiToken ?? await SecureStorage.GetAsync(SkynetPortal.SelectedPortal.GetApiTokenPrefKey());
+                var apiToken = SkynetPortal.SelectedPortal.UserApiToken ?? await SecureStorage.GetAsync(SkynetPortal.SelectedPortal.GetApiTokenPrefKey());
 
-                    SkynetPortal.SelectedPortal.UserApiToken = apiToken;
+                SkynetPortal.SelectedPortal.UserApiToken = apiToken;
 
-                    if (string.IsNullOrEmpty(SkynetPortal.SelectedPortal.UserApiToken))
-                        await ShowLoginPrompt();
-                });
+                if (string.IsNullOrEmpty(SkynetPortal.SelectedPortal.UserApiToken))
+                    await ShowLoginPrompt();
             }
         }
 

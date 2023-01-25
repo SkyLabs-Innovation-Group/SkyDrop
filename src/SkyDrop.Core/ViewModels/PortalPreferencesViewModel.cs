@@ -63,7 +63,7 @@ namespace SkyDrop.Core.ViewModels
 
             if (savedPortals.Count == 0)
             {
-                storageService.SaveSkynetPortal(new SkynetPortal(SkynetPortal.DefaultWeb3PortalUrl)
+                await storageService.SaveSkynetPortal(new SkynetPortal(SkynetPortal.DefaultWeb3PortalUrl)
                     { Name = "Web3 Portal" });
                 savedPortals = storageService.LoadSkynetPortals();
             }
