@@ -97,19 +97,6 @@ namespace SkyDrop.Core.DataModels
 
             var storageService = Mvx.IoCProvider.Resolve<IStorageService>();
 
-            //if (!IsValidUri(portal.BaseUrl))
-            //{
-                //Realm.GetInstance().Write(() => // TODO add back escape and http:// in storageService somewhere to prevent bad URIs - causes issues putting this here
-                //{
-                //    portal.BaseUrl = "http://" + portal.BaseUrl;
-                //    portal.BaseUrl = Uri.EscapeUriString(portal.BaseUrl);
-                //    Realm.GetInstance().Add(portal);
-                //});
-
-                //if (!IsValidUri(portal.BaseUrl)) 
-            //        return storageService.LoadSkynetPortals().Where(p => p.BaseUrl.Contains(DefaultWeb3PortalUrl)).FirstOrDefault();
-            //}
-
             Preferences.Remove(PreferenceKey.SelectedSkynetPortal);
             Preferences.Set(PreferenceKey.SelectedSkynetPortal, portal.ToString());
 
