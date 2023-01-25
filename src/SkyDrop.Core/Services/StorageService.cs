@@ -364,7 +364,7 @@ namespace SkyDrop.Core.Services
                     }
                 };
 
-                var instance =  Realm.GetInstance(realmConfiguration);
+                var instance = Realm.GetInstance(realmConfiguration);
 
                 return instance;
             }

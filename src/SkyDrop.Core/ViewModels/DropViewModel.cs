@@ -1105,7 +1105,8 @@ namespace SkyDrop.Core.ViewModels.Main
 
                 var selectedPortal = SkynetPortal.SelectedPortal;
 
-                var confirmed = await userDialogs.ConfirmAsync($"You need to log in to a Skynet portal. Do you want to log in to {selectedPortal.BaseUrl}?");
+                var urlWithoutProtocol = new Uri(selectedPortal.BaseUrl).Host;
+                var confirmed = await userDialogs.ConfirmAsync($"You're not yet logged in to a Skynet portal. Do you want to log in to {urlWithoutProtocol}?", null, "OK", "Cancel");
                 if (!confirmed)
                     return;
 
