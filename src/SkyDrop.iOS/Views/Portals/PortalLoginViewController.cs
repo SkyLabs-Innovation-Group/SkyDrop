@@ -53,6 +53,7 @@ namespace SkyDrop.iOS.Views.Portals
 
             var set = CreateBindingSet();
             set.Bind(this).For(w => w.WebViewHidden).To(vm => vm.IsLoggedIn);
+            set.Bind(LoggingInLabel).To(vm => vm.LoadingLabelText);
             set.Bind(this).For(t => t.Title).To(vm => vm.Title);
             set.Apply();
         }

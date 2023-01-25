@@ -13,6 +13,9 @@ namespace SkyDrop.iOS.Views.Portals
 	partial class PortalLoginViewController
 	{
 		[Outlet]
+		UIKit.UILabel LoggingInLabel { get; set; }
+
+		[Outlet]
 		UIKit.UIView WebViewContainer { get; set; }
 		
 		void ReleaseDesignerOutlets ()
@@ -20,6 +23,11 @@ namespace SkyDrop.iOS.Views.Portals
 			if (WebViewContainer != null) {
 				WebViewContainer.Dispose ();
 				WebViewContainer = null;
+			}
+
+			if (LoggingInLabel != null) {
+				LoggingInLabel.Dispose ();
+				LoggingInLabel = null;
 			}
 		}
 	}
