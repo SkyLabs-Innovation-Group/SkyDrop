@@ -46,6 +46,7 @@ namespace SkyDrop.Core.DataModels
         // Used for Fody.Weaver
         public string BaseUrl { get; set; }
 
+        [Ignored]
         public string UserApiToken { get; set; }
 
         public bool HasLoggedInBrowser { get; set; }
@@ -62,7 +63,7 @@ namespace SkyDrop.Core.DataModels
             var portal = new SkynetPortal(portalUrl);
             Realm.GetInstance().Write(() =>
             {
-                portal.UserApiToken = SecureStorage.GetAsync(portal.GetApiTokenPrefKey()).GetAwaiter().GetResult();
+                portal.UserApiToken ??= SecureStorage.GetAsync(portal.GetApiTokenPrefKey()).GetAwaiter().GetResult();
 
                 if (portal.HasApiToken())
                 {
