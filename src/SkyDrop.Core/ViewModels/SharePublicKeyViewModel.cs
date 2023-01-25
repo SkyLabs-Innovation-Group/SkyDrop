@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Acr.UserDialogs;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using SkyDrop.Core.Services;
+using SkyDrop.Core.Utility;
+using Xamarin.Essentials;
 using ZXing.Common;
 using static SkyDrop.Core.Services.EncryptionService;
 
@@ -10,6 +13,7 @@ namespace SkyDrop.Core.ViewModels
 {
     public class SharePublicKeyViewModel : BaseViewModel
     {
+        private readonly IUserDialogs userDialogs;
         private readonly IBarcodeService barcodeService;
         private readonly IEncryptionService encryptionService;
         private readonly IMvxNavigationService navigationService;
@@ -31,17 +35,22 @@ namespace SkyDrop.Core.ViewModels
         {
             Title = "Pair Devices";
 
+            this.userDialogs = userDialogs;
             this.barcodeService = barcodeService;
             this.encryptionService = encryptionService;
             this.navigationService = navigationService;
 
             BackCommand = new MvxCommand(() => navigationService.Close(this));
+            PasteApiKeyCommand = new MvxAsyncCommand(PasteApiKey);
+            ShareApiKeyCommand = new MvxAsyncCommand(ShareApiKey);
         }
 
         public AddContactResult AddContactResult { get; set; }
         public IMvxCommand BackCommand { get; set; }
         public IMvxCommand RefreshBarcodeCommand { get; set; }
         public IMvxCommand StopScanningCommand { get; set; }
+        public IMvxCommand PasteApiKeyCommand { get; set; }
+        public IMvxCommand ShareApiKeyCommand { get; set; }
         public string HintText => GetHintText(AddContactResult);
         public string ContactSavedName { get; set; }
 
@@ -51,7 +60,18 @@ namespace SkyDrop.Core.ViewModels
             return barcodeService.GenerateBarcode(publicKey, width, height);
         }
 
-        public void AddContact(string barcodeData)
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+
+            if (!Preferences.Get(PreferenceKey.ContactsOnboardingComplete, false))
+            {
+                userDialogs.Alert("To save a new contact, scan the contact's QR code or share the public key using the buttons in the top right to copy and paste.");
+                Preferences.Set(PreferenceKey.ContactsOnboardingComplete, true);
+            }
+        }
+
+        public void AddContact(string barcodeData, bool isFromClipboard = false)
         {
             try
             {
@@ -62,7 +82,7 @@ namespace SkyDrop.Core.ViewModels
                 }
 
                 //wait for user interaction before scanning again
-                if (AddContactResult != AddContactResult.Default)
+                if (AddContactResult != AddContactResult.Default && !isFromClipboard)
                     return;
 
                 //prevents double dialog issue
@@ -94,6 +114,24 @@ namespace SkyDrop.Core.ViewModels
                 AddContactResult.Default => "",
                 _ => throw new Exception("Unexpected AddContactResult")
             };
+        }
+
+        private async Task PasteApiKey()
+        {
+            var text = await Xamarin.Essentials.Clipboard.GetTextAsync();
+            if (text.IsNullOrWhiteSpace())
+            {
+                AddContactResult = AddContactResult.InvalidKey;
+                return;
+            }
+
+            AddContact(text.Trim(), true);
+        }
+
+        private async Task ShareApiKey()
+        {
+            var publicKey = encryptionService.GetMyPublicKeyWithId(justScannedId);
+            await Xamarin.Essentials.Share.RequestAsync(publicKey);
         }
 
         public void Close()
