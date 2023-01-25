@@ -8,7 +8,7 @@ Our app is inspired by the user experience of Apple’s AirDrop feature for iOS 
 
 ---
 
-<img src="http://tomdawes.co.uk/skydrop/screenshot.png" width="350" title="SkyDrop iOS screenshot">
+<img src="http://tomdawes.co.uk/skydrop/screenshot_v2.png" width="350" title="SkyDrop iOS screenshot">
 
 SkyDrop is free software; your files are uploaded to your preferred Skynet portal. Files will usually be pinned for 30 days but to guarantee long term storage be sure to ask about plans with your portal provider.
 
