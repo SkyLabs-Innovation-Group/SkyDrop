@@ -13,5 +13,7 @@ namespace SkyDrop.Core
         public static string RequireSecureConnection = "RequireSecureConnection";
 
         public static string OnboardingComplete = "OnboardingComplete";
+
+        public static string ContactsOnboardingComplete = "ContactsOnboardingComplete";
     }
 }

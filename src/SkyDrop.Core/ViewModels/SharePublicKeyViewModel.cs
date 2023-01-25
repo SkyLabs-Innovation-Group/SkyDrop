@@ -5,6 +5,7 @@ using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using SkyDrop.Core.Services;
 using SkyDrop.Core.Utility;
+using Xamarin.Essentials;
 using ZXing.Common;
 using static SkyDrop.Core.Services.EncryptionService;
 
@@ -12,6 +13,7 @@ namespace SkyDrop.Core.ViewModels
 {
     public class SharePublicKeyViewModel : BaseViewModel
     {
+        private readonly IUserDialogs userDialogs;
         private readonly IBarcodeService barcodeService;
         private readonly IEncryptionService encryptionService;
         private readonly IMvxNavigationService navigationService;
@@ -33,6 +35,7 @@ namespace SkyDrop.Core.ViewModels
         {
             Title = "Pair Devices";
 
+            this.userDialogs = userDialogs;
             this.barcodeService = barcodeService;
             this.encryptionService = encryptionService;
             this.navigationService = navigationService;
@@ -55,6 +58,17 @@ namespace SkyDrop.Core.ViewModels
         {
             var publicKey = encryptionService.GetMyPublicKeyWithId(justScannedId);
             return barcodeService.GenerateBarcode(publicKey, width, height);
+        }
+
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+
+            if (!Preferences.Get(PreferenceKey.ContactsOnboardingComplete, false))
+            {
+                userDialogs.Alert("To save a new contact, scan the contact's QR code or share the public key using the buttons in the top right to copy and paste.");
+                Preferences.Set(PreferenceKey.ContactsOnboardingComplete, true);
+            }
         }
 
         public void AddContact(string barcodeData, bool isFromClipboard = false)
