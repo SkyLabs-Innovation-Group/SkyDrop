@@ -31,7 +31,7 @@ namespace SkyDrop.Core.ViewModels
             BackCommand = new MvxCommand(() => navigationService.Close(this, null));
         }
 
-        public string LoadingLabelText { get; set; } = "Logging in...";
+        public string LoadingLabelText { get; set; }
         public string PortalUrl { get; set; }
         public bool DidSetApiKey { get; set; }
         public bool IsLoggedIn { get; set; }
@@ -41,7 +41,11 @@ namespace SkyDrop.Core.ViewModels
         public void Prepare(string url)
         {
             //remove protocol
-            if (url.StartsWith("https://")) url = url.Substring(8);
+            if (url.StartsWith("https://"))
+                url = url.Substring(8);
+
+            LoadingLabelText = $"Logging in to {url}...";
+            Title = url;
 
             PortalUrl = $"https://account.{url}";
         }
