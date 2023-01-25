@@ -240,9 +240,7 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 var apiToken = SkynetPortal.SelectedPortal.UserApiToken ?? await SecureStorage.GetAsync(SkynetPortal.SelectedPortal.GetApiTokenPrefKey());
 
-                SkynetPortal.SelectedPortal.UserApiToken = apiToken;
-
-                if (string.IsNullOrEmpty(SkynetPortal.SelectedPortal.UserApiToken))
+                if (string.IsNullOrEmpty(apiToken))
                     await ShowLoginPrompt();
             }
         }
