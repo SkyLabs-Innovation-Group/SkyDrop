@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Microsoft.AppCenter.Crashes;
+using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using Realms;
@@ -238,7 +239,9 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             else
             {
-                var apiToken = SkynetPortal.SelectedPortal.UserApiToken ?? await SecureStorage.GetAsync(SkynetPortal.SelectedPortal.GetApiTokenPrefKey());
+                var httpClientFactory = Mvx.IoCProvider.Resolve<ISkyDropHttpClientFactory>();
+                var httpClient = httpClientFactory.GetSkyDropHttpClientInstance(SkynetPortal.SelectedPortal);
+                var apiToken = httpClientFactory.GetTokenForHttpClient(httpClient);
 
                 if (string.IsNullOrEmpty(apiToken))
                     await ShowLoginPrompt();
@@ -1110,7 +1113,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (string.IsNullOrEmpty(apiToken))
                     return;
 
-                SingletonService.StorageService.SaveSkynetPortal(selectedPortal, apiToken);
+                await SingletonService.StorageService.SaveSkynetPortal(selectedPortal, apiToken);
 
                 userDialogs.Toast($"Logged in to {selectedPortal.BaseUrl}");
             }

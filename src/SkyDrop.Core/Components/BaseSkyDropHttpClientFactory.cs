@@ -10,7 +10,10 @@ namespace SkyDrop.Core.Components
 {
     public abstract class BaseSkyDropHttpClientFactory : ISkyDropHttpClientFactory
     {
-        protected const string PortalApiTokenHeader = "Skynet-Api-Key";
+        private ILog _log;
+        protected ILog log => (_log ??= Mvx.IoCProvider.Resolve<ILog>());
+
+        public const string PortalApiTokenHeader = "Skynet-Api-Key";
 
         // todo: nb that this might one day cause issues if we stored too many HttpClient instances e.g. for 100s of portals
         protected Dictionary<SkynetPortal, HttpClient> HttpClientsPerPortal { get; private set; } =
@@ -56,6 +59,7 @@ namespace SkyDrop.Core.Components
             }
             catch (Exception ex)
             {
+                log.Exception(ex);   
             }
 
             return apiTokenHeader;
