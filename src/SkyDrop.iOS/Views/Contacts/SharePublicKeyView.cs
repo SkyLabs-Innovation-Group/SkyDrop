@@ -48,6 +48,13 @@ namespace SkyDrop.iOS.Views.Contacts
 
             AddBackButton(() => ViewModel.Close());
 
+            var pasteKeyButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_paste") };
+            pasteKeyButton.Clicked += (s, e) => ViewModel.PasteApiKeyCommand.Execute();
+            var shareKeyButton = new UIBarButtonItem { Image = UIImage.FromBundle("ic_share") };
+            shareKeyButton.Clicked += (s, e) => ViewModel.ShareApiKeyCommand.Execute();
+
+            NavigationItem.RightBarButtonItems = new[] { shareKeyButton, pasteKeyButton };
+
             ViewModel.RefreshBarcodeCommand = new MvxAsyncCommand(ShowBarcode);
             ViewModel.StopScanningCommand = new MvxCommand(StopScanning);
 

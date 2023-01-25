@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Acr.UserDialogs;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using SkyDrop.Core.Services;
+using SkyDrop.Core.Utility;
 using ZXing.Common;
 using static SkyDrop.Core.Services.EncryptionService;
 
@@ -36,12 +38,16 @@ namespace SkyDrop.Core.ViewModels
             this.navigationService = navigationService;
 
             BackCommand = new MvxCommand(() => navigationService.Close(this));
+            PasteApiKeyCommand = new MvxAsyncCommand(PasteApiKey);
+            ShareApiKeyCommand = new MvxAsyncCommand(ShareApiKey);
         }
 
         public AddContactResult AddContactResult { get; set; }
         public IMvxCommand BackCommand { get; set; }
         public IMvxCommand RefreshBarcodeCommand { get; set; }
         public IMvxCommand StopScanningCommand { get; set; }
+        public IMvxCommand PasteApiKeyCommand { get; set; }
+        public IMvxCommand ShareApiKeyCommand { get; set; }
         public string HintText => GetHintText(AddContactResult);
         public string ContactSavedName { get; set; }
 
@@ -51,7 +57,7 @@ namespace SkyDrop.Core.ViewModels
             return barcodeService.GenerateBarcode(publicKey, width, height);
         }
 
-        public void AddContact(string barcodeData)
+        public void AddContact(string barcodeData, bool isFromClipboard = false)
         {
             try
             {
@@ -62,7 +68,7 @@ namespace SkyDrop.Core.ViewModels
                 }
 
                 //wait for user interaction before scanning again
-                if (AddContactResult != AddContactResult.Default)
+                if (AddContactResult != AddContactResult.Default && !isFromClipboard)
                     return;
 
                 //prevents double dialog issue
@@ -94,6 +100,24 @@ namespace SkyDrop.Core.ViewModels
                 AddContactResult.Default => "",
                 _ => throw new Exception("Unexpected AddContactResult")
             };
+        }
+
+        private async Task PasteApiKey()
+        {
+            var text = await Xamarin.Essentials.Clipboard.GetTextAsync();
+            if (text.IsNullOrWhiteSpace())
+            {
+                AddContactResult = AddContactResult.InvalidKey;
+                return;
+            }
+
+            AddContact(text.Trim(), true);
+        }
+
+        private async Task ShareApiKey()
+        {
+            var publicKey = encryptionService.GetMyPublicKeyWithId(justScannedId);
+            await Xamarin.Essentials.Share.RequestAsync(publicKey);
         }
 
         public void Close()
