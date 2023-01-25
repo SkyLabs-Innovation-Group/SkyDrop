@@ -45,6 +45,7 @@ namespace SkyDrop.Core.ViewModels
                 url = url.Substring(8);
 
             LoadingLabelText = $"Logging in to {url}...";
+            Title = url;
 
             PortalUrl = $"https://account.{url}";
         }
