@@ -6,6 +6,7 @@ using FFImageLoading.Helpers;
 using FFImageLoading.Work;
 using MvvmCross;
 using SkyDrop.Core.DataModels;
+using Xamarin.Essentials;
 
 namespace SkyDrop.Core.Services
 {
@@ -30,7 +31,9 @@ namespace SkyDrop.Core.Services
                 return;
 
             var selectedPortal = SkynetPortal.SelectedPortal;
-
+            var apiToken = await SecureStorage.GetAsync(selectedPortal.GetApiTokenPrefKey());
+            selectedPortal.UserApiToken = apiToken;
+            
             ImageService.Instance.Initialize(new Configuration
             {
                 ClearMemoryCacheOnOutOfMemory = true,
