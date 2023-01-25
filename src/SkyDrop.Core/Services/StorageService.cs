@@ -11,6 +11,7 @@ using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.RealmObjects;
 using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 using Contact = SkyDrop.Core.DataModels.Contact;
 
 namespace SkyDrop.Core.Services
@@ -342,11 +343,30 @@ namespace SkyDrop.Core.Services
         /// </summary>
         private Realm GetRealm()
         {
-            var realmConfiguration = new RealmConfiguration();
+            const ulong currentSchemaVersion = 1;
+
+            var realmConfiguration = new RealmConfiguration()
+            {
+                SchemaVersion = currentSchemaVersion
+            };
 
             try
             {
-                return Realm.GetInstance(realmConfiguration);
+
+                realmConfiguration.MigrationCallback = (migration, oldSchemaVersion) =>
+                {
+                    if (oldSchemaVersion < 1)
+                    {
+                        //var newPortals = migration.NewRealm.All<SkynetPortal>();
+                        //var oldPortals = migration.OldRealm.All<SkynetPortal>();
+
+                        // No migration needed
+                    }
+                };
+
+                var instance =  Realm.GetInstance(realmConfiguration);
+
+                return instance;
             }
             catch (RealmException e)
             {
