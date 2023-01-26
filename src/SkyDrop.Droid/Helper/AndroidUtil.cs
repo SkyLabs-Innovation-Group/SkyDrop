@@ -168,78 +168,82 @@ namespace SkyDrop.Droid.Helper
 
         public static void ShowUploadStartedNotification(Context context, string message)
         {
-            // Set up an intent so that tapping the notifications returns to this app:
-            var intent = new Intent(context, typeof(DropView));
+            // TODO - fix notifications (broken after targeting API 31)
+            //// Set up an intent so that tapping the notifications returns to this app:
+            //var intent = new Intent(context, typeof(DropView));
 
-            //prevent the activity from being restarted (retain state)
-            intent.SetFlags(ActivityFlags.SingleTop | ActivityFlags.ClearTop);
+            ////prevent the activity from being restarted (retain state)
+            //intent.SetFlags(ActivityFlags.SingleTop | ActivityFlags.ClearTop);
 
-            // Create a PendingIntent; we're only using one PendingIntent (ID = 0):
-            const int pendingIntentId = 0;
-            var pendingIntent =
-                PendingIntent.GetActivity(context, pendingIntentId, intent, 0);
+            //// Create a PendingIntent; we're only using one PendingIntent (ID = 0):
+            //const int pendingIntentId = 0;
+            //var pendingIntent =
+            //    PendingIntent.GetActivity(context, pendingIntentId, intent, 0);
 
-            // Instantiate the builder and set notification elements:
-            _uploadNotificationBuilder = new NotificationCompat.Builder(context, UploadNotificationChannelId)
-                .SetContentTitle("Sending file...")
-                .SetContentText(message)
-                .SetSmallIcon(Resource.Drawable.ic_skydrop)
-                .SetContentIntent(pendingIntent)
-                .SetProgress(100, 0, false)
-                .SetAutoCancel(true); //dismiss notification when tapped
+            //// Instantiate the builder and set notification elements:
+            //_uploadNotificationBuilder = new NotificationCompat.Builder(context, UploadNotificationChannelId)
+            //    .SetContentTitle("Sending file...")
+            //    .SetContentText(message)
+            //    .SetSmallIcon(Resource.Drawable.ic_skydrop)
+            //    .SetContentIntent(pendingIntent)
+            //    .SetProgress(100, 0, false)
+            //    .SetAutoCancel(true); //dismiss notification when tapped
 
-            // Build the notification:
-            var notification = _uploadNotificationBuilder.Build();
+            //// Build the notification:
+            //var notification = _uploadNotificationBuilder.Build();
 
-            // Publish the notification:
-            GetNotificationManager(context).Notify(UploadNotificationId, notification);
+            //// Publish the notification:
+            //GetNotificationManager(context).Notify(UploadNotificationId, notification);
         }
 
         public static void ShowUploadFinishedNotification(Context context, FileUploadResult uploadResult)
         {
-            switch (uploadResult)
-            {
-                case FileUploadResult.Success:
-                    _uploadNotificationBuilder.SetContentTitle("File published successfully (tap to view)");
-                    _uploadNotificationBuilder.SetProgress(0, 0, false); //hide progressbar
-                    break;
-                case FileUploadResult.Fail:
-                    _uploadNotificationBuilder.SetContentTitle("Upload failed");
-                    _uploadNotificationBuilder.SetProgress(0, 0, false); //hide progressbar
-                    break;
-                case FileUploadResult.Cancelled:
-                    GetNotificationManager(context).CancelAll();
-                    return;
-            }
+            // TODO - fix notifications (broken after targeting API 31)
+            //switch (uploadResult)
+            //{
+            //    case FileUploadResult.Success:
+            //        _uploadNotificationBuilder.SetContentTitle("File published successfully (tap to view)");
+            //        _uploadNotificationBuilder.SetProgress(0, 0, false); //hide progressbar
+            //        break;
+            //    case FileUploadResult.Fail:
+            //        _uploadNotificationBuilder.SetContentTitle("Upload failed");
+            //        _uploadNotificationBuilder.SetProgress(0, 0, false); //hide progressbar
+            //        break;
+            //    case FileUploadResult.Cancelled:
+            //        GetNotificationManager(context).CancelAll();
+            //        return;
+            //}
 
-            // Build a notification object with updated content:
-            var notification = _uploadNotificationBuilder.Build();
+            //// Build a notification object with updated content:
+            //var notification = _uploadNotificationBuilder.Build();
 
-            // Publish the new notification with the existing ID:
-            GetNotificationManager(context).Notify(UploadNotificationId, notification);
+            //// Publish the new notification with the existing ID:
+            //GetNotificationManager(context).Notify(UploadNotificationId, notification);
         }
 
         public static void UpdateNotificationProgress(Context context, double normalProgress)
         {
-            if (normalProgress >= 1)
-            {
-                //set indeterminate loader
-                _uploadNotificationBuilder.SetProgress(100, 0, true);
-                var notification = _uploadNotificationBuilder.Build();
-                GetNotificationManager(context).Notify(UploadNotificationId, notification);
-                return;
-            }
+            // TODO - fix notifications (broken after targeting API 31)
+            //if (normalProgress >= 1)
+            //{
+            //    //set indeterminate loader
+            //    _uploadNotificationBuilder.SetProgress(100, 0, true);
+            //    var notification = _uploadNotificationBuilder.Build();
+            //    GetNotificationManager(context).Notify(UploadNotificationId, notification);
+            //    return;
+            //}
 
-            var intProgress = (int)Math.Floor(normalProgress * 100);
-            _uploadNotificationBuilder.SetProgress(100, intProgress, false);
-            var notificationOther = _uploadNotificationBuilder.Build();
-            GetNotificationManager(context).Notify(UploadNotificationId, notificationOther);
+            //var intProgress = (int)Math.Floor(normalProgress * 100);
+            //_uploadNotificationBuilder.SetProgress(100, intProgress, false);
+            //var notificationOther = _uploadNotificationBuilder.Build();
+            //GetNotificationManager(context).Notify(UploadNotificationId, notificationOther);
         }
 
-        private static NotificationManager GetNotificationManager(Context context)
-        {
-            return context.GetSystemService(Context.NotificationService) as NotificationManager;
-        }
+        // TODO - fix notifications (broken after targeting API 31)
+        //private static NotificationManager GetNotificationManager(Context context)
+        //{
+        //    return context.GetSystemService(Context.NotificationService) as NotificationManager;
+        //}
 
         public static void LoadLocalImagePreview(string filePath, ImageView target, CancellationToken token)
         {
