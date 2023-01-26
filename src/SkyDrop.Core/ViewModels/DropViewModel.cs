@@ -20,6 +20,7 @@ using SkyDrop.Core.Services;
 using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
 using ZXing.Common;
+using static System.Net.WebRequestMethods;
 using static SkyDrop.Core.ViewModels.Main.FilesViewModel;
 using Contact = SkyDrop.Core.DataModels.Contact;
 
@@ -371,12 +372,15 @@ namespace SkyDrop.Core.ViewModels.Main
                                                 (cancelledEx.Message == "Socket closed" &&
                                                  DeviceInfo.Platform == DevicePlatform.Android))
             {
+                if (!apiService.DidRequestCancellation)
+                    Crashes.TrackError(cancelledEx);
                 //catches Java.Net.SocketException when user cancels upload
                 HandleUploadError(cancelledEx, "Upload cancelled", FileUploadResult.Cancelled);
             }
             catch (HttpRequestException httpEx) when (httpEx.Message.Contains("SSL") &&
                                                       DeviceInfo.Platform == DevicePlatform.Android)
             {
+                Crashes.TrackError(httpEx);
                 HandleUploadError(httpEx, Strings.SslPrompt, FileUploadResult.Fail);
             }
             catch (UnauthorizedAccessException authEx)
@@ -389,6 +393,7 @@ namespace SkyDrop.Core.ViewModels.Main
             }
             catch (Exception ex) // General error
             {
+                Crashes.TrackError(ex);
                 HandleUploadError(ex, "Upload failed", FileUploadResult.Fail);
             }
             finally
