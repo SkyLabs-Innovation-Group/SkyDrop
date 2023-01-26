@@ -14,7 +14,7 @@ using Object = Java.Lang.Object;
 
 namespace SkyDrop.Droid.Views.Portals
 {
-    [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden)]
+    [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden, Exported = true)]
     public class PortalLoginView : BaseActivity<PortalLoginViewModel>
     {
         private WebView webView;

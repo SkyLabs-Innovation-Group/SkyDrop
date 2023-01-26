@@ -177,7 +177,8 @@ namespace SkyDrop.Droid.Helper
             // Create a PendingIntent; we're only using one PendingIntent (ID = 0):
             const int pendingIntentId = 0;
             var pendingIntent =
-                PendingIntent.GetActivity(context, pendingIntentId, intent, 0);
+                PendingIntent.GetActivity(context, pendingIntentId, intent, PendingIntentFlags.Immutable);
+
 
             // Instantiate the builder and set notification elements:
             _uploadNotificationBuilder = new NotificationCompat.Builder(context, UploadNotificationChannelId)

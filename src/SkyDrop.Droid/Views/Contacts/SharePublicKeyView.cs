@@ -14,7 +14,7 @@ using Result = ZXing.Result;
 
 namespace SkyDrop.Droid.Views.Main
 {
-    [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden)]
+    [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden, Exported = true)]
     public class SharePublicKeyView : BaseActivity<SharePublicKeyViewModel>
     {
         private ImageView barcodeImageView;

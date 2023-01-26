@@ -9,7 +9,7 @@ using SkyDrop.Droid.Views.Files;
 
 namespace SkyDrop.Droid.Views.Main
 {
-    [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden)]
+    [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden, Exported = true)]
     public class FilesView : BaseActivity<FilesViewModel>
     {
         private ImageView buttonAddFolder;

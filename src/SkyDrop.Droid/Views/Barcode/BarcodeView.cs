@@ -13,7 +13,7 @@ using SkyDrop.Droid.Helper;
 
 namespace SkyDrop.Droid.Views.Barcode
 {
-    [Activity(Label = "BarcodeView")]
+    [Activity(Label = "BarcodeView", Exported = true)]
     public class BarcodeView : BaseActivity<BarcodeViewModel>
     {
         private ImageView barcodeImageView;

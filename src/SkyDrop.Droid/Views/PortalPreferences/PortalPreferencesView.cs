@@ -5,7 +5,7 @@ using SkyDrop.Core.ViewModels;
 
 namespace SkyDrop.Droid.Views.PortalPreferences
 {
-    [Activity(Label = "PortalPreferencesView")]
+    [Activity(Label = "PortalPreferencesView", Exported = true)]
     public class PortalPreferencesView : BaseActivity<PortalPreferencesViewModel>
     {
         private PortalPreferencesListView portalPrefsListview;

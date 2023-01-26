@@ -28,7 +28,7 @@ namespace SkyDrop.Droid.Views.Main
     /// File transfer screen
     /// </summary>
     [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden,
-        ScreenOrientation = ScreenOrientation.Portrait)]
+        ScreenOrientation = ScreenOrientation.Portrait, Exported = true)]
     public class DropView : BaseActivity<DropViewModel>
     {
         private const int SwipeMarginX = 100;

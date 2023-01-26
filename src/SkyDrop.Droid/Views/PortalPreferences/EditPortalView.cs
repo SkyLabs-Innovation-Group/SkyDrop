@@ -5,7 +5,7 @@ using SkyDrop.Core.ViewModels;
 
 namespace SkyDrop.Droid.Views.PortalPreferences
 {
-    [Activity(Label = "EditPortalView")]
+    [Activity(Label = "EditPortalView", Exported = true)]
     public class EditPortalView : BaseActivity<EditPortalViewModel>
     {
         protected override int ActivityLayoutId => Resource.Layout.EditPortalView;

@@ -7,7 +7,7 @@ using SkyDrop.Droid.Helper;
 
 namespace SkyDrop.Droid.Views.Main
 {
-    [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden)]
+    [Activity(Theme = "@style/AppTheme", WindowSoftInputMode = SoftInput.AdjustResize | SoftInput.StateHidden, Exported = true)]
     public class ContactsView : BaseActivity<ContactsViewModel>
     {
         protected override int ActivityLayoutId => Resource.Layout.ContactsView;

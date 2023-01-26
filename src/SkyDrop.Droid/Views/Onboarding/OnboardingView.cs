@@ -7,7 +7,7 @@ using SkyDrop.Droid.Styles;
 
 namespace SkyDrop.Droid.Views.Onboarding
 {
-    [Activity(Label = "OnboardingView")]
+    [Activity(Label = "OnboardingView", Exported = true)]
     public class OnboardingView : BaseActivity<OnboardingViewModel>
     {
         protected override int ActivityLayoutId => Resource.Layout.OnboardingView;

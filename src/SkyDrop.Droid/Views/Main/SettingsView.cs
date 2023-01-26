@@ -7,7 +7,7 @@ using SkyDrop.Droid.Helper;
 
 namespace SkyDrop.Droid.Views.Main
 {
-    [Activity(Label = "SettingsView")]
+    [Activity(Label = "SettingsView", Exported = true)]
     public class SettingsView : BaseActivity<SettingsViewModel>
     {
         private CheckBox uploadNotificationCheckbox, verifySslCheckbox;
