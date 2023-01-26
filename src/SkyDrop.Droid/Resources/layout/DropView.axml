@@ -187,11 +187,21 @@
                                 android:layout_gravity="center"
                                 android:layout_marginTop="4dp"
                                 android:orientation="vertical">
-                                <ImageView
+                                <FrameLayout
                                     android:layout_width="32dp"
                                     android:layout_height="32dp"
-                                    android:src="@drawable/ic_file"
-                                    android:layout_marginTop="8dp"/>
+                                    android:layout_marginTop="8dp">
+                                    <ImageView
+                                        android:layout_width="32dp"
+                                        android:layout_height="32dp"
+                                        android:src="@drawable/ic_file"
+                                        app:MvxBind="Visibility InvertedVisibility(IsLoadingFilename);"
+                                    />
+                                    <ProgressBar
+                                        android:layout_width="32dp"
+                                        android:layout_height="32dp"
+                                        app:MvxBind="Visibility Visibility(IsLoadingFilename)"/>
+                                </FrameLayout>
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -234,12 +244,12 @@
                                 <ImageView
                                     android:layout_width="32dp"
                                     android:layout_height="32dp"
-                                    app:MvxBind="Icon SaveUnzipIcon(IsFocusedFileAnArchive);Visibility InvertedVisibility(IsDownloadingFile);"
+                                    app:MvxBind="Icon SaveUnzipIcon(IsFocusedFileAnArchive);Visibility InvertedVisibility(IsSaveButtonSpinnerVisible);"
                                 />
                                 <ProgressBar
                                     android:layout_width="32dp"
                                     android:layout_height="32dp"
-                                    app:MvxBind="Visibility Visibility(IsDownloadingFile)"/>
+                                    app:MvxBind="Visibility Visibility(IsSaveButtonSpinnerVisible)"/>
                             </FrameLayout>
                             <TextView
                                 android:layout_width="wrap_content"

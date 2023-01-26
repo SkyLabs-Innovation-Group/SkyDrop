@@ -162,6 +162,8 @@ namespace SkyDrop.Core.ViewModels.Main
         public bool SwipeNavigationEnabled { get; set; } //determines whether user can swipe to the QR code screen
         public bool UserIsSwipingResult { get; set; }
         public bool NavDotsVisible => DropViewUiState != DropViewState.ConfirmFilesState && SwipeNavigationEnabled;
+        public bool IsLoadingFilename { get; set; }
+        public bool IsSaveButtonSpinnerVisible => IsDownloadingFile || IsLoadingFilename;
 
         public string SendButtonLabel => IsEncrypting ? "ENCRYPTING" :
             IsUploading ? StagedFiles?.Count > 2 ? "SENDING FILES" : "SENDING FILE" : "SEND";
@@ -455,12 +457,16 @@ namespace SkyDrop.Core.ViewModels.Main
                 var skylink = barcodeData.Substring(barcodeData.Length - 46, 46);
                 FocusedFile = new SkyFile { Skylink = skylink };
 
+                IsLoadingFilename = true;
+
                 IsPreviewImageVisible = true;
 
                 await GenerateBarcodeAsyncFunc(FocusedFileUrl);
 
                 var filename = await apiService.GetSkyFileFilename(FocusedFile.GetSkylinkUrl());
                 FocusedFile.Filename = filename;
+                IsLoadingFilename = false;
+
                 storageService.SaveSkyFiles(FocusedFile);
 
                 //show filename
@@ -882,6 +888,9 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (UserIsSwiping())
                     return;
 
+                if (IsLoadingFilename)
+                    return;
+
                 if (FocusedFile.Filename.IsEncryptedFile())
                 {
                     DownloadAndUnzipArchive();
@@ -992,6 +1001,9 @@ namespace SkyDrop.Core.ViewModels.Main
         {
             try
             {
+                if (IsLoadingFilename)
+                    return;
+
                 if (IsFocusedFileAnArchive)
                 {
                     //unzip
