@@ -30,6 +30,7 @@ namespace SkyDrop.Core.ViewModels
         }
 
         public TaskCompletionSource<bool> PrepareTcs { get; set; } = new TaskCompletionSource<bool>();
+        public string Id { get; set; }
         public string PortalName { get; set; }
         public string PortalUrl { get; set; }
         public string ApiToken { get; set; }
@@ -43,15 +44,17 @@ namespace SkyDrop.Core.ViewModels
 
         private async Task SavePortal()
         {
-            Portal ??= new SkynetPortal(CleanUri(PortalUrl), PortalName);
 
             if (IsAddingNewPortal)
             {
+                Portal = new SkynetPortal(CleanUri(PortalUrl), PortalName);
                 Portal.PortalPreferencesPosition = SingletonService.StorageService.LoadSkynetPortals().Count;
                 await SingletonService.StorageService.SaveSkynetPortal(Portal, ApiToken);
             }
             else
-                await SingletonService.StorageService.EditSkynetPortal(Portal, ApiToken);
+            {
+                await SingletonService.StorageService.EditSkynetPortal(Portal, PortalName, PortalUrl, ApiToken);
+            }
 
             SingletonService.UserDialogs.Toast("Saved");
 
@@ -126,7 +129,7 @@ namespace SkyDrop.Core.ViewModels
             await navigationService.Close(this);
         }
 
-        private bool IsValidUri(string uriString)
+        public bool IsValidUri(string uriString)
         {
             if (!Uri.TryCreate(uriString, UriKind.Absolute, out Uri uri))
             {
