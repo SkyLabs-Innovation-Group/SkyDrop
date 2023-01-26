@@ -45,6 +45,8 @@
                 <outlet property="MiniMenuSkyDriveButton" destination="YAu-Vc-9QS" id="ebA-yS-gDD"/>
                 <outlet property="MiniMenuSkyDriveIcon" destination="CI8-ex-HQm" id="4OG-Lc-o7K"/>
                 <outlet property="OpenButton" destination="rhP-Ru-BgC" id="SIp-o7-VRB"/>
+                <outlet property="OpenButtonActivityIndicator" destination="Wns-Jo-kC5" id="68b-Vm-hvL"/>
+                <outlet property="OpenButtonIcon" destination="dZF-4O-FlZ" id="oPn-k5-eLh"/>
                 <outlet property="PortalsButton" destination="tAt-Ie-jBn" id="SUv-JN-WGq"/>
                 <outlet property="PreviewImage" destination="hFD-sB-3NN" id="8Hh-3q-Tiy"/>
                 <outlet property="ProgressFillArea" destination="RUr-fo-czC" id="9Zk-Lf-VbU"/>
@@ -367,6 +369,10 @@
                                     <color key="textColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="Wns-Jo-kC5">
+                                    <rect key="frame" x="32" y="22" width="20" height="20"/>
+                                    <color key="color" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </activityIndicatorView>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="filemenu.and.cursorarrow" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="dZF-4O-FlZ">
                                     <rect key="frame" x="24" y="9.5" width="35.5" height="46"/>
                                     <color key="tintColor" white="0.90000000000000002" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -397,6 +403,7 @@
                             <color key="backgroundColor" systemColor="systemYellowColor"/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="rhP-Ru-BgC" secondAttribute="height" multiplier="1:1" id="46Z-Rj-xi0"/>
+                                <constraint firstItem="Wns-Jo-kC5" firstAttribute="centerX" secondItem="dZF-4O-FlZ" secondAttribute="centerX" id="6rs-wf-Ude"/>
                                 <constraint firstItem="gpQ-iG-edJ" firstAttribute="leading" secondItem="rhP-Ru-BgC" secondAttribute="leading" id="My4-PI-gBf"/>
                                 <constraint firstItem="XWL-Zr-F7D" firstAttribute="top" secondItem="rhP-Ru-BgC" secondAttribute="top" id="NBC-FF-Qe9"/>
                                 <constraint firstItem="dZF-4O-FlZ" firstAttribute="centerY" secondItem="rhP-Ru-BgC" secondAttribute="centerY" constant="-10" id="PIq-0H-ehQ"/>
@@ -404,6 +411,7 @@
                                 <constraint firstItem="gpQ-iG-edJ" firstAttribute="top" secondItem="dZF-4O-FlZ" secondAttribute="bottom" constant="2" id="W39-pd-Nsv"/>
                                 <constraint firstAttribute="trailing" secondItem="gpQ-iG-edJ" secondAttribute="trailing" id="bRV-82-S3j"/>
                                 <constraint firstItem="dZF-4O-FlZ" firstAttribute="leading" secondItem="rhP-Ru-BgC" secondAttribute="leading" constant="24" id="dnE-RB-7UB"/>
+                                <constraint firstItem="Wns-Jo-kC5" firstAttribute="centerY" secondItem="dZF-4O-FlZ" secondAttribute="centerY" id="o7F-x9-9RB"/>
                                 <constraint firstAttribute="trailing" secondItem="XWL-Zr-F7D" secondAttribute="trailing" id="wfC-Ia-1hJ"/>
                             </constraints>
                         </view>

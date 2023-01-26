@@ -118,6 +118,12 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIView OpenButton { get; set; }
 
 		[Outlet]
+		UIKit.UIActivityIndicatorView OpenButtonActivityIndicator { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView OpenButtonIcon { get; set; }
+
+		[Outlet]
 		UIKit.UIView PortalsButton { get; set; }
 
 		[Outlet]
@@ -185,9 +191,14 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (LoginToBrowserButton != null) {
-				LoginToBrowserButton.Dispose ();
-				LoginToBrowserButton = null;
+			if (OpenButtonIcon != null) {
+				OpenButtonIcon.Dispose ();
+				OpenButtonIcon = null;
+			}
+
+			if (OpenButtonActivityIndicator != null) {
+				OpenButtonActivityIndicator.Dispose ();
+				OpenButtonActivityIndicator = null;
 			}
 
 			if (BarcodeContainer != null) {
@@ -303,6 +314,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (LeftNavDot != null) {
 				LeftNavDot.Dispose ();
 				LeftNavDot = null;
+			}
+
+			if (LoginToBrowserButton != null) {
+				LoginToBrowserButton.Dispose ();
+				LoginToBrowserButton = null;
 			}
 
 			if (LoginToBrowserIcon != null) {
