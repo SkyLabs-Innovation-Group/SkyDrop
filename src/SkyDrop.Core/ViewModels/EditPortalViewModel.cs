@@ -30,7 +30,6 @@ namespace SkyDrop.Core.ViewModels
         }
 
         public TaskCompletionSource<bool> PrepareTcs { get; set; } = new TaskCompletionSource<bool>();
-        public string Id { get; set; }
         public string PortalName { get; set; }
         public string PortalUrl { get; set; }
         public string ApiToken { get; set; }
