@@ -10,7 +10,7 @@ namespace SkyDrop
     {
         // help from https://stackoverflow.com/a/39137495/9436321
 
-        [Conditional("DEBUG")]
+        //[Conditional("DEBUG")]
         public static void Trace(this ILog t, string message,
             [CallerFilePath] string sourceFilePath = "",
             [CallerLineNumber] int sourceLineNumber = 0)
@@ -24,11 +24,15 @@ namespace SkyDrop
             {
                 var fileName = Path.GetFileName(sourceFilePath);
 
-                Debug.WriteLine($"{fileName}:{sourceLineNumber} " + message);
+                Console.WriteLine($"{fileName}:{sourceLineNumber} " + message);
+                //Debug.WriteLine($"{fileName}:{sourceLineNumber} " + message);
+
             }
             catch (Exception e)
             {
-                Debug.WriteLine(message);
+                //Debug.WriteLine(message);
+                Console.WriteLine(message);
+
             }
         }
     }
