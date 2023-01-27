@@ -66,7 +66,7 @@ namespace SkyDrop.Core.ViewModels
 
             if (!Preferences.Get(PreferenceKey.ContactsOnboardingComplete, false))
             {
-                userDialogs.Alert("To save a new contact, scan the contact's QR code or share the public key using the buttons in the top right to copy and paste.");
+                userDialogs.Alert("To save a new contact, scan the contact's QR code or share the public key using the buttons in the top right to copy and paste.", null, "OK");
                 Preferences.Set(PreferenceKey.ContactsOnboardingComplete, true);
             }
         }
