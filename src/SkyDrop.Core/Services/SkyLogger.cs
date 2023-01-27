@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using FFImageLoading.Helpers;
+using Microsoft.AppCenter.Crashes;
 using MvvmCross.Logging;
 
 // In exceptional cases, tooling may be placed into the root namespace to gain accessibility to the members everywhere.
@@ -40,13 +41,17 @@ namespace SkyDrop
 
         public void Exception(Exception ex,
             [CallerFilePath] string sourceFilePath = "",
-            [CallerLineNumber] int sourceLineNumber = 0)
+            [CallerLineNumber] int sourceLineNumber = 0,
+            bool unhandled = false)
         {
             if (ex == null)
             {
                 Error("ex == null", sourceFilePath, sourceLineNumber);
                 return;
             }
+
+            if (unhandled)
+                Crashes.TrackError(ex);
 
             ExceptionCount++;
 
@@ -109,7 +114,8 @@ namespace SkyDrop
     {
         public void Exception(Exception exception,
             [CallerFilePath] string sourceFilePath = "",
-            [CallerLineNumber] int sourceLineNumber = 0);
+            [CallerLineNumber] int sourceLineNumber = 0,
+            bool unhandled = false);
 
         void Error(string errorMessage, Exception ex,
             [CallerFilePath] string sourceFilePath = "",
