@@ -25,6 +25,7 @@ namespace SkyDrop.Droid.Views.Main
         private void BindViews()
         {
             uploadNotificationCheckbox = FindViewById<CheckBox>(Resource.Id.uploadNotificationCheckbox);
+            uploadNotificationCheckbox.Visibility = Android.Views.ViewStates.Gone;
             uploadNotificationCheckbox.CheckedChange += (s, e) => ViewModel.SetUploadNotificationEnabled(e.IsChecked);
 
             verifySslCheckbox = FindViewById<CheckBox>(Resource.Id.verifySslCheckbox);
