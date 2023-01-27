@@ -31,12 +31,12 @@ namespace SkyDrop.Droid.Helper
     {
         public const int PickFileRequestCode = 100;
 
-        private const string UploadNotificationChannelId = "to.hns.skydrop.notifications.DOWNLOAD";
-        private const string UploadNotificationChannelName = "Uploads";
-        private const string UploadNotificationChannelDescription = "Notifies you when a file has finished uploading";
-        private const int UploadNotificationId = 200;
+        //private const string UploadNotificationChannelId = "to.hns.skydrop.notifications.DOWNLOAD";
+        //private const string UploadNotificationChannelName = "Uploads";
+        //private const string UploadNotificationChannelDescription = "Notifies you when a file has finished uploading";
+        //private const int UploadNotificationId = 200;
 
-        private static NotificationCompat.Builder _uploadNotificationBuilder;
+        //private static NotificationCompat.Builder _uploadNotificationBuilder;
 
         private static readonly ILog Log = Mvx.IoCProvider.Resolve<ILog>();
 
@@ -147,23 +147,23 @@ namespace SkyDrop.Droid.Helper
         /// </summary>
         public static void CreateNotificationChannel(Context context)
         {
-            if (Build.VERSION.SdkInt < BuildVersionCodes.O)
-                // Notification channels are new in API 26 (and not a part of the
-                // support library). There is no need to create a notification
-                // channel on older versions of Android.
-                return;
+            //if (Build.VERSION.SdkInt < BuildVersionCodes.O)
+            //    // Notification channels are new in API 26 (and not a part of the
+            //    // support library). There is no need to create a notification
+            //    // channel on older versions of Android.
+            //    return;
 
-            var channelName = UploadNotificationChannelName;
-            var channelDescription = UploadNotificationChannelDescription;
-            var channel = new NotificationChannel(UploadNotificationChannelId, new String(channelName),
-                NotificationImportance.Default)
-            {
-                Description = channelDescription
-            };
-            channel.SetSound(null, null);
+            //var channelName = UploadNotificationChannelName;
+            //var channelDescription = UploadNotificationChannelDescription;
+            //var channel = new NotificationChannel(UploadNotificationChannelId, new String(channelName),
+            //    NotificationImportance.Default)
+            //{
+            //    Description = channelDescription
+            //};
+            //channel.SetSound(null, null);
 
-            var notificationManager = (NotificationManager)context.GetSystemService(Context.NotificationService);
-            notificationManager.CreateNotificationChannel(channel);
+            //var notificationManager = (NotificationManager)context.GetSystemService(Context.NotificationService);
+            //notificationManager.CreateNotificationChannel(channel);
         }
 
         public static void ShowUploadStartedNotification(Context context, string message)
