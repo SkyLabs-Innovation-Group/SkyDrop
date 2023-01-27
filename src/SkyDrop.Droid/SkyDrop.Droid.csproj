@@ -55,7 +55,7 @@
         <WarningLevel>4</WarningLevel>
         <AndroidManagedSymbols>true</AndroidManagedSymbols>
         <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
-        <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+        <AndroidLinkMode>None</AndroidLinkMode>
         <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
         <EnableProguard>true</EnableProguard>
         <LangVersion>8.0</LangVersion>
