@@ -23,7 +23,7 @@ namespace SkyDrop.Droid.Bindings
 
         private int GetImageResource(string filename)
         {
-            var fileCategory = GetFileCategory(filename);
+            var fileCategory = filename.GetFileCategory();
             switch (fileCategory)
             {
                 case FileCategory.Document:

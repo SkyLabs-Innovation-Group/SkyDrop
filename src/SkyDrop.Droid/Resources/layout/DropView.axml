@@ -178,30 +178,19 @@
                         app:cardCornerRadius="8dp"
                         app:cardBackgroundColor="@color/skyGreen"
                         app:MvxBind="Click OpenFileCommand">
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="4dp"
-                                android:orientation="vertical">
-                                <FrameLayout
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="4dp"
+                            android:orientation="vertical">
+                                <ImageView
                                     android:layout_width="32dp"
                                     android:layout_height="32dp"
-                                    android:layout_marginTop="8dp">
-                                    <ImageView
-                                        android:layout_width="32dp"
-                                        android:layout_height="32dp"
-                                        android:src="@drawable/ic_file"
-                                        app:MvxBind="Visibility InvertedVisibility(IsLoadingFilename);"
-                                    />
-                                    <ProgressBar
-                                        android:layout_width="32dp"
-                                        android:layout_height="32dp"
-                                        app:MvxBind="Visibility Visibility(IsLoadingFilename)"/>
-                                </FrameLayout>
+                                    android:layout_marginTop="8dp"
+                                    android:src="@drawable/ic_file"
+                                    app:MvxBind="Visibility InvertedVisibility(IsLoadingFilename);"
+                                />
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -212,14 +201,6 @@
                                     android:paddingTop="2dp"
                                     android:paddingBottom="12dp"/>
                             </LinearLayout>
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@drawable/ic_user"
-                                android:padding="4dp"
-                                android:layout_gravity="right"
-                                app:MvxBind="Click LoginToBrowserCommand"/>
-                        </FrameLayout>
                     </com.google.android.material.card.MaterialCardView>
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0px"
