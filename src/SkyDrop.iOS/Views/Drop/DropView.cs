@@ -194,7 +194,7 @@ namespace SkyDrop.iOS.Views.Drop
 
             //QR menu
             set.Bind(CopyLinkButton).For("Tap").To(vm => vm.CopyLinkCommand);
-            set.Bind(OpenButton).For("Tap").To(vm => vm.OpenFileInBrowserCommand);
+            set.Bind(OpenButton).For("Tap").To(vm => vm.OpenFileCommand);
             set.Bind(OpenButtonActivityIndicator).For("Visible").To(vm => vm.IsLoadingFilename);
             set.Bind(OpenButtonIcon).For(c => c.Hidden).To(vm => vm.IsLoadingFilename);
             set.Bind(LoginToBrowserButton).For("Tap").To(vm => vm.LoginToBrowserCommand);

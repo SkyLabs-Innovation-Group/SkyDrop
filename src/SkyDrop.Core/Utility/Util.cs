@@ -62,7 +62,7 @@ namespace SkyDrop.Core.Utility
             return false;
         }
 
-        public static FileCategory GetFileCategory(string filename)
+        public static FileCategory GetFileCategory(this string filename)
         {
             if (filename.IsNullOrEmpty())
                 return FileCategory.None;

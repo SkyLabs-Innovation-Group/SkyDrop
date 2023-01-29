@@ -115,7 +115,7 @@ namespace SkyDrop.Core.ViewModels.Main
             ShareLinkCommand = new MvxAsyncCommand(async () => await ShareLink());
             ShowStagedFileMenuCommand =
                 new MvxAsyncCommand<StagedFileDvm>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
-            OpenFileInBrowserCommand = new MvxAsyncCommand(async () => await OpenFile());
+            OpenFileCommand = new MvxAsyncCommand(async () => await OpenFile());
             LoginToBrowserCommand = new MvxAsyncCommand(LoginToBrowser);
             DownloadFileCommand = new MvxAsyncCommand(SaveOrUnzipFocusedFile);
             ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
@@ -131,7 +131,7 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand CopyLinkCommand { get; set; }
         public IMvxCommand ResetUiStateCommand { get; set; }
         public IMvxCommand ShareLinkCommand { get; set; }
-        public IMvxCommand OpenFileInBrowserCommand { get; set; }
+        public IMvxCommand OpenFileCommand { get; set; }
         public IMvxCommand DownloadFileCommand { get; set; }
         public IMvxCommand SlideSendButtonToCenterCommand { get; set; }
         public IMvxCommand SlideReceiveButtonToCenterCommand { get; set; }
@@ -896,12 +896,13 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (IsLoadingFilename)
                     return;
 
-                if (FocusedFile.Filename.IsEncryptedFile())
+                await navigationService.Navigate<FilesViewModel, NavParam>(new NavParam
                 {
-                    DownloadAndUnzipArchive();
-                    return;
-                }
-
+                    IsUnzippedFilesMode = true,
+                    ArchiveUrl = FocusedFileUrl,
+                    ArchiveName = FocusedFile.Filename
+                });
+                /*
                 if (!SkynetPortal.SelectedPortal.HasLoggedInBrowser)
                 {
                     //user hasn't seen the login screen for this portal before
@@ -938,6 +939,7 @@ namespace SkyDrop.Core.ViewModels.Main
                     LaunchMode = BrowserLaunchMode.SystemPreferred,
                     TitleMode = BrowserTitleMode.Show
                 });
+                */
             }
             catch (Exception e)
             {
@@ -1043,12 +1045,6 @@ namespace SkyDrop.Core.ViewModels.Main
             {
                 IsDownloadingFile = false;
             }
-        }
-
-        private void DownloadAndUnzipArchive()
-        {
-            navigationService.Navigate<FilesViewModel, NavParam>(new NavParam
-                { IsUnzippedFilesMode = true, ArchiveUrl = FocusedFileUrl, ArchiveName = FocusedFile.Filename });
         }
 
         private void UpdatePreviewImage()

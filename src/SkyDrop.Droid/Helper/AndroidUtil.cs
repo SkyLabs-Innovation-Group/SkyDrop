@@ -117,14 +117,6 @@ namespace SkyDrop.Droid.Helper
             return displayName;
         }
 
-        public static void OpenFileInBrowser(Activity context, SkyFile file)
-        {
-            Toast.MakeText(context, $"Opening file {file.Filename}", ToastLength.Long)?.Show();
-
-            var browserIntent = new Intent(Intent.ActionView, Uri.Parse(file.GetSkylinkUrl()));
-            context.StartActivity(browserIntent);
-        }
-
         public static bool GetBit(BitMatrix matrix, int x, int y)
         {
             var row = matrix.getRow(y, null);
