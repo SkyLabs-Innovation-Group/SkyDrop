@@ -116,7 +116,6 @@ namespace SkyDrop.Core.ViewModels.Main
             ShowStagedFileMenuCommand =
                 new MvxAsyncCommand<StagedFileDvm>(async stagedFile => await ShowStagedFileMenu(stagedFile.SkyFile));
             OpenFileCommand = new MvxAsyncCommand(async () => await OpenFile());
-            LoginToBrowserCommand = new MvxAsyncCommand(LoginToBrowser);
             DownloadFileCommand = new MvxAsyncCommand(SaveOrUnzipFocusedFile);
             ShowBarcodeCommand = new MvxCommand(() => IsPreviewImageVisible = false);
             ShowPreviewImageCommand = new MvxCommand(() => IsPreviewImageVisible = true);
@@ -146,7 +145,6 @@ namespace SkyDrop.Core.ViewModels.Main
         public IMvxCommand IosSelectFileCommand { get; set; }
         public IMvxCommand ShowBarcodeCommand { get; set; }
         public IMvxCommand ShowPreviewImageCommand { get; set; }
-        public IMvxCommand LoginToBrowserCommand { get; set; }
 
         public bool IsUploading { get; set; }
         public bool IsStagingFiles { get; set; }
@@ -893,53 +891,12 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (UserIsSwiping())
                     return;
 
-                if (IsLoadingFilename)
-                    return;
-
                 await navigationService.Navigate<FilesViewModel, NavParam>(new NavParam
                 {
                     IsUnzippedFilesMode = true,
                     ArchiveUrl = FocusedFileUrl,
                     ArchiveName = FocusedFile.Filename
                 });
-                /*
-                if (!SkynetPortal.SelectedPortal.HasLoggedInBrowser)
-                {
-                    //user hasn't seen the login screen for this portal before
-                    //show "do you want to login" dialog
-
-                    var cancel = "Cancel";
-                    var login = "Log in";
-                    var open = "Open in browser";
-                    var dontShowAgain = "Don't show this again";
-                    var result = await userDialogs.ActionSheetAsync(
-                        "You may need to log in before you can open in browser", cancel, null, null, login, open,
-                        dontShowAgain);
-                    if (result == cancel)
-                        return;
-
-                    if (result == login)
-                    {
-                        await LoginToBrowser();
-                        return;
-                    }
-
-                    if (result == dontShowAgain)
-                    {
-                        //assume the user has logged in
-                        storageService.SetSkynetPortalLoggedInBrowser(SkynetPortal.SelectedPortal);
-                        return;
-                    }
-                }
-
-                var skylinkUrl = FocusedFile.GetSkylinkUrl();
-                Log.Trace("Opening Skylink " + skylinkUrl);
-                await Browser.OpenAsync(skylinkUrl, new BrowserLaunchOptions
-                {
-                    LaunchMode = BrowserLaunchMode.SystemPreferred,
-                    TitleMode = BrowserTitleMode.Show
-                });
-                */
             }
             catch (Exception e)
             {
@@ -954,16 +911,6 @@ namespace SkyDrop.Core.ViewModels.Main
         private async Task OpenUrlInBrowser(string url)
         {
             await Browser.OpenAsync(url, new BrowserLaunchOptions
-            {
-                LaunchMode = BrowserLaunchMode.SystemPreferred,
-                TitleMode = BrowserTitleMode.Show
-            });
-        }
-
-        private Task LoginToBrowser()
-        {
-            var url = SkynetPortal.GetLoginUrl(SkynetPortal.SelectedPortal.BaseUrl);
-            return Browser.OpenAsync(url, new BrowserLaunchOptions
             {
                 LaunchMode = BrowserLaunchMode.SystemPreferred,
                 TitleMode = BrowserTitleMode.Show
