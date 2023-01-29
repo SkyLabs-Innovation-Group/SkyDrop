@@ -1014,7 +1014,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 if (IsFocusedFileAnArchive)
                 {
                     //unzip
-                    DownloadAndUnzipArchive();
+                    await OpenFile();
                     return;
                 }
 

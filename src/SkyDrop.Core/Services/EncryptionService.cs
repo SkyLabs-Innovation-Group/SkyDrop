@@ -469,7 +469,7 @@ namespace SkyDrop.Core.Services
             //generate name from Guid, without dashes
             var name = new StringBuilder(Guid.NewGuid().ToString("N"));
 
-            if (GetFileCategory(originalFileName) == FileCategory.Zip)
+            if (originalFileName.GetFileCategory() == FileCategory.Zip)
             {
                 //add zi signature to identify skydrop encrypted zip files
                 name[15] = 'z';

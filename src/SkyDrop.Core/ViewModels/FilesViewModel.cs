@@ -112,7 +112,7 @@ namespace SkyDrop.Core.ViewModels.Main
                 {
                     IsFoldersVisible = false;
                     var unzippedFiles = await DownloadAndUnzipArchive();
-                    SkyFiles.SwitchTo(unzippedFiles);
+                    SkyFiles.SwitchTo(GetUnzippedFileDvMs(unzippedFiles));
                 }
                 else
                 {
@@ -152,23 +152,25 @@ namespace SkyDrop.Core.ViewModels.Main
                 var (stream, filename) = await apiService.DownloadFile(ArchiveUrl);
                 using (stream)
                 {
-                    Stream decryptedStream;
                     if (filename.IsEncryptedZipFile())
                     {
-                        //decrypt and unzip
+                        //decrypt
                         LoadingLabelText = decryptingText;
                         await Task.Delay(500);
                         var decryptedPath = await encryptionService.DecodeZipFile(stream, filename);
-                        decryptedStream = File.OpenRead(decryptedPath);
+                        var decryptedStream = File.OpenRead(decryptedPath);
 
+                        //unzip
                         LoadingLabelText = unzippingText;
                         await Task.Delay(500);
-                        return fileSystemService.UnzipArchive(decryptedStream));
+                        return fileSystemService.UnzipArchive(decryptedStream);
                     }
 
                     if (filename.IsEncryptedFile())
                     {
-                        //no need to unzip
+                        //only decrypt
+                        LoadingLabelText = decryptingText;
+                        await Task.Delay(500);
                         var filePath = await fileSystemService.SaveFile(stream, filename, false);
                         var decryptedPath = await encryptionService.DecodeFile(filePath, false);
                         return new List<SkyFile> { new SkyFile { Filename = Path.GetFileName(decryptedPath), FullFilePath = decryptedPath } };
@@ -176,17 +178,16 @@ namespace SkyDrop.Core.ViewModels.Main
 
                     if (filename.GetFileCategory() == Util.FileCategory.Zip)
                     {
-                        //no need to decrypt
-                        decryptedStream = stream;
-
+                        //only unzip
                         LoadingLabelText = unzippingText;
                         await Task.Delay(500);
-                        return fileSystemService.UnzipArchive(decryptedStream);
+                        return fileSystemService.UnzipArchive(stream);
                     }
 
                     //just a single plaintext file
+                    //do not decrypt or unzip
                     var savedPath = await fileSystemService.SaveFile(stream, filename, false);
-                    return new List<SkyFile> { new SkyFile { Filename = Path.GetFileName(savedPath), FullFilePath = filename } };
+                    return new List<SkyFile> { new SkyFile { Filename = Path.GetFileName(savedPath), FullFilePath = savedPath } };
                 }
             }
             catch (Exception e)

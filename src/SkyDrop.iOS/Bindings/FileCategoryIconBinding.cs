@@ -23,7 +23,7 @@ namespace SkyDrop.iOS.Bindings
 
         private string GetImageResource(string filename)
         {
-            var fileCategory = GetFileCategory(filename);
+            var fileCategory = filename.GetFileCategory();
             switch (fileCategory)
             {
                 case FileCategory.Document:
