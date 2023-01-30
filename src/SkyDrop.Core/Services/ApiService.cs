@@ -144,7 +144,7 @@ namespace SkyDrop.Core.Services
                 Action = new ToastAction
                 {
                     Text = "Open",
-                    Action = openFolderService.OpenFolder
+                    Action = () => openFolderService.OpenFolder(saveType)
                 }
             });
         }

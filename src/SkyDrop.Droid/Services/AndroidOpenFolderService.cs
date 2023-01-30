@@ -3,6 +3,7 @@ using Android.Net;
 using Plugin.CurrentActivity;
 using SkyDrop.Core.Services;
 using SkyDrop.Droid.Helper;
+using static SkyDrop.Core.Utility.Util;
 
 namespace SkyDrop.Droid.Services
 {
@@ -15,7 +16,7 @@ namespace SkyDrop.Droid.Services
             this.fileSystemService = fileSystemService;
         }
 
-        public void OpenFolder()
+        public void OpenFolder(SaveType saveType)
         {
             var intent = new Intent(Intent.ActionGetContent);
             var uri = Uri.Parse(fileSystemService.DownloadsFolderPath);

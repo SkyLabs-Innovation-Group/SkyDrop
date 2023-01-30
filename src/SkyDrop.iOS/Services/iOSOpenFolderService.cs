@@ -3,16 +3,27 @@ using Foundation;
 using System.Security.Policy;
 using SkyDrop.Core.Services;
 using UIKit;
+using static SkyDrop.Core.Utility.Util;
 
 namespace SkyDrop.iOS.Services
 {
     public class iOSOpenFolderService : IOpenFolderService
     {
-        public void OpenFolder()
+        public void OpenFolder(SaveType saveType)
         {
-            var path = GetDocumentsDirectory().AbsoluteString.Replace("file://", "shareddocuments://");
-            var url = new NSUrl(path);
+            string path;
+            if (saveType == SaveType.Photos)
+            {
+                //open Photos app
+                path = @"photos-redirect://";
+            }
+            else
+            {
+                //open Files app
+                path = GetDocumentsDirectory().AbsoluteString.Replace("file://", "shareddocuments://");
+            }
 
+            var url = new NSUrl(path);
             UIApplication.SharedApplication.OpenUrl(url);
         }
 
