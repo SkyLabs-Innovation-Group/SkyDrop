@@ -146,7 +146,8 @@ namespace SkyDrop.Core.Services
                     Text = "Open",
                     TextColor = Colors.Primary,
                     Action = () => openFolderService.OpenFolder(saveType)
-                }
+                },
+                Duration = TimeSpan.FromSeconds(4)
             });
         }
 
