@@ -7,7 +7,7 @@ using Xamarin.Essentials;
 
 namespace SkyDrop.iOS.Services
 {
-    public class IOsSaveToGalleryService : ISaveToGalleryService
+    public class iOSSaveToGalleryService : ISaveToGalleryService
     {
         public async Task<string> SaveToGallery(Stream imageData, string filename)
         {
