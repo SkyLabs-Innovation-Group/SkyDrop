@@ -278,7 +278,7 @@ namespace SkyDrop.Core.Services
 
             //check if user is listed in file recipients list
             if (!metaData.RecipientKeys.ContainsKey(myId))
-                throw new Exception("You are not a valid recipient of this encrypted file");
+                throw new Exception("You are not the intended recipient of this encrypted file");
 
             //check if user recognises the sender
             var senderPublicKey = GetSenderPublicKey(metaData.SenderId, MyContact);
@@ -290,8 +290,7 @@ namespace SkyDrop.Core.Services
 
             //decrypt the key
             var sharedSecret = GetSharedSecret(myPrivateKey, senderPublicKey);
-            var keyPlainTextPadded =
-                Decrypt(sharedSecret, myKeyEncrypted); //we only want the first 32 bytes of this 64 byte array
+            var keyPlainTextPadded = Decrypt(sharedSecret, myKeyEncrypted); //we only want the first 32 bytes of this 64 byte array
             var keyPlainText = keyPlainTextPadded.Take(32).ToArray();
 
             //decrypt the file
@@ -469,7 +468,7 @@ namespace SkyDrop.Core.Services
             //generate name from Guid, without dashes
             var name = new StringBuilder(Guid.NewGuid().ToString("N"));
 
-            if (GetFileCategory(originalFileName) == FileCategory.Zip)
+            if (originalFileName.GetFileCategory() == FileCategory.Zip)
             {
                 //add zi signature to identify skydrop encrypted zip files
                 name[15] = 'z';

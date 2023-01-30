@@ -108,7 +108,6 @@ namespace SkyDrop.iOS.Views.Drop
                 OpenButton.StyleButton(Colors.GradientGreen);
                 DownloadButton.StyleButton(Colors.GradientTurqouise);
                 ShareButton.StyleButton(Colors.GradientOcean);
-                LoginToBrowserIcon.TintColor = Colors.LightGrey.ToNative();
 
                 //home menu
                 SkyDriveButton.StyleButton(Colors.Primary, true);
@@ -194,10 +193,8 @@ namespace SkyDrop.iOS.Views.Drop
 
             //QR menu
             set.Bind(CopyLinkButton).For("Tap").To(vm => vm.CopyLinkCommand);
-            set.Bind(OpenButton).For("Tap").To(vm => vm.OpenFileInBrowserCommand);
-            set.Bind(OpenButtonActivityIndicator).For("Visible").To(vm => vm.IsLoadingFilename);
+            set.Bind(OpenButton).For("Tap").To(vm => vm.OpenFileCommand);
             set.Bind(OpenButtonIcon).For(c => c.Hidden).To(vm => vm.IsLoadingFilename);
-            set.Bind(LoginToBrowserButton).For("Tap").To(vm => vm.LoginToBrowserCommand);
             set.Bind(ShareButton).For("Tap").To(vm => vm.ShareLinkCommand);
             set.Bind(DownloadButton).For("Tap").To(vm => vm.DownloadFileCommand);
             set.Bind(DownloadButtonActivityIndicator).For("Visible").To(vm => vm.IsSaveButtonSpinnerVisible);

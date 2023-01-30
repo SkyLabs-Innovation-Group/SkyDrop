@@ -82,12 +82,6 @@ namespace SkyDrop.iOS.Views.Drop
 		UIKit.UIImageView LeftNavDot { get; set; }
 
 		[Outlet]
-		UIKit.UIView LoginToBrowserButton { get; set; }
-
-		[Outlet]
-		UIKit.UIImageView LoginToBrowserIcon { get; set; }
-
-		[Outlet]
 		UIKit.UIView MiniMenuContactsButton { get; set; }
 
 		[Outlet]
@@ -116,9 +110,6 @@ namespace SkyDrop.iOS.Views.Drop
 
 		[Outlet]
 		UIKit.UIView OpenButton { get; set; }
-
-		[Outlet]
-		UIKit.UIActivityIndicatorView OpenButtonActivityIndicator { get; set; }
 
 		[Outlet]
 		UIKit.UIImageView OpenButtonIcon { get; set; }
@@ -191,16 +182,6 @@ namespace SkyDrop.iOS.Views.Drop
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (OpenButtonIcon != null) {
-				OpenButtonIcon.Dispose ();
-				OpenButtonIcon = null;
-			}
-
-			if (OpenButtonActivityIndicator != null) {
-				OpenButtonActivityIndicator.Dispose ();
-				OpenButtonActivityIndicator = null;
-			}
-
 			if (BarcodeContainer != null) {
 				BarcodeContainer.Dispose ();
 				BarcodeContainer = null;
@@ -316,16 +297,6 @@ namespace SkyDrop.iOS.Views.Drop
 				LeftNavDot = null;
 			}
 
-			if (LoginToBrowserButton != null) {
-				LoginToBrowserButton.Dispose ();
-				LoginToBrowserButton = null;
-			}
-
-			if (LoginToBrowserIcon != null) {
-				LoginToBrowserIcon.Dispose ();
-				LoginToBrowserIcon = null;
-			}
-
 			if (MiniMenuContactsButton != null) {
 				MiniMenuContactsButton.Dispose ();
 				MiniMenuContactsButton = null;
@@ -374,6 +345,11 @@ namespace SkyDrop.iOS.Views.Drop
 			if (OpenButton != null) {
 				OpenButton.Dispose ();
 				OpenButton = null;
+			}
+
+			if (OpenButtonIcon != null) {
+				OpenButtonIcon.Dispose ();
+				OpenButtonIcon = null;
 			}
 
 			if (PortalsButton != null) {

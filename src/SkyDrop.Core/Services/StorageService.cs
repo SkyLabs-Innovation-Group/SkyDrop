@@ -308,18 +308,6 @@ namespace SkyDrop.Core.Services
             });
         }
 
-
-        public void SetSkynetPortalLoggedInBrowser(SkynetPortal portal)
-        {
-            Realm.Write(() =>
-            {
-                var storedPortal = Realm.Find<SkynetPortal>(portal.Id);
-                storedPortal.HasLoggedInBrowser = true;
-
-                Realm.Add(storedPortal);
-            });
-        }
-
         public List<SkynetPortal> LoadSkynetPortals()
         {
             return Realm.All<SkynetPortal>().OrderBy(portal => portal.PortalPreferencesPosition).ToList();
@@ -531,8 +519,6 @@ namespace SkyDrop.Core.Services
         SkynetPortal LoadSkynetPortal(string portalId);
 
         void DeleteSkynetPortal(SkynetPortal portal);
-
-        void SetSkynetPortalLoggedInBrowser(SkynetPortal portal);
 
         void ReorderPortals(SkynetPortal portal, int oldPosition, int newPosition);
 
