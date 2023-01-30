@@ -116,6 +116,7 @@
         <Compile Include="Views\Portals\PortalLoginWebViewClient.cs" />
         <Compile Include="Helper\JsBridge.cs" />
         <Compile Include="Views\Barcode\BarcodeView.cs" />
+        <Compile Include="Services\AndroidOpenFolderService.cs" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="MvvmCross">
