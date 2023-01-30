@@ -30,6 +30,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IMvxNavigationService navigationService;
         private readonly IStorageService storageService;
         private readonly IUserDialogs userDialogs;
+        private readonly IOpenFolderService openFolderService;
 
         private TaskCompletionSource<IFolderItem> moveFilesCompletionSource;
 
@@ -40,6 +41,7 @@ namespace SkyDrop.Core.ViewModels.Main
             IUserDialogs userDialogs,
             IMvxNavigationService navigationService,
             IEncryptionService encryptionService,
+            IOpenFolderService openFolderService,
             ILog log) : base(singletonService)
         {
             Title = "SkyDrive";
@@ -50,6 +52,7 @@ namespace SkyDrop.Core.ViewModels.Main
             this.userDialogs = userDialogs;
             this.navigationService = navigationService;
             this.encryptionService = encryptionService;
+            this.openFolderService = openFolderService;
             this.log = log;
 
             ToggleLayoutCommand = new MvxCommand(() =>
@@ -246,7 +249,16 @@ namespace SkyDrop.Core.ViewModels.Main
                 UpdateTopBarButtonsCommand?.Execute();
 
                 var s = selectedFilesDvMs.Count == 1 ? "" : "s";
-                userDialogs.Toast($"Saved {selectedFilesDvMs.Count} file{s}");
+
+                userDialogs.Toast(new ToastConfig($"Saved {selectedFilesDvMs.Count} file{s}")
+                {
+                    Action = new ToastAction
+                    {
+                        Text = "Open",
+                        TextColor = Colors.Primary,
+                        Action = () => openFolderService.OpenFolder(saveType)
+                    }
+                });
             }
             catch (Exception e)
             {
