@@ -9,22 +9,36 @@ namespace SkyDrop.iOS.Services
 {
     public class iOSOpenFolderService : IOpenFolderService
     {
+        private readonly ILog log;
+
+        public iOSOpenFolderService(ILog log)
+        {
+            this.log = log;
+        }
+
         public void OpenFolder(SaveType saveType)
         {
-            string path;
-            if (saveType == SaveType.Photos)
+            try
             {
-                //open Photos app
-                path = @"photos-redirect://";
-            }
-            else
-            {
-                //open Files app
-                path = GetDocumentsDirectory().AbsoluteString.Replace("file://", "shareddocuments://");
-            }
+                string path;
+                if (saveType == SaveType.Photos)
+                {
+                    //open Photos app
+                    path = @"photos-redirect://";
+                }
+                else
+                {
+                    //open Files app
+                    path = GetDocumentsDirectory().AbsoluteString.Replace("file://", "shareddocuments://");
+                }
 
-            var url = new NSUrl(path);
-            UIApplication.SharedApplication.OpenUrl(url);
+                var url = new NSUrl(path);
+                UIApplication.SharedApplication.OpenUrl(url);
+            }
+            catch(Exception e)
+            {
+                log.Exception(e);
+            }
         }
 
         private NSUrl GetDocumentsDirectory()

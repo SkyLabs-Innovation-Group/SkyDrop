@@ -58,7 +58,7 @@ namespace SkyDrop.iOS
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton(() => UserDialogs.Instance);
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISkyDropHttpClientFactory>(() => new NsUrlHttpClientFactory());
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISaveToGalleryService>(() => new iOSSaveToGalleryService());
-            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IOpenFolderService>(() => new iOSOpenFolderService());
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IOpenFolderService>(() => new iOSOpenFolderService(Mvx.IoCProvider.Resolve<ILog>()));
 
             return base.CreateApp();
         }
