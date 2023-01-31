@@ -10,22 +10,28 @@ namespace SkyDrop.Droid.Services
     public class AndroidOpenFolderService : IOpenFolderService
     {
         private readonly IFileSystemService fileSystemService;
+        private readonly ILog log;
 
-        public AndroidOpenFolderService(IFileSystemService fileSystemService)
+        public AndroidOpenFolderService(IFileSystemService fileSystemService, ILog log)
         {
             this.fileSystemService = fileSystemService;
+            this.log = log;
         }
 
         public void OpenFolder(SaveType saveType)
         {
-            var intent = new Intent(Intent.ActionGetContent);
-            var uri = Uri.Parse(fileSystemService.DownloadsFolderPath);
-            intent.SetDataAndType(uri, "*/*");
+            try
+            {
+                var intent = new Intent(Intent.ActionGetContent);
+                var uri = Uri.Parse(fileSystemService.DownloadsFolderPath);
+                intent.SetDataAndType(uri, "*/*");
 
-            if (CrossCurrentActivity.Current?.Activity == null)
-                return;
-
-            CrossCurrentActivity.Current.Activity.StartActivity(Intent.CreateChooser(intent, "Open folder"));
+                CrossCurrentActivity.Current.Activity.StartActivity(Intent.CreateChooser(intent, "Open folder"));
+            }
+            catch(System.Exception e)
+            {
+                log.Exception(e);
+            }
         }
     }
 }
