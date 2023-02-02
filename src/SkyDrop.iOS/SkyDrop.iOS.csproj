@@ -317,6 +317,7 @@
         <ImageAsset Include="Media.xcassets\ic_up.imageset\chevron-up.pdf" />
         <Compile Include="Common\RetryHandler.cs" />
         <ImageAsset Include="Media.xcassets\ic_user.imageset\account-circle.pdf" />
+        <Compile Include="Services\iOSOpenFolderService.cs" />
     </ItemGroup>
     <ItemGroup>
         <Reference Include="System" />

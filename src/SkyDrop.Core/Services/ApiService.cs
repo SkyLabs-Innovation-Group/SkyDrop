@@ -21,25 +21,27 @@ namespace SkyDrop.Core.Services
     [ConfigureAwait(false)]
     public class ApiService : IApiService
     {
-        private const string UnauthorizedExceptionMessage =
-            "Unauthorized. Check your API key is set correctly in the Portals screen.";
-
+        private const string UnauthorizedExceptionMessage = "Unauthorized. Check your API key is set correctly in the Portals screen.";
         private const int SkynetPortalApiTokenLength = 52;
         private readonly IEncryptionService encryptionService;
-
         private readonly IFileSystemService fileSystemService;
         private readonly ISkyDropHttpClientFactory httpClientFactory;
         private readonly ISingletonService singletonService;
         private readonly IUserDialogs userDialogs;
+        private readonly IOpenFolderService openFolderService;
 
         public CancellationTokenSource UploadCancellationTokenSource { get; private set; } = new CancellationTokenSource();
+        public ILog Log { get; }
+        public bool DidRequestCancellation { get; private set; }
+        public bool IsTestingEndpoint { get; private set; }
 
         public ApiService(ILog log,
             ISkyDropHttpClientFactory skyDropHttpClientFactory,
             ISingletonService singletonService,
             IUserDialogs userDialogs,
             IFileSystemService fileSystemService,
-            IEncryptionService encryptionService)
+            IEncryptionService encryptionService,
+            IOpenFolderService openFolderService)
         {
             Log = log;
             httpClientFactory = skyDropHttpClientFactory;
@@ -47,13 +49,8 @@ namespace SkyDrop.Core.Services
             this.userDialogs = userDialogs;
             this.fileSystemService = fileSystemService;
             this.encryptionService = encryptionService;
+            this.openFolderService = openFolderService;
         }
-
-        public ILog Log { get; }
-        public bool DidRequestCancellation { get; private set; }
-
-        public bool IsTestingEndpoint { get; private set; }
-
 
         public async Task<SkyFile> UploadFile(SkyFile skyfile)
         {
@@ -130,8 +127,7 @@ namespace SkyDrop.Core.Services
             if (fileName.IsEncryptedFile())
             {
                 //save encrypted file
-                var encryptedFilePath =
-                    await fileSystemService.SaveFile(await response.Content.ReadAsStreamAsync(), fileName, false);
+                var encryptedFilePath = await fileSystemService.SaveFile(await response.Content.ReadAsStreamAsync(), fileName, false);
 
                 //decrypt
                 var decryptedFilePath = await encryptionService.DecodeFile(encryptedFilePath, true);
@@ -143,7 +139,16 @@ namespace SkyDrop.Core.Services
             using var responseStream = await response.Content.ReadAsStreamAsync();
             var newFilePath = await fileSystemService.SaveToGalleryOrFiles(responseStream, fileName, saveType);
 
-            userDialogs.Toast($"Saved {Path.GetFileName(newFilePath)}");
+            userDialogs.Toast(new ToastConfig($"Saved {Path.GetFileName(newFilePath)}")
+            {
+                Action = new ToastAction
+                {
+                    Text = "Open",
+                    TextColor = Colors.Primary,
+                    Action = () => openFolderService.OpenFolder(saveType)
+                },
+                Duration = TimeSpan.FromSeconds(4)
+            });
         }
 
         public async Task<(Stream data, string filename)> DownloadFile(string url)
