@@ -8,14 +8,14 @@ namespace SkyDrop.Core
 {
     public class SkyDropAppStart : MvxAppStart
     {
-        private readonly IFfImageService ffImageService;
+        private readonly IFFImageService ffImageService;
         private readonly IFileSystemService fileSystemService;
         private readonly IMvxNavigationService navigationService;
 
         public SkyDropAppStart(IMvxApplication application,
             IMvxNavigationService navigationService,
             IFileSystemService fileSystemService,
-            IFfImageService ffImageService,
+            IFFImageService ffImageService,
             ILog log) : base(application, navigationService)
         {
             this.navigationService = navigationService;
@@ -28,7 +28,7 @@ namespace SkyDrop.Core
 
         protected override async Task NavigateToFirstViewModel(object hint = null)
         {
-            await ffImageService.Initialise();
+            ffImageService.Initialize();
 
             await navigationService.Navigate<DropViewModel>();
         }

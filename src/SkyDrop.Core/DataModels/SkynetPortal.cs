@@ -3,6 +3,7 @@ using System.Linq;
 using MvvmCross;
 using Realms;
 using SkyDrop.Core.Services;
+using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
 
 namespace SkyDrop.Core.DataModels
@@ -57,18 +58,15 @@ namespace SkyDrop.Core.DataModels
                 return _selectedPortalInstance;
 
             var portalUrl = Preferences.Get(PreferenceKey.SelectedSkynetPortal, "");
-
-            if (string.IsNullOrEmpty(portalUrl)) return new SkynetPortal(DefaultWeb3PortalUrl);
+            if (portalUrl.IsNullOrEmpty())
+                return new SkynetPortal(DefaultWeb3PortalUrl);
 
             var portal = new SkynetPortal(portalUrl);
 
-            portal.UserApiToken = SecureStorage.GetAsync(portal.GetApiTokenPrefKey()).GetAwaiter().GetResult();
+            var apiToken = SecureStorage.GetAsync(portal.GetApiTokenPrefKey()).GetAwaiter().GetResult();
 
-            if (portal.HasApiToken())
-            {
-                var httpClientFactory = Mvx.IoCProvider.GetSingleton<ISkyDropHttpClientFactory>();
-                httpClientFactory.UpdateHttpClientWithNewToken(portal);
-            }
+            var httpClientFactory = Mvx.IoCProvider.GetSingleton<ISkyDropHttpClientFactory>();
+            httpClientFactory.UpdateHttpClientWithNewToken(portal, apiToken);
 
             return portal;
         }
@@ -95,30 +93,20 @@ namespace SkyDrop.Core.DataModels
             if (string.IsNullOrEmpty(portal.ToString()))
                 return new SkynetPortal(DefaultWeb3PortalUrl);
 
-            var storageService = Mvx.IoCProvider.Resolve<IStorageService>();
-
             Preferences.Remove(PreferenceKey.SelectedSkynetPortal);
             Preferences.Set(PreferenceKey.SelectedSkynetPortal, portal.ToString());
 
-            storageService.SaveSkynetPortal(portal);
+            var apiTokenPrefKey = portal.GetApiTokenPrefKey();
+            var apiToken = SecureStorage.GetAsync(apiTokenPrefKey).GetAwaiter().GetResult();
 
-            if (portal.HasApiToken())
-            {
-                var key = portal.GetApiTokenPrefKey();
+            var storageService = Mvx.IoCProvider.Resolve<IStorageService>();
+            storageService.SaveSkynetPortal(portal, apiToken);
 
-                if (!string.IsNullOrEmpty(portal.UserApiToken) &&
-                   !(SecureStorage.GetAsync(key).GetAwaiter().GetResult() == portal.UserApiToken))
-                {
-                    SecureStorage.Remove(key);
-                    SecureStorage.SetAsync(key, portal.UserApiToken).GetAwaiter().GetResult();
-                }
+            var httpClientFactory = Mvx.IoCProvider.GetSingleton<ISkyDropHttpClientFactory>();
+            httpClientFactory.UpdateHttpClientWithNewToken(portal, apiToken);
 
-                var httpClientFactory = Mvx.IoCProvider.GetSingleton<ISkyDropHttpClientFactory>();
-                httpClientFactory.UpdateHttpClientWithNewToken(portal);
-
-                var ffImageService = Mvx.IoCProvider.GetSingleton<IFfImageService>();
-                ffImageService.UpdateHttpClient(httpClientFactory.GetSkyDropHttpClientInstance(portal));
-            }
+            var ffImageService = Mvx.IoCProvider.GetSingleton<IFFImageService>();
+            ffImageService.UpdateHttpClient(httpClientFactory.GetSkyDropHttpClientInstance(portal));
 
             return portal;
         }
@@ -126,11 +114,6 @@ namespace SkyDrop.Core.DataModels
         public string GetApiTokenPrefKey()
         {
             return $"{PreferenceKey.PrefixPortalApiToken}{BaseUrl}".ToLowerInvariant();
-        }
-
-        public bool HasApiToken()
-        {
-            return !string.IsNullOrEmpty(UserApiToken);
         }
 
         public override int GetHashCode()

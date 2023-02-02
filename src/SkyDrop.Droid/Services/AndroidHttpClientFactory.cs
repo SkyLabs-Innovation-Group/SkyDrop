@@ -47,9 +47,9 @@ namespace SkyDrop.Droid.Services
                 };
             //}
 
-            portal.UserApiToken ??= SecureStorage.GetAsync(portal.GetApiTokenPrefKey()).GetAwaiter().GetResult();
+            var apiToken = SecureStorage.GetAsync(portal.GetApiTokenPrefKey()).GetAwaiter().GetResult();
 
-            AddApiTokenHeader(client, portal);
+            AddApiTokenHeader(client, apiToken);
 
             client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
 

@@ -56,7 +56,7 @@ namespace SkyDrop.Core.ViewModels.Main
         private readonly IApiService apiService;
         private readonly IBarcodeService barcodeService;
         private readonly IEncryptionService encryptionService;
-        private readonly IFfImageService ffImageService;
+        private readonly IFFImageService ffImageService;
         private readonly IFileSystemService fileSystemService;
         private readonly IMvxNavigationService navigationService;
         private readonly IShareLinkService shareLinkService;
@@ -80,7 +80,7 @@ namespace SkyDrop.Core.ViewModels.Main
             IFileSystemService fileSystemService,
             IEncryptionService encryptionService,
             ILog log,
-            IFfImageService fFImageService) : base(singletonService)
+            IFFImageService fFImageService) : base(singletonService)
         {
             Log = log;
             Title = "SkyDrop";
@@ -1075,6 +1075,9 @@ namespace SkyDrop.Core.ViewModels.Main
                     return;
 
                 await SingletonService.StorageService.SaveSkynetPortal(selectedPortal, apiToken);
+
+                var httpClientFactory = Mvx.IoCProvider.Resolve<ISkyDropHttpClientFactory>();
+                httpClientFactory.UpdateHttpClientWithNewToken(selectedPortal, apiToken);
 
                 userDialogs.Toast($"Logged in to {selectedPortal.BaseUrl}");
             }

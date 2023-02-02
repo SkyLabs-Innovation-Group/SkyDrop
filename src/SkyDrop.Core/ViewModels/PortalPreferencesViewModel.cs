@@ -9,6 +9,7 @@ using Realms;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.DataViewModels;
 using SkyDrop.Core.Services;
+using SkyDrop.Core.Utility;
 using Xamarin.Essentials;
 using static SkyDrop.Core.ViewModels.EditPortalViewModel;
 
@@ -18,19 +19,21 @@ namespace SkyDrop.Core.ViewModels
     {
         private readonly IApiService apiService;
         private readonly IMvxNavigationService navigationService;
-
         private readonly IPortalService portalService;
         private readonly IStorageService storageService;
+        private readonly ISkyDropHttpClientFactory httpClientFactory;
 
         public PortalPreferencesViewModel(ISingletonService singletonService,
             IApiService apiService,
             IMvxNavigationService navigationService,
             IPortalService portalService,
-            IStorageService storageService) : base(singletonService)
+            IStorageService storageService,
+            ISkyDropHttpClientFactory httpClientFactory) : base(singletonService)
         {
             this.apiService = apiService;
             this.navigationService = navigationService;
             this.storageService = storageService;
+            this.httpClientFactory = httpClientFactory;
 
             Title = "Portal Preferences";
             UserPortals = new MvxObservableCollection<SkynetPortalDvm>();
@@ -59,13 +62,11 @@ namespace SkyDrop.Core.ViewModels
 
         public async Task LoadUserPortals()
         {
-            var savedPortals = storageService.LoadSkynetPortals();
-
+            var savedPortals = await storageService.LoadSkynetPortals();
             if (savedPortals.Count == 0)
             {
-                await storageService.SaveSkynetPortal(new SkynetPortal(SkynetPortal.DefaultWeb3PortalUrl)
-                    { Name = "Web3 Portal" });
-                savedPortals = storageService.LoadSkynetPortals();
+                await storageService.SaveSkynetPortal(new SkynetPortal(SkynetPortal.DefaultWeb3PortalUrl, "Web3 Portal"), string.Empty);
+                savedPortals = await storageService.LoadSkynetPortals();
             }
 
             var savedPortalsDvms = portalService.ConvertSkynetPortalsToDvMs(savedPortals, ReorderAction);
@@ -74,16 +75,16 @@ namespace SkyDrop.Core.ViewModels
             await SetTopPortalSelected();
         }
 
-        private async void ReorderAction(SkynetPortal portal, bool moveUp)
+        private void ReorderAction(SkynetPortal portal, bool moveUp)
         {
             var portalDvm = UserPortals.FirstOrDefault(a => a.Portal == portal);
             var portalCurrentIndex = UserPortals.IndexOf(portalDvm);
             var portalNewIndex = moveUp ? portalCurrentIndex - 1 : portalCurrentIndex + 1;
             
-            await ReorderPortals(portal, portalCurrentIndex, portalNewIndex);
+            ReorderPortals(portal, portalCurrentIndex, portalNewIndex);
         }
 
-        private async Task ReorderPortals(SkynetPortal portal, int oldPosition, int newPosition)
+        private void ReorderPortals(SkynetPortal portal, int oldPosition, int newPosition)
         {
             if (oldPosition == newPosition)
                 return;
@@ -100,7 +101,7 @@ namespace SkyDrop.Core.ViewModels
 
             storageService.ReorderPortals(portal, oldPosition, newPosition);
             
-            await SetTopPortalSelected();
+            SetTopPortalSelected().Forget();
         }
 
         public void EditPortal(int position)
@@ -111,12 +112,21 @@ namespace SkyDrop.Core.ViewModels
 
         private async Task SetTopPortalSelected()
         {
-            var topPortal = UserPortals.FirstOrDefault();
-            if (topPortal == null)
-                return;
+            try
+            {
+                var topPortal = UserPortals.FirstOrDefault();
+                if (topPortal == null)
+                    return;
 
-            SkynetPortal.SelectedPortal = topPortal.Portal;
-            SkynetPortal.SelectedPortal.UserApiToken ??= await SecureStorage.GetAsync(topPortal.Portal.GetApiTokenPrefKey());
+                SkynetPortal.SelectedPortal = topPortal.Portal;
+
+                var apiToken = await topPortal.GetApiToken();
+                httpClientFactory.UpdateHttpClientWithNewToken(SkynetPortal.SelectedPortal, apiToken);
+            }
+            catch(Exception e)
+            {
+                Log.Exception(e);
+            }
         }
     }
 }

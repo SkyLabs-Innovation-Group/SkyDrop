@@ -13,22 +13,7 @@ namespace SkyDrop.Core.ViewModels
 {
     public class EditPortalViewModel : BaseViewModel<NavParam>
     {
-        private readonly IMvxNavigationService navigationService;
-        public SkynetPortal Portal;
-
-        public EditPortalViewModel(ISingletonService singletonService, IMvxNavigationService navigationService) : base(
-            singletonService)
-        {
-            Title = "Edit Portal";
-
-            BackCommand = new MvxCommand(() => navigationService.Close(this));
-            SavePortalCommand = new MvxAsyncCommand(SavePortal);
-            LoginWithPortalCommand = new MvxAsyncCommand(LoginWithPortal);
-            PasteApiKeyCommand = new MvxAsyncCommand(PasteApiKey);
-            DeletePortalCommand = new MvxAsyncCommand(DeletePortal);
-            this.navigationService = navigationService;
-        }
-
+        public SkynetPortal Portal { get; set; }
         public TaskCompletionSource<bool> PrepareTcs { get; set; } = new TaskCompletionSource<bool>();
         public string PortalName { get; set; }
         public string PortalUrl { get; set; }
@@ -41,13 +26,29 @@ namespace SkyDrop.Core.ViewModels
         public IMvxCommand BackCommand { get; set; }
         public IMvxCommand DeletePortalCommand { get; set; }
 
+        private readonly IMvxNavigationService navigationService;
+
+        public EditPortalViewModel(ISingletonService singletonService, IMvxNavigationService navigationService) :
+            base(singletonService)
+        {
+            Title = "Edit Portal";
+
+            BackCommand = new MvxCommand(() => navigationService.Close(this));
+            SavePortalCommand = new MvxAsyncCommand(SavePortal);
+            LoginWithPortalCommand = new MvxAsyncCommand(LoginWithPortal);
+            PasteApiKeyCommand = new MvxAsyncCommand(PasteApiKey);
+            DeletePortalCommand = new MvxAsyncCommand(DeletePortal);
+            this.navigationService = navigationService;
+        }
+
         private async Task SavePortal()
         {
-
             if (IsAddingNewPortal)
             {
                 Portal = new SkynetPortal(CleanUri(PortalUrl), PortalName);
-                Portal.PortalPreferencesPosition = SingletonService.StorageService.LoadSkynetPortals().Count;
+
+                var allPortals = await SingletonService.StorageService.LoadSkynetPortals();
+                Portal.PortalPreferencesPosition = allPortals.Count;
                 await SingletonService.StorageService.SaveSkynetPortal(Portal, ApiToken);
             }
             else
@@ -136,7 +137,6 @@ namespace SkyDrop.Core.ViewModels
             }
             return true;
         }
-
 
         public string CleanUri(string portalUrl)
         {
