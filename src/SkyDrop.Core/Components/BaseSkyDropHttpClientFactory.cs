@@ -5,6 +5,7 @@ using System.Net.Http;
 using MvvmCross;
 using SkyDrop.Core.DataModels;
 using SkyDrop.Core.Services;
+using SkyDrop.Core.Utility;
 
 namespace SkyDrop.Core.Components
 {
@@ -37,11 +38,11 @@ namespace SkyDrop.Core.Components
             HttpClientsPerPortal = new Dictionary<SkynetPortal, HttpClient>();
         }
 
-        public void UpdateHttpClientWithNewToken(SkynetPortal portal)
+        public void UpdateHttpClientWithNewToken(SkynetPortal portal, string apiToken)
         {
             var httpClient = GetSkyDropHttpClientInstance(portal);
 
-            AddApiTokenHeader(httpClient, portal);
+            AddApiTokenHeader(httpClient, apiToken);
         }
 
         public string GetTokenForHttpClient(SkynetPortal portal)
@@ -65,10 +66,11 @@ namespace SkyDrop.Core.Components
             return apiTokenHeader;
         }
 
-        protected static void AddApiTokenHeader(HttpClient client, SkynetPortal portal)
+        protected static void AddApiTokenHeader(HttpClient client, string apiToken)
         {
             client.DefaultRequestHeaders.Remove(PortalApiTokenHeader);
-            if (portal.HasApiToken()) client.DefaultRequestHeaders.Add(PortalApiTokenHeader, portal.UserApiToken);
+            if (!apiToken.IsNullOrEmpty())
+                client.DefaultRequestHeaders.Add(PortalApiTokenHeader, apiToken);
         }
 
         public void CancelAllUploadsForClient(SkynetPortal portal)

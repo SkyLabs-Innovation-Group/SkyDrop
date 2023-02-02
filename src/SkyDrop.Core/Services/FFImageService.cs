@@ -10,20 +10,20 @@ using Xamarin.Essentials;
 
 namespace SkyDrop.Core.Services
 {
-    public class FfImageService : IFfImageService
+    public class FFImageService : IFFImageService
     {
         private readonly ISkyDropHttpClientFactory httpClientFactory;
         private readonly ILog log;
 
         public TaskCompletionSource<bool> InitialiseTask;
 
-        public FfImageService(ILog log, ISkyDropHttpClientFactory skyDropHttpClientFactory)
+        public FFImageService(ILog log, ISkyDropHttpClientFactory skyDropHttpClientFactory)
         {
             this.log = log;
             httpClientFactory = skyDropHttpClientFactory;
         }
 
-        public async Task Initialise()
+        public void Initialize()
         {
             if (InitialiseTask == null)
                 InitialiseTask = new TaskCompletionSource<bool>();
@@ -31,8 +31,6 @@ namespace SkyDrop.Core.Services
                 return;
 
             var selectedPortal = SkynetPortal.SelectedPortal;
-            var apiToken = await SecureStorage.GetAsync(selectedPortal.GetApiTokenPrefKey());
-            selectedPortal.UserApiToken = apiToken;
             
             ImageService.Instance.Initialize(new Configuration
             {
@@ -59,9 +57,9 @@ namespace SkyDrop.Core.Services
         }
     }
 
-    public interface IFfImageService
+    public interface IFFImageService
     {
-        Task Initialise();
+        void Initialize();
         void UpdateHttpClient(HttpClient httpClient);
     }
 }

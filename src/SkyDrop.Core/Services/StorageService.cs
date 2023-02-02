@@ -277,14 +277,13 @@ namespace SkyDrop.Core.Services
             Realm.Write(() => { Realm.Remove(portal); });
         }
 
-        public async Task SaveSkynetPortal(SkynetPortal portal, string apiToken = null)
+        public async Task SaveSkynetPortal(SkynetPortal portal, string apiToken)
         {
             Realm.Write(() =>
             {
                 Realm.Add(portal);
             });
 
-            portal.UserApiToken ??= apiToken;
             await SaveApiTokenToSecureStorage(portal.GetApiTokenPrefKey(), apiToken);
         }
 
@@ -293,7 +292,6 @@ namespace SkyDrop.Core.Services
             if (portal == null)
                 throw new ArgumentNullException(nameof(portal));
 
-            portal.UserApiToken ??= apiToken;
             await SaveApiTokenToSecureStorage(portal.GetApiTokenPrefKey(), apiToken);
 
             Realm.Write(() =>
@@ -308,9 +306,19 @@ namespace SkyDrop.Core.Services
             });
         }
 
-        public List<SkynetPortal> LoadSkynetPortals()
+        public async Task<List<SkynetPortal>> LoadSkynetPortals()
         {
-            return Realm.All<SkynetPortal>().OrderBy(portal => portal.PortalPreferencesPosition).ToList();
+            var portals = Realm.All<SkynetPortal>().OrderBy(portal => portal.PortalPreferencesPosition).ToList();
+
+            await Realm.WriteAsync(() =>
+            {
+                foreach(var portal in portals)
+                {
+                    EnsurePortalHasName(portal);
+                }
+            });
+
+            return portals;
         }
 
         public SkynetPortal LoadSkynetPortal(string portalId)
@@ -447,9 +455,9 @@ namespace SkyDrop.Core.Services
 
         public void ReorderPortals(SkynetPortal portal, int oldPosition, int newPosition)
         {
-            Realm.Write(() =>
+            Realm.Write(async () =>
             {
-                var portals = LoadSkynetPortals();
+                var portals = await LoadSkynetPortals();
 
                 if (oldPosition < 0 || oldPosition >= portals.Count || newPosition < 0 || newPosition >= portals.Count)
                     return;
@@ -464,6 +472,19 @@ namespace SkyDrop.Core.Services
                 Realm.Add(portals[oldPosition]);
                 Realm.Add(portals[newPosition]);
             });
+        }
+
+        private void EnsurePortalHasName(SkynetPortal portal)
+        {
+            if (portal.Name.IsNullOrEmpty())
+            {
+                //remove protocol
+                var url = portal.BaseUrl;
+                if (url.StartsWith("https://") && url.Length > 8)
+                    url = url.Substring(8);
+
+                portal.Name = url;
+            }
         }
     }
 
@@ -510,11 +531,11 @@ namespace SkyDrop.Core.Services
 
         void RenameContact(Contact contact, string newName);
 
-        Task SaveSkynetPortal(SkynetPortal portal, string apiToken = null);
+        Task SaveSkynetPortal(SkynetPortal portal, string apiToken);
 
         Task EditSkynetPortal(SkynetPortal portal, string newPortalName, string newPortalUrl, string apiToken = null);
 
-        List<SkynetPortal> LoadSkynetPortals();
+        Task<List<SkynetPortal>> LoadSkynetPortals();
 
         SkynetPortal LoadSkynetPortal(string portalId);
 

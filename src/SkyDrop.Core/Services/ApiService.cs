@@ -202,8 +202,7 @@ namespace SkyDrop.Core.Services
                 return false;
 
             // Set back to valid old token if new one failed
-            portal.UserApiToken = oldToken;
-            httpClientFactory.UpdateHttpClientWithNewToken(portal);
+            httpClientFactory.UpdateHttpClientWithNewToken(portal, oldToken);
 
             return false;
         }
