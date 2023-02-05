@@ -18,8 +18,4 @@ We are working on updated FAQs now that the Skynet Labs portals have shut down. 
 
 To turn your links into QR codes, you can use the mobile app or our web app at https://encodeqr.hns.web3portal.com/ to convert text to QR codes (which can also be received by the mobile app).
 
-FAQ:
-
-My images won't load in app! Try selecting your portal under 'Portals' and tapping the API token field to log in again - restart the app after you're done.
-
 *Note: [Check here for known issues](https://github.com/SkyLabs-Innovation-Group/SkyDrop/issues?q=is%3Aissue+is%3Aopen+label%3A%22known+issues%22), you may submit bug reports and feature requests*
