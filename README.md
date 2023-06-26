@@ -2,9 +2,9 @@
 
 Our app is inspired by the user experience of Apple’s AirDrop feature for iOS and Mac: we have created a secure, private, FOSS (Free and Open Source) alternative for sharing text and uncompressed files between Android and iOS devices using QR codes.
 
-* iOS - [Get SkyDrop on App Store](https://apps.apple.com/app/id1568591168#?platform=iphone)
+* iOS - [Get IdeaAnchor on App Store](https://apps.apple.com/us/app/ideaanchor/id6450562752?platform=iphone)
 
-* Android - [Get SkyDrop on Google Play](https://play.google.com/store/apps/details?id=to.hns.skydrop)
+* Android - [Get IdeaAnchor on Google Play](https://play.google.com/store/apps/details?id=ideaanchor.ideaanchor)
 
 ---
 
